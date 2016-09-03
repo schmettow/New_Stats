@@ -1,0 +1,722 @@
+---
+title: "New statistics for design researchers"
+subtitle: "A Bayesian workshop in R"
+author: "Martin Schmettow"
+date: "September 3, 2015"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document: default
+---
+
+
+
+```{r profile, echo = FALSE, warning = FALSE, eval = TRUE, message = FALSE}
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = T
+source("RMDR.R")
+# Pgsr = list() # plots
+# Dgsr = list() # data sets
+# Mgsr = list() # models
+# Sgsr = list() # simulation functions
+# Tgsr = list() # tables
+# try(load("Getting started with R.Rda"))
+
+CE <-
+  c("BrowsingAB")
+
+load_CE(CE)
+```
+
+```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
+## The following is just for running the script conventionally (no knitr) on the authors computer
+```
+
+
+# Getting started with R
+
+In this book, we are going to use the statistical computing environment R. The first few sections describe how you can set up a fully functional environment and test it. Subsequently, we will get to know the most basic concepts of programming in R.
+
+## Installing R and Rstudio
+
+First, we make sure that you have following programs downloaded and installed on your computer. The two programs can be retrieved from the belo addresses. Make sure to select the version for your operating system. 
+
+* [R](http://www.r-project.org)
+* [Rstudio](http://www.rstudio.com)
+
+If you fully own the computer you are working with, meaning that you have administrator rights, just do the usual downloading and running the setup. If everything is fine, you'll find R and Rstudio installed under `c\Programs\` and both are in your computers start menu. You can directly proceed to the installation of packages.
+
+In corporate environments, two issues can arise with the installation: first a user may not have administrator rights to install programs to the common path `c:\programs\`. Second, the home directory may reside on a network drive, which is likely to cause trouble when installing packages.
+
+If you have no administrator rights, you must choose your home directory during the setup. If that is a local directory,  (`c:/Users/YourName/`), this should work fine and you can proceed to installation of packages.
+
+If your home directory (i.e. `My Documents`) is located on a network drive, this is likely to cause trouble. In such a case, you must install R and Rstudio to a local directory (on your computers hard drive), where you have full read/write access. In the following, it is assumed that this directory is `D:/Users/YourName/`: 
+
+1. create a directory `D:/Users/YourName/R/`. This is where both programs, as well as packages will reside.
+2. create a sub directory `Rlibrary` where all additional packages reside (R comes with a pack of standard packages, which are in a read-only system directory).
+3. start Rstudio
+4. create a regular text file `File -> New File -> Text file`
+5. copy and paste code from the box below
+6. save the file as `.Rprofile` in `D:/Users/YourName/R/`
+7. open the menu and go to `Tools -> Global options -> General -> Default working directory`. Select `D:/Users/YourName/R/`.
+
+```{r Rprofile, opts.label = "rtut.nr"}
+## .Rprofile
+
+options(stringsAsFactors = FALSE)
+
+.First <- function(){
+  RHOME <<- getwd()
+	cat("\nLoading .Rprofile in", getwd(), "\n")
+  .libPaths(c(paste0(RHOME,"Rlibrary"), .libPaths()))
+}
+
+.Last <- function(){ 
+  cat("\nGoodbye at ", date(), "\n")
+}
+```
+
+
+With the above steps you have created a customized startup profile for R. The profile primarily sets the library path to point to a directory on the computers drive. As you are owning this directory, R can install the packages withour admin rights. In the second part, you configure Rstudio's default path, which is where R, invoked from Rstudio, searches for the .Rprofile.  
+
+After closing and reopening Rstudio, you should see a message in the console window saying:
+
+> Loading .Rprofile in D:/Users/YourName/R/
+
+If that 
+
+That means that R has found the `.Rprofile` file and loaded it at startup. The `.Rprofile` file primarily sets the path of the *library*, which is the collection of packages you install yourself. Whether this was succesful can be checked by entering the `console` window in Rstudio, type the command below and hit Enter.
+
+```{r opts.label = "rtut.nr"}
+.libPaths()
+
+```
+
+If your installation went fine, you should see an output like the following. If the output lacks the first entry, your installation was not successful and you need to check all the above steps.
+
+> [1] "D:/Users/YourName/R/Rlibrary" "C:/Program Files/R/R-3.3.0/library"
+
+If all this fails, I have compiled a quick-start R environment, which you can copy to your computer or run from a USB stick. This environment contains Rstudio, R and all required packages. Using it has just a few disadvantages, one of which is that your computer will not automatically open R files to Rstudio. Also, for staring up, you need to open a file explorer, browse to the installation folder, enter the folder 
+ `Rstudio/bin` and run `Rstudio.exe` manually. The quick-start environment can be downloaded from:
+ 
+[R quick start environment]()
+
+For installation, just unzip the file to a directory on your computer or to an USB drive.
+
+
+
+## Installing packages
+
+While R comes with a set of standard packages. In this book we will use a number of additional packages. Generally, packages need to be *installed once* on your system and be *loaded everytime* you need them. Installation is fairly straight-forward once your R environment has been setup correctly and you have an internet connection.
+
+The following code loads all required packages using the `library(package)` command.
+
+```{r libraries, opts.label = "rtut.nr"}
+## data import and export
+library(foreign)
+library(haven)
+library(openxlsx)
+
+## data manipulation
+library(plyr)
+library(pipeR)
+library(dplyr)
+library(tidyr)
+
+## plotting system
+library(ggplot2)
+library(gridExtra)
+
+## regression models
+library(rstanarm)
+library(bayr)
+
+
+```
+
+We start by *checking the libraries*:
+
+1. create a new R file by `File --> New file --> R script`
+2. copy and paste the above code to that file and run it. Run every line one-by-one by repeatedly pressing `Ctrl-Return`.
+
+As a first time user with a fresh installation, you will now see error messages like:
+
+> Error in library(haven) : there is no package called 'haven'
+
+This means that the respective package is not yet present on your R system. Before you can use the package _haven_ you have to install. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Ìnstall`, enter the names of the missing package(s) and install.
+
+Finally,run the complete code block at once by selecting it and `Ctrl-Return`. You will see some output to the console, which you should check once again. Unless the output does not contain any error messages (like above), you have successfully installed and loaded all packages.
+
+
+## A first statistical program
+
+
+After you have set up your R environment, you are ready to run your first R program:
+
+1. Stay in the file where you have inserted the above code for loading the libraries.
+2. Find the *environment tab* in Rstudio. It should be empty.
+3. Copy-and-paste the code below into your first file, right afrer library commands.
+4. Run the code lines one-by-one and observe what happens
+
+```{r first_simulation_1, opts.label = "rtut"}
+## Simulation of a data set with 100 participants 
+## in two between-subject conditions
+N <- 100
+levels <- c("control","experimental")
+Group <- rep(levels, N/2)
+age <- round(runif(N, 18, 35),0)
+outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
+Experiment <- data_frame(Group, age, outcome)
+
+summary(Experiment)
+
+## Plotting the distribution of outcome
+Experiment %>% 
+  ggplot( aes(x = outcome) ) + 
+  geom_density(fill = 1)
+
+## ... outcome by group
+Experiment %>% 
+  ggplot( aes(fill = Group, x = outcome) ) + 
+  geom_density()
+
+
+```
+
+Observe Console, Environment and Plots. Did you see 
+
++ how the _Environment_ window is populated with new variables (Values and Data)?
++ the table appear in the _Console_, when executing the `summary(Experiment)` command?
++ how the "camel-against-the-light" in _Plots_ tab morphed into "two-piles-of-colored-sugar"?
+
+Congratulations! You have just 
+
+* simulated data of a virtual experiment using random variable generators
+* summarized the data
+* plotted the data
+
+## First exercise
+
+And here is a small exercise:
+
+The variable `Experiment`, which we created in the above code block, is a so called *data frame* with two columns, the factor _Group_, and the continuous variables _age_  and  _outcome_. Using the resources at the end of the chapter (and Google), find out how, in R, you can:
+
+1. compute the mean of _outcome_
+2. run a linear model with _Group_ as predictor
+3. test the effect using an ANOVA
+
+If you prefer the fast lane, you can also run and examine the following code, which does the above tasks.
+
+```{r first_exercise, opts.label = "rtut"}
+mean(Experiment$outcome)
+var(Experiment$outcome)
+
+model <- lm(formula = outcome ~ Group, 
+            data = Experiment) 
+
+coef(model)
+anova(model)
+
+summary(model)
+```
+
+Isn't it amazing, that in less than 20 simple statements we have just reached the level of a second-year bachelor student? Still, you may find the R output a little inconvenient, as you may want to save the output of your data analysis. Not long ago, that really was an issue, but in the past few years R has become a great tool for *reproducable research*. The most simple procedure of saving your analysis for print or sharing is to:
+
+1. save the R file your have created by hitting `CTRL-s` and selecting a directory and name.
+2. in RStudio open `File --> Compile notebook` and select Word as a format.
+3. Hit `Compile`
+
+A new Word document should appear that shows all code and the output. Now, you can copy-and-paste the graphics into another document or a presentation.
+
+## Programming in R: a primer
+
+This book has been written in R. It is almost inevitable that the following introduction to R follows the style and workflow of when writing the book. A full treatment of R as a programming language, with all its features and idions is beyond the scope. However, the following introduction will present just a few concepts, which in the experience of the author (when writing this book), suffice for 90% of the tasks in data analysis.
+
+### Objects (= variables)
+
+In programming, variables are used to store values, collections of values and more complex data. Variables are volatile, they only exist in your current workspace. (You can save and restore your workspace, more on that later).
+
+[add definition of statistical variables]
+
+This book is about pargramming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In order to avoid confusion and keep brevity, I am from now on referring to variables, when speaking of predictors and outcomes. For programming variables, I am using the term *object*, instead, although this is not strictly correct.
+
+
+Objects can be of various *types*. R's most common basic types  are the following: 
+
+* *logical*  objects for storing the two levels TRUE, FALSE, like presence or absence of a treatment, or passed and failed test items
+* *factor* for categories or groups, like experimental treatments or participant IDs
+* *integer* for discrete quantitative variables, like counts or ranks
+* *numerical* for continuous quantitative variables, like most measures
+* *character* for free text, for example, the description of a usability problem
+
+Objects have two basic operations: *assigning* a value to a name, and *calling* the value by name. Imagine, you wanted to store the number of observations in your data set into a object with name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
+
+```{r assigning, opts.label = "rtut"}
+N_obs <- 100
+```
+
+Now, that the value is stored, you can call it any time by simply calling its name:
+
+```{r calling, opts.label = "rtut"}
+N_obs
+```
+
+Just calling the name prints the value to Console. In typical interactive programming sessions with R, this is already quite useful. But, you can do much more with this mechanism. 
+
+Often, what you want is to do calculations with the value. For example, you have a repeatd measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
+
+```{r}
+N_Obs <- 100
+N_Part <- 25
+avg_N_Obs <- N_Obs/N_Part
+avg_N_Obs
+```
+
+Notice the `[1]` that R put in front of the value. This is an index. Different to other programming language, all basic data types are all *vectors*. Vectors are containers for storing many values of same type. The values addressed by *indexing*. Formally, our value is stored as the first and only element of a vector.
+
+Although unusual in the programming world, for statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. Many frequently used operations work on many values, take the mean:
+
+```{r mean, opts.label = "rtut"}
+
+X <- rnorm(100, 2, 1)
+mean(X)
+
+```
+
+In fact, the above example works in both directions: the first command creates 100 draws from a normal distribution with mean 2 and an SD of 1. Three individual values are passed to the function (more on that later), but a collection of 100 is returned. The second command takes the collection and returns a single number. By the way, this is precisely, what we call *a* statistic: a single quantities that characterizes a collection of quantities.
+
+Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R missing values are first-class citizens. Every vector of a certain type can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean`
+
+### Operators and functions
+
+R comes with a full bunch for creating and summarizing data. Let me introduce you to functions that produce one or several statistics to characterize a vector. 
+
+* `length(num_vector)`
+* `sum(num_vector)`
+* `mean(num_vector)`
+* `var(num_vector)`
+* `sd(num_vector)`
+* `min(num_vector)`
+* `max(num_vector)`
+* `median(num_vector)`
+* `quantile(num_vector, .025)`
+* `head(num_vector)`
+
+
+
+### Storing data in data frames
+
+Most Behavioural research collects *real data* to work with. Like our simulation, real data usually contains several variables. In most cases, data is stored in a matrix-like structure, where columns are variables and rows are observations. R has *data frames* to store data. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research. You have already seen one ways of creating data frames. You create it by using the `data_frame` command, where you give alll the variable names and a vector with their values.
+
+A data frame basically is a set of variables in columns and values in rows. The variables can be of different types, like factors or numbers. Data frames are objects, too. As we have seen above, you can print a data frame to the screen by just calling teh object by name.
+
+```{r opts.label = "rtut.nr"}
+Experiment
+
+```
+
+If this is too much information, several commands are available to look into a data frame. The `str` (structure) command works on any R object and gives quite a useful output to understand  a data frame:
+
+```{r opts.label = "rtut"}
+str(Experiment)
+```
+
+Simple descriptives statistics for all variables (i.e. columns) are given by the `summary` command.
+
+```{r opts.label = "rtut"}
+summary(Experiment)
+```
+
+A third option many people use is to print just the first few rows of a data set:
+
+```{r opts.label = "rtut"}
+head(Experiment)
+```
+
+Often, you want to assess a single variable from your data frame. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
+
+```{r opts.label = "rtut"}
+mean(Experiment$outcome)
+```
+
+As data frames are matrix-like structures, you can also access individual values by their addresses. The following commands call 
+
++ the first _outcome_ measure
++ the first to third elements of _Group_
++ the complete first row
+
+```{r df_slicing, opts.label = "rtut"}
+Experiment[  1, 3]
+Experiment[1:3, 2]
+Experiment[  1,  ]
+```
+
+Addressing one or more elements in the square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression `Experiment[,]` is fully valid and will just the return the whole dataframe.
+
+There is an important difference, however, when using Rs classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr dataframes one always gets a dataframe back. That is a very predictable behavior, very much unlike the classic `data.frame`. When the addressed elements expand over multiple columns, like 
+`Experiment[, 1:2]`, the result will be a `data.frame` object. However, when slicing a single column, the result is a vector:
+
+```{r df_classic_odd, opts.label = "rtut"}
+Exp_classic <- as.data.frame(Experiment)
+Exp_classic[1:2,1:2]  ## data.frame
+Exp_classic[1,]       ## data.frame
+Exp_classic[,1]       ## vector
+```
+
+While `data_frame[]` behaves perfectly predictable in terms of the returned object, extracting a variable as a vector is sometimes neded. With a `data_frame` a single column can be extracted using double square brackets, or using the `$` operator. Both variants will always return a vector.
+
+```{r df_square_brackets, opts.label = "rtut.nr"}
+Experiment[[1]]       ## vector
+Experiment$Group      ## the same
+```
+
+Sometimes, it may be neccessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a dataframe can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we set them all to `NA`. 
+
+```{r df_injecting}
+## injecting
+Experiment[2,      "outcome"] <- 660
+Experiment[6,      "outcome"] <- 987
+Experiment[c(1,3), "age"]     <- -99
+
+## printing first few observations
+head(Experiment)
+
+## setting to NA
+Experiment[c(2, 6),"outcome"] <- NA
+Experiment[c(1, 3),"age"]     <- NA
+
+
+```
+
+
+Besides the injection, note two more features of addressing dataframe elements. The first is, that vectors can be used to address multiple rows, e.g. 2 and 6. In fact, the range operator `1:3` we used above is just a convenient way of creating a vector `c(1,2,3)`. Although not shown in the example, this works for columns alike.
+
+The careful reader may also have noted another oddity in the above example. With `Experiment[c(2, 6),"outcome"]` we addressed two elements, but right-hand side of `<-` is one value, only. That is a basic mechanism of R, called *reuse*. When the left-hand side is longer than the right-hand side, the right-hand side is reused as many times as needed. Many basic functions in R work like this, and it can be quite useful. For example, you may want to create a vector of 20 random numbers, where one half has a different mean as the second half of observations.
+
+```{r reuse_1, opts.label = "rtut.nr"}
+rnorm(20, mean = c(1,2), sd = 1)
+```
+
+The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes is convenient, it can also lead to difficult programming errors. So, it is good advice to be aware of this mechanism and always check the input to vectorized functions, carefully.
+
+
+
+
+[MOVE]
+Most behavioural research collects *real data* to work with. Like our simulation, real data usually contains several variables. In most cases, data is stored in a matrix-like structure, where columns are variables and rows are observations. R has *data frames* to store data. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research:
+	
+In the whole book, data tables are organized according to the rule *one-row-per-observation of the dependent variable*. Many reseachers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research non-repeated measures (and actually equivalent with the above rule), but will not function properly with modern regression models, like mixed-effects models.
+[/MOVE]
+
+The most common way to create a data frame is reading in a data table from a file, as we will see next.
+
+
+__Exercises:__
+
+1. We have seen how to extract a dataframe column as a vector using the double square brackets. There seem to be no such option to extract an individual row. Why? (Think about object types).
+
+1. How would you use extract a single value from  variable in dataframe using the `$` operator ands square brackets _in that order_? (`Experiment$outcome[3]`)
+
+### Importing and storing data
+
+R lets you import data from almost every conceiveable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for EXcel files). Besides that R has its own file format for storing data, which is *.Rda*  files. With thse files you can save data frames (and any other object in R), using the `save(data, file = "some_file.Rda")` and `load(file = "some_file.Rda")` commands. 
+
+Few people create their data tables directly in R, or have legacy data sets in Excel (*.xslx*) and SPSS files (*.sav*). Moreover, the data can be produced by electronic measurement devices (e.g. electrodermal response measures) or programmed experiments  can provide data in different forms, for example as *.csv* (comma-separated-values) files. All these files can be opened by the following commands:
+
+```{r load files, opts.label = "rtut.nr"}
+## Text files
+Experiment <- 
+  read.csv("some_file.csv")
+
+## EXcel
+Experiment <- 
+  read.xlsx("some_file.xlsx", sheet = 1)
+
+## SPSS
+Experiment <- 
+  read.spss("some_file.sav", 
+            to.data.frame = TRUE)
+
+```
+
+Note how the read.spss command gets an additional argument, which tells it to create a data frame. As a default it creates a list of lists, which is not what you typically want.
+
+Remember, data frames are objects and volatile as such. If you leave your One you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to hsve a complete R-based workflow, you can conventiently use R's own format for storing data, `Rdata` files. For storing a data frame and then reading it back in (in your next session), simply do:
+
+```{r opts.label = "rtut.nr"}
+save(Experiment, file = "Experiment.Rda")
+load(file = "Experiment.Rda")
+```
+
+Note that all objects are restored by their original names, without using any assignments. Take care, as this will overwrite any objects with the same name. Another issue is that for the `save` command you have to explicitly refer to the `file` argument and provide the file path as a character object. In Rstudio, begin typing  `file=""`, put the cursor between the quotation marks and hit `Tab`, which opens a small dialogue for navigation to the desired file.
+
+
+
+Exercise 1:
+
+In the book package (directory `/Data`) you will find the data set of the (virtual) `` study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
+
+
+Exercise 2:
+
+1. drop an Excel and/or an SPSS file into the same directory as your current R file. 
+2. Read the data into a data frame 
+3. summarize what is in the data frame
+
+
+### Manipulating data
+
+Do you wonder about the strange use of `%>%` in my code above? This is a modern way of programming in R, that grounds on the [split, apply, combine](http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/) paradigm, which is famous in big data  scenarios. 
+
+The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for data manipulation, where it chains steps of data manipulation. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.
+
+Importing data from any of the possible ressources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the dataframe. Say, you want to variable _Group_ to be called _Condition_, but omit the variable _age_ and store the new dataframe as _Exp_. The select command does all this. In the following code the dataframe `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables 
+
+```{r opts.label = "rtut"}
+Exp <-
+  Experiment %>% 
+  select(Condition = Group, outcome)
+```
+
+Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers in the outcome variable (larger than 500). Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ onboard) and add some filtering steps:
+
+```{r opts.label = "rtut"}
+
+## rename, then filtering
+Exp <-
+  Experiment %>% 
+  select(Condition = Group, age, outcome) %>% 
+  filter(outcome < 500) %>% 
+  filter(age != -99)
+
+head(Exp)
+  
+```
+
+Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable by condition. The following chain of commands first group the dataframe, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
+
+```{r opts.label = "rtut"}
+Exp %>% 
+  group_by(Condition) %>% 
+  summarize(mean = mean(outcome),
+           sd = sd(outcome) )
+```
+
+
+### Plotting data
+
+Good statistical graphics can vastly improve your and your readers understanding of data and results. This book exclusively introduces the modern ggplot2 graphics system of R, which is based on the [grammar of graphics](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/).
+
+Every plot starts with a data frame that is chained into the `ggplot(aes(...))` command. The `aes(...)` argument of ggplot creates the *aesthetics*, which is a *mapping  between variables and features of the plot* (and only remotly has something to do with beauty). Review the code once again that produces the piles-of-sugar: the aesthetics map the variable *Group* on the fill color, whereas *outcome* is mapped to the x axis. For a plot to be valid, there must at least one layer with a *geometry*. The above example uses the density geometry, which calculates the density and maps it to the y axis.
+
+The ggplot2 plotting system knows a full set of geometries, like:
+
+* scatterplots with `geom_point()`
+* smooth line plots with `geom_smooth()`
+* histograms with `geom_histogram()`
+* boxplots with `geom_boxplot()` and
+* my personal favorite: horizontal density diagrams with `geom_violin()`
+
+For a brief demonstration of ggplots basic functionality, we use the `BAB1` data set of the BrowsingAB case. We attach the case environment and use the `str` command to take a first look at the data:
+
+```{r opts.label = "rtut"}
+attach(BrowsingAB)
+BAB1
+```
+
+The BrowsingAB case is a virtual series of studies, where two websites were compared by how long it takes users to complete a given task, time-on-task (ToT). Besides the design factor, a number of additional variables exist, that could possibly play a role, too, for ToT. We explore the data set with ggplot:
+
+We begin with a plot that shows the association between age of the participant and time-on-task (ToT). Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a *scatter plot*. 
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT)) +
+  geom_point()
+
+```
+
+Let's take a look at the elements of the command chain: The first two lines pipe the data frame into the ggplot engine.
+
+```{r opts.label = "rtut.nr"}
+BAB1 %>% 
+  ggplot(...)
+```
+
+At that moment, the ggplot engine "knows" which variables the data frame contains and hence are available for the plot. It does not yet know, what variables are being used, and how. The next step is, usually, to consider a basic (there exist more than 30) *geometry* and put it on a *layer*. The scatterplot geometry of ggplot is `geom_point`:
+
+```{r opts.label = "rtut.nr"}
+BAB1 %>% 
+  ggplot(...) +
+  geom_point()
+```
+
+
+The last step is the *aesthetic mapping*, which tells ggplot the variables to use and how to map them to *aesthetic* properties of the geometry. The basic properties of points in a coordinate system are the x and y-positions:
+
+```{r opts.label = "rtut.nr"}
+BAB1 %>% 
+  ggplot(aes(x = age, y = ToT)) +
+  geom_point()
+```
+
+The function `aes` creates a mapping where the aesthetics per variable are given. When call `aes` directly, we see that it is just a table.
+
+```{r opts.label = "rtut"}
+aes(x = age, y = ToT)
+```
+
+One tiny detail in the above chain has not yet been explained: the `+`. When choosing the geometry, you actually *add a layer* to the plot. This is, of course, not the literal mathematical sum. Technically, what the author of the ggplot2 package did, was to *overload* the `+` operator. A large zoo of ggplot functions can be combined in a myriad of ways, just using `+`. The overloaded `+` in ggplot is a brilliant analogy: you can infinitly chain ggplot functions, like you can create long sums. You can store ggplot object and later modify it by adding functions. The analogy has its limits, though: other than sums, order matters in ggplot combinations: the first in the chain is always `ggplot` and layers are drawn upon each other.
+
+Let's move on with a slightly different situation that will result in a different geometry. Say, we are interested in the distribution of the time-on-task measures under the two designs. We need a geometry, that visualizes the distribution of quantitative variables split by a grouping variable, factor. The boxplot does the job:
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = Design,  y = ToT)) +
+  geom_boxplot()
+
+```
+
+The boxplot maps ToT to y (again). The factor Design is represented as a split on the x-axis. Interestingly, the boxplot does not represent the data as raw as in the scatter plot example. The geometry actually performs an analysis on ToT, which produces five statistics: min, first quartile, median, third quartile and max. These statistics define the vertical positions of bars and end points.
+
+Now, we combine all three variables in one plot: how does the association between ToT and age differ by design? As we have two quantitative variables, we stay with the scatter plot for now. As we intend to separate the groups, we need a property of points to distinguish them. Points offer several additional aesthetics, such as color, size and shape. We choose color, and add it to the aesthetic mapping by `aes`. 
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
+  geom_point()
+```
+
+Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the boxplot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For the scatterplots, a geometry that does the job of summarizing the trend is `geom_smooth`. This geometry summarizes a cloud of point by drawing a LOESS-smoothes line through it. Note how the color mapping is applied to all geometry layers. 
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
+  geom_point() +
+  geom_smooth()
+```
+
+We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored  sigmoid curves. 
+
+Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *facetting*. A facet splits the data by a grouping variable and creates one single plot for every group:
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
+  geom_point() +
+  geom_smooth() +
+  facet_grid(Education ~ 1)
+```
+
+See, how the `facet_grid` command takes a formula, instead of just a variable name. This makes facetting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:
+
+```{r  opts.label = "rtut"}
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT)) +
+  geom_point() +
+  geom_smooth() +
+  facet_grid(Education ~ Design)
+```
+
+Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable (but not vice-versa).
+
+Exercise 1: 
+
+Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a boxplot that shows the two conditions (think carefully about the mappings of x and y).
+
+Exercise 2:
+
+Use the dataset BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet, and use color to represent Design again.
+
+
+### Fitting regression models
+
+Above we have seen examples of functions that boils down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the `lm` command, that applies regression models to data (provided as dataframes).
+
+In the following, we will use our simulated dataframe `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. (I am using a `dyplr` transformation chain for the simulation, as explained before.
+
+```{r opts.label = "rtut"}
+N_Obs <- N_Obs
+
+Exp <-
+  data_frame(Obs = 1:N_Obs,
+             Condition = rep(c("Experimental", "Control"), N_Obs/2),
+             age = runif(N_Obs, 18, 35),
+             mu = 200 + (Condition == "Control") * 50 + age * 1,
+             outcome = rnorm(N_Obs, mu, 10))
+```
+
+
+*ANOVA* is just one special case of regression model, as you will learn in a later chapter. The ANOVA model is specified in the first argument of the command. The model specification is given in a certain formula language. Learning this formula language is key to unleashing the power of linear regression in R. Below is a very basic model, that predicts `outcome` by `Condition`. As the predictor is a factor, it is practically an ANOVA.
+We can perform a full ANOVA on the dataframe `Exp` with just one command:
+
+```{r opts.label = "rtut"}
+M1 <- 
+  lm(outcome ~ Condition, 
+     data = Exp)
+summary(M1)
+```
+
+Another classic model is *linear regression*, where outcome is predicted by the metric variable `age`:
+
+```{r opts.label = "rtut"}
+M2 <- 
+  lm(outcome ~ age, 
+     data = Exp)
+summary(M2)
+```
+
+If you are interested in both at the same time, you can combine that in one model by the following formula:
+
+```{r opts.label = "rtut"}
+M3 <- 
+  lm(outcome ~ Condition + age, 
+     data = Exp)
+summary(M3)
+
+```
+
+A statistical model has several components, for example the coefficients and residuals. Models are complex objects, from which a variety of inferences can be made. For example, the coefficient estimates can be extracted and used for prediction. F-test can be applied on the residuals. This is basícally, what the `summary` command prints to Console. 
+
+A number of functions can be used to extract certain aspects of the model. For example:
+
+* `coef(model)`
+* `residuals(model)`
+* `predict(model)`
+* `anova(model)`
+
+
+
+### Knitting statistical reports  (TBC)
+
+
+### A workflow for reproducable research  (TBC)
+
+
+## Resources for getting started with R
+
+[Getting started with Rstudio (presentation)](http://www.calvin.edu/~rpruim/talks/Rminis/RStartingUp.pdf)
+
+[Getting started with Rstudio (ebook)](http://it-ebooks.info/book/2253/)
+
+[ggplot2 Version of Figures in "25 Recipes for Getting Started with R"](http://www.r-bloggers.com/ggplot2-version-of-figures-in-%E2%80%9C25-recipes-for-getting-started-with-r%E2%80%9D/) for users who are familiar with the legacy plotting commands in R
+
+[Introduction to dplyr for Faster Data Manipulation in R](http://rpubs.com/justmarkham/dplyr-tutorial) introduces dplyr, the next generation R interfacte for data manipulation, which is used extensively in this tutorial.
+
+[Quick-R](http://www.statmethods.net/) is a comprehensive introduction to many common statistical techniques with R.
+
+[rstudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/) is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and bring them to the workshop.
+
+[Code as manuscript](http://codeasmanuscript.org/lessons/) features a small set of lessons with code examples, asssignments and further ressources. For if you are in a haste.
+
+```{r save_all, opts.label = "invisible"}
+#save(Dgsr, Pgsr, Mgsr, Sgsr, Tgsr, file = "Getting started with R.Rda")
+#write.bibtex(file="ref_gsr.bib")
+
+save_CE(CE)
+```
+

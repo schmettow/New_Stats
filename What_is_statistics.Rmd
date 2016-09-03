@@ -1,0 +1,590 @@
+---
+title: "What is statistics?"
+author: "Martin Schmettow"
+date: "July 5, 2016"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document: default
+subtitle: New statistics for design researcher
+---
+
+
+
+
+```{r setup, message=F, warning=F}
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = F
+
+source("RMDR.R")
+
+CE = c("Rainfall", "Rational", "Sec99")
+load_CE(CE)
+
+#opts_chunk$set(cache = T)
+```
+
+
+# What is statistics?
+
+## Decision making under uncertainty
+
++ I see clouds. Should I take my umbrella?
++ Should I do this bungee jump? How many people came to death by jumping? (More or less than alpine skiing?) And how much fun is it really?
++ Overhauling our company website will cost us EUR 100.000. Is it worth it?
+
+All the above cases are examples of decision making under uncertainty. The actors aim for maximizing their outcome, be it well being, fun or money. But, they are uncertain. And their uncertainty occurs on two levels: 
+
+1. One cannot precisely foresee the exact outcome of one's chosen action:
+
++ Taking the umbrella with you can have two consequences: if it rains, you have the benefit of staying dry. If it does not rain, you have the inconvenience of carrying it with you. 
++ You don't know if you will be the unlucky one, who's bungee rope breaks, with fatal consequences.
++ You don't know whether the new design will attracts more visitors to your website and serves them better.
+
+2. It can be difficult to precisely determine the benefits or losses of potential outcomes:
+
++ How much worse is your day when carrying a useless object with you? How much do you hate moisture? In order to compare the two, they must be assessed on the same scale.
++ How much fun (or other sources of reward, like social acknowledgements) is it to jump a 120 meter canyon? And how much worth is your own life to you?
++ What is the average revenue generated per visit? What is an increase of recurrance rate of, say, 50% worth?
+
+Once you know the probabilities of events and the respective values, *decision theory* provides an intuitive framework to estimate these values. *Expected utility* $U$ is the sum product of *outcome probabilities* $P$ and the involved *losses* $L$. As such, it is the average loss one can expect, when following a particular strategy. 
+
+In the given case, two strategies exist, namely taking an umbrella versus taking no umbrella, when it is cloudy. We calculate and compare the expected utilities `U` as follows: 
+
+$$\begin{aligned}
+P(rain) = 0.6 \\
+P(no rain) = 1 - P(rain) = 0.4 \\
+L(carry) = 2 \\
+L(wet) = 4 \\
+U(umbrella) = P(rain) L(carry) + P(no rain) L(carry)  = L(carry) = 2\\
+U(no umbrella) = P(rain) L(wet) = 2.4
+\end{aligned}
+$$
+
+
+
+```{r tab:umbrella_1}
+# try(detach(Rainfall))
+attach(Rainfall)
+
+Actions <-
+  data.frame(action = c("umbrella", "no umbrella"))
+
+Events  <-
+  data.frame(event  = c("rain", "no rain"),
+                     prob   = c(0.6, 0.4))
+
+Loss  <- 
+  expand.grid(action = Actions$action, event = Events$event) %>%
+  join(Events) %>%
+  mutate(loss = c(2, 4, 2, 0))
+
+Decision <- 
+  Loss %>%
+  mutate(conditional_loss = prob * loss) %>%
+  group_by(action) %>%
+  summarise(expected_loss = sum(conditional_loss))
+
+Decision  %>% 
+  knitr::kable()
+
+
+```
+
+We conclude that, given the high chance for rain, and the conditional losses, the expected loss is larger for not taking an umbrella with you. It is rational to take an umbrella when it is cloudy.
+
+## Measuring uncertainty
+
+As we have seen above, a decision requires two investigations: the indeterministic  nature of  outcomes, and the assigned loss. Assigning loss to decisions is highly context dependent and often requires domain-specific expertize (or even individual judgment). We will do the formalization of it one more time, then set it aside. The issues of indeterministic processes and the associated uncertainty is basically what the  field of *statistics* deals with. We encounter uncertainty in two forms: first, we usually have just a limited set of observations to draw inference from, this is *uncertainty of parameter estimates*. From just 20 days of observation, we cannot be absolutely certain about the true chance of rain. It can be 60%, but also 62% or 56%. Second, even if we precisely knew the chance of rain, it does not mean we could make a certain statement of the future wheather conditions, which is *predictive uncertainty*. For a perfect forecast, we had to have a complete and exact figure of the physical properties of the atmosphere, and a fully valid model to predict future states from it. For all non-trivial systems (which excludes living organisms and wheather), this is impossible. 
+
+Review the rainfall example: the strategy of taking an umbrella with you has proven to be superior under the very assumption of *predictive uncertainty*. As long as you are interested in long-term benefit (i.e. optimizing the average loss on a long series of days), this is the best strategy. This may sound obvious, but it is not. In many cases, where we make decisions under uncertainty, the decision is not part of a homogeneous series. If you are member of a startup team, you only have this one chance to make a fortune. There is not much opportunty to average out a single failure at future occasions. In contrast, the investor, who lends you the money for your endeavour, probably has a series. You and the investor are playing to very different rules. For the investor it is rational to optimize his strategy towards a minimum average loss. The entrepreneur is best advised to keep the maximum possible loss at a minimum.
+
+As we have seen, predictive uncertainty is already embebedded in the framework of rational decision making. Some concepts in statistics can be of help here: the uncertainty regarding future events can be quantified (for example, with posterior predictive distributions) and the process of model selection can assist in finding the model that provides the best predictive power.
+
+Still, in our formalization of the Rainfall case, what magically appears are the estimates for the chance of rain. Having these estimates is crucial for finding  an optimal decision, but they are created outside of the framework. Furthermore, we pretended t o know the chance of rain exactly, which is unrealistic. Estimating parameters from observations is the reign of statistics. From naive calculöations , statistical reasoning differs by also regarding uncertainty of estimates. Generally, we aim for making statements of the following form: 
+
+"With probability $p$, the attribute $A$ is of magnitude $X$."
+
+In the umbrella example above, the magnitude of interest is the chance of rain. It was assumed to be 60%. This appears extremely high for an average day. A more realistic assumption would be that the probability of  rainfall is 60%  *given the observation of a cloudy sky*. How could we have come to the belief that with 60% chance, it will rain when the sky is cloudy? We have several options, here:
+
+1. Supposed, you know that, on average, it rains 60% of all days, it is a matter of common sense, that the probability of rain must be equal or larger than that, when it's cloudy.
+
+2. You could go and ask a number of experts about the association of clouds and rain.
+
+3. You could do some systematic observations yourself.
+
+Maybe, you have recorded the coincidences of clouds and rainfall over a period, of, let's say, 20 days. You made the following observations:
+
+```{r tab:umbrella_2}
+
+Rain %>% 
+  sample_n(5) %>% 
+  knitr::kable()
+
+```
+
+Intuitively, you would use the average to estimate the probability of rain under every condition.
+
+```{r umbrella_3}
+T_desc <-
+  Rain %>% 
+  group_by(cloudy) %>%
+  summarize(chance_of_rain = mean(rain))
+
+T_desc %>%
+  knitr::kable()
+```
+
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r Rainfall$T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(Rainfall$T_desc[2,2]), 5) * 100`$%. 
+
+The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
+
+Maybe, the conversation would be as follows:
+
+> YOU: In your experience, what is the chance of rain, when it's cloudy.
+
+> EXPERT: Wow, difficult question. I don't have a definite answer.
+
+> YOU: Oh, c'mon. I just need a rough answer. Is it more like 50%-ish, or rather 70%-ish.
+
+> EXPERT: Hmm, maybe somewhere between 50 and70%.
+
+> YOU: Then, I guess, taking an umbrella with me is the rational choice of action.
+
+Note how the expert gave two endpoints for the parameter in question, to indicate the location and the level of uncertainty. If she had been more certain, she had said "between 55 and 65%. While this is better than nothing, it remains unclear, which level of uncertainty is enclosed. Is the expert 100%, 90% or just 50% sure the true chance is in the interval? Next time, you could ask as follows:
+
+> ...
+
+> EXPERT: Hmm, maybe somewhere between 70-90%
+
+> YOU: What do you bet? I'm betting 5 EUR that the true parameter is outside the range you just gave.
+
+> EXPERT: I dare you! 95 EUR it's inside!
+
+The expert feels 95% certain, that the parameter in question is in the interval. However, for many questions of interest, we have no expert at hand (or we may not even trust them altogether). Then we proceed with option 3: making our own observations. 
+
+## Bayesian estimation
+
+Modern Bayesian statistics provide us with advanced means to characterize a parameters magnitude and degree of (un)certainty. Let's run an analysis on the 20 rainfall observations to see how this happens.
+
+```{r umbrella_4, opts.label = "mcmc"}
+M_1 <- 
+  Rain %>%
+  stan_glm(rain ~ cloudy -1, 
+           family = binomial,
+           data = .)
+
+
+```
+
+What the estimation does, is to calculate the *posterior distribution* from the observations. The *posterior distribution* contains the probability (more precisely: the *density*) for all possible values of the parameter in question. The following density plot represents our belief about the parameter $P(rain|cloudy)$ after we have observed twenty days:
+
+```{r fig:umbrella_post, opts.label = "fig.small"}
+M_1 %>%
+  posterior() %>%
+  filter(type == "fixef") %>% 
+  mutate(chance_of_rain = plogis(value)) %>% 
+  ggplot(aes(x = chance_of_rain, fill = parameter, col = parameter)) +
+  geom_density(alpha = .5)
+
+```
+
+From the posterior distribution, we can deduct all kinds of summary statistics, such as:
+
+1. the most likely value for a parameter in question is called the *posterior mode* and is the same as the *maximum likelihood estimate* when prior knowledge is absent.
+2. the average of parameter values, weighted by their probability is called the *posterior mean*
+3. a defined range to express 95% (or any other level of) certainty is the *95% credibility interval*
+
+We can also make non-standard evaluations on the posterior distribution, for example: How certain is it that $P(rain|cloudy) < 0.7$? We'll demonstrate the use of this in the next section.
+
+## Betting on designs
+
+The design of systems can be conceived as a choice between design options. For example, when designing an informational website, you have the choice of making the navigation structure broad (and shallow) or deep (and narrow). Your choice will to some extent, change usability of the website, hence your customer satisfaction, rate of recurrance, revenue etc.
+
+
+### Case: e-commerce A/B
+
+Consider the following example: Violet is development manager of a e-commerce website. At present, there is debate about a major overhaul of the website. Most management team members  agree that implementing a better search function will increase the revenue per existing customer. At the opposite, there are considerable development costs involved, which you have estimated to EUR 100.000.
+
+Upper management has a keen eye on shareholder value and wants the costs to be covered by increased revenues within one year. As the company's total revenue per year is 1.000.000 Euro, an increase by factor 1.1 is required to cover the development costs. 
+
+In order to get a rough idea whether this target can be met, Violet conducts a study where she observes the transactions of 50 random customers using the current system with 50 transactions with a prototype of the new system. The measured variable is the money every participant spends during the visit. The question is: 
+
+*"Do customers in the prototype condition spend 10% more on average?"*
+
+The figure below shows the distribution of revenue in the experiment.
+
+```{r fig:rational_design_1, opts.label = "fig.small"}
+attach(Rational)
+G_exploratory_1 <-
+  RD  %>% 
+  ggplot(aes(y = Euro, x = Design)) +
+  geom_boxplot()
+  
+
+G_exploratory_1
+
+detach(Rational)
+```
+
+There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? And how certain can Violet be? A formal regression analysis gives the answer [^gamma_reg].
+
+[^gamma_reg]: What we run here is a Gamma regression, which we will re-encounter in chapter [GLM]. The coefficients can directly be interpreted as changes in rate.
+
+```{r est:rational_design_2, opts.label = "mcmc"}
+attach(Rational)
+
+M_1 <- 
+  RD %>% 
+  stan_glm(Euro ~ Design, 
+           family = Gamma(link="log"),
+      data = .)
+
+P_1 <-  posterior(M_1)
+
+detach(Rational)
+```
+
+
+```{r rational_design_3}
+attach(Rational)
+T_fixef <- fixef(P_1, mean.func = exp)
+T_fixef %>%  kable()
+detach(Rational)
+
+```
+
+The results tell her that participants spend $`r Rational$T_fixef[[1,2]]`$ Euro on average with the current design. The prototype seems to increase the revenue per transaction by $`r Rational$T_fixef[[2,2]]`$. That seems sufficient, but uncertainty is strong, too, as indicated by the 95% credibility intervals. There is a chance of more than 2.5%, that the revenue is just $`r Rational$T_fixef[[2,3]]`$ (or lower), such that the target is not met. But what precisely is the chance of falling below EUR 5? In Bayesian analysis we usually get the complete posterior distribution, which we can evaluate to get a definite answer:
+
+*What is the probability of the increase in revenue being less than 5 EUR?*
+
+We inspect the posterior distribution and mark the area of interest
+
+```{r fig:rational_design_risk_of_failure, opts.label = "fig.small"}
+attach(Rational)
+G_risk_of_failure_1 <-
+  P_1 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+
+N_risk_of_failure_1 <-
+  P_1 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = value < 1.1) %>%
+  select(outcome) %>%
+  colMeans  
+
+G_risk_of_failure_1
+
+detach(Rational)  
+```
+
+The red area represents the danger zone, where revenue increase does not reach  EUR 5. The area amounts to `r Rational$N_risk_of_failure_1 * 100`% of the total probability. With this information the manager now has several options:
+
+1) decides that `r Rational$N_risk_of_failure_1 * 100`% is a risk she *dares* to take
+2) be confident in herself because *past successes* prove that she should follow her intuition
+3) take into account other *sources of evidence*, for example expert opinions or meta studies
+4) continue the study until sufficient evidence is gathered, but costs of additional  effort have to be accounted for
+
+The first option represents an unspecific tolerance towards risk. Extreme risk tolerance of managers is infamous as one cause for large scale economic crises [BLACK_SWANs]. Her motives could be manifold, still: maybe she was nursed to take risks in her life; or she is confident that consequences in case of failure will be bearable.
+
+The second and third options have something in common: they make use of *external knowledge*. This is explained in the coming section. The fourth option is another way of making *cumulative use of knowledge*, namely *[adaptive testing: find correct term]*. 
+
+
+### Case: 99 seconds
+
+Consider Jane: she is chief engineer at a mega-large rent-a-car company smartr.car that is doing their business nothing but online. Jane was responsible for a large scale overhaul of the customer interface for mobile users. Goal of the redesign was to streamline the user interface, which had grown wild over the years and had become boring. Early customer studies indicated that the app needed a serious visual decluttering and stronger funneling of tasks. 300 person months went into the re-development and the team did well: a recent A/B study had shown that users learned the smartr.car v2.0 fast could use its functionality very efficiently. Jane's team is prepared for the opening event, when marketing requested the following.
+
+> marketing: we want to support marketing introduction with the following slogan: "rent a car in 99 seconds".
+
+> Jane: not all users manage a full transaction in that short time. That could be a lie.
+
+> marketing: legally, the claim is fine if it holds on average.
+
+> Jane: i can find out for you (but we won't violate any rules).
+
+User researcher Andrew was responsible for analyzing the data of the A/B study. On Jane's request, Andrew takes another look at the data. As he understands it, he has to find out whether the average of all recorded time-on-tasks with smartr.car 2.0 is 99 seconds, or better. Here is what he sees:
+
+
+```{r fig:seconds_99_1, opts.label = "fig.small"}
+attach(Sec99)
+
+G_Sec99_expl_1 <-
+  Ver20 %>%   
+  ggplot(aes(x = ToT)) +
+  geom_histogram()
+
+G_Sec99_expl_1
+
+detach(Sec99)
+```
+
+
+
+Andrew, trained in statistics as he is, figures that if you make such a statement, he wanted to be 90% sure. The performance is not completely off 99 seconds. But given the huge variance in the sample, it seems impossible to hold the desired claim with a certainty of 80%. Still, he gives it a try and runs an estimation (which we will later get to know as a *grand mean model*)
+
+
+```{r seconds_99_2, opts.label = "mcmc"}
+attach(Sec99)
+
+M_Sec99_1 <- 
+  Ver20 %>%    
+  stan_glm(ToT ~ 1, data = .)
+
+P_Sec99_1 <-
+  posterior(M_Sec99_1)
+
+detach(Sec99)
+  
+```
+
+
+```{r seconds_99_3}
+attach(Sec99)
+
+T_fixef <-  
+  fixef(P_Sec99_1,
+        interval = .6)
+
+N_99s <- 
+  P_Sec99_1 %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(confirm = value <= 99) %>% 
+  summarise(certainty = mean(confirm)) %>% 
+  mutate(odds = (1-certainty)/certainty) %>% 
+  as.numeric()
+  
+N_111s <- 
+  P_Sec99_1 %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(confirm = value <= 111) %>% 
+  summarise(certainty = mean(confirm)) %>% 
+  mutate(odds = (1-certainty)/certainty) %>% 
+  as.numeric()
+
+detach(Sec99)
+
+```
+
+
+
+The results tell him that most likely the average time-on-task is 
+$`r Sec99$T_fixef[[1,2]]`$. That is not very promising. In fact, the odds that the average user can do it in 99 seconds is a feeble `r round(Sec99$N_99s[1] * 100, 0)`%. Then, Jane had the idea that the slogan could be changed to *"rent a card in 1-1-1 seconds"*. The certainty that this slogan holds is a favorable `r round(Sec99$N_111s[1] * 100, 0)`, a risk that a brave marketing department is surely willing to take.
+
+## Prior information
+
+It is rarely the case that we encounter a situation *tabula rasa*. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season, the region and even the planet.
+
+In behavioural research it has been general standard that every experiment had to be judged on the produced data alone. For the sake of objectivity, researchers were not allowed to take into account previous results, let alone their personal opinion.
+
+In Bayesian statistics, you have the choice. You can make use of external knowledge, but you don't have to. In Bayesian terminology, previous or external knowledge  is called *prior information*. Kowledge that comes from the data is called the *likelihood* and both are combined to *posterior* knowledge by multiplication:
+
+$posterior = likelihood * prior$
+
+Reconsider Violet, the rational e-commerce development manager. She had this role for years and has supervised several large scale outrolls. Couldn't she be more daring, taking into account her past successes? This is not a completely new situation, after all.
+
+
+The impact of prior information can range from negligible to overwhelming. The gain in confidence in our example depends on three factors:
+
+1) the average magnitude of past successes, the higher, the better
+2) the similarity of the current project with past projects
+3) the amount of evidence (e.g., number of recorded projects)
+
+```{r sim:rational_prior, opts.label = "invisible"}
+attach(Rational)
+set.seed(2)
+D_prior <-
+  data_frame(project = as.factor(1:5), 
+             revenue_increase = exp(rnorm(5, log(1.15), .05)))
+detach(Rational)
+```
+
+
+```{r mc:rational_99_prior, opts.label = "mcmc"}
+attach(Rational)
+
+M_prior <-
+  D_prior %>% 
+  stan_glm(revenue_increase ~ 1, 
+           family = Gamma(link = "log"),
+           data = .)
+
+P_prior <- posterior(M_prior)
+
+detach(Rational)
+
+```
+
+```{r tab:rational_design_prior, opts.label = "invisible"}
+attach(Rational)
+
+T_prior <- 
+  P_prior %>% 
+  group_by(parameter) %>% 
+  summarize(mean = mean(value), sd = sd(value))
+
+detach(Rational)
+```
+
+Let's assume, the manager had done 5 projects in the past and recorded the resulting change in revenues. On these five values she does a regression, that we will later call an intercept-only model, and concludes that her *prior belief* is distributed as:
+
+
+
+```{r fig:previous_belief_in_revenue, opts.label = "fig.small"}
+attach(Rational)
+G_prior <- 
+  P_prior %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(value = exp(value)) %>% 
+  ggplot(aes(x = value)) +
+  geom_density()
+
+G_prior
+
+detach(Rational)
+```
+
+On average, revenues have increased by factor `r exp(Rational$T_prior[[1,2]])` by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.
+
+
+```{r opts.label = "mcmc"}
+attach(Rational)
+
+M_2 <-
+  RD %>% 
+  stan_glm(Euro ~ Design, 
+      prior_intercept = normal(0, 100),
+      prior = normal(T_prior[[1,2]], T_prior[[1,3]]),
+      family = Gamma(link = "log"),
+      data = .)
+
+P_2 <- posterior(M_2)
+
+detach(Rational)
+```
+
+```{r rational_design_prior}
+attach(Rational)
+T_fixef_2 <- fixef(P_2, mean.func = exp)
+T_fixef_2 %>%  kable()
+detach(Rational)
+
+```
+
+
+
+```{r fig:rational_design_risk_of_failure_2, opts.label = "fig.small"}
+attach(Rational)
+
+G_risk_of_failure_2 <-
+  P_2 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+  
+N_risk_of_failure_2 <-
+  P_2 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = value < 1.1) %>%
+  select(outcome) %>%
+  colMeans 
+
+G_risk_of_failure_2
+
+detach(Rational)
+```
+
+The manager used historical data to come to a more optimistic evaluation of risk. With a $`r Rational$N_risk_of_failure_2`$ risk of failure it is more tempting to kick off the redesign project. In Bayesian inference, the posterior knowledge about magnitude and certainty of parameters is *literally* a product of prior knowledge and experimental data.
+
+$$posterior = prior * likelihood$$
+
+or, more formally in the famous Bayes law
+
+$$P(\theta|D) = P(\theta) * P(D|\theta)/P(D)$$
+
+where $P(\theta|D)$ is the posterior probability, $P(\theta)$ the prior probability and $P(D|\theta)$ the *likelihood* (what the data says). $P(D)$ is the marginal probability, which much off the time has the only function of scaling the whole term, such that the sum is precisely 1 (as this is required for a probability distribution). 
+
+While anyone with a training in classic statistics may be at unease about the idea to incorporate external knowledge, it is the most natural and reasonable thing to do. Consider the following situation: it has been shown in dozens of studies, that older persons tend to be slower in most basic tasks (like reacting to a red light signal by pressing a button). Imagine now, you were a young Human Factors researcher testing a novel design for brake lights of cars. In your simulator study with $N = 10$, you find that older peopler react quicker than younger persons, on average ($\delta \mu = 123ms; p < .05$). Would you write a paper about it? Given the publication pressure that is imposed on young researchers, the answer may be 'yes'. But, would you honestly believe that the tested design is so unique that it reverses an otherwise highly stable effect? Hopefully, not!
+
+When a result is strongly against all experience, it is natural and reasonable to be more sceptical. And this should be incorporated in the conclusion in two ways: first, the conclusion about magnitude of the effect should be reduced by a certain amount and second, unexpected results are more uncertain. Reducing uncertainty is the primary business when doing empirical research. If the data contradicts prior belief, ambiguity raises. If going with a certain amount of ambiguity is not okay, there is just one option left, which is gathering stronger evidence for the surprising effect. That is: increasing the sample size. In Bayesian statistics you are allowed to gather further evidence when unsatisfied with the level of certainty. At the same time, you can also stop at any time. (Classic frequentist statistics is rather unflexible in that respect.)
+
+Imagine the situation after running the pilot study, but this time the manager is a greenhorn with no history. At the same time, the manager is not fine with the level of certainty in the estimate of revenue increase and seeks to improve it by running additional 40 participants.
+
+## Research units in design 
+
+
+
+## Descriptive statistics
+
+### What is *a* statistic?
+
+Reconsider Jane and Andrew. When asked about whether users can, on average, complete a transaction within 99, they looked at some time-on-task measures. Recall how the research question was defined (based on some fictional laws): the slogan "rent a car in 99 seconds" is only legit, when the average time of all users is 99s or below. Taking the average of a set of measures is everyday knowledge. Often, what is intuitive to people is what they think about the least and don't see the alternatives. So, just to be sure that we are on the same page, the statement is  *not* about:
+
++ There are at least some users who can (which clearly is the case). That would be the *minimum value*.
++ Half of the users or more can, which is a statistic called the *median*.
++ Most users can in around 99s, which is called the *mode*.
+
+All the above, including the  mean, are numbers that summarize the observations. A single number that summarizes a set of observations is called *a statistic*, formally it is just
+
+$s = f_s(D)$
+
+with $s$ being a statistic on data $D$, defined by the function $f_s$. Characterizing a data set by appropriate statistics is called *descriptive statistics*. 
+
+Most commonly used statistics fall in three classes: cardinality, central tendency (or location) of data, or data dispersion. Cardinality statistics give the number of units of a class in a data set. The most common cardinalities are  the number of observed performance measures $N_{Obs}$, the number of individual participants $N_{Part}$ in the study. 
+
+
+
+Reporting the calculated mean of time-on-task in two designs is descriptive. It summarizes the data set in a reasonable way. It is informative in so far as one learns which design to prefer, but coarsely. Consider a case where two designs were just slight variations, come at precisely the same costs, and the researcher has collected performance measures on five subjects per group, without the option of inviting more participants.
+
+## Inferential statistics
+
+Reconsider Jane and Andrew. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
+
+$$\hat M_{ToT} = 1\over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
+
+So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, the field of statistics strongest contribution is that the level of uncertainty can also be quantified. This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate usually is imperfect, with respect to certainty.
+
+A consequence of the imperfect is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
+
+> How certain can you be that in the population of users $M_{ToT] <= 99$?
+
+For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
+
+## Elements of Bayesian statistics
+
+In the following the essential ideas and procedures in Bayesian analysis will be introduced. For an illustration, these concepts will be framed by a virtual case study, which comprises a full Bayesian workflow, with one of the most simple models possible.
+
++ Fault in procedures
+
+### Some probability theory
+
++ $[0;1]$
++ probabilities of joint events multiply
+
+### Likelihoods
+
+In the previous section a basic rule of working with probabilities arouse: the joint probability of two independent events, $x_1$ and $x_2$ is its product. 
+
+### Bayes rule
+
+
+
+## What is wrong with classic statistics
+
+The p-value [...] Imagine giant replication study that showed that 35% of published psychology studies are not replicable. In fact, such a study exists and it has far-reaching consequences. [...]  [REF] shows that rejection bias is one reason: studies that have not reached the *magic .05 level* of significance, have a lower chance of publication. [REF] sees as a reason that author's implicitly trick the system by *the garden of forking paths*  strategy. The research project collects an array of variables, followed by a fishing expediture. Theory is conventiently considered last, but written up in  a pseudo-a prior way.
+
+```{r save_CE, opts.label = "invisible"}
+save_CE(CE)
+```

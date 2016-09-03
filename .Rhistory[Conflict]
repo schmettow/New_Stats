@@ -1,0 +1,512 @@
+LOAD_DATA_SETS = T ## a hack for using RMDR.R by external programs
+if(!exists(LOAD_DATA_SETS)) LOAD_DATA_SETS = T ## a hack for using RMDR.R by external programs
+if(!exists("LOAD_DATA_SETS")) LOAD_DATA_SETS = T ## a hack for using RMDR.R by external programs
+RELOAD_DATA_SETS = F
+install.packages("brms")
+install.packages("wakefield")
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = F
+source("RMDR.R")
+Pwis = list() # plots
+Dwis = list() # data sets
+Mwis = list() # models
+Swis = list() # simulation functions
+Twis = list() # tables
+load("What_is_statistics.Rda")
+names(Mwis)
+load("What_is_statistics.Rda")
+names(Pwis)
+names(Dwis)
+names(Swis)
+names(Twis)
+names(Mwis)
+Mwis[["rational_design_1"]] <-
+Dwis[["rational_design"]] %>%
+brm(revenue ~ design,
+data = .)
+Twis[["rational_design_1"]] <-
+fixef(Mwis[["rational_design_1"]])
+Mwis[["rational_design_1"]]
+fixef(Mwis[["rational_design_1"]])
+posterior(Mwis$rational_design_1)
+bayr::posterior(Mwis$rational_design_1)
+posterior
+fixef
+fixef()
+fixef.brmsfit()
+posterior.brmsfit
+detach("package:bayr")
+library(bayr)
+fixef
+fixef(Mwis$rational_design_1)
+## Regression models
+# library(lme4)
+library(MCMCglmm)
+#library(brms)
+#library(rjags)
+## Simulation etc
+library(modeest)
+#library(MCMCpack)
+## Plotting and setting
+library(knitr)
+library(ggplot2)
+## Data management (go last to prevent overwriting dplyr/tidyr namespace)
+library(plyr)
+library(pipeR)
+library(dplyr)
+library(tidyr)
+library(stringr)
+# distribution functions, link functions
+# logit = Vectorize(function(mu, upper = 1) log(mu/(upper-mu)))
+# inv.logit = function(eta) plogis(eta)
+#' MCMC chain extraction
+#'
+#' MCMC chains are  extracted from a Bayesian (regression) object
+#' and returned as a posterior object, which is in long format
+#' (chain, iter, parameter, value). Depending on input, it may
+#' contain an additional type classifier.
+#'
+#' @aliases posterior.MCMCglmm posterior.brms
+#' @usage posterior(model, ...)
+#' @param model Bayesian model object
+#' @return posterior object with MCMC chain in long format
+#'
+#' The length of the result is determined by n for rlnbinom, and is the maximum
+#' of the lengths of the numerical parameters for the other functions. The
+#' numerical parameters other than n are recycled to the length of the result.
+#' @note %% ~~further notes~~
+#' @author Martin Schmettow
+#' @examples
+#' 	M1 <-
+#' 		data_frame(Condition = rep(c("A", "B"), 20)) %>%
+#' 		mutate(y = rnorm(40, 0 + (Condition == "B") * 2, 1)) %>%
+#' 		MCMCglmm(y ~ Condition, data = .)
+#' 	posterior(M1)
+#'
+#' 	M2 <-
+#' 		data_frame(Condition = rep(c("A", "B"), 20)) %>%
+#' 		mutate(y = rnorm(40, 0 + (Condition == "B") * 2, 1)) %>%
+#' 		brm(y ~ Condition, data = .)
+#' 	posterior(M2)
+#' @export posterior, posterior.brmsfit, posterior.MCMCglmm
+posterior <- function (model, ...) {
+UseMethod("posterior", model)
+}
+posterior.MCMCglmm <- function(model) {
+fixed <-
+as.data.frame(model$Sol) %>%
+mutate(iter = row_number()) %>%
+gather(parameter, value, -iter) %>%
+mutate(type = "fixef",
+parameter = as.character(parameter))
+random <-
+as.data.frame(model$VCV) %>%
+mutate(iter = row_number()) %>%
+gather(parameter, value, -iter) %>%
+mutate(value = sqrt(value),
+type = "grpef",
+parameter = as.character(parameter))
+out <- bind_rows(fixed, random) %>%
+select(iter, parameter, value, type) %>%
+as_data_frame()
+class(out) <- append(class(out), "posterior")
+attr(out, "order") <-
+data_frame(parameter = unique(out$parameter)) %>%
+mutate(order = row_number())
+return(out)
+}
+posterior.brmsfit <- function(model) {
+samples <-
+posterior_samples(model, add_chains = T) %>%
+rename(chain = chains)
+par_order <-
+data_frame(parameter = colnames(samples)) %>%
+mutate(order = row_number())
+type_patterns <-
+data_frame(pattern = c("^b_", "^sd_", "^r_", "^sigma_", "^lp__"),
+type = c("fixef", "grpef", "ranef", "resid", "diag"))
+type_mapping <-
+expand.grid(type = type_patterns$type,
+parameter = par_order$parameter) %>%
+mutate(parameter = as.character(parameter),
+type = as.character(type)) %>%
+join(type_patterns, by = "type") %>%
+mutate(match = str_detect(parameter, pattern)) %>%
+filter(match) %>%
+select(parameter, type, pattern)
+out <-
+samples %>%
+mutate(iter = row_number()) %>%
+gather(parameter, value, -iter, -chain) %>%
+as_data_frame() %>%
+mutate(parameter = as.character(parameter)) %>%
+left_join(type_mapping, by = "parameter") %>%
+left_join(par_order, by = "parameter") %>%
+arrange(order, chain, iter) %>%
+mutate(parameter = str_replace(parameter, pattern, "")) %>%
+select(-pattern)
+class(out) <- append(class(out), "posterior")
+# attr(out, "par_order") <- par_order
+return(out)
+}
+fixef <- function (posterior, location, ...) {
+UseMethod("fixef", posterior)
+}
+ranef <- function (posterior, location, ...) {
+UseMethod("ranef", posterior)
+}
+grpef <- function (posterior, location, ...) {
+UseMethod("grpef", posterior)
+}
+#' fixef
+#'
+#' Extraction of coefficients from posterior chains
+#'
+#' @aliases ranef, grpef
+#' @usage fixef(posterior, loc.function = shorth)
+#' @param posterior posterior distribution object
+#' @param location function for computing the location
+#' @return coefficient table with parameter name, location and CI
+#'
+#' The standard location function is the posterior mode
+#'
+#' @note %% ~~further notes~~
+#' @author Martin Schmettow
+#' @seealso posterior
+#' @examples
+#' 	M1 <-
+#' 		data_frame(Condition = rep(c("A", "B"), 20)) %>%
+#' 		mutate(y = rnorm(40, 0 + (Condition == "B") * 2, 1)) %>%
+#' 		MCMCglmm(y ~ Condition, data = .)
+#' 	posterior(M1) %>%
+#' 	fixef()
+#' @export fixef, fixef.brmsfit
+fixef.posterior <- function(posterior, loc.func = shorth) {
+posterior %>%
+filter(type == "fixef") %>%
+group_by(parameter, order) %>%
+summarize(location = loc.func(value),
+"l-95% CI" = quantile(value, .025),
+"u-95% CI" = quantile(value, .975)) %>%
+ungroup() %>%
+arrange(order) %>%
+select(-order)
+}
+ranef.posterior <- function(posterior, loc.func = shorth) {
+posterior %>%
+filter(type == "ranef") %>%
+group_by(parameter, order) %>%
+summarize(location = loc.func(value),
+"l-95% CI" = quantile(value, .025),
+"u-95% CI" = quantile(value, .975)) %>%
+arrange(order) %>%
+select(-order)
+}
+grpef.posterior <- function(posterior, loc.func = shorth) {
+posterior %>%
+filter(type == "grpef") %>%
+group_by(parameter, order) %>%
+summarize(location = loc.func(value),
+"l-95% CI" = quantile(value, .025),
+"u-95% CI" = quantile(value, .975))
+}
+fixef.MCMCglmm <- function(object, loc.func = shorth) posterior(object) %>% fixef(loc.func = loc.func)
+ranef.MCMCglmm <- function(object, loc.func = shorth) posterior(object) %>% ranef(loc.func = loc.func)
+grpef.MCMCglmm <- function(object, loc.func = shorth) posterior(object) %>% ranef(loc.func = loc.func)
+fixef.brmsfit <- function(object, loc.func = shorth) posterior(object) %>% fixef(loc.func = loc.func)
+ranef.brmsfit <- function(object, loc.func = shorth) posterior(object) %>% ranef(loc.func = loc.func)
+grpef.brmsfit <- function(object, loc.func = shorth) posterior(object) %>% ranef(loc.func = loc.func)
+## p-values don't work
+# pMCMC = function(object) 2 * pmax(0.5/dim(object$Sol)[1],
+#                                   pmin(colSums(object$Sol[,1:object$Fixed$nfl, drop = FALSE] > 0)/dim(object$Sol)[1],
+#                                        1 - colSums(object$Sol[, object$Fixed$nfl, drop = FALSE] >
+#                                                      0)/dim(object$Sol)[1]))
+# ia_table <- function(M, parameters){
+#   fixef(M) %>%
+#     mutate(parameter = str_replace_all(parameter,
+#                                        paste(parameters, collapse = "|"), "")) %>%
+#     separate(parameter, parameters, sep = ":")
+# }
+#
+# ia_plot <- function(M, parameters) {
+#   ia_table(M, parameters) %>%
+#     ggplot(aes_string(y = "location", x = parameters[1],
+#                       col = parameters[2], group = parameters[2])) +
+#     geom_point() +
+#     geom_line()
+# }
+fixef(Mwis[["rational_design_1"]])
+fixef.brmsfit()
+save(Dwis, Pwis, Mwis, Swis, Twis, file = "What_is_statistics.Rda")
+posterior(Mwis[["rational_design_1"]]) %>%
+filter(parameter == "designprototype") %>%
+mutate(increased = ifelse(value < 5, "insufficient", "sufficient")) %>%
+ggplot(aes(x = value, fill = increased)) +
+geom_histogram(binwidth = .2)
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = T
+source("RMDR.R")
+Pwis = list() # plots
+Dwis = list() # data sets
+Mwis = list() # models
+Swis = list() # simulation functions
+Twis = list() # tables
+load("What_is_statistics.Rda")
+Twis[["rational_design_1"]] <-
+fixef(Mwis[["rational_design_1"]])
+Twis[["rational_design_1"]] %>% kable()
+detach("package:bayr")
+install.packages("C:/Users/martin/Google Drive/Aktenkoffer/Environments/Github/R Packages/bayr_0.1.zip", repos = NULL, type = "win.binary")
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = T
+source("RMDR.R")
+Pwis = list() # plots
+Dwis = list() # data sets
+Mwis = list() # models
+Swis = list() # simulation functions
+Twis = list() # tables
+load("What_is_statistics.Rda")
+Twis[["rational_design_1"]] <-
+fixef(Mwis[["rational_design_1"]])
+Twis[["rational_design_1"]] %>% kable()
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = T
+source("RMDR.R")
+Pwis = list() # plots
+Dwis = list() # data sets
+Mwis = list() # models
+Swis = list() # simulation functions
+Twis = list() # tables
+load("What_is_statistics.Rda")
+Twis[["rational_design_1"]] <-
+fixef(Mwis[["rational_design_1"]])
+Twis[["rational_design_1"]] %>% kable()
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = T
+source("RMDR.R")
+Pwis = list() # plots
+Dwis = list() # data sets
+Mwis = list() # models
+Swis = list() # simulation functions
+Twis = list() # tables
+load("What_is_statistics.Rda")
+Mwis[["rational_design_prior"]] <-
+Dwis[["rational_design_prior"]] %>%
+brm(revenue_increase ~ 1, data = .)
+Dwis[["rational_design_prior"]] <-
+data_frame(project = as.factor(1:5),
+revenue_increase = rnorm(5, 5.5, 4))
+set.seed(42)
+Dwis[["rational_design_prior"]] <-
+data_frame(project = as.factor(1:5),
+revenue_increase = rnorm(5, 5.5, 4))
+Mwis[["rational_design_prior"]] <-
+Dwis[["rational_design_prior"]] %>%
+brm(revenue_increase ~ 1, data = .)
+Twis[["rational_design_prior"]] <-
+posterior(Mwis[["rational_design_prior"]]) %>%
+filter(parameter == "Intercept") %>%
+group_by(parameter) %>%
+summarize(mean = mean(value), sd = sd(value))
+Mwis[["rational_design_2"]] <-
+Dwis[["rational_design"]] %>%
+brm(revenue ~ design,
+prior = set_prior(paste0("normal(",Twis[["rational_design_prior"]][1,2],
+",",Twis[["rational_design_prior"]][1,3],")"),
+class = "b", coef = "designprototype"),
+iter = 8000,
+data = .)
+save(Dwis, Pwis, Mwis, Swis, Twis, file = "What_is_statistics.Rda")
+.libPaths()
+library(retime)
+library(retimes)
+ggplot(aes(x = Simulation)) +
+geom_hist()
+library(ggplot2)
+ggplot(aes(x = Simulation)) +
+geom_hist()
+Simulation = rexgauss(n, mu, sigma, tau)
+n = 100
+mu = 0
+sigma = 1
+tau = 1
+Simulation = rexgauss(n, mu, sigma, tau)
+rexgauss(1, mu, sigma, tau, positive = T)
+Simulation = rexgauss(n, mu, sigma, tau, positive = T)
+n
+Simulation = rexgauss(2, mu, sigma, tau, positive = T)
+Simulation = rexgauss(2, mu, sigma, tau)
+Simulation = rexgauss(n, mu, sigma, tau)
+Simulation = rexgauss(100, mu, sigma, tau)
+Simulation = rexgauss(10, mu, sigma, tau)
+Simulation = rexgauss(99, mu, sigma, tau)
+Simulation = rexgauss(20, mu, sigma, tau)
+Simulation = rexgauss(40, mu, sigma, tau)
+Curve = dexgauss(0:20, mu, sigma, tau)
+Curve
+ggplot(aes(x = Simulation)) +
+geom_hist()
+Curve = data_frame(x = 0:20,
+dexgauss(0:20, mu, sigma, tau))
+library(dplyr)
+Curve = data_frame(x = 0:20,
+density = dexgauss(0:20, mu, sigma, tau))
+Curve = data_frame(x = 0:20,
+density = dexgauss(0:20, mu, sigma, tau))
+Curve %>%
+ggplot(aes(x = Simulation)) +
+geom_hist()
+Curve %>%
+ggplot(aes(x = Simulation)) +
+geom_histogram()
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_histogram()
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_line()
+Curve = data_frame(x = seq(0, max, .1)) %>%
+mutate(density = dexgauss(x, mu, sigma, tau))
+max = 20
+Curve = data_frame(x = seq(0, max, .1)) %>%
+mutate(density = dexgauss(x, mu, sigma, tau))
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_line()
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stats = "identity")
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+n = 100
+mu = 5
+sigma = 1
+tau = .1
+max = 20
+Curve = data_frame(x = seq(0, max, .1)) %>%
+mutate(density = dexgauss(x, mu, sigma, tau))
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+n = 100
+mu = 5
+sigma = 1
+tau = 10
+max = 20
+Curve = data_frame(x = seq(0, max, .1)) %>%
+mutate(density = dexgauss(x, mu, sigma, tau))
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+n = 100
+mu = 5
+sigma = 1
+tau = 5
+max = 20
+Curve = data_frame(x = seq(0, max, .1)) %>%
+mutate(density = dexgauss(x, mu, sigma, tau))
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+shiny::runApp('Shiny/exgauss')
+runApp('Shiny/exgauss')
+shinyServer(function(input, output) {
+Curve = data_frame(x = seq(0, input$max, .1)) %>%
+mutate(density = dexgauss(x, input$mu, input$sigma, input$tau))
+output$exgaussPlot <- renderPlot({
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+})
+}
+shinyServer(function(input, output) {
+Curve = data_frame(x = seq(0, input$max, .1)) %>%
+mutate(density = dexgauss(x, input$mu, input$sigma, input$tau))
+output$exgaussPlot <- renderPlot({
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+})
+}
+runApp('Shiny/exgauss')
+shinyServer(
+function(input, output) {
+Curve = data_frame(x = seq(0, input$max, .1)) %>%
+mutate(density = dexgauss(x, input$mu, input$sigma, input$tau))
+output$exgaussPlot <- renderPlot({
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+})
+shinyServer
+runApp('Shiny/exgauss')
+shinyServer(
+function(input, output) {
+Curve = data_frame(x = seq(0, input$max, .1)) %>%
+mutate(density = dexgauss(x, input$mu, input$sigma, input$tau))
+P <-
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+output$exgaussPlot <- renderPlot(P)
+}
+)
+shinyServer(
+)
+runApp('Shiny/exgauss')
+function(input, output) {
+Curve = data_frame(x = seq(0, input$max, .1)) %>%
+mutate(density = dexgauss(x, input$mu, input$sigma, input$tau))
+P <-
+Curve %>%
+ggplot(aes(x = x, y = density)) +
+geom_bar(stat = "identity")
+output$exgaussPlot <- renderPlot(P)
+}
+input = c()
+runApp('Shiny/exgauss')
+shinyapps::setAccountInfo(name='schmettow',
+token='42BD9B40B91D553B509407626F879D51',
+secret='XuBoyu/YFF/IwP5l5KpppQcAIgnscNGYzYl3KmmQ')
+library(shinyapps)
+install.packages("shinyapps")
+devtools::install_github('rstudio/shinyapps')
+install.packages(c("BDgraph", "BH", "BRugs", "car", "curl", "devtools", "DiagrammeR", "directlabels", "dygraphs", "GGally", "ggmcmc", "ggthemes", "git2r", "Hmisc", "httr", "knitr", "latticeExtra", "lubridate", "maptools", "MCMCglmm", "memoise", "MuMIn", "mvtnorm", "qgraph", "R6", "RandomFields", "RandomFieldsUtils", "raster", "Rcpp", "RcppArmadillo", "RcppEigen", "RefManageR", "rjags", "rJava", "rmarkdown", "rockchalk", "sfsmisc", "shinyjs", "sp", "spdep", "statmod", "stringdist", "tidyr", "tikzDevice", "tree", "visNetwork", "xtable"))
+devtools::install_github('rstudio/shinyapps')
+library(shinyapps)
+devtools::install_github('rstudio/shinyapps')
+shinyapps::setAccountInfo(name='schmettow',
+token='42BD9B40B91D553B509407626F879D51',
+secret='<SECRET>')
+shinyapps::setAccountInfo(name='schmettow',
+token='42BD9B40B91D553B509407626F879D51',
+secret='XuBoyu/YFF/IwP5l5KpppQcAIgnscNGYzYl3KmmQ')
+shiny::runApp('Shiny/exgauss')
+.4^3
+1/.6
+10/6
+5/3
+3/5
+8/5
+install.packages("C:/Users/martin/Google Drive/Aktenkoffer/Environments/Github/R Packages/bayr_0.1.zip", repos = NULL, type = "win.binary")
+load("C:/Users/martin/Google Drive/Aktenkoffer/Publications/MRTDR/Classic_linear_models.Rda")
+Mclm$Browsing_AB_4
+posterior(Mclm$Browsing_AB_4)
+library(bayr)
+posterior(Mclm$Browsing_AB_4)
+install.packages("brms")
+## The following is for running the script through knitr
+thisdir = getwd()
+source("RMDR.R")
+Pclm = list() # plots
+Dclm = list() # data sets
+Mclm = list() # models
+Sclm = list() # simulation functions
+Tclm = list() # tables
+load("Classic_linear_models.Rda")

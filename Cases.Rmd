@@ -1,0 +1,1290 @@
+---
+title: "Cases"
+subtitle: "New statistics for design researcher"
+author: "Martin Schmettow"
+date: "July 01, 2016"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document: default
+---
+
+TODO: add class and attributes to all CEs
+
+```{r profile, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+## The following is for running the script through knitr
+source("RMDR.R")
+```
+
+```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
+## The following is just for running the script conventionally (no knitr) on the authors computer
+```
+
+
+# Simulation data {#chap:simulation}
+
+1. Identify the classes of objects in your research, such as participants, designs, tasks, situations asf. In the most general case, these are considered *units* sampled from a population
+2. For every class create a *unit table*
+
+* start with the identifier variables, which unambiguously mark every row.
+* add fixed effects properties to unit tables, for example, age and gender of participants
+* add random effects to the unit tables, like $\theta_T0$ for a task-level ramdom effect, or $\theta_S1$ for a subject-level slope ramdom effect. 
+
+3. Create an *observation  table* for your observations. Start with a grid of unit identifiers. For complete designs, this is easiest done using *expand.grid()*. 
+4. *Join* the observations table with all unit tables using unit identifiers as key. This is done either through *merge()* from the base package or *inner_join()* from dplyr. This you will gather all predictors in one table.
+6. Compute the linear predictor $\eta$ (eta), by a linear term, e.g. add the treatment effect and participant random effects. In case of Gaussian distributed residuals, the link function is *identity()* and this step can be omitted.
+7. Compute the expected value $\mu$ (mu), by using the link function
+8. Compute the observed value $y$ (or any more expressive name) by adding the error term to $\mu$, typically by using a random number function such as *rnorm()*.
+
+## Tipps &  Tricks
+
+1. While it is possible (with the help of dplyr) to write the complete simulation in one chain, using intermediate variables and tables results in code that is better to read and to modify.  
+
+2. Still, intermediate variables can clutter the environment. Consider writing the simulation code as a function. That keeps the environment clean from all intermediate tables and variables you are using. The function can either save the simulated data set to an Rda file, or return it.
+
+3. Sometimes, it is useful to introduce *latent variables*. These are just variables that have not been observed.  The interaction effect between age and Design is such a case. In the BrowsingAB data set, age was not the direct cause of the design improvement, but a latent variable called *Far_sightedness*.  association between education and age was not a direct one. 
+
+It occured indirectly, mediated through 
+
+## Statistical distributions
+
+### Gaussian distribution
+
+### Binomial and Poisson distributions
+
+### Exponential and gamma distributions
+
+### Exponential-gaussian distribution
+
+
+
+
+
+## Case Rainfall
+
+```{r Rainfall_create_old, opts.label = "deprecated"}
+try(detach(Rainfall))
+try(rm(Rainfall))
+
+Rainfall <- 
+  new.env()
+
+Rainfall$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Rainfall)
+    detach(Rainfall)
+    attach(Rainfall)
+  }
+
+Rainfall$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Rainfall)
+    detach(Rainfall)
+    attach(Rainfall)
+  }
+
+save(Rainfall, file = "Cases/Rainfall.Rda")
+```
+
+```{r Rainfall_create}
+ 
+new_syncenv("Rainfall")
+# save(Rainfall, file = "Cases/Rainfall.Rda")
+```
+
+
+
+```{r Rainfall_sim, opts.label = "simulate"}
+## simulating the data set
+Rainfall$simulate <-
+  function(
+    n_Days = 20,
+    set.seed = 1,
+    debug = F){
+
+    if (!is.na(set.seed)) set.seed(set.seed)
+    ## number of observations
+    data_frame(cloudy = rbinom(n_Days, 1, .6)) %>%
+    mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
+    mutate(cloudy = as.logical(cloudy),
+         rain = as.logical(rain))
+
+  }
+
+Rainfall$Rain <- 
+  Rainfall$simulate()
+
+names(Rainfall)
+
+```
+
+
+```{r Rainfall_plot}
+## frequency table
+
+Rainfall$tbl_expl_1 <-
+  function(Rain, shape = "long"){
+    out = 
+      Rainfall$Rain %>% 
+      group_by(cloudy, rain) %>% 
+      summarize(freq = n())
+    
+    if(shape == "wide") out = 
+        out %>% 
+        spread(rain, freq)
+    
+    out
+  }
+
+Rainfall$tbl_expl_1(Rainfall$Rain)
+
+
+# Rainfall$plt_expl_1 <- 
+#   function(D){
+#     D %>% 
+#       Rainfall$tbl_expl_1() %>% 
+#       ggplot(aes(x = cloudy, col = rain, y = freq))+
+#       geom_bar(stat = "identity")
+#   }
+
+
+```
+  
+
+```{r Rainfall_export}
+save(Rainfall, file = "Cases/Rainfall.Rda")
+
+write_sav(Rainfall$Rain, "Data/Rainfall.sav")
+write_csv(Rainfall$Rain, "Data/Rainfall.csv")
+
+```
+
+
+## Case 99 seconds
+
+Case 99 seconds is 
+The group mean of the second design is fixed to 105, with the CI80 of [103, 111]
+
+```{r Sec99_create, opts.label = "simulate"}
+try(detach(Sec99))
+try(rm(Sec99))
+
+new_syncenv("Sec99")
+# 
+# Sec99$"<-" <- 
+#   function(name,value) {
+#     assign(as.character(substitute(name)), 
+#            value, envir = Sec99)
+#     detach(Sec99)
+#     attach(Sec99)
+#   }
+# 
+# Sec99$"->" <- 
+#   function(value,name) {
+#     assign(as.character(substitute(name)), 
+#            value, envir = Sec99)
+#     detach(Sec99)
+#     attach(Sec99)
+#   }
+
+save(Sec99, file = "Cases/Sec99.Rda")
+```
+
+
+```{r Sec99_simulate, opts.label = "simulate"}
+
+## simulating the data set
+Sec99$simulate <-
+  function(n_Part = 100, 
+           mu_ToT = 105, 
+           sigma_ToT = 30,
+           set.seed = 42,
+           debug = F){
+    
+    if (!is.na(set.seed)) set.seed(set.seed)
+    ## number of observations
+    n_Obs = n_Part
+    
+    ## OUT
+    Sec99 = data.frame(Obs = 1:n_Part,
+                       Part = 1:n_Part,
+                       ToT = rnorm(n_Obs, mu_ToT, sigma_ToT))
+    Sec99 %>% 
+      as_data_frame()
+  }    
+
+Sec99$Ver20 <- Sec99$simulate()
+
+# Sec99$Ver20 %>% 
+#   stan_glm(ToT ~ 1, data = ., 
+#            verbose = F, 
+#            show_messages = F,
+#            refresh = -1
+#            ) %>% 
+#   fixef(interval = .8)
+  
+
+save(Sec99, file = "Cases/Sec99.Rda")
+```
+
+
+
+
+
+
+
+## Case: Rational
+
+```{r Rational_create, opts.label = "invisible"}
+try(detach(Rational))
+try(rm(Rational))
+
+Rational <- 
+  new_syncenv("Rational")
+# 
+# Rational$"<-" <- 
+#   function(name,value) {
+#     assign(as.character(substitute(name)), 
+#            value, envir = Rational)
+#     detach(Rational)
+#     attach(Rational)
+#   }
+# 
+# Rational$"->" <- 
+#   function(value,name) {
+#     assign(as.character(substitute(name)), 
+#            value, envir = Rational)
+#     detach(Rational)
+#     attach(Rational)
+#   }
+
+save(Rational, file = "Cases/Rational.Rda")
+```
+
+
+```{r Rational_simulate, opts.label = "simulate"}
+
+
+## simulating the data set
+Rational$simulate <-
+  function(n_Part = 100,
+    mu_legacy = 50,
+    eta_proto = 1.1,
+    scale = 2,
+    set.seed = 1,
+    debug = F){
+
+    
+    if (!is.na(set.seed)) set.seed(set.seed)
+    
+    RD    <- 
+      data_frame(Part = 1:n_Part,
+                 Design = rep(c("current", "proto"), n_Part/2),
+                 mu = mu_legacy * ifelse(Design == "proto", eta_proto, 1),
+                 shape = mu/scale,
+                 scale = scale,
+                 Euro = rgamma(n_Part, shape = shape, scale = scale))
+    
+  }
+
+Rational$RD <- 
+  Rational$simulate()
+
+# Rational$RD %>%
+#   ggplot(aes(x = Euro, col = Design)) +
+#   geom_density()
+
+save(Rational, file = "Cases/Rational.Rda")
+```
+
+
+  
+
+```{r Rational_export}
+write_sav(Rational$RD, "Data/Rational.sav")
+write_csv(Rational$RD, "Data/Rational.csv")
+
+```
+
+
+## Case: BrowsingAB
+
+```{r BAB_create, opts.label = "simulate"}
+try(detach(BrowsingAB))
+try(rm(BrowsingAB))
+
+BrowsingAB <- 
+  new.env()
+
+BrowsingAB$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = BrowsingAB)
+    detach(BrowsingAB)
+    attach(BrowsingAB)
+  }
+
+BrowsingAB$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = BrowsingAB)
+    detach(BrowsingAB)
+    attach(BrowsingAB)
+  }
+```
+
+
+```{r BAB_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+BrowsingAB$simulate <-
+  function(
+    n_Part = 100,
+    n_Task = 5,
+    ## Fixed effects
+    beta_S0 = 120,
+    # intercept
+    beta_S1 = 2,
+    # male
+    beta_S2 = 20,
+    # no degree
+    beta_S3 = .5,
+    # age
+    beta_S4 = .5,
+    # age:no degree
+    beta_S5 = -.1,
+    # age:designB
+    beta_D1 = -30,
+    # designB
+    ## Random effects
+    sd_S0 = 20,
+    # subject intercept
+    sd_S1 = 10,
+    # subject slope design
+    sd_T0 = 50,
+    # task intercept
+    lambda_SD1 = 30,
+    # Far_sightedness:Small_font
+    sd_epsilon = 30,
+    # Residual) {)
+    set.seed = 42,
+    debug = F
+  ){
+    
+    n_Design = 2
+    
+    if (!is.na(set.seed)) set.seed(set.seed)
+    ## number of observations
+    n_Obs = n_Part * n_Design * n_Task
+    
+    ## Subject frame
+    Part = data.frame(
+      Part = as.factor(1:n_Part),
+      Gender = ifelse(rbinom(n_Part, 1, .5), "f", "m"),
+      Education = rep(c("degree", "no degree"), n_Part / 2),
+      theta_S0 = rnorm(n_Part, 0, sd_S0),
+      theta_S1 = rnorm(n_Part, 0, sd_S1),
+      age = as.integer(runif(n_Part, 20, 80))
+    ) %>%
+      # LVs
+      # probability of far sightedness increases with age
+      mutate(mu_Far_sighted = (age - 50) / 100,
+             p_Far_sighted = plogis(mu_Far_sighted)) %>% 
+      mutate(Far_sighted = rbinom(n_Part, 
+                                  1, 
+                                  p_Far_sighted))
+    
+    
+    Task = 
+      data.frame(Task = as.factor(1:n_Task),
+                      theta_T0 = rnorm(n_Task, 0, sd_T0))
+    
+    Design = 
+      data.frame(Design = factor(c("A", "B"))) %>% ## LVs
+      mutate(Small_font = (Design == "B"))
+    
+    
+    BrowsingAB =
+      ## creating a complete design
+      expand.grid(
+        Part = levels(Part$Part),
+        Task = levels(Task$Task),
+        Design = levels(Design$Design)) %>%
+      ## joining in the sample tables
+      inner_join(Part) %>%
+      inner_join(Design) %>%
+      inner_join(Task) %>%
+      ## latent variables
+      # small font at website B
+      mutate(lambda_SD1 * Small_font * Far_sighted) %>%
+      ## dependent variable
+      mutate(
+        mu = beta_S0 +
+          (Gender == "male") * beta_S1 +
+          (Education == "no degree") * beta_S2 +
+          age * beta_S3 +
+          age * (Education == "no degree") * beta_S4 +
+          age * (Design == "A") * beta_S5 +
+          (Design == "B") * beta_D1 +
+          theta_S0 +
+          theta_S1 * (Design == "A") +
+          theta_T0 +
+          lambda_SD1 * Far_sighted * Small_font
+      ) %>%
+      mutate(ToT = rnorm(n_Obs, mu, sd_epsilon)) %>%
+      mutate(Obs = 1:n_Obs) %>% 
+      select(Obs, Part, Task, Design, 
+             Gender, Education, age, Far_sighted, Small_font, ToT) %>% 
+      as_data_frame()
+
+    BrowsingAB
+  }
+
+BrowsingAB$BAB1 <- BrowsingAB$simulate(n_Task = 1)
+BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5)
+
+save(BrowsingAB, file = "Cases/BrowsingAB.Rda")
+```
+
+
+  
+
+```{r BAB_export}
+attach(BrowsingAB)
+
+summary(lm(ToT ~ Design, BAB1))
+summary(lm(ToT ~ age, BAB1))
+summary(lm(ToT ~ age * Design, BAB1))
+
+
+write_sav(BAB1, "Data/BrowsingAB1.sav")
+write_sav(BAB5, "Data/BrowsingAB5.sav")
+write_csv(BAB1, "Data/BrowsingAB1.csv")
+write_csv(BAB5, "Data/BrowsingAB5.csv")
+
+detach(BrowsingAB)
+```
+
+
+
+## Case: CUE8
+
+
+
+```{r simulate:cue8, opts.label = "future"}
+Ssim[["cue8"]] <-
+  function(n_Part = 32,
+    n_Team = 16,
+    n_Task = 5,
+    tau = 10 ## higher levels produce more skew
+){
+    n_Obs = n_Part * n_Task
+    Teams <- 
+      data_frame(Team = as.factor(1:n_Team),
+                       moderated = rbinom(n_Team, 1, .5)) %>% 
+      mutate(alpha = runif(n_Team,.9, .95) + moderated * -.05,
+                       prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
+    
+    Participants <- 
+      data_frame(Participant = as.factor(1:n_Part)) %>% 
+      mutate(Team = factor(x = colSums(rmultinom(n_Part, 
+                                                 1, prob = Teams$prevalence)  * 1:n_Team),
+                           levels = c(1:n_Team))) %>% 
+      inner_join(Teams, by = "Team") %>% 
+      mutate(mu_Part = rgamma(n_Part, 160 + moderated * 20, 200) * 20) ## gaussian part
+    
+    Tasks <-
+      data_frame(Task = factor(1:n_Task)) %>% 
+      mutate(mu_Task = rgamma(n_Task, 100, 100) * 100) ## gaussian part
+    
+    Obs <-
+      expand.grid(Participant = as.factor(1:n_Part), 
+                Task = as.factor(1:n_Task)) %>% 
+      full_join(Participants, by = "Participant") %>% 
+      full_join(Tasks, by = "Task") %>% 
+      mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50))
+  }
+
+```
+
+
+## Case: Headache
+
+```{r Headache_create, opts.label = "simulate"}
+try(detach(Headache))
+try(rm(Headache))
+
+Headache <- 
+  new.env()
+
+Headache$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Headache)
+    detach(Headache)
+    attach(Headache)
+  }
+
+Headache$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Headache)
+    detach(Headache)
+    attach(Headache)
+  }
+```
+
+
+```{r Headache_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Headache$simulate <-
+  function(N = 16, 
+           seed = 42){
+    set.seed(seed)
+    data_frame(before = round(rbeta(N, 3, 2) * 4 + 3),
+               PillA = rep(c(TRUE, FALSE), N/2),
+               PillB = c(rep(TRUE, N/2), rep(FALSE, N/2))) %>%
+      mutate(reduction = rnorm(N, before/7 * log(2 + 8 * PillA + 6 * PillB), 0.5)) %>%
+      mutate(PillA = as.factor(PillA),
+             PillB = as.factor(PillB))
+  }
+
+Headache$Pills <- Headache$simulate(N = 40)
+names(Headache)
+save(Headache, file = "Cases/Headache.Rda")
+```
+
+
+  
+
+```{r Headache_export}
+write_sav(Headache$Pills, "Data/Headache.sav")
+write_csv(Headache$Pills, "Data/Headache.csv")
+
+```
+
+
+## Case: Reading time
+
+```{r Reading_create, opts.label = "simulate"}
+try(detach(Reading))
+try(rm(Reading))
+
+Reading <- 
+  new.env()
+
+Reading$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Reading)
+    detach(Reading)
+    attach(Reading)
+  }
+
+Reading$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Reading)
+    detach(Reading)
+    attach(Reading)
+  }
+```
+
+
+```{r Reading_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Reading$simulate <-
+  function(N = 60,
+           beta = c(60, -12, -10, 8),
+           sigma = 5,
+           seed = 42) 
+    {
+    set.seed(seed)
+    out <-
+      data_frame(Part = 1:N,
+                 font_size = factor(rep(c(1, 2), N/2), 
+                                    levels = c(1,2), 
+                                    labels = c("10pt", "12pt")),
+                 font_color = factor(c(rep(1, N/2), rep(2, N/2)),
+                                     levels = c(1,2), 
+                                     labels = c("gray", "black"))) %>%
+       mutate( mu = beta[1] + 
+                beta[2] * (font_size == "12pt") +
+                beta[3] * (font_color == "black") +
+                beta[4] * (font_color == "black") * (font_size == "12pt"),
+              ToT = rnorm(N,  mu, sigma))
+    
+    class(out) <- append(class(out), "sim_tbl")
+    attr(out, "coef") <- list(beta = beta,
+                              sigma = sigma)
+    attr(out, "seed") <- seed
+    
+    out
+    }
+
+Reading$D_1 <- Reading$simulate(N = 40)
+names(Reading$D_1)
+betaplot::iiaplot_3(fixef = as.list(attr(Reading$D_1, "coef")$beta),
+                    # labels = c("font size", "contrast", "ToT"),
+                    factor_1 = c("10pt", "12pt"),
+                    factor_2 = c("gray", "black"))
+
+Reading$D_1 %>% 
+  ggplot(aes(col = font_color,
+             x = font_size,
+             y = ToT)) +
+  geom_boxplot()
+
+save(Reading, file = "Cases/Reading.Rda")
+```
+
+
+  
+
+```{r Reading_export}
+write_sav(Reading$D_1, "Data/Reading.sav")
+write_csv(Reading$D_1, "Data/Reading.csv")
+
+```
+
+
+
+## Case: AR_game
+
+```{r AR_game_create, opts.label = "simulate"}
+try(detach(AR_game))
+try(rm(AR_game))
+
+AR_game <- 
+  new.env()
+
+AR_game$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = AR_game)
+    detach(AR_game)
+    attach(AR_game)
+  }
+
+AR_game$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = AR_game)
+    detach(AR_game)
+    attach(AR_game)
+  }
+```
+
+
+```{r AR_game_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+AR_game$simulate <-
+  function(N = 200,
+           beta = c(-1, .7, .8, .5),
+           sigma = .3,
+           seed = 42) 
+    {
+    set.seed(seed)
+    out <-
+      data_frame(Part = 1:N,
+                 technophile = rbeta(N, 2, 4) * 2 - 1,
+                 sociophile = rbeta(N, 2, 2) * 2 - 1) %>%
+      
+      mutate( mu = beta[1] + 
+                beta[2] * technophile +
+                beta[3] * sociophile +
+                beta[4] * technophile * sociophile,
+              intention = inv.logit(rnorm(N,  mu, sigma)))
+    
+    class(out) <- append(class(out), "sim_tbl")
+    attr(out, "coef") <- list(beta = beta,
+                              sigma = sigma)
+    attr(out, "seed") <- seed
+    
+    out
+    }
+
+AR_game$D_1 <- AR_game$simulate(N = 40)
+names(AR_game$D_1)
+
+AR_game$D_1 %>% 
+  mutate(technophile_grp = technophile > median(technophile),
+         sociophile_grp = sociophile > median(sociophile)) %>%
+  ggplot(aes(x = sociophile_grp,
+             color = technophile_grp,
+             y = intention)) +
+  geom_boxplot()
+  
+
+save(AR_game, file = "Cases/AR_game.Rda")
+```
+
+
+  
+
+```{r AR_game_export}
+write_sav(AR_game$D_1, "Data/AR_game.sav")
+write_csv(AR_game$D_1, "Data/AR_game.csv")
+
+```
+
+
+## Case: Sleep
+
+```{r Sleep_create, opts.label = "simulate"}
+try(detach(Sleep))
+try(rm(Sleep))
+
+Sleep <- 
+  new.env()
+
+Sleep$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Sleep)
+    detach(Sleep)
+    attach(Sleep)
+  }
+
+Sleep$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Sleep)
+    detach(Sleep)
+    attach(Sleep)
+  }
+```
+
+
+```{r Sleep_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Sleep$simulate <-
+  function(N = 40, beta = c(Intcpt = 70, noisy = 8, 
+                            deprived = 200, n_d = -100), 
+           sigma = 50, 
+           seed  = 42){
+    set.seed(seed)
+    expand.grid(.N = 1:(N/4), 
+                Environment = as.factor(c("calm", "noisy")),
+                Sleep = as.factor(c("rested", "Sleepy"))) %>%
+      select(-.N) %>% 
+      mutate(Part = 1:N,
+             mu = beta[1] + 
+               beta[2] * (Environment == "noisy") +
+               beta[3] * (Sleep == "Sleepy") +
+               beta[4] * (Environment == "noisy") * (Sleep == "Sleepy"),
+             gaps = rnorm(N,mu,sigma)) %>% 
+      mutate(gaps = ifelse(gaps > 0, gaps, NA)) %>% 
+      select(3,1,2,4,5) %>% 
+      as_data_frame()
+  }
+
+
+Sleep$D_1 <- Sleep$simulate(N = 40)
+names(Sleep$D_1)
+
+Sleep$D_1 %>% 
+  ggplot(aes(x = Environment,
+             color = Sleep,
+             y = gaps)) +
+  geom_boxplot()
+  
+```
+
+Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
+
+```{r Sleep_sim_YD}
+Sleep$simulate_YD <- 
+    function(arousal, offset = 1, scale = 1.8){
+    data_frame(arousal = arousal) %>% 
+      mutate(energy = plogis(arousal + offset, scale = .5),
+             focus =  (1 - plogis(arousal, scale = .5))) %>% 
+      mutate(performance = energy * focus * scale)
+  }
+```
+
+
+```{r Sleep_export}
+save(Sleep, file = "Cases/Sleep.Rda")
+write_sav(Sleep$D_1, "Data/Sleep.sav")
+write_csv(Sleep$D_1, "Data/Sleep.csv")
+
+```
+
+
+
+## Case: Uncanny Valley
+
+```{r Uncanny_create, opts.label = "simulate"}
+try(detach(Uncanny))
+try(rm(Uncanny))
+
+Uncanny <- 
+  new.env()
+
+Uncanny$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Uncanny)
+    detach(Uncanny)
+    attach(Uncanny)
+  }
+
+Uncanny$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Uncanny)
+    detach(Uncanny)
+    attach(Uncanny)
+  }
+
+```
+
+
+```{r Uncanny_load_data, opts.label = "sim"}
+load("external_Data/MathurRepl.Rda")
+Uncanny$Data <- MathurRepl
+rm(MathurRepl)
+
+
+## simulating the data set
+Uncanny$UV_1 <- 
+  Uncanny$Data %>% 
+  filter(Collection == "Mathur",
+         Experiment == "Mathur") %>% 
+  select(Part, Stimulus, huMech, response) %>% 
+  group_by(Stimulus, huMech) %>% 
+  summarize(avg_like = mean(response, na.rm = T)) %>% 
+  ungroup()
+
+names(Uncanny)
+
+```
+
+
+```{r Uncanny_functions}
+try(detach(Uncanny))
+attach(Uncanny)
+
+trough <- function (coef, ...) {
+   UseMethod("trough", coef)
+ }
+
+trough.numeric <- 
+    function(coef = c(-.2, -.5, .2, .7)) {
+      if(length(coef) != 4) stop("the uncanny valley trough polynomial requires exactly four parameters")
+      poly   = polynom::polynomial(coef)
+      dpoly  = deriv(poly)
+      ddpoly = deriv(dpoly)
+      points = solve(dpoly)
+      pt_dir = as.function(ddpoly)(points)
+      if(!(any(is.complex(pt_dir)))){ ## when there is solution ...
+        points[pt_dir > 0]            ## select the minimum
+      }else{
+        NA                            ## no solution: return NA
+      }
+    }
+
+trough.matrix <- 
+  function(coef) aaply(as.matrix(coef), .margins = 1, .fun = trough.numeric)
+
+trough.data.frame <- 
+  function(coef) trough.matrix(as.matrix(coef))
+
+detach(Uncanny)
+```
+
+
+
+
+
+```{r Uncanny_export}
+save(Uncanny, file = "Cases/Uncanny.Rda")
+write_sav(Uncanny$UV_1, "Data/UV_1.sav")
+write_csv(Uncanny$UV_1, "Data/UV_1.csv")
+
+```
+
+## Typing speed
+
+
+```{r Typing_create, opts.label = "simulate"}
+try(detach(Typing))
+try(rm(Typing))
+
+Typing <- 
+  new.env()
+
+Typing$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Typing)
+    detach(Typing)
+    attach(Typing)
+  }
+
+Typing$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Typing)
+    detach(Typing)
+    attach(Typing)
+  }
+```
+
+
+```{r Typing_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Typing$simulate <-
+  function(n_Part = 30,
+           n_trial = 30,
+           scale = .3, # dispersion of speed
+           seed = 42){
+    set.seed(42)
+    Part <- 
+      data_frame(Part = 1:n_Part,
+                 skill = rnorm(n_Part, 1, .5), # latent performance at relaxed speed
+                 relaxed_speed = exp(skill),
+                 relaxed_error = exp(1-skill))
+    
+    Typing <- 
+      expand.grid(Part = 1:n_Part,
+                  trial = 1:n_trial) %>% 
+      as_data_frame() %>% 
+      left_join(Part, by = "Part") %>% 
+      mutate(eta_speed = skill + (trial - 1)/n_trial,
+             eta_error = (1 - skill) + (trial - 1)/n_trial,
+             mu_speed = exp(eta_speed),
+             mu_error = exp(eta_error),
+             speed = rgamma(n_Part * n_trial, 
+                            shape = mu_speed/scale, scale = scale),
+             error = rpois(n_Part * n_trial, mu_error))
+    Typing
+  }
+
+
+Typing$Type_1 <- Typing$simulate()
+names(Typing)
+
+Typing$Type_1_avg <-
+  Typing$Type_1 %>% 
+  group_by(Part) %>% 
+  summarize(speed = mean(speed),
+            error = mean(error)) %>% 
+  ungroup()
+
+
+Typing$Type_1 %>% 
+  ggplot(aes(x = speed,
+             y = error)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_point(data = Typing$Type_1_avg, color = "red") +
+  geom_smooth(data = Typing$Type_1_avg, method = "lm", color = "red")
+  
+
+
+```
+
+
+```{r Typing_export}
+save(Typing, file = "Cases/Typing.Rda")
+write_sav(Typing$Type_1, "Data/Type_1.sav")
+write_csv(Typing$Type_1, "Data/Type_1.csv")
+
+```
+
+
+## Stroop
+
+
+```{r Stroop_create, opts.label = "simulate"}
+try(detach(Stroop))
+try(rm(Stroop))
+
+Stroop <- 
+  new.env()
+
+Stroop$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = Stroop)
+    detach(Stroop)
+    attach(Stroop)
+  }
+
+Stroop$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = Stroop)
+    detach(Stroop)
+    attach(Stroop)
+  }
+```
+
+
+```{r Stroop_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Stroop$simulate <-
+  function(b_int = 300,
+           b_incon = 100,
+           b_neutr = 30,
+           b_trial = 5,
+           b_age = 2,
+           sd_int = 50,
+           sd_trial = .5,
+           sd_treat = 10,
+           min_age = 18,
+           max_age = 60,
+           sd_resid = 200,
+           n_Part = 30,
+           outlier_rate = .02,
+           correct_rate = .9){
+    
+    n_Stim = 32
+    
+    Part <-
+      data_frame(Part = 1:n_Part,
+                 t_int = rnorm(n_Part, 0, sd_int),
+                 age = round(runif(n_Part, min_age, max_age)),
+                 t_trial = rnorm(n_Part, 0, sd_trial),
+                 t_incon = rnorm(n_Part, 0, sd_treat),
+                 t_neutr = rnorm(n_Part, 0, sd_treat))
+    
+    Colors <- 
+      data_frame(Color = c("red", "green", "blue", "yellow"))
+    
+    Words <-  
+      data_frame(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
+      mutate(Word_type = ifelse(Word %in% Colors$Color, "color", "neutral"))
+    
+    Stimuli <- 
+      expand.grid(Color = Colors$Color,
+                           Word = Words$Word,
+                           stringsAsFactors = F) %>% 
+      inner_join(Words, by = "Word") %>% 
+      mutate(Stimulus = row_number(),
+             Condition = ifelse(Word_type == "neutral",
+                                "neutral", 
+                                ifelse(Word == Color,
+                                       "congruent",
+                                       "incongruent")),
+             Incongruent = (Condition == "incongruent"))
+
+    Trials <- 
+      Stimuli %>% 
+      mutate(trial = sample(1:n_Stim, replace = F))
+    
+    Stroop <- 
+      expand.grid(Part = Part$Part, 
+                  trial = Trials$trial) %>% 
+      inner_join(Part, by = "Part") %>% 
+      inner_join(Trials, by = "trial") %>% 
+      mutate(mu = b_int + t_int + 
+               (b_incon + t_incon) * (Condition == 'incongruent') +
+               (b_neutr + t_neutr) * (Condition == 'neutral') +
+               (b_age * age) +
+               (b_trial + t_trial) * trial) %>% 
+      mutate(RT = rnorm(n_Part * n_Stim, mu, sd_resid)) %>% 
+      mutate(RT = RT + rbinom(n_Part * n_Stim, 1, outlier_rate) * RT * 3) %>% 
+      mutate(Correct = as.logical(rbinom(n_Part * n_Stim, 1, correct_rate)))
+    
+    as_data_frame(Stroop)
+  }
+
+Stroop$Strp_1 <- 
+  Stroop$simulate()
+
+Stroop$Strp_1_avg <-
+  Stroop$Strp_1 %>% 
+  group_by(Part, Condition, Incongruent, age) %>% 
+  summarize(RT = mean(RT)) %>% 
+  ungroup() 
+
+Stroop$Strp_1 %>% 
+  ggplot(aes(x = Condition,
+             y = RT)) +
+  geom_boxplot() +
+  facet_wrap(~Part, nrow = 5)
+  
+
+
+```
+
+
+
+
+
+```{r Stroop_export}
+save(Stroop, file = "Cases/Stroop.Rda")
+write_sav(Stroop$Strp_1, "Data/Strp_1.sav")
+write_csv(Stroop$Strp_1, "Data/Strp_1.csv")
+write_sav(Stroop$Strp_1_avg, "Data/Strp_1_avg.sav")
+write_csv(Stroop$Strp_1_avg, "Data/Strp_1_avg.csv")
+
+```
+
+
+## Case: Yerkes-Dodson law
+
+Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
+
+```{r YD_create, opts.label = "simulate"}
+try(detach(YD))
+try(rm(YD))
+
+YD <- 
+  new.env()
+
+YD$"<-" <- 
+  function(name,value) {
+    assign(as.character(substitute(name)), 
+           value, envir = YD)
+    detach(YD)
+    attach(YD)
+  }
+
+YD$"->" <- 
+  function(value,name) {
+    assign(as.character(substitute(name)), 
+           value, envir = YD)
+    detach(YD)
+    attach(YD)
+  }
+
+names(YD)
+```
+
+
+```{r YD_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+YD$simulate_nonstoch <- 
+    function(arousal, offset = 1, scale = 1.8){
+    data_frame(arousal = arousal) %>% 
+      mutate(energy = plogis(arousal + offset, scale = .5),
+             focus =  (1 - plogis(arousal, scale = .5))) %>% 
+      mutate(performance = energy * focus * scale)
+  }
+
+YD$D_1 <- 
+  YD$simulate_nonstoch(seq(-4,4,.1))
+
+names(YD$D_1)
+
+```
+
+We proviode three plot functions for the case:
+
+* a theoretical function, showing the presumed cognitive mechanism 
+* an exploratory function, showing the real data
+* a model function
+
+```{r YD_plot}
+YD$plot_theo_1 <- 
+  function(D_non_stoch){
+    D_non_stoch %>% 
+      gather(outcome, value, -arousal) %>%
+      mutate(level = ifelse(outcome == "performance",
+                            "performance", "mediators")) %>% 
+      ggplot(aes(x = arousal, y = value, col = outcome)) +
+      geom_line() +
+      facet_wrap("level", scales = "free_y") +
+      ylim(0, 1) +
+      theme(axis.text.y=element_blank())      
+  }
+
+YD$D_1 %>% 
+  YD$plot_theo_1()
+
+```
+
+
+
+
+```{r YD_export}
+save(YD, file = "Cases/YD.Rda")
+write_sav(YD$D_1, "Data/YD_1.sav")
+write_csv(YD$D_1, "Data/YD_1.csv")
+
+```
+
+
+
+
+```{r save_all, message = "purp.dbg"}
+#save(Dsim, Psim, Msim, Ssim, Tsim, file = "Simulation.Rda")
+#write.bibtex(file="ref_sim.bib")
+```
+
+
+# Generic constructor
+
+```{r CE_create, opts.label = "future"}
+
+create_CE <- 
+  function(CE){
+    CE_expr =  parse(text = CE)
+    Env = new.env()
+    Env$"<-" <- 
+      function(name,value) {
+        assign(as.character(substitute(name)), 
+               value, 
+               envir = eval(CE_expr))
+        cat(as.character(CE_expr))
+      }
+    
+    Env$"->" <- 
+      function(name,value) {
+        assign(as.character(substitute(name)), 
+               value, 
+               envir = eval(CE_expr))
+        cat(as.character(CE_expr))
+      }
+
+    class(Env) <- c("case_env", "environment")
+    #assign(x = "<-", CE_assign,  envir = Env)
+    #assign(x = "->", CE_rassign, envir = Env)
+    assign(CE, Env, envir = .GlobalEnv)
+    Env
+  }
+```
+
+
+```{r CE_create_test, opts.label = "future"}
+try(detach(CE_test))
+try(rm(CE_test))
+create_CE("CE_test")
+class(CE_test)
+
+attach(CE_test)
+names(CE_test)
+z <- 1
+2 -> y
+names(CE_test)
+detach(CE_test)
+names(CE_test)
+
+
+```
+
