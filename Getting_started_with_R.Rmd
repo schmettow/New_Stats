@@ -18,7 +18,7 @@ output:
 ```{r profile, echo = FALSE, warning = FALSE, eval = TRUE, message = FALSE}
 ## The following is for running the script through knitr
 thisdir = getwd()
-purp.mcmc = T
+purp.mcmc = F
 source("RMDR.R")
 # Pgsr = list() # plots
 # Dgsr = list() # data sets
@@ -235,7 +235,21 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 ## Programming in R: a primer
 
-This book has been written in R. It is almost inevitable that the following introduction to R follows the style and workflow of when writing the book. A full treatment of R as a programming language, with all its features and idions is beyond the scope. However, the following introduction will present just a few concepts, which in the experience of the author (when writing this book), suffice for 90% of the tasks in data analysis.
+> crazy as in 'idiosyncrasy'
+
+R has three purposes:
+
+R is a way to develop statistical computations of high complexity. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient interactive programming language. [Idiosyncrasies, Functional programming, object orientation, ...]
+
+
+R is a way to interactively work through your data analysis. [interactivity, ...]
+
+
+R is a way to archive and report what you have been doing. [...] 
+
+
+As this is for applied researchers, who's job usually is to analyze data and report it. The way R is presented in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and optimal transparent. In most cases, we will just write a short chain of simple data transformations and push this into a modelling or graphics engine that will do the job. We will not even bother (ourselves and others) with programming concepts such as conditionals or loops. 
+
 
 ### Objects (= variables)
 
@@ -243,16 +257,11 @@ In programming, variables are used to store values, collections of values and mo
 
 [add definition of statistical variables]
 
-This book is about pargramming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In order to avoid confusion and keep brevity, I am from now on referring to variables, when speaking of predictors and outcomes. For programming variables, I am using the term *object*, instead, although this is not strictly correct.
+This book is about programming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In order to avoid confusion and keep brevity, I am from now on referring to variables, when speaking of predictors and outcomes. For programming variables, I am using the term *object*, instead, although this is not strictly correct.
 
 
-Objects can be of various *types*. R's most common basic types  are the following: 
 
-* *logical*  objects for storing the two levels TRUE, FALSE, like presence or absence of a treatment, or passed and failed test items
-* *factor* for categories or groups, like experimental treatments or participant IDs
-* *integer* for discrete quantitative variables, like counts or ranks
-* *numerical* for continuous quantitative variables, like most measures
-* *character* for free text, for example, the description of a usability problem
+
 
 Objects have two basic operations: *assigning* a value to a name, and *calling* the value by name. Imagine, you wanted to store the number of observations in your data set into a object with name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
@@ -290,7 +299,55 @@ mean(X)
 
 In fact, the above example works in both directions: the first command creates 100 draws from a normal distribution with mean 2 and an SD of 1. Three individual values are passed to the function (more on that later), but a collection of 100 is returned. The second command takes the collection and returns a single number. By the way, this is precisely, what we call *a* statistic: a single quantities that characterizes a collection of quantities.
 
-Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R missing values are first-class citizens. Every vector of a certain type can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean`
+Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric
+
+Objects of type *logical* store the two levels TRUE, FALSE, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
+
+```{r class_logic, opts.label = "rtut"}
+
+Apple <- TRUE
+Pear  <- FALSE
+
+Apple & Pear ## and
+Apple | Pear ## or
+
+```
+
+
+
+
+The class `numeric` is abundant in statistical programming, as it generally reepresents numbers. The usual math operations apply. Objects of class `integer` are store natural numbers, which often occur as counts or ranks. The usual arithmetic operations apply, although the result of operation may no longer be `integer`, but `numeric`
+
+```{r class_int, opts.label = "rtut"}
+
+best_friends <- c(anton = 1, 
+                  berta = 3, 
+                  carlo = 2)
+order(best_friends)
+
+N <- 3
+sum_of_scores <- 32
+mean_score <- 32/3 ## numeric
+
+```
+
+
+Objects *factor* for categories or groups. With  like experimental treatments or participant IDs
+
+
+* *character* for free text, for example, the description of a usability problem, but often used to replace factors
+
+Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R missing values are first-class citizens. Every vector of a certain class can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to remove NA values from the data. While this appears slightly inconvenient, this feature helps to catch errors early in data analysis, and creates better transparency.
+
+```{r mean_NA}
+
+clicks <- c(3, NA, 2)
+mean(clicks)
+mean(clicks, na.rm = T)
+
+```
+
+
 
 ### Operators and functions
 
@@ -311,34 +368,44 @@ R comes with a full bunch for creating and summarizing data. Let me introduce yo
 
 ### Storing data in data frames
 
-Most Behavioural research collects *real data* to work with. Like our simulation, real data usually contains several variables. In most cases, data is stored in a matrix-like structure, where columns are variables and rows are observations. R has *data frames* to store data. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research. You have already seen one ways of creating data frames. You create it by using the `data_frame` command, where you give alll the variable names and a vector with their values.
+Most behavioural research collects *real data* to work with. As behaviour researchers are obsessed about finding  associations between variables, real data usually contains several. If you have a sample of observations (e.g. participants) and every case has the same variables (measures or groups), data is stored in a table  structure, where columns are variables and rows are observations. 
 
-A data frame basically is a set of variables in columns and values in rows. The variables can be of different types, like factors or numbers. Data frames are objects, too. As we have seen above, you can print a data frame to the screen by just calling teh object by name.
+R knows the `data.frame` objects to store variable-by-observation tables. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research. In many cases dataframes are imported to R, as they represent real data. Here we first see how to create dataframes by simulation. First, we usually want some initial inspection of a freshly harvested dataframe.
 
-```{r opts.label = "rtut.nr"}
+Data frames are objects. By just calling a dataframe it gets printed to the screen. This is a good moment to reflect on one idiosyncracy in R, a feature, of course.
+R is primarily used interactively, which has the immense advantage that the programmer can incrementally build the data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call `Experiment`:
+
+```{r df_call, opts.label = "rtut"}
 Experiment
+```
+
+This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It were a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. In the latter case, R silently called a function on the object:
+
+```{r df_call_print}
+print(Experiment)
 
 ```
 
-If this is too much information, several commands are available to look into a data frame. The `str` (structure) command works on any R object and gives quite a useful output to understand  a data frame:
+Such `print` functions exist for dozens of classes of objects. They represent what the developers though would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand.
+
+If the dedicated print function provides too much, too little or just the wrong information, several commands are available to look into a data frame. The `str` (structure) command works on any R object capitalizing on its structure:
 
 ```{r opts.label = "rtut"}
 str(Experiment)
 ```
 
-Simple descriptives statistics for all variables (i.e. columns) are given by the `summary` command.
+Another command that is implemented for a variety of classes is `summary`. For dataframes, it produces an overview  with descriptives statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
 ```{r opts.label = "rtut"}
 summary(Experiment)
 ```
 
-A third option many people use is to print just the first few rows of a data set:
 
-```{r opts.label = "rtut"}
-head(Experiment)
-```
+Dataframes store variables, but statistical procedures operate on variables. We need 
+ways of accessing and manipulating statistical variables and we get several. 
+Recall, that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.
 
-Often, you want to assess a single variable from your data frame. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
+Internally, dataframes are a collection of "vertical" vectors that are equally long. The variables can be of different class, like `factor` or `numeric`. Often, you want to assess a single variable from your data frame. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
 
 ```{r opts.label = "rtut"}
 mean(Experiment$outcome)
@@ -358,8 +425,8 @@ Experiment[  1,  ]
 
 Addressing one or more elements in the square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression `Experiment[,]` is fully valid and will just the return the whole dataframe.
 
-There is an important difference, however, when using Rs classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr dataframes one always gets a dataframe back. That is a very predictable behavior, very much unlike the classic `data.frame`. When the addressed elements expand over multiple columns, like 
-`Experiment[, 1:2]`, the result will be a `data.frame` object. However, when slicing a single column, the result is a vector:
+There is an important difference, however, when using Rs classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr dataframes one always gets a dataframe back. That is a very predictable behavior, and very much unlike the classic: with  `data.frame`, when the addressed elements expand over multiple columns, like 
+`Experiment[, 1:2]`, the result will be a `data.frame` object, too. However, when slicing a single column, the result is a vector:
 
 ```{r df_classic_odd, opts.label = "rtut"}
 Exp_classic <- as.data.frame(Experiment)
@@ -368,7 +435,15 @@ Exp_classic[1,]       ## data.frame
 Exp_classic[,1]       ## vector
 ```
 
-While `data_frame[]` behaves perfectly predictable in terms of the returned object, extracting a variable as a vector is sometimes neded. With a `data_frame` a single column can be extracted using double square brackets, or using the `$` operator. Both variants will always return a vector.
+Predictability and a few other useful tweaks made me prefer `dplyr::data_frame` over `base:data.frame`, many third-party packages continue to produce classic `data.frame` objects. These can be updated easily:
+
+```{r df_import_update, opts.label = "rtut.nr"}
+D_foo <- 
+  read.xlsx("foo.xlsx") %>% 
+  as_data_frame()
+```
+
+While `data_frame[]` behaves perfectly predictable in terms of the returned object, extracting a variable as a vector is sometimes needed. With a `data_frame` a single column can be extracted using double square brackets, or using the `$` operator. Both variants will always return a vector.
 
 ```{r df_square_brackets, opts.label = "rtut.nr"}
 Experiment[[1]]       ## vector
@@ -377,7 +452,7 @@ Experiment$Group      ## the same
 
 Sometimes, it may be neccessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a dataframe can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we set them all to `NA`. 
 
-```{r df_injecting}
+```{r df_injecting, opts.label = "rtut"}
 ## injecting
 Experiment[2,      "outcome"] <- 660
 Experiment[6,      "outcome"] <- 987
@@ -422,13 +497,17 @@ __Exercises:__
 
 1. How would you use extract a single value from  variable in dataframe using the `$` operator ands square brackets _in that order_? (`Experiment$outcome[3]`)
 
-### Importing and storing data
+1. Make a copy of `Experiment` that is a classic `data.frame`. Inspect both using the command `str`, `summary` and `print`.  
+
+1. We have seen several generic functions to summarize data frames. Graphical plots, as produced in FSP are complex objects, too. Store the plot in an object and inspect it using `class`, `summary` and `str`. What happens, when you just call the plot object?
+
+### Import, export and archiving
 
 R lets you import data from almost every conceiveable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for EXcel files). Besides that R has its own file format for storing data, which is *.Rda*  files. With thse files you can save data frames (and any other object in R), using the `save(data, file = "some_file.Rda")` and `load(file = "some_file.Rda")` commands. 
 
 Few people create their data tables directly in R, or have legacy data sets in Excel (*.xslx*) and SPSS files (*.sav*). Moreover, the data can be produced by electronic measurement devices (e.g. electrodermal response measures) or programmed experiments  can provide data in different forms, for example as *.csv* (comma-separated-values) files. All these files can be opened by the following commands:
 
-```{r load files, opts.label = "rtut.nr"}
+```{r load_files, opts.label = "rtut.nr"}
 ## Text files
 Experiment <- 
   read.csv("some_file.csv")
@@ -449,29 +528,26 @@ Note how the read.spss command gets an additional argument, which tells it to cr
 Remember, data frames are objects and volatile as such. If you leave your One you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to hsve a complete R-based workflow, you can conventiently use R's own format for storing data, `Rdata` files. For storing a data frame and then reading it back in (in your next session), simply do:
 
 ```{r opts.label = "rtut.nr"}
-save(Experiment, file = "Experiment.Rda")
-load(file = "Experiment.Rda")
+save(Experiment, file = "Data/Experiment.Rda")
+load(file = "Data/Experiment.Rda")
 ```
 
 Note that all objects are restored by their original names, without using any assignments. Take care, as this will overwrite any objects with the same name. Another issue is that for the `save` command you have to explicitly refer to the `file` argument and provide the file path as a character object. In Rstudio, begin typing  `file=""`, put the cursor between the quotation marks and hit `Tab`, which opens a small dialogue for navigation to the desired file.
 
 
 
-Exercise 1:
+__Exercises:__
 
-In the book package (directory `/Data`) you will find the data set of the (virtual) `` study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
+1. In the book package (directory `/Data`) you will find the data set of the (virtual) `` study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
 
+1. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame summarize what is in the data frame.
 
-Exercise 2:
-
-1. drop an Excel and/or an SPSS file into the same directory as your current R file. 
-2. Read the data into a data frame 
-3. summarize what is in the data frame
+1. Find the documentation of the packages `haven` and `readr`. Find two import functions. the one that is most useful for you and the one that you consider most exotic.
 
 
 ### Manipulating data
 
-Do you wonder about the strange use of `%>%` in my code above? This is a modern way of programming in R, that grounds on the [split, apply, combine](http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/) paradigm, which is famous in big data  scenarios. 
+Do you wonder about the strange use of `%>%` in my code above? This is the new way of programming data transformations in R. 
 
 The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for data manipulation, where it chains steps of data manipulation. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.
 
@@ -498,7 +574,7 @@ head(Exp)
   
 ```
 
-Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable by condition. The following chain of commands first group the dataframe, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
+Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the dataframe, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
 
 ```{r opts.label = "rtut"}
 Exp %>% 
@@ -506,6 +582,8 @@ Exp %>%
   summarize(mean = mean(outcome),
            sd = sd(outcome) )
 ```
+
+
 
 
 ### Plotting data
@@ -533,7 +611,7 @@ The BrowsingAB case is a virtual series of studies, where two websites were comp
 
 We begin with a plot that shows the association between age of the participant and time-on-task (ToT). Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a *scatter plot*. 
 
-```{r  opts.label = "rtut"}
+```{r build_ggpl_2, opts.label = "rtut"}
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT)) +
   geom_point()
@@ -566,7 +644,7 @@ BAB1 %>%
 
 The function `aes` creates a mapping where the aesthetics per variable are given. When call `aes` directly, we see that it is just a table.
 
-```{r opts.label = "rtut"}
+```{r opts.label = "rtut.nr"}
 aes(x = age, y = ToT)
 ```
 
