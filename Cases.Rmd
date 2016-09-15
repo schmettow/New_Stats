@@ -13,11 +13,15 @@ output:
   word_document: default
 ---
 
-TODO: add class and attributes to all CEs
+TODO: 
+
++ add attributes to all CEs
++ create syncenv print method
 
 ```{r profile, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 ## The following is for running the script through knitr
 source("RMDR.R")
+library(syncenv)
 ```
 
 ```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
@@ -66,31 +70,6 @@ It occured indirectly, mediated through
 
 ## Case Rainfall
 
-```{r Rainfall_create_old, opts.label = "deprecated"}
-try(detach(Rainfall))
-try(rm(Rainfall))
-
-Rainfall <- 
-  new.env()
-
-Rainfall$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Rainfall)
-    detach(Rainfall)
-    attach(Rainfall)
-  }
-
-Rainfall$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Rainfall)
-    detach(Rainfall)
-    attach(Rainfall)
-  }
-
-save(Rainfall, file = "Cases/Rainfall.Rda")
-```
 
 ```{r Rainfall_create}
  
@@ -172,28 +151,7 @@ Case 99 seconds is
 The group mean of the second design is fixed to 105, with the CI80 of [103, 111]
 
 ```{r Sec99_create, opts.label = "simulate"}
-try(detach(Sec99))
-try(rm(Sec99))
-
 new_syncenv("Sec99")
-# 
-# Sec99$"<-" <- 
-#   function(name,value) {
-#     assign(as.character(substitute(name)), 
-#            value, envir = Sec99)
-#     detach(Sec99)
-#     attach(Sec99)
-#   }
-# 
-# Sec99$"->" <- 
-#   function(value,name) {
-#     assign(as.character(substitute(name)), 
-#            value, envir = Sec99)
-#     detach(Sec99)
-#     attach(Sec99)
-#   }
-
-save(Sec99, file = "Cases/Sec99.Rda")
 ```
 
 
@@ -221,14 +179,6 @@ Sec99$simulate <-
 
 Sec99$Ver20 <- Sec99$simulate()
 
-# Sec99$Ver20 %>% 
-#   stan_glm(ToT ~ 1, data = ., 
-#            verbose = F, 
-#            show_messages = F,
-#            refresh = -1
-#            ) %>% 
-#   fixef(interval = .8)
-  
 
 save(Sec99, file = "Cases/Sec99.Rda")
 ```
@@ -242,28 +192,7 @@ save(Sec99, file = "Cases/Sec99.Rda")
 ## Case: Rational
 
 ```{r Rational_create, opts.label = "invisible"}
-try(detach(Rational))
-try(rm(Rational))
-
-Rational <- 
-  new_syncenv("Rational")
-# 
-# Rational$"<-" <- 
-#   function(name,value) {
-#     assign(as.character(substitute(name)), 
-#            value, envir = Rational)
-#     detach(Rational)
-#     attach(Rational)
-#   }
-# 
-# Rational$"->" <- 
-#   function(value,name) {
-#     assign(as.character(substitute(name)), 
-#            value, envir = Rational)
-#     detach(Rational)
-#     attach(Rational)
-#   }
-
+new_syncenv("Rational")
 save(Rational, file = "Cases/Rational.Rda")
 ```
 
@@ -316,27 +245,7 @@ write_csv(Rational$RD, "Data/Rational.csv")
 ## Case: BrowsingAB
 
 ```{r BAB_create, opts.label = "simulate"}
-try(detach(BrowsingAB))
-try(rm(BrowsingAB))
-
-BrowsingAB <- 
-  new.env()
-
-BrowsingAB$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = BrowsingAB)
-    detach(BrowsingAB)
-    attach(BrowsingAB)
-  }
-
-BrowsingAB$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = BrowsingAB)
-    detach(BrowsingAB)
-    attach(BrowsingAB)
-  }
+new_syncenv("BrowsingAB")
 ```
 
 
@@ -476,41 +385,76 @@ detach(BrowsingAB)
 
 ## Case: CUE8
 
+```{r CUE8_create, opts.label = "simulate"}
+new_syncenv("CUE8")
+```
 
 
-```{r simulate:cue8, opts.label = "future"}
-Ssim[["cue8"]] <-
+```{r CUE8_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+CUE8$simulate <-
   function(n_Part = 32,
-    n_Team = 16,
-    n_Task = 5,
-    tau = 10 ## higher levels produce more skew
-){
+           n_Team = 16,
+           n_Task = 5,
+           tau = 10 ## higher levels produce more skew
+  ){
     n_Obs = n_Part * n_Task
-    Teams <- 
+    Teams = 
       data_frame(Team = as.factor(1:n_Team),
-                       moderated = rbinom(n_Team, 1, .5)) %>% 
-      mutate(alpha = runif(n_Team,.9, .95) + moderated * -.05,
-                       prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
+                 Moderated = rbinom(n_Team, 1, .5)) %>% 
+      mutate(alpha = runif(n_Team,.9, .95) + Moderated * -.05,
+             prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
     
-    Participants <- 
+    Participants = 
       data_frame(Participant = as.factor(1:n_Part)) %>% 
       mutate(Team = factor(x = colSums(rmultinom(n_Part, 
                                                  1, prob = Teams$prevalence)  * 1:n_Team),
                            levels = c(1:n_Team))) %>% 
       inner_join(Teams, by = "Team") %>% 
-      mutate(mu_Part = rgamma(n_Part, 160 + moderated * 20, 200) * 20) ## gaussian part
+      mutate(mu_Part = rgamma(n_Part, 160 + Moderated * 20, 200) * 20) ## gaussian part
     
-    Tasks <-
+    Tasks =
       data_frame(Task = factor(1:n_Task)) %>% 
       mutate(mu_Task = rgamma(n_Task, 100, 100) * 100) ## gaussian part
     
-    Obs <-
-      expand.grid(Participant = as.factor(1:n_Part), 
-                Task = as.factor(1:n_Task)) %>% 
+    Obs =
+      expand_grid(Participant = as.factor(1:n_Part), 
+                  Task = as.factor(1:n_Task)) %>% 
       full_join(Participants, by = "Participant") %>% 
       full_join(Tasks, by = "Task") %>% 
       mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50))
-  }
+  }    
+```
+
+```{r CUE8_load_sim_data, opts.label = "sim"}
+
+CUE8$D_sim_1 <- 
+  CUE8$simulate()
+
+CUE8$D_study <- 
+  foreign::read.spss("external_Data/CUE8 long.sav") %>% 
+  as_data_frame() %>% 
+  # haven::read_sav("external_Data/CUE8 long.sav") %>% 
+  dplyr::select(Team, Part = Participant, Moderated = moderated, SUS, Task, ToT) %>% 
+  mutate(Moderated = as.factor(Moderated),
+         Team = str_trim(Team),
+         Team = as.factor(Team),
+         Part = as.factor(Part))
+
+names(CUE8)
+
+```
+
+  
+
+```{r CUE8_export}
+save(CUE8, file = "Cases/CUE8.Rda")
+write_sav(CUE8$D_study, "Data/CUE8_study.sav")
+write_csv(CUE8$D_study, "Data/CUE8_study.csv")
+write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
+write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
 
 ```
 
@@ -518,27 +462,7 @@ Ssim[["cue8"]] <-
 ## Case: Headache
 
 ```{r Headache_create, opts.label = "simulate"}
-try(detach(Headache))
-try(rm(Headache))
-
-Headache <- 
-  new.env()
-
-Headache$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Headache)
-    detach(Headache)
-    attach(Headache)
-  }
-
-Headache$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Headache)
-    detach(Headache)
-    attach(Headache)
-  }
+new_syncenv("Headache")
 ```
 
 
@@ -576,27 +500,7 @@ write_csv(Headache$Pills, "Data/Headache.csv")
 ## Case: Reading time
 
 ```{r Reading_create, opts.label = "simulate"}
-try(detach(Reading))
-try(rm(Reading))
-
-Reading <- 
-  new.env()
-
-Reading$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Reading)
-    detach(Reading)
-    attach(Reading)
-  }
-
-Reading$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Reading)
-    detach(Reading)
-    attach(Reading)
-  }
+new_syncenv("Reading")
 ```
 
 
@@ -663,27 +567,9 @@ write_csv(Reading$D_1, "Data/Reading.csv")
 ## Case: AR_game
 
 ```{r AR_game_create, opts.label = "simulate"}
-try(detach(AR_game))
-try(rm(AR_game))
+ 
+new_syncenv("AR_game")
 
-AR_game <- 
-  new.env()
-
-AR_game$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = AR_game)
-    detach(AR_game)
-    attach(AR_game)
-  }
-
-AR_game$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = AR_game)
-    detach(AR_game)
-    attach(AR_game)
-  }
 ```
 
 
@@ -745,27 +631,7 @@ write_csv(AR_game$D_1, "Data/AR_game.csv")
 ## Case: Sleep
 
 ```{r Sleep_create, opts.label = "simulate"}
-try(detach(Sleep))
-try(rm(Sleep))
-
-Sleep <- 
-  new.env()
-
-Sleep$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Sleep)
-    detach(Sleep)
-    attach(Sleep)
-  }
-
-Sleep$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Sleep)
-    detach(Sleep)
-    attach(Sleep)
-  }
+new_syncenv("Sleep")
 ```
 
 
@@ -831,27 +697,7 @@ write_csv(Sleep$D_1, "Data/Sleep.csv")
 ## Case: Uncanny Valley
 
 ```{r Uncanny_create, opts.label = "simulate"}
-try(detach(Uncanny))
-try(rm(Uncanny))
-
-Uncanny <- 
-  new.env()
-
-Uncanny$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Uncanny)
-    detach(Uncanny)
-    attach(Uncanny)
-  }
-
-Uncanny$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Uncanny)
-    detach(Uncanny)
-    attach(Uncanny)
-  }
+new_syncenv("Uncanny")
 
 ```
 
@@ -862,7 +708,7 @@ Uncanny$Data <- MathurRepl
 rm(MathurRepl)
 
 
-## simulating the data set
+## splicing out 
 Uncanny$UV_1 <- 
   Uncanny$Data %>% 
   filter(Collection == "Mathur",
@@ -924,27 +770,7 @@ write_csv(Uncanny$UV_1, "Data/UV_1.csv")
 
 
 ```{r Typing_create, opts.label = "simulate"}
-try(detach(Typing))
-try(rm(Typing))
-
-Typing <- 
-  new.env()
-
-Typing$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Typing)
-    detach(Typing)
-    attach(Typing)
-  }
-
-Typing$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Typing)
-    detach(Typing)
-    attach(Typing)
-  }
+new_syncenv("Typing")
 ```
 
 
@@ -1016,27 +842,7 @@ write_csv(Typing$Type_1, "Data/Type_1.csv")
 
 
 ```{r Stroop_create, opts.label = "simulate"}
-try(detach(Stroop))
-try(rm(Stroop))
-
-Stroop <- 
-  new.env()
-
-Stroop$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = Stroop)
-    detach(Stroop)
-    attach(Stroop)
-  }
-
-Stroop$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = Stroop)
-    detach(Stroop)
-    attach(Stroop)
-  }
+new_syncenv("Stroop")
 ```
 
 
@@ -1149,29 +955,7 @@ write_csv(Stroop$Strp_1_avg, "Data/Strp_1_avg.csv")
 Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
 
 ```{r YD_create, opts.label = "simulate"}
-try(detach(YD))
-try(rm(YD))
-
-YD <- 
-  new.env()
-
-YD$"<-" <- 
-  function(name,value) {
-    assign(as.character(substitute(name)), 
-           value, envir = YD)
-    detach(YD)
-    attach(YD)
-  }
-
-YD$"->" <- 
-  function(value,name) {
-    assign(as.character(substitute(name)), 
-           value, envir = YD)
-    detach(YD)
-    attach(YD)
-  }
-
-names(YD)
+new_syncenv("YD")
 ```
 
 
@@ -1230,61 +1014,4 @@ write_csv(YD$D_1, "Data/YD_1.csv")
 ```
 
 
-
-
-```{r save_all, message = "purp.dbg"}
-#save(Dsim, Psim, Msim, Ssim, Tsim, file = "Simulation.Rda")
-#write.bibtex(file="ref_sim.bib")
-```
-
-
-# Generic constructor
-
-```{r CE_create, opts.label = "future"}
-
-create_CE <- 
-  function(CE){
-    CE_expr =  parse(text = CE)
-    Env = new.env()
-    Env$"<-" <- 
-      function(name,value) {
-        assign(as.character(substitute(name)), 
-               value, 
-               envir = eval(CE_expr))
-        cat(as.character(CE_expr))
-      }
-    
-    Env$"->" <- 
-      function(name,value) {
-        assign(as.character(substitute(name)), 
-               value, 
-               envir = eval(CE_expr))
-        cat(as.character(CE_expr))
-      }
-
-    class(Env) <- c("case_env", "environment")
-    #assign(x = "<-", CE_assign,  envir = Env)
-    #assign(x = "->", CE_rassign, envir = Env)
-    assign(CE, Env, envir = .GlobalEnv)
-    Env
-  }
-```
-
-
-```{r CE_create_test, opts.label = "future"}
-try(detach(CE_test))
-try(rm(CE_test))
-create_CE("CE_test")
-class(CE_test)
-
-attach(CE_test)
-names(CE_test)
-z <- 1
-2 -> y
-names(CE_test)
-detach(CE_test)
-names(CE_test)
-
-
-```
 

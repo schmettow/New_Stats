@@ -43,7 +43,7 @@ library(rstanarm)
 ## Simulation etc
 library(modeest)
 library(retimes, quietly = !purp.debg)
-# library(MCMCpack)
+library(MCMCpack)
 library(polynom)
 # library(wakefield)
 
@@ -66,6 +66,7 @@ library(stringr)
 library(haven)
 library(readr)
 library(openxlsx)
+library(mascutils)
 
 ## own libraries
 library(bayr)
