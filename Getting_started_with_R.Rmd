@@ -2,7 +2,7 @@
 title: "New statistics for design researchers"
 subtitle: "A Bayesian workshop in R"
 author: "Martin Schmettow"
-date: "September 3, 2015"
+date: "September 21, 2015"
 output:
   html_document:
     fig_caption: yes
@@ -16,26 +16,20 @@ output:
 
 
 ```{r profile, echo = FALSE, warning = FALSE, eval = TRUE, message = FALSE}
-## The following is for running the script through knitr
 thisdir = getwd()
 purp.mcmc = F
 source("RMDR.R")
-# Pgsr = list() # plots
-# Dgsr = list() # data sets
-# Mgsr = list() # models
-# Sgsr = list() # simulation functions
-# Tgsr = list() # tables
-# try(load("Getting started with R.Rda"))
 
 CE <-
   c("BrowsingAB")
 
 load_CE(CE)
+
+
+formals(fun = stan_glm)$chains = 1
+formals(fun = stan_glm)$iter = 200
 ```
 
-```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
-## The following is just for running the script conventionally (no knitr) on the authors computer
-```
 
 
 # Getting started with R
@@ -106,7 +100,7 @@ If all this fails, I have compiled a quick-start R environment, which you can co
  
 [R quick start environment]()
 
-For installation, just unzip the file to a directory on your computer or to an USB drive.
+For installation, just unzip the file to a directory on your computer or to a USB drive.
 
 
 
@@ -135,8 +129,6 @@ library(gridExtra)
 ## regression models
 library(rstanarm)
 library(bayr)
-
-
 ```
 
 We start by *checking the libraries*:
@@ -185,6 +177,12 @@ Experiment %>%
   ggplot( aes(fill = Group, x = outcome) ) + 
   geom_density()
 
+## ... statistical model comparing the groups
+
+model <- stan_glm(formula = outcome ~ Group, 
+            data = Experiment) 
+
+fixef(model)
 
 ```
 
@@ -196,9 +194,10 @@ Observe Console, Environment and Plots. Did you see
 
 Congratulations! You have just 
 
-* simulated data of a virtual experiment using random variable generators
+* simulated data of a virtual experiment with two groups
 * summarized the data
 * plotted the data
+* estimated a Bayesian regression model that compares the two groups
 
 ## First exercise
 
@@ -216,13 +215,10 @@ If you prefer the fast lane, you can also run and examine the following code, wh
 mean(Experiment$outcome)
 var(Experiment$outcome)
 
-model <- lm(formula = outcome ~ Group, 
+model <- stan_glm(formula = outcome ~ Group, 
             data = Experiment) 
 
-coef(model)
-anova(model)
-
-summary(model)
+fixef(model)
 ```
 
 Isn't it amazing, that in less than 20 simple statements we have just reached the level of a second-year bachelor student? Still, you may find the R output a little inconvenient, as you may want to save the output of your data analysis. Not long ago, that really was an issue, but in the past few years R has become a great tool for *reproducable research*. The most simple procedure of saving your analysis for print or sharing is to:
@@ -279,7 +275,7 @@ Just calling the name prints the value to Console. In typical interactive progra
 
 Often, what you want is to do calculations with the value. For example, you have a repeatd measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
 
-```{r}
+```{r, opts.label = "rtut"}
 N_Obs <- 100
 N_Part <- 25
 avg_N_Obs <- N_Obs/N_Part
@@ -332,14 +328,20 @@ mean_score <- 32/3 ## numeric
 ```
 
 
-Objects *factor* for categories or groups. With  like experimental treatments or participant IDs
+Data sets usually contain variables that are not numeric, but partition the data into groups. For example:
 
++ `Part`
++ `Condition`
++ `Design`
++ `education level`
 
-* *character* for free text, for example, the description of a usability problem, but often used to replace factors
+Two variable types apply in such cases: *factor* and *character*. While the first specializes on the purpose of grouping, character objects can also be used to store longer text, say the description of a usability problem.
+
+[example]
 
 Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R missing values are first-class citizens. Every vector of a certain class can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to remove NA values from the data. While this appears slightly inconvenient, this feature helps to catch errors early in data analysis, and creates better transparency.
 
-```{r mean_NA}
+```{r mean_NA, opts.label = "rtut"}
 
 clicks <- c(3, NA, 2)
 mean(clicks)
@@ -381,7 +383,7 @@ Experiment
 
 This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It were a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. In the latter case, R silently called a function on the object:
 
-```{r df_call_print}
+```{r df_call_print, opts.label = "rtut"}
 print(Experiment)
 
 ```
@@ -450,7 +452,7 @@ Experiment[[1]]       ## vector
 Experiment$Group      ## the same
 ```
 
-Sometimes, it may be neccessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a dataframe can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we set them all to `NA`. 
+Sometimes, it may be neccessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a dataframe can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to `NA`.
 
 ```{r df_injecting, opts.label = "rtut"}
 ## injecting
@@ -538,7 +540,7 @@ Note that all objects are restored by their original names, without using any as
 
 __Exercises:__
 
-1. In the book package (directory `/Data`) you will find the data set of the (virtual) `` study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
+1. In the book package (directory `/Data`) you will find the data set of the (virtual) study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
 
 1. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame summarize what is in the data frame.
 
@@ -549,9 +551,9 @@ __Exercises:__
 
 Do you wonder about the strange use of `%>%` in my code above? This is the new way of programming data transformations in R. 
 
-The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for data manipulation, where it chains steps of data manipulation. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.
+The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for data manipulation. It chains steps of data manipulation by connecting transformation functions. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.
 
-Importing data from any of the possible ressources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the dataframe. Say, you want to variable _Group_ to be called _Condition_, but omit the variable _age_ and store the new dataframe as _Exp_. The select command does all this. In the following code the dataframe `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables 
+Importing data from any of the possible ressources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the dataframe. Say, you want to variable _Group_ to be called _Condition_, but omit the variable _age_ and store the new dataframe as _Exp_. The select command does all this. In the following code the dataframe `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
 
 ```{r opts.label = "rtut"}
 Exp <-
@@ -559,7 +561,7 @@ Exp <-
   select(Condition = Group, outcome)
 ```
 
-Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers in the outcome variable (larger than 500). Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ onboard) and add some filtering steps:
+Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers (>500) in the outcome variable. Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ onboard) and add some filtering steps:
 
 ```{r opts.label = "rtut"}
 
@@ -715,10 +717,10 @@ Use the dataset BAB5 in BrowsingAB. It contains a follow-up experiment, where pa
 
 Above we have seen examples of functions that boils down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the `lm` command, that applies regression models to data (provided as dataframes).
 
-In the following, we will use our simulated dataframe `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. (I am using a `dyplr` transformation chain for the simulation, as explained before.
+In the following, we will use another simulated dataframe `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. Note how the *expected value* `mu` is created by drawing on the variables `Condition` and `age`. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of $mu$. 
 
 ```{r opts.label = "rtut"}
-N_Obs <- N_Obs
+N_Obs <- 20
 
 Exp <-
   data_frame(Obs = 1:N_Obs,
@@ -729,43 +731,42 @@ Exp <-
 ```
 
 
-*ANOVA* is just one special case of regression model, as you will learn in a later chapter. The ANOVA model is specified in the first argument of the command. The model specification is given in a certain formula language. Learning this formula language is key to unleashing the power of linear regression in R. Below is a very basic model, that predicts `outcome` by `Condition`. As the predictor is a factor, it is practically an ANOVA.
+*ANOVA* is just one special case of regression model, as you will learn in a later chapter. The model specification is given in a certain formula language. Learning this formula language is key to unleashing the power of linear regression in R. Below is a very basic model, that predicts `outcome` by `Condition`. As the predictor is a factor, it is practically what people often refer to as ANOVA.
 We can perform a full ANOVA on the dataframe `Exp` with just one command:
 
-```{r opts.label = "rtut"}
-M1 <- 
-  lm(outcome ~ Condition, 
+```{r fit:Condition, opts.label = "rtut"}
+M_1 <- 
+  stan_glm(outcome ~ Condition, 
      data = Exp)
-summary(M1)
+fixef(M_1)
 ```
 
 Another classic model is *linear regression*, where outcome is predicted by the metric variable `age`:
 
-```{r opts.label = "rtut"}
-M2 <- 
-  lm(outcome ~ age, 
+```{r fit:age, opts.label = "rtut"}
+M_2 <- 
+  stan_glm(outcome ~ age, 
      data = Exp)
-summary(M2)
+fixef(M_2)
 ```
 
 If you are interested in both at the same time, you can combine that in one model by the following formula:
 
-```{r opts.label = "rtut"}
-M3 <- 
-  lm(outcome ~ Condition + age, 
+```{r fit:multifac, opts.label = "rtut"}
+M_3 <- 
+  stan_glm(outcome ~ Condition + age, 
      data = Exp)
-summary(M3)
+fixef(M_3)
 
 ```
 
-A statistical model has several components, for example the coefficients and residuals. Models are complex objects, from which a variety of inferences can be made. For example, the coefficient estimates can be extracted and used for prediction. F-test can be applied on the residuals. This is basícally, what the `summary` command prints to Console. 
+A statistical model has several components, for example the coefficients and residuals. Models are complex objects, from which a variety of inferences can be made. For example, the coefficient estimates can be extracted and used for prediction. This is what `fixef()` does in the above code.
 
 A number of functions can be used to extract certain aspects of the model. For example:
 
-* `coef(model)`
+* `fixef(model)`
 * `residuals(model)`
 * `predict(model)`
-* `anova(model)`
 
 
 
