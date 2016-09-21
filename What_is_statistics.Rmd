@@ -19,13 +19,15 @@ subtitle: New statistics for design researcher
 ```{r setup, message=F, warning=F}
 ## The following is for running the script through knitr
 thisdir = getwd()
-purp.mcmc = F
+purp.mcmc = T
 
 source("RMDR.R")
 
 CE = c("Rainfall", "Rational", "Sec99")
 load_CE(CE)
 
+formals(stan_glm)$iter = 500
+formals(stan_glm)$chains = 2
 #opts_chunk$set(cache = T)
 ```
 
