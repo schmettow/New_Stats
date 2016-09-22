@@ -134,10 +134,11 @@ opts_template$set(
   fig.wide = list(fig.width = 8, fig.height = 4,  anchor = 'Figure'),
   fig.slide = list(fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
   fig.half = list(fig.width = 3.8, fig.height = 4, dpi = 120, dev = "svg"),
+  fig.half = list(fig.width = 4, fig.height = 4, dpi = 120, dev = "svg", echo = purp.rtut),
   invisible = list(eval = purp.book, echo = purp.debg),
   list(eval = purp.debg, echo = purp.debg),
   sim = list(eval = purp.book, echo = purp.debg),
-  mcmc = list(eval = purp.mcmc, echo = purp.debg),
+  mcmc = list(eval = purp.mcmc, echo = purp.rtut),
   rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut),
   rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
                     fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
@@ -175,8 +176,8 @@ inv.logit = function(eta) plogis(eta)
 options(mc.cores = parallel::detectCores())
 # formals(stan_lm)$chains <- 1
 # formals(stan_lm)$iter <- 1000
-formals(stan_glm)$chains <- 1
-formals(stan_glm)$iter <- 1000
+formals(stan_glm)$chains <- 2
+formals(stan_glm)$iter <- 3000
 # formals(MCMCglmm)$verbose <- F
 
 
@@ -262,7 +263,8 @@ load_CE <-
 save_CE <-
   function(cases) {
     for(c in cases){
-      save(list = c, file = paste0("Cases/",c,".Rda"))
-      message(paste0("Saving case environment ", c))
+      fname = paste0("Cases/",c,".Rda")
+      save(list = c, file = fname)
+      message(paste0("Saving case environment ", c, " to: ", fname))
     }
   }

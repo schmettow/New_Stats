@@ -1,7 +1,7 @@
 ---
 title: "New statistics for design researchers"
 author: "Martin Schmettow"
-date: "9 August, 2016"
+date: "September 20, 2016"
 output:
   html_document:
     fig_caption: yes
@@ -14,8 +14,7 @@ bibliography: Bayesian_Stats.bib
 
 ```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 ## The following is for running the script through knitr
-purp.mcmc = T
-purp.rtut = T
+purp.mcmc = F
 thisdir = getwd()
 source("RMDR.R")
 
@@ -24,6 +23,8 @@ CE <-
     "AR_game", "Sleep", "Uncanny")
 load_CE(CE)
 
+formals(stan_glm)$iter <- 200
+formals(stan_glm)$chains <- 1
 
 ```
 
@@ -61,22 +62,24 @@ The Gaussian distribution often is a good approximation for the distribution of 
 In R, the analysis of the 99 seconds problem unfolds as follows: recall that only the completion times of the novel design are of interest. These have been extracted from the original data set and stored in a separate data frame. This data frame is send to the R command MCMCglmm for estimation, using the `%>%` operator and the argument `data = .`. As the MCMCglmm command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The `1`here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the intercept. Finally, the `family` argument states that a model with Gaussian error term is desired. This is the default in MCMCglmm (and most other regression commands), so in coming examples, we will leave it out.
 
 
-```{r mod:99_seconds, opts.label = "rtut"}
+```{r fit:99_seconds, opts.label = "mcmc"}
 attach(Sec99)
-#detach(Sec99)
-M_1 <- 
-  Ver20 %>%    
-  stan_glm(ToT ~ 1, data = .)
+M_1 <- stan_glm(ToT ~ 1, data = Ver20)
+
+fixef(M_1)
+detach(Sec99)
 ```
 
-The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution of the intercept and the standard deviation of residuals. The posterior distribution gives the degree of certainty for every possible value of the parameter. In fact, what we get from the MCMC estimation is just samples from the posterior distribution. The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines.
+The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution of the intercept and the standard deviation of residuals. The posterior distribution gives the degree of certainty for every possible value of the parameter. In fact, what we get from the MCMC estimation is just samples from the posterior distribution. The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
 
 ```{r lst:99_seconds_post, opts.label = "rtut"}
+attach(Sec99)
+
 P_1 <-  
   posterior(M_1)
 P_1 %>% 
   sample_n(10)
-
+P_1
 ```
 
 Making statements about certainty, for example $M_{ToT] <= 99$, is very easy, once we have a basic understanding of what MCMC estimation actually does. While a full treatment of the issue is beyond the scope of this book (see [BDA]), but it suffices to understand that the MCMC algorithm is a *random walk* through *parameter space*. In the current case, the parameter space is two-dimensional, as we have two parameters. At every iteration, the MCMC algorithm stores the coordinates in parameter space.
@@ -84,8 +87,10 @@ Making statements about certainty, for example $M_{ToT] <= 99$, is very easy, on
 
 ```{r fig:99_seconds_random_walk, opts.label = "fig.small"}
 G_random_walk <-
-  posterior(M_1, shape = "wide") %>% 
+  P_1 %>% 
   filter(iter <= 50) %>% 
+  select(iter, parameter, value) %>% 
+  spread(parameter, value) %>% 
   ggplot(aes(x = Intercept, y = sigma_resid, label = iter)) +
   geom_text() +
   geom_path(alpha = .3) +
@@ -107,14 +112,12 @@ P_1 %>%
 ```
 
 ```{r 99_seconds_post_fixef}
-T_coef_1 <-
-  P_1 %>% 
-  fixef()
+T_coef_1 <- fixef(P_1)
 
 ```
 
 
-In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r # frm_coef(Sec99$T_coef_1, 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r # frm_coef(Sec99$T_coef_1, 1, center = F)`$ as "reasonably certain".
+In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r md_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, row = 1, center = F)`$ as "reasonably certain".
 
 Often, statisticians want to summarize regression results in a more compact way. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicater for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the more certain an estimate is, the narrower is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value. 
 
@@ -208,33 +211,31 @@ data_frame(x = 1:20,
 
 Linear regression requires the predictor to be metric. Now, we run a linear regression with age as predictor for ToT. First, we plot the data once again. We ask ggplot to overlay a smoothing line that lets us assess the overall trend at a glance.
 
-```{r age_EDA}
+```{r fig:BAB_eda_age}
 attach(BrowsingAB)
 
-BAB1 %>%
+G_eda_1 <-
+  BAB1 %>%
   ggplot(aes(x = age, y = ToT)) +
   geom_point()+
   geom_smooth(se = F)
 
+G_eda_1
 ```
 
 Now, we use the `stan_glm` command in much the same way. The command will internally check the data type of your variable, which is numeric, here. Therefore, it is treated as a *covariate*.
 
-```{r age_lm1}
+```{r age_lm1, opts.label = "mcmc"}
 M_age <-
   BAB1 %>% 
   stan_glm(ToT ~ age, 
            data = .)
 
-posterior(M_age) %>% 
-  fixef() %>% 
-  kable()
+fixef(M_age)
 ```
 
 
-
-
-To assess the quality of the model fit, it is recommended to check the distribution of residuals. With stan_arm models, we can extract residuals as:
+To assess the quality of the model fit, it is recommended to check the distribution of residuals. With rstan_arm models, we can extract residuals as:
 
 ```{r age_resid, opts.label = "rtut.nr"}
 residuals(M_age)
@@ -245,21 +246,23 @@ See how the command is called on the model object. This reflects the fact that *
 
 A commonly used criterion for model fit is whether a predictor considerably explains variance, which reduces the spread of the residual distribution. Below, we also estimate the so-called *null model*, which characterizes the data by just one grand mean. The question is: does the predictor age effectively reduce the residual spread?
 
-```{r age_resid_reduction}
+```{r fit:age_resid_reduction, opts.label = "mcmc"}
 M_0 <-
   BAB1 %>% 
   stan_glm(ToT ~ 1, data = .)
 
 T_resid <-
   data_frame(
-    M0 = residuals(M_0),
+    M_0 = residuals(M_0),
     M_age = residuals(M_age))
 
-
-T_resid %>%
+G_resid_0 <-
+  T_resid_0 %>%
   gather(model, error) %>% 
-	ggplot(aes(col = model, x = error)) +
-	geom_density()
+  ggplot(aes(col = model, x = error)) +
+  geom_density()
+
+G_resid_0
 ```
 
 
@@ -283,7 +286,7 @@ One of the most basic statistical routines is ANOVA, which compares two groups o
 
 This question could happen, for instance, during an overhaul of a municipal website. With the emerge of e-government, this website had grown wildly over a decade. With the current navigation structure, users have increasing difficulties to find the information they need. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same five tasks,  but sees only one of the two designs.
 
-```{r anova_EDA}
+```{r fig:eda_anova}
 
 BAB1 %>% 
   select(Obs, Design, ToT) %>%
@@ -303,7 +306,7 @@ Now, we perform the ANOVA. Again, this is a two-step procedure:
 1. the `stan_glm` command lets you specify a simple formula to express the dependency between predictors (education) and outcome variable (ToT). It performs the parameter estimation, using the method of _Markov-Chain Monte-Carlo Sampling_. The results are stored in an object (M1).
 2. With the `coef` command the estimates can be extracted.
 
-```{r anova_lm}
+```{r fit:anova_lm, opts.label = "mcmc"}
 # ANOVA parameter estimation
 
 M_Design <-
@@ -311,20 +314,19 @@ M_Design <-
   stan_glm(ToT ~ 1 + Design, 
            data = .)
 
-posterior(M_Design) %>% 
-  fixef() %>% 
-  kable()
+fixef(M_Design)
 
-T_resid$M_Design = residuals(M_Design)
-
-
+T_resid$M_Design <- residuals(M_Design)
 ```
 
 
 
 ## Crossover: multifactorial ANOVA
 
-Now that we have seen how to compare a couple of designs, I must let you in on something: it does not matter whether the groups are established by people encountering different designs. The only thing that matters is that observations are unambiguously grouped by some criterion. That can be
+[NEEDS SEVERE OVERHAULING]
+
+Now that we have seen how we can compare on one factor, we can extend the model to more factors. With linear  models, 
+. observations are unambiguously grouped by some criterion.
 
 + designs: as we have seen in the A/B testing scenario
 + properties of people, like  gender or whether they have a high school degree, or not
@@ -334,30 +336,30 @@ In addition, we can extend the model to incorporate multiple of such factors at 
 
 
 
-Now, we are looking at a slightly more complicated situation, where browsing is predicted by education and gender. First, with the *ggplot* system, we plot the new situation. ggplot basically works by 
+Now, we are looking at a slightly more complicated situation, where browsing is predicted by design and education level of participants. First, with the *ggplot* system, we plot the new situation. Recall that 
 
 1. mapping variables in the data set to elemental properties in the splot, such as: x position, y position, color, shape etc.
 
 2. selecting an appropriate geometry that carries such properties, e.g. points, bars, boxplots
 
-```{r anova_twofact_2, }
+```{r fig:anova_twofact_2, opts.label = "fig.tut"}
 BAB1 %>%
-  ggplot(aes(x = Design, y = ToT, fill = Education)) +
+  ggplot(aes(x = Design, 
+             y = ToT, 
+             fill = Education)) +
   geom_boxplot()
 ```
 
 Now we can do the two-factorial ANOVA in much the same way as before. We only have to add the predictor *Education* to the model formula. Then we run the MCMC estimation and get the estimates.
 
 
-```{r anova_twofact_3}
+```{r fit:anova_twofact_3, opts.label = "mcmc"}
 M_cross <- 
   BAB1 %>% 
   stan_glm(ToT ~ 1 + Design + Education,
            data = .)
 
-posterior(M_cross) %>% 
-  fixef() %>% 
-  kable()
+fixef(M_cross)
 
 T_resid$M_cross = residuals(M_cross)
 
@@ -378,7 +380,7 @@ In the BrowsingAB example, we were interested in the influence of age, but we ha
 
 
 
-```{r glm_EDA_2}
+```{r fig:glm_EDA_2}
 BAB1 %>%
 	ggplot(aes(y = ToT, 
 						 x = Education)) +
@@ -388,16 +390,14 @@ BAB1 %>%
 
 And here we call `stan_glm` once again, with both predictors, simultaneously
 
-```{r glm_mixed}
+```{r fit:glm_mixed, opts.label = "mcmc"}
 # GLM parameter estimation
 M_glm <- 
   BAB1 %>% 
   stan_glm(ToT ~ Design + age, 
 							data = .)
 
-posterior(M_glm) %>% 
-  fixef() %>% 
-  kable()
+fixef(M_glm)
 
 T_resid$M_glm = residuals(M_glm)
 ```
@@ -412,68 +412,7 @@ T_resid$M_glm = residuals(M_glm)
 
 
 
-### How parameter estimation with MCMC works
 
-```{r mcmc_algorithm}
-# posterior(Mclm[["Browsing_AB_1"]]) %>% 
-#   spread(parameter, value) %>% 
-# 	ggplot(aes(x = `Intercept`,
-# 						 y = DesignB)) + 
-# 	geom_path(alpha = .2) +
-# 	geom_point()
-```
-
-
-### How parameter estimation with RSS works
-
-Here I demonstrate a brute force method to find the optimal parameters for the linear regression.
-The parameter space span by $beta_0$ and $\beta_1$ is systematically explored, and for every combination the RSS is computed. The point where the RSS is at its minimum is the _least square estimate_.
-
-```{r rss_minimization, opt.label = "deprecated"}
-# ## function for RSS
-# RSS = Vectorize(function(beta_0, beta_1){
-#   Browsing %>%
-#     mutate(Predicted = beta_0 + beta_1 * age) %>%
-#     mutate(squrResid = (Predicted - Browsing)^2) %>%
-#     select(squrResid) %>%
-#     sum()
-# })
-# 
-# ## exploring (part of) the parameter space
-# E1 = expand.grid(beta_0 = seq(-14, -12, length.out = 100),
-#                   beta_1 = seq(0.2, 0.5, length.out = 100)) %>%
-#   mutate(logRSS = log(RSS(beta_0, beta_1)))
-# 
-# ## here is the minimum
-# E1 %>%
-#   filter(logRSS == min(logRSS))
-# 
-# ## exloring it graphically
-# grid.arrange(
-#   E1 %>%
-#     ggplot(aes(x = beta_0, y = beta_1, col = logRSS)) +
-#     geom_point(),
-#   E1 %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   E1 %>%
-#     filter(abs(-13 - beta_0) < 0.5 & abs(0.3 - beta_1) < 0.1) %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   E1 %>%
-#     filter(abs(-13.25 - beta_0) < 0.1 & abs(0.31 - beta_1) < 0.03) %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   ncol = 2
-#   )
-
-```
 
 ## Interaction effects
 
@@ -481,15 +420,19 @@ The linear regression model `M_age` showed a considerable relationship between a
 
 It is commonly known that older people tend to have lower performance than younger users. A numkber of factors are responsible, such as: slower processing speed, lower working memory capacity, lower motor speed and visual problems, It is also commonly held, that universal designs are possible. Universal designs reduce the cognitive, sensory and motor obstacles for impaired users. A perfect universal design is equally usable for everyone.
 
-Is, perhaps, one of the two designs less of a burden for elderly users? We plot the observed ToT by age, but form groups by design. For seeing the trend, a linear smoother is added to tghe plot.
+Is, perhaps, one of the two designs less of a burden for elderly users? We plot the observed ToT by age, but form groups by design. For seeing the trend, a linear smoother is added to the plot.
 
-```{r glm_EDA_3}
-BAB1 %>%
-	ggplot(aes(x = age,
-						 col = Design,
-						 y = ToT)) +
-	geom_point() +
-	geom_smooth(method = "lm", se = F)
+```{r fig:glm_EDA_3, opts.label = "fig"}
+G_slope_ia <-
+  BAB1 %>%
+  ggplot(aes(x = age,
+             col = Design,
+             y = ToT)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+
+G_slope_ia
 ```
 
 
@@ -518,15 +461,15 @@ are called *interaction effects*.
 As we have seen, with GLM, it is  possible to investigate the effect of design properties and user properties simultaneously. For example, assume that main difference between design A and B in the web browsing example is that A uses larger letters than B. Would that create the same benefit for everybody? It is not unlikely, that larger letters only matter for users that have issues with far sightedness, which is associated with age. Maybe, there is even an adverse effect for younger users, as larger font size takes up more space on screen and more scrolling is required. 
 
 
-```{r fit:Browsing_interaction}
+```{r fit:BAB_ia1, opts.label = "mcmc"}
 
 M_ia1 <- 
   BAB1 %>% 
   stan_glm(ToT ~ Design + age + Design:age,
 				 data = .)
 
-  fixef(M_ia1) %>% 
-  kable()
+fixef(M_ia1)
+T_resid$M_ia1 = residuals(M_ia1)
 
 ```
 
@@ -539,14 +482,27 @@ M_ia1 <-
 
 ```
 
+If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B differ for the educational level of participants?
+
+```{r fit:BAB_ia2, opts.label = "mcmc"}
+
+M_ia2 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ Design + Education + Design:Education,
+				 data = .)
+
+fixef(M_ia2)
+T_resid$M_ia2 = residuals(M_ia2)
+
+```
+
+Well, interaction effects occur routinely, but a `Design:Education` effect is not a feature of the BrowsingAB data set.
+
+
 ```{r}
 detach(BrowsingAB)
 ```
 
-
-Many studies in design research ignore user conditions. The author's personal take is that this is a heritage from experimental research in social science and it is unduly. Seminal studies in cognitive psychology and social psychology claim mental structures or processes on average, which means they assume completely homogenic responses. And indeed, several properties of human information processing have been replicated under such diverse conditions that one can assume that they are general. For example, the Stroop observation has been observed a hundred times in various population subgroups [REF], situations [REF] and variations. In contrast, in the chapter on polynomial regression [PR] we will see a plot of individual response patterns of participants rating robot faces [preview Fig XY]. It turns out that participants show immensely diverse patterns in how they used the rating scale.
-
-Research on accessibility, universal design or robust designs has a strong tradition in design research. Still, the number of studies that regard individual differences is comparably small [Schmettow & Kuurstra, 2016]. In the following we will discover another feature of BAB. We saw earlier that people get slower with age, which we modelled as a straight regression line. (We ignored the wavey pattern, but this is not the point here). Then we combined the predictors Design and age into one model. But, review [Fig XY] and watch closely: we have two regression lines, that are completely parallel. 
 
 We can distinguish between *saturation effects* and *amplification effects*.
 
@@ -586,6 +542,7 @@ grid.arrange(
 	ncol = 2
 )
 ```
+
 
 
 ## Saturation and non-linearity
@@ -650,7 +607,7 @@ Pills %>%
 
 Below, we estimate a series of models, which we are now going to compare.
 
-```{r fit:Headache}
+```{r fit:Headache, opts.label = "mcmc"}
 M_1 <-
   stan_glm(reduction ~ PillA + PillB, 
                           data = Pills)
@@ -659,24 +616,20 @@ M_2 <-
                           data = Pills)
 
 M_3 <- 
-  stan_glm(reduction ~ before + PillA * PillB, 
+  stan_glm(reduction ~ before * PillA + PillA * PillB, 
                           data = Pills)
 
 M_4 <- 
   stan_glm(reduction ~ -1 + PillA:PillB, 
      data = Pills)
 
-
 ```
 
 Imagine, the researcher started with a two-way ANOVA, estimating the mein effects PillA and PillsB. The result is:
 
 ```{r tab:M_1_fixef}
-T_fixef_1 <- 
-  fixef(M_1)
-
-T_fixef_1 %>%  
-  kable()
+T_fixef_1 <- fixef(M_1)
+T_fixef_1
 ```
 
 Given these estimates, we conclude that pill A has an almost double reduction of headache compared to B. We further notice the Intercept, indicating that headache spontaneously diminishes at a certain rate.
@@ -688,12 +641,13 @@ Setting the spontaneous recovery aside, what would be the prediction of the mode
 T_guess <-
   T_means %>% 
   mutate(guess = c(0, 
-                   round(T_fixef_1[[2,3]],2),
-                   round(T_fixef_1[[2,2]],2),
+                   round(T_fixef_1[[2,6]],2),
+                   round(T_fixef_1[[3,6]],2),
                    "?")) %>% 
   select(-reduction) %>% 
   spread(PillB, guess)
 
+T_guess
 ```
 
 Probably, you came up with 
@@ -703,16 +657,13 @@ $$`r round(sum(Headache$T_fixef_1$center), 2)$$
 But, is that reasonable? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. We clarify the situation by  introducing an interaction term in our second model. 
 
 ```{r tab:Headache_fixef_2}
-T_fixef_2 <-
-  posterior(M_2) %>% 
-  fixef()
+T_fixef_2 <-  fixef(M_2)
+T_fixef_2
 ```
 
 
 
-We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given:
-
-$$`r round(Headache$T_fixef_2[[2,2]],2)` + `r round(Headache$T_fixef_2[[2,3]],2)` + `r round(Headache$T_fixef_2[[2,4]],2)`=  `r round(Headache$T_fixef_2[[2,2]] + Headache$T_fixef_2[[2,3]],2) + round(Headache$T_fixef_2[[2,4]],2)`$$
+We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of `r round(sum(Headache$T_fixef_2$center), 2)` in reduction.
 
 As the interaction effect is negative, it reduces the predicted combined effect. As we would expect, the effectiveness of two pills us not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
 
@@ -746,7 +697,7 @@ D_1 %>%
 
 We see immediately, that both design choices have a an impact: more contrast, as well as larger letters lead to improved reading performance. But, do they add up? Or do both factors behave like headache pills, where more is more, but less than the sum. Clearly, the 12pt-black group could read fastest on average. So, neither with large font, nor with optimal contrast alone has the design reached maximum performance, i.e. saturation. Still, there could be an interaction effect, that gradually reduces the positive effect of large font in a high-contrast design. We run two regression model, one with both main effects and one that adds an interaction term. We extract the coefficients from both models and view them side-by-side:
 
-```{r fit:reading_1, opts.label = "rtut"}
+```{r fit:reading_1, opts.label = "mcmc"}
 M_1 <-
   D_1 %>% 
   stan_glm(ToT ~ font_size + font_color,
@@ -759,9 +710,9 @@ M_2 <-
 
 
 T_read_fixef <-
-  right_join(select(fixef(M_1), parameter, M_1 = center),
-             select(fixef(M_2), parameter, M_2 = center),
-             by = "parameter")
+  right_join(select(fixef(M_1), fixef, M_1 = center),
+             select(fixef(M_2), fixef, M_2 = center),
+             by = "fixef")
 
 T_read_fixef %>% kable()
 
@@ -771,14 +722,14 @@ The estimates confirm, that both manipulations have a considerable effect. And, 
 
 $$\mu_{12pt, black} = `r Reading$T_read_fixef[1,3]` + `r Reading$T_read_fixef[2,3]` + `r Reading$T_read_fixef[3,3]` + `r Reading$T_read_fixef[4,3]` = `r sum(Reading$T_read_fixef[,3])`$$
 
-In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain ($`r frm_coef(fixef(Reading$M_2), 4)`$)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clatity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthatic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
+In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain ($`r md_coef(fixef(Reading$M_2), row = 4)`$)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clatity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthatic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
 
 Why are the main effects under-estimated, when not including the interaction term? The pure main-effects model has three parameters. This allows it to represent the same numner of independent group means. Formally, the number of groups in the study is four. However, the three-parameter model assumes that the fourth group (black, 12pt) can sufficiently be specified by the existing three parameters. If saturation occurs, the group of participants in the 12pt group is not homogenous: in the grey group, they experience a stronger improvement than in the black group. The three parameter model is forced to make the best out of situation and adjusts the net effect of font size to be slightly lower than it actually is. The same occurs for the font color effect.
 
 Interaction effects are notoriously neglected in research, and they are hard to grasp for audience with or without a classic statistics education. It is therefore highly recommended to illustrate interaction effects using interaction plots. 
 To begin with, an interaction plot for the 2x2 design contains the four estimated group means. These can be computed from the linear model coefficients, but there is an alternative way: we modify the model, such that it represents the four group means, directly. The re-parametrized model has no intercept (if we want the group means directly, we need no reference group), and no main effects. The model contains just the raw interaction effect, which results in an estimation of the four group means:
 
-```{r fit:reading_2, opts.label = "rtut"}
+```{r fit:reading_2, opts.label = "mcmc"}
 M_3 <-
   D_1 %>% 
   stan_glm(ToT ~ 0 + font_size : font_color,
@@ -792,7 +743,7 @@ With some basic data transformation on the coefficient table, we create a data f
 ```{r tab:reading, opts.label = "rtut"}
 T_2x2_mu <-
   fixef(M_3) %>% 
-  separate(parameter, c("font_size", "font_color"), sep = ":") %>% 
+  separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
   mutate(font_size = str_replace(font_size, "font_size", ""),
          font_color = str_replace(font_color, "font_color", "")) %>% 
   as.data.frame()
@@ -871,10 +822,8 @@ In their study they collect self ratings of a larger set of participants, where 
 While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effect between metric predictors. While this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors we have used boxplots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wireframe plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatterplot with the predictors on axis and encode the outcome variable by shades or size of dots. These options may suffice to see any present main effects, but are too coarse to discover the subtlety of interaction effects. This is not an issue with metric interaction effects per se, but more general: while we can comprehend more complex models from coefficient tables, exploratory graphs are limited to just a few variables at the same time. Therefore, this analysis does without the usual exploratory graph. However, we will introduce a method to create interaction plots for metric predictors.
 
 
-```{r fit:ARgame}
-try(detach(AR_game))
+```{r fit:ARgame, opts.label = "mcmc"}
 attach(AR_game)
-
 
 M_1 <-
   D_1 %>% 
@@ -882,10 +831,6 @@ M_1 <-
            data = .)
 
 fixef(M_1)
-```
-
-
-```{r}
 detach(AR_game)
 ```
 
@@ -917,7 +862,7 @@ G_expl <-
 
 Using a 2x2 model including an interaction effect, we examine the conditional association between noise and sleepiness. The `*` operator in the model formula is an abbreviation for the fully factorial term `Environment + Sleep + Environment:Sleep`.
 
-```{r fit:Sleep, opts.label = "rtut"}
+```{r fit:Sleep, opts.label = "mcmc"}
 M_1 <- 
   D_1 %>% 
   stan_glm(gaps ~ Environment * Sleep, data = .)
@@ -930,7 +875,7 @@ T_fixef <-
 T_fixef %>% kable()
 ```
 
-Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r frm_coef(Sleep$T_fixef, "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
+Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r md_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r md_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r md_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
 The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law suggests that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we except that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
 
@@ -1013,21 +958,18 @@ M_1 <-
   mutate(huMech_1 = huMech,
          huMech_2 = huMech^2,
          huMech_3 = huMech^3) %>% 
-  stan_glm(avg_like ~ huMech_1 + huMech_2 + huMech_3,
-           data = .)
+  stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
+           data = ., iter = 500)
 
 P_1 <-
   posterior(M_1) %>% 
-  mutate(parameter = str_replace(parameter, "Intercept", "huMech_0")) %>% 
+  mutate(parameter = str_replace(parameter, "Intercept", "huMech_0"),
+         fixef = str_replace(fixef, "Intercept", "huMech_0")) %>% 
   posterior()
   
-T_fixef_1 <-
-  fixef(P_1)
-
-```
-
-```{r tab:Uncanny_fixef_1}
-kable(T_fixef_1)
+T_fixef_1 <- fixef(P_1)
+T_fixef_1
+save_CE(CE)
 ```
 
 
@@ -1065,8 +1007,8 @@ Every PD sample contains simultaneous draw of the four parameters `huMech_[0:3]`
 P_1_trough <-
   P_1 %>%
   filter(type == "fixef") %>%
-  select(-chain, -order) %>% 
-  spread(parameter, value) %>% 
+  select(chain, iter, fixef, value) %>% 
+  spread(fixef, value) %>% 
   select(starts_with("huMech")) %>% 
   trough()
 
@@ -1103,8 +1045,73 @@ detach(Uncanny)
 ```
 
 
-```{r save_all, message = "purp.dbg"}
-save_CE(CE)
+
+
+## Stub: How parameter estimation with MCMC works
+
+```{r mcmc_algorithm}
+# posterior(Mclm[["Browsing_AB_1"]]) %>% 
+#   spread(parameter, value) %>% 
+# 	ggplot(aes(x = `Intercept`,
+# 						 y = DesignB)) + 
+# 	geom_path(alpha = .2) +
+# 	geom_point()
+```
+
+
+## Stub: How parameter estimation with RSS works
+
+Here I demonstrate a brute force method to find the optimal parameters for the linear regression.
+The parameter space span by $beta_0$ and $\beta_1$ is systematically explored, and for every combination the RSS is computed. The point where the RSS is at its minimum is the _least square estimate_.
+
+```{r rss_minimization, opt.label = "deprecated"}
+# ## function for RSS
+# RSS = Vectorize(function(beta_0, beta_1){
+#   Browsing %>%
+#     mutate(Predicted = beta_0 + beta_1 * age) %>%
+#     mutate(squrResid = (Predicted - Browsing)^2) %>%
+#     select(squrResid) %>%
+#     sum()
+# })
+# 
+# ## exploring (part of) the parameter space
+# E1 = expand.grid(beta_0 = seq(-14, -12, length.out = 100),
+#                   beta_1 = seq(0.2, 0.5, length.out = 100)) %>%
+#   mutate(logRSS = log(RSS(beta_0, beta_1)))
+# 
+# ## here is the minimum
+# E1 %>%
+#   filter(logRSS == min(logRSS))
+# 
+# ## exloring it graphically
+# grid.arrange(
+#   E1 %>%
+#     ggplot(aes(x = beta_0, y = beta_1, col = logRSS)) +
+#     geom_point(),
+#   E1 %>%
+#     gather(parameter, value, 1:2) %>%
+#     ggplot(aes(x = value, y = logRSS)) +
+#     geom_point(alpha = .5) +
+#     facet_grid(.~parameter, scales = "free_x"),
+#   E1 %>%
+#     filter(abs(-13 - beta_0) < 0.5 & abs(0.3 - beta_1) < 0.1) %>%
+#     gather(parameter, value, 1:2) %>%
+#     ggplot(aes(x = value, y = logRSS)) +
+#     geom_point(alpha = .5) +
+#     facet_grid(.~parameter, scales = "free_x"),
+#   E1 %>%
+#     filter(abs(-13.25 - beta_0) < 0.1 & abs(0.31 - beta_1) < 0.03) %>%
+#     gather(parameter, value, 1:2) %>%
+#     ggplot(aes(x = value, y = logRSS)) +
+#     geom_point(alpha = .5) +
+#     facet_grid(.~parameter, scales = "free_x"),
+#   ncol = 2
+#   )
 
 ```
 
+
+```{r save_all, opts.label = "invisible"}
+save_CE(CE)
+
+```

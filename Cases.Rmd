@@ -257,6 +257,8 @@ BrowsingAB$simulate <-
   function(
     n_Part = 100,
     n_Task = 5,
+    ## within-subject design is default
+    within_Part = T,
     ## Fixed effects
     beta_S0 = 120,
     # intercept
@@ -352,12 +354,16 @@ BrowsingAB$simulate <-
       select(Obs, Part, Task, Design, 
              Gender, Education, age, Far_sighted, Small_font, ToT) %>% 
       as_data_frame()
-
+    
     BrowsingAB
   }
 
-BrowsingAB$BAB1 <- BrowsingAB$simulate(n_Task = 1)
-BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5)
+BrowsingAB$BAB1 <- 
+  BrowsingAB$simulate(n_Task = 1) %>% 
+  mutate(Part = Obs) ## tweak to make it between-subject
+
+BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5,
+                                       n_Part = 30)
 
 save(BrowsingAB, file = "Cases/BrowsingAB.Rda")
 ```
@@ -441,7 +447,8 @@ CUE8$D_study <-
   mutate(Moderated = as.factor(Moderated),
          Team = str_trim(Team),
          Team = as.factor(Team),
-         Part = as.factor(Part))
+         Part = as.factor(Part),
+         logToT = log(ToT))
 
 names(CUE8)
 
