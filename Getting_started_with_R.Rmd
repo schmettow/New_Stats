@@ -388,32 +388,33 @@ print(Experiment)
 
 ```
 
-Such `print` functions exist for dozens of classes of objects. They represent what the developers though would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand.
+Such `print` functions exist for dozens of classes of objects. They represent what the developers though would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand. However, when working interactively, most of the time you do a data transformation and assign it to a new variable, you check it, immediately. As the assignmemt is always silent (unless their occurs an error), you are forced to type a print statement afterwards. There is shortcut for that: if you embrace the assignment statement in brackets, the result will be printed to the screen. As convenient as this is, especially when creating longer data transformation chains, it introduces some visual clutter. In this book I use it sparingly, for end results, mostly.
 
-If the dedicated print function provides too much, too little or just the wrong information, several commands are available to look into a data frame. The `str` (structure) command works on any R object capitalizing on its structure:
+The dedicated print function does what way back a developer thought would be the most useful information in most cases. Depending on the situation, it can provide too much, too little or just the wrong information. For example: when simulating a data set, like in [First Exercise], we want to check whether the resulting data frame has the desired length and variables the correct class. The standard implementation of the print command, dumps the whole data frame to the screen, which is more than needed. The newer tidyverse implementation `data_frame` you have seen in action, already, is much better suited for this situation, as it displays dimensions and variable classes. In contrast, if the job is to spot whether there are many missing values (`NA`), the classic print performs better.
 
-```{r opts.label = "rtut"}
-str(Experiment)
-```
-
-Another command that is implemented for a variety of classes is `summary`. For dataframes, it produces an overview  with descriptives statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
+Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For dataframes, it produces an overview  with descriptives statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
 ```{r opts.label = "rtut"}
 summary(Experiment)
 ```
 
 
-Dataframes store variables, but statistical procedures operate on variables. We need 
-ways of accessing and manipulating statistical variables and we get several. 
-Recall, that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.
+The `str` (structure) command works on any R object and displays the hierarchical structure (if there isd one):
 
-Internally, dataframes are a collection of "vertical" vectors that are equally long. The variables can be of different class, like `factor` or `numeric`. Often, you want to assess a single variable from your data frame. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
+```{r opts.label = "rtut"}
+str(Experiment)
+```
+
+
+Dataframes store variables, but statistical procedures operate on variables. We need ways of accessing and manipulating statistical variables and we will have plenty. First, Recall that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.
+
+Internally, dataframes are a collection of "vertical" vectors that are equally long. Being a collection of vectors, the variables of a dataframe can be of different classes, like `character`, `factor` or `numeric`. In the most basic case, you want to calculate a statistic for a single variable out of a dataframe. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
 
 ```{r opts.label = "rtut"}
 mean(Experiment$outcome)
 ```
 
-As data frames are matrix-like structures, you can also access individual values by their addresses. The following commands call 
+As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call 
 
 + the first _outcome_ measure
 + the first to third elements of _Group_

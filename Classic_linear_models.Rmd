@@ -23,8 +23,8 @@ CE <-
     "AR_game", "Sleep", "Uncanny")
 load_CE(CE)
 
-formals(stan_glm)$iter <- 200
-formals(stan_glm)$chains <- 1
+#formals(stan_glm)$iter <- 200
+#formals(stan_glm)$chains <- 1
 
 ```
 
@@ -45,32 +45,33 @@ The grand mean model predicts the level of performance to be expected from someo
 
 To summarize, the grand mean model notoriously predicts the population average, not drawing upon any predictors. Because of this imperfection, we can expect a good amount of *error*. The formula of the grand mean linear model is as follows:
 
-$$Y_i = \mu_i + \epsilon_i$$
 $$\mu_i = \beta_0$$
-$$\epsilon_i ~ N(0, \sigma_{\epsilon})$$
+$$Y_i = N(\mu_i, \sigma_{\epsilon})$$
 
-The first term separates the *observed values* $Y_i$ into the *deterministic term* or *predictor* $mu_i$ and the *random term* or *error term* $\epsilon_i$.  In the grand mean model $\mu_i$ is fully determined by the *coefficient* $\beta_0$. Note that, generally, $\mu_i$ is unique for every single observation. However, in the grand mean model it depends on a single coefficient $\beta_0$ which is not associated with individual measures, hence: grand mean. Most linear models have a $\beta_0$, which i called the *intercept coefficient*. As the  grand meean model has this one parameter only, it is also referred to as the *intercept-only model* or *null model*.  
+The first term is called the *likelihood term*. It defines the relation between *predicted values* $mu_i$ and predictors. In the current case, there are no predictors rather than the grand mean $\beta_0$. The likelihood is strictly deterministic. Beneath it, the *random term* specifies our assumptions on the randomness in the observations.  With CLM we are always limited to a normal distribution. [...]
 
-The last line specifies the random term, or error. We cannot predict the error itself, but we can assume it to follow a certain distribution. In the case of linear models, the assumed distribution is the normal or *Gaussian distribution*. Gaussian distributions have a characteristic bell curve and depend on two parameters: the mean $\mu$ as the central measure and the standard deviation $\sigma$ giving the spread. It is no coincidence that the letter $\mu$ is used for the predicted value and the Gaussian distribution mean alike, as we can also write:
+Note that, generally, $\mu_i$ is unique for every single observation. However, in the grand mean model it depends on a single coefficient $\beta_0$ which is not associated with individual measures. More complex CLM usually have more parameters, one which is $\beta_0$. This is then called the *intercept coefficient*. As the  grand mean model has this one parameter only, it is also referred to as the *intercept-only model* or *null model*.
 
-$$\Y_i ~ N(\mu_i, \sigma_{\epsilon})$$
+The last line specifies the random term, or error. We cannot predict the error itself, but we can assume it to follow a certain distribution. In the case of linear models, the assumed distribution is the normal or *Gaussian distribution*. Gaussian distributions have a characteristic bell curve and depend on two parameters: the mean $\mu$ as the central measure and the standard deviation $\sigma$ giving the spread.
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sd_{\epsilon}$. It is important to understand that the error term captures all variation that is not explained by the model and the unkown sources of variation are manifold. deviation can arise due to all kinds of individual differences, situational conditions and, last but not least, measurement errors. 
+As a side note, many authors would specify the grand mean model in a slightly different manner:
 
-The Gaussian distribution often is a good approximation for the distribution of error terms.  Still, in some recognizeable cases it is inevitably off. In chapter [GLM] we will introduce other error distributions such as binomial distributions for successes in a  number of trials (for example: task completion rates) and Poisson distributions for count variables (for example: number of errors).
+$$Y_i = \mu_i + \epsilon_i$$
+$$mu_i = \beta_0$$
+$$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
-In R, the analysis of the 99 seconds problem unfolds as follows: recall that only the completion times of the novel design are of interest. These have been extracted from the original data set and stored in a separate data frame. This data frame is send to the R command MCMCglmm for estimation, using the `%>%` operator and the argument `data = .`. As the MCMCglmm command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The `1`here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the intercept. Finally, the `family` argument states that a model with Gaussian error term is desired. This is the default in MCMCglmm (and most other regression commands), so in coming examples, we will leave it out.
+This way of model formulation is intuitive in that it presents the observed values as the sum of predicted values and residuals and works for all CLM. Unfortunately, it cannot be used conveniently, when the random part is not Gaussian.  It is important to understand that the error term captures all variation that is not explained by the model and the unkown sources of variation are manifold. Deviation can arise due to all kinds of individual differences, situational conditions and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness.  Still, in some recognizeable cases it is inevitably off. In chapter [GLM] we will introduce other error distributions such as binomial distributions for successes in a  number of trials (for example: task completion rates) and Poisson distributions for count variables (for example: number of errors).
+
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: recall that only the completion times of the novel design are of interest. These have been extracted from the original data set and stored in a separate data frame. This data frame is send to the R command `stan_glm` for estimation, using the `%>%` operator and the argument `data = .`. As the MCMCglmm command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The `1`here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the intercept. Finally, the `family` argument states that a model with Gaussian error term is desired. This is the default in MCMCglmm (and most other regression commands), so in coming examples, we will leave it out.
 
 
 ```{r fit:99_seconds, opts.label = "mcmc"}
 attach(Sec99)
 M_1 <- stan_glm(ToT ~ 1, data = Ver20)
-
-fixef(M_1)
 detach(Sec99)
 ```
 
-The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution of the intercept and the standard deviation of residuals. The posterior distribution gives the degree of certainty for every possible value of the parameter. In fact, what we get from the MCMC estimation is just samples from the posterior distribution. The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
+The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution of the intercept and the standard deviation of residuals. The posterior distribution gives the degree of certainty for every possible value of the parameter. In a perfect world, we would know the analytical formula of the posterior. In most non-trivial cases, though, there is no formula for the posterior. Instead, what we get is a sample from this distribution via a process called Markov-Chain Monte Carlo sampling (MCMC). In fact, what we get from the MCMC estimation is just many draws from the posterior distribution. The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
 
 ```{r lst:99_seconds_post, opts.label = "rtut"}
 attach(Sec99)
@@ -100,7 +101,10 @@ G_random_walk <-
 G_random_walk
 ```
 
-The first 50 hundred steps of the MCMC random walk are shown in `r figr("fig:99_seconds_random_walk")`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area.  This is where the more probable parameter values lie. In fact, the MCMC algorithm works with simple a rule that lets it jump to more likely areas more frequently. A common way to plot the posterior distribution, is to create one histogram per parameter (alternative: density or violin plots). Separating the parameters, let's us visually determine the degree of certainty.
+The first 50 hundred steps of the MCMC random walk are shown in `r figr("fig:99_seconds_random_walk")`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area.  This is where the more probable parameter values lie. In fact, the MCMC algorithm works with simple a rule that lets it jump to more likely areas more frequently. A common way to plot the posterior distribution, is to create one histogram per parameter (alternative: density or violin plots).
+
+In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r md_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, row = 1, center = F)`$ as "reasonably certain".
+
 
 ```{r fig:99_seconds_post, opts.label = "fig.small"}
 P_1 %>% 
@@ -111,33 +115,22 @@ P_1 %>%
 
 ```
 
-```{r 99_seconds_post_fixef}
-T_coef_1 <- fixef(P_1)
+That was a first glance on the underlying MCMC engine and how derive conclusions from the PD. However, much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
+A coefficient table is produced by the `fixef` command of the bayr library:
+
+```{r tab:99_seconds_post_fixef, opts.label = "tab"}
+(T_coef_1 <- fixef(P_1))
 
 ```
 
 
-In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r md_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, row = 1, center = F)`$ as "reasonably certain".
-
-Often, statisticians want to summarize regression results in a more compact way. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicater for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the more certain an estimate is, the narrower is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value. 
-
-```{r, opts.label = "invisible"}
-  T_coef_1 %>% 
-  kable(caption = "fixed effect of grand mean model with lower and upper 95% CI")
-```
-
-
-
-The authors of Bayesian books and the various Bayesian libraries have different opinions on what to report. Some report the posterior mean, others prefer the median, as it is less influenced by skew. For the spread of the distributions, either simple quantiles can be used, whereas others report areas of highest posterior density (HPD). In this book, we primarily use the posterior mode for magnitude of the effect, and the 2.5% and 97.5% quantiles, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather inuitive meaning as the most likely region, which is compatibel with the concept of maximum likelihood. Second, it is invariate to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chaper [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bimodal. But, when that happens, you probably have a more deeply rooted problem, then just deciding on a suitable . For a basic summary of the posterior distribution, we can simply state: 
+The authors of Bayesian books and the various Bayesian libraries have different opinions on what to report. Some report the posterior mean, others prefer the median, as it is less influenced by skew. A second advantage of the median is that it doesn't change, when a variable is transformed monotonically. For the spread of the distributions, either simple quantiles can be used, whereas others report areas of highest posterior density (HPD).
+ 
+In this book, we primarily use the posterior mode for magnitude of the effect, and the 2.5% and 97.5% quantiles, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather inuitive meaning as the most likely region, which is compatibel with the concept of maximum likelihood. Second, it is invariate to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chaper [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bimodal. But, when that happens, you probably have a more deeply rooted problem, then just deciding on a suitable coefficient table. For a basic summary of the posterior distribution, we can simply state: 
 
 ```{r 99_seconds_post_fixef_table, opts.label = "rtut.nr"}
 P_1 %>% 
-  coef() %>% 
-  kable()
-```
 
-
-```{r, opts.label = "future"}
   Ver20 %>% 
   ggplot(aes(x = "Intercept", y = ToT)) +
   geom_jitter() +
@@ -148,7 +141,7 @@ P_1 %>%
 
 
 
-Back to Andrew and Jane: the histogram in `r figr("fig:99_seconds_post")` indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. The standard posterior summary with `coef()` does not answer the question, strictly. The CIs give the limits of a range that contains a given certainty. In contrast, Jane needs the the certainty that average time-on-task is smaler than the 99 (or 111) seconds limit.    
+Back to Andrew and Jane: the histogram in `r figr("fig:99_seconds_post")` indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. The standard posterior summary with `fixef()` does not answer the question, strictly. The CIs give the limits of a range that contains a given certainty. In contrast, Jane needs the certainty that average time-on-task is smaller than the 99 (or 111) seconds limit.    
 This can be achieved by operating on the posterior distribution, directly. We can simply count how many visited values are smaller than 99.  But, by using quantile functions on the posterior distribution, we can make a precise statement about the probability of the claim:
 
 ```{r 99_seconds_prob99}
@@ -175,7 +168,7 @@ T_certainty <-
 ```
 
 
-It turns out that the certainty for average time-on-task is below the 99 seconds is a meager `r Sec99$T_certainty[[1,1]]`. The alternative claim, that average completion time is lower or equal to 111 seconds, is far more likely (`r Sec99$T_certainty[[1,2]]`).
+It turns out that the certainty for average time-on-task below the 99  is a meager `r Sec99$T_certainty[[1,1]]`. The alternative claim, that average completion time is better than 111 seconds is far more likely (`r Sec99$T_certainty[[1,2]]`).
 
 ```{r fig:99_seconds_beta, opts.label = "future"}
 betaplot::iiaplot_1(fixef = c(106, 0, 0, 0, 0))
@@ -192,11 +185,12 @@ detach(Sec99)
 
 ## Walk the line: linear Regression
 
-In the previous section we have introduced the mother of all regression models: the grand mean intercept-only model. The latter term bears some resemblance to mid-school function analysis. The intercept It is known as of intercept as *"the point where a function graph crosses the x-axis"*, or more formally, as a basic linear function:
+In the previous section we have introduced the mother of all regression models: the grand mean intercept-only model. The latter term bears some resemblance to mid-school function analysis. There, the intercept is known as of intercept as *"the point where a function graph crosses the x-axis"*, or more formally, as a basic linear function:
 
-$$\mu_i = \beta_0 + \beta_1x_{1i}$$
+$$f(x_1) = \beta_0 + \beta_1x_{1i}$$
+$$f(x_1 = 0) = \beta_0$$
 
-is a basic linear function. As $f(0) = \beta_0$, the linear function line crosses the y-axis at $y =  \beta_0$, if it is drawn at $x = 1$. The line's *slope* is given by the parameter $\beta_1$. The linear regression model is a generalization of the intercept-only model: setting $\beta_1 = 0$ produces a flat horizontal line, with the  expected value is constant over the whole range. The full  then the linear regression model equals the grand mean model, $\mu_i = \beta_0$.
+At $\beta_0$, the linear function crosses point zero on the y-axis. The second parameter, $\beta_1$ is called the *slope*. The slope determines the steepness of the function. The linear regression model can be conceived a generalization of the intercept-only model: setting $\beta_1 = 0$ produces a an orthogonal line, with the  expected value is constant over the whole range. The full  then the linear regression model equals the grand mean model, $\mu_i = \beta_0$.
 
 ```{r fig:basic_linear_function, opts.label = "fig.small"}
 
@@ -207,9 +201,12 @@ data_frame(x = 1:20,
 
 ```
 
+Linear regression requires the predictor to be metric. That gives us the opportunity to discover how ToT can be predicted by age: are older people slower on te internet? The formula specification is:
 
+$$\mu_i = \beta_0 + \beta_1x_{1i}$$
+$$Y_i = N(\mu_i, \sigma_{\epsilon})$$
 
-Linear regression requires the predictor to be metric. Now, we run a linear regression with age as predictor for ToT. First, we plot the data once again. We ask ggplot to overlay a smoothing line that lets us assess the overall trend at a glance.
+As long as we do CLM, only the likelihood term needs to be extended: a product of the (to be estimated) parameter $\beta_1$ and recorded age $\x_{1i}$ has been added. This literally means: with every year of age, ToT increases by the $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we plot the association between age and ToT:
 
 ```{r fig:BAB_eda_age}
 attach(BrowsingAB)
@@ -223,28 +220,130 @@ G_eda_1 <-
 G_eda_1
 ```
 
-Now, we use the `stan_glm` command in much the same way. The command will internally check the data type of your variable, which is numeric, here. Therefore, it is treated as a *covariate*.
+Now, we use the `stan_glm` command in much the same way as before, just adding the  predictor age. The command will internally check the data type of your variable, which is numeric, here. Therefore, it is treated as a *covariate*.
 
 ```{r age_lm1, opts.label = "mcmc"}
 M_age <-
   BAB1 %>% 
-  stan_glm(ToT ~ age, 
+  stan_glm(ToT ~ 1 + age, 
            data = .)
+```
 
+```{r opts.label = "invisible"}
+T_age <- fixef(M_age)
+```
+
+Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r bayr::md_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower. That is not a lot.
+
+```{r opts.label = "rtut"}
 fixef(M_age)
 ```
 
+### Shifting predictors
 
-To assess the quality of the model fit, it is recommended to check the distribution of residuals. With rstan_arm models, we can extract residuals as:
+The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward on a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r md_coef(fixef(M_age), ~fixef == "age")`.
+
+Both, the unplausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is not data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible. Before, we explore this on a deeper level, there is a pragmatic solution to the problem: *shifting the predictor*. Shifting means just that: the whole linear curve is shifted to the right (or the left), such that the intercept is covered with data. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be:
+
+
+
+```{r BAB_shift_and_center, opts.label = "mcmc"}
+BAB1$age_shft = BAB1$age - 20
+BAB1$age_cntr = BAB1$age - mean(BAB1$age)
+
+M_age_shft <- 
+  stan_glm(ToT ~ 1 + age_shft, data = BAB1)
+M_age_cntr <- 
+  stan_glm(ToT ~ 1 + age_cntr, data = BAB1)
+
+# use posterior merging
+# extend bayr posterior to append models
+fixef(M_age)
+fixef(M_age_shft)
+fixef(M_age_cntr)
+```
+
+The shifted intercept has moved to higher values. We observe that intercept uncertainty `r md_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`.
+
+Surprisingly, the shifted Intercept is not exactly 20 years right of the original. This is due to the high uncertainty of the latter. In addition, the slope parameter has moved a tiny bit, too. Think of the intercept as the end of the lever: shifting or centered intercepts tightens certainty and get a more determined grip on the lever. One parameter partly overrules the other.
+
+### Endlessly linear
+
+On a deeper level the bizarre age = 0 prediction is an example of a general rule, that i will emphasize several times throughout ths book:
+
+> In an endless universe, everything is finite.
+
+A fact about LR is that they allow us to fit a straight line to data. A lesser regarded consequence is that this line extends infinitly in both directions. To fulfill this assumption, the outcome variable needs to be infinite, too,  $y_i \in [-infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even basic physics is finite: the speed of light is limited to $\approx 300.000 km/s$ and temperature has a lower limit of -276°C (or 0K). If there is neither endless speed nor cold, it would be daring to assume any psychological effect to be endlessly linear.
+
+The endlessly linear assumption (ELA) is central to all CLM and linear mixed-effects models. From a formal perspective, the ELA is always violated in a universe like ours. The practical consequences are, as ever so often: it depends! Frequently, LR is a reasonably effective approximation. Review [G_eda_1]: the blue line is a so called a *smoother*, more specifically a LOESS. A smoother is a fitted line, not unlike LR. But, it is way more flexible. Where LR is a lever, LOESS is a pipe cleaner. LOESS shows a more varied picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. 
+
+[Physiologically, this makes no sense. Adapt simulation and redo BAB1 and BAB5]
+
+It is not directly linear, still: LR provided sufficient evidence that a relationship exists, such that, generally, the older one gets, the slower one does the task. There is a possibility that the design is unfair. That is enough reason to improve the design, for example, doing a formal accessibility evaluation and fixing the major issues. A theorist may desire a more detailed picture. Disruptions of linearity often indicate interesting psychological processes. Knowing these makes us better understand design. An uncanny example of theoretical work will be given in polynomial regression.
+
+## Predictions and residual analysis
+
+```{r opts.label = "invisible"}
+C_age <- fixef(M_age_shft)$center
+
+```
+
+In the BrowsingAB case, we have repeatedly recorded age of participant. LR found the repeating pattern, that with every unit of age, ToT increased by  `r C_age[2]` seconds. This pattern is what the model predicts, now and forever. If we ask: what is predicted for a person of age 45? We get:
+
+$$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45 
+= `r C_age[1] + C_age[2] * 45`$$
+
+Parameter $\mu_i$ is called the *expected value*. 
+
+> expected value $\mu_i$ captures the signal, that part of the observation that repeats.
+
+The expected value is our best guess under the LR model. Therefore it is uncertain to a degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . We can find a person of about age 43 in the data set and take it at face value. The data set contains a few participants in about that range. Using the estimated intercept and age coefficients `C_age` with the basic LR formula, we can compute one predicted value per observation. Here, observations are congruent with participants, but this will change down the road to [LMEM].
+
+```{r opts.label = "rtut"}
+C_age <- fixef(M_age_shft)$center
+
+T_pred_age <-
+  BAB1 %>% 
+  select(age, ToT) %>% 
+  mutate(mu  = C_age[1] + age * C_age[2],
+         eps = ToT - mu)
+
+T_pred_age %>%  
+  filter(age >= 44, age <= 46)
+
+```
+
+The final line calculates the *residuals*, which is the deviation from the expected value:
+
+$\epsilon_i = y_i - \mu_i$. 
+
+Again, there is one residual per observation. The residuals equation contains an uncertain term $\mu_i$, therefore $\epsilon_i$ are uncertain, too. 
+
+> residuals $\epsilon_i$ capture the random noise, that part of the observation that does not repeat. 
+
+Residuals are routinely used to assess the quality of models. With linear models it is highly recommended to check the distribution of residuals. Do we see the characteristic bell curve of a Gaussian distribution? Sort of we do.
+
+```{r fig:resid_age, opts.label = "rtut"}
+T_pred_age %>% 
+  ggplot(aes(x = eps)) +
+  geom_histogram(bins = 20)
+
+```
+
+To give a counter example of Gaussain residual distribution, we take the variable `clicks`, that captures the number of links followed to find the desired information.
+
+[Add Poisson clicks to BAB and make example]
+
+Drawing on expected values, *residual analysis is something you can only do after estimation*. Indeed, this process is often called *checking assumptions*, which implies you do it beforehand. Due to the false intuition, a common beginners mistake is to analyze the distribution of the outcome variable $y_i$ before running the model. Review the two figures in the first example of [GSR]. The observations are bimodally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped.
+
+Expected values $\mu_i$ and residuals $\epsilon_i$ are uncertain. With rstan_arm models, we can extract both parameters together with credibility intervals.
 
 ```{r age_resid, opts.label = "rtut.nr"}
 residuals(M_age)
 ```
 
-See how the command is called on the model object. This reflects the fact that *residual analysis is something you can only do after estimation*. A common beginners mistake is to analyze the distribution of the response variable before-hand.
-
-
-A commonly used criterion for model fit is whether a predictor considerably explains variance, which reduces the spread of the residual distribution. Below, we also estimate the so-called *null model*, which characterizes the data by just one grand mean. The question is: does the predictor age effectively reduce the residual spread?
+See how the command is called on the model object. This reflects the fact that 
+A commonly used criterion for model fit is whether a predictor considerably explains variance, which reduces the spread of the residual distribution. We could ask: does the age predictor effectively reduce the residual variance $\sigma$ as compared to the GM?
 
 ```{r fit:age_resid_reduction, opts.label = "mcmc"}
 M_0 <-
@@ -255,16 +354,17 @@ T_resid <-
   data_frame(
     M_0 = residuals(M_0),
     M_age = residuals(M_age))
+```
 
+```{r opts.label = "fig.small"}
 G_resid_0 <-
-  T_resid_0 %>%
+  T_resid %>%
   gather(model, error) %>% 
   ggplot(aes(col = model, x = error)) +
   geom_density()
 
 G_resid_0
 ```
-
 
 
 
@@ -280,11 +380,17 @@ G_resid_0
 
 ## A or B: Comparing two (or more) designs
 
-One of the most basic statistical routines is ANOVA, which compares two groups on a metric outcome. In the following example, the research question is
+One of the most basic statistical routines is the *comparison of groups* (CoG), commonly known as ANOVA. In design research group comparisons are all over the place, for example:
 
-*Do two web designs A and B differ in performance?*
++ designs: as we have seen in the A/B testing scenario
++ properties of people, like  gender or whether they have a high school degree, or not
++ properties of situations, like whether someone uses an app on the go, or sitting still behind a computer
 
-This question could happen, for instance, during an overhaul of a municipal website. With the emerge of e-government, this website had grown wildly over a decade. With the current navigation structure, users have increasing difficulties to find the information they need. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same five tasks,  but sees only one of the two designs.
+In order to perform a CoG, a variable is needed that establishes the groups, which is commonly called a *factor*. A factor is a variable that puts labels "A" and "B" on observations, these are called *factor levels*. In the BrowsingAB case, the factor Design with its levels A and B does the job. A research question could be:
+
+*Do two web designs A and B differ in user performance?*
+
+This question could appear during an overhaul of a municipal website. With the emerge of e-government, many such websites had grown wildly over a decade. They temporarily were jungles, to the disadvantage for the  users. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. As always, we first takle a look at the raw data:
 
 ```{r fig:eda_anova}
 
@@ -301,38 +407,42 @@ BAB1 %>%
 	facet_grid(Design~.)
 ```
 
+This doesn't look too striking. We might consider a slight advantage for design B, but the overlap is immense. We perform the COG. Again, this is a two-step procedure:
 
-Now, we perform the ANOVA. Again, this is a two-step procedure:
 1. the `stan_glm` command lets you specify a simple formula to express the dependency between predictors (education) and outcome variable (ToT). It performs the parameter estimation, using the method of _Markov-Chain Monte-Carlo Sampling_. The results are stored in an object (M1).
-2. With the `coef` command the estimates can be extracted.
+1. With the `fixef` command the estimates are extracted and interpreted
 
 ```{r fit:anova_lm, opts.label = "mcmc"}
-# ANOVA parameter estimation
+# COG parameter estimation
 
 M_Design <-
   BAB1 %>% 
   stan_glm(ToT ~ 1 + Design, 
            data = .)
 
-fixef(M_Design)
-
-T_resid$M_Design <- residuals(M_Design)
+T_resid <- 
+  mutate(T_resid, M_Design = residuals(M_Design))
 ```
 
 
 
+```{r opts.label = "rtut"}
+fixef(M_Design)
+
+```
+
+The model contains two parameters, the first one being called Intercept, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the Intercept has a different meaning:
+
+> The intercept in factorial models is the mean of a reference group
+
+Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r md_coef(fixef(M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. The second parameter is the group difference, with design A as reference. With design B it took users `r md_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` *less* time to complete the task. However, the effect is small and there is huge uncertainty about it. If the BrowsingAB data set has some exciting features, the design difference is not it.
+
 ## Crossover: multifactorial ANOVA
 
 [NEEDS SEVERE OVERHAULING]
+[THINK I DID IT, where is it?]
 
-Now that we have seen how we can compare on one factor, we can extend the model to more factors. With linear  models, 
-. observations are unambiguously grouped by some criterion.
-
-+ designs: as we have seen in the A/B testing scenario
-+ properties of people, like  gender or whether they have a high school degree, or not
-+ properties of situations, like whether someone uses an app on the go, or sitting still behind a computer
-
-In addition, we can extend the model to incorporate multiple of such factors at a time. 
+Now that we have seen how we can compare on one factor, we can extend the model to more factors. With linear  models, we can extend the basic CoG model to incorporate multiple of such factors.
 
 
 
@@ -359,14 +469,17 @@ M_cross <-
   stan_glm(ToT ~ 1 + Design + Education,
            data = .)
 
-fixef(M_cross)
-
-T_resid$M_cross = residuals(M_cross)
+T_resid <- mutate(T_resid, M_cross = residuals(M_cross))
 
 
 ```
 
 
+```{r optsl.label = "rtut"}
+fixef(M_cross)
+
+
+```
 
 
 ## Putting it all together: General linear models
@@ -397,9 +510,13 @@ M_glm <-
   stan_glm(ToT ~ Design + age, 
 							data = .)
 
+T_resid <- mutate(T_resid, M_glm = residuals(M_glm))
+```
+
+```{r opts.label = "rtut"}
+
 fixef(M_glm)
 
-T_resid$M_glm = residuals(M_glm)
 ```
 
 
@@ -468,8 +585,12 @@ M_ia1 <-
   stan_glm(ToT ~ Design + age + Design:age,
 				 data = .)
 
+T_resid <- mutate(T_resid, M_ia1 = residuals(M_ia1))
+
+```
+
+```{r opts.label = "rtut"}
 fixef(M_ia1)
-T_resid$M_ia1 = residuals(M_ia1)
 
 ```
 
@@ -491,10 +612,15 @@ M_ia2 <-
   stan_glm(ToT ~ Design + Education + Design:Education,
 				 data = .)
 
-fixef(M_ia2)
-T_resid$M_ia2 = residuals(M_ia2)
+T_resid <- mutate(T_resid, M_ia2 = residuals(M_ia2))
+
 
 ```
+
+```{r opts.label = "rtut"}
+fixef(M_ia2)
+```
+
 
 Well, interaction effects occur routinely, but a `Design:Education` effect is not a feature of the BrowsingAB data set.
 
@@ -714,9 +840,14 @@ T_read_fixef <-
              select(fixef(M_2), fixef, M_2 = center),
              by = "fixef")
 
-T_read_fixef %>% kable()
+
 
 ```
+
+```{r}
+T_read_fixef %>% kable()
+```
+
 
 The estimates confirm, that both manipulations have a considerable effect. And, there is an interaction effect as well, correcting the additive effect of font color and size. The combined effect of high contrast and large font is therefore
 
@@ -735,8 +866,13 @@ M_3 <-
   stan_glm(ToT ~ 0 + font_size : font_color,
            data = .)
 
+
+```
+
+```{r opts.label = "rtut"}
 fixef(M_3)
 ```
+
 
 With some basic data transformation on the coefficient table, we create a data frame that encodes the two factors separately. Note how `separate` is used to split the coefficient names into group identifiers. Using `mutate` and `str_replace`, the group labels are stripped the factor names. The resulting coefficient table serves as input to ggplot, creating an interaction plot with overlayed credibility intervals, using `geom_errorbar`.
 
@@ -830,10 +966,13 @@ M_1 <-
   stan_glm(intention ~ sociophile * technophile,
            data = .)
 
-fixef(M_1)
 detach(AR_game)
 ```
 
+```{r opts.label = "rtut"}
+attach(AR_game)
+fixef(M_1)
+```
 
 
 ## Theoretically interesting interaction effects
@@ -970,6 +1109,10 @@ P_1 <-
 T_fixef_1 <- fixef(P_1)
 T_fixef_1
 save_CE(CE)
+```
+
+```{r}
+T_fixef_1
 ```
 
 
