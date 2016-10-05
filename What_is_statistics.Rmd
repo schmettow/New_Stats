@@ -3,23 +3,23 @@ title: "What is statistics?"
 author: "Martin Schmettow"
 date: "July 5, 2016"
 output:
+  word_document: default
+  pdf_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
-  pdf_document:
-    toc: yes
-  word_document: default
 subtitle: New statistics for design researcher
 ---
 
 
 
 
-```{r setup, message=F, warning=F}
+```{r setup, opts.label = "invisible"}
 ## The following is for running the script through knitr
 thisdir = getwd()
-purp.mcmc = T
+purp.mcmc = F
 
 source("RMDR.R")
 
