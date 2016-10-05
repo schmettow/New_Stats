@@ -1,13 +1,13 @@
 ---
 title: "New statistics for design researchers"
 author: "Martin Schmettow"
-date: "September 20, 2016"
+date: "October 4, 2016"
 output:
+  word_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
-    toc: yes
-  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---

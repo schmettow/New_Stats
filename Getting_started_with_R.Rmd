@@ -1,16 +1,16 @@
 ---
 title: "New statistics for design researchers"
-subtitle: "A Bayesian workshop in R"
 author: "Martin Schmettow"
-date: "September 21, 2015"
+date: "October 4, 2016"
 output:
+  word_document: default
+  pdf_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
-  pdf_document:
-    toc: yes
-  word_document: default
+subtitle: A Bayesian workshop in R
 ---
 
 
