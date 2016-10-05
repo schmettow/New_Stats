@@ -1,0 +1,172 @@
+---
+title: "New statistics for design researchers"
+author: "Martin Schmettow"
+date: "27 Sep, 2016"
+output:
+  word_document:
+    toc: yes
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+bibliography: Bayesian_Stats.bib
+---
+
+```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+purp.mcmc = F
+purp.rtut = T
+
+source("RMDR.R")
+
+opts_chunk$set(cache = F)
+
+CE <- c("Uncanny", "YD", "BrowsingAB")
+load_CE(CE)
+
+
+```
+
+
+# Evaluating and improving models
+
+What is the power of models? Two answers:
+
+1. explain current data
+1. predict future data
+
+When explaining existing data, one is basically concerned with the question:  does the model capture all features that stand out from the data, or are their any quirks that let us doubt the model's fidelity. This process is called *model criticism*, and frequently centers around details of lesser theoretical implication, such as: convergence of MCMC estimation, which distribution a variable takes, or whether the chosen priors are realistic. Model quality can be aproached in two ways: either one focusses just on the model at hand and evaluates its quality against a set of absolute  criteria, or one evaluates the quality of a *model in comparison* to another model, or even a set of models. 
+
+
+## Prior specification
+
+The first chapter of this book linked Bayesian statistics to rational decision making. You recall there was much a do about incorporating prior knowledge. In Bayes' formula, prior knowledge is a central component and was expressed as a probability. If this is so awsome as it sounds, why, you may ask, wasn't there any mentioning of priors in the following chapters. I made a difficult choice, here.
+
+All modelling commands used so far, understand specification of prior knowledge. At the same time, these commands provide useful default priors. The defaults are *non-informative priors*. They are formally specified, but have negligible impact on the posterior distribution. Consider the case BrowsingAB. In [CLM], we estimated the linear slope between age and ToT.
+
+```{r prior_BAB_age}
+attach(BrowsingAB)
+fixef(M_2)
+```
+
+The default prior specification can be found in the manuals of rstanarm (or brms). Or, you use the following command on the model object `M_2`:
+
+```{r}
+M_2$prior.info
+formals(stan_glm)
+```
+
+
++ extract default prior from M_2
++ extreme example: guessing a persons IQ, without a measure (100+-15)
+
+## Model criticism
+
+## Model selection
+
+In the context of design research, it is assumed that statistical modeling is for decision making. In an ideal world, one specifies a utility function for a particular performance indicator, gathers data to obtain more certainty on the indicators strength and ultimately combines posterior probability with utility to make a decision. This book featured many examples of data analysis, where gathered (or simulated) data contained multiple variables. The data was fed into a particular regression model that answers the primary research question, and perhaps also included a few more control variables of lesser interest. 
+
+If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formally there exist four potential classic linear models to choose from:
+
++ `y ~ 1` (grand mean)
++ `y ~ x_1` (main effect 1)
++ `y ~ x_2` (main effect 2)
++ `y ~ x_1 + x_2` (both main effects)
++ `y ~ x_1 * x_2` (both main effects and interaction)
+
+For a data set with three predictors, the set of possible models is already 18. Some models can be discarded by more or less informal reasoning. For example, even though most studies routinely gather the variable gender,  there is often little reason to assume that it makes a difference. 
+
+For a number of reasons, it can be appealing to have more formalized criteria for which model to prefer (and by how much):
+
+1. wanting to prune the model to ease its computation
+1. wanting to prune the model to ease its presentation (conciseness)
+1. wanting to obtain the best predictions for future values
+1. selecting one of two very similar predictors, e.g. two procedures to score results form the same test
+1. wanting to test a theory
+
+In fact, model selection can be as easy as computing a single criterion per model and rank models by this criterion. Unfortunately, there appears to be a zoo of model selection criteria, and the question arises which to choose. A closer look reveals, that it actually is a family of criteria. One can best think of it as a dynasty, where there is one omnipotent matriarch. All offsprings admire the matriarch and aim at imitating her, which is sometimes more succesful, sometimes less. However, the matriarch is a diva. Getting her to act in a fruitful way can be a tedious endeavour. While being omnipotent, she is not very willing to answer more than the most simple questions. As an advice seeker with a non-trivial problem, you either go with the potentially imperfect answer of an offspring, or go without any advice at all.
+
+The matriarch/diva's name is *Bayes Factor (BF)*. When comparing two models, BF is the odds of betting on one model or the other. A BF of 4 between two models $M_1$ and $M_2$ means that after seeing the data. It deems four times more likely than $M_2$. As a rational gambler, if an opponent puts 1 EUR on $M_2$, you would go 4 EUR 4 against it. 
+
+BF is defined as:
+
+[tbc]
+
+Computing the BF for common models of moderate complexity is wicked and requires advanced skills. For, complex or exotic models BF is practically impossible.
+The divas more accessible offsprings are the so-called *information criteria (IC)*. Basically, information criteria are approximations of BF that are sufficiently accurate under additional assumptions, only. These assumptions typically include certain classes of models, and exclude others. On the upside, information critera are computed in more straight forward manner and routinely reported by MCMC fitting engines. While information criteria are single numbers, they don't have a natural interpretation. Practical use of information criteria is simple, though: when comparing two or more models, every model receives an individual score on the IC and the model with the lowest score wins. 
+
+All model comparison underlies a  primary conflict: cling and parsimony. Cling is a models tendency to neatly align the observed data points. Recall the distinction of observed and predicted values:
+
+$y_i = \hat\mu_i + \hat\epsilon_i$
+
+While you know $y_i$, precisely, the separation of fitted value and residual is result of the fitting and therefore uncertain. The ideal situation from a predictive perspective is that $\epsilon_i = 0$: with no noise in the data, prediction is perfect. Naively, one could now try to find a model such that $\hat\epsilon_i = 0$. 
+
+Good fit between model and data certainly is a desireable property. But, there is a twist: models with many parameters tend to be more flexible. Recall the Uncanny study, where a third-degree polynomial was used to fit the association between human likeness and likeability. The third degree polynomial was chosen because it can bend around two stationary points: the trough and the shoulder. Third degree polynomials *can* do that, but can also take any form of lower degree polynomials. Ultimately, the grand mean model can be written as a third degree polynomials, 
+
+$$y_i(x_i) = \beta_0 + \beta_1x_i + \beta_2x_i^2 + \beta_3x_i^3$$
+
+if we just set \beta_1 = \beta_2 = \beta_3 = 0. As lower degree polynomials are special cases of higher degree polynomials, where some parameters is fixed. Fixing one parameter has as a consequence that the function is less flexible and can describe fewer patterns that occur in observations. A model that is more parsimonous on parameters will always be less clingy. Too much cling is harmfull, though, which is best understood  at an extreme example: 
+
+[Extreme example where parameters match $N_Obs$, it truly is a linear relation with noise]
+
+Using highly oversaturated models is catastrophic for prediction. When the saturated model is asked to predict future observations, it will recover the full noise that was in the data, which is $mu_i + \epsilon_i$. Residuals represents the stochastical component, which by its very nature does not reproduce on the next occasion. Any more complex model reduces deviation from the observed data, but has less predictive value. The AIC accounts for the reduced predictive accuracy by penalizing the number of parameters. 
+
+The oldest of all IC is the *Akaike Information Criterion (AIC)*. Under a Bayesian perspective, it has limited value, but its formula will be instructive to point out how the trade-off between cling and parsimony is solved. The AIC carries one term that increases when the model moves away from the observed data points. Another term increases with the number of parameters. 
+
+$$AIC = log(p(D|\hat\Theta)) + k$$
+
+The AIC contains the well known likelihood, which combines the probability of all individual observations into one probability score. While Bayesians are used to think of many likelihoods, every MCMC run has their own, this likelihood is the one in our parameter space that does best, it is therefore called the *maximum likelihood estimate (MLE)* It is intuitively clear that this term decreases, when the observed values are close to the best prediction of a model.
+
+
+$AIC$
+
+By two simple counter-acting terms the AIC brings model fit and complexity into balance. As it purely draws principles of maximum likelihood estimation, it turns out both terms are limited to a certain class of models: the likelihood part by definition depends on the data, but prior knowledge does not occur. Under a Bayesian perspective one has to always use flat priors. The likelihood part also contains just the point estimates for parameters. Arguably, these are the maximum likelihood estimates, but this is still much less than the full posterior distribution. The likelihood term forbids to make full use of the Bayesian paradigm; the penality term limits the AIC to a certain class of models, namely those where all parameters are independent of each other. In particular, this is not the case with random effects. A random effect, we recall, is a factor, where the individual means $mu_i$ are assumed to come from a shared distribution $mu_i ~ N(\mu, \sigma)$. In a classic ANOVA, the group means of, say the ToT in two design conditions are allowed to vary  freely. For a random factor, the individual $\mu_i$ determine $\mu and \sigma$, but there is feedback: if most observations happen to be in a close range, hence small $\sigma$,  extreme observations gravitate towards the group mean. The smaller the dispersion, the stronger this pull and the less independent are these  parameters and the less meaningless they get. As this is a process that happens gradually to every parameter, it cannot be solved by removing individual parameters (by model selection).
+
+The *Deviance Information Criterion (DIC)* is a generalization of the *AIC* that solves two of the above issues. With the DIC, priors can be specified [check if there are limitations, for example only normal priors], and the penalty term is adjusted for dependence between parameters. In conequence, the DIC can be used in a Bayesian analysis and covers the important class of (G)LMM. The only remaining issue is that it still draws upon point estimates, the posterior modes.    
+
+## Model pruning
+
+Testing hypothesis is the prevalent statistical paradigm in academic research. Typically, a researcher formulates (or re-iterates) on a more or less profound theory on human behaviour, derives predictions that are observable. Two contradicting hypotheses are formulated on these claims. Both hypothesis are formalized as two separate statistical models and these models are ultimately compared to select the better one.
+
+The most basic case is that one hypothesis states a variable to have an influence on the outcome, the alternative hypothesis says, it has not. In order to make a case, we re-iterate on the XY case study. Recall that a classic linear model was used for estimation, and flat priors were applied. In other words: no prior knowledge was applied and the estimation should neatly match any maximum likelihood estimates. In such a simple case, the oldest of all information criteria may be applied, the *Akaike Information Criterion (AIC)*.
+
+The uncanny valley observation suggests that participants likeablity judgements follow a third-degree polynomial, as this is the smallest polynomial to allow for the trough and the shoulder left of it. However, when looking at 
+
+## Testing hypothesis
+
+The prevalent perspective in this book is the quantification of influence factors in the human-design encounter. In applied domains, where stakes and trade-offs are plenty, the most logical question to asked is on effect size, or: would it be worth to act on it? Applied research aims at practice by telling the impact. 
+
+If practice-oriented research is the right hand in applied sciences, there left hand is the body of theories that *explain* phenomena 
+in the human-design encounter. Recall the Yerkes-Dodson law: for cognitive tasks both, low arousal and high arousal, reduce performance. A possible theory on that observation is that  energy level increases with arousal, at the same focus on the task is degraded by the sensation of agitation. Imagine you just came from an 800m running competition, or a big dog has attacked you. How well would you do in a cognitive puzzle?
+
+Imagine a study on the association between arousal and performance. The researchers chose for serious field work as they run their study on the Oktoberfest. In a massive single measure study, they asked random teenage visitors of under-drinking age to complete a one-question puzzle [find a more funny test item]. Meanwhile their arousal level was measured by self report  and a bunch of smart sensors taking the body signals, like sweat gland activity, heart rate variability. A smart algorithm takes all values and computes a single, highly reliable arousal score.
+
+The ideal functions in the plot were created by assuming performance to follow a logistic function, depending on energy and focus (mediators). In a framework, such as BUGS, one could specify a model on these assumptions. A great introduction to scientific hypothesis testing is [Lee & Wagenmaker], who use the BUGS specification language to  gracefully create neatly defined models. 
+
+Here, we approximate the arousal/performance curve using some polynomials. Whether such an assumption is justified depends on who precisely you formulate the theory. Here, we are in the position to defend the Yerkes-Dodson law. Without stronger specification of the cognitive (and physiological) processes, we can approximate the bell shape with the quadratic part of a second-order polynomial. More formally, the hypothesis on performance ($y$) and arousal ($x$) are:
+
+$$ 
+H0: y = \beta_0 +  \beta_1x
+H1: y = \beta_0 +  \beta_1x + \beta_2x^2
+$$ 
+
+The question is: Is the quadratic term needed to describe the data? Recall, that a [1-deg] polynomial is a special case of the 2-deg, where $\beta_2 = 0$. The models are nested. Does M1 provide the better balance between saturation and accuracy? We fit both models separately:
+
+```{r YD:fit, opts.label = "mcmc"}
+
+```
+
+Using the [XIC] for model comparison, we make a clean decision in favor of M1, justfying the Yerkes-Dodson law. However, the model is, in fact, under-specified. The 2-deg model would also win, when the extremes of arousal were both beneficial. Even die-hard theorists should consult the coefficient table, next to the model comparison. In our case, $\beta_2$ is strongly positive, just the right direction.
+
+__Exercise:__ Imagine, you encounter a Yerkes-Dodson denying maniac. How could you further strengthen you results?
+
+__Solution:__ by doing a meta analysis and creating informative posteriors.
+
+
+## Tuning Stan
+
+
+
+
+
+
+
