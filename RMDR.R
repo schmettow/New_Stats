@@ -23,7 +23,8 @@ mcmcdir = paste0(thisdir, "/mcmc/")
 
 
 
-if(!exists("LOAD_DATA_SETS")) LOAD_DATA_SETS = T ## a hack for using RMDR.R by external programs
+if(!exists("LOAD_DATA_SETS")) 
+  LOAD_DATA_SETS = F ## a hack for using RMDR.R by external programs
 RELOAD_DATA_SETS = F
 
 if(LOAD_DATA_SETS){ 

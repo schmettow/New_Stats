@@ -2,7 +2,7 @@
 title: "Cases"
 subtitle: "New statistics for design researcher"
 author: "Martin Schmettow"
-date: "July 01, 2016"
+date: "October 13, 2016"
 output:
   html_document:
     fig_caption: yes
@@ -22,10 +22,6 @@ TODO:
 ## The following is for running the script through knitr
 source("RMDR.R")
 library(syncenv)
-```
-
-```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
-## The following is just for running the script conventionally (no knitr) on the authors computer
 ```
 
 
@@ -245,7 +241,10 @@ write_csv(Rational$RD, "Data/Rational.csv")
 ## Case: BrowsingAB
 
 ```{r BAB_create, opts.label = "simulate"}
+try(detach(BrowsingAB))
+try(rm(BrowsingAB))
 new_syncenv("BrowsingAB")
+BrowsingAB
 ```
 
 
@@ -260,31 +259,36 @@ BrowsingAB$simulate <-
     ## within-subject design is default
     within_Part = T,
     ## Fixed effects
-    beta_S0 = 120,
     # intercept
-    beta_S1 = 2,
+    beta_S0 = 120,
     # male
-    beta_S2 = 20,
-    # no degree
-    beta_S3 = .5,
+    beta_S1 = 2,
+    # edu low
+    beta_S2_1 = 20,
+    # edu middle
+    beta_S2_2 = 5,
     # age
-    beta_S4 = .5,
-    # age:no degree
-    beta_S5 = -.1,
+    beta_S3 = .1,
+    # age:edu low
+    beta_S4_1 = .3,
+    # age:edu middle
+    beta_S4_2 = 0,
     # age:designB
-    beta_D1 = -30,
+    beta_S5 = .4,
     # designB
+    beta_D1 = -60,
+    
     ## Random effects
-    sd_S0 = 20,
     # subject intercept
-    sd_S1 = 10,
+    sd_S0 = 20,
     # subject slope design
-    sd_T0 = 50,
+    sd_S1 = 10,
     # task intercept
-    lambda_SD1 = 30,
+    sd_T0 = 50,
     # Far_sightedness:Small_font
-    sd_epsilon = 30,
+    lambda_SD1 = 60,
     # Residual) {)
+    sd_epsilon = 30,
     set.seed = 42,
     debug = F
   ){
@@ -298,19 +302,20 @@ BrowsingAB$simulate <-
     ## Subject frame
     Part = data.frame(
       Part = as.factor(1:n_Part),
-      Gender = ifelse(rbinom(n_Part, 1, .5), "f", "m"),
-      Education = rep(c("degree", "no degree"), n_Part / 2),
+      Gender = sample(c("F", "M"), 
+                      size = n_Part, replace = T),
+      Education = sample(forcats::fct_inorder(c("Low", "Middle", "High")), 
+                         size = n_Part, replace = T),
       theta_S0 = rnorm(n_Part, 0, sd_S0),
       theta_S1 = rnorm(n_Part, 0, sd_S1),
       age = as.integer(runif(n_Part, 20, 80))
     ) %>%
       # LVs
       # probability of far sightedness increases with age
-      mutate(mu_Far_sighted = (age - 50) / 100,
-             p_Far_sighted = plogis(mu_Far_sighted)) %>% 
-      mutate(Far_sighted = rbinom(n_Part, 
-                                  1, 
-                                  p_Far_sighted))
+      mutate(p_Far_sighted = age / 150
+             #p_Far_sighted = plogis(mu_Far_sighted)
+             ) %>% 
+      mutate(Far_sighted = as.logical(rbinom(n_Part, 1, p_Far_sighted)))
     
     
     Task = 
@@ -339,20 +344,25 @@ BrowsingAB$simulate <-
       mutate(
         mu = beta_S0 +
           (Gender == "male") * beta_S1 +
-          (Education == "no degree") * beta_S2 +
+          (Education == "Low") * beta_S2_1 +
+          (Education == "Middle") * beta_S2_1 +
           age * beta_S3 +
-          age * (Education == "no degree") * beta_S4 +
-          age * (Design == "A") * beta_S5 +
+          age * (Education == "Low") * beta_S4_1 +
+          age * (Education == "Middle") * beta_S4_2 +
+          age * (Design == "B") * beta_S5 +
           (Design == "B") * beta_D1 +
           theta_S0 +
           theta_S1 * (Design == "A") +
           theta_T0 +
           lambda_SD1 * Far_sighted * Small_font
       ) %>%
-      mutate(ToT = rnorm(n_Obs, mu, sd_epsilon)) %>%
+      mutate(ToT = rnorm(n_Obs, mu, sd_epsilon),
+             clicks = rpois(n_Obs, mu/20),
+             returns = rpois(n_Obs, mu/80)) %>%
       mutate(Obs = 1:n_Obs) %>% 
       select(Obs, Part, Task, Design, 
-             Gender, Education, age, Far_sighted, Small_font, ToT) %>% 
+             Gender, Education, age, Far_sighted, Small_font, 
+             ToT, clicks, returns) %>% 
       as_data_frame()
     
     BrowsingAB
@@ -365,19 +375,45 @@ BrowsingAB$BAB1 <-
 BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5,
                                        n_Part = 30)
 
-save(BrowsingAB, file = "Cases/BrowsingAB.Rda")
+names(BrowsingAB)
+
+BrowsingAB$BAB1 %>% 
+  ggplot(aes(x = Design, y = ToT, col = Education)) +
+  geom_boxplot()
+
+BrowsingAB$BAB1 %>% 
+  ggplot(aes(x = Design, y = returns, col = Education)) +
+  geom_boxplot()
+
+BrowsingAB$BAB1 %>% 
+  ggplot(aes(x = age, y = ToT, col = Design)) +
+  geom_point(aes(shape = Far_sighted)) +
+  geom_smooth(se = F, method = "lm")
+
+BrowsingAB$BAB1 %>% 
+  ggplot(aes(x = age, y = ToT)) +
+  geom_smooth(se = F)
+
+
+
 ```
 
+```{r eval = F}
+BrowsingAB
+BrowsingAB$`<-`
+attach(BrowsingAB)
+names(environment)
+m1 <- lm(ToT ~ Design, BAB1)
+
+detach(BrowsingAB)
+```
 
   
 
 ```{r BAB_export}
+save(BrowsingAB, file = "Cases/BrowsingAB.Rda")
+
 attach(BrowsingAB)
-
-summary(lm(ToT ~ Design, BAB1))
-summary(lm(ToT ~ age, BAB1))
-summary(lm(ToT ~ age * Design, BAB1))
-
 
 write_sav(BAB1, "Data/BrowsingAB1.sav")
 write_sav(BAB5, "Data/BrowsingAB5.sav")

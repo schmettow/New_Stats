@@ -27,7 +27,7 @@ load_CE(CE)
 ```
 
 
-# Evaluating and improving models
+# Working with Models
 
 What is the power of models? Two answers:
 
@@ -59,9 +59,16 @@ formals(stan_glm)
 + extract default prior from M_2
 + extreme example: guessing a persons IQ, without a measure (100+-15)
 
-## Model criticism
+## Model criticism: assessing model fit
 
-## Model selection
+### Residual analysis
+
+### Posterior predictive checks
+
+Gelman, a, Gelman, a, Meng, X.-L., Meng, X.-L., Stern, H., & Stern, H. (1996). Posterior predictive assessment of model fitness via realized discrepancies. Vol.6, No.4. Statistica Sinica, 6(4), 733–807. http://doi.org/10.1.1.142.9951
+
+
+## Model selection: assessing predictive power
 
 In the context of design research, it is assumed that statistical modeling is for decision making. In an ideal world, one specifies a utility function for a particular performance indicator, gathers data to obtain more certainty on the indicators strength and ultimately combines posterior probability with utility to make a decision. This book featured many examples of data analysis, where gathered (or simulated) data contained multiple variables. The data was fed into a particular regression model that answers the primary research question, and perhaps also included a few more control variables of lesser interest. 
 
@@ -123,7 +130,7 @@ By two simple counter-acting terms the AIC brings model fit and complexity into 
 
 The *Deviance Information Criterion (DIC)* is a generalization of the *AIC* that solves two of the above issues. With the DIC, priors can be specified [check if there are limitations, for example only normal priors], and the penalty term is adjusted for dependence between parameters. In conequence, the DIC can be used in a Bayesian analysis and covers the important class of (G)LMM. The only remaining issue is that it still draws upon point estimates, the posterior modes.    
 
-## Model pruning
+### Model pruning
 
 Testing hypothesis is the prevalent statistical paradigm in academic research. Typically, a researcher formulates (or re-iterates) on a more or less profound theory on human behaviour, derives predictions that are observable. Two contradicting hypotheses are formulated on these claims. Both hypothesis are formalized as two separate statistical models and these models are ultimately compared to select the better one.
 
@@ -131,12 +138,12 @@ The most basic case is that one hypothesis states a variable to have an influenc
 
 The uncanny valley observation suggests that participants likeablity judgements follow a third-degree polynomial, as this is the smallest polynomial to allow for the trough and the shoulder left of it. However, when looking at 
 
-## Testing hypothesis
+### Testing hypothesis
 
 The prevalent perspective in this book is the quantification of influence factors in the human-design encounter. In applied domains, where stakes and trade-offs are plenty, the most logical question to asked is on effect size, or: would it be worth to act on it? Applied research aims at practice by telling the impact. 
 
 If practice-oriented research is the right hand in applied sciences, there left hand is the body of theories that *explain* phenomena 
-in the human-design encounter. Recall the Yerkes-Dodson law: for cognitive tasks both, low arousal and high arousal, reduce performance. A possible theory on that observation is that  energy level increases with arousal, at the same focus on the task is degraded by the sensation of agitation. Imagine you just came from an 800m running competition, or a big dog has attacked you. How well would you do in a cognitive puzzle?
+in the human-design encounter. Recall the Yerkes-Dodson law: for cognitive tasks both, low and high, arousal, reduce performance. A possible theory on that observation is that  energy level increases with arousal, at the same focus on the task is degraded by the sensation of agitation. Imagine you just came from an 800m running competition, or a big dog has attacked you. How well would you do in a cognitive puzzle?
 
 Imagine a study on the association between arousal and performance. The researchers chose for serious field work as they run their study on the Oktoberfest. In a massive single measure study, they asked random teenage visitors of under-drinking age to complete a one-question puzzle [find a more funny test item]. Meanwhile their arousal level was measured by self report  and a bunch of smart sensors taking the body signals, like sweat gland activity, heart rate variability. A smart algorithm takes all values and computes a single, highly reliable arousal score.
 
@@ -162,11 +169,17 @@ __Exercise:__ Imagine, you encounter a Yerkes-Dodson denying maniac. How could y
 __Solution:__ by doing a meta analysis and creating informative posteriors.
 
 
-## Tuning Stan
+## Caring for MCMC chains
 
+### Convergence checks
 
+### Tuning the Stan engine
 
+## Literature
 
-
-
-
++ MacElreaths statistical distributions
++ XY chapter on prior specification
++ MacElreaths information criteria
++ W&L on Bayes factor and model selection
++ Stan Manual
++ Stefan Raab entertained with the German life television show: quizz boxing. The opponents encountered in several rounds of boxing, each followed by a quizz contest. YD in action!
