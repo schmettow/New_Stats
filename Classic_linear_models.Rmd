@@ -1,20 +1,20 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 13, 2016"
+date: "October 17, 2016"
 output:
-  word_document:
-    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
+    toc: yes
+  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---
 
 ```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 ## The following is for running the script through knitr
-purp.mcmc = T
+purp.mcmc = F
 source("RMDR.R")
 
 CE <- 
@@ -40,7 +40,7 @@ Reconsider Andrew and Jane. They were faced with the problem that potential comp
 + the checkout process of an e-commerce website must have a a cancel rate not higher than ...
 + the brake lights of a car must be designed to let the following driver react in a certain time frame
 
-The GMM predicts the level of performance to be expected from someone in the given population. Prediction here means that the estimated grand mean we take as a best guess for all realizations we have *not* observed. That includes all people we have not invited to the lab, but also potential performance in other situations, for example the daily shape people are in or their current level of motivation. Just consider the many ways people differ in abilities, experience, strategies, preferences, situations, wishes etc. All these differences may also vary for the same person from day to day and influence performance. As people differ so much, and so do situations they are in, the GMM yields a rather imperfect prediction in most cases.
+The GMM predicts the expected level of performance when the only thing you know is the population someone is from. Prediction here means that the estimated grand mean we take as a best guess for all realizations we have *not* observed. That includes all people we have not invited to the lab, but also potential performance in other situations, for example the daily shape people are in or their current level of motivation. Just consider the many ways people differ in abilities, experience, strategies, preferences, situations, wishes etc. All these differences may also vary for the same person from day to day and influence performance. As people differ so much, and so do situations they are in, the GMM yields a rather imperfect prediction in most cases.
 
 The only *predictor* in the GMM is the popluation mean. If you just know that the average Dutch male has a body length of 182cm, and you are asked to guess the size of a Dutch man you have not met, yet, this is your best guess. In regression models it is common to call predictors with the greek letter $\beta$ (beta). If there are more than one predictors, these are marked with subscripts, starting at zero. The "best guess" is called the *expected value* and is denoted with $\mu$ (mu). So, for this unkown Dutch man $i$, the expected value $\mu_i$ is:
 
@@ -48,7 +48,7 @@ $$\mu_i = \beta_0$$
 
 Of course, would never expect this unkown Dutch man to be exactly 182cm tall. Instead, all Dutch man are more or less clumped around the expected value. In the GMM and all other linear models, it is assumed that the observed values $Y_i$ take the form of a Normal distribution that is centered at $\mu$ and is spread out $\sigma$ standard deviations.
 
-$$Y_i \sim N(\mu_i, \sigma_{\epsilon})$$
+$$y_i \sim N(\mu_i, \sigma_{\epsilon})$$
 
 The first term, relating expected values to predictors is called the *likelihood term*. It defines the relation between *predicted values* $mu_i$ and predictors. In the current case, there are no predictors rather than the grand mean $\beta_0$. The likelihood is strictly deterministic. Generally, $\mu_i$ can be unique for every single observation. This is why the subscript $i$ is needed. In later, more complex models we get different predicted values for every participant.  However, in the grand mean model it depends on a single coefficient $\beta_0$ which is not associated with individual measures. More complex LM usually have more parameters, one which is $\beta_0$. This is then called the *intercept coefficient*. As the  grand mean model has this one parameter only, it is also referred to as the *intercept-only model* or *null model*.
 
@@ -71,9 +71,8 @@ A coefficient table is produced by the `fixef` command of the bayr library:
 
 ```{r tab:99_seconds_post_fixef, opts.label = "tab"}
 attach(Sec99)
-
-(T_coef_1 <- fixef(P_1))
-
+T_coef_1 <- fixef(P_1)
+T_coef_1
 ```
 
 
@@ -169,7 +168,7 @@ G_random_walk
 
 The first 50 hundred steps of the MCMC random walk are shown in `r figr("fig:99_seconds_random_walk")`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area.  This is where the more probable parameter values lie. In fact, the MCMC algorithm works with simple a rule that lets it jump to more likely areas more frequently. A common way to plot the posterior distribution, is to create one histogram per parameter (alternative: density or violin plots).
 
-In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r md_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, row = 1, center = F)`$ as "reasonably certain".
+In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  `r frm_coef(Sec99$T_coef_1, row = 1, center = F)` as "reasonably certain".
 
 
 ```{r fig:99_seconds_post, opts.label = "fig.small"}
@@ -178,7 +177,7 @@ P_1 %>%
   geom_histogram() +
   facet_grid(. ~ parameter, scales = "free")
   
-
+detach(Sec99)
 ```
 
 
@@ -233,7 +232,7 @@ M_age <-
 T_age <- fixef(M_age)
 ```
 
-Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r md_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower. That is not a lot.
+Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower. That is not a lot.
 
 ```{r opts.label = "rtut"}
 fixef(M_age)
@@ -241,7 +240,7 @@ fixef(M_age)
 
 ### Shifting predictors
 
-The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r md_coef(fixef(M_age), ~fixef == "age")`.
+The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(fixef(M_age), ~fixef == "age")`.
 
 Both, the unplausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible. Before we explore this on a deeper level, there is a pragmatic solution to the problem: *shifting the predictor*. Shifting means just that: the whole linear curve is shifted to the right (or the left), such that the intercept is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be:
 
@@ -270,13 +269,13 @@ C_age <- fixef(M_age_shft)$center
 ```
 
 
-The shifted intercept has moved to higher values `r md_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`. Surprisingly, the shift is not exactly 20 years.  This is due to the high uncertainty of the latter, as well as the relation not being exactly linear (see Figure XY). In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to far-sightedness of participants (making them slower), which more or less suddenly kicks for older participants. Still, by shifting or centering the intercept parameter gains considerable certainty. At the same time, the slope parameter practically does not change, but gains some certainty, too. Think of the intercept as the end of the lever: shifting or centering an intercept to a region with data tightens certainty and one gets an overall more determined grip.
+The shifted intercept has moved to higher values, `r frm_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`. Surprisingly, the shift is not exactly 20 years.  This is due to the high uncertainty of the latter, as well as the relation not being exactly linear (see Figure XY). In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to far-sightedness of participants (making them slower), which more or less suddenly kicks for older participants. Still, by shifting or centering the intercept parameter gains considerable certainty. At the same time, the slope parameter practically does not change, but gains some certainty, too. Think of the intercept as the end of the lever: shifting or centering an intercept to a region with data tightens certainty and one gets an overall more determined grip.
 
 ### Endlessly linear
 
 On a deeper level the bizarre age = 0 prediction is an example of a general rule, that will re-occur several times throughout ths book:
 
-> In an endless universe, everything is finite.
+**In an endless universe, everything is finite.**
 
 A fact about LR is that they allow us to fit a straight line to data. A lesser regarded consequence is that this line extends infinitly in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary physics is finite: the speed of light is limited to $\approx 300.000 km/s$ and temperature has a lower limit of -276°C (or 0K). If there is neither endless speed nor cold, it would be daring to assume any psychological effect to be endlessly linear.
 
@@ -402,7 +401,7 @@ G_resid_age_shft
 
 It is highly recommended to routinely check linear models by residual analysis. Do we see the characteristic bell curve of a Gaussian distribution? In the example above, we do, sort of. To give a counter example, we examine the variable `returns`, that captures the number of times a participant had returned to the homepage for a new attempt to find the desired information.
 
-```{r fit:age_pois}
+```{r fit:age_pois, opts.label = "mcmc"}
 M_age_rtrn <- 
   stan_glm(returns ~ 1 + age_shft, data = BAB1)
 P_age_rtrn <- posterior(M_age_rtrn)
@@ -429,9 +428,9 @@ G_resid_age_rtrn <-
 G_resid_age_rtrn
 ```
 
-The model runs fine and returns a parameter for the assumed Normal distributed resdiduals. However, the residuals not even remotely resemble the theoretical curve. What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the Normal distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be $`r md_coef(coef(P_age_rtrn), ~fixef == "Intercept")`$, with a RSE of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine. 
+The model runs fine and returns a parameter for the assumed Normal distributed resdiduals. However, the residuals not even remotely resemble the theoretical curve. What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the Normal distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a RSE of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine. 
 
-Are we? As you can see in the plot, the theoretical RD has is quite a tail to the negative numbers. There is ample chance that the residual for a 20-year old is  smaller then $`r md_coef(coef(M_age_rtrn), ~fixef == "Intercept", interval = F, neg = T)`$. 
+Are we? As you can see in the plot, the theoretical RD has is quite a tail to the negative numbers. There is ample chance that the residual for a 20-year old is  smaller then `r frm_coef(coef(M_age_rtrn), ~fixef == "Intercept", interval = F, neg = T)`. 
 This can only happen, if the observed number of returns is negative, which is impossible, of course. Imagine, you wanted to  simulate the performance of 20-year olds based one what we learned from the last model. You would do the following and frequently observe negative values.
 
 ```{r sim_20yrold, opts.label = "rtut"}
@@ -525,9 +524,7 @@ Another basic statistical routines is the *comparison of groups* (CG), commonly 
 
 In order to perform a CG, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the factor Design with its levels A and B does the job.
 
-This question could appear during an overhaul of a municipal website. With the emerge of e-government, many such websites had grown wildly over a decade. They temporarily were jungles, to the disadvantage for the  users. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in:
-
-*Do two web designs A and B differ in user performance?*
+This question could appear during an overhaul of a municipal website. With the emerge of e-government, many such websites had grown wildly over a decade. They temporarily were jungles, to the disadvantage for the  users. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *do two web designs A and B differ in user performance?*
 
 Again, we first take a look at the raw data:
 
@@ -564,19 +561,143 @@ T_resid <-
 fixef(M_Design)
 ```
 
-The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r md_coef(fixef(M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. 
+The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. 
 
-The second parameter is *group effect*, which is the *difference to the reference group*. With design A as reference. With design B it took users `r md_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely be justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
+The second parameter is *group effect*, which is the *difference to the reference group*. With design A as reference. With design B it took users `r frm_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely be justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
 
 ### Dummy variables (are not stupid at all)
 
-[First explain in two levels] 
-[Change BrowsingAB to contain three levels for education]
+Are we missing something so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{"DesignB"}*\beta_1$?
+
+Factors basically answer the question: *What group does the observation belong to?* The answer is a label and cannot enter the regression formula. Dummy variables solve the dilemma by asking the simpler question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed that answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe. Boolean variables can always be converted to ones and zeros using as.numeric. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once. 
+
+```{r dummy_1, opts.label = "rtut"}
+BAB1 <-
+  BAB1 %>% 
+  mutate(d_A = as.numeric(Design == "A"),
+         d_B = as.numeric((Design == "B")))
+ BAB1 %>% 
+   select(Obs, Design, d_A, d_B) %>% 
+   sample_n(8)
+
+```
+
+Vice versa, numbers in a logical context are always interpreted in complete reverse.
+
+$$ v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} $$
+
+Boolean variables can be both: numerical and categorial. It is unfortunate that we belittlingly call them dummies as they are truly bridges between the world of categories and arithmetics. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables d_A and d_B, the likelihood is written as:
+
+$$ \mu_i = d_A\beta_{A} + d_B\beta_{B} $$
+
+When $d_A=1,d_B=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorial. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted dummy. As I have already done that with a typecast above, we can right-away pipe the following into `stan_glm`.
+
+
+```{r fit:dummy_2, opts.label = "mcmc"}
+M_dummy <-
+  stan_glm(ToT ~ 0 + d_A + d_B, 
+     data = BAB1)
+```
+
+```{r dummy_3, opts.label = "rtut"}
+fixef(M_dummy)
+```
+
+The model contains two effects, which are exactly the group means. This model is what we can call an *absolute group means model (AGM)*. As there is no reference group, we don't want an intercept estimate anymore. Most research deals with estimating effects as differences. All regression engines quietly assume that what you want is a model with intercept. The `0 +` term in the model formula switches the intercept off.
+
+While the regression engines handle factors internally, when specifying the likelihood we have to use the dummy variables. When doing an AGM on a factor $x_1$ with $1,...,k$ levels, the likelihood function becomes:
+
+$$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$
+
+Still, much of the time the CGM with a reference group is the model of choice. With reference group A, the CGM with ToT on design is written as follows:
+$μ_i=β_0+d_B β_1$. In general for a factor with $k$ levels in a CGM with intercept, $k-1$ dummy variables need to be constructed in the way shown above. As all non-reference levels are seen as difference towards the reference, *the reference level is set to always on*. To see so, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, all observations are taken for the intercept, whereas level B is switched on and off.
+
+```{r dummy_4, opts.label = "rtut"}
+BAB1 %>% 
+  select(Part, Design, ToT) %>% 
+  cbind(model.matrix(M_Design)) %>% ## <---
+  as_data_frame() %>% 
+  sample_n(8)
+
+```
+
+In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in linear mixed-effects models [LMM]). With the above notation, the likelihood can become unduly long and I will use the following abbreviation, where the $[./r]$ denotes all factor levels, except the reference level r:
+
+$$
+μ_i=β_0+x_{1[./r]} β_{1[./r]}
+$$
+The regression engines usually take care of dummy variables. Still, by understanding the concept, we gained additional flexibility in specifying factorial models. One variant is to estimate an AGM, leaving out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second gain is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean, by setting contrasts.
+
+
+Exercises:
+
+1.	BAB1 contains the variable Education, which separates the participants by three education level (Low, Middle, High). Construct the dummy variables and run an AGM.
+
+2.	Specify the expanded CGM likelihood for education. Construct the dummy variables and run a regression.
+
+3.	Consider you wanted to use education level High as reference group. Create dummy variables accordingly and run the regression.
+
+
+
+
+### Contrasts
+
+The default behaviour of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
+
++ To what extent does a group deviate from the overall mean in the sample?
+
++	With three ordered factor levels, how large is the rolling effect, i.e. from level 1 to level 2, and the average of 1 and 2 to level 3?
+
+But first, we have to figure out how contrasts are coded. Treatment contrasts do not have anything special to them, in fact. They are just a default of the regression engines. One might therefore assume that we have to alter the regression formula or otherwise specify the contrasts using dedicated arguments of the regression command. It is a bit confusing, that this is not so. Instead, *contrasts are set as attributes of the respective factor  variable*, which we can retrieve by the standard command contrasts:
+
+```{r contrasts_1, opts.label = "rtut"}
+levels(BAB1$Education)
+contrasts(BAB1$Education)
+
+```
+
+The currently set contrasts table specifies the dummy variables for the CGM. The level Low is omitted in the contrasts table as it is the reference level with an always-on intercept. In the previous section i mentioned that you can choose the reference level freely by constructing the dummy variables accordingly. However, that would mean to always bypass the regression engines dummy handling. The package `forcats` provides a set of commands to change factor levels, for example reversing the order:
+
+```{r contrasts_2, opts.label = "rtut"}
+BAB1 <-
+  BAB1 %>% 
+  mutate(Education_rev = forcats::fct_rev(Education))
+levels(BAB1$Education_rev)
+contrasts(BAB1$Education_rev)
+
+```
+
+When running a CGM on Education_rev the intercept represents level High, now. It is worth noting that this model would make the very same predictions and residuals. It is the same model as before, just written differently.
+Sometimes, it is useful to have contrasts other than treatment, as this more closely matches the research question. A plethora of contrasts is known, I will introduce *deviation contrasts* and *successive difference contrasts*.
+
+[Example for deviation coding]
+
+*Successive difference coding (SDC)* applies when one is interested in effects of progressive effects, such as performance gain in a number of sessions. Consider the following research situation. Shortly after the millenium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules, just to name few: foil switches with poor haptic feedback, flimpsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted, too, and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users".
+
+That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it, then? In the real study we tested everyone three times and traced individual progress. This requires a reapted measures analysis and we are not quite there, yet [see LMM].
+
+[TODO: 
+
++ simulate IPump case, non-repeated 
+
++ demonstrate succ diff contr 
+
++ find example for deviation contrasts 
+
++ Contrasts extend the idea of dummy variables. 
+
++ Dummy variables become continuous, thereby more flexible in their effects
+
+]
+
+
+
+
 
 
 ## Crossover: multifactorial models
 
-### [NEEDS SEVERE OVERHAULING]
+### [INCOMPLETE]
 
 Now that we have seen how we can compare on one factor, we can extend the CG model to more factors. With linear  models, we can extend the basic CG model to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
 
@@ -807,7 +928,7 @@ grid.arrange(
 
 
 
-### Saturation and non-linearity
+### Saturation: less than the sum
 
 Most statistically trained researchers are aware of some common assumptions of linear regression, such as the normally distributed residuals and variance homogeneity. Another assumption that is often disregarded, is the assumption of linearity, which arises from the basic regression formula:
 
@@ -914,7 +1035,7 @@ T_guess
 
 Probably, you came up with 
 
-$$`r round(sum(Headache$T_fixef_1$center), 2)$$
+$$`r round(sum(Headache$T_fixef_1$center), 2)`$$
 
 But, is that reasonable? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. We clarify the situation by  introducing an interaction term in our second model. 
 
@@ -925,9 +1046,7 @@ T_fixef_2
 
 
 
-We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of `r round(sum(Headache$T_fixef_2$center), 2)` in reduction.
-
-As the interaction effect is negative, it reduces the predicted combined effect. As we would expect, the effectiveness of two pills us not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
+We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(Headache$T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
 
 Design of systems is a matter of compromises. A common conflict of interests is between the aesthetic appearance and the ergonomic properties. Consider the  typesetting on web pages. Many commercial websites are equally concerned about the ease of comprehending information and positive emotional response. From an ergonomic point of view, the typesettimg of longer text simply requires you to choose the best screen-readable font, find an optimal font size and maximize contrast. If you were now to suggest typesetting a website in black Arial on white background, you are in for trouble with your graphic designer or, much worse, the manager responsible for corporate impression management. In any case, someone will insist on a fancy serif font (which renders rather poorly on low resolution devices) in an understating blueish-grey tone. For creating a relaxed reading experience, the only option left is to increase the font size. This option is limited, though, as too large letters requires excessive scrolling.
 
@@ -989,7 +1108,7 @@ The estimates confirm, that both manipulations have a considerable effect. And, 
 
 $$\mu_{12pt, black} = `r Reading$T_read_fixef[1,3]` + `r Reading$T_read_fixef[2,3]` + `r Reading$T_read_fixef[3,3]` + `r Reading$T_read_fixef[4,3]` = `r sum(Reading$T_read_fixef[,3])`$$
 
-In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain ($`r md_coef(fixef(Reading$M_2), row = 4)`$)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clatity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthatic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
+In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clatity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthatic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
 
 Why are the main effects under-estimated, when not including the interaction term? The pure main-effects model has three parameters. This allows it to represent the same numner of independent group means. Formally, the number of groups in the study is four. However, the three-parameter model assumes that the fourth group (black, 12pt) can sufficiently be specified by the existing three parameters. If saturation occurs, the group of participants in the 12pt group is not homogenous: in the grey group, they experience a stronger improvement than in the black group. The three parameter model is forced to make the best out of situation and adjusts the net effect of font size to be slightly lower than it actually is. The same occurs for the font color effect.
 
@@ -1045,6 +1164,8 @@ In the two-by-two groups case of the Reading study, the interaction plot is crea
 
 Interaction effects can severely bias main effects, when gone unnoticed:
 
+[TBF]
+
 ```{r headache_2, opts.label = "future"} 
 ## FIXME ###
 # T_headache_bias <- 
@@ -1064,7 +1185,7 @@ In the Reading case, overall utility is a compound of ergonomic quality and aest
 If we don't account for saturation by introducing interaction terms, we are prone to underestimate the net effect of any of these measures, and may falsely conclude that a certain measure is ineffective. Consider a large scale study, that asseses the simultaneous impact of many demographic variables on how willing customers are to take certain energy saving actions in their homes. It is very likely that subsets of variables are associated with similar cognitive processes. For example, certain action requires little effort (such as switching off lights in unoccupied rooms), whereas others are time-consuming (drying the laundry outside). At the same time, customers may vary in the overall eagerness (motivation). For high effort actions the impact of motivation level probably makes more of a difference as when effort is low. Not including the interaction effect would result in the false conclusion that suggesting high effort actions is rather ineffective.
 
 
-### Amplification effects
+### Amplification: more than the sum
 
 Saturation effect occur, when multiple factors act on the same system and can (partly) compensate each other. There is an interesting parallel to Boolean algebra. The Boolean OR operator returns `TRUE` when one of the operands is `TRUE`:
 
@@ -1087,6 +1208,7 @@ Amplification can occur, when two (or more) factors impact different cognitive p
 Here, a fictional study on technology acceptance will serve to illustrate amplification effects. Imagine a startup company that seeks funding for a novel augmented reality game, where groups of gamers compete for territory. For their fund raising endeavour they need numbers on the potential market. The entrepreneurs have two hypotheses they want to verify:
 
 1. The game requires some top-notch equipment which only technophile persons will dare to use
+
 1. The game is strongly cooperative and therefore more attractive for people with a strong motivation for social activities
 
 In their study they collect self ratings of a larger set of participants, where they had to rate their technophily and sociophily. In addition, they were given a description of the planned game and were asked how much they intend to participate in the game.
@@ -1108,6 +1230,7 @@ detach(AR_game)
 ```{r opts.label = "rtut"}
 attach(AR_game)
 fixef(M_1)
+detach(AR_game)
 ```
 
 
@@ -1150,7 +1273,7 @@ T_fixef <-
 T_fixef %>% kable()
 ```
 
-Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r md_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r md_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r md_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
+Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
 The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law suggests that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we except that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
 
@@ -1219,7 +1342,7 @@ G_uncanny_illu
 
 A polynomial function of degree $k$ has the form:
 
-$$y_i = \beta_0 * x_i^0 + \beta_1 * x_i^1 + ... + \beta_{k-1} * x_i^{k}$$
+$$y_i = \beta_0 x_i^0 + \beta_1 x_i^1 + ... + \beta_{k}  x_i^{k}$$
 
 In fact, you are already familiar with two polynomial models. The first degree polynomial is the grand mean model. This follows from $x_i^0 = 1$, which makes $\beta_0$ a constant, the intercept. Also, a second degree polynomial is just the linear model. By adding higher degrees we can introduce curvature to the association.
 

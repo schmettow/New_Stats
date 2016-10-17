@@ -809,79 +809,9 @@ write_csv(Uncanny$UV_1, "Data/UV_1.csv")
 
 ```
 
-## Typing speed
 
 
-```{r Typing_create, opts.label = "simulate"}
-new_syncenv("Typing")
-```
-
-
-```{r Typing_simfunc, opts.label = "sim"}
-
-
-## simulating the data set
-Typing$simulate <-
-  function(n_Part = 30,
-           n_trial = 30,
-           scale = .3, # dispersion of speed
-           seed = 42){
-    set.seed(42)
-    Part <- 
-      data_frame(Part = 1:n_Part,
-                 skill = rnorm(n_Part, 1, .5), # latent performance at relaxed speed
-                 relaxed_speed = exp(skill),
-                 relaxed_error = exp(1-skill))
-    
-    Typing <- 
-      expand.grid(Part = 1:n_Part,
-                  trial = 1:n_trial) %>% 
-      as_data_frame() %>% 
-      left_join(Part, by = "Part") %>% 
-      mutate(eta_speed = skill + (trial - 1)/n_trial,
-             eta_error = (1 - skill) + (trial - 1)/n_trial,
-             mu_speed = exp(eta_speed),
-             mu_error = exp(eta_error),
-             speed = rgamma(n_Part * n_trial, 
-                            shape = mu_speed/scale, scale = scale),
-             error = rpois(n_Part * n_trial, mu_error))
-    Typing
-  }
-
-
-Typing$Type_1 <- Typing$simulate()
-names(Typing)
-
-Typing$Type_1_avg <-
-  Typing$Type_1 %>% 
-  group_by(Part) %>% 
-  summarize(speed = mean(speed),
-            error = mean(error)) %>% 
-  ungroup()
-
-
-Typing$Type_1 %>% 
-  ggplot(aes(x = speed,
-             y = error)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  geom_point(data = Typing$Type_1_avg, color = "red") +
-  geom_smooth(data = Typing$Type_1_avg, method = "lm", color = "red")
-  
-
-
-```
-
-
-```{r Typing_export}
-save(Typing, file = "Cases/Typing.Rda")
-write_sav(Typing$Type_1, "Data/Type_1.sav")
-write_csv(Typing$Type_1, "Data/Type_1.csv")
-
-```
-
-
-## Stroop
+## Case: Stroop
 
 
 ```{r Stroop_create, opts.label = "simulate"}
@@ -1057,4 +987,76 @@ write_csv(YD$D_1, "Data/YD_1.csv")
 ```
 
 
+## Case: Infusion Pump 
+
+
+```{r IPump_create, opts.label = "simulate"}
+new_syncenv("IPump")
+```
+
+
+```{r IPump_simfunc, opts.label = "sim"}
+
+### this is still the code of Typing
+
+
+## simulating the data set
+IPump$simulate <-
+  function(n_Part = 30,
+           n_trial = 30,
+           scale = .3, # dispersion of speed
+           seed = 42){
+    set.seed(42)
+    Part <- 
+      data_frame(Part = 1:n_Part,
+                 skill = rnorm(n_Part, 1, .5), # latent performance at relaxed speed
+                 relaxed_speed = exp(skill),
+                 relaxed_error = exp(1-skill))
+    
+    IPump <- 
+      expand.grid(Part = 1:n_Part,
+                  trial = 1:n_trial) %>% 
+      as_data_frame() %>% 
+      left_join(Part, by = "Part") %>% 
+      mutate(eta_speed = skill + (trial - 1)/n_trial,
+             eta_error = (1 - skill) + (trial - 1)/n_trial,
+             mu_speed = exp(eta_speed),
+             mu_error = exp(eta_error),
+             speed = rgamma(n_Part * n_trial, 
+                            shape = mu_speed/scale, scale = scale),
+             error = rpois(n_Part * n_trial, mu_error))
+    IPump
+  }
+
+
+IPump$Type_1 <- IPump$simulate()
+names(IPump)
+
+IPump$Type_1_avg <-
+  IPump$Type_1 %>% 
+  group_by(Part) %>% 
+  summarize(speed = mean(speed),
+            error = mean(error)) %>% 
+  ungroup()
+
+
+IPump$Type_1 %>% 
+  ggplot(aes(x = speed,
+             y = error)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_point(data = IPump$Type_1_avg, color = "red") +
+  geom_smooth(data = IPump$Type_1_avg, method = "lm", color = "red")
+  
+
+
+```
+
+
+```{r IPump_export}
+save(IPump, file = "Cases/IPump.Rda")
+write_sav(IPump$Type_1, "Data/IP_1.sav")
+write_csv(IPump$Type_1, "Data/IP_1.csv")
+
+```
 
