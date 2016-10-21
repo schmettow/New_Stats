@@ -1,13 +1,13 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 17, 2016"
+date: "October 21, 2016"
 output:
+  word_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
-    toc: yes
-  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---
@@ -691,15 +691,121 @@ That means you have to first introduce and train your users to get fluent with t
 ]
 
 
+```{r opts.label = "invisible"}
+try(detach(BrowsingAB))
+```
 
 
 
 
-## Crossover: multifactorial models
+__ Exercises:__
 
-### [INCOMPLETE]
+1. With BrowsingAB, simulate several data sets of very small sample size. Observe how strongly the composition of education and age varies.
 
-Now that we have seen how we can compare on one factor, we can extend the CG model to more factors. With linear  models, we can extend the basic CG model to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
+## Putting it all together: multi predictor models
+
+Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer computing products, enterprise information systems and cars are extremely diverse. Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we could record.
+
+### Empirical versus statistical control
+
+Fundamental researchers have a knack for the experimental method. An *experiment*, strictly, is a study where you measure the effects of variables you *manipulate*. Manipulation is, almost literally, that it is *in your hands*, who receives the treatment. The fantastic thing about manipulation is that it allows for *causal conclusions*. A *strictly controlled experiment* is when all influencing variables are either manipulated or kept constant. That is an ideal and would not even be the case if you test the same person over-and-over again (like researchers in psychophysics often do). You never jump into the same river twice.
+
+Sometimes an influencing variables lends itself to be kept constant. For example in psychological experiments, environment and equipment is usually kept constant. But, this comes with a one major disadvantage: it limits the possible conclusions drawn from the study. Imagine, you tested a smartphone app with participants, all students, comfortably sitting in a quiet environment. Would you dare to make conclusions on how any users perform in real life situations, say while driving a car? When keeping things constant, *ecological validity* and *generalizability* suffer.
+
+In most applied design studies we need ecological validity and generalizability. If performance differs under certain conditions, you certainly want to know that. The solution is to vary conditions and record them as variables, as good as possible. For example, if you were to compare two voice-controlled intelligent agent apps, you could manipulate the ambient noise level, if you are in the lab.
+
+In practically all applied studies, there exist variables, which you cannot manipulate for one of the following reasons. The first is that you do a field study, aiming for high ecological validity. Participants are using the system in the situations they encounter. Situational variables, like ambient noise level, cannot be manipulated. Second, it usually is impossible to manipulate user traits. If someone has an extrovert character or did a lot of gaming in the past, you cannot change that. Diversity of users is a fact and people come as they are.
+
+Fundamental lab researchers are afraid of individual differences, too. The reasons are different, though: all non-manipulated influencing factors add noise to the study, which makes it harder to find the effects of interest. While lab researchers do there best to keep the environment constant, they cannot keep all participant traits constant. Lab researchers have two solutions to the problem: matching and randomized control. 
+
+With *matching*, potentially relevant participant traits are recorded upfront; then participants are assigned to conditions such that groups have about the same composition. For example, one makes sure that the age distribution is about the same and both genders are equally represented. When all other influencing variables are constant between groups, the lab researcher can be sure that the effect is unambigously caused by the manipulation. So they say and routinely record participants age, gender and nationality.
+
+You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethory of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
+
+*Ramdomized control* is a misleading term, as what the researcher actually does is to *let go to chance*. Indeed, if the process of assigning participants to manipulations is completely left to chance, then *in the long-term* all groups will have the same composition of traits. Again, you were able to concluzde that the manipulation is the only cause. *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less heterogenous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
+
+Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
+ But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model. 
+
+### Crossing lines: multiple regression models
+
+
+
+### Crossover groups: multifactorial models
+
+The only necessary precondition for statistical control is that you can *record the influencing variable*. This had happened in the BrowsingAB study: the primary research question regarded the design difference, but the careful researcher always records the gender of participants.
+
+What happened to the likelihood function when we moved from GMM to CGM and LRM? The effect of age was simply added to the intercept. For the education level effects, we expanded the dummy variables and then added them all up. Indeed, the linear model is defined as a succession of linear terms  $x_i\beta_i$ and nothing keeps us from adding further predictors to the model:
+```{r}
+attach(BrowsingAB)
+```
+
+
+```{r fit:mpm_1, opts.label = "mcmc"}
+M_mpm_1 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ Design + Gender, data = .)
+T_fixef_mpm_1 <- 
+  fixef(M_mpm_1)
+```
+
+```{r tab:mpm_1, opts.label = "rtut"}
+
+T_fixef_mpm_1
+
+```
+
+By adding gender the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design wiuth groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
+The other two fixed effects are, once again, differences to the reference. Here, nor does gender do much to performance, nor does the design effect really change, compared to the CGM.
+
+[interaction plot]
+
+
+
+### Regression in groups
+
+Recall that dummy variables make factors compatible with linear regression. No barriers are left for combining factors and covariates in one model. For example, we can estimate the effects age and design simultaneously:
+
+```{r fit:mpm_2, opts.label = "mcmc"}
+
+M_mpm_2 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ Design + age_shft, data = .)
+T_fixef_mpm_2 <- 
+  fixef(M_mpm_2)
+
+```
+
+```{r tab:mpm_2, opts.label = "rtut"}
+
+T_fixef_mpm_2
+
+```
+
+Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year olds with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year olds in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will later see. 
+
+[interaction plot]
+
+__Exercise:__
+
+1. The `simulate` function in case environment BrowsingAB let you change the residual error (in standard deviations). Simulate three data sets with different residual variance, and estimate them by the same model. See how the uncertainty of effects behaves.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### How to plot MPM?
+
+Now that we have seen how we can compare on one factor, we can extend the CGMl to more factors. With linear  models, we can extend the basic CG model to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
 
 Now, we are looking at a slightly more complicated situation, where browsing is predicted by design and education level of participants at the same time.
 
@@ -709,7 +815,7 @@ First, with the *ggplot* system, we plot the new situation. Recall that
 
 2. selecting an appropriate geometry that carries such properties, e.g. points, bars, boxplots
 
-```{r fig:anova_twofact_2, opts.label = "fig.tut"}
+```{r fig:anova_twofact_2, opts.label = "future"}
 BAB1 %>%
   ggplot(aes(x = Design, 
              y = ToT, 
@@ -718,27 +824,6 @@ BAB1 %>%
 ```
 
 Now we can do the two-factorial ANOVA in much the same way as before. We only have to add the predictor *Education* to the model formula. Then we run the MCMC estimation and get the estimates.
-
-
-```{r fit:anova_twofact_3, opts.label = "mcmc"}
-M_cross <- 
-  BAB1 %>% 
-  stan_glm(ToT ~ 1 + Design + Education,
-           data = .)
-
-# T_resid <- mutate(T_resid, M_cross = residuals(M_cross))
-
-
-```
-
-
-```{r optsl.label = "rtut"}
-fixef(M_cross)
-
-
-```
-
-[Explain why you should always extend a model rather than separate analysis]
 
 
 ## Putting it all together: linear models
@@ -750,7 +835,7 @@ In the BrowsingAB example, we were interested in the influence of age, but we ha
 
 
 
-```{r fig:glm_EDA_2}
+```{r fig:glm_EDA_2, opts.label = "rtut"}
 BAB1 %>%
 	ggplot(aes(y = ToT, 
 						 x = Education)) +
@@ -785,6 +870,9 @@ fixef(M_glm)
 
 
 
+```{r opts.label = "invisible"}
+try(detach(BrowsingAB))
+```
 
 
 
@@ -795,6 +883,11 @@ The linear regression model `M_age` showed a considerable relationship between a
 It is commonly known that older people tend to have lower performance than younger users. A numkber of factors are responsible, such as: slower processing speed, lower working memory capacity, lower motor speed and visual problems, It is also commonly held, that universal designs are possible. Universal designs reduce the cognitive, sensory and motor obstacles for impaired users. A perfect universal design is equally usable for everyone.
 
 Is, perhaps, one of the two designs less of a burden for elderly users? We plot the observed ToT by age, but form groups by design. For seeing the trend, a linear smoother is added to the plot.
+
+```{r}
+attach(BrowsingAB)
+```
+
 
 ```{r fig:glm_EDA_3, opts.label = "fig"}
 G_slope_ia <-
