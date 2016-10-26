@@ -1,10 +1,11 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 21, 2016"
+date: "October 26, 2016"
 output:
   word_document:
     toc: yes
+    reference_docx: Book_template.docx
   html_document:
     fig_caption: yes
     number_sections: yes
@@ -18,7 +19,7 @@ purp.mcmc = F
 source("RMDR.R")
 
 CE <- 
-  c("BrowsingAB", "Sec99", "Headache", "Reading", 
+  c("BrowsingAB", "Sec99", "AUP", "MMN", "Headache", "Reading", 
     "AR_game", "Sleep", "Uncanny")
 load_CE(CE)
 
@@ -31,7 +32,7 @@ load_CE(CE)
 # Linear models
 
 
-## Grand mean models: quantification at work
+## Quantification at work: grand mean models
 
 Reconsider Andrew and Jane. They were faced with the problem that potential competitors could invalidate the claim "rent a car in 99 seconds" and drag them to court. More precisely, the question was: "will users *on average* be able ...", which apparently is about the statistic of the mean. A statistical model estimating just the mean we call the *grand mean model* (GMM). There are two reasons why it's "grand": the first is that most reseachers estimate models with more than one mean, the second is that this is the most simple of all models, so in a way, we can think of it as the "grandmother of all models".
 
@@ -56,47 +57,45 @@ Beneath it, the *random term* specifies our assumptions on the randomness in the
 
 The error term captures all variation that is not explained by the likelihood term and the unkown sources of variation are manifold. Deviation can arise due to all kinds of individual differences, situational conditions and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness.  Still, in some recognizeable cases it is inevitably off. In chapter [GLM] we will introduce other error distributions such as binomial distributions for successes in a  number of trials (for example: task completion rates) and Poisson distributions for count variables (for example: number of errors).
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a dataframe, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The `1`here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the intercept. 
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a dataframe, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the *intercept*. 
 
-```{r fit:99_seconds, opts.label = "mcmc"}
+```{r fit:99_seconds_1, opts.label = "mcmc"}
 attach(Sec99)
 M_1 <- stan_glm(ToT ~ 1, data = Ver20)
-P_1 <- posterior(M_1)
 detach(Sec99)
 ```
+```{r}
+attach(Sec99)
+summary(M_1)
+```
+
+The object `M_1`  is the model object created by `stan_glm`. When you call the summary you complex listings that represent different aspects of the regression. These aspects, and more are saved inside the object in a hierarchy of lists. The central result of the etsimation is the *posterior distribution (PD)*. It is an array of variables over MCMC  runs. We extract the posterior distribution from the model object using the `posterior` command (package: `bayr`).
+
+```{r fit:99_seconds_2, opts.label = "rtut"}
+P_1 <- posterior(M_1)
+P_1
+```
+
+The posterior object identifies itself by telling the number of MCMC samples, and the variables contained in the model. In the case here, there is just the intercept and the standard deviation. For first inference on the intercept, the grand mean, the posterior distribution can best be plotted as a density, as is shown in the later section on the posterior distribution.
 
 
-[That was a first glance on the underlying MCMC engine and how derive conclusions from the PD.] However, much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
+
+Much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
 A coefficient table is produced by the `fixef` command of the bayr library:
 
-```{r tab:99_seconds_post_fixef, opts.label = "tab"}
-attach(Sec99)
-T_coef_1 <- fixef(P_1)
-T_coef_1
+```{r tab:99_seconds_post_fixef}
+T_coef_1 <- coef(P_1)
+kable(T_coef_1)
 ```
 
 
 The authors of Bayesian books and the various Bayesian libraries have different opinions on what to report. Some report the posterior mean, others prefer the median, as it is less influenced by skew. A second advantage of the median is that it doesn't change, when a variable is transformed monotonically. For the spread of the distributions, either simple quantiles can be used, whereas others report areas of highest posterior density (HPD).
  
-In this book, we primarily use the posterior mode for magnitude of the effect, and the 2.5% and 97.5% quantiles, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather inuitive meaning as the most likely region, which is compatibel with the concept of maximum likelihood. Second, it is invariate to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chaper [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bimodal. But, when that happens, you probably have a more deeply rooted problem, then just deciding on a suitable coefficient table. For a basic summary of the posterior distribution, we can simply state: 
+In this book, we primarily use the *posterior mode for magnitude of the effect*, and the *2.5% and 97.5% certainty quantiles*, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather inuitive meaning as the most likely region, which is compatibel with the concept of maximum likelihood. Second, it is invariate to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chaper [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bimodal. But, when that happens, you probably have a more deeply rooted problem, than just deciding on a suitable summary.
 
-```{r 99_seconds_post_fixef_table, opts.label = "rtut.nr"}
-P_1 %>% 
+Back to Andrew and Jane: for assessing the 99 seconds question, we inspect the density plot [next section]. The PD of the intercept indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. But what is the probability to err for the 00 seconds statement? The above summary with `fixef()` does not answer the question, accurately. The CI gives lower and upper limits for a range of 95% certainty in total. What is needed is the certainty of $\mu \leq 99$. Specific questions deserve precise answers, which can be drawn by working on the posterior distribution, directly. We simply count how many visited values are smaller than 99.  The `quantile` functions does that and tells how many on the posterior distribution, we can make a precise statement about the probability of the claim:
 
-  Ver20 %>% 
-  ggplot(aes(x = "Intercept", y = ToT)) +
-  geom_jitter() +
-  geom_crossbar(data = filter(T_coef_1, parameter == "Intercept"),
-                aes(ymin = lower, y = center, ymax = upper)) +
-  geom_hline(aes(yintercept = 111, col = "111 seconds"))
-```
-
-
-
-Back to Andrew and Jane: the histogram in `r figr("fig:99_seconds_post")` indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. The standard posterior summary with `fixef()` does not answer the question, strictly. The CIs give the limits of a range that contains a given certainty. In contrast, Jane needs the certainty that average time-on-task is smaller than the 99 (or 111) seconds limit.    
-This can be achieved by operating on the posterior distribution, directly. We can simply count how many visited values are smaller than 99.  But, by using quantile functions on the posterior distribution, we can make a precise statement about the probability of the claim:
-
-```{r 99_seconds_prob99}
+```{r 99_seconds_prob99, opts.label = "invisible"}
 p99 <- 
   P_1 %>% 
   filter(parameter == "Intercept") %>%
@@ -110,12 +109,14 @@ p111 <-
 ```
 
 
-```{r tab:99sec_certainties, opts.label = "rtut.nr"}
+```{r tab:99sec_certainties, opts.label = "rtut"}
 T_certainty <-
   P_1 %>% 
   filter(parameter == "Intercept") %>%
   summarize(certainty_99s = mean(value <= 99),
             certainty_111s = mean(value <= 111))
+
+T_certainty
 
 ```
 
@@ -132,23 +133,21 @@ betaplot::iiaplot_1(fixef = c(106, 0, 0, 0, 0))
 detach(Sec99)
 ```
 
-## Meeting the posterior distribution
+### Meeting the posterior distribution
 
-The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution of predictors, here the  intercept $\beta_0$. The posterior distribution gives the degree of certainty for every possible value of the parameter.
+The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution (PD) of predictors, here the  intercept $\beta_0$. The posterior distribution gives the degree of certainty for every possible value of the parameter. In a perfect world, we would know the analytical formula of the posterior. In most non-trivial cases, though, there is no derivable formula. Instead, what we get is a sample from this distribution via a process called Markov-Chain Monte Carlo sampling (MCMC). MCMC estimation approximates the PD by drawing many times from it. 
 
-In a perfect world, we would know the analytical formula of the posterior. In most non-trivial cases, though, there is no formula for the posterior. Instead, what we get is a sample from this distribution via a process called Markov-Chain Monte Carlo sampling (MCMC). In fact, what we get from the MCMC estimation is just many draws from the posterior distribution. The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
+The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
 
 ```{r lst:99_seconds_post, opts.label = "rtut"}
 attach(Sec99)
 
 P_1 <-  
   posterior(M_1)
-P_1 %>% 
-  sample_n(10)
 P_1
 ```
 
-Making statements about certainty, for example $M_{ToT] <= 99$, is very easy, once we have a basic understanding of what MCMC estimation actually does. While a full treatment of the issue is beyond the scope of this book (see [BDA]), but it suffices to understand that the MCMC algorithm is a *random walk* through *parameter space*. In the current case, the parameter space is two-dimensional, as we have two parameters. At every iteration, the MCMC algorithm stores the coordinates in parameter space.
+Making statements about certainty, for example $\mu \leq 99$, is very easy, once we have a basic understanding of what MCMC estimation actually contains. In the current case, the parameter space is two-dimensional, as we have two parameters $\mu$ and $\sigma$. At every iteration, the MCMC algorithm makes a probabilistic jump to another location in parameter space and stores the coordinates. This is what the MCMC approximation basically is: a long series of parameter values.
 
 
 ```{r fig:99_seconds_random_walk, opts.label = "fig.small"}
@@ -168,7 +167,7 @@ G_random_walk
 
 The first 50 hundred steps of the MCMC random walk are shown in `r figr("fig:99_seconds_random_walk")`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area.  This is where the more probable parameter values lie. In fact, the MCMC algorithm works with simple a rule that lets it jump to more likely areas more frequently. A common way to plot the posterior distribution, is to create one histogram per parameter (alternative: density or violin plots).
 
-In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  `r frm_coef(Sec99$T_coef_1, row = 1, center = F)` as "reasonably certain".
+In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed. There is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  `r frm_coef(Sec99$T_coef_1, ~fixef == "Intercept", center = F)` as "reasonably certain".
 
 
 ```{r fig:99_seconds_post, opts.label = "fig.small"}
@@ -228,19 +227,17 @@ M_age <-
            data = .)
 ```
 
-```{r opts.label = "invisible"}
+```{r opts.label = "rtut"}
 T_age <- fixef(M_age)
+kable(T_age)
 ```
 
 Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower. That is not a lot.
 
-```{r opts.label = "rtut"}
-fixef(M_age)
-```
 
-### Shifting predictors
+### Transforming variables
 
-The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(fixef(M_age), ~fixef == "age")`.
+The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(fixef(M_age), ~fixef == "Intercept")`.
 
 Both, the unplausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible. Before we explore this on a deeper level, there is a pragmatic solution to the problem: *shifting the predictor*. Shifting means just that: the whole linear curve is shifted to the right (or the left), such that the intercept is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be:
 
@@ -256,13 +253,14 @@ M_age_shft <-
 M_age_cntr <- 
   stan_glm(ToT ~ 1 + age_cntr, data = BAB1)
 
-bind_rows(
-  posterior(M_age), 
-  posterior(M_age_shft), 
-  posterior(M_age_cntr)) %>% 
-  fixef()
+P_age <- 
+  bind_rows(posterior(M_age), 
+            posterior(M_age_shft), 
+            posterior(M_age_cntr))
 
 ```
+
+
 
 ```{r opts.label = "invisible"}
 C_age <- fixef(M_age_shft)$center
@@ -271,9 +269,14 @@ C_age <- fixef(M_age_shft)$center
 
 The shifted intercept has moved to higher values, `r frm_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`. Surprisingly, the shift is not exactly 20 years.  This is due to the high uncertainty of the latter, as well as the relation not being exactly linear (see Figure XY). In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to far-sightedness of participants (making them slower), which more or less suddenly kicks for older participants. Still, by shifting or centering the intercept parameter gains considerable certainty. At the same time, the slope parameter practically does not change, but gains some certainty, too. Think of the intercept as the end of the lever: shifting or centering an intercept to a region with data tightens certainty and one gets an overall more determined grip.
 
+An even stronger standardization is *z-transformation*, where the predictor is centered at zero and all values are divided by the standard deviation. [...]
+
+
+
+
 ### Endlessly linear
 
-On a deeper level the bizarre age = 0 prediction is an example of a general rule, that will re-occur several times throughout ths book:
+On a deeper level the bizarre age = 0 prediction is an example of a general axiom, that will re-occur several times throughout ths book.
 
 **In an endless universe, everything is finite.**
 
@@ -281,11 +284,9 @@ A fact about LR is that they allow us to fit a straight line to data. A lesser r
 
 The endlessly linear assumption (ELA) is central to all LR models. From a formal perspective, the ELA is always violated in a universe like ours. The practical consequences are, as ever so often: it depends! Frequently, LR is a reasonably effective approximation. Review [G_eda_1]: the blue line is a so called a *smoother*, more specifically a LOESS. A smoother is a fitted line, not unlike LR. But, it is way more flexible. Where LR is a lever, LOESS is a pipe cleaner. LOESS shows a more varied picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. 
 
-[Physiologically, this makes no sense. Adapt simulation and redo BAB1 and BAB5]
-
 It is not directly linear, still: LR provided sufficient evidence that a relationship exists, such that, generally, the older one gets, the slower one does the task. There is a possibility that the design is unfair. That is enough reason to improve the design, for example, doing a formal accessibility evaluation and fixing the major issues. A theorist may desire a more detailed picture. Disruptions of linearity often indicate interesting psychological processes. Knowing these makes us better understand design. An uncanny example of theoretical work will be given in polynomial regression.
 
-## Predictions 
+### Predictions 
 
 In the BrowsingAB case, we have repeatedly recorded age of participant. LR found the repeating pattern, that with every unit of age, ToT increased by  `r C_age[2]` seconds. This pattern is what the model predicts, now and forever. If we ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
 
@@ -347,7 +348,7 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 
 
-## Residual analysis
+### Residual analysis
 
 So far, we have used a notation for LM, that defines a likelihood term for predicted values and a random term, that links observed values to predicted values. 
 A slightly different notation, that is quite common, first separates the observed value $Y_i$ into predicted value and an individual *residual error* $\epsilon_i$. In this form, the GM is specified follows:
@@ -378,7 +379,7 @@ residuals(M_age_shft)
 ```
 
 
-### checking normality
+### Checking normality
 
 This returns a vector of residual values, exactly one per observation. All LM have the *assumption that the residuals are distributed Normal *. As in practice we are dealing with data from the crazy real world, this assumption may be accurate, sometimes more, sometimes less. With the vector of residuals at hand, we can evaluate this assumption by comparing the residual distribution to its theoretical form, a perfect bell curve.
 
@@ -406,6 +407,10 @@ M_age_rtrn <-
   stan_glm(returns ~ 1 + age_shft, data = BAB1)
 P_age_rtrn <- posterior(M_age_rtrn)
 T_age_rtrn <- coef(M_age_rtrn)
+```
+
+```{r tab:age_pois}
+T_age_rtrn
 ```
 
 ```{r fig:resid_dist_2}
@@ -473,11 +478,9 @@ __Exercises:__
 
 
 
-### comparing models
+### Comparing residuals
 
-A commonly used criterion for model fit is whether a predictor helps to reduce the error. In fact, the coefficients that are returned by the estimation do exactly that: they are "chosen" to minimize the residial standard error. As the residuals 
-
-the estimates such that the estimates assuming that the  considerably explains variance, which reduces the spread of the residual distribution. We could ask: does the age predictor effectively reduce the residual standard error $\sigma_\epsilon$ as compared to the GM? We first fit the null model:
+A commonly used criterion for model fit is whether a predictor helps to reduce the error. In fact, the coefficients that are returned by the estimation do exactly that: they are "chosen" to minimize the residual standard error. We could ask: does the age predictor effectively reduce the residual standard error $\sigma_\epsilon$ as compared to the GMM? We fit the null model for comparison:
 
 ```{r fit:age_resid_reduction, opts.label = "mcmc"}
 M_0 <-
@@ -487,7 +490,7 @@ M_0 <-
 
 Then, we extract residuals from both models and visually compare them:
 
-```{r opts.label = "fig.small"}
+```{r opts.label = "rtut"}
 
 T_resid <-
   data_frame(
@@ -503,7 +506,7 @@ G_resid_0 <-
 G_resid_0
 ```
 
-This is not too convincing: the error distributions overlap almost completely. And indeed, the difference of residual standard errors is minor. Adding age as predictor to the GM is practically futile. 
+This is not too convincing: the error distributions overlap tightly. And indeed, the difference of residual standard errors is minor. Adding age as predictor to the GMM is practically futile. 
 
 ```{r opts.label = "fig.small"}
 bind_rows(posterior(M_0),
@@ -514,15 +517,15 @@ coef(type = "disp")
 In [ME] we will encounter more rigorous procedures to identify useless predictors. A predictor that does not reduce the RSE often is a disappointment for the researcher. What regards the age variable, it will have a glamorous comeback when we turn to interaction effects.
 
 
-## A or B: Comparing two (or more) designs
+## A or B: Comparing two (or more) groups
 
-Another basic statistical routines is the *comparison of groups* (CG), commonly known as ANOVA. In design research group comparisons are all over the place, for example:
+Another basic statistical routines is the *comparison of groups* (CGM), commonly known as ANOVA. In design research group comparisons are all over the place, for example:
 
 + comparing designs: as we have seen in the A/B testing scenario
 + comparing groups of people, like  gender or whether they have a high school degree, or not
 + comparing situations, like whether someone uses an app on the go, or sitting still behind a computer
 
-In order to perform a CG, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the factor Design with its levels A and B does the job.
+In order to perform a CGM, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the factor Design with its levels A and B does the job.
 
 This question could appear during an overhaul of a municipal website. With the emerge of e-government, many such websites had grown wildly over a decade. They temporarily were jungles, to the disadvantage for the  users. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *do two web designs A and B differ in user performance?*
 
@@ -536,14 +539,12 @@ BAB1 %>%
 	facet_grid(Design~.)
 ```
 
-This doesn't look too striking. We might consider a slight advantage for design B, but the overlap is immense. We perform the CG. Again, this is a two-step procedure:
+This doesn't look too striking. We might consider a slight advantage for design B, but the overlap is immense. We perform the CGM. Again, this is a two-step procedure:
 
 1. the `stan_glm` command lets you specify a simple formula to express the dependency between predictors (education) and outcome variable (ToT). It performs the parameter estimation, using the method of _Markov-Chain Monte-Carlo Sampling_. The results are stored in a new object `M_Design`.
 1. With the `fixef` command the estimates are extracted and interpreted
 
 ```{r fit:anova_lm, opts.label = "mcmc"}
-# COG parameter estimation
-
 M_Design <-
   BAB1 %>% 
   stan_glm(ToT ~ 1 + Design, 
@@ -557,38 +558,42 @@ T_resid <-
 ```
 
 
-```{r opts.label = "rtut"}
-fixef(M_Design)
+```{r tab:M_design, opts.label = "rtut"}
+T_Design <- fixef(M_Design)
+kable(T_Design)
 ```
 
 The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. 
 
-The second parameter is *group effect*, which is the *difference to the reference group*. With design A as reference. With design B it took users `r frm_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely be justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
+The second parameter is the *effect* of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely  justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
 
 ### Dummy variables (are not stupid at all)
 
 Are we missing something so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{"DesignB"}*\beta_1$?
 
-Factors basically answer the question: *What group does the observation belong to?* The answer is a label and cannot enter the regression formula. Dummy variables solve the dilemma by asking the simpler question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed that answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe. Boolean variables can always be converted to ones and zeros using as.numeric. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once. 
+*Factors* basically answer the question: *What group does the observation belong to?* The answer is a label and cannot enter the regression formula. *Dummy variables* solve the dilemma by asking the simpler question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
 
 ```{r dummy_1, opts.label = "rtut"}
-BAB1 <-
-  BAB1 %>% 
+BAB1 <-  BAB1 %>% 
   mutate(d_A = as.numeric(Design == "A"),
          d_B = as.numeric((Design == "B")))
- BAB1 %>% 
-   select(Obs, Design, d_A, d_B) %>% 
-   sample_n(8)
+BAB1 %>% 
+  select(Obs, Design, d_A, d_B, ToT) %>% 
+  sample_n(8)
 
 ```
 
 Vice versa, numbers in a logical context are always interpreted in complete reverse.
 
-$$ v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} $$
+$$ 
+v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} 
+$$
 
 Boolean variables can be both: numerical and categorial. It is unfortunate that we belittlingly call them dummies as they are truly bridges between the world of categories and arithmetics. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables d_A and d_B, the likelihood is written as:
 
-$$ \mu_i = d_A\beta_{A} + d_B\beta_{B} $$
+$$ 
+\mu_i = d_A \beta_{A} + d_B \beta_{B} 
+$$
 
 When $d_A=1,d_B=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorial. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted dummy. As I have already done that with a typecast above, we can right-away pipe the following into `stan_glm`.
 
@@ -640,7 +645,7 @@ Exercises:
 
 
 
-### Contrasts
+### Contrasts [TBC]
 
 The default behaviour of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
 
@@ -667,7 +672,7 @@ contrasts(BAB1$Education_rev)
 
 ```
 
-When running a CGM on Education_rev the intercept represents level High, now. It is worth noting that this model would make the very same predictions and residuals. It is the same model as before, just written differently.
+When running a CGM on `Education_rev`, the intercept represents level High, now. It is worth noting that this model would make the very same predictions and residuals. It is the same model as before, just written differently.
 Sometimes, it is useful to have contrasts other than treatment, as this more closely matches the research question. A plethora of contrasts is known, I will introduce *deviation contrasts* and *successive difference contrasts*.
 
 [Example for deviation coding]
@@ -702,40 +707,145 @@ __ Exercises:__
 
 1. With BrowsingAB, simulate several data sets of very small sample size. Observe how strongly the composition of education and age varies.
 
+
+
 ## Putting it all together: multi predictor models
 
 Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer computing products, enterprise information systems and cars are extremely diverse. Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we could record.
 
-### Empirical versus statistical control
+ 
 
-Fundamental researchers have a knack for the experimental method. An *experiment*, strictly, is a study where you measure the effects of variables you *manipulate*. Manipulation is, almost literally, that it is *in your hands*, who receives the treatment. The fantastic thing about manipulation is that it allows for *causal conclusions*. A *strictly controlled experiment* is when all influencing variables are either manipulated or kept constant. That is an ideal and would not even be the case if you test the same person over-and-over again (like researchers in psychophysics often do). You never jump into the same river twice.
+### On surface: multiple regression models
 
-Sometimes an influencing variables lends itself to be kept constant. For example in psychological experiments, environment and equipment is usually kept constant. But, this comes with a one major disadvantage: it limits the possible conclusions drawn from the study. Imagine, you tested a smartphone app with participants, all students, comfortably sitting in a quiet environment. Would you dare to make conclusions on how any users perform in real life situations, say while driving a car? When keeping things constant, *ecological validity* and *generalizability* suffer.
+Productivity software, like word processors, presentation and calculation software or graphics programs have evolved over decades. For every new release, dozens of developers have worked hard to make the handling more efficient and experience better.  Consider a graphics program: basic functionality such as drawing lines, select an object and move it or colorize with the bucket tool, have practically always been there. A user wanting  to draw six rectangles, paint them red and arrange them in a grid pattern, can do so.  At a certain point of system evolution, it was recognized that this is what users routinely do: creating a grid of alike objects. With the basic  functions this is rather repetitive and a new function was created, called "copy-and-arrange". Users may now create a single object, specify rows and columns of the grid and give it a run.
 
-In most applied design studies we need ecological validity and generalizability. If performance differs under certain conditions, you certainly want to know that. The solution is to vary conditions and record them as variables, as good as possible. For example, if you were to compare two voice-controlled intelligent agent apps, you could manipulate the ambient noise level, if you are in the lab.
+The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, Users (people?) have a tendency to stick with their old routines, ignoring new functionality right away. This is called the *active user paradox (AUP)*. 
 
-In practically all applied studies, there exist variables, which you cannot manipulate for one of the following reasons. The first is that you do a field study, aiming for high ecological validity. Participants are using the system in the situations they encounter. Situational variables, like ambient noise level, cannot be manipulated. Second, it usually is impossible to manipulate user traits. If someone has an extrovert character or did a lot of gaming in the past, you cannot change that. Diversity of users is a fact and people come as they are.
+Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score.
 
-Fundamental lab researchers are afraid of individual differences, too. The reasons are different, though: all non-manipulated influencing factors add noise to the study, which makes it harder to find the effects of interest. While lab researchers do there best to keep the environment constant, they cannot keep all participant traits constant. Lab researchers have two solutions to the problem: matching and randomized control. 
+```{r opts.label = "future"}
+attach(AUP)
 
-With *matching*, potentially relevant participant traits are recorded upfront; then participants are assigned to conditions such that groups have about the same composition. For example, one makes sure that the age distribution is about the same and both genders are equally represented. When all other influencing variables are constant between groups, the lab researcher can be sure that the effect is unambigously caused by the manipulation. So they say and routinely record participants age, gender and nationality.
+G_eda_1 <- 
+  AUP_1 %>% 
+  ggplot(aes(x = ncs, y = resistance)) +
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
 
-You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethory of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
+G_eda_2 <- 
+  AUP_1 %>% 
+  ggplot(aes(x = gex, y = resistance)) +
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
 
-*Ramdomized control* is a misleading term, as what the researcher actually does is to *let go to chance*. Indeed, if the process of assigning participants to manipulations is completely left to chance, then *in the long-term* all groups will have the same composition of traits. Again, you were able to concluzde that the manipulation is the only cause. *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less heterogenous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
+G_eda_1
+G_eda_2
+detach(AUP)
 
-Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
- But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model. 
-
-### Crossing lines: multiple regression models
-
+```
 
 
-### Crossover groups: multifactorial models
+As we will see, it is better to build a model with two simultaneous predictors. For instructive purposes we begin with two separate LRM, one for each predictor. Throughout the regression models we use z-transformed scores. Neither the personality nor the resistance scores have a natural interpretation, so nothing is lost in translation. 
 
-The only necessary precondition for statistical control is that you can *record the influencing variable*. This had happened in the BrowsingAB study: the primary research question regarded the design difference, but the careful researcher always records the gender of participants.
+$$
+\mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs}\\
+\mu_i = \beta_0 + \beta_\mathrm{gex} x_\mathrm{gex}
+$$
 
-What happened to the likelihood function when we moved from GMM to CGM and LRM? The effect of age was simply added to the intercept. For the education level effects, we expanded the dummy variables and then added them all up. Indeed, the linear model is defined as a succession of linear terms  $x_i\beta_i$ and nothing keeps us from adding further predictors to the model:
+```{r fit:AUP_LR, opts.label = "mcmc"}
+attach(AUP)
+M_1 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zncs, data = .)
+
+M_2 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zgex, data = .)
+
+P <-
+  bind_rows(posterior(M_1),
+            posterior(M_2))
+detach(AUP)
+
+```
+
+
+Table XY below (`M_1` and 'M_2') shows the two separate  effects. We can ignore the intercepts, as the predictors have been z-centered and they are practically zero, therefore. Both personality scores seem to have a weakly positive impact on AUP  resistance.
+
+Next, we estimate a model that regards both predictors simultaneously. For that purpose, we just add the two linear terms:
+
+$$
+\mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs} + \beta_\mathrm{gex} x_\mathrm{gex}
+$$
+
+It is likewise straight-forward to run a regression model that contains both covariates simultaneously: 
+
+```{r fit:AUP_MRM, opts.label = "mcmc"}
+attach(AUP)
+M_3 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zncs + zgex, data = .)
+
+P <-  bind_rows(P, posterior(M_3))
+
+detach(AUP)
+
+```
+
+```{r tab:AUP_coef}
+attach(AUP)
+
+T_coef_3 <- P %>% 
+  filter(fixef %in% c("zncs", "zgex")) %>% 
+  posterior() %>%  
+  fixef()
+T_coef_3
+```
+
+When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef, ~model == "M_3", ~fixef == "zgex")`. The reason is that the two *predictors are correlated*:
+
+```{r fig:AUP_corr_predictors}
+G_eda_4 <- 
+  AUP_1 %>% 
+  ggplot(aes(x = zncs, y = zgex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = str_c("Correlation between ncs and gex: ", 
+              round(cor(AUP_1$zncs, AUP_1$zgex), 2)))
+G_eda_4
+
+detach(AUP)
+```
+
+Participants with a higher NCS also tend to have more geekism. Is that surprising? I don't think so. People high on NCS love to think. Computers are a good choice for them, because these devices make you think. Finally, a positive attitude towards hacking makes people resistant for the AUP.  
+
+[NCS: love to think] --> [GEX: love computers] --> [resist AUP]
+
+When such a causal chain can be established, some researchers speak of a *mediating variable* GEX.
+Although a bit outdated [REF], *mediator analysis is correct when the causal direction of the three variables is known*. Then, a so-called step-wise regression is performed to find the pure effects. (A better alternative is structural equation modelling, SEM). 
+
+Unfortunately, in the situation here, the causal direction is partly ambiguous. We can exclude that the resistance test has influenced the personality scores, because of the order in the experiment. However, the relation with NCS and GEX is ambiguous as with  the same determination we can put forth: geeks love computers and computers reward you for thinking hard. If you like thinking hard, then you probably also like thinking upfront, when solving computer puzzles.
+
+[GEX: love computers] --> [NCS: love to think] --> [resist AUP]
+
+In causally ambiguous situations, there is no natural order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultanous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
+
+Due to the z-transformation, the intercepts became practically zero and could be ignored. Still, what does the intercept mean in MRM? Similar to LRM, it is the predicted value when all predictors take the value zero.
+
+
+__Exercises:__
+
+1. Rerun `M_3`, this time using the unstandardized resistance scores. Interpret the intercept.
+
+1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory, also known as the visual scratchpad. Another theory could draw on the fact that for most websites the written word prevails. Would we not expect people with better verbal processing capabilies to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM.*.
+
+
+### Crossover: multifactorial models
+
+The only necessary precondition for statistical control is that you recorded the influencing variable. This has happened in the BrowsingAB study: the primary research question regarded the design difference, but the careful researcher also recorded the gender of participants.
+
+What happened to the likelihood function when we moved from GMM to CGM and LRM? The effect of age was simply added to the intercept. For model on education level effects, we expanded the dummy variables and then added them all up. Indeed, the linear model is defined as a succession of linear terms  $x_i\beta_i$ and nothing keeps us from adding further predictors to the model. Seeing is believing! The following code estimates a model with design and gender as predictors.
+
 ```{r}
 attach(BrowsingAB)
 ```
@@ -755,14 +865,15 @@ T_fixef_mpm_1
 
 ```
 
-By adding gender the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design wiuth groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
+By adding gender to the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design wiuth groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
 The other two fixed effects are, once again, differences to the reference. Here, nor does gender do much to performance, nor does the design effect really change, compared to the CGM.
 
+[likelihood]
 [interaction plot]
 
 
 
-### Regression in groups
+### Line-by-line: regression in groups
 
 Recall that dummy variables make factors compatible with linear regression. No barriers are left for combining factors and covariates in one model. For example, we can estimate the effects age and design simultaneously:
 
@@ -771,19 +882,17 @@ Recall that dummy variables make factors compatible with linear regression. No b
 M_mpm_2 <- 
   BAB1 %>% 
   stan_glm(ToT ~ Design + age_shft, data = .)
-T_fixef_mpm_2 <- 
-  fixef(M_mpm_2)
-
 ```
 
 ```{r tab:mpm_2, opts.label = "rtut"}
-
-T_fixef_mpm_2
-
+T_fixef_mpm_2 <-  fixef(M_mpm_2)
+kable(T_fixef_mpm_2)
+detach(BrowsingAB)
 ```
 
-Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year olds with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year olds in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will later see. 
+Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year olds with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year olds in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
 
+[likelihood]
 [interaction plot]
 
 __Exercise:__
@@ -792,6 +901,13 @@ __Exercise:__
 
 
 
+### Co-linearity [TBC]
+
+Linear models link multiple predictors to an outcome variable. In the MMN case we observed that, by adding another predictor to a model, the strength of the original predictor only changes marginally. That is *not* the general rule as we will see now!
+
+Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. Never is there bending needed to connect three points.
+
+[Elaborations on Euclidian space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable]
 
 
 
@@ -801,11 +917,9 @@ __Exercise:__
 
 
 
+### How to plot MPM? [TBC, move to Interaction effects]
 
-
-### How to plot MPM?
-
-Now that we have seen how we can compare on one factor, we can extend the CGMl to more factors. With linear  models, we can extend the basic CG model to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
+Now that we have seen how we can compare on one factor, we can extend the CGMl to more factors. With linear  models, we can extend the basic CGM to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
 
 Now, we are looking at a slightly more complicated situation, where browsing is predicted by design and education level of participants at the same time.
 
@@ -821,58 +935,46 @@ BAB1 %>%
              y = ToT, 
              fill = Education)) +
   geom_boxplot()
+
+detach(BrowsingAB)
 ```
 
 Now we can do the two-factorial ANOVA in much the same way as before. We only have to add the predictor *Education* to the model formula. Then we run the MCMC estimation and get the estimates.
 
-
-## Putting it all together: linear models
-
-What do you think is the *lm* in `stan_glm`? Well, the letters stand for *linear model (LM)*, and as we have seen so far, this includes the case of comparison of groups (CG, MFM, predictors are factors) and linear regression (LR, predictors are covariates). But, linear models can, in fact, deal with any mix of factors and covariates at the same time. Sometimes they are therefore called general liner models, but this term is very close to general*ized* linear models (GLM), which we will encounter in a later chapter. To avoid confusion, here we speak of linear models as the family of models containing GM, CG, MFM, LR and *any combination of those*. (Speaking of such combinations as mixed models would be equally misleading, see the next chapter).
-
-In the BrowsingAB example, we were interested in the influence of age, but we haven't regarded another demographic variable of interested: level of education. First we explore graphically how education affect ToT:
+[Interaction plots with groups,
+IA plots with standard devs,
+mixed IA plots,
+using the AMM]
 
 
+### Empirical versus statistical control
 
+Fundamental researchers have a knack for the experimental method. An *experiment*, strictly, is a study where you measure the effects of variables you *manipulate*. Manipulation is, almost literally, that it is *in your hands*, who receives the treatment. The fantastic thing about manipulation is that it allows for *causal conclusions*. A *strictly controlled experiment* is when all influencing variables are either manipulated or kept constant. That is an ideal and would not even be the case if you test the same person over-and-over again (like researchers in psychophysics often do). You never jump into the same river twice.
 
-```{r fig:glm_EDA_2, opts.label = "rtut"}
-BAB1 %>%
-	ggplot(aes(y = ToT, 
-						 x = Education)) +
-	geom_boxplot()
-```
+Sometimes an influencing variables lends itself to be kept constant. For example in cognitive psychology experiments, environment and equipment is usually kept constant. For applied research, keeping things constant comes at a major disadvantage: it limits the possible conclusions drawn from the study. Imagine, you tested a smartphone app with participants, all students, comfortably sitting in a quiet environment. Would you dare to make conclusions on how any users perform in real life situations, say while driving a car? When keeping things constant, *ecological validity* and *generalizability* suffer.
 
+In most applied design studies we need ecological validity and generalizability. If performance differs under certain conditions, you certainly want to know that.
+The solution is to *let conditions vary and record them* as variables, as good as possible. For example, if you were to compare two voice-controlled intelligent agent apps, you could manipulate the ambient noise level, if you are in the lab.
 
-And here we call `stan_glm` once again, with both predictors, simultaneously
+In practically all applied studies, there exist variables, which you cannot manipulate for one of the following reasons. Especially, user traits are impossible to manipulate. If someone has an extrovert character or did a lot of gaming in the past, you cannot change that. Diversity of users is a fact and people come as they are.
 
-```{r fit:glm_mixed, opts.label = "mcmc"}
-# GLM parameter estimation
-M_glm <- 
-  BAB1 %>% 
-  stan_glm(ToT ~ Design + age, 
-							data = .)
+Field studies usually aim for high ecological validity. Participants are supposed to use the system in the situations they encounter. If a smartphone app is being used sitting walking, driving or on a secret place, it is crucial to observe all situations. Consider a car navigation system that is tested in a long, lonely highway situation. How much would the results tell your for performance in dense city traffic? Design researchers frequently need  results that are highly representative for users and situations of use.
 
-# T_resid <- mutate(T_resid, M_glm = residuals(M_glm))
-```
+Fundamental lab researchers are afraid of individual differences, too. The reasons are different, though: all non-manipulated influencing factors add noise to the study, which makes it harder to find the effects of interest. While lab researchers do there best to keep the environment constant, they cannot keep all participant traits constant. Lab researchers have two solutions to the problem: matching and randomized control. 
 
-```{r opts.label = "rtut"}
+With *pair matching*, potentially relevant participant traits are recorded upfront; then participants are assigned to conditions such that groups have about the same composition. For example, one makes sure that the age distribution is about the same and both genders are equally represented. When all other influencing variables are constant between groups, the lab researcher can be sure that the effect is unambigously caused by the manipulation. So they say and routinely record participants age, gender and nationality.
 
-fixef(M_glm)
+However, there are better alternatives: the best pair  match is the person herself. Experimental studies that expose the same person to several conditions are called *within-subject*. In the special case that all participants encounter all conditions, the variable is *complete within-subject*. [A special  case of within-subject design is *repeated measures*.] In the following chapter, we use mixed-effects models [LMM] to deal with within-subject designs, gracefully.
 
-```
+In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in levels: *basic representation* is reached when all influencing properties have occured a few times during observation. [...]
+*Proportional representation* means that user and situational properties have the same relative frequency in sample as in population. 
 
+You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethory of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
 
-```{r fig:glm_mixed, opts.label = "future"}
-# fe <- as.list(c(Tclm[["Browsing_AB_3"]]$center, 0))
-# 
-# iiaplot_4(fixef = fe, range = c(0, 80), label = c("age", "ToT"))
-```
+When influencing variables cannot be measured fotr matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportial representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogenous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
 
-
-
-```{r opts.label = "invisible"}
-try(detach(BrowsingAB))
-```
+Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
+But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model.
 
 
 
@@ -968,7 +1070,7 @@ M_ia2 <-
 ```
 
 ```{r opts.label = "rtut"}
-fixef(M_ia2)
+fixef(M_ia2) %>% kable()
 ```
 
 
@@ -1056,7 +1158,7 @@ Boundaries of performance measures inevitably lead to non-linear relationships w
 several of them are introduced in later chapters of this book ([GLM, NLM]). 
 In the case of two (or more) interventions to improve a 
 
-Let me explain saturation effects with an example that is intuitive enough, whether you are an design expert, or not. Consider ...
+Let me explain saturation effects with an example that is intuitive enough, whether you are an design expert, or not. Consider [...]
 
 
 ```{r prep_headache, opts.label = "invisible"}
@@ -1134,10 +1236,10 @@ But, is that reasonable? Do the effects of headache pills simply add up like thi
 
 ```{r tab:Headache_fixef_2}
 T_fixef_2 <-  fixef(M_2)
-T_fixef_2
+kable(T_fixef_2)
 ```
 
-
+### --->
 
 We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(Headache$T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
 
@@ -1412,7 +1514,7 @@ detach(Sleep)
 ```
 
 
-## Up and down: polynomial regression [eventually move to NLM]
+## The ups and downs of polynomial regression
 
 Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorph designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of humanlikeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in humanlikess, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very humanlike, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
 

@@ -29,12 +29,32 @@ load_CE(CE)
 
 # Working with Models
 
-What is the power of models? Two answers:
+## On theorizing, prediction and babbling
 
-1. explain current data
-1. predict future data
+Linear models are a language. Different to natural language it is unambiguous in its mathematical confinement. Like human language, thought preceeds any meaningful statements. Research with upfront thoughts is called *theory-driven*. 
 
-When explaining existing data, one is basically concerned with the question:  does the model capture all features that stand out from the data, or are their any quirks that let us doubt the model's fidelity. This process is called *model criticism*, and frequently centers around details of lesser theoretical implication, such as: convergence of MCMC estimation, which distribution a variable takes, or whether the chosen priors are realistic. Model quality can be aproached in two ways: either one focusses just on the model at hand and evaluates its quality against a set of absolute  criteria, or one evaluates the quality of a *model in comparison* to another model, or even a set of models. 
+[...]
+Theory-driven research is interested in prediction of behaviour based on assumptions made by reason. Reasons can be: [...]
+
+Arabesque statements can be construed with human language and linear models alike. Formally, nothing keeps a researcher from creating a questionnaire on the influence of color schemes on perceived usability, collect 32.537 responses via crowdsourcing and enter all, let's say 5, factors into a linear model, including all interaction effects `PU ~ p1 * p2 * p3 * p4 * p5`. Obviously, this is not theory-driven, as *only theories that also deny have predictive value*. What the researcher probably had in mind is to develop a *model for prediction*, for example, which color scheme would be most favored by teenage users. 
+
+In industrial design research, being able to predict crucial properties of a design reduces economical risks.
+
+*Theory testing* [...] *a prior*
+
+What the researcher on color schemes had not in mind, hopefully, is to mine for effects with certainty of more than 95%, create a coefficient table with only these effects and then, *a posterior*, fabulate a matching theory. In psychology, and probably most social sciences, this has happened and had let to ... [crisis]. [Garden of forking paths]
+Researcher who walk the garden of forking paths are producing nothing but *babble*, the lingual equivalent to random noise. 
+
+So, what is the power of models? Two answers:
+
+1. develop theories
+1. test theories
+1. predict the future
+
+
+Irrespective of the research purpose, a basic question on the model at hand is:  does it capture all features that stand out from the data, or are their any quirks that let us doubt the model's fidelity. This process is called *model criticism*, and frequently centers around details of lesser theoretical implication, such as: convergence of MCMC estimation, which distribution a variable takes, or whether the chosen priors are realistic. 
+
+Model quality can be approached in two ways: either one focusses just on the model at hand and evaluates its quality against a set of absolute  criteria, or one evaluates the quality of a *model in comparison* to another model, or even a set of models. 
 
 
 ## Prior specification
@@ -58,6 +78,12 @@ formals(stan_glm)
 
 + extract default prior from M_2
 + extreme example: guessing a persons IQ, without a measure (100+-15)
+
+People had been using the data to come to conclusions, but they also relied on their own convictions. This sounds subjective and idiosyncratic, even. Is that still research, strictly? In fact, some have labelled Bayesian statistics subjective, and therefore inadmissible, for the concept of priors. What has been overlooked by those is:
+
+1. Frequentist statistics has priors, too. They are just always flat (non-informative).
+1. Non-informative priors in Bayesian estimation are routinely used, too.
+1. By putting prior knowledge into a formula, it is objective and becomes criticizable. Every reviewer, stakeholder or follow-up researcher can inspect the chosen prior and follow it, or not. When research is published in a reproducable way, people can even reproduce the estimation  using their own priors, when disagreeing. 
 
 ## Model criticism: assessing model fit
 

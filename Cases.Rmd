@@ -2,7 +2,7 @@
 title: "Cases"
 subtitle: "New statistics for design researcher"
 author: "Martin Schmettow"
-date: "October 13, 2016"
+date: "October 26, 2016"
 output:
   html_document:
     fig_caption: yes
@@ -1059,4 +1059,115 @@ write_sav(IPump$Type_1, "Data/IP_1.sav")
 write_csv(IPump$Type_1, "Data/IP_1.csv")
 
 ```
+
+
+
+
+
+## Case: Millers Magic Number
+
+```{r load_raw_data}
+load("external_data/MMN.Rdata")
+MMN_raw <- MMN
+rm(MMN)
+```
+
+
+```{r Uncanny_create, opts.label = "simulate"}
+new_syncenv("MMN")
+
+```
+
+
+```{r MMN_load_data, opts.label = "sim"}
+MMN$MMN_2 <- 
+  MMN_raw %>% 
+  select(Part = Subject, Website, Task, Corsi, 
+         Ospan.A, Ospan.B, time, clicks) %>% 
+  mascutils::z_score(Corsi) %>% 
+  mascutils::z_score(Ospan.A) %>% 
+  mascutils::z_score(Ospan.B) %>% 
+  mutate(ltime = log(time),
+         lclicks = log(clicks)) %>% 
+  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)
+
+names(MMN$MMN_2)
+
+MMN$MMN_1 <-
+  MMN$MMN_2 %>% 
+  group_by(Part, Corsi, Ospan.A, Ospan.B, zCorsi, zOspan.A, zOspan.B) %>% 
+  summarize(time = sum(time),
+            clicks = sum(clicks)) %>% 
+  mutate(ltime = log(time),
+         lclicks = log(clicks))
+  
+names(MMN$MMN_1)
+
+```
+
+
+```{r MMN_export}
+
+save(MMN, file = "Cases/MMN.Rda")
+write_sav(MMN$MMN_1, "Data/MMN_1.sav")
+write_sav(MMN$MMN_2, "Data/MMN_2.sav")
+write_csv(MMN$MMN_1, "Data/MMN_1.csv")
+write_csv(MMN$MMN_2, "Data/MMN_2.csv")
+
+```
+
+
+## Case: AUP
+
+```{r load_raw_data}
+load("external_data/JK.Rda")
+AUP_raw <- Scores
+rm(Scores)
+names(AUP_raw)
+```
+
+
+```{r Uncanny_create, opts.label = "simulate"}
+new_syncenv("AUP")
+
+```
+
+
+```{r AUP_load_data, opts.label = "sim"}
+AUP$AUP_1 <- 
+  AUP_raw %>% 
+  select(Part = Participant, age = Age, gender = Gender, 
+         gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
+         challenge = AUP_challenge, exploration = AUP_explore) %>% 
+  mutate(resistance = challenge + exploration) %>% 
+  mascutils::z_score(gex) %>% 
+  mascutils::z_score(ncs) %>% 
+  mascutils::z_score(compAnx) %>% 
+  mascutils::z_score(resistance)
+
+names(AUP$AUP_1)
+
+
+```
+
+```{r AUP_test}
+
+AUP$AUP_1 %>% 
+  select(zncs, zgex, zresistance) %>% 
+  GGally::ggpairs(data = .)
+
+lm(zresistance ~ zgex, data = AUP$AUP_1)
+lm(zresistance ~ zncs, data = AUP$AUP_1)
+lm(zresistance ~ zgex + zncs, data = AUP$AUP_1)
+```
+
+
+```{r AUP_export}
+
+save(AUP, file = "Cases/AUP.Rda")
+write_sav(AUP$AUP_1, "Data/AUP_1.sav")
+write_csv(AUP$AUP_1, "Data/AUP_1.csv")
+
+```
+
 
