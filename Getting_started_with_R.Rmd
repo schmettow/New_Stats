@@ -1,5 +1,5 @@
 ---
-title: "New statistics for design researchers"
+title: "New statistics for the design researcher"
 author: "Martin Schmettow"
 date: "October 4, 2016"
 output:
@@ -34,7 +34,7 @@ formals(fun = stan_glm)$iter = 200
 
 # Getting started with R
 
-In this book, we are going to use the statistical computing environment R. The first few sections describe how you can set up a fully functional environment and test it. Subsequently, we will get to know the most basic concepts of programming in R.
+In this book, I am using the statistical computing environment R. The first few sections describe how you can set up a fully functional environment and test it. Subsequently, we will get to know essential concepts of programming in R.
 
 ## Installing R and Rstudio
 
@@ -101,6 +101,7 @@ If all this fails, I have compiled a quick-start R environment, which you can co
 [R quick start environment]()
 
 For installation, just unzip the file to a directory on your computer or to a USB drive.
+
 
 
 
@@ -235,31 +236,65 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 R has three purposes:
 
-R is a way to develop statistical computations of high complexity. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient interactive programming language. [Idiosyncrasies, Functional programming, object orientation, ...]
+R is a way to *work interactively through your data analysis*. Data analysis usually is a rather monotone series of steps, like: 
+
+1. load the data 
+1. make a scatter plot
+1. run a regression
+1. create a coefficient table
+
+A program in R is usually developed like this: you add another step and test it immediately. Step-by-step new objects are created in the environment, capturing intermediate and final results of the analysis:
+
+1. a dataframe holding the data
+1. a graphics object with a scatterplot
+1. a dataframe holding the posterior distribution
+1. a dataframe for the coefficient table
+
+Typically, there is no tedious compile-and-run cycles in everyday R programming. You develop the analysis as it happens.
+
+R is a way to *develop statistical programs*. Thousands of packages in the R ecosystem cover any statistical problem you can imagine. Countless researchers and developers have written statistical routines that can be re-used. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation:
+
+[EXPAND]
+
++ functional programming
++ counting from 1
++ object orientation
++ name spaces
 
 
-R is a way to interactively work through your data analysis. [interactivity, ...]
 
 
-R is a way to archive and report what you have been doing. [...] 
+R is a way to archive and report what precisely you have been doing with your data. In statistics, mathematical formulas  are the common form of unambigously describing a regression model. For example, the following equation defines a linear regression model between the observed outcome $y$ and the predictor $x$:
+
+$$
+\mu_i = \beta_0 +  \beta_1x_i\\
+y_i \sim N(\mu_i, \sigma)
+$$
+
+As we will later see [CLM], in Rs formula language the same model is unambiguously specified  as:
+
+`y ~ x`
+
+R is currently the *lingua franca* of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, the following line of code identifies all scores that are more than a magnitude higher than the average score and marks them as invalid. We just applied our own rule of outlier removal to the data. Others may consider the rule invalid or arbitrary, at best. But, at least, we are fully transparent about what we had done. As you type your data analysis, you *formally report* what precisely you have been doing. 
 
 
-As this is for applied researchers, who's job usually is to analyze data and report it. The way R is presented in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and optimal transparent. In most cases, we will just write a short chain of simple data transformations and push this into a modelling or graphics engine that will do the job. We will not even bother (ourselves and others) with programming concepts such as conditionals or loops. 
+```{r}
+scores     <- c(1,2,4,3,6,5,50,1,2,5,800)
+mean_score <- mean(scores)
+invalids   <- scores > (mean_score * 10)
+scores[invalids] <- NA
+
+```
 
 
-### Objects (= variables)
-
-In programming, variables are used to store values, collections of values and more complex data. Variables are volatile, they only exist in your current workspace. (You can save and restore your workspace, more on that later).
-
-[add definition of statistical variables]
-
-This book is about programming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In order to avoid confusion and keep brevity, I am from now on referring to variables, when speaking of predictors and outcomes. For programming variables, I am using the term *object*, instead, although this is not strictly correct.
+This book is for applied researchers, who's job usually is to analyze data and report it. Therefore, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and fully transparent. In most cases, we will just write a short chain of simple data transformations and push this into a modelling or graphics engine that will do the job. We will not bother (ourselves and others) with programming concepts such as conditionals or loops.
 
 
+### Assigning and calling Objects
 
+This book is about programming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls *objects* what is usually called a programming variable.
 
-
-Objects have two basic operations: *assigning* a value to a name, and *calling* the value by name. Imagine, you wanted to store the number of observations in your data set into a object with name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
+Objects temporarily store data for later use. They do so by two basic operations: *assigning* a value to a name, and *calling* the value by name. Imagine, you wanted to store the number of observations in your data set into a object with name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
 ```{r assigning, opts.label = "rtut"}
 N_obs <- 100
@@ -282,9 +317,9 @@ avg_N_Obs <- N_Obs/N_Part
 avg_N_Obs
 ```
 
-Notice the `[1]` that R put in front of the value. This is an index. Different to other programming language, all basic data types are all *vectors*. Vectors are containers for storing many values of same type. The values addressed by *indexing*. Formally, our value is stored as the first and only element of a vector.
+Notice the `[1]` that R put in front of the value when printing it? This is an *index*. Different to other programming language, all basic data types are all *vectors*. Vectors are containers for storing many values of same type. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
-Although unusual in the programming world, for statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. Many frequently used operations work on many values, take the mean:
+For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. Many frequently used operations work on many values, take the following example:
 
 ```{r mean, opts.label = "rtut"}
 
@@ -293,7 +328,7 @@ mean(X)
 
 ```
 
-In fact, the above example works in both directions: the first command creates 100 draws from a normal distribution with mean 2 and an SD of 1. Three individual values are passed to the function (more on that later), but a collection of 100 is returned. The second command takes the collection and returns a single number. By the way, this is precisely, what we call *a* statistic: a single quantities that characterizes a collection of quantities.
+The `rnorm` command *produces* a vector of length 100 from three values. It does 100 draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a* statistic: a single quantities that characterizes a collection of quantities.
 
 Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric
 
@@ -309,18 +344,19 @@ Apple | Pear ## or
 
 ```
 
+The class `numeric` is abundant in statistical programming. All the the usual math operations apply. Objects of class `integer` are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices. 
 
+```{r class_int_1, opts.label = "rtut"}
+friends <- c(anton = 1, 
+             berta = 3, 
+             carlo = 2)
+order(friends)
 
+```
 
-The class `numeric` is abundant in statistical programming, as it generally reepresents numbers. The usual math operations apply. Objects of class `integer` are store natural numbers, which often occur as counts or ranks. The usual arithmetic operations apply, although the result of operation may no longer be `integer`, but `numeric`
+The usual arithmetic operations apply, although the result of operation may no longer be `integer`, but `numeric`
 
-```{r class_int, opts.label = "rtut"}
-
-best_friends <- c(anton = 1, 
-                  berta = 3, 
-                  carlo = 2)
-order(best_friends)
-
+```{r class_int_2, opts.label = "rtut"}
 N <- 3
 sum_of_scores <- 32
 mean_score <- 32/3 ## numeric
@@ -335,11 +371,18 @@ Data sets usually contain variables that are not numeric, but partition the data
 + `Design`
 + `education level`
 
-Two variable types apply in such cases: *factor* and *character*. While the first specializes on the purpose of grouping, character objects can also be used to store longer text, say the description of a usability problem.
+Two variable types apply in such cases: *factor* and *character*. While the first specializes on the purpose of grouping, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of desgns A and B. Note how the factor identifies its *levels* when called to the screen:
 
-[example]
+```{r class_char_fac}
+design_char <- c("A", "B", "B", "A")
+design_char
 
-Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R missing values are first-class citizens. Every vector of a certain class can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to remove NA values from the data. While this appears slightly inconvenient, this feature helps to catch errors early in data analysis, and creates better transparency.
+design_fact <- factor(c("A", "B", "B", "A"))
+design_fact
+```
+
+
+Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R *missing values are first-class citizens*. Every vector of a certain class can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any NA values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.
 
 ```{r mean_NA, opts.label = "rtut"}
 
@@ -353,18 +396,56 @@ mean(clicks, na.rm = T)
 
 ### Operators and functions
 
-R comes with a full bunch for creating and summarizing data. Let me introduce you to functions that produce one or several statistics to characterize a vector. 
+R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterizes a vector. The following functions do that with to the vector `X`, every in their own way:
 
-* `length(num_vector)`
-* `sum(num_vector)`
-* `mean(num_vector)`
-* `var(num_vector)`
-* `sd(num_vector)`
-* `min(num_vector)`
-* `max(num_vector)`
-* `median(num_vector)`
-* `quantile(num_vector, .025)`
-* `head(num_vector)`
+```{r vec_to_one, opts.label = "rtut.nr"}
+length(X)
+sum(X)
+mean(X)
+var(X)
+sd(X)
+min(X)
+max(X)
+median(X)
+```
+
+
+
+These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. 
+
+Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about 66% of the mass is within the range $\mu-\sigma$ and $\mu+\sigma$. That means, in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes a vector of quantiles as second argument:
+
+```{r quantiles}
+quantile(X, c(.17, .83))
+```
+
+Most functions in R have *optional arguments* that let you change how the function performs. The basic mathematical  functions all have the optional argument `na.rm`. This is a switch that determines how the function deals with missing values `NA`. Many optional arguments have *defaults*. The default of `na.rm` is `FALSE` ("return NA in case of NAs in the vector"). By setting it to `TRUE`, they are removed before operation.
+
+```{r na_rm, opts.label = "rtut.nr"}
+B <- c(1, 2, NA, 3)
+mean(B)
+mean(B, na.rm = TRUE)
+
+```
+Most more complex routines in R have an abundance of parameters, most of which have reasonable defaults, fortunately. To give a more complex example, the first call of `stan_glm` performs a Bayesian estimation of the grand mean model. The second does a 
+Poisson grand mean model with 5000 iterations per MCMC chain. As `seed` has been fixed, every subsequent run will produce the exact same chains. My apologies for the jargon!
+
+```{r gmm, opts.label = "rtut.nr"}
+D_1 = data_frame(X = rnorm(20, 2, 1))
+M_1 = stan_glm(X ~ 1, 
+               data = D)
+
+D_2 = data_frame(X = rpois(20, 2))
+M_2 = stan_glm(X ~ 1,
+               family = poisson,
+               seed = 42,
+               iter = 5000,
+               data = D)
+
+```
+
+
+
 
 
 
@@ -408,7 +489,7 @@ str(Experiment)
 
 Dataframes store variables, but statistical procedures operate on variables. We need ways of accessing and manipulating statistical variables and we will have plenty. First, Recall that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.
 
-Internally, dataframes are a collection of "vertical" vectors that are equally long. Being a collection of vectors, the variables of a dataframe can be of different classes, like `character`, `factor` or `numeric`. In the most basic case, you want to calculate a statistic for a single variable out of a dataframe. This can be done with the `$` operator. For example, the following command calculates the mean outcome:
+Internally, dataframes are a collection of "vertical" vectors that are equally long. Being a collection of vectors, the variables of a dataframe can be of different classes, like `character`, `factor` or `numeric`. In the most basic case, you want to calculate a statistic for a single variable out of a dataframe. The `$` operator pulls the variable out as a vector:
 
 ```{r opts.label = "rtut"}
 mean(Experiment$outcome)
@@ -483,17 +564,6 @@ rnorm(20, mean = c(1,2), sd = 1)
 The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes is convenient, it can also lead to difficult programming errors. So, it is good advice to be aware of this mechanism and always check the input to vectorized functions, carefully.
 
 
-
-
-[MOVE]
-Most behavioural research collects *real data* to work with. Like our simulation, real data usually contains several variables. In most cases, data is stored in a matrix-like structure, where columns are variables and rows are observations. R has *data frames* to store data. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research:
-	
-In the whole book, data tables are organized according to the rule *one-row-per-observation of the dependent variable*. Many reseachers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research non-repeated measures (and actually equivalent with the above rule), but will not function properly with modern regression models, like mixed-effects models.
-[/MOVE]
-
-The most common way to create a data frame is reading in a data table from a file, as we will see next.
-
-
 __Exercises:__
 
 1. We have seen how to extract a dataframe column as a vector using the double square brackets. There seem to be no such option to extract an individual row. Why? (Think about object types).
@@ -548,7 +618,13 @@ __Exercises:__
 1. Find the documentation of the packages `haven` and `readr`. Find two import functions. the one that is most useful for you and the one that you consider most exotic.
 
 
-### Manipulating data
+### [TBC] Structuring data
+
+In the whole book, data sets are structured according to the rule *one-row-per-observation of the dependent variable*. Many reseachers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models.
+
+
+
+### Data transformation chains
 
 Do you wonder about the strange use of `%>%` in my code above? This is the new way of programming data transformations in R. 
 
@@ -557,8 +633,7 @@ The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for
 Importing data from any of the possible ressources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the dataframe. Say, you want to variable _Group_ to be called _Condition_, but omit the variable _age_ and store the new dataframe as _Exp_. The select command does all this. In the following code the dataframe `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
 
 ```{r opts.label = "rtut"}
-Exp <-
-  Experiment %>% 
+Exp <-  Experiment %>% 
   select(Condition = Group, outcome)
 ```
 
@@ -567,15 +642,26 @@ Another frequent step in data analysis is cleaning the data from missing values 
 ```{r opts.label = "rtut"}
 
 ## rename, then filtering
-Exp <-
+Exp <-  
   Experiment %>% 
   select(Condition = Group, age, outcome) %>% 
   filter(outcome < 500) %>% 
   filter(age != -99)
 
-head(Exp)
+Exp
   
 ```
+
+During data preparation and analysis, new variables are created, routinely. For example, the covariate is often shifted to the center before using linear regression:
+
+```{r opts.label = "rtut"}
+mean_age = mean(Exp$age)
+Exp <- Exp %>% 
+  mutate(age_cntrd = age - mean_age)
+Exp
+
+```
+
 
 Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the dataframe, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
 
@@ -585,7 +671,6 @@ Exp %>%
   summarize(mean = mean(outcome),
            sd = sd(outcome) )
 ```
-
 
 
 
@@ -705,27 +790,26 @@ BAB1 %>%
 
 Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable (but not vice-versa).
 
-Exercise 1: 
+__Exercises__: 
 
-Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a boxplot that shows the two conditions (think carefully about the mappings of x and y).
+1. Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a boxplot that shows the two conditions (think carefully about the mappings of x and y).
 
-Exercise 2:
-
-Use the dataset BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet, and use color to represent Design again.
+1. Use the dataset BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet, and use color to represent Design again.
 
 
 ### Fitting regression models
 
 Above we have seen examples of functions that boils down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the `lm` command, that applies regression models to data (provided as dataframes).
 
-In the following, we will use another simulated dataframe `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. Note how the *expected value* `mu` is created by drawing on the variables `Condition` and `age`. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of $mu$. 
+In the following, we will use another simulated dataframe `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. Note how the *expected value* $\mu$ is created by drawing on the variables `Condition` and `age`. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of $mu$. 
 
 ```{r opts.label = "rtut"}
 N_Obs <- 20
 
 Exp <-
   data_frame(Obs = 1:N_Obs,
-             Condition = rep(c("Experimental", "Control"), N_Obs/2),
+             Condition = rep(c("Experimental", "Control"),
+                             N_Obs/2),
              age = runif(N_Obs, 18, 35),
              mu = 200 + (Condition == "Control") * 50 + age * 1,
              outcome = rnorm(N_Obs, mu, 10))
@@ -770,11 +854,7 @@ A number of functions can be used to extract certain aspects of the model. For e
 * `predict(model)`
 
 
-
-### Knitting statistical reports  (TBC)
-
-
-### A workflow for reproducable research  (TBC)
+### [TBD] Knitting statistical reports
 
 
 ## Resources for getting started with R
