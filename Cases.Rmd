@@ -1066,14 +1066,14 @@ write_csv(IPump$Type_1, "Data/IP_1.csv")
 
 ## Case: Millers Magic Number
 
-```{r load_raw_data}
+```{r MMN_raw_data}
 load("external_data/MMN.Rdata")
 MMN_raw <- MMN
 rm(MMN)
 ```
 
 
-```{r Uncanny_create, opts.label = "simulate"}
+```{r MMN_create, opts.label = "simulate"}
 new_syncenv("MMN")
 
 ```
@@ -1119,7 +1119,7 @@ write_csv(MMN$MMN_2, "Data/MMN_2.csv")
 
 ## Case: AUP
 
-```{r load_raw_data}
+```{r AUP_raw_data}
 load("external_data/JK.Rda")
 AUP_raw <- Scores
 rm(Scores)
@@ -1127,7 +1127,7 @@ names(AUP_raw)
 ```
 
 
-```{r Uncanny_create, opts.label = "simulate"}
+```{r AUP_create, opts.label = "simulate"}
 new_syncenv("AUP")
 
 ```

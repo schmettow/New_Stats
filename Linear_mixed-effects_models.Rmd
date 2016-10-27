@@ -3,7 +3,8 @@ title: "Modern regression techniques for design researchers"
 author: "Martin Schmettow"
 date: "October 5, 2016"
 output:
-  word_document: default
+  word_document:
+    toc: yes
   pdf_document:
     toc: yes
   html_document:
@@ -12,19 +13,14 @@ output:
     toc: yes
 ---
 
-Document history:
 
-16/02/03: simulation (rather than loading) of the Stroop data set
-16/05/24: Typing data set added
-16/08/11: started converting document to case environments and stan_lmer
-
-```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
 thisdir = getwd()
 purp.mcmc = F
 
 
-
+library(brms)
 source("RMDR.R")
 CE <- c("BrowsingAB", "Typing", "Uncanny", "CUE8", "Stroop")
 load_CE(CE)
@@ -36,14 +32,6 @@ formals(stan_glmer)$iter = 2000
 
 
 # Linear mixed-effects models
-
-* Neue Struktur
-* überwiegend neue Inhalte
-* CUE8 kann übernommen werden, 
-* CUE8 anfüllen mit SPSS
-* allein HF Beispiele 
-* nur echte Datensätze
-* außer BrowsingAB
 
 
 ## Average? Neverage!
@@ -450,8 +438,6 @@ Note that this treatment is between-subject for participants. There is also just
 try(detach(CUE8))
 attach(CUE8)
 
-library(brms)
-
 M_1 <- 
   D_study %>% 
   brm(logToT ~ Moderated + (1|Part) + (1|Team),
@@ -472,7 +458,7 @@ T_sov <- coef(P_1, type = c("grpef", "disp"))
 T_sov %>%   kable()
 ```
 
- It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. The discordance, between professional teams is concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is `r bayr::md_coef(fixef(CUE8$P_1), ~fixef == "Moderatedmoderated")`. The fixed effect is rather weak and highly uncertain.
+ It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. The discordance, between professional teams is concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is `r frm_coef(fixef(CUE8$P_1), ~fixef == "Moderatedmoderated")`. The fixed effect is rather weak and highly uncertain.
 
 ```{r tab:CUE8_fixef}
 T_fixef <- fixef(P_1)
@@ -641,7 +627,7 @@ We can add a slope random effect to the LMM by extending the random effects term
 try(detach(BrowsingAB))
 attach(BrowsingAB)
 
-library(brms)
+
 
 M_slope_1 <-
   brm(ToT ~ 1 + Design + (1 + Design|Part),

@@ -16,7 +16,8 @@ subtitle: New statistics for design researcher
 
 
 
-```{r setup, opts.label = "invisible"}
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
+
 ## The following is for running the script through knitr
 thisdir = getwd()
 purp.mcmc = F

@@ -5,7 +5,7 @@ date: "October 26, 2016"
 output:
   word_document:
     toc: yes
-    reference_docx: Book_template.docx
+    #reference_docx: Book_template.docx
   html_document:
     fig_caption: yes
     number_sections: yes
@@ -13,9 +13,9 @@ output:
 bibliography: Bayesian_Stats.bib
 ---
 
-```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
-purp.mcmc = F
+purp.mcmc = T
 source("RMDR.R")
 
 CE <- 
@@ -802,7 +802,7 @@ T_coef_3 <- P %>%
 T_coef_3
 ```
 
-When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef, ~model == "M_3", ~fixef == "zgex")`. The reason is that the two *predictors are correlated*:
+When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. The reason is that the two *predictors are correlated*:
 
 ```{r fig:AUP_corr_predictors}
 G_eda_4 <- 
