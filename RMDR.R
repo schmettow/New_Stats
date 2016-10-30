@@ -127,8 +127,10 @@ opts_chunk$set(echo = purp.debg,
 
 options(digits=3)
 
-## ggplot output size for figures
+## chunk templates
+
 opts_template$set( 
+  tab = list(anchor = 'Table', echo = T, eval = T, results = 'asis' ),
   fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
   fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
   fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),

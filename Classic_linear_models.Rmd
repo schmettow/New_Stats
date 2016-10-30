@@ -1,21 +1,20 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 26, 2016"
+date: "October 30, 2016"
 output:
-  word_document:
-    toc: yes
-    #reference_docx: Book_template.docx
   html_document:
     fig_caption: yes
     number_sections: yes
+    toc: yes
+  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
-purp.mcmc = T
+purp.mcmc = F
 source("RMDR.R")
 
 CE <- 
@@ -83,9 +82,9 @@ The posterior object identifies itself by telling the number of MCMC samples, an
 Much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
 A coefficient table is produced by the `fixef` command of the bayr library:
 
-```{r tab:99_seconds_post_fixef}
+```{r tab:99_seconds_post_fixef, opts.label = "tab"}
 T_coef_1 <- coef(P_1)
-kable(T_coef_1)
+T_coef_1
 ```
 
 
@@ -109,14 +108,14 @@ p111 <-
 ```
 
 
-```{r tab:99sec_certainties, opts.label = "rtut"}
+```{r tab:99sec_certainties, opts.label = "tab"}
 T_certainty <-
   P_1 %>% 
   filter(parameter == "Intercept") %>%
   summarize(certainty_99s = mean(value <= 99),
             certainty_111s = mean(value <= 111))
 
-T_certainty
+kable(T_certainty)
 
 ```
 
@@ -227,9 +226,9 @@ M_age <-
            data = .)
 ```
 
-```{r opts.label = "rtut"}
+```{r tab:BAB_age, opts.label = "tab"}
 T_age <- fixef(M_age)
-kable(T_age)
+T_age
 ```
 
 Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower. That is not a lot.
@@ -303,14 +302,15 @@ BAB1 %>%
 
 A more disciplined way to obtain predicted values is to use the standard command `predict` on the model object:
 
-```{r best_guess, opts.label = "rtut"}
+```{r best_guess, opts.label = "tab"}
 T_pred_age <-
   BAB1 %>% 
   select(Part, age, ToT) %>% 
   mutate(mu = predict(M_age_shft))
   
 T_pred_age %>%  
-  filter(age == 45)
+  filter(age == 45) %>% 
+  kable()
 
 ```
 
@@ -406,10 +406,10 @@ It is highly recommended to routinely check linear models by residual analysis. 
 M_age_rtrn <- 
   stan_glm(returns ~ 1 + age_shft, data = BAB1)
 P_age_rtrn <- posterior(M_age_rtrn)
-T_age_rtrn <- coef(M_age_rtrn)
 ```
 
-```{r tab:age_pois}
+```{r tab:age_pois, opts.label = "tab"}
+T_age_rtrn <- coef(P_age_rtrn)
 T_age_rtrn
 ```
 
@@ -517,7 +517,7 @@ coef(type = "disp")
 In [ME] we will encounter more rigorous procedures to identify useless predictors. A predictor that does not reduce the RSE often is a disappointment for the researcher. What regards the age variable, it will have a glamorous comeback when we turn to interaction effects.
 
 
-## A or B: Comparing two (or more) groups
+## A versus B: Comparison of groups
 
 Another basic statistical routines is the *comparison of groups* (CGM), commonly known as ANOVA. In design research group comparisons are all over the place, for example:
 
@@ -558,9 +558,9 @@ T_resid <-
 ```
 
 
-```{r tab:M_design, opts.label = "rtut"}
+```{r tab:M_design, opts.label = "tab"}
 T_Design <- fixef(M_Design)
-kable(T_Design)
+T_Design
 ```
 
 The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. 
@@ -604,7 +604,7 @@ M_dummy <-
      data = BAB1)
 ```
 
-```{r dummy_3, opts.label = "rtut"}
+```{r tab: dummy_3, opts.label = "tab"}
 fixef(M_dummy)
 ```
 
@@ -792,13 +792,13 @@ detach(AUP)
 
 ```
 
-```{r tab:AUP_coef}
+```{r tab:AUP_coef, opts.label = "tab"}
 attach(AUP)
 
 T_coef_3 <- P %>% 
   filter(fixef %in% c("zncs", "zgex")) %>% 
   posterior() %>%  
-  fixef()
+  coef()
 T_coef_3
 ```
 
@@ -855,12 +855,10 @@ attach(BrowsingAB)
 M_mpm_1 <- 
   BAB1 %>% 
   stan_glm(ToT ~ Design + Gender, data = .)
-T_fixef_mpm_1 <- 
-  fixef(M_mpm_1)
 ```
 
-```{r tab:mpm_1, opts.label = "rtut"}
-
+```{r tab:mpm_1, opts.label = "tab"}
+T_fixef_mpm_1 <- fixef(M_mpm_1)
 T_fixef_mpm_1
 
 ```
@@ -884,9 +882,9 @@ M_mpm_2 <-
   stan_glm(ToT ~ Design + age_shft, data = .)
 ```
 
-```{r tab:mpm_2, opts.label = "rtut"}
+```{r tab:mpm_2, opts.label = "tab"}
 T_fixef_mpm_2 <-  fixef(M_mpm_2)
-kable(T_fixef_mpm_2)
+T_fixef_mpm_2
 detach(BrowsingAB)
 ```
 
@@ -1041,7 +1039,7 @@ M_ia1 <-
 
 ```
 
-```{r opts.label = "rtut"}
+```{r opts.label = "tab"}
 fixef(M_ia1)
 
 ```
@@ -1069,8 +1067,8 @@ M_ia2 <-
 
 ```
 
-```{r opts.label = "rtut"}
-fixef(M_ia2) %>% kable()
+```{r opts.label = "tab"}
+fixef(M_ia2)
 ```
 
 
@@ -1205,7 +1203,7 @@ M_4 <-
 
 Imagine, the researcher started with a two-way ANOVA, estimating the mein effects PillA and PillsB. The result is:
 
-```{r tab:M_1_fixef}
+```{r tab:M_1_fixef, opts.label = "tab"}
 T_fixef_1 <- fixef(M_1)
 T_fixef_1
 ```
@@ -1234,9 +1232,9 @@ $$`r round(sum(Headache$T_fixef_1$center), 2)`$$
 
 But, is that reasonable? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. We clarify the situation by  introducing an interaction term in our second model. 
 
-```{r tab:Headache_fixef_2}
+```{r tab:Headache_fixef_2, opts.label = "tab"}
 T_fixef_2 <-  fixef(M_2)
-kable(T_fixef_2)
+T_fixef_2
 ```
 
 ### --->
@@ -1283,19 +1281,15 @@ M_2 <-
   D_1 %>% 
   stan_glm(ToT ~ font_size + font_color + font_size : font_color,
            data = .)
+```
 
-
+```{r tab:comp_coef, opts.label = "tab"}
 T_read_fixef <-
   right_join(select(fixef(M_1), fixef, M_1 = center),
              select(fixef(M_2), fixef, M_2 = center),
              by = "fixef")
 
-
-
-```
-
-```{r}
-T_read_fixef %>% kable()
+kable(T_read_fixef)
 ```
 
 
@@ -1319,14 +1313,14 @@ M_3 <-
 
 ```
 
-```{r opts.label = "rtut"}
+```{r opts.label = "tab"}
 fixef(M_3)
 ```
 
 
 With some basic data transformation on the coefficient table, we create a data frame that encodes the two factors separately. Note how `separate` is used to split the coefficient names into group identifiers. Using `mutate` and `str_replace`, the group labels are stripped the factor names. The resulting coefficient table serves as input to ggplot, creating an interaction plot with overlayed credibility intervals, using `geom_errorbar`.
 
-```{r tab:reading, opts.label = "rtut"}
+```{r fig:reading, opts.label = "rtut"}
 T_2x2_mu <-
   fixef(M_3) %>% 
   separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
@@ -1384,7 +1378,7 @@ If we don't account for saturation by introducing interaction terms, we are pron
 
 Saturation effect occur, when multiple factors act on the same system and can (partly) compensate each other. There is an interesting parallel to Boolean algebra. The Boolean OR operator returns `TRUE` when one of the operands is `TRUE`:
 
-```{r tab:boolean_OR}
+```{r tab:boolean_OR, opts.label = "tab"}
 T_bool_interaction <-
 data_frame(A = c(F, F, T, T),
            B = c(F, T, F, T)) %>%
@@ -1422,7 +1416,7 @@ M_1 <-
 detach(AR_game)
 ```
 
-```{r opts.label = "rtut"}
+```{r opts.label = "tab"}
 attach(AR_game)
 fixef(M_1)
 detach(AR_game)
@@ -1462,10 +1456,9 @@ M_1 <-
 
 ```
 
-```{r tab:Sleep_fixef}
-T_fixef <-
-  fixef(M_1)
-T_fixef %>% kable()
+```{r tab:Sleep_fixef, opts.label = "tab"}
+T_fixef <-  fixef(M_1)
+T_fixef
 ```
 
 Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
@@ -1559,13 +1552,11 @@ P_1 <-
   mutate(parameter = str_replace(parameter, "Intercept", "huMech_0"),
          fixef = str_replace(fixef, "Intercept", "huMech_0")) %>% 
   posterior()
-  
-T_fixef_1 <- fixef(P_1)
-T_fixef_1
-save_CE(CE)
+
 ```
 
-```{r}
+```{r tab:UV_1, opts.label = "tab"}
+T_fixef_1 <- fixef(P_1)
 T_fixef_1
 ```
 
