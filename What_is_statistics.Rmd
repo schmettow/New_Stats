@@ -1,18 +1,27 @@
 ---
-title: "What is statistics?"
+title: "New statistics for the design researcher"
+subtitle: "A Bayesian workshop in R"
 author: "Martin Schmettow"
-date: "July 5, 2016"
+date: "Nov 4, 2016"
+bibliography: Bayesian_Stats.bib
 output:
-  word_document: default
-  pdf_document:
-    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
+    theme: journal
     toc: yes
-subtitle: New statistics for design researcher
+  word_document:
+    toc: yes
 ---
 
+
+
+<style type="text/css">
+.table {
+     width: auto;
+
+}
+</style>
 
 
 
@@ -33,7 +42,7 @@ formals(stan_glm)$chains = 2
 ```
 
 
-# What is statistics?
+# Statistics in Design Research?
 
 ## Decision making under uncertainty
 
@@ -525,10 +534,6 @@ When a result is strongly against all experience, it is natural and reasonable t
 
 Imagine the situation after running the pilot study, but this time the manager is a greenhorn with no history. At the same time, the manager is not fine with the level of certainty in the estimate of revenue increase and seeks to improve it by running additional 40 participants.
 
-## Research units in design 
-
-
-
 ## Descriptive statistics
 
 ### What is *a* statistic?
@@ -583,8 +588,72 @@ In the previous section a basic rule of working with probabilities arouse: the j
 ### Bayes rule
 
 
+## Populations and groups [TBD]
 
-## What is wrong with classic statistics
+## Observations and variables [TBC]
+
+### behaviour and performance 
+
+Applied design research is fundamentally concerned with improvement. The questions raised on a design D are of forms: 
+
++ How good is $D$?
++ Is $D$ good enough?
++ Which one is better, $D_1$ or $D_2$?
++ How inclusive is $D$?
++ etc
+
+A majority of studies observes user behaviour. In [LM: multiple regression] we will encounter the active user paradox (AUP) study. Users were observed doing some tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. For every participant, the researchers  noted down all actions of exploratory nature in a time frame. *Behavioural records* render a detailed and unique picture of every participants behaviour. 
+
+Behavioural records are *sequential*. Events are coded if and when they happen. This raises a combinatorial problem: the set of possible behavioural records is practically infinite. As a result, the sequences are practically unique. The research question in AUP was whether geeks show *more* exploratory behaviour. Obviously, a we need some sort of transformation that gives us a single *performance score*. This we call here the *performance function* and we have many choices, for example:
+
++ the number of all exploratory events
++ their relative frequency
++ their longest uninterrupted sequence
++ total time spent in exploration
+
+The majority of studies does not produce behavioural records, but proceed to performance, directly, by taking *time-on-task (ToT)*.  In a way, ToT is just a special case of a performance function: all events are just weighed equally, with no difference between intense hacking, relaxed browsing and sweet day dreaming.
+
+In other situations, time measures are right spot-on. When controlling a car in dense city traffic, a few hundred milliseconds can make huge a difference. With the boom of automatization in cars, drivers will face unfamiliar situations, like it happened to Joshua Brown: reacting to a white truck across the motor way that his Tesla autopilot had missed. Research on *reaction times (RT)* is vital and we will encounter an example in [LM: theoretically interesting effects].
+
+In *experimental cognitive research reaction times* are a dominant tool to reveal the nature of the mind. An everygreen in cognitive psychology is the Stroop task. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it.
+In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of geeks.
+
+CONDITION WORD    : Ink
+congruent [GREEN ]: green
+incongr   [YELLOW]: green
+neutral   [CHAIR ]: green
+
+
+Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. Counting the *number of clicks* on links is a coarse buts easy to acquire measure of efficiency. It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action.
+
+In [Schnittker, Schmettow & Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, *Levensthein distance* counts the number of edits to transform one sequence into the other  and we used it as the performance score: *deviation from optimal path*.
+
+This is all *not* to say that behavioural records must always end up in performance scores. In *qualitative research*, sequences are examined for recurrent patterns. For example [Thatcher, hypermedia with school children] classified strategies of school children when searching information on the web. As much as I embrace qualitative research, it is not in the scope of this book.
+
+### usability [TBC]
+
+The ISO 9142-11 defines *usability* as composed of:
+
++ effectiveness: can users accopmlish their tasks?
++ efficiency: what resources have to be spend for a task, e.g. time.
++ satisfaction: how did the user like it?
+
+*Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or failures in intravenous medication [Schmettow, voss & Schraagen]. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, to my mind, is primarily a qualitative issue and we shall rarely encounter it in this book.
+
+*Efficiency is where it gets quantitative*. With efficiency, we ask about resources: time, attention, strain, distraction and Euros. CR can be *efficiency*, too, when failure can be repaired in time, such as correcting a typing error. Other than that efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for *repetition*. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.
+
+#### -->*Satisfaction*
+
+
+### experience [TBD]
+
+### design features [TBD]
+
+### the human factor [TBD]
+
+### situations [TBD]
+
+## What is wrong with classic statistics? [TBC]
 
 The p-value [...] Imagine giant replication study that showed that 35% of published psychology studies are not replicable. In fact, such a study exists and it has far-reaching consequences. [...]  [REF] shows that rejection bias is one reason: studies that have not reached the *magic .05 level* of significance, have a lower chance of publication. [REF] sees as a reason that author's implicitly trick the system by *the garden of forking paths*  strategy. The research project collects an array of variables, followed by a fishing expediture. Theory is conventiently considered last, but written up in  a pseudo-a prior way.
 

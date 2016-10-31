@@ -215,7 +215,7 @@ Rational$simulate <-
                  shape = mu/scale,
                  scale = scale,
                  Euro = rgamma(n_Part, shape = shape, scale = scale))
-    
+    RD  
   }
 
 Rational$RD <- 
@@ -520,7 +520,9 @@ Headache$simulate <-
     data_frame(before = round(rbeta(N, 3, 2) * 4 + 3),
                PillA = rep(c(TRUE, FALSE), N/2),
                PillB = c(rep(TRUE, N/2), rep(FALSE, N/2))) %>%
-      mutate(reduction = rnorm(N, before/7 * log(2 + 8 * PillA + 6 * PillB), 0.5)) %>%
+      mutate(reduction = rnorm(N, 
+                               before/7 * log(2 + 8 * PillA + 6 * PillB), 
+                               0.5)) %>%
       mutate(PillA = as.factor(PillA),
              PillB = as.factor(PillB))
   }
@@ -552,8 +554,11 @@ new_syncenv("Reading")
 
 ## simulating the data set
 Reading$simulate <-
-  function(N = 60,
-           beta = c(60, -12, -10, 8),
+  function(N = 40,
+           beta = c(Intercpt = 60, 
+                    fnt_size_12 = -12, 
+                    fnt_color_blk = -10, 
+                    ia_blk_12 = 8),
            sigma = 5,
            seed = 42) 
     {
@@ -580,7 +585,7 @@ Reading$simulate <-
     out
     }
 
-Reading$D_1 <- Reading$simulate(N = 40)
+Reading$D_1 <- Reading$simulate()
 names(Reading$D_1)
 betaplot::iiaplot_3(fixef = as.list(attr(Reading$D_1, "coef")$beta),
                     # labels = c("font size", "contrast", "ToT"),
@@ -683,8 +688,11 @@ new_syncenv("Sleep")
 
 ## simulating the data set
 Sleep$simulate <-
-  function(N = 40, beta = c(Intcpt = 70, noisy = 8, 
-                            deprived = 200, n_d = -100), 
+  function(N = 40, 
+           beta = c(Intcpt = 70, 
+                    noisy = 8,
+                    deprived = 200, 
+                    n_d = -100), 
            sigma = 50, 
            seed  = 42){
     set.seed(seed)
