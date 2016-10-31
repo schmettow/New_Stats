@@ -1,22 +1,33 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 30, 2016"
+date: "October 31, 2016"
 output:
   html_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
+    theme: journal
   word_document:
     toc: yes
+    number_sections: yes
 bibliography: Bayesian_Stats.bib
 ---
+
+<style type="text/css">
+.table {
+     width: auto;
+
+}
+</style>
+
+
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
 purp.mcmc = F
 source("RMDR.R")
-
+# library(printr)1
 CE <- 
   c("BrowsingAB", "Sec99", "AUP", "MMN", "Headache", "Reading", 
     "AR_game", "Sleep", "Uncanny")
@@ -261,7 +272,7 @@ P_age <-
 
 
 
-```{r opts.label = "invisible"}
+```{r, opts.label = "invisible"}
 C_age <- fixef(M_age_shft)$center
 ```
 
@@ -468,15 +479,6 @@ Analysis of expected values (predictions) are necessary to discover problems wit
 Drawing on expected values, *residual analysis is something you can only do after estimation*. It is usually part of a process called *checking assumptions*, which somehow implies you do it beforehand, which lured many into analyzing the *distribution of the outcome* variable $y_i$ before running the model. This is a false meme, because assumptions are always checked for a certain model. The distribution of residuals you only see after you have run it on the data.
 
 
-__Exercises:__
-
-1. Examine the linear parameters of model `M_age_rtrn` and derive some impossible predictions, as was done in the previous section.
-
-1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LR with age and examine the residual distribution. Is the Normality assumption reasonably defendable? What is the difference to home returnjs, despite both variables being counts?
-
-1. Review the two figures in the first example of [GSR]. The observations are bimodally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
-
-
 
 ### Comparing residuals
 
@@ -490,7 +492,7 @@ M_0 <-
 
 Then, we extract residuals from both models and visually compare them:
 
-```{r opts.label = "rtut"}
+```{r, opts.label = "rtut"}
 
 T_resid <-
   data_frame(
@@ -508,13 +510,25 @@ G_resid_0
 
 This is not too convincing: the error distributions overlap tightly. And indeed, the difference of residual standard errors is minor. Adding age as predictor to the GMM is practically futile. 
 
-```{r opts.label = "fig.small"}
+```{r, opts.label = "fig.small"}
 bind_rows(posterior(M_0),
           posterior(M_age_shft)) %>% 
 coef(type = "disp")
 ```
 
 In [ME] we will encounter more rigorous procedures to identify useless predictors. A predictor that does not reduce the RSE often is a disappointment for the researcher. What regards the age variable, it will have a glamorous comeback when we turn to interaction effects.
+
+### Exercises
+
+1. Examine the linear parameters of model `M_age_rtrn` and derive some impossible predictions, as was done in the previous section.
+
+1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LR with age and examine the residual distribution. Is the Normality assumption reasonably defendable? What is the difference to home returnjs, despite both variables being counts?
+
+1. Review the two figures in the first example of [GSR]. The observations are bimodally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
+
+
+
+
 
 
 ## A versus B: Comparison of groups
@@ -551,7 +565,7 @@ M_Design <-
            data = .)
 ```
 
-```{r opts.label = "invisible"}
+```{r, opts.label = "invisible"}
 
 T_resid <- 
   mutate(T_resid, M_Design = residuals(M_Design))
@@ -567,7 +581,7 @@ The model contains two parameters, the first one being the *intercept*, again. H
 
 The second parameter is the *effect* of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely  justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
 
-### Dummy variables (are not stupid at all)
+### Not stupid: dummy variables
 
 Are we missing something so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{"DesignB"}*\beta_1$?
 
@@ -579,7 +593,8 @@ BAB1 <-  BAB1 %>%
          d_B = as.numeric((Design == "B")))
 BAB1 %>% 
   select(Obs, Design, d_A, d_B, ToT) %>% 
-  sample_n(8)
+  sample_n(8) %>% 
+  kable()
 
 ```
 
@@ -634,18 +649,8 @@ $$
 The regression engines usually take care of dummy variables. Still, by understanding the concept, we gained additional flexibility in specifying factorial models. One variant is to estimate an AGM, leaving out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second gain is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean, by setting contrasts.
 
 
-Exercises:
 
-1.	BAB1 contains the variable Education, which separates the participants by three education level (Low, Middle, High). Construct the dummy variables and run an AGM.
-
-2.	Specify the expanded CGM likelihood for education. Construct the dummy variables and run a regression.
-
-3.	Consider you wanted to use education level High as reference group. Create dummy variables accordingly and run the regression.
-
-
-
-
-### Contrasts [TBC]
+### Getting it sharper with contrasts [TBC]
 
 The default behaviour of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
 
@@ -696,16 +701,22 @@ That means you have to first introduce and train your users to get fluent with t
 ]
 
 
-```{r opts.label = "invisible"}
+```{r, opts.label = "invisible"}
 try(detach(BrowsingAB))
 ```
 
 
 
 
-__ Exercises:__
+### Exercises
 
 1. With BrowsingAB, simulate several data sets of very small sample size. Observe how strongly the composition of education and age varies.
+
+1.	BAB1 contains the variable Education, which separates the participants by three education level (Low, Middle, High). Construct the dummy variables and run an AGM.
+
+1.	Specify the expanded CGM likelihood for education. Construct the dummy variables and run a regression.
+
+1.	Consider you wanted to use education level High as reference group. Create dummy variables accordingly and run the regression.
 
 
 
@@ -723,7 +734,7 @@ The new function saves time and leads to better results. Users should be very ex
 
 Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score.
 
-```{r opts.label = "future"}
+```{r, opts.label = "future"}
 attach(AUP)
 
 G_eda_1 <- 
@@ -831,13 +842,6 @@ Unfortunately, in the situation here, the causal direction is partly ambiguous. 
 In causally ambiguous situations, there is no natural order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultanous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
 
 Due to the z-transformation, the intercepts became practically zero and could be ignored. Still, what does the intercept mean in MRM? Similar to LRM, it is the predicted value when all predictors take the value zero.
-
-
-__Exercises:__
-
-1. Rerun `M_3`, this time using the unstandardized resistance scores. Interpret the intercept.
-
-1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory, also known as the visual scratchpad. Another theory could draw on the fact that for most websites the written word prevails. Would we not expect people with better verbal processing capabilies to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM.*.
 
 
 ### Crossover: multifactorial models
@@ -974,36 +978,16 @@ When influencing variables cannot be measured fotr matching or statistical contr
 Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
 But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model.
 
+### Exercises
+
+1. Rerun `M_3`, this time using the unstandardized resistance scores. Interpret the intercept.
+
+1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory, also known as the visual scratchpad. Another theory could draw on the fact that for most websites the written word prevails. Would we not expect people with better verbal processing capabilies to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM.*.
 
 
 ## Interaction effects
 
-The linear regression model `M_age` showed a considerable relationship between age and ToT. However, the uncertainty was pronounced and the residual error was reduced by only a small fraction. Model `M_Design` showed a small average advantage for design B, with high uncertainty. Neither of the two models provided compelling effects.
-
-It is commonly known that older people tend to have lower performance than younger users. A numkber of factors are responsible, such as: slower processing speed, lower working memory capacity, lower motor speed and visual problems, It is also commonly held, that universal designs are possible. Universal designs reduce the cognitive, sensory and motor obstacles for impaired users. A perfect universal design is equally usable for everyone.
-
-Is, perhaps, one of the two designs less of a burden for elderly users? We plot the observed ToT by age, but form groups by design. For seeing the trend, a linear smoother is added to the plot.
-
-```{r}
-attach(BrowsingAB)
-```
-
-
-```{r fig:glm_EDA_3, opts.label = "fig"}
-G_slope_ia <-
-  BAB1 %>%
-  ggplot(aes(x = age,
-             col = Design,
-             y = ToT)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)
-
-
-G_slope_ia
-```
-
-
-With the framework of GLM, we can use an arbitrary number of predictors. These can represent properties on different levels, for example, two designs proposals for a website can differ in font size, or participants differ in age. So, with GLM we gain much greater flexibility in handling data from applied design research, which allows us to examine user-design interaction (literally) more closely. 
+With the framework of MPM, we can use an arbitrary number of predictors. These can represent properties on different levels, for example, two designs proposals for a website can differ in font size, or participants differ in age. So, with MPM we gain much greater flexibility in handling data from applied design research, which allows us to examine user-design interactions (literally) more closely. 
 
 The catch is that if you would ask an arbitrary design researcher:
 
@@ -1021,28 +1005,76 @@ The definition explicitly requires you to state for *for whom* you intended to d
 
 In statistical terms, conditional statements of the form:
 
-> the effect of predictor A (the design) depends on the level of predictor B (the user group)
+> the effect of design changes with (some) user properties
 
-are called *interaction effects*. 
+In regression models, conditional statements like these are represented by *interaction effects*. Interactions between user properties and designs are the most genuine in design research, and deserve a neologism: *differential design effects (DDM)*. They come with some of their siblings. *Saturation* occurs when physical (or other) boundaries are reached and the result is less than the sum. *Amplification*, a rare one, is like compound glue: it will harden only if the two components are present. The final section is a plaidoyer for interaction effects in theorizing.
+
+
+
+### Users differ: differential design effects
+
+Do people differ? Yes. If you showed two web designs to a group of stakeholders, asking to choose individually. Is there any chance they would all agree? No. Is the design of universal systems easy? No. The ideal of universal design is to never put a user group at a disadvantage. If it is an ideal, than designs are likely to differ in by how much they accomplish it. 
+
+As to age: it is commonly held that older people tend to have lower performance than younger users. A number of factors are called responsible, such as: slower processing speed, lower working memory capacity, lower motor speed and visual problems. Is, perhaps, one of the two designs less of a burden for elderly users? We plot the observed ToT by age, this time forming groups by design. 
+
+
+
+```{r fig:glm_EDA_3, opts.label = "fig"}
+attach(BrowsingAB)
+G_slope_ia <-
+  BAB1 %>%
+  ggplot(aes(x = age,
+             col = Design,
+             y = ToT)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+
+G_slope_ia
+```
+
+
 
 As we have seen, with GLM, it is  possible to investigate the effect of design properties and user properties simultaneously. For example, assume that main difference between design A and B in the web browsing example is that A uses larger letters than B. Would that create the same benefit for everybody? It is not unlikely, that larger letters only matter for users that have issues with far sightedness, which is associated with age. Maybe, there is even an adverse effect for younger users, as larger font size takes up more space on screen and more scrolling is required. 
+
+We recall the MPM in BrowsingAB: `M_mpm_2` showed a moderate relationship between age and ToT. Another disappointment was the design effect (`M_Design`): a classic statistician may have called it "significant", but only a clown would claim practical relevance. By adding an interaction effect `Design:age_shft` to the model, we will now investigate how differential the designs are.
 
 
 ```{r fit:BAB_ia1, opts.label = "mcmc"}
 
 M_ia1 <- 
   BAB1 %>% 
-  stan_glm(ToT ~ Design + age + Design:age,
+  stan_glm(ToT ~ Design + age_shft + Design:age_shft,
 				 data = .)
 
 # T_resid <- mutate(T_resid, M_ia1 = residuals(M_ia1))
 
 ```
 
-```{r opts.label = "tab"}
-fixef(M_ia1)
 
+
+```{r, opts.label="tab"}
+
+
+T_ia1 <-
+  bind_rows(
+    posterior(M_mpm_2),
+    posterior(M_ia1)) %>% 
+  fixef()
+  
+
+T_ia1
 ```
+
+```{r, opts.label = "invisible"}
+C_ia1_ageB <- T_ia1 %>% 
+  filter(model == "M_ia1", fixef %in% c("age_shft", "DesignB:age_shft")) %>% 
+  select(center) %>% 
+  sum()
+```
+
+
+The intercept still is the performance of an average twen using reference design A. Compared to the MPM, it is less favorable, with `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "Intercept")` seconds time-on-task. The effect of design B improved dramatically with the DDM: a twen is now `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "DesignB")` faster with it. Is B the clear winner? It is not,  because A has much lower age effect. The age parameter does no longer represent both groups, but just reference A, and it is now very small, `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "age_shft", interval = T)`. The final coefficient is *not* the age effect in B, but *the difference* to the reference age effect. With design B, users are getting `r BrowsingAB$C_ia1_ageB` seconds slower per year of life. That is a lot!
 
 
 ```{r fig:Browsing_interaction, opts.label = "future"}
@@ -1053,9 +1085,14 @@ fixef(M_ia1)
 
 ```
 
-If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B differ for the educational level of participants?
+
+If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level? Again, we compare the main-effect model to the one with interaction effects. 
 
 ```{r fit:BAB_ia2, opts.label = "mcmc"}
+M_mpm_3 <-
+  BAB1 %>% 
+  stan_glm(ToT ~ Design + Education,
+				 data = .)
 
 M_ia2 <- 
   BAB1 %>% 
@@ -1067,12 +1104,34 @@ M_ia2 <-
 
 ```
 
-```{r opts.label = "tab"}
-fixef(M_ia2)
+```{r, opts.label = "tab"}
+T_ia2 <-
+  bind_rows(
+    posterior(M_mpm_3),
+    posterior(M_ia2)) %>% 
+  fixef() 
+  
+
+T_ia2
 ```
+```{r, opts.label }
+C_ia2_midB <- 
+  T_ia2 %>% 
+  filter(model == "M_ia2", 
+         str_detect(fixef, "EducationMiddle")) %>% 
+  select(center) %>% 
+  sum()
 
+C_ia2_hiB <- 
+  T_ia2 %>% 
+  filter(model == "M_ia2", 
+         str_detect(fixef, "EducationHigh")) %>% 
+  select(center) %>% 
+  sum()
+```
+#### ---->
 
-Well, interaction effects occur routinely, but a `Design:Education` effect is not a feature of the BrowsingAB data set.
+The reference group in both models is low education level encountering design A. The  effect of design B on low-educated  users is of a similar strength as in the age-by-design model, (`r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB")`). With design A, education helps a lot: the steps to low and high are so similar, one could almost call it linear. This is different for design B: 
 
 
 ```{r}
@@ -1121,7 +1180,7 @@ grid.arrange(
 
 
 
-### Saturation: less than the sum
+### Hitting the boundaries: saturation
 
 Most statistically trained researchers are aware of some common assumptions of linear regression, such as the normally distributed residuals and variance homogeneity. Another assumption that is often disregarded, is the assumption of linearity, which arises from the basic regression formula:
 
@@ -1144,24 +1203,26 @@ D_reading_time %>%
 ```
 
 It is immediatly clear, that these expectations have no ground: for normally sighted persons, a font size of 12 is easy to decipher and another increase will not have the same effect. Taking this further, one would even arrive at absurdly short or 
-impossible negative reading times. At the opposite, a font size of four point may just render unreadable on a computer screen. Instead of a moderate increase by 
-10 seconds, participants may have to decipher and guess the individual words, which will take ages.
+impossible negative reading times. At the opposite, a font size of four point may just render unreadable on a computer screen. Instead of a moderate increase by 10 seconds, participants may have to decipher and guess the individual words, which will take ages.
 
-A major flaw with the linear model is that it presumes the regression line to 
-increase and fall infinitely. However, in an endless universe everything has 
-boundaries. The time someone needs to read a text is limited by fundamental cognitive processing speed. We may be able to reduce the inconvenience of deciphering small 
-text, but once an optimum is reached, there is no further improvement.
+A major flaw with the linear model is that it presumes the regression line to increase and fall infinitely. However, in an endless universe everything has boundaries. The time someone needs to read a text is limited by fundamental cognitive processing speed. We may be able to reduce the inconvenience of deciphering small text, but once an optimum is reached, there is no further improvement.
 
-Boundaries of performance measures inevitably lead to non-linear relationships with predictors. Modern statistics knows several means to deal with non-linearity, 
-several of them are introduced in later chapters of this book ([GLM, NLM]). 
-In the case of two (or more) interventions to improve a 
+Boundaries of performance measures inevitably lead to non-linear relationships between predictors and outcome. 
+Modern statistics knows several means to deal with non-linearity, some of them are introduced in later chapters of this book ([GLM, NLM]). Still, most researchers use linear models, and it often can be regarded a reasonable approximation, as long as one keeps reasonable distance to the upper and lower boundaries of the outcome. 
 
-Let me explain saturation effects with an example that is intuitive enough, whether you are an design expert, or not. Consider [...]
+Researching the effect of font sizes between 8pt and 12pt font size probably keeps the right distance. For itself, we would expect a reasonable linearity within that range. But what happens if you when you bring a second manipulation into the game, that has a functionally similar effect? A likely outcome is that the fundamental assumption of *predictors sum up* no longer holds, but *saturation* occurs. Before we return to the Readingf case, let me explain saturation intercation effects by an example that is intuitive even if you are not a design expert. 
 
+Consider a pharmaceutical study on the effectiveness of two pain killer pills A and B. It takes place in the aftermath of a great party on a university campus. Random strolling students are asked to participate. First, they rate their experienced headache on a Likert scale ranging from "fresh like the kiss of morning dew" to "dead highway opossum". Participants are randomly assigned to four groups, each group getting a different combination of pills: A-B, A-Placebo, B-Placebo, Placebo-Placebo. After 30 minutes, experienced headache is measured again and the difference between both measures is taken as the outcome measure, headache reduction. We inspect the position of four group means graphically:
 
-```{r prep_headache, opts.label = "invisible"}
+```{r eda_headache, opts.label = "fig.small"}
 attach(Headache)
 
+Pills %>% 
+  ggplot(aes(x = PillA, col = PillB, reduction)) +
+	geom_boxplot()
+```
+
+```{r prep_headache, opts.label = "invisible"}
 T_means <-
   Pills %>% 
   group_by(PillA, PillB) %>% 
@@ -1173,52 +1234,42 @@ T_means_cross <-
   mutate(reduction = round(reduction,1)) %>% 
   spread(PillA, reduction)
 
-
-Pills %>% 
-  ggplot(aes(x = PillA, col = PillB, reduction)) +
-	geom_boxplot()
-
-
 ```
 
-Below, we estimate a series of models, which we are now going to compare.
+
+When neither pill is given a slight spontaneous reduction seems to occur. Both pills alone seem to be effective in their own way, and giving them both has the most benefical effect. However, it seems that the net effect of B is slightly weaker when admininstered  together with A. The effect of factor B is *conditional* on the level of A.
+
+Now, we will estimate and compare a set of three models, starting with the standard factorial MPM and proceeding to two models with interaction effects. The third one is an AGM with two factors, actually, although it may not seem so at first.
 
 ```{r fit:Headache, opts.label = "mcmc"}
-M_1 <-
-  stan_glm(reduction ~ PillA + PillB, 
-                          data = Pills)
-M_2 <- 
-  stan_glm(reduction ~ PillA * PillB, 
-                          data = Pills)
+M_1 <- stan_glm(reduction ~ PillA + PillB, data = Pills)
+M_2 <- stan_glm(reduction ~ PillA + PillB + PillA:PillB, data = Pills)
+M_3 <- stan_glm(reduction ~ 0 + PillA:PillB, data = Pills)
 
-M_3 <- 
-  stan_glm(reduction ~ before * PillA + PillA * PillB, 
-                          data = Pills)
-
-M_4 <- 
-  stan_glm(reduction ~ -1 + PillA:PillB, 
-     data = Pills)
+P <- bind_rows(
+  posterior(M_1),
+  posterior(M_2),
+  posterior(M_3)
+)
 
 ```
 
-Imagine, the researcher started with a two-way ANOVA, estimating the mein effects PillA and PillsB. The result is:
+Imagine, the researcher started with a two-way MGM, estimating the fixed effects PillA and PillsB. The result is:
 
 ```{r tab:M_1_fixef, opts.label = "tab"}
 T_fixef_1 <- fixef(M_1)
 T_fixef_1
 ```
 
-Given these estimates, we conclude that pill A has an almost double reduction of headache compared to B. We further notice the Intercept, indicating that headache spontaneously diminishes at a certain rate.
+Given these estimates, we conclude that pill A has an almost double reduction of headache compared to B. The intercept indicates that headache spontaneously diminishes at a rate of `r frm_coef(T_fixef_1, ~fixef == "Intercept")`. Setting the spontaneous recovery aside, what would you predict the effect to be in the group with both pills?
 
-Setting the spontaneous recovery aside, what would be the prediction of the model for the condition with both pills?
-
-```{r Headache_guess}
+```{r Headache_guess, opts.label ="invisible"}
 
 T_guess <-
   T_means %>% 
   mutate(guess = c(0, 
-                   round(T_fixef_1[[2,6]],2),
-                   round(T_fixef_1[[3,6]],2),
+                   md_coef(T_fixef_1, ~fixef =="PillATRUE"),
+                   md_coef(T_fixef_1, ~fixef =="PillBTRUE"),
                    "?")) %>% 
   select(-reduction) %>% 
   spread(PillB, guess)
@@ -1226,22 +1277,22 @@ T_guess <-
 T_guess
 ```
 
-Probably, you came up with 
+Thinking linearly you probably came up with:
 
-$$`r round(sum(Headache$T_fixef_1$center), 2)`$$
+$$`r round(sum(Headache$T_fixef_1$center[2:3]), 2)`$$
 
-But, is that reasonable? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. We clarify the situation by  introducing an interaction term in our second model. 
+Does that makes sense? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. Certainly, the effect is not linear. But, is it in the long run? In some Hollywood movies the wounded hero consumes a handful of pills. (With the exception of Leon, the Profi, where it is the scary Gary Oldman). With two pills: how close to the boundaries are we? We can just test that by introducing an *interaction term* to the model: `PillaA:PillB`.
 
 ```{r tab:Headache_fixef_2, opts.label = "tab"}
 T_fixef_2 <-  fixef(M_2)
 T_fixef_2
 ```
 
-### --->
+We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking either pill alone is more effective than we thought from the multiple CGM. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(Headache$T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
 
-We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking one pill at a time are more effective than we thought from the first model. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(Headache$T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects.
 
-Design of systems is a matter of compromises. A common conflict of interests is between the aesthetic appearance and the ergonomic properties. Consider the  typesetting on web pages. Many commercial websites are equally concerned about the ease of comprehending information and positive emotional response. From an ergonomic point of view, the typesettimg of longer text simply requires you to choose the best screen-readable font, find an optimal font size and maximize contrast. If you were now to suggest typesetting a website in black Arial on white background, you are in for trouble with your graphic designer or, much worse, the manager responsible for corporate impression management. In any case, someone will insist on a fancy serif font (which renders rather poorly on low resolution devices) in an understating blueish-grey tone. For creating a relaxed reading experience, the only option left is to increase the font size. This option is limited, though, as too large letters requires excessive scrolling.
+
+Back to reading performance! Design of systems is a matter of compromises. A common conflict of interests is between the aesthetic appearance and the ergonomic properties. Consider the  typesetting on web pages. Many commercial websites are equally concerned about the ease of comprehending information and positive emotional response. From an ergonomic point of view, the typesettimg of longer text simply requires you to choose the best screen-readable font, find an optimal font size and maximize contrast. If you were now to suggest typesetting a website in black Arial on white background, you are in for trouble with your graphic designer or, much worse, the manager responsible for corporate impression management. In any case, someone will insist on a fancy serif font (which renders rather poorly on low resolution devices) in an understating blueish-grey tone. For creating a relaxed reading experience, the only option left is to increase the font size. This option is limited, though, as too large letters requires excessive scrolling.
 
 The question arises: can one sufficiently compensate lack of contrast by setting the text in the maximum reasonable font size 12pt, as compared to the more typical 10pt? In the fictional study Reading, this is examined in a 2x2 between-subject design:  the same page of text is presented in four versions, with either 10pt or 12pt, and grey versus black font color. Performance is here measured as time-on-task of reading the full page.
 
@@ -1313,7 +1364,7 @@ M_3 <-
 
 ```
 
-```{r opts.label = "tab"}
+```{r, opts.label = "tab"}
 fixef(M_3)
 ```
 
@@ -1348,24 +1399,6 @@ From Figure XY we can easily spot the two main effects, and how they go together
 
 
 
-
-In the two-by-two groups case of the Reading study, the interaction plot is created 
-
-Interaction effects can severely bias main effects, when gone unnoticed:
-
-[TBF]
-
-```{r headache_2, opts.label = "future"} 
-## FIXME ###
-# T_headache_bias <- 
-#   fixef(M_1) %>% 
-#   left_join(fixef(M_2), by = "parameter") %>% 
-#   select(parameter, Model_1 = location.x, Model_2 = location.y) %>%
-#   mutate(parameter = str_replace(parameter, "TRUE", ""), 
-#          bias = Model_1 - Model_2)
-```
-
-
 We have seen in the Headache example that interaction effects occur 
 as non-linearities. The more a participant approaches the natural boundary of zero headache, the less benefit is created by additional effort. This we call  *saturation*. Saturation is likely to occur when multiple factors influence the same cognitive or physical system or functioning. In quantitative comparative design studies, we gain a more detailed picture on the co-impact of design interventions and can come to more sophisticated decisions.
 
@@ -1374,7 +1407,7 @@ In the Reading case, overall utility is a compound of ergonomic quality and aest
 If we don't account for saturation by introducing interaction terms, we are prone to underestimate the net effect of any of these measures, and may falsely conclude that a certain measure is ineffective. Consider a large scale study, that asseses the simultaneous impact of many demographic variables on how willing customers are to take certain energy saving actions in their homes. It is very likely that subsets of variables are associated with similar cognitive processes. For example, certain action requires little effort (such as switching off lights in unoccupied rooms), whereas others are time-consuming (drying the laundry outside). At the same time, customers may vary in the overall eagerness (motivation). For high effort actions the impact of motivation level probably makes more of a difference as when effort is low. Not including the interaction effect would result in the false conclusion that suggesting high effort actions is rather ineffective.
 
 
-### Amplification: more than the sum
+### More than the sum: amplification [EDIT]
 
 Saturation effect occur, when multiple factors act on the same system and can (partly) compensate each other. There is an interesting parallel to Boolean algebra. The Boolean OR operator returns `TRUE` when one of the operands is `TRUE`:
 
@@ -1392,15 +1425,13 @@ kable(T_bool_interaction)
 
 The Boolean OR is an extreme case of saturation. Once factor A is present, the result is "positive" and introducing B has absolutely nor additional effect. Another basic Boolean operation is $A AND B$ with quite the opposite occuring: any of the two factors only has an effect, if the other is present, too. Rarely will we encounter non-trivial cases where the results are so crisp as in the Boolean world. The gradual version of the Boolean AND is *amplification*: the impact of one factor gets stronger with the presence of another factor.
 
-Amplification can occur, when two (or more) factors impact different cognitive processes in a processing chain. To my mind, finding possible amplification effects is far more challenging as compared to saturation effects, because one has to deal with more complex cognitive or physiological models.
+Amplification can occur, when two (or more) factors impact different cognitive processes in a processing chain. To my mind, finding possible amplification effects is far more challenging as compared to saturation effects, because one has to deal with more complex cognitive or physiological models. Here, a fictional study on technology acceptance will serve to illustrate amplification effects. Imagine a startup company that seeks funding for a novel augmented reality game, where groups of gamers compete for territory. For their fund raising endeavour they need to explore numbers on the potential market. The entrepreneurs have two hypotheses they want to verify:
 
-Here, a fictional study on technology acceptance will serve to illustrate amplification effects. Imagine a startup company that seeks funding for a novel augmented reality game, where groups of gamers compete for territory. For their fund raising endeavour they need numbers on the potential market. The entrepreneurs have two hypotheses they want to verify:
+1. Only technophile persons will dare to play the game, because it requires some top-notch equipment 
 
-1. The game requires some top-notch equipment which only technophile persons will dare to use
+1. The game is strongly cooperative and therefore more attractive for people with a strong need for social activities.
 
-1. The game is strongly cooperative and therefore more attractive for people with a strong motivation for social activities
-
-In their study they collect self ratings of a larger set of participants, where they had to rate their technophily and sociophily. In addition, they were given a description of the planned game and were asked how much they intend to participate in the game.
+In their study they asked a larger set of participants to rate their technophily and sociophily. In addition, they were given a description of the planned game and were asked how much they intend to participate in the game.
 
 While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effect between metric predictors. While this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors we have used boxplots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wireframe plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatterplot with the predictors on axis and encode the outcome variable by shades or size of dots. These options may suffice to see any present main effects, but are too coarse to discover the subtlety of interaction effects. This is not an issue with metric interaction effects per se, but more general: while we can comprehend more complex models from coefficient tables, exploratory graphs are limited to just a few variables at the same time. Therefore, this analysis does without the usual exploratory graph. However, we will introduce a method to create interaction plots for metric predictors.
 
@@ -1416,14 +1447,14 @@ M_1 <-
 detach(AR_game)
 ```
 
-```{r opts.label = "tab"}
+```{r, opts.label = "tab"}
 attach(AR_game)
 fixef(M_1)
 detach(AR_game)
 ```
 
 
-### Theoretically interesting interaction effects
+### Theoretically interesting interaction effects [EDIT]
 
 Explaining or predicting complex behaviour with psychological theory is a corner stone of design science. Unfortunately, it is not that easy. Few psychological theories cover more than three associations between external or individual conditions and behaviour. The design researcher is often forced to enter a rather narrow perspective, or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
 
@@ -1507,7 +1538,7 @@ detach(Sleep)
 ```
 
 
-## The ups and downs of polynomial regression
+## Up and down: polynomial regression [EDIT]
 
 Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorph designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of humanlikeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in humanlikess, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very humanlike, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
 
