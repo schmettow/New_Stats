@@ -1,17 +1,27 @@
 ---
 title: "New statistics for the design researcher"
+subtitle: "A Bayesian workshop in R"
 author: "Martin Schmettow"
-date: "October 27, 2016"
+date: "Nov 4, 2016"
+bibliography: Bayesian_Stats.bib
 output:
-  word_document: default
-  pdf_document:
-    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
+    theme: journal
     toc: yes
-subtitle: A Bayesian workshop in R
+  word_document:
+    toc: yes
 ---
+
+
+
+<style type="text/css">
+.table {
+     width: auto;
+
+}
+</style>
 
 
 
@@ -36,7 +46,9 @@ formals(fun = stan_glm)$iter = 200
 
 In this book, I am using the statistical computing environment R. The first few sections describe how you can set up a fully functional environment and test it. Subsequently, we will get to know essential concepts of programming in R.
 
-## Installing R and Rstudio
+## Installing R
+
+### Installing R and Rstudio
 
 First, we make sure that you have following programs downloaded and installed on your computer. The two programs can be retrieved from the belo addresses. Make sure to select the version for your operating system. 
 
@@ -105,7 +117,7 @@ For installation, just unzip the file to a directory on your computer or to a US
 
 
 
-## Installing packages
+### Installing packages
 
 While R comes with a set of standard packages. In this book we will use a number of additional packages. Generally, packages need to be *installed once* on your system and be *loaded everytime* you need them. Installation is fairly straight-forward once your R environment has been setup correctly and you have an internet connection.
 
@@ -146,7 +158,7 @@ This means that the respective package is not yet present on your R system. Befo
 Finally,run the complete code block at once by selecting it and `Ctrl-Return`. You will see some output to the console, which you should check once again. Unless the output does not contain any error messages (like above), you have successfully installed and loaded all packages.
 
 
-## A first statistical program
+### A first statistical program
 
 
 After you have set up your R environment, you are ready to run your first R program:
@@ -200,7 +212,7 @@ Congratulations! You have just
 * plotted the data
 * estimated a Bayesian regression model that compares the two groups
 
-## First exercise
+### First exercise
 
 And here is a small exercise:
 
@@ -275,10 +287,10 @@ As we will later see [CLM], in Rs formula language the same model is unambiguous
 
 `y ~ x`
 
-R is currently the *lingua franca* of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, the following line of code identifies all scores that are more than a magnitude higher than the average score and marks them as invalid. We just applied our own rule of outlier removal to the data. Others may consider the rule invalid or arbitrary, at best. But, at least, we are fully transparent about what we had done. As you type your data analysis, you *formally report* what precisely you have been doing. 
+R is currently the *lingua franca* of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, the following line of code identifies all scores that are more than a magnitude higher than the average score and marks them as invalid. We just applied our own rule of outlier removal to the data. Others may consider the rule invalid or arbitrary, at best. But, at least, we are fully transparent about what we had done. As you type your data analysis, you *formally report* what precisely you have been doing to the data. 
 
 
-```{r}
+```{r, opts.label = "rtut"}
 scores     <- c(1,2,4,3,6,5,50,1,2,5,800)
 mean_score <- mean(scores)
 invalids   <- scores > (mean_score * 10)
@@ -287,14 +299,14 @@ scores[invalids] <- NA
 ```
 
 
-This book is for applied researchers, who's job usually is to analyze data and report it. Therefore, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and fully transparent. In most cases, we will just write a short chain of simple data transformations and push this into a modelling or graphics engine that will do the job. We will not bother (ourselves and others) with programming concepts such as conditionals or loops.
+This book is for applied researchers in design sciences, who's frequent task is to analyze data and report it to stakeholders. Therefore, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data and is then pushed into a modelling or graphics engine that will do the job. We will not bother (ourselves and others) with programming concepts such as conditionals or loops. At the same time, we can almost ignore all the clever and advanced routines that underly statistical inference and production of graphics.
 
 
 ### Assigning and calling Objects
 
-This book is about programming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls *objects* what is usually called a programming variable.
+Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
-Objects temporarily store data for later use. They do so by two basic operations: *assigning* a value to a name, and *calling* the value by name. Imagine, you wanted to store the number of observations in your data set into a object with name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
+*Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name that chosen by the programmer. By their name, a stored objects can be found back at any time. Two basic operations apply for any objects: an object is stored by *assigning* it a name; it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
 ```{r assigning, opts.label = "rtut"}
 N_obs <- 100
@@ -308,7 +320,7 @@ N_obs
 
 Just calling the name prints the value to Console. In typical interactive programming sessions with R, this is already quite useful. But, you can do much more with this mechanism. 
 
-Often, what you want is to do calculations with the value. For example, you have a repeatd measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
+Often, what you want is to do calculations with the value. For example, you have a repeated measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
 
 ```{r, opts.label = "rtut"}
 N_Obs <- 100
@@ -317,7 +329,14 @@ avg_N_Obs <- N_Obs/N_Part
 avg_N_Obs
 ```
 
-Notice the `[1]` that R put in front of the value when printing it? This is an *index*. Different to other programming language, all basic data types are all *vectors*. Vectors are containers for storing many values of same type. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
+Objects can exist without a name, but are volatile, then. They cannot be used any further. The following arithmetic operation does create an object, a single number. For a moment, or so, this number exists somewhere in your computers memory, but once it is printed to the screen, it is gone. Of course, the same expression can be called again, resulting in the same number. But, strictly, it is a different object.
+
+```{r, opts.label = "rtut"}
+N_Obs/N_Part ## gone after printing
+N_Obs/N_Part ## same value, different object
+```
+
+Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming language, all basic data types are all *vectors* in R. Vectors are containers for storing many values *of same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
 For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. Many frequently used operations work on many values, take the following example:
 
@@ -328,11 +347,13 @@ mean(X)
 
 ```
 
-The `rnorm` command *produces* a vector of length 100 from three values. It does 100 draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a* statistic: a single quantities that characterizes a collection of quantities.
+The `rnorm` command *produces* a vector of length 100 from three values. It does 100 draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
 
-Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric
+### Basic object types
 
-Objects of type *logical* store the two levels TRUE, FALSE, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
+Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.
+
+Objects of type *logical* store the two levels `TRUE`, `FALSE`, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
 
 ```{r class_logic, opts.label = "rtut"}
 
@@ -344,7 +365,34 @@ Apple | Pear ## or
 
 ```
 
-The class `numeric` is abundant in statistical programming. All the the usual math operations apply. Objects of class `integer` are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices. 
+More generally, logical values can be used for categorization, when their are only two categories, which is called a *dichotomous variable*. For example, gender is usually coded as a vector of characters (`"m", "f", "f"`), but one can always do:
+
+```{r class_logic_categories}
+is_female <- c(FALSE, TRUE, TRUE)
+is_male   <- c(T, F, F)
+```
+
+Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate `TRUE` and `FALSE` as shown above. As a consequence, one should never assign objects the name reserved for logical values:
+
+```{r dont_do_this, opts.label = "rtut.nr"}
+## never do this
+TRUE <- "All philosophers have beards" ## a character object, see below
+F    <- "All gods existed before the big bang"
+42 * F
+
+```
+
+
+The class `numeric` stores real numbers and is therefore abundant in statistical programming. All the the usual arithmetics operations apply: 
+
+```{r class_num_1, opts.label = "rtut"}
+a <- 1.0
+b <- a + 1
+sqrt(b)
+```
+
+
+Objects of class `integer` are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices. 
 
 ```{r class_int_1, opts.label = "rtut"}
 friends <- c(anton = 1, 
@@ -359,19 +407,31 @@ The usual arithmetic operations apply, although the result of operation may no l
 ```{r class_int_2, opts.label = "rtut"}
 N <- 3
 sum_of_scores <- 32
-mean_score <- 32/3 ## numeric
+mean_score <- 32/3
+mean_score
+class(mean_score)
+```
+
+Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value `TRUE` in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will use in [LM: dummy variables].
+
+```{r logical_arithmetics, opts.label = "rtut"}
+TRUE + TRUE
+sqrt(3 + TRUE)
+is_car <- c(TRUE, TRUE, FALSE) ## bicycle otherwise
+wheels <- 2 + is_car * 2
+wheels
 
 ```
 
 
-Data sets usually contain variables that are not numeric, but partition the data into groups. For example:
+Data sets usually contain variables that are not numeric, but partition the data into groups. For example, we frequently group observations by the following
 
-+ `Part`
-+ `Condition`
-+ `Design`
-+ `education level`
++ `Part`: participant
++ `Condition`: experimental condition
++ `Design`: one of several designs
++ `Education`: level of education (e.g., low, middle or high)
 
-Two variable types apply in such cases: *factor* and *character*. While the first specializes on the purpose of grouping, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of desgns A and B. Note how the factor identifies its *levels* when called to the screen:
+Two object types apply for grouping observations: *factor* and *character*. While factors specialize on grouping observations, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of designs A and B. Note how the factor identifies its *levels* when called to the screen:
 
 ```{r class_char_fac}
 design_char <- c("A", "B", "B", "A")
@@ -382,7 +442,9 @@ design_fact
 ```
 
 
-Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this the identifier for a missing value. In R *missing values are first-class citizens*. Every vector of a certain class can contain missing values, which are identified as `NA`. Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any NA values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.
+Statistical analysis deals with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work porperly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this a missing value. In R *missing values are first-class citizens*. Every vector of a certain class can contain missing values, which are identified as `NA`. 
+
+Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any `NA` values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.
 
 ```{r mean_NA, opts.label = "rtut"}
 
@@ -391,6 +453,8 @@ mean(clicks)
 mean(clicks, na.rm = T)
 
 ```
+
+This book is about programming and statistics at the same time. Unfortunatly, there are a few terms that have a particular meaning in both domains. One of those is "a variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In general programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls *objects* what is usually called a programming variable.
 
 
 
@@ -409,11 +473,7 @@ max(X)
 median(X)
 ```
 
-
-
-These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. 
-
-Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about 66% of the mass is within the range $\mu-\sigma$ and $\mu+\sigma$. That means, in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes a vector of quantiles as second argument:
+These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about 66% of the mass is within the range $\mu-\sigma$ and $\mu+\sigma$. That means, in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes a vector of quantiles as second argument:
 
 ```{r quantiles}
 quantile(X, c(.17, .83))
@@ -444,10 +504,29 @@ M_2 = stan_glm(X ~ 1,
 
 ```
 
+R brings the usual set of arithmetic operators, like `+`, `-`, `/` and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in the two ways:
+
+```{r operators_are_functions, opts.label = "rtut"}
+1 + 2
+`+`(1,2)
+```
+
+The second term is a function that takes two numbers as input and returns a third. It is just a different syntax, and this one is called the *polish notation*. I will never use it throughout.
+
+Another set of commonly used operators are logical, they implement *Boolean algebra*. Some common Boolean operators are shown in the truth table:
 
 
+| A 	| B 	| !A 	|A & B |A \|  B |
+|---|---|---|---|---|
+|     |     | not	| and	| or 	|
+| T 	| T 	| F 	| T 	| T 	|
+| T 	| F 	| F 	| F 	| T 	|
+| F 	| T 	| T 	| F 	| T 	|
+| F 	| F 	| T 	| F 	| F 	|
 
+Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because noone can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child". 
 
+Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, "either A or B" can be written as: `(A | B) & !(A & B)`. This term only gets TRUE when A or B is TRUE, but not both.
 
 ### Storing data in data frames
 

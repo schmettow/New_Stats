@@ -1,16 +1,15 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "October 31, 2016"
+date: "Nov 4, 2016"
 output:
+  word_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
-    toc: yes
     theme: journal
-  word_document:
     toc: yes
-    number_sections: yes
 bibliography: Bayesian_Stats.bib
 ---
 
@@ -40,6 +39,10 @@ load_CE(CE)
 
 
 # Linear models
+
+## Observations and variables
+
+##
 
 
 ## Quantification at work: grand mean models
@@ -813,7 +816,8 @@ T_coef_3 <- P %>%
 T_coef_3
 ```
 
-When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. The reason is that the two *predictors are correlated*:
+When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. 
+NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zncs")`. The reason is that the two *predictors are correlated*:
 
 ```{r fig:AUP_corr_predictors}
 G_eda_4 <- 
@@ -1037,8 +1041,7 @@ G_slope_ia
 
 As we have seen, with GLM, it is  possible to investigate the effect of design properties and user properties simultaneously. For example, assume that main difference between design A and B in the web browsing example is that A uses larger letters than B. Would that create the same benefit for everybody? It is not unlikely, that larger letters only matter for users that have issues with far sightedness, which is associated with age. Maybe, there is even an adverse effect for younger users, as larger font size takes up more space on screen and more scrolling is required. 
 
-We recall the MPM in BrowsingAB: `M_mpm_2` showed a moderate relationship between age and ToT. Another disappointment was the design effect (`M_Design`): a classic statistician may have called it "significant", but only a clown would claim practical relevance. By adding an interaction effect `Design:age_shft` to the model, we will now investigate how differential the designs are.
-
+We recall the MPM in BrowsingAB: `M_mpm_2` showed a moderate relationship between age and ToT. The design effect was disappointing (`M_Design`): a classic statistician may have called it "significant", but one can hardly claim practical relevance. By adding the interaction effect `Design:age_shft` to the model, we will now investigate how the age effect differs by design. We call this a *differential interaction effect*, as one of the involved 
 
 ```{r fit:BAB_ia1, opts.label = "mcmc"}
 
@@ -1086,7 +1089,16 @@ The intercept still is the performance of an average twen using reference design
 ```
 
 
-If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level? Again, we compare the main-effect model to the one with interaction effects. 
+If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level?
+
+```{r fig:BAB_ia2, opts.label = "fig"}
+BAB1 %>% 
+  ggplot(aes(y = ToT, x = Education, color = Design)) +
+  geom_boxplot()
+```
+
+
+Again, we compare the main-effect model to the one with interaction effects. 
 
 ```{r fit:BAB_ia2, opts.label = "mcmc"}
 M_mpm_3 <-
@@ -1129,14 +1141,54 @@ C_ia2_hiB <-
   select(center) %>% 
   sum()
 ```
-#### ---->
 
-The reference group in both models is low education level encountering design A. The  effect of design B on low-educated  users is of a similar strength as in the age-by-design model, (`r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB")`). With design A, education helps a lot: the steps to low and high are so similar, one could almost call it linear. This is different for design B: 
+The model has factors only, so there is a reference group. The intercepts in both models represent low education encountering design A. The main  effect designB on low-educated  users is present in both models. With the interaction term, design B looks much favorable, `r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB")`. The effect of middle education has doubled, whereas it remains stable for high education. 
+
+That may appear strange at first, but keep in mind, that by the interaction term, the education main effects are no longer "main": they only refer to group A, now. In the main effects model, the same education effects are assumed for both designs. Here, it is conditional on design, which brings us to the two interaction effects `B:Middle` and `B:High`. These are, once again, differences. The effect of middle education in B is `r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB:EducationMiddle", interval = F)`more seconds than in A (r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "EducationMiddle", interval = F)). There practically is no net effect of middle education in B. In contrast, the high education interaction effect is small, with practically makes `DesignB` a *main effect: it is the same in both groups*.
+
+Count the number of parameters in both models! We have six with interaction and four without. Six is just the number of groups and, indeed, with interaction effects all group means can vary freely. That is best demonstrated by estimating a variant of the model, where six parameters represent six group means, directly. In other words, it is an AGM, without an intercept and without main effects:
+
+
+```{r fit:BAB_ia3, opts.label = "mcmc"}
+M_ia3 <-
+  BAB1 %>% 
+  stan_glm(ToT ~ 0 + Design : Education,
+				 data = .)
+# T_resid <- mutate(T_resid, M_ia2 = residuals(M_ia2))
+
+
+```
+
+We extract the coefficients and, with a little preparation, we create an *interaction plot*. It shows the same pattern as the exploratory plot, but is fully inferential, with error bars indicate the 95% credibility interval.
+
+```{r tab:BAB_ia3, opts.label = "tab"}
+P_ia3 <- posterior(M_ia3)
+T_ia3 <- fixef(M_ia3)
+T_ia3
+```
+
+```{r fig:BAB_ia3, opts.label = "fig"}
+T_ia3 %>% 
+  select(fixef, ToT = center, lower, upper) %>% 
+  separate(fixef, c("Design", "Education"), ":") %>% 
+  mutate(Design = str_replace(Design, "Design", ""),
+         Education = str_replace(Education, "Education", ""),
+         Education = forcats::fct_inorder(Education)) %>% 
+  ggplot(aes(y = ToT, ymin  = lower, ymax = upper,
+             x = Education, 
+             color = Design, group = Design)) +
+  geom_pointrange(alpha = .5) +
+  geom_line()
+```
+
+
 
 
 ```{r}
 detach(BrowsingAB)
 ```
+
+#### ---->
 
 
 We can distinguish between *saturation effects* and *amplification effects*.
