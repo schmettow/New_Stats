@@ -24,7 +24,7 @@ bibliography: Bayesian_Stats.bib
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
-purp.mcmc = F
+purp.mcmc = T
 source("RMDR.R")
 # library(printr)1
 CE <- 
