@@ -1,14 +1,14 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "Nov 4, 2016"
+date: "Nov 8, 2016"
 output:
-  word_document:
-    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
     theme: journal
+    toc: yes
+  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---
@@ -40,14 +40,10 @@ load_CE(CE)
 
 # Linear models
 
-## Observations and variables
-
-##
-
 
 ## Quantification at work: grand mean models
 
-Reconsider Andrew and Jane. They were faced with the problem that potential competitors could invalidate the claim "rent a car in 99 seconds" and drag them to court. More precisely, the question was: "will users *on average* be able ...", which apparently is about the statistic of the mean. A statistical model estimating just the mean we call the *grand mean model* (GMM). There are two reasons why it's "grand": the first is that most reseachers estimate models with more than one mean, the second is that this is the most simple of all models, so in a way, we can think of it as the "grandmother of all models".
+Reconsider Andrew and Jane. They were faced with the problem that potential competitors could invalidate the claim "rent a car in 99 seconds" and drag them to court. More precisely, the question was: "will users *on average* be able ...", which apparently is about the statistic of the mean. A statistical model estimating just the mean we call the *grand mean model* (GMM). There are two reasons why it's "grand": the first is that most researchers estimate models with more than one mean, the second is that this is the most simple of all models, so in a way, we can think of it as the "grandmother of all models".
 
 
 + with medical infusion pump a decimal error (giving the tenfold or a tenth of the prescribed dose) must be below a bearable level
@@ -56,11 +52,11 @@ Reconsider Andrew and Jane. They were faced with the problem that potential comp
 
 The GMM predicts the expected level of performance when the only thing you know is the population someone is from. Prediction here means that the estimated grand mean we take as a best guess for all realizations we have *not* observed. That includes all people we have not invited to the lab, but also potential performance in other situations, for example the daily shape people are in or their current level of motivation. Just consider the many ways people differ in abilities, experience, strategies, preferences, situations, wishes etc. All these differences may also vary for the same person from day to day and influence performance. As people differ so much, and so do situations they are in, the GMM yields a rather imperfect prediction in most cases.
 
-The only *predictor* in the GMM is the popluation mean. If you just know that the average Dutch male has a body length of 182cm, and you are asked to guess the size of a Dutch man you have not met, yet, this is your best guess. In regression models it is common to call predictors with the greek letter $\beta$ (beta). If there are more than one predictors, these are marked with subscripts, starting at zero. The "best guess" is called the *expected value* and is denoted with $\mu$ (mu). So, for this unkown Dutch man $i$, the expected value $\mu_i$ is:
+The only *predictor* in the GMM is the population mean. If you just know that the average Dutch male has a body length of 182cm, and you are asked to guess the size of a Dutch man you have not met, yet, this is your best guess. In regression models it is common to call predictors with the Greek letter $\beta$ (beta). If there are more than one predictors, these are marked with subscripts, starting at zero. The "best guess" is called the *expected value* and is denoted with $\mu$ (mu). So, for this unknown Dutch man $i$, the expected value $\mu_i$ is:
 
 $$\mu_i = \beta_0$$
 
-Of course, would never expect this unkown Dutch man to be exactly 182cm tall. Instead, all Dutch man are more or less clumped around the expected value. In the GMM and all other linear models, it is assumed that the observed values $Y_i$ take the form of a Normal distribution that is centered at $\mu$ and is spread out $\sigma$ standard deviations.
+Of course, would never expect this unknown Dutch man to be exactly 182cm tall. Instead, all Dutch man are more or less clumped around the expected value. In the GMM and all other linear models, it is assumed that the observed values $Y_i$ take the form of a Normal distribution that is centered at $\mu$ and is spread out $\sigma$ standard deviations.
 
 $$y_i \sim N(\mu_i, \sigma_{\epsilon})$$
 
@@ -68,21 +64,24 @@ The first term, relating expected values to predictors is called the *likelihood
 
 Beneath it, the *random term* specifies our assumptions on the randomness in the observations. It is given as a distribution, denoted by the $\sim$ (tilde) operator, which reads as: "is distributed". We cannot predict this random term itself, but we can assume it to follow a distribution of our choice. In the case of linear models, the assumed distribution is always the normal or *Gaussian distribution*. Gaussian distributions have a characteristic bell curve and depend on two parameters: the mean $\mu$ as the central measure and the standard deviation $\sigma$ giving the spread.
 
-The error term captures all variation that is not explained by the likelihood term and the unkown sources of variation are manifold. Deviation can arise due to all kinds of individual differences, situational conditions and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness.  Still, in some recognizeable cases it is inevitably off. In chapter [GLM] we will introduce other error distributions such as binomial distributions for successes in a  number of trials (for example: task completion rates) and Poisson distributions for count variables (for example: number of errors).
+The error term captures all variation that is not explained by the likelihood term and the unknown sources of variation are manifold. Deviation can arise due to all kinds of individual differences, situational conditions and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness.  Still, in some recognizable cases it is inevitably off. In chapter [GLM] we will introduce other error distributions such as binomial distributions for successes in a  number of trials (for example: task completion rates) and Poisson distributions for count variables (for example: number of errors).
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a dataframe, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the *intercept*. 
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the *intercept*. 
+
+```{r, opts.label = "rtut"}
+attach(Sec99)
+```
+
 
 ```{r fit:99_seconds_1, opts.label = "mcmc"}
-attach(Sec99)
 M_1 <- stan_glm(ToT ~ 1, data = Ver20)
-detach(Sec99)
+
 ```
 ```{r}
-attach(Sec99)
 summary(M_1)
 ```
 
-The object `M_1`  is the model object created by `stan_glm`. When you call the summary you complex listings that represent different aspects of the regression. These aspects, and more are saved inside the object in a hierarchy of lists. The central result of the etsimation is the *posterior distribution (PD)*. It is an array of variables over MCMC  runs. We extract the posterior distribution from the model object using the `posterior` command (package: `bayr`).
+The object `M_1`  is the model object created by `stan_glm`. When you call the summary you complex listings that represent different aspects of the regression. These aspects, and more are saved inside the object in a hierarchy of lists. The central result of the estimation is the *posterior distribution (PD)*. It is an array of variables over MCMC  runs. We extract the posterior distribution from the model object using the `posterior` command (package: `bayr`).
 
 ```{r fit:99_seconds_2, opts.label = "rtut"}
 P_1 <- posterior(M_1)
@@ -93,7 +92,7 @@ The posterior object identifies itself by telling the number of MCMC samples, an
 
 
 
-Much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distibution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
+Much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used. A typical coefficient  table is shown below. It reports the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distribution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the spread of the posterior distribution. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value.
 A coefficient table is produced by the `fixef` command of the bayr library:
 
 ```{r tab:99_seconds_post_fixef, opts.label = "tab"}
@@ -104,7 +103,7 @@ T_coef_1
 
 The authors of Bayesian books and the various Bayesian libraries have different opinions on what to report. Some report the posterior mean, others prefer the median, as it is less influenced by skew. A second advantage of the median is that it doesn't change, when a variable is transformed monotonically. For the spread of the distributions, either simple quantiles can be used, whereas others report areas of highest posterior density (HPD).
  
-In this book, we primarily use the *posterior mode for magnitude of the effect*, and the *2.5% and 97.5% certainty quantiles*, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather inuitive meaning as the most likely region, which is compatibel with the concept of maximum likelihood. Second, it is invariate to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chaper [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bimodal. But, when that happens, you probably have a more deeply rooted problem, than just deciding on a suitable summary.
+In this book, we primarily use the *posterior mode for magnitude of the effect*, and the *2.5% and 97.5% certainty quantiles*, which resembles the 95% confidence limit in classic statistics. The posterior mode has two advantages: first, it has a rather intuitive meaning as the most likely region, which is compatible with the concept of maximum likelihood. Second, it is invariant to (strictly monotonous) transformations, which is an issue with Generalized Linear Models in a later chapter [GLM]. The main disadvantage is that the mode does not work well when the posterior distribution is bi-modal. But, when that happens, you probably have a more deeply rooted problem, than just deciding on a suitable summary.
 
 Back to Andrew and Jane: for assessing the 99 seconds question, we inspect the density plot [next section]. The PD of the intercept indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. But what is the probability to err for the 00 seconds statement? The above summary with `fixef()` does not answer the question, accurately. The CI gives lower and upper limits for a range of 95% certainty in total. What is needed is the certainty of $\mu \leq 99$. Specific questions deserve precise answers, which can be drawn by working on the posterior distribution, directly. We simply count how many visited values are smaller than 99.  The `quantile` functions does that and tells how many on the posterior distribution, we can make a precise statement about the probability of the claim:
 
@@ -148,15 +147,13 @@ detach(Sec99)
 
 ### Meeting the posterior distribution
 
-The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution (PD) of predictors, here the  intercept $\beta_0$. The posterior distribution gives the degree of certainty for every possible value of the parameter. In a perfect world, we would know the analytical formula of the posterior. In most non-trivial cases, though, there is no derivable formula. Instead, what we get is a sample from this distribution via a process called Markov-Chain Monte Carlo sampling (MCMC). MCMC estimation approximates the PD by drawing many times from it. 
+The `stan_glm` command returns a complex object that stores the results of estimation. The most interesting part is the posterior distribution (PD) of predictors, here the  intercept $\beta_0$. The posterior distribution gives the degree of certainty for every possible value of the parameter. In a perfect world, we would know the analytic formula of the posterior. In most non-trivial cases, though, there is no derivable formula. Instead, what we get is a sample from this distribution via a process called Markov-Chain Monte Carlo sampling (MCMC). MCMC estimation approximates the PD by drawing many times from it. 
 
-The following code extracts the posterior distribution from the MCMC estimation and prints a random selection of 10 lines. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables.
+The following code extracts the posterior distribution from the MCMC estimation and prints. When calling the posterior object (class: tbl_post) directly, it provides a compact summary of all variables in the model, here this is the intercept and the residual standard error.
 
 ```{r lst:99_seconds_post, opts.label = "rtut"}
 attach(Sec99)
-
-P_1 <-  
-  posterior(M_1)
+P_1 <-  posterior(M_1)
 P_1
 ```
 
@@ -212,7 +209,7 @@ data_frame(x = 1:20,
 
 ```
 
-Linear regression requires the predictor to be metric. That gives us the opportunity to discover how ToT can be predicted by age: are older people slower on te internet? The formula specification is:
+Linear regression requires the predictor to be metric. That gives us the opportunity to discover how ToT can be predicted by age: are older people slower on the internet? The formula specification is:
 
 $$\mu_i = \beta_0 + \beta_1x_{1i}$$
 $$Y_i = N(\mu_i, \sigma)$$
@@ -252,7 +249,7 @@ Is age associated with ToT? The coefficient table tells us that with every year 
 
 The intercept parameter tells us the expected ToT at age = 0, a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(fixef(M_age), ~fixef == "Intercept")`.
 
-Both, the unplausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible. Before we explore this on a deeper level, there is a pragmatic solution to the problem: *shifting the predictor*. Shifting means just that: the whole linear curve is shifted to the right (or the left), such that the intercept is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be:
+Both, the implausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible. Before we explore this on a deeper level, there is a pragmatic solution to the problem: *shifting the predictor*. Shifting means just that: the whole linear curve is shifted to the right (or the left), such that the intercept is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be:
 
 
 ```{r BAB_shift_and_center, opts.label = "mcmc"}
@@ -280,7 +277,7 @@ C_age <- fixef(M_age_shft)$center
 ```
 
 
-The shifted intercept has moved to higher values, `r frm_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`. Surprisingly, the shift is not exactly 20 years.  This is due to the high uncertainty of the latter, as well as the relation not being exactly linear (see Figure XY). In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to far-sightedness of participants (making them slower), which more or less suddenly kicks for older participants. Still, by shifting or centering the intercept parameter gains considerable certainty. At the same time, the slope parameter practically does not change, but gains some certainty, too. Think of the intercept as the end of the lever: shifting or centering an intercept to a region with data tightens certainty and one gets an overall more determined grip.
+The shifted intercept has moved to higher values, `r frm_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`. Surprisingly, the shift is not exactly 20 years.  This is due to the high uncertainty of the latter, as well as the relation not being exactly linear (see Figure XY). In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to far-farsightedness of participants (making them slower), which more or less suddenly kicks for older participants. Still, by shifting or centering the intercept parameter gains considerable certainty. At the same time, the slope parameter practically does not change, but gains some certainty, too. Think of the intercept as the end of the lever: shifting or centering an intercept to a region with data tightens certainty and one gets an overall more determined grip.
 
 An even stronger standardization is *z-transformation*, where the predictor is centered at zero and all values are divided by the standard deviation. [...]
 
@@ -289,11 +286,11 @@ An even stronger standardization is *z-transformation*, where the predictor is c
 
 ### Endlessly linear
 
-On a deeper level the bizarre age = 0 prediction is an example of a general axiom, that will re-occur several times throughout ths book.
+On a deeper level the bizarre age = 0 prediction is an example of a general axiom, that will re-occur several times throughout this book.
 
 **In an endless universe, everything is finite.**
 
-A fact about LR is that they allow us to fit a straight line to data. A lesser regarded consequence is that this line extends infinitly in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary physics is finite: the speed of light is limited to $\approx 300.000 km/s$ and temperature has a lower limit of -276°C (or 0K). If there is neither endless speed nor cold, it would be daring to assume any psychological effect to be endlessly linear.
+A fact about LR is that they allow us to fit a straight line to data. A lesser regarded consequence is that this line extends infinitely in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary physics is finite: the speed of light is limited to $\approx 300.000 km/s$ and temperature has a lower limit of -276°C (or 0K). If there is neither endless speed nor cold, it would be daring to assume any psychological effect to be endlessly linear.
 
 The endlessly linear assumption (ELA) is central to all LR models. From a formal perspective, the ELA is always violated in a universe like ours. The practical consequences are, as ever so often: it depends! Frequently, LR is a reasonably effective approximation. Review [G_eda_1]: the blue line is a so called a *smoother*, more specifically a LOESS. A smoother is a fitted line, not unlike LR. But, it is way more flexible. Where LR is a lever, LOESS is a pipe cleaner. LOESS shows a more varied picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. 
 
@@ -311,7 +308,8 @@ The predicted value is our best guess under the LR model. It is uncertain to a d
 ```{r just_a_guess}
 BAB1 %>% 
   select(Part, age, ToT) %>% 
-  filter(age == 45)
+  filter(age == 45) %>% 
+  kable()
 ```
 
 A more disciplined way to obtain predicted values is to use the standard command `predict` on the model object:
@@ -351,7 +349,7 @@ G_pred_age <-
 G_pred_age
 ```
 
-This figure does not look too convincing. The regression line is rather flat, indicating a small effect of age. In addition, it looks like a lonely highway in a vast forrest area. Just visually, a completely flat line or a slight negative slope would be equally credible.
+This figure does not look too convincing. The regression line is rather flat, indicating a small effect of age. In addition, it looks like a lonely highway in a vast forest area. Just visually, a completely flat line or a slight negative slope would be equally credible.
 
 ```{r fig:lin_reg_modelplot, opts.label = "future"}
 # betaplot::iiaplot_2(list(as.numeric(Tclm[["Browsing_AB_3"]][1,2]),
@@ -447,10 +445,10 @@ G_resid_age_rtrn <-
 G_resid_age_rtrn
 ```
 
-The model runs fine and returns a parameter for the assumed Normal distributed resdiduals. However, the residuals not even remotely resemble the theoretical curve. What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the Normal distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a RSE of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine. 
+The model runs fine and returns a parameter for the assumed Normal distributed residuals. However, the residuals not even remotely resemble the theoretical curve. What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the Normal distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a RSE of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine. 
 
 Are we? As you can see in the plot, the theoretical RD has is quite a tail to the negative numbers. There is ample chance that the residual for a 20-year old is  smaller then `r frm_coef(coef(M_age_rtrn), ~fixef == "Intercept", interval = F, neg = T)`. 
-This can only happen, if the observed number of returns is negative, which is impossible, of course. Imagine, you wanted to  simulate the performance of 20-year olds based one what we learned from the last model. You would do the following and frequently observe negative values.
+This can only happen, if the observed number of returns is negative, which is impossible, of course. Imagine, you wanted to  simulate the performance of 20-year old based one what we learned from the last model. You would do the following and frequently observe negative values.
 
 ```{r sim_20yrold, opts.label = "rtut"}
 set.seed(42)
@@ -475,9 +473,9 @@ negative_obs <-
 cat(negative_obs, " negative simulations\n")
 ```
 
-This is ostentively poor behaviour of the model. What is most important, is that generally, *when a model is severely mis-spedified,  neither predictions nor estimate, nor certainty statements can be trusted *. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter [GLM]. 
+This is poor behaviour of the model and, generally, *when a model is severely mis-spedified,  neither predictions nor estimate, nor certainty statements can be trusted *. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter [GLM]. 
 
-Analysis of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is an essential part of the modelling process, too. By residual analysis we reflect on whether the Normality assumption is reasonably defendable. For variables that are counts, the distribution may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defendable ever, in an endless universe. 
+Analysis of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is an essential part of the modelling process, too. By residual analysis we reflect on whether the Normality assumption is reasonably defensible. For variables that are counts, the distribution may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
 
 Drawing on expected values, *residual analysis is something you can only do after estimation*. It is usually part of a process called *checking assumptions*, which somehow implies you do it beforehand, which lured many into analyzing the *distribution of the outcome* variable $y_i$ before running the model. This is a false meme, because assumptions are always checked for a certain model. The distribution of residuals you only see after you have run it on the data.
 
@@ -525,9 +523,9 @@ In [ME] we will encounter more rigorous procedures to identify useless predictor
 
 1. Examine the linear parameters of model `M_age_rtrn` and derive some impossible predictions, as was done in the previous section.
 
-1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LR with age and examine the residual distribution. Is the Normality assumption reasonably defendable? What is the difference to home returnjs, despite both variables being counts?
+1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LR with age and examine the residual distribution. Is the Normality assumption reasonably defensible? What is the difference to home returns, despite both variables being counts?
 
-1. Review the two figures in the first example of [GSR]. The observations are bimodally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
+1. Review the two figures in the first example of [GSR]. The observations are bi-modally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
 
 
 
@@ -607,13 +605,13 @@ $$
 v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} 
 $$
 
-Boolean variables can be both: numerical and categorial. It is unfortunate that we belittlingly call them dummies as they are truly bridges between the world of categories and arithmetics. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables d_A and d_B, the likelihood is written as:
+Boolean variables can be both: numerical and categorical. It is unfortunate that we call them dummies in such a belittling manner, as they are truly bridges between the world of categories and arithmetic. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables d_A and d_B, the likelihood is written as:
 
 $$ 
 \mu_i = d_A \beta_{A} + d_B \beta_{B} 
 $$
 
-When $d_A=1,d_B=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorial. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted dummy. As I have already done that with a typecast above, we can right-away pipe the following into `stan_glm`.
+When $d_A=1,d_B=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted dummy. As I have already done that with a typecast above, we can right-away pipe the following into `stan_glm`.
 
 
 ```{r fit:dummy_2, opts.label = "mcmc"}
@@ -640,7 +638,8 @@ BAB1 %>%
   select(Part, Design, ToT) %>% 
   cbind(model.matrix(M_Design)) %>% ## <---
   as_data_frame() %>% 
-  sample_n(8)
+  sample_n(8) %>% 
+  kable()
 
 ```
 
@@ -655,7 +654,7 @@ The regression engines usually take care of dummy variables. Still, by understan
 
 ### Getting it sharper with contrasts [TBC]
 
-The default behaviour of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
+The default behavior of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
 
 + To what extent does a group deviate from the overall mean in the sample?
 
@@ -665,7 +664,8 @@ But first, we have to figure out how contrasts are coded. Treatment contrasts do
 
 ```{r contrasts_1, opts.label = "rtut"}
 levels(BAB1$Education)
-contrasts(BAB1$Education)
+contrasts(BAB1$Education) %>% 
+  kable()
 
 ```
 
@@ -676,7 +676,8 @@ BAB1 <-
   BAB1 %>% 
   mutate(Education_rev = forcats::fct_rev(Education))
 levels(BAB1$Education_rev)
-contrasts(BAB1$Education_rev)
+contrasts(BAB1$Education_rev) %>% 
+  kable()
 
 ```
 
@@ -685,9 +686,9 @@ Sometimes, it is useful to have contrasts other than treatment, as this more clo
 
 [Example for deviation coding]
 
-*Successive difference coding (SDC)* applies when one is interested in effects of progressive effects, such as performance gain in a number of sessions. Consider the following research situation. Shortly after the millenium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules, just to name few: foil switches with poor haptic feedback, flimpsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted, too, and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users".
+*Successive difference coding (SDC)* applies when one is interested in effects of progressive effects, such as performance gain in a number of sessions. Consider the following research situation. Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules, just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted, too, and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users".
 
-That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it, then? In the real study we tested everyone three times and traced individual progress. This requires a reapted measures analysis and we are not quite there, yet [see LMM].
+That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it, then? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there, yet [see LMM].
 
 [TODO: 
 
@@ -735,7 +736,7 @@ Productivity software, like word processors, presentation and calculation softwa
 
 The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, Users (people?) have a tendency to stick with their old routines, ignoring new functionality right away. This is called the *active user paradox (AUP)*. 
 
-Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score.
+Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioral coding system was used to derive an individual AUP resistance score.
 
 ```{r, opts.label = "future"}
 attach(AUP)
@@ -843,7 +844,7 @@ Unfortunately, in the situation here, the causal direction is partly ambiguous. 
 
 [GEX: love computers] --> [NCS: love to think] --> [resist AUP]
 
-In causally ambiguous situations, there is no natural order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultanous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
+In causally ambiguous situations, there is no natural order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultaneous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
 
 Due to the z-transformation, the intercepts became practically zero and could be ignored. Still, what does the intercept mean in MRM? Similar to LRM, it is the predicted value when all predictors take the value zero.
 
@@ -871,7 +872,7 @@ T_fixef_mpm_1
 
 ```
 
-By adding gender to the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design wiuth groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
+By adding gender to the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design with groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
 The other two fixed effects are, once again, differences to the reference. Here, nor does gender do much to performance, nor does the design effect really change, compared to the CGM.
 
 [likelihood]
@@ -896,7 +897,7 @@ T_fixef_mpm_2
 detach(BrowsingAB)
 ```
 
-Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year olds with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year olds in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
+Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year old in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
 
 [likelihood]
 [interaction plot]
@@ -913,7 +914,7 @@ Linear models link multiple predictors to an outcome variable. In the MMN case w
 
 Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. Never is there bending needed to connect three points.
 
-[Elaborations on Euclidian space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable]
+[Elaborations on Euclidean space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable]
 
 
 
@@ -925,15 +926,15 @@ Why is it better to have three legs under a table than four? Because three legs 
 
 ### How to plot MPM? [TBC, move to Interaction effects]
 
-Now that we have seen how we can compare on one factor, we can extend the CGMl to more factors. With linear  models, we can extend the basic CGM to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
+Now that we have seen how we can compare on one factor, we can extend the CGM to more factors. With linear  models, we can extend the basic CGM to incorporate multiple of such factors. This is called *multifactorial models* (MFM).
 
 Now, we are looking at a slightly more complicated situation, where browsing is predicted by design and education level of participants at the same time.
 
 First, with the *ggplot* system, we plot the new situation. Recall that 
 
-1. mapping variables in the data set to elemental properties in the splot, such as: x position, y position, color, shape etc.
+1. mapping variables in the data set to elemental properties in the plot, such as: x position, y position, color, shape etc.
 
-2. selecting an appropriate geometry that carries such properties, e.g. points, bars, boxplots
+2. selecting an appropriate geometry that carries such properties, e.g. points, bars, box plots
 
 ```{r fig:anova_twofact_2, opts.label = "future"}
 BAB1 %>%
@@ -948,7 +949,7 @@ detach(BrowsingAB)
 Now we can do the two-factorial ANOVA in much the same way as before. We only have to add the predictor *Education* to the model formula. Then we run the MCMC estimation and get the estimates.
 
 [Interaction plots with groups,
-IA plots with standard devs,
+IA plots with standard debs,
 mixed IA plots,
 using the AMM]
 
@@ -968,16 +969,16 @@ Field studies usually aim for high ecological validity. Participants are suppose
 
 Fundamental lab researchers are afraid of individual differences, too. The reasons are different, though: all non-manipulated influencing factors add noise to the study, which makes it harder to find the effects of interest. While lab researchers do there best to keep the environment constant, they cannot keep all participant traits constant. Lab researchers have two solutions to the problem: matching and randomized control. 
 
-With *pair matching*, potentially relevant participant traits are recorded upfront; then participants are assigned to conditions such that groups have about the same composition. For example, one makes sure that the age distribution is about the same and both genders are equally represented. When all other influencing variables are constant between groups, the lab researcher can be sure that the effect is unambigously caused by the manipulation. So they say and routinely record participants age, gender and nationality.
+With *pair matching*, potentially relevant participant traits are recorded upfront; then participants are assigned to conditions such that groups have about the same composition. For example, one makes sure that the age distribution is about the same and both genders are equally represented. When all other influencing variables are constant between groups, the lab researcher can be sure that the effect is unambiguously caused by the manipulation. So they say and routinely record participants age, gender and nationality.
 
 However, there are better alternatives: the best pair  match is the person herself. Experimental studies that expose the same person to several conditions are called *within-subject*. In the special case that all participants encounter all conditions, the variable is *complete within-subject*. [A special  case of within-subject design is *repeated measures*.] In the following chapter, we use mixed-effects models [LMM] to deal with within-subject designs, gracefully.
 
-In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in levels: *basic representation* is reached when all influencing properties have occured a few times during observation. [...]
+In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in levels: *basic representation* is reached when all influencing properties have occurred a few times during observation. [...]
 *Proportional representation* means that user and situational properties have the same relative frequency in sample as in population. 
 
-You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethory of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
+You can only match what you can measure and you only measure what you expect. Human behavior in everyday life is influenced by many factors in complex ways. Although a plethora of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
 
-When influencing variables cannot be measured fotr matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportial representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogenous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
+When influencing variables cannot be measured for matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportional representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogeneous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
 
 Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
 But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model.
@@ -986,7 +987,7 @@ But, you can only examine what is varied and recorded. The approach of *statisti
 
 1. Rerun `M_3`, this time using the unstandardized resistance scores. Interpret the intercept.
 
-1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory, also known as the visual scratchpad. Another theory could draw on the fact that for most websites the written word prevails. Would we not expect people with better verbal processing capabilies to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM.*.
+1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory, also known as the visual scratchpad. Another theory could draw on the fact that for most websites the written word prevails. Would we not expect people with better verbal processing capabilities to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM.*.
 
 
 ## Interaction effects
@@ -1011,7 +1012,7 @@ In statistical terms, conditional statements of the form:
 
 > the effect of design changes with (some) user properties
 
-In regression models, conditional statements like these are represented by *interaction effects*. Interactions between user properties and designs are the most genuine in design research, and deserve a neologism: *differential design effects (DDM)*. They come with some of their siblings. *Saturation* occurs when physical (or other) boundaries are reached and the result is less than the sum. *Amplification*, a rare one, is like compound glue: it will harden only if the two components are present. The final section is a plaidoyer for interaction effects in theorizing.
+In regression models, conditional statements like these are represented by *interaction effects*. Interactions between user properties and designs are the most genuine in design research, and deserve a neologism: *differential design effects (DDM)*. They come with some of their siblings. *Saturation* occurs when physical (or other) boundaries are reached and the result is less than the sum. *Amplification*, a rare one, is like compound glue: it will harden only if the two components are present. The final section is a plea for interaction effects in theorizing.
 
 
 
@@ -1039,7 +1040,7 @@ G_slope_ia
 
 
 
-As we have seen, with GLM, it is  possible to investigate the effect of design properties and user properties simultaneously. For example, assume that main difference between design A and B in the web browsing example is that A uses larger letters than B. Would that create the same benefit for everybody? It is not unlikely, that larger letters only matter for users that have issues with far sightedness, which is associated with age. Maybe, there is even an adverse effect for younger users, as larger font size takes up more space on screen and more scrolling is required. 
+As we have seen, with GLM, it is  possible to investigate the effect of design properties and user properties simultaneously. For example, assume that main difference between design A and B in the web browsing example is that A uses larger letters than B. Would that create the same benefit for everybody? It is not unlikely, that larger letters only matter for users that have issues with far farsightedness, which is associated with age. Maybe, there is even an adverse effect for younger users, as larger font size takes up more space on screen and more scrolling is required. 
 
 We recall the MPM in BrowsingAB: `M_mpm_2` showed a moderate relationship between age and ToT. The design effect was disappointing (`M_Design`): a classic statistician may have called it "significant", but one can hardly claim practical relevance. By adding the interaction effect `Design:age_shft` to the model, we will now investigate how the age effect differs by design. We call this a *differential interaction effect*, as one of the involved 
 
@@ -1254,7 +1255,7 @@ D_reading_time %>%
   kable()
 ```
 
-It is immediatly clear, that these expectations have no ground: for normally sighted persons, a font size of 12 is easy to decipher and another increase will not have the same effect. Taking this further, one would even arrive at absurdly short or 
+It is immediately clear, that these expectations have no ground: for normally sighted persons, a font size of 12 is easy to decipher and another increase will not have the same effect. Taking this further, one would even arrive at absurdly short or 
 impossible negative reading times. At the opposite, a font size of four point may just render unreadable on a computer screen. Instead of a moderate increase by 10 seconds, participants may have to decipher and guess the individual words, which will take ages.
 
 A major flaw with the linear model is that it presumes the regression line to increase and fall infinitely. However, in an endless universe everything has boundaries. The time someone needs to read a text is limited by fundamental cognitive processing speed. We may be able to reduce the inconvenience of deciphering small text, but once an optimum is reached, there is no further improvement.
@@ -1262,7 +1263,7 @@ A major flaw with the linear model is that it presumes the regression line to in
 Boundaries of performance measures inevitably lead to non-linear relationships between predictors and outcome. 
 Modern statistics knows several means to deal with non-linearity, some of them are introduced in later chapters of this book ([GLM, NLM]). Still, most researchers use linear models, and it often can be regarded a reasonable approximation, as long as one keeps reasonable distance to the upper and lower boundaries of the outcome. 
 
-Researching the effect of font sizes between 8pt and 12pt font size probably keeps the right distance. For itself, we would expect a reasonable linearity within that range. But what happens if you when you bring a second manipulation into the game, that has a functionally similar effect? A likely outcome is that the fundamental assumption of *predictors sum up* no longer holds, but *saturation* occurs. Before we return to the Readingf case, let me explain saturation intercation effects by an example that is intuitive even if you are not a design expert. 
+Researching the effect of font sizes between 8pt and 12pt font size probably keeps the right distance. For itself, we would expect a reasonable linearity within that range. But what happens if you when you bring a second manipulation into the game, that has a functionally similar effect? A likely outcome is that the fundamental assumption of *predictors sum up* no longer holds, but *saturation* occurs. Before we return to the Reading case, let me explain saturation interaction effects by an example that is intuitive even if you are not a design expert. 
 
 Consider a pharmaceutical study on the effectiveness of two pain killer pills A and B. It takes place in the aftermath of a great party on a university campus. Random strolling students are asked to participate. First, they rate their experienced headache on a Likert scale ranging from "fresh like the kiss of morning dew" to "dead highway opossum". Participants are randomly assigned to four groups, each group getting a different combination of pills: A-B, A-Placebo, B-Placebo, Placebo-Placebo. After 30 minutes, experienced headache is measured again and the difference between both measures is taken as the outcome measure, headache reduction. We inspect the position of four group means graphically:
 
@@ -1289,7 +1290,7 @@ T_means_cross <-
 ```
 
 
-When neither pill is given a slight spontaneous reduction seems to occur. Both pills alone seem to be effective in their own way, and giving them both has the most benefical effect. However, it seems that the net effect of B is slightly weaker when admininstered  together with A. The effect of factor B is *conditional* on the level of A.
+When neither pill is given a slight spontaneous reduction seems to occur. Both pills alone seem to be effective in their own way, and giving them both has the most beneficial effect. However, it seems that the net effect of B is slightly weaker when administered  together with A. The effect of factor B is *conditional* on the level of A.
 
 Now, we will estimate and compare a set of three models, starting with the standard factorial MPM and proceeding to two models with interaction effects. The third one is an AGM with two factors, actually, although it may not seem so at first.
 
@@ -1326,7 +1327,7 @@ T_guess <-
   select(-reduction) %>% 
   spread(PillB, guess)
 
-T_guess
+T_guess %>% kable()
 ```
 
 Thinking linearly you probably came up with:
@@ -1344,7 +1345,7 @@ We first examine the main effects for both pills. Interestingly, both effects ar
 
 
 
-Back to reading performance! Design of systems is a matter of compromises. A common conflict of interests is between the aesthetic appearance and the ergonomic properties. Consider the  typesetting on web pages. Many commercial websites are equally concerned about the ease of comprehending information and positive emotional response. From an ergonomic point of view, the typesettimg of longer text simply requires you to choose the best screen-readable font, find an optimal font size and maximize contrast. If you were now to suggest typesetting a website in black Arial on white background, you are in for trouble with your graphic designer or, much worse, the manager responsible for corporate impression management. In any case, someone will insist on a fancy serif font (which renders rather poorly on low resolution devices) in an understating blueish-grey tone. For creating a relaxed reading experience, the only option left is to increase the font size. This option is limited, though, as too large letters requires excessive scrolling.
+Back to reading performance! Design of systems is a matter of compromises. A common conflict of interests is between the aesthetic appearance and the ergonomic properties. Consider the  typesetting on web pages. Many commercial websites are equally concerned about the ease of comprehending information and positive emotional response. From an ergonomic point of view, the typesetting of longer text simply requires you to choose the best screen-readable font, find an optimal font size and maximize contrast. If you were now to suggest typesetting a website in black Arial on white background, you are in for trouble with your graphic designer or, much worse, the manager responsible for corporate impression management. In any case, someone will insist on a fancy serif font (which renders rather poorly on low resolution devices) in an understating blueish-grey tone. For creating a relaxed reading experience, the only option left is to increase the font size. This option is limited, though, as too large letters requires excessive scrolling.
 
 The question arises: can one sufficiently compensate lack of contrast by setting the text in the maximum reasonable font size 12pt, as compared to the more typical 10pt? In the fictional study Reading, this is examined in a 2x2 between-subject design:  the same page of text is presented in four versions, with either 10pt or 12pt, and grey versus black font color. Performance is here measured as time-on-task of reading the full page.
 
@@ -1400,9 +1401,9 @@ The estimates confirm, that both manipulations have a considerable effect. And, 
 
 $$\mu_{12pt, black} = `r Reading$T_read_fixef[1,3]` + `r Reading$T_read_fixef[2,3]` + `r Reading$T_read_fixef[3,3]` + `r Reading$T_read_fixef[4,3]` = `r sum(Reading$T_read_fixef[,3])`$$
 
-In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clatity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthatic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
+In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clarity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthetic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
 
-Why are the main effects under-estimated, when not including the interaction term? The pure main-effects model has three parameters. This allows it to represent the same numner of independent group means. Formally, the number of groups in the study is four. However, the three-parameter model assumes that the fourth group (black, 12pt) can sufficiently be specified by the existing three parameters. If saturation occurs, the group of participants in the 12pt group is not homogenous: in the grey group, they experience a stronger improvement than in the black group. The three parameter model is forced to make the best out of situation and adjusts the net effect of font size to be slightly lower than it actually is. The same occurs for the font color effect.
+Why are the main effects under-estimated, when not including the interaction term? The pure main-effects model has three parameters. This allows it to represent the same number of independent group means. Formally, the number of groups in the study is four. However, the three-parameter model assumes that the fourth group (black, 12pt) can sufficiently be specified by the existing three parameters. If saturation occurs, the group of participants in the 12pt group is not homogeneous: in the grey group, they experience a stronger improvement than in the black group. The three parameter model is forced to make the best out of situation and adjusts the net effect of font size to be slightly lower than it actually is. The same occurs for the font color effect.
 
 Interaction effects are notoriously neglected in research, and they are hard to grasp for audience with or without a classic statistics education. It is therefore highly recommended to illustrate interaction effects using interaction plots. 
 To begin with, an interaction plot for the 2x2 design contains the four estimated group means. These can be computed from the linear model coefficients, but there is an alternative way: we modify the model, such that it represents the four group means, directly. The re-parametrized model has no intercept (if we want the group means directly, we need no reference group), and no main effects. The model contains just the raw interaction effect, which results in an estimation of the four group means:
@@ -1452,11 +1453,11 @@ From Figure XY we can easily spot the two main effects, and how they go together
 
 
 We have seen in the Headache example that interaction effects occur 
-as non-linearities. The more a participant approaches the natural boundary of zero headache, the less benefit is created by additional effort. This we call  *saturation*. Saturation is likely to occur when multiple factors influence the same cognitive or physical system or functioning. In quantitative comparative design studies, we gain a more detailed picture on the co-impact of design interventions and can come to more sophisticated decisions.
+as non-linearity. The more a participant approaches the natural boundary of zero headache, the less benefit is created by additional effort. This we call  *saturation*. Saturation is likely to occur when multiple factors influence the same cognitive or physical system or functioning. In quantitative comparative design studies, we gain a more detailed picture on the co-impact of design interventions and can come to more sophisticated decisions.
 
 In the Reading case, overall utility is a compound of ergonomic quality and aesthetic appeal. It was assumed that a gray-on-white color scheme is more appealing. The researcher would choose the gray-12pt design: higher contrast would increase ergonomic value, but too much at the expense of appeal. Of course, in a perfect world, one would add emotional appeal as a second measure to the study.
 
-If we don't account for saturation by introducing interaction terms, we are prone to underestimate the net effect of any of these measures, and may falsely conclude that a certain measure is ineffective. Consider a large scale study, that asseses the simultaneous impact of many demographic variables on how willing customers are to take certain energy saving actions in their homes. It is very likely that subsets of variables are associated with similar cognitive processes. For example, certain action requires little effort (such as switching off lights in unoccupied rooms), whereas others are time-consuming (drying the laundry outside). At the same time, customers may vary in the overall eagerness (motivation). For high effort actions the impact of motivation level probably makes more of a difference as when effort is low. Not including the interaction effect would result in the false conclusion that suggesting high effort actions is rather ineffective.
+If we don't account for saturation by introducing interaction terms, we are prone to underestimate the net effect of any of these measures, and may falsely conclude that a certain measure is ineffective. Consider a large scale study, that assesses the simultaneous impact of many demographic variables on how willing customers are to take certain energy saving actions in their homes. It is very likely that subsets of variables are associated with similar cognitive processes. For example, certain action requires little effort (such as switching off lights in unoccupied rooms), whereas others are time-consuming (drying the laundry outside). At the same time, customers may vary in the overall eagerness (motivation). For high effort actions the impact of motivation level probably makes more of a difference as when effort is low. Not including the interaction effect would result in the false conclusion that suggesting high effort actions is rather ineffective.
 
 
 ### More than the sum: amplification [EDIT]
@@ -1475,9 +1476,9 @@ kable(T_bool_interaction)
 
 ```
 
-The Boolean OR is an extreme case of saturation. Once factor A is present, the result is "positive" and introducing B has absolutely nor additional effect. Another basic Boolean operation is $A AND B$ with quite the opposite occuring: any of the two factors only has an effect, if the other is present, too. Rarely will we encounter non-trivial cases where the results are so crisp as in the Boolean world. The gradual version of the Boolean AND is *amplification*: the impact of one factor gets stronger with the presence of another factor.
+The Boolean OR is an extreme case of saturation. Once factor A is present, the result is "positive" and introducing B has absolutely nor additional effect. Another basic Boolean operation is $A AND B$ with quite the opposite occurring: any of the two factors only has an effect, if the other is present, too. Rarely will we encounter non-trivial cases where the results are so crisp as in the Boolean world. The gradual version of the Boolean AND is *amplification*: the impact of one factor gets stronger with the presence of another factor.
 
-Amplification can occur, when two (or more) factors impact different cognitive processes in a processing chain. To my mind, finding possible amplification effects is far more challenging as compared to saturation effects, because one has to deal with more complex cognitive or physiological models. Here, a fictional study on technology acceptance will serve to illustrate amplification effects. Imagine a startup company that seeks funding for a novel augmented reality game, where groups of gamers compete for territory. For their fund raising endeavour they need to explore numbers on the potential market. The entrepreneurs have two hypotheses they want to verify:
+Amplification can occur, when two (or more) factors impact different cognitive processes in a processing chain. To my mind, finding possible amplification effects is far more challenging as compared to saturation effects, because one has to deal with more complex cognitive or physiological models. Here, a fictional study on technology acceptance will serve to illustrate amplification effects. Imagine a start-up company that seeks funding for a novel augmented reality game, where groups of gamers compete for territory. For their fund raising endeavor they need to explore numbers on the potential market. The entrepreneurs have two hypotheses they want to verify:
 
 1. Only technophile persons will dare to play the game, because it requires some top-notch equipment 
 
@@ -1485,7 +1486,7 @@ Amplification can occur, when two (or more) factors impact different cognitive p
 
 In their study they asked a larger set of participants to rate their technophily and sociophily. In addition, they were given a description of the planned game and were asked how much they intend to participate in the game.
 
-While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effect between metric predictors. While this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors we have used boxplots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wireframe plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatterplot with the predictors on axis and encode the outcome variable by shades or size of dots. These options may suffice to see any present main effects, but are too coarse to discover the subtlety of interaction effects. This is not an issue with metric interaction effects per se, but more general: while we can comprehend more complex models from coefficient tables, exploratory graphs are limited to just a few variables at the same time. Therefore, this analysis does without the usual exploratory graph. However, we will introduce a method to create interaction plots for metric predictors.
+While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effect between metric predictors. While this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors we have used box plots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wire-frame plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatter-plot with the predictors on axis and encode the outcome variable by shades or size of dots. These options may suffice to see any present main effects, but are too coarse to discover the subtlety of interaction effects. This is not an issue with metric interaction effects per se, but more general: while we can comprehend more complex models from coefficient tables, exploratory graphs are limited to just a few variables at the same time. Therefore, this analysis does without the usual exploratory graph. However, we will introduce a method to create interaction plots for metric predictors.
 
 
 ```{r fit:ARgame, opts.label = "mcmc"}
@@ -1508,15 +1509,15 @@ detach(AR_game)
 
 ### Theoretically interesting interaction effects [EDIT]
 
-Explaining or predicting complex behaviour with psychological theory is a corner stone of design science. Unfortunately, it is not that easy. Few psychological theories cover more than three associations between external or individual conditions and behaviour. The design researcher is often forced to enter a rather narrow perspective, or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
+Explaining or predicting complex behavior with psychological theory is a corner stone of design science. Unfortunately, it is not that easy. Few psychological theories cover more than three associations between external or individual conditions and behavior. The design researcher is often forced to enter a rather narrow perspective, or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
 
-Vigilance is the ability endure in attention for rarely occuring events. Think of truck drivers on lonely night tours, where most of the time they spend keeping the truck on a straight 80km/h course. Only every now and then is the driver required to react to an event like braking lights flaring up ahead. Vigilance tasks are among the hardest thing to ask from a human operator, yet, they are safety relevant in a number of domains. Keeping up vigilance most peoaple perceive as tiring, and vigilance detoriates with tiredness.
+Vigilance is the ability endure in attention for rarely occurring events. Think of truck drivers on lonely night tours, where most of the time they spend keeping the truck on a straight 80km/h course. Only every now and then is the driver required to react to an event like braking lights flaring up ahead. Vigilance tasks are among the hardest thing to ask from a human operator, yet, they are safety relevant in a number of domains. Keeping up vigilance most people perceive as tiring, and vigilance deteriorates with tiredness.
 
-Several studies have shown that reaction time at simple tasks increases when people are tired. The disturbing effect of noise has been documented as well. A study by Corcoran (1961) examined the simultaneous influence of sleed deprivation and noise on a rather simple reaction task. They ask:
+Several studies have shown that reaction time at simple tasks increases when people are tired. The disturbing effect of noise has been documented as well. A study by Corcoran (1961) examined the simultaneous influence of sleep deprivation and noise on a rather simple reaction task. They ask:
 
 >  will the effects of noise summate with those of loss of sleep to induce an even greater performance decrement or will noise subtract from the performance decrement caused by loss of sleep?
 
-The central argument is that sleep deprivation detoriates a central nervous arousal system. In consequence, sleep deprived persons cannot maintain the necessary level of tension that goes with the task. Noise is a source of irritation and therefore usually reduces performance. At the same time, noise may have an arousing effect, which may compensate for the loss of arousal due to sleep deprivation. To re-iterate on the headache pills analogy, noise could be the antidote for sleepiness.
+The central argument is that sleep deprivation deteriorates a central nervous arousal system. In consequence, sleep deprived persons cannot maintain the necessary level of tension that goes with the task. Noise is a source of irritation and therefore usually reduces performance. At the same time, noise may have an arousing effect, which may compensate for the loss of arousal due to sleep deprivation. To re-iterate on the headache pills analogy, noise could be the antidote for sleepiness.
 
 The Sleep case study is a simplified simulation of Corcoran's results. Participants were divided into 2x2 groups (quiet/noisy, rested/deprived) and has to react to five signal lamps in a succession of trials. In the original study, as performance measure gaps were counted, which is the number of delayed reactions ($>1500ms$).
 
@@ -1544,7 +1545,7 @@ T_fixef <-  fixef(M_1)
 T_fixef
 ```
 
-Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the detoriating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the detoriating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
+Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested. The results clearly confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Surprisingly, noise did not affect well-rested persons at all `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Maybe that is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests the theory that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
 The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law suggests that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we except that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
 
@@ -1592,7 +1593,7 @@ detach(Sleep)
 
 ## Up and down: polynomial regression [EDIT]
 
-Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorph designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of humanlikeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in humanlikess, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very humanlike, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
+Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in human-likeness, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very human-like, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
 
 ```{r fig:uncanny_valley}
 # detach(Uncanny)
@@ -1609,7 +1610,7 @@ G_uncanny_illu
 ```
 
 
-[Mathur et al.] study aimed at rendering the association between humanlikeness and liking at full range. They collected 60 pictures of robots and attached a score ranging from mechanical to human appearance. Then they let more than 200 participants rate the faces on how much they liked them. Finally, they created an average score of likeability per robot picture and examined the association with human likeness using a statistical model. Owing to the curved shape of the uncanny valley, linear regression is not applicable to the problem. Instead, Mathur et al. applied a third degree polynomial term.
+[Mathur et al.] study aimed at rendering the association between human-likeness and liking at full range. They collected 60 pictures of robots and attached a score ranging from mechanical to human appearance. Then they let more than 200 participants rate the faces on how much they liked them. Finally, they created an average score of likability per robot picture and examined the association with human likeness using a statistical model. Owing to the curved shape of the uncanny valley, linear regression is not applicable to the problem. Instead, Mathur et al. applied a third degree polynomial term.
 
 A polynomial function of degree $k$ has the form:
 
@@ -1617,7 +1618,7 @@ $$y_i = \beta_0 x_i^0 + \beta_1 x_i^1 + ... + \beta_{k}  x_i^{k}$$
 
 In fact, you are already familiar with two polynomial models. The first degree polynomial is the grand mean model. This follows from $x_i^0 = 1$, which makes $\beta_0$ a constant, the intercept. Also, a second degree polynomial is just the linear model. By adding higher degrees we can introduce curvature to the association.
 
-Mathus et al. argue that the Uncanny Valley curve possesses two stationary points, where the slope is zero. One is a local minimum and represents the deepest point in the valley. The second is a local maximum and marks the shoulder left of the valley. Such a curvature can be approximated with a polynomial of (at least) third degree, which has a constant $\beta_0$, a linear slope $\beta_1$, quadratic parameter $\beta_2$ and a cubic parameter $\beta_3$.
+Mathur et al. argue that the Uncanny Valley curve possesses two stationary points, where the slope is zero. One is a local minimum and represents the deepest point in the valley. The second is a local maximum and marks the shoulder left of the valley. Such a curvature can be approximated with a polynomial of (at least) third degree, which has a constant $\beta_0$, a linear slope $\beta_1$, quadratic parameter $\beta_2$ and a cubic parameter $\beta_3$.
 
 While R provides high-level methods to deal with polynomial regression, it is instructive to build the regression manually. The first step is to add variables to the data frame, which are the exponentiated predictors ($x_k = x^k$). These variables are then straight-forwardly added to the model term, as if they were independent predictors. For better clarity, we rename the Intercept to be $x_0$, before summarizing the fixed effects.
 
@@ -1644,9 +1645,9 @@ T_fixef_1
 ```
 
 
-We can extract the fixef effects table as usual. The four coefficients specify the poynomial to approximate the average likeability responses. The polynomial parameters have little explanatory value. Neither of the parameter alone relates to a relevant property of the uncanny valley. One relevant property would be the location of the deepest point of the uncanny valley, its trough. The trough is a local minimum of the curve and With polynomial techniques, we can find this point. 
+We can extract the fixef effects table as usual. The four coefficients specify the polynomial to approximate the average likability responses. The polynomial parameters have little explanatory value. Neither of the parameter alone relates to a relevant property of the uncanny valley. One relevant property would be the location of the deepest point of the uncanny valley, its trough. The trough is a local minimum of the curve and With polynomial techniques, we can find this point. 
 
-Finding a local minimum a two step procedure: first, we must find all *stationary points*, which includes local minima and maxima. Then, we determine which of the resulting points is the local minimum. Stationary points occur, where teh curve bends from a rising to falling, or vice versa. They are distinguishable by having a slope of zero, neither rising nor falling. Stationary points can be identified by the derivative of the third degree polynomial, which is a second degree polynomial:
+Finding a local minimum a two step procedure: first, we must find all *stationary points*, which includes local minima and maxima. Then, we determine which of the resulting points is the local minimum. Stationary points occur, where the curve bends from a rising to falling, or vice versa. They are distinguishable by having a slope of zero, neither rising nor falling. Stationary points can be identified by the derivative of the third degree polynomial, which is a second degree polynomial:
 
 $$f'(x) = \beta_1 + 2\beta_2x + 3\beta_2x^2$$
 
@@ -1654,7 +1655,7 @@ The derivative $f'(x)$ of a function $f(x)$ gives the slope of $f(x)$ at any giv
 
 If the stationary point is a local minimum, as the trough, slope switches from negative to positive; $f'(x)$ crosses $x = 0$ in a rising manner, which is a positive slope of $f'(x)$. Therefore, a stationary point is a local minimum, when of $f''(x) > 0$.
 
-Mathur et al. followed these analytical steps to arrive at an estimate for the position of the trough. The following code uses several high-level functions from package `polynom` to estimate the location of the trough, by drawing on the first and second derivative `d[d]poly` 
+Mathur et al. followed these analytic steps to arrive at an estimate for the position of the trough. The following code uses several high-level functions from package `polynom` to estimate the location of the trough, by drawing on the first and second derivative `d[d]poly` 
 
 ```{r trough_from_fixef, opts.label = "rtut"}
 library(polynom)
@@ -1669,9 +1670,9 @@ trough   = stat_pts[slopes > 0]         # selecting the local minimum
 cat("The trough is most likely at a huMech score of ", round(trough, 2))
 ```
 
-While this procedure is instrictuve, there is an issue: drawing on the center estimates, which is a summary of the PD, we get a point estimate, only. Statements on certainty are impossible, as a CI is lacking. Recall the 99 seconds study, where we operated directly on the PD to obtain more specific statements on certainty. Another case for directly operating on the PD samples is to calculate additional statistics. It is another virtue of the MCMC method, that this is possible.
+While this procedure is instructive, there is an issue: drawing on the center estimates, which is a summary of the PD, we get a point estimate, only. Statements on certainty are impossible, as a CI is lacking. Recall the 99 seconds study, where we operated directly on the PD to obtain more specific statements on certainty. Another case for directly operating on the PD samples is to calculate additional statistics. It is another virtue of the MCMC method, that this is possible.
 
-Every PD sample contains simultaneous draw of the four parameters `huMech_[0:3]`, and therefore fully specifies its own third degree polynomial. A PD for the trough parameter can be obtained by performing the above procedure on every sample separately. For the convenience, the case study Uncanny contains a function `trough(coef)` that includes all the above steps. The following code creates a data frame with one row per MCMC draw and the four huMech variables, the function `trough` acts on this data frame as a matrix of coeffients and returns one trough point per row. We have obtained the PD of the trough.
+Every PD sample contains simultaneous draw of the four parameters `huMech_[0:3]`, and therefore fully specifies its own third degree polynomial. A PD for the trough parameter can be obtained by performing the above procedure on every sample separately. For the convenience, the case study Uncanny contains a function `trough(coef)` that includes all the above steps. The following code creates a data frame with one row per MCMC draw and the four huMech variables, the function `trough` acts on this data frame as a matrix of coefficients and returns one trough point per row. We have obtained the PD of the trough.
 
 
 ```{r trough_from_PD, opts.label = "rtut"}
@@ -1689,11 +1690,12 @@ P_1_trough <-
 From the PD, we can derive statements on uncertainty in the usual way: the 95% credibility limits we get by:
 
 ```{r trough_CI95}
-quantile(P_1_trough, c(.025, .975), na.tm = T)
+quantile(P_1_trough, c(.025, .975), na.rm = T) %>% 
+  kable()
 ```
 
 
-The 95% CI is a conventional measure of uncertainty and may be more or less irrelevant for the spectator. The most generous account uncertainty is a density plot on the full posterior. The density function just smoothes over the frequency distribution of trough draws, but makes no arbitrary choices on where to cut it. 
+The 95% CI is a conventional measure of uncertainty and may be more or less irrelevant for the spectator. The most generous account uncertainty is a density plot on the full posterior. The density function just smooths over the frequency distribution of trough draws, but makes no arbitrary choices on where to cut it. 
 
 ```{r}
 grid.arrange(
