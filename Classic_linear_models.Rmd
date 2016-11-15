@@ -1,7 +1,7 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "Nov 8, 2016"
+date: "Nov 13, 2016"
 output:
   html_document:
     fig_caption: yes
@@ -358,7 +358,9 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 ```
 
+In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In my perspective they are the *idealized responses*. 
 
+Posterior predictions are routinely compared to *observed values* which are known beforehand. But, contain randomness, effects that do not repeat and cannot be taken fully representative. The model separates the idealized effect from the randomness surrounding it.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
 
 ### Residual analysis
 
