@@ -38,7 +38,7 @@ if(LOAD_DATA_SETS){
 ## Regression models
 # library(lme4)
 # library(MCMCglmm)
-# library(brms)
+library(brms)
 library(rstanarm)
 
 ## Simulation etc
@@ -67,9 +67,9 @@ library(stringr)
 library(haven)
 library(readr)
 library(openxlsx)
-library(mascutils)
 
 ## own libraries
+library(mascutils)
 library(bayr)
 library(syncenv)
 
@@ -271,3 +271,15 @@ save_CE <-
       message(paste0("Saving case environment ", c, " to: ", fname))
     }
   }
+
+deploy_CE <-
+  function(cases, path){
+    for(c in cases){
+      fname = paste0(path,"/",c,".Rda")
+      load(paste0("Cases/",c,".Rda"), envir = globalenv())
+      rm("<-", envir = eval(parse(text = c)))
+      save(list = c, file = fname)
+      message(paste0("Deploying case environment ", c, " to: ", fname))
+    }
+}
+
