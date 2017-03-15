@@ -475,7 +475,7 @@ CUE8$simulate <-
 CUE8$D_sim_1 <- 
   CUE8$simulate()
 
-CUE8$D_study <- 
+CUE8$D_cue8 <- 
   foreign::read.spss("external_Data/CUE8 long.sav") %>% 
   as_data_frame() %>% 
   # haven::read_sav("external_Data/CUE8 long.sav") %>% 
@@ -1005,67 +1005,58 @@ new_syncenv("IPump")
 
 ```{r IPump_simfunc, opts.label = "sim"}
 
-### this is still the code of Typing
+## two designs at two moments nurses are familiar with device L
 
-
-## simulating the data set
-IPump$simulate <-
+IPump$simulate_1 <-
   function(n_Part = 30,
-           n_trial = 30,
-           scale = .3, # dispersion of speed
-           seed = 42){
+           seed = 42,
+           beta = c(180, 30, -20, -40),
+           sd = 20){
     set.seed(42)
-    Part <- 
-      data_frame(Part = 1:n_Part,
-                 skill = rnorm(n_Part, 1, .5), # latent performance at relaxed speed
-                 relaxed_speed = exp(skill),
-                 relaxed_error = exp(1-skill))
-    
-    IPump <- 
-      expand.grid(Part = 1:n_Part,
-                  trial = 1:n_trial) %>% 
-      as_data_frame() %>% 
-      left_join(Part, by = "Part") %>% 
-      mutate(eta_speed = skill + (trial - 1)/n_trial,
-             eta_error = (1 - skill) + (trial - 1)/n_trial,
-             mu_speed = exp(eta_speed),
-             mu_error = exp(eta_error),
-             speed = rgamma(n_Part * n_trial, 
-                            shape = mu_speed/scale, scale = scale),
-             error = rpois(n_Part * n_trial, mu_error))
-    IPump
+    n_Obs = n_Part * 4
+    Exp <-
+      expand_grid(Part = 1:n_Part,
+                  Design = c("L", "N"),
+                  moment = c(1,2)) %>% 
+      mutate(mu = beta[1] + 
+               (Design == "N") * beta[2] +
+               (moment == 2) * beta[3] +
+               (Design == "N") * (moment == 2) * beta[4],
+             ToT = rnorm(n_Obs, mu, sd))
+    Exp
   }
+    
+IPump$D_1 <- IPump$simulate_1()
+
+IPump$D_1 %>% 
+  ggplot(aes(x = moment, 
+             y = ToT, 
+             color = Design)) +
+  geom_smooth(method = "lm", se = F)
 
 
-IPump$Type_1 <- IPump$simulate()
-names(IPump)
-
-IPump$Type_1_avg <-
-  IPump$Type_1 %>% 
-  group_by(Part) %>% 
-  summarize(speed = mean(speed),
-            error = mean(error)) %>% 
-  ungroup()
-
-
-IPump$Type_1 %>% 
-  ggplot(aes(x = speed,
-             y = error)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  geom_point(data = IPump$Type_1_avg, color = "red") +
-  geom_smooth(data = IPump$Type_1_avg, method = "lm", color = "red")
-  
 
 
 ```
 
 
+```{r load_data}
+load("external_data/PUMPS.Rda", envir = IPump)
+IPump$D_pumps <- IPump$P
+rm(P, envir = IPump)
+
+```
+
+
+
+
+
 ```{r IPump_export}
 save(IPump, file = "Cases/IPump.Rda")
-write_sav(IPump$Type_1, "Data/IP_1.sav")
-write_csv(IPump$Type_1, "Data/IP_1.csv")
-
+write_sav(IPump$D_1, "Data/IP_1.sav")
+write_csv(IPump$D_1, "Data/IP_1.csv")
+write_sav(IPump$D_pumps, "Data/Pumps.sav")
+write_csv(IPump$D_pumps, "Data/Pumps.csv")
 ```
 
 
@@ -1178,4 +1169,249 @@ write_csv(AUP$AUP_1, "Data/AUP_1.csv")
 
 ```
 
+
+## Case: Schools
+
+
+```{r Schools_create, opts.label = "simulate"}
+new_syncenv("Schools")
+```
+
+
+```{r Schools_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Schools$simulate <-
+  function(n_Schools = 10, ## total
+           n_Studs = 200, ## total
+           beta_0 =   inv_logit(2.2), ## A, average income
+           beta_1 =  .2, ## B (factor)
+           beta_2 =  .3, ## income in A (cov)
+           beta_3 = -.15, ## diff income A-B
+           sd_Schools = .2,
+           sd_Studs = .5,
+           sd_Obs = .3,
+           seed = 2){
+    set.seed(seed)
+    Schools <-
+      data_frame(School = 1:n_Schools,
+                  Type = sample(c("A", "B"), n_Schools, replace = T),  
+      theta_0_School = rnorm(n_Schools, 0, sd_Schools))  ## intercept RE
+    
+    Studs <-
+      data_frame(Stud = 1:n_Studs,
+                 School = sample(x = unique(Schools$School), n_Studs, replace = T)) %>% 
+      mutate(income = rnorm(n(), 0, 1),
+             theta_0_Stud = rnorm(n(), 0, sd_Studs))
+    
+    Obs <- 
+      left_join(Studs, Schools, by = "School") %>% 
+      mutate(eta =
+               beta_0 + theta_0_School + theta_0_Stud +
+               beta_1 * (Type =="B") +
+               beta_2 * income +
+               beta_3 * (Type =="B") * income,
+               lv_score = rnorm(n(), eta, sd_Obs),
+               score = inv_logit(lv_score) * 100) %>% 
+      mutate(Obs = 1:n()) %>% 
+      select(Obs, Stud, income, School, Type, score) 
+        
+    Obs
+
+  }
+
+Schools$simulate()
+
+Schools$D_1 <-  Schools$simulate()
+Schools$D_2 <-  Schools$simulate(n_Studs = 400)
+
+Schools$G_1 <-
+  Schools$D_1 %>%
+  ggplot(aes(x = Type,
+             y = score)) +
+  geom_boxplot()
+
+
+Schools$G_2 <-
+  Schools$D_1 %>%
+  ggplot(aes(x = income,
+             y = score, 
+             col = Type,
+             shape = Type,
+             linetype = Type)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+Schools$G_1
+Schools$G_2
+
+M_1 <- lm(score ~ Type, data = Schools$D_1)
+summary(M_1)
+
+M_2 <- lm(score ~ Type * income, data = Schools$D_1)
+summary(M_2)
+```
+
+
+
+
+
+```{r Schools_export}
+save(Schools, file = "Cases/Schools.Rda")
+write_sav(Schools$D_1, "Data/Schools_1.sav")
+write_csv(Schools$D_1, "Data/Schools_1.csv")
+write_sav(Schools$D_2, "Data/Schools_2.sav")
+write_csv(Schools$D_2, "Data/Schools_2.csv")
+
+```
+
+
+
+## Case: Stroop_competition
+
+
+```{r Stroop_comp_create, opts.label = "simulate"}
+new_syncenv("Stroop")
+```
+
+
+```{r Stroop_comp_simfunc, opts.label = "sim"}
+library(retimes)
+
+## simulating the data set
+Stroop_comp$simulate <-
+  function(){
+    n_Part = 25 ## total
+           n_Stim = 120 ## total
+           beta_0 = 400
+           beta_1 = 100 
+           beta_2 = 5 ## not used
+           sd_0   = 50
+           sd_1   = 10
+           sd_2   = 2 ## not used
+           sigma = 20
+           tau_0 = 50
+           tau_1 = 100
+           sd_tau_1 = 20
+           rate_delay = .03
+           seed = 2
+
+    set.seed(seed)
+    n_Obs = n_Part * n_Stim
+    
+    Part <-
+      data_frame(Part = 1:n_Part,
+                 theta_0 = rnorm(n_Part, 0, sd_0),
+                 theta_1 = rnorm(n_Part, 0, sd_1),
+                 theta_2 = rnorm(n_Part, 0, sd_2),
+                 theta_3 = rnorm(n_Part, 0, sd_tau_1))
+    Stim <- 
+      data_frame(Stim = 1:n_Stim,
+                 Cond = rep(c("C", "I"), n_Stim/2))
+    
+    Obs <- 
+      expand_grid(Part = Part$Part, Stim = Stim$Stim) %>% 
+      mutate(Obs = 1:n_Obs) %>% 
+      left_join(Part) %>% 
+      left_join(Stim) %>% 
+      mutate(mu = beta_0 + theta_0 + (beta_1 + theta_1) * (Cond == "I"),
+             tau = tau_0 + (tau_1 + theta_3) * (Cond == "I")) %>% 
+      mutate(RT = rexgauss(n_Obs, mu, sigma, tau))
+
+    Obs
+  }
+
+Stroop_comp$D_1 <-  Stroop_comp$simulate()
+
+Stroop_comp$G_1 <-
+  Stroop_comp$D_1 %>%
+  ggplot(aes(x = RT, col = Cond)) +
+  geom_density() +
+  xlim(0,2000) +
+  facet_wrap(~Part)
+
+Stroop_comp$G_1
+
+Stroop_comp$G_2 <-
+  Stroop_comp$D_1 %>%
+  ggplot(aes(x = RT)) +
+  geom_histogram() +
+  xlim(0,2000) +
+  facet_grid(Cond~.)
+Stroop_comp$G_2
+
+Stroop_comp$G_3 <-
+  Stroop_comp$D_1 %>% 
+  group_by(Part, Cond) %>% 
+  summarize(mean_RT = mean(RT)) %>% 
+  ggplot(aes(x = mean_RT, col = Cond)) +
+  geom_density()
+Stroop_comp$G_3
+
+Stroop_comp$M_1 <- lme4::lmer(RT ~ Cond + (1 + Cond|Part), data = Stroop_comp$D_1)
+summary(M_1)
+
+```
+
+
+
+
+
+```{r Stroop_comp_export}
+save(Stroop_comp, file = "Cases/Stroop_comp.Rda")
+write_sav(Stroop_comp$D_1, "Data/Stroop_comp_1.sav")
+write_csv(Stroop_comp$D_1, "Data/Stroop_comp_1.csv")
+
+```
+
+
+## Case: Egan
+
+```{r Egan_create, opts.label = "simulate"}
+new_syncenv("Egan")
+```
+
+
+```{r Egan_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+
+```
+
+```{r Egan_load_data, opts.label = "sim"}
+load("external_data/havinga.Rdata")
+
+Egan$D_egan <- 
+  havinga %>% 
+  mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
+  select(Part = participantID,
+         Gender = participantGender,
+         age = participantAge,
+         trial = Trialnumber,
+         Website = website,
+         Task = task,
+         outcome = SuccesTask,
+         ToT = TimeOnTask,
+         logToT = ltime,
+         clicks = NumberOfClicks,
+         returns_hp = TimesReturnedHomepage,
+         return_links = TimesPreviousPressedLinksUsed,
+         workload
+         ) %>% 
+  mutate_at(vars(Part, Gender), as.factor)
+
+names(Egan)
+
+```
+
+  
+
+```{r Egan_export}
+save(Egan, file = "Cases/Egan.Rda")
+write_sav(Egan$D_egan, "Data/Egan.sav")
+write_csv(Egan$D_egan, "Data/Egan.csv")
+
+```
 
