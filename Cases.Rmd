@@ -1042,8 +1042,27 @@ IPump$D_1 %>%
 
 ```{r load_data}
 load("external_data/PUMPS.Rda", envir = IPump)
-IPump$D_pumps <- IPump$P
+IPump$D_pumps <- 
+  IPump$P %>% 
+    select(Part = Participant, 
+         # ProfessionalGroup = professionalGroup,
+         # experience,
+         # EducationLevel = educationLevel,
+         Design = design,
+         session,
+         Task = Task,
+         ToT = completionTime,
+         completion = taskCompletion,
+         deviations = pathDeviation,
+         workload = mentalWorkload) %>% 
+  mutate(Design = if_else(Design == "Braun", 
+                          "Legacy", "Novel"),
+          session = as.integer(session))
+
+
 rm(P, envir = IPump)
+
+IPump$D_pumps
 
 ```
 
