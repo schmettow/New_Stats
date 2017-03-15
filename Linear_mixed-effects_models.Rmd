@@ -1,7 +1,7 @@
 ---
 title: "Modern regression techniques for design researchers"
 author: "Martin Schmettow"
-date: "October 5, 2016"
+date: "March 10, 2017"
 output:
   word_document:
     toc: yes
@@ -32,6 +32,13 @@ formals(stan_glmer)$iter = 2000
 
 
 # Linear mixed-effects models
+
+In the previous chapters we have seen several examples of differential design effects: groups of users responding differently to design conditions, such as font size, noise and emerging technology. Dealing with differential design effects seems straight forward: identify the relevant property, record it and add an interaction effect to the model. But, identifying the relevant property is more difficult than it sounds. Researchers routinely record basic demographic properties such as age and gender, but these frequently show little effects, or the effects are obvious, i.e. not interesting. In addition, such predictors are rarely more than approximations of the properties that make the difference, really. Older people have weaker vision *by tendency*, but the individual differences in any age group are immense.
+
+Identifying properties that matter upfront requires deep theorizing, and even then it remains guesswork. Presumably, hundreds of studies aimed at explaining differences in usage patterns or performance by all sorts of psychological predictors, and failed miserably. That is a big problem in design research, as variation in performance can be huge. Identifying the mental origins of being fast versus slow, or motivated versus bored, is extremely useful to improve the design of systems to be more inclusive.
+
+As we will see in this chapter: there is hope if we let go of theorizing and aiming to *explain* individual differences. What we need to know in the first place is by how much users differ  in performance. With linear mixed-effects models that is easily done and it only requires that the study features repeated measures. But, first, let me give you an illustration, why caring for individual differences is not just an added value, that you may take or leave, but a necessary perspective to avoid severely wrong conclusions.
+
 
 
 ## Average? Neverage!
