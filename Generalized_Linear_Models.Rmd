@@ -44,16 +44,28 @@ In this next section we will revise the linear model assumption and lead them ad
 
 The GzLM framework rests on two extensions that bring us a huge step closer to the data.  The first one is a minor mathematical tweak, the *link function*. The second is the informed choice from a set of statistical distributions and this will open a whole new world for you. Follow up on this path and discover the many sources of randomness.
 
-## Linear model assumptions
+## Debunking the linear model
 
 In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between a bunch of predictors and an outcome variable. We saw how factors and covariates gracefully work together and how complex research designs can be captured by random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable. We will approach the assumptions from a novel perspective: by *simulation of the data generating process* we will discover how the linear model is impossible, strictly.
 
-Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream. Pumps are rather simple devices as infusion is a function of volumen and time, only. They are routinely used by trained stuff, anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a almost hilarious trio of completely unnecessary design mistakes:
+In the following three sections I will explain the three core assumptions of linear models, recall the canonical model formulation:
+
+$$μ_i=β_0+ β_1 x_1i+ …+β_k x_ki\\
+y_i \sim Norm(μ_i,σ)$$
+
+The first term, we called the likelihood. It represents the quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: *normal distribution* of errors and *constant error variance*.
+
+Further down, we will take the linear model formula literally and discover what happens when we simulate from it. The simulations will raise skepticism. But, it is real data that leaves no doubt the linear model is far off when it comes to typical measures in design research. For the first time 
+
+
+### Case: user testing infusion pumps
+
+Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream. Pumps are rather simple devices as infusion is a function of volumen and time, only. They are routinely used by trained stuff, anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a hilarious set of completely unnecessary design mistakes:
 
 * tiny 3-row LCD displays
 * flimpsy foil buttons without haptic marking or feedback
 * modes
-* hidden information
+* information hidden in menus
 
 For fixing these issues no additional research is needed, as the problems and there fixes are pretty obvious to experienced usability specialists. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
 
@@ -61,44 +73,82 @@ For fixing these issues no additional research is needed, as the problems and th
 * is it efficient to learn?
 * is a novel interface better than a legacy design? And by how much?
 
-Recall the canonical linear model formulation:
+We conducted such a study. 
 
-$$μ_i=β_0+ β_1 x_1i+ …+β_k x_ki\\
-y_i \sim Norm(μ_i,σ)$$
+[DESCRIBE STUDY]
 
-The first term, we called the likelihood and by summing products, this makes the model a linear one. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: normal distribution of errors and constant variance.
-
-### Assumption: linearity
+### Assuming linearity
 
 Recall the principle, "all-finite-in-the-endless": when two or more interventions improve the same process, e.g. visual recognition of letters, the sum is less than the summands. This results in a non-linearity when the boundary of performance is reached. With a small set of predictors this can gracefully be modelled as saturation interaction effects.
 
-Consider a study that assesses the improvement of safe operation with continued practice. For simplicity, we regard just a single nurse whose number of errors were measured in a longer task sequence. We simulate a linear model, assuming there is an improvement of one error less with every day of practice, with expected 12 errors on the first day.
+Consider a study that assesses the improvement of safe operation with continued practice. For simplicity, we regard just a single nurse whose number of errors were measured on a chain of 8 tasks. Errors in operation were measured as number of deviations from the shortest possible interaction sequence. 
+
+We simulate a linear model, assuming there is an improvement of one error less with every repetition of the sequence, with expected 7 deviations in the first session. We assume that path deviations has a normally distributed random component with $\sigma = 1$. 
 
 ```{r}
-N_days <- 10
-pumps_1 <-
-  data_frame(day = as.integer(1:N_days),
-             mu = 12 - day,
-             errors = rnorm(N_days, mu, sd = 1))
-pumps_1 %>% 
-  ggplot(aes(x = day, y = errors)) +
+data_frame(session = as.integer(1:5),
+           mu = 9 - session * 2.5,
+           deviations = rnorm(5, mu, sd = 1)) %>% 
+  ggplot(aes(x = session, 
+             y = deviations)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) +
-  xlim(1, 20) + ylim(0,max(pumps_1$errors))
+  geom_abline(aes(intercept = 9, slope = -2.5))
+
+
 ```
 
-The model we used is crude and almost obviously far from reality. One purpose of statistical modelling is to predict. Here we are tempted to forecast to coming days of practice. From day 12 onwards, the model predicts negative error counts, which is impossible. Also, similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
+See what happens when the linear model is naivly applied to the deviation counts. In no time, negative values are drawn, which is impossible. Similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
 
-Such a non-linearity happens to all outcome variables that have natural lower or upper boundaries, and that includes all outcome variables in the universe, except its very own spatial extension. All outcome variables in design research suffer from the problem of impossible predictions as a consequence of their boundedness. 
+Here is some real world data from the IPump study. We take a look at a small slice of it: the total number of deviations of one participant across the three sessions.
+
+
+
+```{r}
+
+attach(IPump)
+
+D_pumps %>% 
+  filter(Part == nurse, Design == "Novel") %>% 
+  group_by(Part, session) %>% 
+  summarize(deviations = sum(deviations)) %>% 
+  ggplot(aes(x = session, y = deviations)) +
+  geom_point() +
+  geom_line() + 
+  ylim(0,7)
+
+detach(IPump)
+```
+
+What really happens, when a performance measure approaches its natural limit, is an asymptotic leaning-on. Neither will the line break through the limit, nor will it stop there abruptly.
+
+Such a non-linearity happens to all outcome variables that have natural lower or upper boundaries, and that includes all outcome variables in the universe, except its very own spatial extension. All outcome variables in design research suffer from the problem of impossible predictions as a consequence of their boundedness:
 
 * Errors and other countable incidences are bound at zero
 * ToT is bounded at zero and probably also bound above when users loose their patience
 * Rating scales are bound at the lower and upper extreme item
 * Task completion has a lower bound of zero and upper bound is the number of tasks. Or the average task completion is in the range $[0,1]$
 
-Furthermore, 
+
+### Re-linking linearity
+
+There is a conflict between the extreme versatility of the linear term, and its unfortunate assumption of linearity. Generalized linear models use a simple mathematical trick to keep the linear term, without permitting the expected values to ever cross the boundaries.
+
+
+
+
+Using the link function comes at a cost: the linear coefficients $\beta_i$ no longer  have a natural interpretation, like "movin one step on the predictor, let the outcome change by $\beta_i$". The linear link is now strictly with the linear predictor $\theta_i$. Still, we will see that other, only slightly less intuitive statements can 
+be made for link-transformed linear models.
+
+Some researchers apply transformations to their variables, to make them meet the assumptions. This may look similar, but it is not, as the sole purpose is to squeeze the distribution of data into a form that is "more normal". It is a gamble, sometimes it works, sometimes it does not. Even worse, it renders the linear coefficients useless. In quantitative design research, a statement like the following has no reasonable, let alone natural, interpretation: interface A can be use 2 *log-seconds* better than B. 
+
+If one realizes that distributions in real data are rarely normal, it is getter to go with the real thing, which 
+
+
 
 ### Assumption: normal distribution
+
+
+
 
 The second term of a linear model, $y_i \sim Norm(\mu, \sigma)$ states that the observed values are drawn from normal distributions. That sounds normal, but it is never truly the case. In only a limited number of situations, it is a useful approximation.
 
@@ -129,7 +179,25 @@ Recall how linearity is gradually bended when a magnitude approaches its natural
 
 ### [ADD plots of poisson, binomial and normal]
 
+### Fun with random distributions 
 
+### Assumption: constant variance
+
+### Mean-variance relations
+
+## Poisson regression
+
+## Binomial regression
+
+## Exponential regression (and how it fails)
+
+## ExGaussian regression
+
+## Beta regression
+
+
+
+## EATME
 
 
 Consider a very basic linear regression
