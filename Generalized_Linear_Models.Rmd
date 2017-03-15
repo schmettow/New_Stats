@@ -1,43 +1,181 @@
 ---
-title: "New statistics for design researcher"
+title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "Jan 5, 2015"
+date: "March 13, 2017"
 output:
   html_document:
     fig_caption: yes
-    keep_md: yes
     number_sections: yes
+    theme: journal
     toc: yes
-  pdf_document:
+  word_document:
     toc: yes
-  word_document: default
+bibliography: Bayesian_Stats.bib
 ---
 
+<style type="text/css">
+.table {
+     width: auto;
+
+}
+</style>
 
 
-```{r profile, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
-thisdir = getwd()
-purp.mcmc = F
 purp.mcmc = F
 source("RMDR.R")
-Pglm = list() # plots
-Dglm = list() # data sets
-Mglm = list() # models
-Sglm = list() # simulation functions
-Tglm = list() # tables
-#load("Generalized_Linear_Models.Rda")
+# library(printr)1
+CE <- c("IPump")
+load_CE(CE)
+
+#formals(stan_glm)$iter <- 200
+#formals(stan_glm)$chains <- 1
+
 ```
-
-
-
-```{r mystuff, echo = FALSE, warnings = FALSE, eval = FALSE}
-## The following is just for running the script conventionally (no knitr) on the authors computer
-```
-
 
 
 # Generalized Linear Models
+
+Have you wondered about the abundance of simulated data sets up to this point? One answer is that after I had figured out a general approach to simulation (see [SIM]), i just could not stop doing it. The real answer is: the linear model makes assumptions that are *never* met by real data. For some data the linear model is a reasonable approximation, but this occurs less often than you might think. 
+
+In this next section we will revise the linear model assumption and lead them ad absurdum. At this point the apt reader may ask another critical question: why does chapter [LM] not account for linear model assumptions, and how to test them. Simply put, checking assumptions on model that you know is inapproriate, I regard a futile exercise. This perspective holds at least, when better alternatives are available, and that is the whole point of this chapter. 
+
+The GzLM framework rests on two extensions that bring us a huge step closer to the data.  The first one is a minor mathematical tweak, the *link function*. The second is the informed choice from a set of statistical distributions and this will open a whole new world for you. Follow up on this path and discover the many sources of randomness.
+
+## Linear model assumptions
+
+In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between a bunch of predictors and an outcome variable. We saw how factors and covariates gracefully work together and how complex research designs can be captured by random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable. We will approach the assumptions from a novel perspective: by *simulation of the data generating process* we will discover how the linear model is impossible, strictly.
+
+Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream. Pumps are rather simple devices as infusion is a function of volumen and time, only. They are routinely used by trained stuff, anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a almost hilarious trio of completely unnecessary design mistakes:
+
+* tiny 3-row LCD displays
+* flimpsy foil buttons without haptic marking or feedback
+* modes
+* hidden information
+
+For fixing these issues no additional research is needed, as the problems and there fixes are pretty obvious to experienced usability specialists. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
+
+* is the interface safe to use?
+* is it efficient to learn?
+* is a novel interface better than a legacy design? And by how much?
+
+Recall the canonical linear model formulation:
+
+$$μ_i=β_0+ β_1 x_1i+ …+β_k x_ki\\
+y_i \sim Norm(μ_i,σ)$$
+
+The first term, we called the likelihood and by summing products, this makes the model a linear one. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: normal distribution of errors and constant variance.
+
+### Assumption: linearity
+
+Recall the principle, "all-finite-in-the-endless": when two or more interventions improve the same process, e.g. visual recognition of letters, the sum is less than the summands. This results in a non-linearity when the boundary of performance is reached. With a small set of predictors this can gracefully be modelled as saturation interaction effects.
+
+Consider a study that assesses the improvement of safe operation with continued practice. For simplicity, we regard just a single nurse whose number of errors were measured in a longer task sequence. We simulate a linear model, assuming there is an improvement of one error less with every day of practice, with expected 12 errors on the first day.
+
+```{r}
+N_days <- 10
+pumps_1 <-
+  data_frame(day = as.integer(1:N_days),
+             mu = 12 - day,
+             errors = rnorm(N_days, mu, sd = 1))
+pumps_1 %>% 
+  ggplot(aes(x = day, y = errors)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  xlim(1, 20) + ylim(0,max(pumps_1$errors))
+```
+
+The model we used is crude and almost obviously far from reality. One purpose of statistical modelling is to predict. Here we are tempted to forecast to coming days of practice. From day 12 onwards, the model predicts negative error counts, which is impossible. Also, similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
+
+Such a non-linearity happens to all outcome variables that have natural lower or upper boundaries, and that includes all outcome variables in the universe, except its very own spatial extension. All outcome variables in design research suffer from the problem of impossible predictions as a consequence of their boundedness. 
+
+* Errors and other countable incidences are bound at zero
+* ToT is bounded at zero and probably also bound above when users loose their patience
+* Rating scales are bound at the lower and upper extreme item
+* Task completion has a lower bound of zero and upper bound is the number of tasks. Or the average task completion is in the range $[0,1]$
+
+Furthermore, 
+
+### Assumption: normal distribution
+
+The second term of a linear model, $y_i \sim Norm(\mu, \sigma)$ states that the observed values are drawn from normal distributions. That sounds normal, but it is never truly the case. In only a limited number of situations, it is a useful approximation.
+
+Consider a second study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
+
+```{r opts.label = "rtut"}
+N = 80
+pumps_2 <- 
+  data_frame(Design = rep(c("L", "N"), N/2),
+             mu = if_else(Design == "L", 3, 1.2),
+             errors = rnorm(N, mu, sd = 1))
+```
+
+We illustrate the data set using histograms:
+
+```{r opts.label = "rtut"}
+pumps_2 %>% 
+  ggplot(aes(x = errors)) +
+  facet_grid(~Design) +
+  geom_histogram(bins = 20) +
+  geom_vline(col = "red", xintercept = 0) +
+  coord_flip()
+```
+
+This looks unsuspicious on first glance, but it is not (just like an infusion pump). A substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, the normal distribution supports the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly hitting keys until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
+
+Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit tend to get squeezed like chewing gum into a corner. And that is true for the distribution of real data as well as the theoretical distributions that are truly edaquate to present the data. Only the normal distribution stoically retains its symmetry in all infinity. 
+
+### [ADD plots of poisson, binomial and normal]
+
+
+
+
+Consider a very basic linear regression
+The linear model that has the form:
+
+
+Eq.1
+where y_i are the observed outcome values (e.g. response times), μ_i are the predicted values. With classic linear models it is assumed that y_i are normally distributed, with the predicted value μ_i as mean and standard deviation σ. Observation y_i  are drawn from normal distributions that have a varying mean but an equal spread throughout. The predicted values emerge from the linear combination of predictor variables x_(.i) and linear coefficients β_.. y_i and x_ki are both observed data and therefore known.  The coefficients β_(0..k)  are unknown and estimating them is what a regression model practically does. The predicted value μ_i can be considered a “best guess” for every data point.
+Strictly speaking, classic linear models can only deal with outcome variables that have a range [-∞;∞] and a normally distributed error term with constant variance. These assumptions usually do not hold for usability performance measures. For example, counting errors can never take negative values. Count variables are often have severely right-skewed residual distributions [27] that increase with predicted values. As another example, task completion rates are even bounded below (zero successes) and above (number of tasks). Such variables typically are left-skewed, when approaching the lower bound, but right skewed near the upper bound. Moreover, a classic linear model fits the data by straight lines. This also holds for the prediction a linear model makes. The regression line extends between \-∞ and ∞, which can easily lead to impossible predictions for response times and other bounded measures.
+Generalized Linear Models (GzLM) generalize linear models to allow for a wider range of outcome variable types. GzLM is a family of models, each member being a specialist for certain typical variable types. Three of the best known are Poisson, logistic and Gaussian regression. Poisson regression applies for count variables that theoretically have no upper limit, such as error counts. Logistic regression deals with count data that has an upper limit, such as number of successes with a given set of tasks. Gaussian regression is just the classic linear model with normally distributed residuals. All members work with their own assumption of how the measures are distributed (Poisson, binomial or Gaussian). In addition, linearity is established, preventing that impossible predictions can be made. This comes at some costs: the coefficients β_(i..k)  can be used in a linear manner, as usual, but that does no longer give the predicted value, directly, but the linear predictor η_i, which hardly has a natural interpretation. For making statements on the original scale, every GzLM  member provides their own transformation function. Throughout the reporting of results, we demonstrate the transformation and derive quantitative statements on the natural scale.
+
+
+
+## Generalizing the concepts
+
+
+The framework of Generalized Linear Models (GzLM) extends linear models by providing choices for three aspects of the outcome variable and its relation with predictors: link function, residual distribution and variance structure. In GzLM, linearity is re-established by separating the linear combination of predictors (linear term) from the predicted value μ. The linear term is tied to the linear predictor η_i that always supports the range [-∞;∞]. While this satisfies the linearity assumption, η does not have a natural interpretation. Instead, η is linked to predicted values μ by a bijective, strictly monotonous transformation, the mean function. For example, when dealing with count data, where μ has zero as lower bound, one uses Poisson regression with the exponential mean function:
+μ_i=expa〖η_i 〗
+η_i=β_0+ β_1 x_1i+ …+β_k x_ki	Eq.4
+
+The inverse of the mean function, called the link function and is often referred to when characterizing a GzLM family member. In case of Poisson regression this is the logarithm, as this reverses the exponential function.
+Furthermore, family members provide a residual distributions that are appropriate for the outcome variable at hand. Common choices are: Poisson distribution for counts, Binomial for successes at a number of trials, exponential distribution for waiting times and, last but not least, the normal distribution. Finally, a GzLM member defines a variance structures, which refers to the association between expected value and variance. For example, with measures of time and counts it typically occurs that variance increases by expected value. In contrast, the (Gaussian) linear model assumes that variance is constant.
+Table A Members of the family of generalized linear models
+Model	Range	Residuals	Variance	Link function	Mean function	Measures
+Gaussian	[-∞;∞]	Normal	σ^2=c
+constant	η=μ
+identity	μ=η
+Identity	rating scales
+Poisson	[0;∞]	Poisson	σ^2=μ
+proportional	η=lnaμ
+logarithm	μ=e^η
+exponential	sequence length,
+path deviations 
+Logistic	[0;k]	Binomial	μ(k-μ)/k
+cigar shaped	η=lna〖μ⁄(k-μ)〗
+logit
+	μ=k(e^η⁄(1+e^η ))
+logistic	task completion
+Exponential	[0;∞]	Exponential	σ^2=μ^2
+Squared	η=lnaμ
+Logarithm	μ=e^(-η)
+exponential	completion time
+μ: predicted value; η: linear predictor; σ^2: variance; k: number of trials
+
+A common misunderstanding is that GzLM is a relaxation of the assumptions of linear models. In fact, every member has different assumptions, but these are equally strict (see Table A). One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as there is a tight association between variance and expected value, but no separate parameter for the amount of variance. Noteworthy the strict variance assumptions of Poisson, exponential and binomial are frequently violated by real data in that more variance occurs than is allowed. This issue is called over-dispersion and requires correction [51]. The implementation we chose for the data analysis here regards over-dispersion by default [52] , but researchers using different implementations must take care of it.
+
 
 ## Gaussian data and linear (aka *Gaussian*) regression
 
