@@ -44,21 +44,27 @@ In this next section we will revise the linear model assumption and lead them ad
 
 The GzLM framework rests on two extensions that bring us a huge step closer to the data.  The first one is a minor mathematical tweak, the *link function*. The second is the informed choice from a set of statistical distributions and this will open a whole new world for you. Follow up on this path and discover the many sources of randomness.
 
-## Debunking the linear model
-
-In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between a bunch of predictors and an outcome variable. We saw how factors and covariates gracefully work together and how complex research designs can be captured by random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable. We will approach the assumptions from a novel perspective: by *simulation of the data generating process* we will discover how the linear model is impossible, strictly.
+In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between a bunch of predictors and an outcome variable. We saw how factors and covariates gracefully work together and how complex research designs can be captured by multiple crossed random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable.
 
 In the following three sections I will explain the three core assumptions of linear models, recall the canonical model formulation:
 
 $$μ_i=β_0+ β_1 x_1i+ …+β_k x_ki\\
 y_i \sim Norm(μ_i,σ)$$
 
-The first term, we called the likelihood. It represents the quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: *normal distribution* of errors and *constant error variance*.
+The first term, we called the likelihood. It represents the quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: *normal distribution* of errors and *constant error variance*. 
 
-Further down, we will take the linear model formula literally and discover what happens when we simulate from it. The simulations will raise skepticism. But, it is real data that leaves no doubt the linear model is far off when it comes to typical measures in design research. For the first time 
+Some classic textbooks tend to present these assumptions as preconditions for a successful ANOVA or linear regression. As in pre-condition, they need to be checked upfront using a zoo of tests. If one fails, let's say the Kolmogorov-Smirnoff test on normality, one better considers non-parametric tests or a down-tempering statement.
 
+Here, I will not present any tests on assumption, other than exploratory plots. Instead, I will right-away debunk all three assumptions for measures that design researchers are routinely dealing with. The three debunks take the LM formula  literally by simulating data from it. The *simulations* will raise severe skepticism as they do not look like real data. An idea as equally simple and immensely useful as the liner model can expected to be a tough survivor. Less useful ideas have outlived their expectation for decades and centuries. Therefore, in this chapter, *real data* will speak for itself, the infusion pump case study (*Ipump*).  After all, the poor fidelity of linear models, aka the  *Gaussian GzLM* is the real reason why the previous chapters made regular use of simulated, but not real, data.
 
-### Case: user testing infusion pumps
+Every assumption that fails, rebounces from one of two building blocks that GzLM add to our regression framework:
+
+1. *link functions* re-establish linearity
+2. *random distributions* cover randomness of "real" outcome variables
+
+After a full debunk, the *GzLM* framework will rise from the ashes of *LM*. It hosts a variety of models that leaves little reason for crude approximations of the linear model, aka the *Gaussian LM*. The *Poisson LM* is the logical choice for outcome variables that are counted with no limit, like number of errors.  *Binomial regression* covers the case of succesful task completion, where counts have an upper boundary. These two GzLM members have been around for more than half a century in statistics. The quest for a good model for time-on-task was more difficult as the seemingly good candidates disappointed at first. Luckily, the with recent developments in Bayesian regression engines the choice of random distributions has become much broader. For ToT, I here suggest the exponentially-modified Gaussian *(ExGauss) LM*. Also for analogue rating scales will I present a relative novelty, the *Beta LM*.
+
+## Case: user testing infusion pumps
 
 Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream. Pumps are rather simple devices as infusion is a function of volumen and time, only. They are routinely used by trained stuff, anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a hilarious set of completely unnecessary design mistakes:
 
@@ -129,30 +135,16 @@ Such a non-linearity happens to all outcome variables that have natural lower or
 * Task completion has a lower bound of zero and upper bound is the number of tasks. Or the average task completion is in the range $[0,1]$
 
 
-### Re-linking linearity
 
-There is a conflict between the extreme versatility of the linear term, and its unfortunate assumption of linearity. Generalized linear models use a simple mathematical trick to keep the linear term, without permitting the expected values to ever cross the boundaries.
-
-
-
-
-Using the link function comes at a cost: the linear coefficients $\beta_i$ no longer  have a natural interpretation, like "movin one step on the predictor, let the outcome change by $\beta_i$". The linear link is now strictly with the linear predictor $\theta_i$. Still, we will see that other, only slightly less intuitive statements can 
-be made for link-transformed linear models.
-
-Some researchers apply transformations to their variables, to make them meet the assumptions. This may look similar, but it is not, as the sole purpose is to squeeze the distribution of data into a form that is "more normal". It is a gamble, sometimes it works, sometimes it does not. Even worse, it renders the linear coefficients useless. In quantitative design research, a statement like the following has no reasonable, let alone natural, interpretation: interface A can be use 2 *log-seconds* better than B. 
-
-If one realizes that distributions in real data are rarely normal, it is getter to go with the real thing, which 
 
 
 
 ### Assumption: normal distribution
 
 
+The second term of a linear model, $y_i \sim Norm(\mu_i, \sigma)$ states that the observed values are drawn from normal distributions. Note that the plural  (distributions) is by intention. Two observed values $y_i$ and $y_j$ are only drawn from the same distribution, when they have the same expected value $\mu_i = \mu_j$. Normal distribution sounds like this were the regular case. In fact, the normal distribution is a reasonable approximation in a limited number of situations. 
 
-
-The second term of a linear model, $y_i \sim Norm(\mu, \sigma)$ states that the observed values are drawn from normal distributions. That sounds normal, but it is never truly the case. In only a limited number of situations, it is a useful approximation.
-
-Consider a second study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
+Consider a study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
 
 ```{r opts.label = "rtut"}
 N = 80
@@ -173,15 +165,18 @@ pumps_2 %>%
   coord_flip()
 ```
 
-This looks unsuspicious on first glance, but it is not (just like an infusion pump). A substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, the normal distribution supports the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly hitting keys until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
+When instantiated by simulation, the linear model looses its unsuspicious flare (just like medical infusion pumps themselves). A substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, the normal distribution supports the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly hitting keys until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
 
 Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit tend to get squeezed like chewing gum into a corner. And that is true for the distribution of real data as well as the theoretical distributions that are truly edaquate to present the data. Only the normal distribution stoically retains its symmetry in all infinity. 
+
+### Assumption: constant variance
+
+
+
 
 ### [ADD plots of poisson, binomial and normal]
 
 ### Fun with random distributions 
-
-### Assumption: constant variance
 
 ### Mean-variance relations
 
@@ -195,6 +190,8 @@ Recall how linearity is gradually bended when a magnitude approaches its natural
 
 ## Beta regression
 
+## Logot-normal regression
+
 
 
 ## EATME
@@ -205,8 +202,7 @@ The linear model that has the form:
 
 
 Eq.1
-where y_i are the observed outcome values (e.g. response times), μ_i are the predicted values. With classic linear models it is assumed that y_i are normally distributed, with the predicted value μ_i as mean and standard deviation σ. Observation y_i  are drawn from normal distributions that have a varying mean but an equal spread throughout. The predicted values emerge from the linear combination of predictor variables x_(.i) and linear coefficients β_.. y_i and x_ki are both observed data and therefore known.  The coefficients β_(0..k)  are unknown and estimating them is what a regression model practically does. The predicted value μ_i can be considered a “best guess” for every data point.
-Strictly speaking, classic linear models can only deal with outcome variables that have a range [-∞;∞] and a normally distributed error term with constant variance. These assumptions usually do not hold for usability performance measures. For example, counting errors can never take negative values. Count variables are often have severely right-skewed residual distributions [27] that increase with predicted values. As another example, task completion rates are even bounded below (zero successes) and above (number of tasks). Such variables typically are left-skewed, when approaching the lower bound, but right skewed near the upper bound. Moreover, a classic linear model fits the data by straight lines. This also holds for the prediction a linear model makes. The regression line extends between \-∞ and ∞, which can easily lead to impossible predictions for response times and other bounded measures.
+where y_i are the observed outcome values (e.g. response times), μ_i are the predicted values. With classic linear models it is assumed that y_i are normally distributed, with the predicted value μ_i as mean and standard deviation σ. Observation y_i  are drawn from normal distributions that have a varying mean but an equal spread throughout.  and a normally distributed error term with constant variance. These assumptions usually do not hold for usability performance measures. For example, counting errors can never take negative values. Count variables are often have severely right-skewed residual distributions [27] that increase with predicted values. As another example, task completion rates are even bounded below (zero successes) and above (number of tasks). Such variables typically are left-skewed, when approaching the lower bound, but right skewed near the upper bound. Moreover, a classic linear model fits the data by straight lines. This also holds for the prediction a linear model makes. The regression line extends between \-∞ and ∞, which can easily lead to impossible predictions for response times and other bounded measures.
 Generalized Linear Models (GzLM) generalize linear models to allow for a wider range of outcome variable types. GzLM is a family of models, each member being a specialist for certain typical variable types. Three of the best known are Poisson, logistic and Gaussian regression. Poisson regression applies for count variables that theoretically have no upper limit, such as error counts. Logistic regression deals with count data that has an upper limit, such as number of successes with a given set of tasks. Gaussian regression is just the classic linear model with normally distributed residuals. All members work with their own assumption of how the measures are distributed (Poisson, binomial or Gaussian). In addition, linearity is established, preventing that impossible predictions can be made. This comes at some costs: the coefficients β_(i..k)  can be used in a linear manner, as usual, but that does no longer give the predicted value, directly, but the linear predictor η_i, which hardly has a natural interpretation. For making statements on the original scale, every GzLM  member provides their own transformation function. Throughout the reporting of results, we demonstrate the transformation and derive quantitative statements on the natural scale.
 
 
