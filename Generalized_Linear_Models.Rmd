@@ -83,6 +83,8 @@ We conducted such a study.
 
 [DESCRIBE STUDY]
 
+## Debunking the Gaussian linear model
+
 ### Assuming linearity
 
 Recall the principle, "all-finite-in-the-endless": when two or more interventions improve the same process, e.g. visual recognition of letters, the sum is less than the summands. This results in a non-linearity when the boundary of performance is reached. With a small set of predictors this can gracefully be modelled as saturation interaction effects.
@@ -139,7 +141,7 @@ Such a non-linearity happens to all outcome variables that have natural lower or
 
 
 
-### Assumption: normal distribution
+### Assumping normal distribution
 
 
 The second term of a linear model, $y_i \sim Norm(\mu_i, \sigma)$ states that the observed values are drawn from normal distributions. Note that the plural  (distributions) is by intention. Two observed values $y_i$ and $y_j$ are only drawn from the same distribution, when they have the same expected value $\mu_i = \mu_j$. Normal distribution sounds like this were the regular case. In fact, the normal distribution is a reasonable approximation in a limited number of situations. 
@@ -167,30 +169,175 @@ pumps_2 %>%
 
 When instantiated by simulation, the linear model looses its unsuspicious flare (just like medical infusion pumps themselves). A substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, the normal distribution supports the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly hitting keys until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
 
-Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit tend to get squeezed like chewing gum into a corner. And that is true for the distribution of real data as well as the theoretical distributions that are truly edaquate to present the data. Only the normal distribution stoically retains its symmetry in all infinity. 
-
-### Assumption: constant variance
+Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit tend to get squeezed like chewing gum into a corner. And that is true for the distribution of real data as well as the theoretical distributions that are truly edaquate to present the data. Only the normal distribution stoically retains its symmetry in all infinity. The figure below shows the distribution of 
 
 
 
+### Assuming constant variance
 
-### [ADD plots of poisson, binomial and normal]
+
+
+
+
+## Concepts of Generalized Linear Models
+
+GzLM is a *framework for modeling* that produces a *family of models*. Every member of this family uses a specific link functions and chooses a particular random distribution. Sometimes GzLM are confused as a way to relax assumptions of linear models, (or even called non-parametric).  They absolutely are not! Every member of its own makes precise assumptions  on the level of measurement and the shape of randomness (see Table A). One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as they use only one parameter, with the consequence of an even  tighter association between variance and expected value. A few members of GzLM are classic: Poisson, Binomial (aks logistic) and exponential regression have routinely been used before they were united  under the hood of GzLM. These and a few others are called *canonical* GzLM, as they possess some convenient mathematical properties, that made efficient estimation possible, back in the days of expensive computer time. 
+
+
+### Re-linking linearity
+
+The strength of the linear term (the likelihood) is its endless versatility in specifying relations between predictor variables and outcome. Unfortunately, it represents all associations as straight lines. These lines extend from $-\infty$ to $\infty$ and will cross the lower or upper boundaries of every known outcome variable. The model could predict what cannot happen.
+
+Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values. We cannot just cut it off, apparently. But it can be bended. In arithmetics an abundance of functions exists for every possible purpose. The  *exponential* function supports the whole range of real numbers and bends it up into the non-negative range. Its inverse, the *logarithm* does the opposite: It restretches strictly positive numbers to the real range.
+
+Other variables, like success rates or analog rating scales, have two boundaries. A function that bends the real range into $[0;1]$ is the *logistic* function. The two-sided bending makes its characteristic sigmoid shape. Again there is an inverse function, the log_odds, or *logit*. 
+
+
+It could translate a strictly positive $\mu$
+
+```{r, opts.label = "fig.wide"}
+data_frame(x = seq(-3, 3, .01)) %>% 
+  ggplot(aes(x)) +
+  stat_function(fun = exp, aes(color = "exponential"))
+
+data_frame(x = seq(-3, 3, .01)) %>% 
+  ggplot(aes(x)) +
+  stat_function(fun = inv_logit, aes(color = "logistic"))
+```
+
+
+What is further required for such a function is 
+
+
+
+
+
+
+
+
+
+
+
+Using the link function comes at a cost: the linear coefficients $\beta_i$ no longer  have a natural interpretation, like "movin one step on the predictor, let the outcome change by $\beta_i$". The linear link is now strictly with the linear predictor $\theta_i$. Still, we will see that other, only slightly less intuitive statements can 
+be made for link-transformed linear models.
+
+Who needs a well-defined link between observations and expected values? Applied design researchers do when predictions over time is their business. Reconsider Andrew & Jane in [WIS], who predicted the population mean of ToT from a sample. This is a statement on the status quo, and therefore it is not a prediction, in a strict sense. Comparing designs A and B is status quo, too, as both designs do exist. Generally, we  classify all research questions as *status quo* that stay confined in the range of $y_i$. In the IPump study it is compelling to ask: "how will the nurse perform in session 4?". "When will she reach error-free operation?". These are predictive questions, where the question reaches into the unknown.   
+
+With Bayesian regression engines we can compute a best guess for observed ranges and factor levels, but we can also simulate in the void. We estimate a linear model on learning 
+
+```{r stanglm_predict}
+attach(IPump)
+M_1 <- 
+  
+
+```
+
+
+```{r predicting_the_impossibe}
+detach(IPump)
+```
+
+
+
+
+Some researchers apply transformations to their variables, to make the meet the assumptions. 
+
 
 ### Fun with random distributions 
 
-### Mean-variance relations
 
-## Poisson regression
 
-## Binomial regression
+## Modelling counts
 
-## Exponential regression (and how it fails)
+### Poisson regression
 
-## ExGaussian regression
+### Binomial regression
 
-## Beta regression
+### Overdispersion
 
-## Logot-normal regression
+Poisson and binomial regression differ from the well-known Gaussian model in that they only have one parameter. Consider, location and variance are two completely independent choices for the Gaussian distribution. For Variables with Binomial or Poisson distribution, only one parameter is estimated and that determines the location. The subtle consequence is that the variance of any such distributions is strictly tied to the mean. In fact, for Poisson distributions the variance *is* the mean:
+
+$x \sim Pois(\lambda) \implies \mu = \sigma^2 = \lambda$
+
+The variance of binomial variables is:
+
+$x \sim Bin(p, k) \implies \mu = k\mu(1-\mu) = p$, where k is the number of trials.
+
+The strict variance assumptions of Poisson, binomial and exponential models are frequently violated by real data. The violation happens when real impact factors have not been included in the likelhood equation. Whenever there is one or more imoact factors on the outcome at question that the researcher has not regarded, overdispersion inevitably happens. That means it always happens in studies other than purified physics experiments. 
+
+Using Poisson regression for overdispersed  count data results in inflated certainty of estimates. When strictly inferential statistics is done, this must be accounted for. A classic way to regard overdispersion is to choose yet another random distríbution that adds a scale parameter for randomness variation. For Poisson regression that is the negative binomial distribution (never mind its name!), for binomial the beta-binomial and for exponential it is the gamma distribution. These are respected members of the broader GzLM family and two of them, negative binomial and gamma, are even canonical. Negative binomial and gamma distributions introduce a scale parameter for variance. They keep the basic relation between $\mu$ and variance intact, but 
+
+With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance without extending the family any further. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
+
+$$
+\theta_{ij} = \beta_0 + \beta_{0j} \\
+\mu_ij = \exp(\theta_{ij})\\
+\beta_{0j} \sim N(\mu_{p}, \sigma_p)\\
+y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+
+The random effect does not cause any trouble with predictions, as it is added on the level of the linear predictor, before the expected value is obtained by the exponential transformation. It is very likely, that the above model contains unexplained variance. Observation-level random effects are additive deviations $\beta_i$ on the linear predictor, in a Poisson grand mean model:
+
+$$
+\theta_{i} = \beta_0 + \beta_{i} \\
+\mu_i = \exp(\theta_i)\\
+y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+
+See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive! The negative binomial distribution adds a scale parameter, which is multiplicative. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
+
+For demonstration, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
+
+```{r sim:overdisp, opts.label = "sim"}
+
+Part <- data_frame(Part = 1:100,
+                   beta_0p = rnorm(100, 0, .75)) ## participant-level RE
+
+D <- data_frame(Obs  = 1:1000,
+                Part = rep(1:100, 10),
+                beta_0i = rnorm(1000, 0, .5),    ## observeration-level RE
+                beta_0 = .8) %>%
+  left_join(Part) %>% 
+  mutate(theta_i = beta_0 + beta_0p + beta_0i,
+         mu_i    = exp(theta_i),
+         y_i     = rpois(1000, mu_i))
+```
+
+```{r}
+M <- D %>% 
+  stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
+             family = poisson)
+
+```
+
+```{r}
+summary(M)
+```
+
+
+At the beginning of this section, I opted for observation-level random effects for  parsimony. However, there is a practical reason, too.  I frequently reminded the reader to interpret parameters quantitatively, by translating their magnitude to practical relevance. For variance parameters this is notoriously difficult to do. What can be done ease and has sufficient practical utility, is to compare variance of random effects relative to each other. With observation-level random effects, the unexplained variance is on the same scale as all the other ramndom effects, which makes them fully comparable. 
+
+
+### Zero inflation
+
+
+## Modelling time
+
+### Exponential regression (and how it fails)
+
+### ExGaussian regression
+
+
+## Modelling rating scales
+
+### Gaussian regression
+
+The classic linear model we have mercilessly debunked at the beginning of the chapter, is a member of the GzLM framework, with some rather unusual properties. It assumes normally distributed randomness, which implies a constant variance. In contrast to all other members so far, there is no relation between mean and variance of randomness. The link function simply is *identity* and is consequential for the problem of linearity and bounded ranges. The general take is that, whenever there is a theoretically justified and reasonably pragmatic choice, one better leaves the Gaussian alone. Here it makes its re-entrance for a type of outcome measures that are so problematic that a pragmatic choice is indicated.
+
+
+### Beta regression
+
+
+
+
 
 
 
@@ -238,7 +385,7 @@ Logarithm	μ=e^(-η)
 exponential	completion time
 μ: predicted value; η: linear predictor; σ^2: variance; k: number of trials
 
-A common misunderstanding is that GzLM is a relaxation of the assumptions of linear models. In fact, every member has different assumptions, but these are equally strict (see Table A). One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as there is a tight association between variance and expected value, but no separate parameter for the amount of variance. Noteworthy the strict variance assumptions of Poisson, exponential and binomial are frequently violated by real data in that more variance occurs than is allowed. This issue is called over-dispersion and requires correction [51]. The implementation we chose for the data analysis here regards over-dispersion by default [52] , but researchers using different implementations must take care of it.
+
 
 
 ## Gaussian data and linear (aka *Gaussian*) regression
