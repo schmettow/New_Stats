@@ -3,12 +3,12 @@ title: "New statistics for the design researcher"
 author: "Martin Schmettow"
 date: "March 13, 2017"
 output:
+  word_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
     theme: journal
-    toc: yes
-  word_document:
     toc: yes
 bibliography: Bayesian_Stats.bib
 ---
@@ -27,7 +27,7 @@ bibliography: Bayesian_Stats.bib
 purp.mcmc = F
 source("RMDR.R")
 # library(printr)1
-CE <- c("IPump")
+CE <- c("IPump", "Overdisp")
 load_CE(CE)
 
 #formals(stan_glm)$iter <- 200
@@ -116,7 +116,7 @@ Here is some real world data from the IPump study. We take a look at a small sli
 attach(IPump)
 
 D_pumps %>% 
-  filter(Part == nurse, Design == "Novel") %>% 
+  filter(Part == 5, Design == "Novel") %>% 
   group_by(Part, session) %>% 
   summarize(deviations = sum(deviations)) %>% 
   ggplot(aes(x = session, y = deviations)) +
@@ -227,7 +227,7 @@ With Bayesian regression engines we can compute a best guess for observed ranges
 
 ```{r stanglm_predict}
 attach(IPump)
-M_1 <- 
+# M_1 <- 
   
 
 ```
@@ -270,53 +270,137 @@ Using Poisson regression for overdispersed  count data results in inflated certa
 With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance without extending the family any further. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
 
 $$
-\theta_{ij} = \beta_0 + \beta_{0j} \\
-\mu_ij = \exp(\theta_{ij})\\
-\beta_{0j} \sim N(\mu_{p}, \sigma_p)\\
-y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+\theta_{pi} = \beta_0 + x_p\beta_{0p} \\
+\mu_{pi} = \exp(\theta_{pi})\\
+\beta_{0p} \sim N(\mu_{p}, \sigma_p)\\
+y_{p} \sim \textrm{Pois}(\mu_{ij})$$
 
-The random effect does not cause any trouble with predictions, as it is added on the level of the linear predictor, before the expected value is obtained by the exponential transformation. It is very likely, that the above model contains unexplained variance. Observation-level random effects are additive deviations $\beta_i$ on the linear predictor, in a Poisson grand mean model:
+The OLRE is normally distributed but  does not cause any bounded-range range, as it is added on the level of the linear predictor, before applying the exponential transformation. Observation-level random effects are completely analogous, except that every observation becomes its own group, in a Poisson grand mean model with added variation:
 
 $$
 \theta_{i} = \beta_0 + \beta_{i} \\
 \mu_i = \exp(\theta_i)\\
 y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
 
-See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive! The negative binomial distribution adds a scale parameter, which is multiplicative. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
+See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive. Compare this to the negative binomial distribution where variance is scaled up, which is multiplication. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
 
-For demonstration, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
-
-```{r sim:overdisp, opts.label = "sim"}
-
-Part <- data_frame(Part = 1:100,
-                   beta_0p = rnorm(100, 0, .75)) ## participant-level RE
-
-D <- data_frame(Obs  = 1:1000,
-                Part = rep(1:100, 10),
-                beta_0i = rnorm(1000, 0, .5),    ## observeration-level RE
-                beta_0 = .8) %>%
-  left_join(Part) %>% 
-  mutate(theta_i = beta_0 + beta_0p + beta_0i,
-         mu_i    = exp(theta_i),
-         y_i     = rpois(1000, mu_i))
+```{r sync_env_overdisp, opts.label = "invisible"}
+#try(detach(Overdisp))
+#syncenv::new_syncenv(SE = "Overdisp")
+attach(Overdisp)
 ```
 
-```{r}
-M <- D %>% 
+For demonstration of the concept, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
+
+
+
+The simulation first generates the PLRE and OLRE
+
+```{r sim:overdisp_2, opts.label = "sim"}
+
+simulate_1 <- function(
+  beta_0 = 2,   # mu = 8
+  sd_Obs = .3, 
+  sd_P   = .4,
+  N_Part = 30,
+  N_Rep  = 20, 
+  N_Obs =  N_Part * N_Rep,
+  seed = 42){
+  set.seed(seed)
+  Part <- data_frame(Part = 1:N_Part,
+                     beta_0p = rnorm(N_Part, 0, sd_P)) ## participant-level RE
+  D <- data_frame(Obs  = 1:N_Obs,
+                    Part = rep(1:N_Part, N_Rep),
+                    beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
+                    beta_0 = beta_0) %>%
+    left_join(Part) %>% 
+    mutate(theta_i = beta_0 + beta_0p + beta_0i,
+           mu_i    = exp(theta_i),               ## inverse link function
+           y_i     = rpois(N_Obs, mu_i))
+  D
+}
+
+D_1 <- simulate_1()
+
+D_1 %>%
+  ggplot(aes(x = y_i)) +
+  geom_histogram()
+```
+
+```{r opts.label = "mcmc"}
+M_1 <- 
+  D_1 %>% 
   stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
              family = poisson)
 
+RE_1 <- ranef(M_1) %>% 
+  mascutils::discard_redundant()
+
+M_1
 ```
+
+Random effect variation is accurately recovered from the simulated data. Ans, as the following two plots show, the participant latent scores can be recovered and even the observation levels themselves. Every observation gets a measure og how much it had been pushed by unknown sources of variation.
+
 
 ```{r}
-summary(M)
+
+
+
+D_1 %>% 
+  bind_cols(filter(RE_1, re_factor == "Obs")) %>% 
+  ggplot(aes(x = beta_0i, y = center, ymin = lower, ymax = upper)) +
+  geom_errorbar()
+
+
+D_1 %>% 
+  distinct(Part, beta_0p) %>% 
+  bind_cols(filter(RE_1, re_factor == "Part")) %>% 
+  ggplot(aes(x = beta_0p, y = center, ymin = lower, ymax = upper)) +
+  geom_errorbar()
+
 ```
 
 
-At the beginning of this section, I opted for observation-level random effects for  parsimony. However, there is a practical reason, too.  I frequently reminded the reader to interpret parameters quantitatively, by translating their magnitude to practical relevance. For variance parameters this is notoriously difficult to do. What can be done ease and has sufficient practical utility, is to compare variance of random effects relative to each other. With observation-level random effects, the unexplained variance is on the same scale as all the other ramndom effects, which makes them fully comparable. 
+In the real world of design research, regular dispersion in Poisson, binomial or exponential data is completely unrealistic and overdispersion needs to be embraced. Within the framework of GzLM, the solution is to switch to a more flexible dedicated random distribution. From LMM we borrow a surprisingly simple and general solution, observation-level random effects. Why should we add some twisted random distribution to our toolbox when familiar random effects can be reused? It is amazing how neatly the model recovered the `r Overdisp$N_Obs` levels of the OLRE. For every observation, we get an estimate that is basically a *residual*. These are very useful for model criticism. In the next section, we will use OLRE to diagnose a more wicked source of overdispersion that cannot be covered by OLRE, zero inflation.
+
+Frequently, I reminded the reader to interpret parameters quantitatively, by translating their magnitude to statements of practical relevance. For random effects variance this usually more difficult. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GzLMM, the marriage of LMM and GzLM this claim is testable, as we will see in [CASE EGAN].
+
+```{r, ops.label = "invisible"}
+detach(Overdisp)
+```
+
+
+### Case: Egan's claim
 
 
 ### Zero inflation
+
+```{r, ops.label = "invisible"}
+attach(Overdisp)
+
+simulate_2 <- function(
+  N_Part = 40,
+  p_pois = .8, # chance of being in Poisson
+  sd_Obs = 0   # parameters passed on to simulate_1
+){
+  simulate_1(N_Part = N_Part,
+             N_Rep = 1,
+             sd_Obs = sd_Obs) %>%
+    mutate(pois = rbinom(N_Part, 1, p_pois),
+      y_zi = 0 + y_i * pois)
+}
+
+D_2 <- simulate_2()
+D_2 %>% 
+  ggplot(aes(x = y_zi)) +
+  geom_histogram()
+
+```
+
+```{r, ops.label = "invisible"}
+detach(Overdisp)
+```
+
 
 
 ## Modelling time
@@ -336,312 +420,12 @@ The classic linear model we have mercilessly debunked at the beginning of the ch
 ### Beta regression
 
 
-
-
-
-
-
-## EATME
-
-
-Consider a very basic linear regression
-The linear model that has the form:
-
-
-Eq.1
-where y_i are the observed outcome values (e.g. response times), μ_i are the predicted values. With classic linear models it is assumed that y_i are normally distributed, with the predicted value μ_i as mean and standard deviation σ. Observation y_i  are drawn from normal distributions that have a varying mean but an equal spread throughout.  and a normally distributed error term with constant variance. These assumptions usually do not hold for usability performance measures. For example, counting errors can never take negative values. Count variables are often have severely right-skewed residual distributions [27] that increase with predicted values. As another example, task completion rates are even bounded below (zero successes) and above (number of tasks). Such variables typically are left-skewed, when approaching the lower bound, but right skewed near the upper bound. Moreover, a classic linear model fits the data by straight lines. This also holds for the prediction a linear model makes. The regression line extends between \-∞ and ∞, which can easily lead to impossible predictions for response times and other bounded measures.
-Generalized Linear Models (GzLM) generalize linear models to allow for a wider range of outcome variable types. GzLM is a family of models, each member being a specialist for certain typical variable types. Three of the best known are Poisson, logistic and Gaussian regression. Poisson regression applies for count variables that theoretically have no upper limit, such as error counts. Logistic regression deals with count data that has an upper limit, such as number of successes with a given set of tasks. Gaussian regression is just the classic linear model with normally distributed residuals. All members work with their own assumption of how the measures are distributed (Poisson, binomial or Gaussian). In addition, linearity is established, preventing that impossible predictions can be made. This comes at some costs: the coefficients β_(i..k)  can be used in a linear manner, as usual, but that does no longer give the predicted value, directly, but the linear predictor η_i, which hardly has a natural interpretation. For making statements on the original scale, every GzLM  member provides their own transformation function. Throughout the reporting of results, we demonstrate the transformation and derive quantitative statements on the natural scale.
-
-
-
-## Generalizing the concepts
-
-
-The framework of Generalized Linear Models (GzLM) extends linear models by providing choices for three aspects of the outcome variable and its relation with predictors: link function, residual distribution and variance structure. In GzLM, linearity is re-established by separating the linear combination of predictors (linear term) from the predicted value μ. The linear term is tied to the linear predictor η_i that always supports the range [-∞;∞]. While this satisfies the linearity assumption, η does not have a natural interpretation. Instead, η is linked to predicted values μ by a bijective, strictly monotonous transformation, the mean function. For example, when dealing with count data, where μ has zero as lower bound, one uses Poisson regression with the exponential mean function:
-μ_i=expa〖η_i 〗
-η_i=β_0+ β_1 x_1i+ …+β_k x_ki	Eq.4
-
-The inverse of the mean function, called the link function and is often referred to when characterizing a GzLM family member. In case of Poisson regression this is the logarithm, as this reverses the exponential function.
-Furthermore, family members provide a residual distributions that are appropriate for the outcome variable at hand. Common choices are: Poisson distribution for counts, Binomial for successes at a number of trials, exponential distribution for waiting times and, last but not least, the normal distribution. Finally, a GzLM member defines a variance structures, which refers to the association between expected value and variance. For example, with measures of time and counts it typically occurs that variance increases by expected value. In contrast, the (Gaussian) linear model assumes that variance is constant.
-Table A Members of the family of generalized linear models
-Model	Range	Residuals	Variance	Link function	Mean function	Measures
-Gaussian	[-∞;∞]	Normal	σ^2=c
-constant	η=μ
-identity	μ=η
-Identity	rating scales
-Poisson	[0;∞]	Poisson	σ^2=μ
-proportional	η=lnaμ
-logarithm	μ=e^η
-exponential	sequence length,
-path deviations 
-Logistic	[0;k]	Binomial	μ(k-μ)/k
-cigar shaped	η=lna〖μ⁄(k-μ)〗
-logit
-	μ=k(e^η⁄(1+e^η ))
-logistic	task completion
-Exponential	[0;∞]	Exponential	σ^2=μ^2
-Squared	η=lnaμ
-Logarithm	μ=e^(-η)
-exponential	completion time
-μ: predicted value; η: linear predictor; σ^2: variance; k: number of trials
-
-
-
-
-## Gaussian data and linear (aka *Gaussian*) regression
-
-First, we simulate data from the most basic sitation that we measure response time (RT) on sample of participants in just one condition (e.g., a particular design).
-ANOVA situation, where one group of participants tested design A and  the other group design B. Whenever we have just one observation per participant, we can short-circuit the eight steps, in starting directly with the observation table.
-
-```{r sim_gaussian_one_condition}
-D1 = data.frame(Participant = as.factor(1:100)) %>% 
-	mutate(RT = rnorm(100, 300, 50))
-
-D1 %>% 
-	ggplot(aes(x = RT)) + 
-	geom_histogram()
-
-
-```
-
-Often, observations are a combination of two factors, for example, participants and conditions. The following produces an ANOVA situation, where every participant encounters two designs A and B. However, there is not (yet) a difference in the designs. Both conditions are simulated from the same distribution:
-
-$$RT ~ Norm(\mu = 300, \sigma = 50$$
-
-Then we try to recover the parameters by running a linear mixed-effects model (LMEM) with Design as predictor for RT, and a subject-level intercept random effect.
-
-```{r sim_gaussian_2Designs}
-n.subj = 100
-
-D2 = expand.grid(Participant = as.factor(1:n.subj),
-								 Design = c("A", "B")) %>% 
-	mutate(RT = rnorm(n.subj * 2, 300, 50))
-
-M102 = MCMCglmm(RT ~ Design, 
-	 random = ~ Participant,
-	 data = D2)
-
-```
-
-In the next simulation, 100 participants encounter three designs in a within-subject design. In the participant data frame (D3_P), the participant sample is given two properties: 
-
-1. with a chance of $65%$, a participant is female
-2. participants vary by some amount how quickly the respond, which is represented by the ramdom effect 
-
-$$\theta ~ Norm(0, 10)$$
-
-A second table (D3_D) represents the three designs. Designs have one property assigned: background color is either white or yellow. Yellow background adds 50s to the response time.  
-
-The observation table D3 first creates an empty grid of all combinations of participant and designs (This is called a _complete_ design). Then the object tables are joined, to gather all predictors in one place. 
-
-Then we compute the expected value $\mu$ by applying the linear combination of coefficients $\beta$ (designs) and  $\theta$ (participants). Finally, observed values are created as
-
-$$RT = Norm(\mu, 50)$$
-
-Finally, we recover $\beta$ with a (LMEM), using the same structure as before. The next logical step, is to run a model with background color as predictor. Note that you should never estimate both at a time, as they are highly correlated. The associated problem is called *multi-colinearity* and can result in weird estimates.
-
-```{r sim_gaussian_3Designs}
-
-Sglm[["DesignABC"]] <- 
-  function(n.subj = 50){
-    Participants = data.frame(Participant = as.factor(1:n.subj)) %>% 
-      mutate(female = as.logical(rbinom(n.subj, 1, 0.65))) %>% 
-      mutate(theta = rnorm(n.subj, 0, 10))
-    
-    Designs = data.frame(Design = c("A", "B", "C")) %>% 
-      mutate(bgcolor = c("yellow", "white", "white")) %>% 
-      mutate(beta = c(350, 300, 300))
-    
-    Experiment = expand.grid(Participant = as.factor(1:n.subj),
-                             Design = c("A", "B", "C")) %>%
-      join(Participants, by = "Participant") %>% 
-      join(Designs, by = "Design") %>% 
-      mutate(eta = beta + theta) %>% 
-      mutate(mu_RT = identity(eta)) %>% 
-      mutate(RT = rnorm(n.subj * 3, mu_RT, 50)) %>% 
-      mutate(mu_Success = plogis(eta/200)) %>% # logistic 
-      mutate(trials = 10) %>% 
-      mutate(Success = rbinom(3 * n.subj, trials, mu_Success)) %>% 
-      mutate(mu_Errors = exp(eta/200)) %>%  ## expected value mu
-      mutate(Errors = rpois(3 * n.subj, mu_Errors)) ## observed variable
-      Experiment
-  }
-
-Dglm[["DesignABC"]] <- Sglm[["DesignABC"]]()
-
-D3 %>% 
-	ggplot(aes(x = RT, fill = Design)) +
-	facet_grid(Design ~.) +
-	geom_density(alpha = .5)
-
-M103 = MCMCglmm(RT ~ Design,
-					random =~ Participant,
-					data = D3)
-summary(M103)
-
-```
-
-## Binomial data and logistic regression
-
-Now we simulate a data set with the same research design, but the outcome variable is successes in ten tasks. For instance, the designs are three websites and participants are given ten information retrieval tasks.
-
-Because the research design is the same, we can keep the two object data frames. The only issue is that $\beta$ and $\theta$ are on the scale of the linear predictor $\eta$, which is linked to expected values $\mu$ by the *logit link function*:
-
-$$\eta = \log(\mu/(1-\mu))$$ 
-
-Expected values $\mu$ are computed from $\eta$ through the so-called *mean function*, which is the inverse of the logit, the *logistic tranformation*:
-
-$$\mu = \exp(\eta)/{1 + \exp(eta)}$$ 
-
-Note that values of \mu from the Gaussian data set above, are in the range of 300 - 350, which would result in chances of success of virtually 100%. To get more realistic values, we first divide $\eta$ by 100. 
-
-SNIPPET 
-
-from the experiment on Visual EDA:
-
-Logistic regression coefficients are on a logit scale. For the interpretation, we want to back-transform to the original scale, which is: probability the assumption to be rejected. In order to make statements on the probability scale, we backtransform using the inverse function of the logit, the logistic function:
-mu_x = exp(eta_x)/(1 + exp(eta_x))
-eta in the above formula is called the "linear predictor". The linear predictor is the value you get when you do operations on the coefficients. The most simple application is computing the overall probability for a rejection. This is represented by the Intercept parameter. In the table below, this parameter accounts to practically zero, on the logit scale. Back-transforming to the probability scale gives exactly a chance of 50%:
-exp(0)/(1 + exp(0)) = 1/2
- So, an intercept of zero always means that chances are equal, which is the same as saying: the coefficient does not add any information. The same is true for parameters: the closer a coefficient is to zero, the less does it influence prediction of reject. Like with general linear models, parameters close to zero have "no effect" and can even be removed to simplify a model (we don't do that here).
-Note, that the intercept in our model represents the situation that skew is 0 and N = 0. A more useful baseline rate for rejection rate would be at skew = 0 and the smallest sample size N = 10.
-We can compute any prediction we want by combining the parameters with the predictors. But, the other coefficients in the model represent differences, not absolute values. Therefore, when predicting a certain event, let's say rejection at a skew = 0 and N = 50, we first have to compute the linear predictor eta, then transform to get predicted value mu. 
-eta = 0.042 + Skew * 0 + Sampel size * 10
-mu = logist(eta)
-To give another example, the chance of rejection at skew = .5 and N = 50 is computed as:
-eta = 0.042 + Skew * 0.5 + Sampel size * 50
-mu = logist(eta)
-Watch out! It is a severe mistake to transform coefficients individually, then do the linear combination.
-eta = logist(Skew * 0.5) + logist(Sampel size * 50)
-In any case, it is much preferred to report the estimates on the probability scale, as this is right-away interpretable. Credibility limits can be reported on the linear predictor scale. 
-
-
-Group effects indicate how homogeneous the overall pattern (Table 1) is on individual units in the data set. Relevant units here are the participant and stimuli. For exanple, the relativels large coefficient Skew means that people differ a lot in how much their response is influenced by skew (which is desireable): The strong effect on stimuli means that (after taking skew and N into account) stimuli differ a lot in which response they provoke. It sounds a bit paradox, but that means that stimuli differ systematically: there exist properties other then Skew and N, that trigger a response.
-
-SNIPPET
-
-```{r binomial}
-n.subj = 50
-D4 = expand.grid(Participant = as.factor(1:n.subj),
-								 Design = c("A", "B", "C")) %>%
-	join(D3_P, by = "Participant") %>% 
-	join(D3_D, by = "Design") %>%
-	mutate(eta = (theta + beta)/100) %>%   ## linear predictor eta
-	mutate(mu = plogis(eta)) %>%  ## expected value mu
-	mutate(trials = 10) %>% 
-	mutate(Successes10 = rbinom(3 * n.subj, trials, mu)) ## observed variable
-
-## Distribution of linear predictor eta
-D4 %>% 
-	ggplot(aes(x = eta, fill = Design)) +
-	geom_density(alpha = .5) +
-	facet_grid(Design~.)
-
-## Distribution of expected value mu (or p)
-D4 %>% 
-	ggplot(aes(x = mu, fill = Design)) +
-	geom_density(alpha = .5) +
-	facet_grid(Design~.) +
-	xlim(0,1)
-
-## Distribution of (simulated) observed values
-D4 %>% 
-	ggplot(aes(x = Successes10, fill = Design)) +
-	geom_histogram(alpha = .5) +
-	facet_grid(Design~.)
-
-M104 = MCMCglmm(cbind(Successes10,trials) ~ Design,
-					family = "multinomial2",
-					random = ~ Participant,
-					data = D4)
-
-summary(M104)
-
-data.frame(summary(M104)$solution) %>% 
-	add_rownames() %>% 
-	mutate(mu_hat = plogis(post.mean))
-```
-
-## Count data and Poisson regression
-
-Count measures are bounded to the below. Unlike the normal distribution, the minimal count is 0. Theoretically, there is no upper bound for counts, but larger counts just get more and more unlikely.
-
-The Poisson distribution describes count data. Different to the successes-on-trials, these counts have no natural upper limit. The distribution is left-skewed. The smaller the measured values are, the stronger the skew. Vice versa, when the average count gets larger, the distribution becomes more symmetric. For this reason, it may be practical to use the classic linear model, with normally distributed residuals (see [CLM]).
-
-Consider a study that let's participants seek a piece of information on a governmental website. As a measure of efficiency, the number of steps are counted that takes users to find the information. Two websites are compared, website A with a very broad navigation structure (the home page presents 16 categories and the navigation structure has just two levels). Website B has a very deep information structure, presenting information in a five-level deep taxonomy.
-
-
-
-A common misconception is that the RD of a measure approaches normal distribution with larger sample sizes. That is not true. Increasing the number of participants just results in a cleaner shape of the distribution, with less ruggedness. Examine yourself, how the shape of Poisson distributions changes by mean count, as well as sample size. The following code simulates a Poisson distribution with a given $\lambda$ and $N$. With every new run of the code, `rpois` generates a new random set of counts. By repeatedly running this code and watching the output, you can get a good idea of how varied the shape of the distribution can be.
-
-```{r fig:exercise_poisson_dist}
-data_frame(count = rpois(n = 20,
-                         lambda = 2)) %>% 
-  ggplot(aes(x = count)) + 
-  geom_histogram()
-
+```{r}
+CE <- c(CE, "Overdisp")
+save_CE(CE)
 ```
 
 
-
-```{r fig:poisson_dist}
-expand.grid(lambda = c(2, 5, 10), N = 10, 50, 100) %>% 
-  as_data_frame() %>% 
-  mutate()
-ddply()
-```
-
-
-
-
-Poisson regression, ...
-
-Therefore, the link function has to transform
-
-$$[0;\infty] \to [-\infty, \infty]$$
-
-Accordingly, the *exponential* serves as link function, and the *logarithm* is the mean function. Note that in order to get realistic number of errors, $\eta$ has been set to a 20th of the Gaussian variable from D3. 
-
-
-```{r poisson}
-D5 = expand.grid(Participant = as.factor(1:n.subj),
-								 Design = c("A", "B", "C")) %>%
-	join(D3_P, by = "Participant") %>% 
-	join(D3_D, by = "Design") %>%
-	mutate(eta = (theta + beta)/20) %>%   ## linear predictor eta
-	mutate(mu = exp(eta)) %>%  ## expected value mu
-	mutate(trials = 10) %>% 
-	mutate(Errors = rpois(3 * n.subj, mu)) ## observed variable
-
-## Distribution of linear predictor eta
-D5 %>% 
-	ggplot(aes(x = eta, fill = Design)) +
-	geom_density(alpha = .5) +
-	facet_grid(Design~.)
-
-## Distribution of expected value mu (or p)
-D5 %>% 
-	ggplot(aes(x = mu, fill = Design)) +
-	geom_density(alpha = .5) +
-	facet_grid(Design~.)
-
-## Distribution of (simulated) observed values
-D5 %>% 
-	ggplot(aes(x = Errors, fill = Design)) +
-	geom_histogram(alpha = .5) +
-	facet_grid(Design~.)
-
-M105 = MCMCglmm(Errors ~ Design,
-					family = "poisson",
-					random = ~ Participant,
-					data = D5)
-
-summary(M105)
-
-data.frame(summary(M105)$solution) %>% 
-	add_rownames() %>% 
-	mutate(mu_hat = plogis(post.mean))
-```
 
 
 
