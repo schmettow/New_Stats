@@ -1,7 +1,7 @@
 ---
 title: "New statistics for the design researcher"
 author: "Martin Schmettow"
-date: "March 13, 2017"
+date: "April 3, 2017"
 output:
   word_document:
     toc: yes
@@ -188,7 +188,7 @@ GzLM is a *framework for modeling* that produces a *family of models*. Every mem
 
 The strength of the linear term (the likelihood) is its endless versatility in specifying relations between predictor variables and outcome. Unfortunately, it represents all associations as straight lines. These lines extend from $-\infty$ to $\infty$ and will cross the lower or upper boundaries of every known outcome variable. The model could predict what cannot happen.
 
-Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values. We cannot just cut it off, apparently. But it can be bended. In arithmetics an abundance of functions exists for every possible purpose. The  *exponential* function supports the whole range of real numbers and bends it up into the non-negative range. Its inverse, the *logarithm* does the opposite: It restretches strictly positive numbers to the real range.
+Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values. We cannot just cut it off,  But it can be bended. In arithmetics an abundance of functions exists for every possible purpose. The  *exponential* function supports the whole range of real numbers and bends it up into the non-negative range. Its inverse, the *logarithm* does the opposite: It restretches strictly positive numbers to the real range.
 
 Other variables, like success rates or analog rating scales, have two boundaries. A function that bends the real range into $[0;1]$ is the *logistic* function. The two-sided bending makes its characteristic sigmoid shape. Again there is an inverse function, the log_odds, or *logit*. 
 
@@ -206,7 +206,9 @@ data_frame(x = seq(-3, 3, .01)) %>%
 ```
 
 
-What is further required for such a function is 
+In GzLM, a layer is drawn between expected value $\mu$ and the linear term, *linear predictor $\theta$*. The *link function* transforms between $\mu$ and $\theta$. For example, when $\y_i$ is a count variable, such that $\mu$ is bounded at zero, the logarithm makes the transformation to th unbounded $\theta$. The transformation bends the scale, but is monotonous, leaving the order intact. The back-transformation to the observed scale is called the *mean function*  
+
+
 
 
 
@@ -245,23 +247,207 @@ Some researchers apply transformations to their variables, to make the meet the 
 
 ### Fun with random distributions 
 
+Count measures are bounded to the below. Unlike the normal distribution, the minimal count is 0. Theoretically, there is no upper bound for counts, but larger counts just get more and more unlikely. The Poisson distribution describes count data. Different to the successes-on-trials, these counts have no natural upper limit. The distribution is left-skewed. The smaller the measured values are, the stronger the skew. Vice versa, when the average count gets larger, the distribution becomes more symmetric. A common misconception is that random distributions approach the normal distribution with larger sample sizes. That is not true. Increasing the number of participants just results in a cleaner shape of the distribution, with less ruggedness. Examine yourself, how the shape of Poisson distributions changes by mean count, as well as sample size. The following code simulates a Poisson distribution with a given $\lambda$ and $N$. With every new run of the code, `rpois` generates a new random set of counts. By repeatedly running this code and watching the output, you can get a good idea of how varied the shape of the distribution can be.
+
+```{r fig:exercise_poisson_dist}
+data_frame(count = rpois(n = 20,
+                         lambda = 2)) %>% 
+  ggplot(aes(x = count)) + 
+  geom_histogram()
+
+```
 
 
-## Modelling counts
 
-### Poisson regression
+```{r fig:poisson_dist, opts.label = "future"}
+expand.grid(lambda = c(2, 5, 10), N = 10, 50, 100) %>% 
+  as_data_frame() %>% 
+  mutate()
+ddply()
+```
+
+
+
+
+
+
+## Count data
+
 
 ### Binomial regression
 
+Now we simulate a data set with the same research design, but the outcome variable is successes in ten tasks. For instance, the designs are three websites and participants are given ten information retrieval tasks.
+
+Because the research design is the same, we can keep the two object data frames. The only issue is that $\beta$ and $\theta$ are on the scale of the linear predictor $\eta$, which is linked to expected values $\mu$ by the *logit link function*:
+
+$$\eta = \log(\mu/(1-\mu))$$ 
+
+Expected values $\mu$ are computed from $\eta$ through the so-called *mean function*, which is the inverse of the logit, the *logistic tranformation*:
+
+$$\mu = \exp(\eta)/{1 + \exp(eta)}$$ 
+
+Note that values of \mu from the Gaussian data set above, are in the range of 300 - 350, which would result in chances of success of virtually 100%. To get more realistic values, we first divide $\eta$ by 100. 
+
+SNIPPET 
+
+from the experiment on Visual EDA:
+
+Logistic regression coefficients are on a logit scale. For the interpretation, we want to back-transform to the original scale, which is: probability the assumption to be rejected. In order to make statements on the probability scale, we backtransform using the inverse function of the logit, the logistic function:
+mu_x = exp(eta_x)/(1 + exp(eta_x))
+eta in the above formula is called the "linear predictor". The linear predictor is the value you get when you do operations on the coefficients. The most simple application is computing the overall probability for a rejection. This is represented by the Intercept parameter. In the table below, this parameter accounts to practically zero, on the logit scale. Back-transforming to the probability scale gives exactly a chance of 50%:
+exp(0)/(1 + exp(0)) = 1/2
+ So, an intercept of zero always means that chances are equal, which is the same as saying: the coefficient does not add any information. The same is true for parameters: the closer a coefficient is to zero, the less does it influence prediction of reject. Like with general linear models, parameters close to zero have "no effect" and can even be removed to simplify a model (we don't do that here).
+Note, that the intercept in our model represents the situation that skew is 0 and N = 0. A more useful baseline rate for rejection rate would be at skew = 0 and the smallest sample size N = 10.
+We can compute any prediction we want by combining the parameters with the predictors. But, the other coefficients in the model represent differences, not absolute values. Therefore, when predicting a certain event, let's say rejection at a skew = 0 and N = 50, we first have to compute the linear predictor eta, then transform to get predicted value mu. 
+eta = 0.042 + Skew * 0 + Sampel size * 10
+mu = logist(eta)
+To give another example, the chance of rejection at skew = .5 and N = 50 is computed as:
+eta = 0.042 + Skew * 0.5 + Sampel size * 50
+mu = logist(eta)
+Watch out! It is a severe mistake to transform coefficients individually, then do the linear combination.
+eta = logist(Skew * 0.5) + logist(Sampel size * 50)
+In any case, it is much preferred to report the estimates on the probability scale, as this is right-away interpretable. Credibility limits can be reported on the linear predictor scale. 
+
+
+Group effects indicate how homogeneous the overall pattern (Table 1) is on individual units in the data set. Relevant units here are the participant and stimuli. For exanple, the relativels large coefficient Skew means that people differ a lot in how much their response is influenced by skew (which is desireable): The strong effect on stimuli means that (after taking skew and N into account) stimuli differ a lot in which response they provoke. It sounds a bit paradox, but that means that stimuli differ systematically: there exist properties other then Skew and N, that trigger a response.
+
+SNIPPET
+
+```{r binomial, opts.label = "future"}
+n.subj = 50
+D4 = expand.grid(Participant = as.factor(1:n.subj),
+								 Design = c("A", "B", "C")) %>%
+	join(D3_P, by = "Participant") %>% 
+	join(D3_D, by = "Design") %>%
+	mutate(eta = (theta + beta)/100) %>%   ## linear predictor eta
+	mutate(mu = plogis(eta)) %>%  ## expected value mu
+	mutate(trials = 10) %>% 
+	mutate(Successes10 = rbinom(3 * n.subj, trials, mu)) ## observed variable
+
+## Distribution of linear predictor eta
+D4 %>% 
+	ggplot(aes(x = eta, fill = Design)) +
+	geom_density(alpha = .5) +
+	facet_grid(Design~.)
+
+## Distribution of expected value mu (or p)
+D4 %>% 
+	ggplot(aes(x = mu, fill = Design)) +
+	geom_density(alpha = .5) +
+	facet_grid(Design~.) +
+	xlim(0,1)
+
+## Distribution of (simulated) observed values
+D4 %>% 
+	ggplot(aes(x = Successes10, fill = Design)) +
+	geom_histogram(alpha = .5) +
+	facet_grid(Design~.)
+
+M104 = MCMCglmm(cbind(Successes10,trials) ~ Design,
+					family = "multinomial2",
+					random = ~ Participant,
+					data = D4)
+
+summary(M104)
+
+data.frame(summary(M104)$solution) %>% 
+	add_rownames() %>% 
+	mutate(mu_hat = plogis(post.mean))
+```
+
+
+
+
+### Poisson regression
+
+When the outcome variable is a count with no upper limit, Poisson regression applies. With counts we usually expect the variance of randomness to raise with the mean. The Poisson distribution  is very strict in the sense that the variance equals the mean $$y_i \sim \textrm{Pois}(\lambda) \rightarrow \textrm{Var}(x_i) = \textrm{Mean}(x_i) = \lambda$$. Real data frequently has variance that raises proportionally with the mean, but is inflated. This is called overdispersion and is accounted for by an observation-level random effect, which will be explained in a separate section.
+
+The link function is the logarithm, as it transfoms from the non-negative range of numbers to real numbers. The use of a link function (other than identity) has as a consequence that the parameters of Poisson regression cannot be interpreted as differences in units. As we will see now, there is a rather intuitive interpretation of linear coefficients in Poisson regression, that follows from:
+
+$\exp(a + b) = \exp(a)\exp(b)$
+
+Hence, the likelihood (including the mean function) of a Poisson model with two parameters can be re-written as a purely multiplicative term.
+
+$$
+y_i = \exp(\beta_0 + x_1\beta_1 + x_2\beta_2)\\
+y_i = \exp(\beta_0) \exp(x_1\beta_1) \exp(x_2\beta_2)
+$$
+With the log link function, the exponentiated coefficients simply become multiplicators and statements of ratio are meaningful, like the following: *With the legacy design users make 1.5 times the errors than with the novel design*. This corresponds nicely with the measurement-theoretic perspective that count variables have a natural origin (zero) and therefore are invariant to rescaling.
+
+In the infusion pump study, the deviations from normative path were counted to serve as a measure for safety of operation. For demonstration of how to report Poisson regression, the reduction of deviations by repeated sessions is examined. As we are interested in the improvement from first to second session and second to third, successive difference contrasts apply.
+
+The table below shows the regression estimates on the linear scale and the exponentiated parameters. The latter are interpretable on the original scale, but strictly as multiplicators.
+
+```{r}
+attach(IPump)
+```
+
+```{r fit:deviations, opts.label = "mcmc"}
+## Setting successive difference contrasts (library(MASS))
+M_dev <- D_pumps %>%  
+  stan_glmer(deviations ~ Design + session + session:Design + 
+               (1 + Design + session|Part) +
+               (1 + Design|Task) +
+               (1|Obs), ## accounting for overdispersion
+             data = ., family="poisson") 
+
+```
+
+```{r opts.label = "mcmc"}
+## checking the factorial 
+
+M_dev_fct <- D_pumps %>%  
+  stan_glmer(deviations ~ Design + Session + Session:Design + 
+               (1 + Design + Session|Part) +
+               (1 + Design|Task) +
+               (1|Obs), ## accounting for overdispersion
+             data = ., family="poisson") 
+T_dev_fct <- fixef(M_dev_fct)
+```
+
+
+```{r}
+T_dev <- fixef(M_dev)
+# %>% 
+#   mutate(`exp(center)` = exp(center),
+#          `exp(lower)` = exp(lower),
+#          `exp(upper)` = exp(upper)) %>% 
+#   discard_redundant() %>%
+#   coef()
+  
+
+T_dev
+```
+
+```{r}
+detach(IPump)
+
+```
+
+
+The legacy design serves as the reference group. Note that  the session variable has been coded starting at 0, such that the intercept coefficient represents the first session.  The expected number of deviations is $\exp(`r frm_coef(IPump$T_dev, row = 1, interval = F)`) = frm_coef(IPump$T_dev, row = 1, interval = F, mean_fnc = exp)$. 
+
+[CONTINUE RESULTS]
+
+The  transformation of coefficients to the original scale has been applied to the point and range estimates as produced by the `fixef` command. The less convenient alternative would have been to transform the values of the MCMC chain. This shortcut is not generally allowed. The crucial issue is that link and mean functions are monotonically increasing, with the consequence that the order of observations is preserved. Formally, for any two MCMC iterations $i$ and  $j$ for a parameter $\beta_i$:
+
+$$\beta_{1i} \lt \beta_{1j} \rightarrow \exp(\beta_{1i}) \lt \exp(\beta_{1j})$$
+Recall that throughout this book, center and interval estimates have been obtained by simple quantiles, marking the points where 2.5%, 50% and 97.5% of all iterations are smaller. As order does not change with monotonous transformations, quantiles do not either. Some researchers prefer the mode of the posterior to represent its center location. The mode is the point of highest density. As it does not rely on ranks, it is even invariant under all transformations that preserve identity. Without question, the mode is also not affected by the mean function and one may dor the transformation after summary.
+
+This is different for higher order methods for obtaining point and interval estimates. Most notably the mean and the highest posterior density intervals are not generally invariant to mean functions. When using those, the mean function must be applied before summarizing the posterior, which is rather inconvenient.
+
+
 ### Overdispersion
 
-Poisson and binomial regression differ from the well-known Gaussian model in that they only have one parameter. Consider, location and variance are two completely independent choices for the Gaussian distribution. For Variables with Binomial or Poisson distribution, only one parameter is estimated and that determines the location. The subtle consequence is that the variance of any such distributions is strictly tied to the mean. In fact, for Poisson distributions the variance *is* the mean:
+Poisson and binomial distributions differ from the well-known Gaussian in that they only have one parameter. Location and variance are two completely independent choices for Gaussian distributions, whereas for variables with Binomial or Poisson distribution, only the location parameter is estimated. The subtle consequence is that the variance of any such distributions is strictly tied to the mean. In fact, for Poisson distributions the variance *is* the mean:
 
 $x \sim Pois(\lambda) \implies \mu = \sigma^2 = \lambda$
 
 The variance of binomial variables is:
 
 $x \sim Bin(p, k) \implies \mu = k\mu(1-\mu) = p$, where k is the number of trials.
+
+[ILLUSTRATION]
 
 The strict variance assumptions of Poisson, binomial and exponential models are frequently violated by real data. The violation happens when real impact factors have not been included in the likelhood equation. Whenever there is one or more imoact factors on the outcome at question that the researcher has not regarded, overdispersion inevitably happens. That means it always happens in studies other than purified physics experiments. 
 
@@ -301,14 +487,14 @@ The simulation first generates the PLRE and OLRE
 simulate_1 <- function(
   beta_0 = 2,   # mu = 8
   sd_Obs = .3, 
-  sd_P   = .4,
+  sd_Part   = .4,
   N_Part = 30,
   N_Rep  = 20, 
   N_Obs =  N_Part * N_Rep,
   seed = 42){
   set.seed(seed)
   Part <- data_frame(Part = 1:N_Part,
-                     beta_0p = rnorm(N_Part, 0, sd_P)) ## participant-level RE
+                     beta_0p = rnorm(N_Part, 0, sd_Part)) ## participant-level RE
   D <- data_frame(Obs  = 1:N_Obs,
                     Part = rep(1:N_Part, N_Rep),
                     beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
@@ -333,18 +519,18 @@ M_1 <-
   stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
              family = poisson)
 
-RE_1 <- ranef(M_1) %>% 
-  mascutils::discard_redundant()
-
-M_1
+RE_1 <- ranef(M_1)
+RE_1 %>% 
+  group_by(re_factor) %>% 
+  summarize(sd(center))
 ```
 
-Random effect variation is accurately recovered from the simulated data. Ans, as the following two plots show, the participant latent scores can be recovered and even the observation levels themselves. Every observation gets a measure og how much it had been pushed by unknown sources of variation.
+Random effect variation is accurately recovered from the simulated data. The following two plots show, the participant latent scores can be recovered and even the observation levels themselves. Every observation gets an accurate measure of how much it had been pushed by unrecorded sources of variation. Practically, we obtain residuals which can be used for model criticism. For example, extreme outliers can be identified and relations between random variation and predicted values (or groups)  are open to scrutiny.
 
 
 ```{r}
-
-
+T_1_grpef <- grpef(M_1)
+T_1_grpef
 
 D_1 %>% 
   bind_cols(filter(RE_1, re_factor == "Obs")) %>% 
@@ -363,7 +549,7 @@ D_1 %>%
 
 In the real world of design research, regular dispersion in Poisson, binomial or exponential data is completely unrealistic and overdispersion needs to be embraced. Within the framework of GzLM, the solution is to switch to a more flexible dedicated random distribution. From LMM we borrow a surprisingly simple and general solution, observation-level random effects. Why should we add some twisted random distribution to our toolbox when familiar random effects can be reused? It is amazing how neatly the model recovered the `r Overdisp$N_Obs` levels of the OLRE. For every observation, we get an estimate that is basically a *residual*. These are very useful for model criticism. In the next section, we will use OLRE to diagnose a more wicked source of overdispersion that cannot be covered by OLRE, zero inflation.
 
-Frequently, I reminded the reader to interpret parameters quantitatively, by translating their magnitude to statements of practical relevance. For random effects variance this usually more difficult. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GzLMM, the marriage of LMM and GzLM this claim is testable, as we will see in [CASE EGAN].
+Frequently, I reminded the reader to interpret parameters quantitatively, by translating their magnitude to statements of practical relevance. For random effects variance this isn't always straight forward. usually more difficult. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GzLMM, the marriage of LMM and GzLM this claim is testable, as we will see in [CASE EGAN].
 
 ```{r, ops.label = "invisible"}
 detach(Overdisp)
@@ -375,29 +561,42 @@ detach(Overdisp)
 
 ### Zero inflation
 
-```{r, ops.label = "invisible"}
+```{r sim:ZI, ops.label = "rtut"}
 attach(Overdisp)
 
 simulate_2 <- function(
-  N_Part = 40,
-  p_pois = .8, # chance of being in Poisson
-  sd_Obs = 0   # parameters passed on to simulate_1
+  beta_0 = 2.5,
+  N_Part = 120,
+  p_zero = .2, # chance of being in Poisson
+  sd_Part = 0.8,
+  seed = 23 # parameters passed on to simulate_1
 ){
-  simulate_1(N_Part = N_Part,
-             N_Rep = 1,
-             sd_Obs = sd_Obs) %>%
-    mutate(pois = rbinom(N_Part, 1, p_pois),
-      y_zi = 0 + y_i * pois)
+  set.seed(seed)
+  data_frame(Part = 1:N_Part,
+             theta = rnorm(N_Part, beta_0, sd_Part),
+             mu = exp(theta),
+             is_user = rbinom(N_Part, 1, 1 - p_zero), 
+             visits = 0 + is_user *rpois(N_Part, mu))
 }
 
 D_2 <- simulate_2()
 D_2 %>% 
-  ggplot(aes(x = y_zi)) +
+  ggplot(aes(x = visits)) +
   geom_histogram()
 
 ```
 
-```{r, ops.label = "invisible"}
+
+
+
+```{r fit:ZI, opts.label = "mcmc"}
+M_2 <-
+  D_2 %>% brm(visits ~ 1 + (1|Part) , family = zero_inflated_poisson, data = .)
+M_2
+
+```
+
+```{r}
 detach(Overdisp)
 ```
 
@@ -405,9 +604,99 @@ detach(Overdisp)
 
 ## Modelling time
 
-### Exponential regression (and how it fails)
+```{r}
+attach(IPump)
+D_pumps %>% 
+  ggplot(aes(x = Session, col = Design, y = ToT)) +
+  geom_boxplot()
+
+D_pumps %>% 
+  group_by(Design, Session) %>% 
+  summarize(mean(ToT)) %>% 
+  spread(Design, `mean(ToT)`)
+detach(IPump)
+```
+
+
+
+### Time-to-failure models (and how they fail for ToT)
+
+#### Weibull
+
+```{r fit:tot_weib, opts.label = "mcmc"}
+attach(IPump)
+## Setting successive difference contrasts (library(MASS))
+M_tot_wbl <- D_pumps %>%  
+  brms::brm(ToT ~ Design + session + session:Design + 
+               (1 + Design + session|Part) +
+               (1 + Design|Task) +
+               (1|Obs), ## accounting for overdispersion
+            family="weibull", data = .) 
+
+
+detach(IPump)
+
+save_CE("IPump")
+
+```
+
+```{r}
+IPump$M_tot_wbl
+```
+
+
 
 ### ExGaussian regression
+
+```{r fit:tot_exg, opts.label = "mcmc"}
+attach(IPump)
+## Setting successive difference contrasts (library(MASS))
+M_tot_exg <- D_pumps %>%  
+  brms::brm(ToT ~ Design + session + session:Design + 
+              (1 + Design + session|Part) +
+              (1 + Design|Task), ## accounting for overdispersion
+            family="exgaussian", data = .) 
+detach(IPump)
+
+M_tot_exg
+fixef(M_tot_exg)
+
+save_CE("IPump")
+
+```
+
+```{r}
+IPump$M_tot_exg
+```
+
+
+```{r opts.label = "future"}
+attach(IPump)
+D_pumps <-
+  D_pumps %>% 
+  mutate(M_tot_wbl = predict(M_tot_wbl)[,1],
+         M_tot_exg = predict(M_tot_exg)[,1])
+
+detach(IPump)
+
+
+
+```
+
+```{r opts.label = "future"}
+attach(IPump)
+P_pumps <- 
+  bind_rows(
+    posterior(M_tot_wbl),
+    posterior(M_tot_exg)
+  )
+detach(IPump)
+
+
+
+```
+
+
 
 
 ## Modelling rating scales
@@ -421,7 +710,6 @@ The classic linear model we have mercilessly debunked at the beginning of the ch
 
 
 ```{r}
-CE <- c(CE, "Overdisp")
 save_CE(CE)
 ```
 
