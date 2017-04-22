@@ -2,7 +2,7 @@
 title: "New statistics for the design researcher"
 subtitle: "A Bayesian workshop in R"
 author: "Martin Schmettow"
-date: "Nov 8, 2016"
+date: "April 22, 2017"
 bibliography: Bayesian_Stats.bib
 output:
   html_document:
@@ -52,8 +52,8 @@ In this book, I am using the statistical computing environment R. The first few 
 
 First, we make sure that you have following programs downloaded and installed on your computer. The two programs can be retrieved from the below addresses. Make sure to select the version for your operating system. 
 
-* [R](http://www.r-project.org)
-* [Rstudio](http://www.rstudio.com)
++ [R](http://www.r-project.org)
++ [Rstudio](http://www.rstudio.com)
 
 If you fully own the computer you are working with, meaning that you have administrator rights, just do the usual downloading and running the setup. If everything is fine, you'll find R and Rstudio installed under `c\Programs\` and both are in your computers start menu. You can directly proceed to the installation of packages.
 
@@ -93,8 +93,6 @@ With the above steps you have created a customized start-up profile for R. The p
 After closing and reopening Rstudio, you should see a message in the console window saying:
 
 > Loading .Rprofile in D:/Users/YourName/R/
-
-If that 
 
 That means that R has found the `.Rprofile` file and loaded it at start-up. The `.Rprofile` file primarily sets the path of the *library*, which is the collection of packages you install yourself. Whether this was successful can be checked by entering the `console` window in Rstudio, type the command below and hit Enter.
 
@@ -146,6 +144,7 @@ library(rstanarm)
 
 ## other
 library(devtools) ## only needed for installing from Github
+library(knitr)
 
 ## non-CRAN packages
 library(mascutils)
@@ -271,9 +270,26 @@ Isn't it amazing, that in less than 20 simple statements we have just reached th
 
 A new Word document should appear that shows all code and the output. Now, you can copy-and-paste the graphics into another document or a presentation.
 
+### Bibliographic notes
+
+[Getting started with Rstudio (presentation)](http://www.calvin.edu/~rpruim/talks/Rminis/RStartingUp.pdf)
+
+[Getting started with Rstudio (ebook)](http://it-ebooks.info/book/2253/)
+
+[rstudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/) is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and bring them to the workshop.
+
+
+
+
+
 ## Programming in R: a primer
 
-> crazy as in 'idiosyncrasy'
+
+> cRazy as in 'idiosyncrasy'
+
+
+This book is for applied researchers in design sciences, who's frequent task is to analyze data and report it to stakeholders. Therefore, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data and can readily be pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with programming concepts such as conditionals or loops. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics. Let me first give you a global account of programming in R, albeit that might be more interesting for readers who have experience with other programming languages (and styles).
+
 
 R has three purposes:
 
@@ -325,8 +341,6 @@ scores[invalids] <- NA
 ```
 
 
-This book is for applied researchers in design sciences, who's frequent task is to analyze data and report it to stakeholders. Therefore, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R's rich feature set is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data and is then pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with programming concepts such as conditionals or loops. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics.
-
 
 ### Assigning and calling Objects
 
@@ -361,6 +375,19 @@ Objects can exist without a name, but are volatile, then. They cannot be used an
 N_Obs/N_Part ## gone after printing
 N_Obs/N_Part ## same value, different object
 ```
+
+There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the demonstration purpose and you will rarely use it in everyday programming tasks:
+
+
+
+```{r, opts.label = "rtut"}
+tracemem(N_Obs/N_Part)
+tracemem(N_Obs/N_Part)
+```
+
+
+
+## Vectors
 
 Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming language, all basic data types are all *vectors* in R. Vectors are containers for storing many values *of same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
@@ -670,65 +697,61 @@ rnorm(20, mean = c(1,2), sd = 1)
 
 The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes is convenient, it can also lead to difficult programming errors. So, it is good advice to be aware of this mechanism and always check the input to vectorized functions, carefully.
 
-
-__Exercises:__
-
-1. We have seen how to extract a data frame column as a vector using the double square brackets. There seem to be no such option to extract an individual row. Why? (Think about object types).
-
-1. How would you use extract a single value from  variable in data frame using the `$` operator and square brackets _in that order_? (`Experiment$outcome[3]`)
-
-1. Make a copy of `Experiment` that is a classic `data.frame`. Inspect both using the command `str`, `summary` and `print`.  
-
-1. We have seen several generic functions to summarize data frames. Graphical plots, as produced in FSP are complex objects, too. Store the plot in an object and inspect it using `class`, `summary` and `str`. What happens, when you just call the plot object?
-
 ### Import, export and archiving
 
 R lets you import data from almost every conceivable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for Excel files). Besides that R has its own file format for storing data, which is *.Rda*  files. With these files you can save data frames (and any other object in R), using the `save(data, file = "some_file.Rda")` and `load(file = "some_file.Rda")` commands. 
 
 Few people create their data tables directly in R, or have legacy data sets in Excel (*.xslx*) and SPSS files (*.sav*). Moreover, the data can be produced by electronic measurement devices (e.g. electrodermal response measures) or programmed experiments  can provide data in different forms, for example as *.csv* (comma-separated-values) files. All these files can be opened by the following commands:
 
+```{r save_files, opts.label = "invisible"}
+write_csv(Experiment, path = "Data/Experiment.csv")
+write.xlsx(Experiment, file = "Data/Experiment.xlsx")
+write_sav(Experiment, path = "Data/Experiment.sav")
+```
+
+
 ```{r load_files, opts.label = "rtut.nr"}
 ## Text files
 Experiment <- 
-  read.csv("some_file.csv")
+  read_csv("Data/Experiment.csv")
 
-## EXcel
+## Excel
 Experiment <- 
-  read.xlsx("some_file.xlsx", sheet = 1)
+  read.xlsx("Data/Experiment.xlsx", sheet = 1)
 
-## SPSS
+## SPSS (haven)
 Experiment <- 
-  read.spss("some_file.sav", 
-            to.data.frame = TRUE)
+  read_sav("Data/Experiment.sav")
+
+## SPSS (foreign)
+Experiment <- 
+  read.spss("Data/Experiment.sav", to.data.frame = TRUE)
+
 
 ```
 
-Note how the read.spss command gets an additional argument, which tells it to create a data frame. As a default it creates a list of lists, which is not what you typically want.
 
-Remember, data frames are objects and volatile as such. If you leave your One you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to have a complete R-based workflow, you can conveniently use R's own format for storing data, `Rdata` files. For storing a data frame and then reading it back in (in your next session), simply do:
+
+Note that I gave two options for reading SPSS files. The first (with an underscore) is from the newer haven package (part of tidyverse). With some SPSS files, I experienced problems with this command, as it does not convert SPSS's data type *labelled* (which is almost the same as an R factor). The alternative is the classic `read.spss` command  which works almost always, but as a default it creates a list of lists, which is not what you typically want. With the extra argument, as shown, it behaves as expected. The only issue is that it sometimes fails 
+
+Remember, data frames are objects and volatile as such. If you leave your session, they are gone. Once you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to have a complete R-based workflow, you can conveniently use R's own format for storing data, `Rdata` files. For storing a data frame and then reading it back in (in your next session), simply do:
 
 ```{r opts.label = "rtut.nr"}
 save(Experiment, file = "Data/Experiment.Rda")
 load(file = "Data/Experiment.Rda")
 ```
 
-Note that all objects are restored by their original names, without using any assignments. Take care, as this will overwrite any objects with the same name. Another issue is that for the `save` command you have to explicitly refer to the `file` argument and provide the file path as a character object. In Rstudio, begin typing  `file=""`, put the cursor between the quotation marks and hit `Tab`, which opens a small dialogue for navigation to the desired file.
+Note that with `save` and `load` all objects are restored by their original names, without using any assignments. Take care, as this will not overwrite any object with the same name. Another issue is that for the `save` command you have to explicitly refer to the `file` argument and provide the file path as a character object. In Rstudio, begin typing  `file=""`, put the cursor between the quotation marks and hit `Tab`, which opens a small dialogue for navigation to the desired directory.
+
+Once you have loaded, prepared and started to analyze a data frame in R, there is little reason to go back to any legacy program. Still, the `haven` and `foreign` packages contain commands to write to various file formats. I'll keep that as an exercise for the reader.
 
 
-
-__Exercises:__
-
-1. In the book package (directory `/Data`) you will find the data set of the (virtual) study BAB1, which we will be using in coming chapters. This data comes as text file with the file ending `.csv`. Load this file into R using the `read.csv` command. 
-
-1. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame summarize what is in the data frame.
-
-1. Find the documentation of the packages `haven` and `readr`. Find two import functions. the one that is most useful for you and the one that you consider most exotic.
 
 ### Case environments
 
 This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: `BrowsingAB_M_1`, `AUP_M_1`, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.
 
-For these reasons, all cases are enclosed in *case environments*. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:
+For these reasons, all cases are enclosed in *case environments* and provided with this book. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:
 
 ```{r load_CE, opts.label = "rtut.nr"}
 load("BrowsingAB")
@@ -748,8 +771,8 @@ D_1
 
 Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The `detach` command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.
 
-All case environments provided with this book all contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called `simulate` is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
-With few exceptions, calling the simulation function without any further arguments exactly reproduces the synthetic data set:
+All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called `simulate` is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
+Generally, calling the simulation function without any further arguments exactly reproduces the synthetic data set provided with the case environment.
 
 ```{r CE_simulate_1, opts.label = "rtut"}
 simulate() ## reproduces the data frame D_1
@@ -765,7 +788,7 @@ detach(Reading)
 ```
 Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.
 
-Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: at any moment the current working environment with all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Saving all objects and retrieving them when returning from the break is as easy as:
+Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Saving all objects and retrieving them when returning from a break is as easy as:
 
 ```{r save_working_env, opts.label = "rtut.nr"}
 save(file = "my_data_analysis.Rda")
@@ -775,10 +798,49 @@ load("my_data_analysis.Rda")
 
 Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.
 
-### [TBC] Structuring data
+### Structuring data
 
-In the whole book, data sets are structured according to the rule *one-row-per-observation of the dependent variable*. Many researchers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models.
+```{r opts.label = "invisible"}
+ORPO <- 
+  mascutils::expand_grid(Part = 1:3, Task = 1:2, Design = c("A", "B"), Item = 1:3) %>% 
+  mutate(response = round(runif(36, 1, 7),0))
+```
 
+
+In the whole book, data sets are structured according to the rule *one-row-per-observation of the dependent variable* (the ORPO rule). Many researchers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models. Consider an study where two designs were evaluated by three participants using a self-report item, like "how easy to use is the interface?" Then, the *wrong way* of structuring the data would be:
+
+```{r opts.label = "table"}
+ORPO %>% 
+  filter(Task == 1, Item == 1) %>% 
+  mascutils::discard_redundant() %>% 
+  spread(Design, response)
+```
+
+The correct way of setting up the data frame is:
+
+```{r opts.label = "table"}
+ORPO %>% 
+  filter(Task == 1, Item == 1) %>% 
+  mascutils::discard_redundant()
+```
+
+The ORPO rule dictates another principle: every row should have a unique identifier. In the example above, every observation is uniquely identified by the participant identifier and the design condition. If we extend the example slightly, it is immediatly apparent, why the ORPO ruile is justified. Imagine, the study actually asked three partcipants to rate two different tasks on two different designs by three self-report items. By the ORPO rule, we can easily extend the data frame as below (showing a random selection of rows). I leave it up to the reader to figure out how to press such a data set in the wide legacy format.
+
+Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record  data in multi-method experiments and join them automatically. This is shown in chapter [DM]. Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects model and the notion of *members of a population*. Throughout the book I will use standard names for recurring identifier variables in design research:
+
++ Part
++ Design
++ Item
++ Task
+
+Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.
+
+```{r opts.label = "table"}
+ORPO %>% 
+  sample_n(6) %>% 
+  arrange(Part, Task, Design, Item)
+
+```
 
 
 ### Data transformation chains
@@ -932,7 +994,7 @@ BAB1 %>%
   ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point() +
   geom_smooth() +
-  facet_grid(Education ~ 1)
+  facet_grid(Education ~ .)
 ```
 
 See, how the `facet_grid` command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:
@@ -946,12 +1008,6 @@ BAB1 %>%
 ```
 
 Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable (but not vice versa).
-
-__Exercises__: 
-
-1. Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a box plot that shows the two conditions (think carefully about the mappings of x and y).
-
-1. Use the data set BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet, and use color to represent Design again.
 
 
 ### Fitting regression models
@@ -1016,27 +1072,41 @@ This will all be covered in later chapters.
 
 ### [TBD] Knitting statistical reports
 
+### Exercises
 
-## Resources for getting started with R
+1. In the book package (directory `/Data`) you will find the data set of the (virtual) study BAB1, which we will be using in coming chapters. This data comes as comma-separated value file with the file ending `.csv`. Load this file into R using the `read_csv` command and check the dataframe.
 
-[Getting started with Rstudio (presentation)](http://www.calvin.edu/~rpruim/talks/Rminis/RStartingUp.pdf)
+1. Find the documentation of the packages `haven` and `readr`. Find two import functions. The one that is most useful for you and the one that you consider most exotic.
 
-[Getting started with Rstudio (ebook)](http://it-ebooks.info/book/2253/)
+1. We have seen how to extract a data frame column as a vector using the double square brackets. There seems to be no such option to extract an individual row as a vector. Why? (Think about object types).
+
+1. Use the world wide web to find geometries that are useful for plotting associations between grouping variables (factors) and a metric variables. Try them all on the BAB1 data frame. Compare the geometries on what properties of the data they convey.
+
+1. Like data frames and regression results, plots produced by ggplot are complex objects, too. Create an arbitrary plot, store it in a variable and inspect it using `class`, `summary` and `str`. In addition, what happens when you assign the plot to a variable and what happens when you call the variable?
+
+1. Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a box plot that shows the two conditions (think carefully about the mappings of x and y).
+
+1. Use the data set BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet grid, and use color to represent Design again.
+
+1. Use the data set BAB5 in BrowsingAB. Using a transformation chain, take the sum or average of participants' ToT. Then run a few simple regression models.
+
+1. Use your own data. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame and summarize what is in the data frame. Use ggplot to create one or more exploratory graphs. Then use dplyr `summarize` to create summary statistics.
+
+
+
+### Bibliographic notes
 
 [ggplot2 Version of Figures in "25 Recipes for Getting Started with R"](http://www.r-bloggers.com/ggplot2-version-of-figures-in-%E2%80%9C25-recipes-for-getting-started-with-r%E2%80%9D/) for readers who are familiar with the legacy plotting commands in R
 
-[Introduction to dplyr for Faster Data Manipulation in R](http://rpubs.com/justmarkham/dplyr-tutorial) introduces dplyr, the next generation R interface for data manipulation, which is used extensively in this tutorial.
+[Introduction to dplyr for Faster Data Manipulation in R](http://rpubs.com/justmarkham/dplyr-tutorial) introduces dplyr, the next generation R interface for data manipulation, which is used extensively in this book.
 
 [Quick-R](http://www.statmethods.net/) is a comprehensive introduction to many common statistical techniques with R.
-
-[rstudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/) is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and bring them to the workshop.
 
 [Code as manuscript](http://codeasmanuscript.org/lessons/) features a small set of lessons with code examples, assignments and further resources. For if you are in a haste.
 
 ```{r save_all, opts.label = "invisible"}
-#save(Dgsr, Pgsr, Mgsr, Sgsr, Tgsr, file = "Getting started with R.Rda")
-#write.bibtex(file="ref_gsr.bib")
 
 save_CE(CE)
+deploy_CE(CE, "Workshops/GSR/")
 ```
 
