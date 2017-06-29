@@ -38,13 +38,13 @@ load_CE(CE)
 
 # Generalized Linear Models
 
-Have you wondered about the abundance of simulated data sets up to this point? One answer is that after I had figured out a general approach to simulation (see [SIM]), i just could not stop doing it. The real answer is: the linear model makes assumptions that are *never* met by real data. For some data the linear model is a reasonable approximation, but this occurs less often than you might think. 
+Have you wondered about the abundance of simulated data sets up to this point? The reason for using simulated data is: the linear model, as introduced by now, makes assumptions that are *never* met by real data. The simulated data sets so far demonstrated some features found in real data sets, but  unsparingly wiped over some other frequent peculiarities. 
 
-In this next section we will revise the linear model assumption and lead them ad absurdum. At this point the apt reader may ask another critical question: why does chapter [LM] not account for linear model assumptions, and how to test them. Simply put, checking assumptions on model that you know is inapproriate, I regard a futile exercise. This perspective holds at least, when better alternatives are available, and that is the whole point of this chapter. 
+Up to this point, another question is probably lurking in the minds of readers with some classic statistics training:  what has happened to the assumptions of ANOVA and the like and where are all the neat tests covered that check for normality, constant variance and such?  In the next section we will review these assumptions and lead them ad absurdum. Simply put, these assumptions cannot never be true for any data and checking assumptions on model that you know is inapproriate is a futile futile exercise. This perspective holds at least, when better alternatives are available, and that is the case: with *Generalized Linear Models* we again extend the regression modelling framework. 
 
 The GzLM framework rests on two extensions that bring us a huge step closer to the data.  The first one is a minor mathematical tweak, the *link function*. The second is the informed choice from a set of statistical distributions and this will open a whole new world for you. Follow up on this path and discover the many sources of randomness.
 
-In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between a bunch of predictors and an outcome variable. We saw how factors and covariates gracefully work together and how complex research designs can be captured by multiple crossed random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable.
+In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between predictors and outcome variables. We saw how factors and covariates gracefully work together and how complex research designs can be captured by multiple crossed random effects. It was all about specifying appropriate (and often sophisticated) right-hand sides formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable.
 
 In the following three sections I will explain the three core assumptions of linear models, recall the canonical model formulation:
 
@@ -53,9 +53,7 @@ y_i \sim Norm(μ_i,σ)$$
 
 The first term, we called the likelihood. It represents the quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is the first assumption that fails. The second term represents the source of randomness and it hosts two further assumptions: *normal distribution* of errors and *constant error variance*. 
 
-Some classic textbooks tend to present these assumptions as preconditions for a successful ANOVA or linear regression. As in pre-condition, they need to be checked upfront using a zoo of tests. If one fails, let's say the Kolmogorov-Smirnoff test on normality, one better considers non-parametric tests or a down-tempering statement.
-
-Here, I will not present any tests on assumption, other than exploratory plots. Instead, I will right-away debunk all three assumptions for measures that design researchers are routinely dealing with. The three debunks take the LM formula  literally by simulating data from it. The *simulations* will raise severe skepticism as they do not look like real data. An idea as equally simple and immensely useful as the liner model can expected to be a tough survivor. Less useful ideas have outlived their expectation for decades and centuries. Therefore, in this chapter, *real data* will speak for itself, the infusion pump case study (*Ipump*).  After all, the poor fidelity of linear models, aka the  *Gaussian GzLM* is the real reason why the previous chapters made regular use of simulated, but not real, data.
+Some classic textbooks tend to present these assumptions as preconditions for a successful ANOVA or linear regression. As in pre-condition, they need to be checked upfront using a zoo of tests. If one fails, let's say the Kolmogorov-Smirnoff test on normality, one better considers non-parametric tests or a down-tempering statement. Here, I will not present any tests on assumption, other than exploratory plots. Instead, I will right-away debunk all three assumptions for measures that design researchers are routinely dealing with. The three debunks take the LM formula  literally by simulating data from it. The *simulations* will raise severe skepticism as they do not look like real data. An idea as equally simple and immensely useful as the liner model can expected to be a tough survivor. Less useful ideas have outlived their expectation for decades and centuries. Therefore, in this chapter, *real data* will speak for itself, the infusion pump case study (*Ipump*).  After all, the poor fidelity of linear models, aka the  *Gaussian GzLM* is the real reason why the previous chapters made regular use of simulated, but not real, data.
 
 Every assumption that fails, rebounces from one of two building blocks that GzLM add to our regression framework:
 
@@ -561,15 +559,17 @@ detach(Overdisp)
 
 ### Zero inflation
 
+Imagine a study that examines the frequency of visits to the social media website Fakebook. While other researchers already set out to find predictive factors, like extrovert personality and the like, we are here interested in the frequency of daily use.  
+
 ```{r sim:ZI, ops.label = "rtut"}
 attach(Overdisp)
 
 simulate_2 <- function(
-  beta_0 = 2.5,
-  N_Part = 120,
-  p_zero = .2, # chance of being in Poisson
-  sd_Part = 0.8,
-  seed = 23 # parameters passed on to simulate_1
+  beta_0  = 2.5,
+  N_Part  = 120,
+  p_zero  = .2, # proportion of non-users
+  sd_Part = 0.8, # individual differences (lp scale)
+  seed    = 23 # parameters passed on to simulate_1
 ){
   set.seed(seed)
   data_frame(Part = 1:N_Part,
