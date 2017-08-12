@@ -1,0 +1,587 @@
+---
+title: "New statistics for the design researcher"
+author: "Martin Schmettow"
+date: "August 9, 2017"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    theme: journal
+    toc: yes
+  word_document:
+    toc: yes
+subtitle: A Bayesian workshop in R
+bibliography: Bayesian_Stats.bib
+---
+
+
+
+<style type="text/css">
+.table {
+     width: auto;
+
+}
+</style>
+
+
+
+```{r setup, include = F}
+
+## The following is for running the script through knitr
+thisdir = getwd()
+purp.mcmc = F
+
+source("RMDR.R")
+
+CE = c("Rainfall", "Rational", "Sec99", "IPump")
+load_CE(CE)
+
+formals(stan_glm)$iter = 500
+formals(stan_glm)$chains = 2
+#opts_chunk$set(cache = T)
+```
+
+
+
+# Statistics in Design Research
+
+## Elements of evidence-based design research
+
++ Designing is wicked
++ Evaluative design research
++ Decision problems in design research
++ Design research as exploration
++ Mapping multidimensional impact factors
++ Quantification for decision making
++ Minimax decision making on designs
++ Measures and psychometrics
++ Emergent design theories
+
+
+### Groups and populations [TBD]
+
+
+### Observations and variables [TBC]
+
+
+### behaviour
+
++ counting steps
++ counting behavioural 
++ classifying strategies
+
+Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. Counting the *number of clicks* on links is a coarse buts easy to acquire measure of efficiency. It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action.
+
+In [Schnittker, Schmettow & Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, *Levensthein distance* counts the number of edits to transform one sequence into the other  and we used it as the performance score: *deviation from optimal path*.
+
+This is all *not* to say that behavioural records must always end up in performance scores. In *qualitative research*, sequences are examined for recurrent patterns. For example [Thatcher, hypermedia with school children] classified strategies of school children when searching information on the web. As much as I embrace qualitative research, it is not in the scope of this book.
+
+### performance measures
+
+Applied design research is fundamentally concerned with improvement. The questions raised on a design D are of forms: 
+
++ How good is $D$?
++ Is $D$ good enough?
++ Which one is better, $D_1$ or $D_2$?
++ How inclusive is $D$?
++ etc
+
+A majority of studies observes user behaviour. In [LM: multiple regression] we will encounter the active user paradox (AUP) study. Users were observed doing some tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. For every participant, the researchers  noted down all actions of exploratory nature in a time frame. *Behavioural records* render a detailed and unique picture of every participants behaviour. 
+
+Behavioural records are *sequential*. Events are coded if and when they happen. This raises a combinatorial problem: the set of possible behavioural records is practically infinite. As a result, the sequences are practically unique. The research question in AUP was whether geeks show *more* exploratory behaviour. Obviously, a we need some sort of transformation that gives us a single *performance score*. This we call here the *performance function* and we have many choices, for example:
+
++ the number of all exploratory events
++ their relative frequency
++ their longest uninterrupted sequence
++ total time spent in exploration
+
+The majority of studies does not produce behavioural records, but proceed to performance, directly, by taking *time-on-task (ToT)*.  In a way, ToT is just a special case of a performance function: all events are just weighed equally, with no difference between intense hacking, relaxed browsing and sweet day dreaming.
+
+In other situations, time measures are right spot-on. When controlling a car in dense city traffic, a few hundred milliseconds can make huge a difference. With the boom of automatization in cars, drivers will face unfamiliar situations, like it happened to Joshua Brown: reacting to a white truck across the motor way that his Tesla autopilot had missed. Research on *reaction times (RT)* is vital and we will encounter an example in [LM: theoretically interesting effects].
+
+In *experimental cognitive research reaction times* are a dominant tool to reveal the nature of the mind. An everygreen in cognitive psychology is the Stroop task. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it.
+In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of geeks.
+
+CONDITION WORD    : Ink
+congruent [GREEN ]: green
+incongr   [YELLOW]: green
+neutral   [CHAIR ]: green
+
+
+
+
+### usability [TBC]
+
+The ISO 9142-11 defines *usability* as composed of:
+
++ effectiveness: can users accopmlish their tasks?
++ efficiency: what resources have to be spend for a task, e.g. time.
++ satisfaction: how did the user like it?
+
+*Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or failures in intravenous medication [Schmettow, voss & Schraagen]. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, to my mind, is primarily a qualitative issue and we shall rarely encounter it in this book.
+
+*Efficiency is where it gets quantitative*. With efficiency, we ask about resources: time, attention, strain, distraction and Euros. CR can be *efficiency*, too, when failure can be repaired in time, such as correcting a typing error. Other than that efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for *repetition*. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.
+
+#### -->*Satisfaction*
+
+
+### experience [TBD]
+
+### design features [TBD]
+
+### the human factor [TBD]
+
+### situations [TBD]
+
+
+
+## Decision making under uncertainty
+
++ I see clouds. Should I take my umbrella?
++ Should I do this bungee jump? How many people came to death by jumping? (More or less than alpine skiing?) And how much fun is it really?
++ Overhauling our company website will cost us EUR 100.000. Is it worth it?
+
+All the above cases are examples of decision making under uncertainty. The actors aim for maximizing their outcome, be it well being, fun or money. But, they are uncertain. And their uncertainty occurs on two levels: 
+
+1. One cannot precisely foresee the exact outcome of one's chosen action:
+
++ Taking the umbrella with you can have two consequences: if it rains, you have the benefit of staying dry. If it does not rain, you have the inconvenience of carrying it with you. 
++ You don't know if you will be the unlucky one, who's bungee rope breaks, with fatal consequences.
++ You don't know whether the new design will attracts more visitors to your website and serves them better.
+
+2. It can be difficult to precisely determine the benefits or losses of potential outcomes:
+
++ How much worse is your day when carrying a useless object with you? How much do you hate moisture? In order to compare the two, they must be assessed on the same scale.
++ How much fun (or other sources of reward, like social acknowledgements) is it to jump a 120 meter canyon? And how much worth is your own life to you?
++ What is the average revenue generated per visit? What is an increase of recurrance rate of, say, 50% worth?
+
+Once you know the probabilities of events and the respective values, *decision theory* provides an intuitive framework to estimate these values. *Expected utility* $U$ is the sum product of *outcome probabilities* $P$ and the involved *losses* $L$. As such, it is the average loss one can expect, when following a particular strategy. 
+
+In the given case, two strategies exist, namely taking an umbrella versus taking no umbrella, when it is cloudy. We calculate and compare the expected utilities `U` as follows: 
+
+$$\begin{aligned}
+P(rain) = 0.6 \\
+P(no rain) = 1 - P(rain) = 0.4 \\
+L(carry) = 2 \\
+L(wet) = 4 \\
+U(umbrella) = P(rain) L(carry) + P(no rain) L(carry)  = L(carry) = 2\\
+U(no umbrella) = P(rain) L(wet) = 2.4
+\end{aligned}
+$$
+
+
+
+```{r tab:umbrella_1}
+# try(detach(Rainfall))
+attach(Rainfall)
+
+Actions <-
+  data.frame(action = c("umbrella", "no umbrella"))
+
+Events  <-
+  data.frame(event  = c("rain", "no rain"),
+                     prob   = c(0.6, 0.4))
+
+Loss  <- 
+  expand.grid(action = Actions$action, event = Events$event) %>%
+  join(Events) %>%
+  mutate(loss = c(2, 4, 2, 0))
+
+Decision <- 
+  Loss %>%
+  mutate(conditional_loss = prob * loss) %>%
+  group_by(action) %>%
+  summarise(expected_loss = sum(conditional_loss))
+
+Decision  %>% 
+  knitr::kable()
+
+
+```
+
+We conclude that, given the high chance for rain, and the conditional losses, the expected loss is larger for not taking an umbrella with you. It is rational to take an umbrella when it is cloudy.
+
+## Measuring uncertainty
+
+As we have seen above, a decision requires two investigations: the indeterministic  nature of  outcomes, and the assigned loss. Assigning loss to decisions is highly context dependent and often requires domain-specific expertize (or even individual judgment). We will do the formalization of it one more time, then set it aside. The issues of indeterministic processes and the associated uncertainty is basically what the  field of *statistics* deals with. We encounter uncertainty in two forms: first, we usually have just a limited set of observations to draw inference from, this is *uncertainty of parameter estimates*. From just 20 days of observation, we cannot be absolutely certain about the true chance of rain. It can be 60%, but also 62% or 56%. Second, even if we precisely knew the chance of rain, it does not mean we could make a certain statement of the future wheather conditions, which is *predictive uncertainty*. For a perfect forecast, we had to have a complete and exact figure of the physical properties of the atmosphere, and a fully valid model to predict future states from it. For all non-trivial systems (which excludes living organisms and wheather), this is impossible. 
+
+Review the rainfall example: the strategy of taking an umbrella with you has proven to be superior under the very assumption of *predictive uncertainty*. As long as you are interested in long-term benefit (i.e. optimizing the average loss on a long series of days), this is the best strategy. This may sound obvious, but it is not. In many cases, where we make decisions under uncertainty, the decision is not part of a homogeneous series. If you are member of a startup team, you only have this one chance to make a fortune. There is not much opportunty to average out a single failure at future occasions. In contrast, the investor, who lends you the money for your endeavour, probably has a series. You and the investor are playing to very different rules. For the investor it is rational to optimize his strategy towards a minimum average loss. The entrepreneur is best advised to keep the maximum possible loss at a minimum.
+
+As we have seen, predictive uncertainty is already embebedded in the framework of rational decision making. Some concepts in statistics can be of help here: the uncertainty regarding future events can be quantified (for example, with posterior predictive distributions) and the process of model selection can assist in finding the model that provides the best predictive power.
+
+Still, in our formalization of the Rainfall case, what magically appears are the estimates for the chance of rain. Having these estimates is crucial for finding  an optimal decision, but they are created outside of the framework. Furthermore, we pretended t o know the chance of rain exactly, which is unrealistic. Estimating parameters from observations is the reign of statistics. From naive calculöations , statistical reasoning differs by also regarding uncertainty of estimates. Generally, we aim for making statements of the following form: 
+
+"With probability $p$, the attribute $A$ is of magnitude $X$."
+
+In the umbrella example above, the magnitude of interest is the chance of rain. It was assumed to be 60%. This appears extremely high for an average day. A more realistic assumption would be that the probability of  rainfall is 60%  *given the observation of a cloudy sky*. How could we have come to the belief that with 60% chance, it will rain when the sky is cloudy? We have several options, here:
+
+1. Supposed, you know that, on average, it rains 60% of all days, it is a matter of common sense, that the probability of rain must be equal or larger than that, when it's cloudy.
+
+2. You could go and ask a number of experts about the association of clouds and rain.
+
+3. You could do some systematic observations yourself.
+
+Maybe, you have recorded the coincidences of clouds and rainfall over a period, of, let's say, 20 days. You made the following observations:
+
+```{r tab:umbrella_2}
+
+Rain %>% 
+  sample_n(5) %>% 
+  knitr::kable()
+
+```
+
+Intuitively, you would use the average to estimate the probability of rain under every condition.
+
+```{r umbrella_3}
+T_desc <-
+  Rain %>% 
+  group_by(cloudy) %>%
+  summarize(chance_of_rain = mean(rain))
+
+T_desc %>%
+  knitr::kable()
+```
+
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r Rainfall$T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(Rainfall$T_desc[2,2]), 5) * 100`$%. 
+
+The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
+
+Maybe, the conversation would be as follows:
+
+> YOU: In your experience, what is the chance of rain, when it's cloudy.
+
+> EXPERT: Wow, difficult question. I don't have a definite answer.
+
+> YOU: Oh, c'mon. I just need a rough answer. Is it more like 50%-ish, or rather 70%-ish.
+
+> EXPERT: Hmm, maybe somewhere between 50 and70%.
+
+> YOU: Then, I guess, taking an umbrella with me is the rational choice of action.
+
+Note how the expert gave two endpoints for the parameter in question, to indicate the location and the level of uncertainty. If she had been more certain, she had said "between 55 and 65%. While this is better than nothing, it remains unclear, which level of uncertainty is enclosed. Is the expert 100%, 90% or just 50% sure the true chance is in the interval? Next time, you could ask as follows:
+
+> ...
+
+> EXPERT: Hmm, maybe somewhere between 70-90%
+
+> YOU: What do you bet? I'm betting 5 EUR that the true parameter is outside the range you just gave.
+
+> EXPERT: I dare you! 95 EUR it's inside!
+
+The expert feels 95% certain, that the parameter in question is in the interval. However, for many questions of interest, we have no expert at hand (or we may not even trust them altogether). Then we proceed with option 3: making our own observations. 
+
+## Betting on designs
+
+The design of systems can be conceived as a choice between design options. For example, when designing an informational website, you have the choice of making the navigation structure broad (and shallow) or deep (and narrow). Your choice will to some extent, change usability of the website, hence your customer satisfaction, rate of recurrance, revenue etc.
+
+
+### Case: e-commerce A/B
+
+Consider the following example: Violet is development manager of a e-commerce website. At present, there is debate about a major overhaul of the website. Most management team members  agree that implementing a better search function will increase the revenue per existing customer. At the opposite, there are considerable development costs involved, which you have estimated to EUR 100.000.
+
+Upper management has a keen eye on shareholder value and wants the costs to be covered by increased revenues within one year. As the company's total revenue per year is 1.000.000 Euro, an increase by factor 1.1 is required to cover the development costs. 
+
+In order to get a rough idea whether this target can be met, Violet conducts a study where she observes the transactions of 50 random customers using the current system with 50 transactions with a prototype of the new system. The measured variable is the money every participant spends during the visit. The question is: 
+
+*"Do customers in the prototype condition spend 10% more on average?"*
+
+The figure below shows the distribution of revenue in the experiment.
+
+```{r fig:rational_design_1, opts.label = "fig.small"}
+attach(Rational)
+G_exploratory_1 <-
+  RD  %>% 
+  ggplot(aes(y = Euro, x = Design)) +
+  geom_boxplot()
+  
+
+G_exploratory_1
+
+detach(Rational)
+```
+
+There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? And how certain can Violet be? A formal regression analysis gives the answer [^gamma_reg].
+
+[^gamma_reg]: What we run here is a Gamma regression, which we will re-encounter in chapter [GLM]. The coefficients can directly be interpreted as changes in rate.
+
+```{r est:rational_design_2, opts.label = "mcmc"}
+attach(Rational)
+
+M_1 <- 
+  RD %>% 
+  stan_glm(Euro ~ Design, 
+           family = Gamma(link="log"),
+      data = .)
+
+P_1 <-  posterior(M_1)
+
+detach(Rational)
+```
+
+
+```{r rational_design_3}
+attach(Rational)
+T_fixef <- fixef(P_1, mean.func = exp)
+T_fixef %>%  kable()
+detach(Rational)
+
+```
+
+The results tell her that participants spend $`r Rational$T_fixef[[1,2]]`$ Euro on average with the current design. The prototype seems to increase the revenue per transaction by $`r Rational$T_fixef[[2,2]]`$. That seems sufficient, but uncertainty is strong, too, as indicated by the 95% credibility intervals. There is a chance of more than 2.5%, that the revenue is just $`r Rational$T_fixef[[2,3]]`$ (or lower), such that the target is not met. But what precisely is the chance of falling below EUR 5? In Bayesian analysis we usually get the complete posterior distribution, which we can evaluate to get a definite answer:
+
+*What is the probability of the increase in revenue being less than 5 EUR?*
+
+We inspect the posterior distribution and mark the area of interest
+
+```{r fig:rational_design_risk_of_failure, opts.label = "fig.small"}
+attach(Rational)
+G_risk_of_failure_1 <-
+  P_1 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+
+N_risk_of_failure_1 <-
+  P_1 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = value < 1.1) %>%
+  select(outcome) %>%
+  colMeans  
+
+G_risk_of_failure_1
+
+detach(Rational)  
+```
+
+The red area represents the danger zone, where revenue increase does not reach  EUR 5. The area amounts to `r Rational$N_risk_of_failure_1 * 100`% of the total probability. With this information the manager now has several options:
+
+1) decides that `r Rational$N_risk_of_failure_1 * 100`% is a risk she *dares* to take
+2) be confident in herself because *past successes* prove that she should follow her intuition
+3) take into account other *sources of evidence*, for example expert opinions or meta studies
+4) continue the study until sufficient evidence is gathered, but costs of additional  effort have to be accounted for
+
+The first option represents an unspecific tolerance towards risk. Extreme risk tolerance of managers is infamous as one cause for large scale economic crises [BLACK_SWANs]. Her motives could be manifold, still: maybe she was nursed to take risks in her life; or she is confident that consequences in case of failure will be bearable.
+
+The second and third options have something in common: they make use of *external knowledge*. This is explained in the coming section. The fourth option is another way of making *cumulative use of knowledge*, namely *[adaptive testing: find correct term]*. 
+
+
+### Case: 99 seconds
+
+Consider Jane: she is chief engineer at a mega-large rent-a-car company smartr.car that is doing their business nothing but online. Jane was responsible for a large scale overhaul of the customer interface for mobile users. Goal of the redesign was to streamline the user interface, which had grown wild over the years and had become boring. Early customer studies indicated that the app needed a serious visual decluttering and stronger funneling of tasks. 300 person months went into the re-development and the team did well: a recent A/B study had shown that users learned the smartr.car v2.0 fast and could use its functionality very efficiently. Jane's team is prepared for the roll-out, when marketing requested the following:
+
+> marketing: we want to support market introduction with the following slogan: "rent a car in 99 seconds".
+
+> Jane: not all users manage a full transaction in that short time. That could be a lie.
+
+> marketing: legally, the claim is fine if it holds on average.
+
+> Jane: i can find out for you (but we won't violate any rules).
+
+
+Jane takes another look at the performance of users in the smartr car v2.0 condition. As she understands it, she has to find out whether the average of all recorded time-on-tasks with smartr.car 2.0 is 99 seconds, or better. Here is what she sees:
+
+
+```{r fig:seconds_99_1, opts.label = "fig.small"}
+attach(Sec99)
+
+G_Sec99_expl_1 <-
+  Ver20 %>%   
+  ggplot(aes(x = ToT)) +
+  geom_histogram()
+
+G_Sec99_expl_1
+
+detach(Sec99)
+```
+
+
+
+Jane, trained in statistics as she is, figures that if she would make such a statement, she wanted to be 90% sure. The performance is not completely off 99 seconds. But given the huge variance in the sample, it seems impossible to hold the desired claim with a certainty of 80%. Still, she gives it a try and runs an estimation (which we will later get to know as a *grand mean model*)
+
+
+```{r seconds_99_2, opts.label = "mcmc"}
+attach(Sec99)
+
+M_Sec99_1 <- 
+  Ver20 %>%    
+  stan_glm(ToT ~ 1, data = .)
+
+P_Sec99_1 <-
+  posterior(M_Sec99_1)
+
+detach(Sec99)
+  
+```
+
+
+```{r seconds_99_3}
+attach(Sec99)
+
+T_fixef <-  
+  fixef(P_Sec99_1,
+        interval = .6)
+
+N_99s <- 
+  P_Sec99_1 %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(confirm = value <= 99) %>% 
+  summarise(certainty = mean(confirm)) %>% 
+  mutate(odds = (1-certainty)/certainty) %>% 
+  as.numeric()
+  
+N_111s <- 
+  P_Sec99_1 %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(confirm = value <= 111) %>% 
+  summarise(certainty = mean(confirm)) %>% 
+  mutate(odds = (1-certainty)/certainty) %>% 
+  as.numeric()
+
+detach(Sec99)
+
+```
+
+
+
+The results tell her that most likely the average time-on-task is 
+$`r Sec99$T_fixef[[1,2]]`$. That is not very promising. In fact, the odds that the average user can do it in 99 seconds is a feeble `r round(Sec99$N_99s[1] * 100, 0)`%. Luckily, Jane had the idea that the slogan could be changed to *"rent a card in 1-1-1 seconds"*. The certainty that this slogan holds is a favorable `r round(Sec99$N_111s[1] * 100, 0)`, a risk that a brave marketing department is surely willing to take.
+
+## Prior information
+
+It is rarely the case that we encounter a situation *tabula rasa*. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season and the region. Even the planet is sometimes taken into account: the Pathfinder probe carried a bag of gadgets, but the umbrella was for safe landing only.
+
+In behavioural research it has been general standard that every experiment had to be judged on the produced data alone. For the sake of objectivity, researchers were not allowed to take into account previous results, let alone their personal opinion.
+
+In Bayesian statistics, you have the choice. You can make use of external knowledge, but you don't have to. In Bayesian terminology, previous or external knowledge  is called *prior information*. Kowledge that comes from the data is called the *likelihood* and both are combined to *posterior* knowledge by multiplication:
+
+$posterior = likelihood * prior$
+
+Reconsider Violet, the rational e-commerce development manager. She had this role for years and has supervised several large scale outrolls. Couldn't she be more daring, taking into account her past successes? This is not a completely new situation, after all.
+
+
+The impact of prior information can range from negligible to overwhelming. The gain in confidence in our example depends on three factors:
+
+1) the average magnitude of past successes, the higher, the better
+2) the similarity of the current project with past projects
+3) the amount of evidence (e.g., number of recorded projects)
+
+```{r sim:rational_prior, opts.label = "invisible"}
+attach(Rational)
+set.seed(2)
+D_prior <-
+  data_frame(project = as.factor(1:5), 
+             revenue_increase = exp(rnorm(5, log(1.15), .05)))
+detach(Rational)
+```
+
+
+```{r mc:rational_99_prior, opts.label = "mcmc"}
+attach(Rational)
+
+M_prior <-
+  D_prior %>% 
+  stan_glm(revenue_increase ~ 1, 
+           family = Gamma(link = "log"),
+           data = .)
+
+P_prior <- posterior(M_prior)
+
+detach(Rational)
+
+```
+
+```{r tab:rational_design_prior, opts.label = "invisible"}
+attach(Rational)
+
+T_prior <- 
+  P_prior %>% 
+  group_by(parameter) %>% 
+  summarize(mean = mean(value), sd = sd(value))
+
+detach(Rational)
+```
+
+Let's assume, the manager had done 5 projects in the past and recorded the resulting change in revenues. On these five values she does a regression, that we will later call an intercept-only model, and concludes that her *prior belief* is distributed as:
+
+
+
+```{r fig:previous_belief_in_revenue, opts.label = "fig.small"}
+attach(Rational)
+G_prior <- 
+  P_prior %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(value = exp(value)) %>% 
+  ggplot(aes(x = value)) +
+  geom_density()
+
+G_prior
+
+detach(Rational)
+```
+
+On average, revenues have increased by factor `r exp(Rational$T_prior[[1,2]])` by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.
+
+
+```{r opts.label = "mcmc"}
+attach(Rational)
+
+M_2 <-
+  RD %>% 
+  stan_glm(Euro ~ Design, 
+      prior_intercept = normal(0, 100),
+      prior = normal(T_prior[[1,2]], T_prior[[1,3]]),
+      family = Gamma(link = "log"),
+      data = .)
+
+P_2 <- posterior(M_2)
+
+detach(Rational)
+```
+
+```{r rational_design_prior}
+attach(Rational)
+T_fixef_2 <- fixef(P_2, mean.func = exp)
+T_fixef_2 %>%  kable()
+detach(Rational)
+
+```
+
+
+
+```{r fig:rational_design_risk_of_failure_2, opts.label = "fig.small"}
+attach(Rational)
+
+G_risk_of_failure_2 <-
+  P_2 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+  
+N_risk_of_failure_2 <-
+  P_2 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = value < 1.1) %>%
+  select(outcome) %>%
+  colMeans 
+
+G_risk_of_failure_2
+
+detach(Rational)
+```
+
+
+
+
+
+
+
+```{r save_CE, opts.label = "invisible"}
+save_CE(CE)
+```
