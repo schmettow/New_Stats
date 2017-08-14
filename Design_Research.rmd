@@ -3,12 +3,12 @@ title: "New statistics for the design researcher"
 author: "Martin Schmettow"
 date: "August 9, 2017"
 output:
+  word_document:
+    toc: yes
   html_document:
     fig_caption: yes
     number_sections: yes
     theme: journal
-    toc: yes
-  word_document:
     toc: yes
 subtitle: A Bayesian workshop in R
 bibliography: Bayesian_Stats.bib
@@ -43,9 +43,83 @@ formals(stan_glm)$chains = 2
 
 
 
-# Statistics in Design Research
+# Elements of quantitative design research
 
-## Elements of evidence-based design research
+A *design* is the structure of an artifact that people use for a purpose. This definition appears extremely broad as it covers everything from tea kettles to complex information systems, and even silver bullets are included if you wish so. In fact, this definition is even redundant in two points: first, artifacts are usually made for a purpose and some call them just "tools". Second,  who else than people have purposes? Well, many wild animals reportedly create artificial structures for purposes such as shelter, mating and hunting. I have absolutely no objections against using this book to compare the stability of birds nestings, for example. (In such a case, everyone, please, read "design" as "part of the extended phenotype" and "purpose" as "emerged by natural selection".
+
+This book may apply to everything anyone like to call a design; but only so for a specific set of research questions that hinge on the word "purpose". We all have purposes and much of the time it is quite a job to get there. Getting-there typically requires resources and often enough we find ourselves right there only to some extent. So, the two basic questions in *quantitative design research* are:
+
+1. to what amount is a purpose fulfilled?
+1. how easy is it to get there?
+
+To the apt reader this may sound as i would next reduce all quantitative design research to the concept of usability and in a way i will be doing just that below (even discarding some subconcepts). The point here is that statistician actually don't care much about definitions from a domain, but think about research problems in a more abstract manner. Here is a number of things, a statistician would inquire:
+
++ On what a scale is the measurement of purpose fulfillment?
++ What is the expected precision of measures? Is a lot of noise to be expected?
++ How many observations are available?
++ Is the research concerned with how purpose fulfillment compares under various conditions?
++ How are observations grouped?
+
+
+In this book, quantitative design research is rather defined by a set of typical research problems, which includes the structure of the research question, as well as the empirical circumstances. In the following I will break this down one by one, and will also point out why the statistical framework of this book *Bayesian regression models will do the job.
+
+##### Introduce magnitude, as this is used when explaining uncertainty.
+
+One obvious element is *quantification*, but that carries some ambiguity, as we can speak of measures or research questions. In much research, quantification happens during the process of measuring. Recording times or counting errors certainly is quantitative. But, what matters is to ask *quantitative research questions*. In the real world, decisions are (or should be) based on benefits and rational allocation of resources. Changing the background color of a website might just be a switch (and can have undesired effects as users hate change), but restructuring an intranet site can cost a million. In industrial design research, there usually someone who wants to know whether this is worth it, and that requires to ask research questions:
+
++ By how much does reaction ability degrade and it is safe that people beyond 80 still drive?
++ Does design B reduce the required number of steps by a third, at least?
++ What proportion of users prefers red over yellow? All websites better go red?
+
+Sadly, in much existing research, quantification is frequently lost along the way and conclusions read more like:
+
++ Older people have longer reaction times in traffic situations ($p \leq .05$).
++ People find information more easily with design A, compared to B ($p \leq .05$).
++ Chinese people on average prefer red color schemes over yellow ($p \leq .001$).
+
+There simply is no numbers in these statements (except for the notorious p-values, which I will briefly discuss in chapter [BS]).
+
+Regression models are just right for measures and they are terrific at drawing quantitative conclusions. Every regression model features a so called *outcome*, which must be a measure. At the same time, regression models can deal with a broad class of measures and their peculiarities.
+
+Modern designs tend to be very complex and so are research questions, potentially. The options for designing just your personal homepage are myriad and there is considerable uncertainty about which options, or rather which configuration works best. Consider every option, say font type, font size, color, background color, position of menu, a potential impact factor on how pleasant the page is to read. Perhaps, someone should once and for all figure out the optimal configuration. It is recommended in such a case, that as many as possible impact factors are represented in a single study and evaluated by a single comprehensive statistical model. The primary reason for this recommendation is given in chapter [LM]: impact factors have the nasty tendency to not act out independent of each other. Regression models handle such complexity with grace. There is theoretically no limit for the number of impact factors or *predicors* and interaction effects.
+
+
+The central peculiarity in all behavioural research is that measures are extremely *noisy*. In the next chapter, the concept of measurement errors will be elaborated upon, but for now it suffices to understand that all measures approximate the measured property, only and that leaves room for *uncertainty*. In a simple experiment where participants respond to a signal and time is recorded, the first three trials will more likely have values that are widely scattered, like 900ms, 1080ms, 1110ms. Imagine this were an ability test in a training for, say, astronauts. To be admissioned to the space program the applicant needs a score of less than 1000ms. Would you dare to decide on the career of a young person based on these three observations? Hardly so.
+
+On the other side, consider measuring a persons waste length for the purpose of tayloring a suit. By using a meter the taylor measures 990mm, and would be perfectly fine with that.  Why did the taylor not take a second and a third measure? Well, experience tells that meters are pretty precise measures and waste length shows relatively little variation (under constant habits). Say the two measures were 995mm and 989mm. Such small deviations have practically no influence on cutting the linen.
+
+> "Our minds are not run as top - down dictatorships ; they are rambunctious parliaments, populated by squabbling factions and caucuses, with much more going on beneath the surface than our conscious awareness ever accesses."
+
+> Carroll, Sean. The Big Picture (Kindle Locations 5029-5031). Oneworld Publications. Kindle Edition. 
+
+Vast fluctuations of measures are common in design research, simply for the fact that human behaviour is involved. Every magnitude we derive from a study is uncertain to some degree. Uncertainty makes that at any moment, we can rely on a quantitative result only to some extent, which influences how we take risks. Statistics is called inferential, when every derived magnitude comes with a degree of certainty attached. Section [Decision making] gives some reasoning and examples, how to operate rationally under uncertainty, and drives at right into the arms of Bayesian statistics.
+ 
+In the austronautic test, a decision is raised on one individual. Down on earth, designs affect many people at once. Consider your personal homepage. If you decide, for aesthetic reasons, to shrink the font size, I promise you, that you just start loosing all visitors from the e-senior generation. Or, if your content is really good, they start using looking glasses on their o-pads. As a researcher, you can approach this in two ways: do a user study to compare the new design to the current design, or be the one who finds out, once and for all, what the optimal trade-off is between readability and aesthetic pleasure. Your method of choice would be an experiment. 
+
+When you have no greater goal in mind than proving your design is of quality, *user studies* are effective and quick. In the easiest case, you want to put your design against a fixed benchmark. For example, in the design of automotives, media devices in the cockpit may not distract the driver for more than 1.5 seconds at  times [CHECK ME]. To prove that, you will have to plug some advanced eye tracking gear into a prototype car and send people on the test drive. But once the precise data is in, things get really simple. The saccade measures directly represent what you were out for: the length of episodes of visual attention on the media display. You can take the average value. Sometimes, industrial design  researchers examine two or more designs at once. In e-commerce this is routinely done in A/B testing. A potential future design is put on the test drive and delivered to a customer sample. Performance is measured as hard currency, which is as close to the purpose as it can get.
+
+A user studies solves the momentary problem of comparing  a local design to a benchmark, which can be another design. In the long run, design configurations are too manyfold to be compared in a one-by-one manner. It is inevitable that we try to trace some general patterns (ageing) and apply our knowledge to a whole class of designs at once. Our research design just got one step more complex, as now we are comparing the combined effect of aging and font size on reading time. But this is not the reason why I'd like to give this study a different name, not call it user study, but *design experiment*. It is more the notion that this dig deeper and try to come up with guidelines for future designs.  
+
+Of course, that requires that you actually have the design, or a sufficient 
+
+
+For example, studies in design research tend to have:
+
+Regarding the structure of the research question ...
+
+The empirical circumstances are usually characterized by:
+
++ very noisy measures
++ small sample sizes
++ highly varied user populations
+
+
+
+##### HERE 
+
+
+##### TODO
+
 
 + Designing is wicked
 + Evaluative design research
@@ -58,49 +132,85 @@ formals(stan_glm)$chains = 2
 + Emergent design theories
 
 
-### Groups and populations [TBD]
+## Studies
+
++ user studies
++ experimental/fundamental studies
++ qualitative vs quantitative
 
 
-### Observations and variables [TBC]
 
 
-### behaviour
+## Observations and measures[TBC]
 
-+ counting steps
-+ counting behavioural 
-+ classifying strategies
 
-Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. Counting the *number of clicks* on links is a coarse buts easy to acquire measure of efficiency. It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action.
 
-In [Schnittker, Schmettow & Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, *Levensthein distance* counts the number of edits to transform one sequence into the other  and we used it as the performance score: *deviation from optimal path*.
 
-This is all *not* to say that behavioural records must always end up in performance scores. In *qualitative research*, sequences are examined for recurrent patterns. For example [Thatcher, hypermedia with school children] classified strategies of school children when searching information on the web. As much as I embrace qualitative research, it is not in the scope of this book.
+### Interaction sequences
 
-### performance measures
+Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. The difficult part is the following: When observing 50 users while doing a non-trivial task, no two interaction sequences are exactly the same (if i had to bet on it). By itself, there is little value without further means of interpretation and this can go two ways up:
 
-Applied design research is fundamentally concerned with improvement. The questions raised on a design D are of forms: 
+The diligent and skilled *qualitative* researchers are able to extract meaningful patterns from such sequences. For example, in usability tests, the following patterns are frequently observed and interpreted.  
 
-+ How good is $D$?
-+ Is $D$ good enough?
-+ Which one is better, $D_1$ or $D_2$?
-+ How inclusive is $D$?
-+ etc
++ a user jumping back to the main screen possibly went into a wrong direction
++ users randomly probing around either have no clue or no motivation
++ users in a longitudinal study who only interact at the begin and the end of the period, have no use for the system, really.
 
-A majority of studies observes user behaviour. In [LM: multiple regression] we will encounter the active user paradox (AUP) study. Users were observed doing some tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. For every participant, the researchers  noted down all actions of exploratory nature in a time frame. *Behavioural records* render a detailed and unique picture of every participants behaviour. 
-
-Behavioural records are *sequential*. Events are coded if and when they happen. This raises a combinatorial problem: the set of possible behavioural records is practically infinite. As a result, the sequences are practically unique. The research question in AUP was whether geeks show *more* exploratory behaviour. Obviously, a we need some sort of transformation that gives us a single *performance score*. This we call here the *performance function* and we have many choices, for example:
+The *quantitative* researcher will aim at deriving measures from the interaction sequence. Formally, *to measure* means assigning numbers to observed sequences, so that these can be brought into an *order*, at least. Obviously, we need some sort of transformation that gives us a single *performance score*. This we call here the *performance function* and we have many choices, for example:
 
 + the number of all exploratory events
 + their relative frequency
 + their longest uninterrupted sequence
 + total time spent in exploration
 
-The majority of studies does not produce behavioural records, but proceed to performance, directly, by taking *time-on-task (ToT)*.  In a way, ToT is just a special case of a performance function: all events are just weighed equally, with no difference between intense hacking, relaxed browsing and sweet day dreaming.
 
-In other situations, time measures are right spot-on. When controlling a car in dense city traffic, a few hundred milliseconds can make huge a difference. With the boom of automatization in cars, drivers will face unfamiliar situations, like it happened to Joshua Brown: reacting to a white truck across the motor way that his Tesla autopilot had missed. Research on *reaction times (RT)* is vital and we will encounter an example in [LM: theoretically interesting effects].
+Sometimes, you have to go a long way up the qualitative route, before you can derive useful measures. In [Schnittker, Schmettow & Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, *Levensthein distance* counts the number of edits to transform one sequence into the other  and we used it as the performance score: *deviation from optimal path*. Even more interpreting was another study we did on the active user paradox. We recorded interaction sequences of users doing some repetitive tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. First, events were classified on a low level (e.g. "reading the handbook", "first time trying a function") and later aggregated to broader classes (e.g. "exploratory behavior"). The number of events in a given time frame that were classified as such were finally taken as a measure, representing the exploratory tendencies.
 
-In *experimental cognitive research reaction times* are a dominant tool to reveal the nature of the mind. An everygreen in cognitive psychology is the Stroop task. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it.
-In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of geeks.
+
+
+
+
+
+
+##### EATME: behavioral records
+[A majority of studies observes user behaviour.  *Behavioural records* render a detailed and unique picture of every participants behaviour. 
+
+
+
+### usability [TBC]
+
+
+
+
+
+
+### performance measures
+
+
+A good point to start with is the classic concept of "usability", which the ISO 9142-11 defines by the following three high-level criteria:
+
++ effectiveness: can users accomplish their tasks?
++ efficiency: what resources have to be spend for a task, e.g. time.
++ satisfaction: how did the user like it?
+
+While these criteria originated in the field of Human-Computer Interaction, they can easily be adapted to compare everything that people do their work with. Even within the field, it has been adapted to hundreds of studies and a hundred ways are reported of assessing these criteria. 
+
+*Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or medical errors. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, in the sense of task completion, is primarily a qualitative issue and we shall rarely encounter it in this book.
+
+A more subtle notion of effectiveness is the *quality of outcome*, and strange enough, that is the truly quantitative notion. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.
+
+*Efficiency* is where it reaqlly gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. 
+
+Counting the *number of clicks* before someone has found teh desired piece of informnation is a coarse, but easy to acquire and intuitive measure of efficiency, and so is *time-on-task (ToT)*, which is just the sum . Still, these  It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, *error rate* can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.
+
+ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for *repetition*. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.
+
+Above, I did not mean to say that design research always requires the sometimes painful recording of interaction sequences. The majority of studies jumps over them and proceed to performance measures, directly, by counting attempts or pressing stop watches.
+
+In many situations, such *direct measures* are right spot-on: When controlling a car in dense city traffic, a few hundred milliseconds is what makes huge a difference and therefore *reaction time* is a valid performance measure. In experimental cognitive research reaction times are a dominant tool to reveal the structure of the mind. The Stroop tasks is a golden evergreen cognitive psychology and serves as an example. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it.
+In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of participants. We showed them pictures with computers on them, followed by a printed word (e.g., "explore") on which to perform the Stroop task. It was conceived that reaction time is increased when a participant experiences a strong association, like:
+
+black tower PC + "explore" --> "can someone hand me a screwdriver"
 
 CONDITION WORD    : Ink
 congruent [GREEN ]: green
@@ -110,17 +220,9 @@ neutral   [CHAIR ]: green
 
 
 
-### usability [TBC]
 
-The ISO 9142-11 defines *usability* as composed of:
 
-+ effectiveness: can users accopmlish their tasks?
-+ efficiency: what resources have to be spend for a task, e.g. time.
-+ satisfaction: how did the user like it?
 
-*Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or failures in intravenous medication [Schmettow, voss & Schraagen]. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, to my mind, is primarily a qualitative issue and we shall rarely encounter it in this book.
-
-*Efficiency is where it gets quantitative*. With efficiency, we ask about resources: time, attention, strain, distraction and Euros. CR can be *efficiency*, too, when failure can be repaired in time, such as correcting a typing error. Other than that efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for *repetition*. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.
 
 #### -->*Satisfaction*
 
