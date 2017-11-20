@@ -4,6 +4,7 @@
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
+# knitr::opts_knit$set(cache = T)
 ## The following is for running the script through knitr
 purp.mcmc = F
 source("RMDR.R")
@@ -16,6 +17,8 @@ load_CE(CE)
 #formals(stan_glm)$iter <- 200
 #formals(stan_glm)$chains <- 1
 
+#file.remove("_main.Rmd")
+#bookdown::preview_chapter("Classic_linear_models.Rmd")
 ```
 
 
@@ -38,7 +41,7 @@ $$
 
 The larger $\sigma$ is,  the more questionnable it is that the grand mean is truly *representative* for the population. From the GM we will depart in to directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a design condition. These models will still make statements on population averages, although in a more detailed way. In the following chapter on mixed-effects models, individuals will get spot light. Still, what all the advanced models have in common is that they move variance in the outcome variable from the error variance to predictors. An optimist would say: today's error is tomorrow's predictor.
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma\epsilon$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number surrounded by 0 and 2. In R's formula language it represents the *intercept*. 
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma\epsilon$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number neighboured by 0 and 2. In R's formula language it represents the *intercept*. 
 
 ```{r, opts.label = "rtut"}
 attach(Sec99)
@@ -67,11 +70,12 @@ Much of the time a researcher doesn't want to deal with the posterior, directly,
 ```{r tab:99_seconds_post_fixef, opts.label = "tab"}
 T_coef_1 <- coef(P_1)
 T_coef_1
+detach(Sec99)
 ```
 
 
 ```{r}
-detach(Sec99)
+
 ```
 
 
@@ -96,7 +100,7 @@ attach(Sec99)
 ```
 
 
-```{r}
+```{r opts.label = "tab"}
 coef(P_1, estimate = modeest::shorth)
 ```
 
@@ -276,7 +280,7 @@ detach(Sec99)
 
 
 
-## Walk the line: linear regression
+## Walk the line: linear regression {#linear-regression}
 
 In the previous section we have introduced the mother of all regression models: the grand mean model. It assigns rather coarse predictions, without any real predictors. Routinely, design researchers desire to predict performance based on *metric variables*, such as:
 
@@ -437,7 +441,7 @@ M_age_z <-
   stan_glm(ToT ~ 1 + age_z, data = BAB1)
 
 ```
-```{r}
+```{r opts.label = "tab"}
 P_age <-  bind_rows(P_age, posterior(M_age_z))
 T_age <- fixef(P_age)
 T_age
@@ -471,7 +475,7 @@ As has been said theorists may desire more detailed picture and see disruptions 
 
 ### Posterior predictions 
 
-In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In my perspective they are the *idealized responses*. Posterior predictions are routinely compared to *observed values* which are known beforehand, but contain randomness. The model separates the idealized effect from the randomness.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
+In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In yet another perspective they are  *idealized responses* and as such address both, present and future. Posterior predictions are routinely compared to *observed values* $y_i$ which are known beforehand, but still contain the randomness component. Fitting a linear model basically means separating the idealized effect from the randomness.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
 
 In the BrowsingAB case, we have repeatedly recorded age of participant. LRM found the repeating pattern, that with every unit of age, ToT increased by  `r C_age[2]` seconds. This pattern is what the model predicts, now and forever. If we ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
 
@@ -576,15 +580,15 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 ## A versus B: Comparison of groups {#CGM}
 
-Another basic statistical routines is the *comparison of groups* (CGM), commonly known as ANOVA. In design research group comparisons are all over the place, for example:
+Another basic liknear model is the *comparison of groups* (CGM), which replaces the commonly known analysis of variance (ANOVA). In design research group comparisons are all over the place, for example:
 
 + comparing designs: as we have seen in the A/B testing scenario
-+ comparing groups of people, like  gender or whether they have a high school degree, or not
++ comparing groups of people, like  gender or whether they have a high school degree
 + comparing situations, like whether someone uses an app on the go, or sitting still behind a computer
 
-In order to perform a CGM, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the factor Design with its levels A and B does the job.
+In order to perform a CGM, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the prominent factor is Design with its levels A and B.
 
-This question could appear during an overhaul of a municipal website. With the emerge of e-government, many such websites had grown wildly over a decade. They temporarily were jungles, to the disadvantage for the  users. The prototype of a novel web design is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *do two web designs A and B differ in user performance?*
+Asking for differences between two (or more) designs is routine in design research. For example, it could occur during an overhaul of a municipal website. With the emerge of e-government, many municipal websites have grown wildly over a decade. What once was a lean (but not pretty) 1990 website over time has grown into a jungles, to the disadvantage for the users. The BrowsingAB case could represent the prototype of a novel web design, which is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *do two web designs A and B differ in user performance?*
 
 Again, we first take a look at the raw data:
 
@@ -631,21 +635,21 @@ detach(BrowsingAB)
 ```
 
 
-The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, clearly design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "Intercept")` Given the 95% CIs one would rather say that it is around 200. 
+The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is the *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "Intercept")`. 
 
-The second parameter is the *effect* of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely  justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
-
-
+The second parameter is the effect of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
 
 
 
 
 
-### Not stupid: dummy variables
+
+
+### Not stupid: dummy variables {#dummy_variables}
 
 Are we missing something so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor, a non-metric variable. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{DesignB} \times\beta_1$?
 
-*Factors* basically answer the question: *What group does the observation belong to?* The answer is a label and cannot enter the regression formula. *Dummy variables* solve the dilemma by asking the simpler question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
+*Factors* basically answer the question: *What group does the observation belong to?*. This is a label, not a number, and cannot enter the regression formula. *Dummy variables* solve the dilemma by converzing factor levels to numbers. A dumma variable represents only one level of a factor, by asking the simple question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
 
 ```{r}
 attach(BrowsingAB)
@@ -670,13 +674,15 @@ $$
 v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} 
 $$
 
-Boolean variables can be both: numerical and categorical. It is unfortunate that we call them dummies in such a belittling manner, as they are truly bridges between the world of categories and arithmetic. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables d_A and d_B, the likelihood is written as:
+Boolean variables can be used in all contexts, including numerical and categorical. It is unfortunate that we call them dummies in such a belittling manner, as they are truly bridges between the world of categories and arithmetic. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables `d_A` and `d_B`, the likelihood is written as:
 
 $$ 
-\mu_i = d_A \beta_{A} + d_B \beta_{B} 
+\mu_i = d_{Ai} \beta_{A} + d_B \beta_{Bi} 
 $$
 
-When $d_A=1,d_B=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted dummy. As I have already done that with a typecast above, we can right-away pipe the following into `stan_glm`.
+When $d_{Ai}=1, d_{Ai}=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted as desired. This has been done that with the explicit typecast `as.numeric` above.
+
+Most research deals with estimating effects as differences and all regression engines quietly assume that what you want is a model with a reference group. When expanding the dummy variables manually, this automatism gets into the way and the needs to be switched off, explicitly.  In Rs linear models formula language, that is done by adding the term `0 +` to the formula.
 
 
 ```{r fit:dummy_2, opts.label = "mcmc"}
@@ -689,14 +695,19 @@ M_dummy <-
 fixef(M_dummy)
 ```
 
-The model contains two effects, which are exactly the group means. This model is what we can call an *absolute group means model (AGM)*. As there is no reference group, we don't want an intercept estimate anymore. Most research deals with estimating effects as differences. All regression engines quietly assume that what you want is a model with intercept. The `0 +` term in the model formula switches the intercept off.
+In its predictions, the model `M_dummy` is equivalent to the fomer model `M_design`, but contains two effects that are exactly the group means. This model we  call an *absolute group means model (AGM)*.
 
-While the regression engines handle factors internally, when specifying the likelihood we have to use the dummy variables. When doing an AGM on a factor $x_1$ with $1,...,k$ levels, the likelihood function becomes:
+Regression engines expand dummy variables automatically, when they encounter a factor. However, when formally specifying the likelihood, dummy variables must be made explicit. When doing an AGM on a factor $x_1$ with $1,...,k$ levels, the likelihood function becomes:
 
 $$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$
 
-Still, much of the time the CGM with a reference group is the model of choice. With reference group A, the CGM with ToT on design is written as follows:
-$μ_i=β_0+d_B β_1$. In general for a factor with $k$ levels in a CGM with intercept, $k-1$ dummy variables need to be constructed in the way shown above. As all non-reference levels are seen as difference towards the reference, *the reference level is set to always on*. To see so, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, all observations are taken for the intercept, whereas level B is switched on and off.
+In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models \@ref(multilevel-models)). With expanded dummy variables, the likelihood can become unduly long. However, many other textbooks avoid this altogether and the model is unambiguously specified in Rs regression formula language.
+
+Up to this point, I have introduced dummy variables at the example of AGMs, where at any moment only one factor level is switched on. A more common CGMs  would have a the following likelihood specification (with a factor of $k$ levels):
+
+$$\mu_i = \beta_0 + d_1 \beta_{1[1]}+...+d_k \beta_{1[k-1]}$$
+
+For a factor with $k$ levels in a CGM with intercept, $k-1$ dummy variables need to be constructed in the way shown above. As all non-reference levels are seen as difference towards the reference, *the reference level is set to always on*. To see so, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, for all observations the `(Intercept)` column takes the value `1`, whereas level `DesignB` is switched on and off.
 
 ```{r dummy_4, opts.label = "rtut"}
 BAB1 %>% 
@@ -708,27 +719,28 @@ BAB1 %>%
 
 ```
 
-In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in linear mixed-effects models [LMM]). With the above notation, the likelihood can become unduly long and I will use the following abbreviation, where the $[./r]$ denotes all factor levels, except the reference level r:
 
-$$
-μ_i=β_0+x_{1[./r]} β_{1[./r]}
-$$
-The regression engines usually take care of dummy variables. Still, by understanding the concept, we gained additional flexibility in specifying factorial models. One variant is to estimate an AGM, leaving out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second gain is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean, by setting contrasts.
+
+
+Regression engines take care of factors, automatically, expanding the dummy variables under the hood. Still, by understanding the concept, we gained additional flexibility in specifying factorial models. One variant is to estimate an AGM, which leaves out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second benefit is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean, by setting contrasts.
 
 ```{r}
 detach(BrowsingAB)
 ```
 
 
-### Getting it sharper with contrasts [TBC]
+### Getting it sharper with contrasts [TBC] {#contrasts}
 
-The default behavior of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called treatment contrasts. In a moment, we will encounter different contrasts that represent different questions, for example:
+The default behavior of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called *treatment contrasts*. Treatment contrasts do not have anything special to them. They are just a default of the regression engines, because so many people work experimentally. 
+
+Before we come to an understanding what contrasts are, let me point out what they are not: In \@ref(dummy_variables) it was mentioned, that the AGM and CGM make exactly the same predictions (even though the formulas differ by the `+0` term). For contrasts, this holds in general. Setting contrasts never changes the predictions $\mu_i$. In contrast, *contrast change what the coefficients $\beta_i$ mean*. Recall, that in an CGM, $\beta_1$ has the meaning of "difference to the reference group", whereas in an AGM, it is "the mean of the second group". 
+
+In the following, I will illustrate contrasts that represent two different types of questions:
 
 + To what extent does a group deviate from the overall mean in the sample?
-
 +	With three ordered factor levels, how large is the rolling effect, i.e. from level 1 to level 2, and the average of 1 and 2 to level 3?
 
-But first, we have to figure out how contrasts are coded. Treatment contrasts do not have anything special to them, in fact. They are just a default of the regression engines. One might therefore assume that we have to alter the regression formula or otherwise specify the contrasts using dedicated arguments of the regression command. It is a bit confusing, that this is not so. Instead, *contrasts are set as attributes of the respective factor  variable*, which we can retrieve by the standard command contrasts:
+So, how are contrasts set?  Although, this is a bit odd, they are neither set by modifications to the regression formula, nor by additional command arguments. Instead, *contrasts are set as attributes of the factor  variable*, which we can retrieve by and set by the standard command `contrasts`. For example, the variable Education has the three levels "Low", "Middle", "High", in that order:
 
 ```{r}
 attach(BrowsingAB)
@@ -743,12 +755,12 @@ contrasts(BAB1$Education) %>%
 
 ```
 
-The currently set contrasts table specifies the dummy variables for the CGM. The level Low is omitted in the contrasts table as it is the reference level with an always-on intercept. In the previous section i mentioned that you can choose the reference level freely by constructing the dummy variables accordingly. However, that would mean to always bypass the regression engines dummy handling. The package `forcats` provides a set of commands to change factor levels, for example reversing the order:
+If you believe to have seen something similar before, you are right. Contrast tables are related to dummy variables (\@ref(dummy_variables)). The column Low is omitted in the contrasts table as it is the reference level with an always-on intercept. In the previous section I mentioned that you can choose the reference level freely by constructing the dummy variables accordingly. However, that would mean to always bypass the regression engines dummy handling. The package `forcats` provides a set of commands to change the order of levels. In the following code, the factor levels are reversed, such that High becomes the reference group:
 
 ```{r contrasts_2, opts.label = "rtut"}
 BAB1 <-
   BAB1 %>% 
-  mutate(Education_rev = forcats::fct_rev(Education))
+  mutate(Education_rev = forcats::fct_rev(Education)) # <--
 levels(BAB1$Education_rev)
 contrasts(BAB1$Education_rev) %>% 
   kable()
@@ -761,8 +773,9 @@ detach(BrowsingAB)
 
 
 
-When running a CGM on `Education_rev`, the intercept represents level High, now. It is worth noting that this model would make the very same predictions and residuals. It is the same model as before, just written differently.
-Sometimes, it is useful to have contrasts other than treatment, as this more closely matches the research question. A plethora of contrasts is known, I will introduce *deviation contrasts* and *successive difference contrasts*.
+If we were running a CGM on `Education_rev`, the intercept would represent level High, now. Again, this model would make the very same predictions and residuals. In that respect, it is the same model as before, only the meaning (and values) of the coefficients changes and become differences to the level High. 
+
+Sometimes, it is useful to have contrasts other than treatment, as this more closely matches the research question. A plethora of contrasts is known, I will introduce *deviation contrasts* and *successive difference contrasts* in the following.
 
 [Example for deviation coding]
 
@@ -785,7 +798,7 @@ That means you have to first introduce and train your users to get fluent with t
 ]
 
 
-### Sharper on the fly: derived quantities
+### Sharper on the fly: derived quantities [TBD]
 
 Contrasts are classic in aligning regression estimates with research questions that state a differences. With two groups A and B the following hypotheses of difference can be formed:
 
@@ -815,24 +828,23 @@ Contrasts are classic in aligning regression estimates with research questions t
 
 
 
+
+
+
 ## Putting it all together: multi predictor models
 
-Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer computing products, enterprise information systems and cars are extremely diverse. Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we could record.
+Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer products, enterprise information systems and cars can be extremely diverse. At the same time, Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we have recorded. First, we will see, how to use models with two or more metric covariates. Subsequently, we address the case of multi-factorial designs. Finally, we will see examples of models, where covariates and factors peacefully co-reside.
+ 
+ 
 
- 
- 
- 
- 
- 
- 
 
 ### On surface: multiple regression models 
 
-Productivity software, like word processors, presentation and calculation software or graphics programs have evolved over decades. For every new release, dozens of developers have worked hard to make the handling more efficient and experience better.  Consider a graphics program: basic functionality such as drawing lines, select an object and move it or colorize with the bucket tool, have practically always been there. A user wanting  to draw six rectangles, paint them red and arrange them in a grid pattern, can do so.  At a certain point of system evolution, it was recognized that this is what users routinely do: creating a grid of alike objects. With the basic  functions this is rather repetitive and a new function was created, called "copy-and-arrange". Users may now create a single object, specify rows and columns of the grid and give it a run.
+Productivity software, like word processors, presentation and calculation software or graphics programs have evolved over decades. For every new release, dozens of developers have worked hard to make the handling more efficient and the user experience more pleasant.  Consider a program for drawing illustrations: basic functionality, such as drawing lines, selecting objects, moving or colorize them, have practically always been there. A user wanting  to draw six rectangles, painting them red and arranging them in a grid pattern, can readily do that using basic functionality.  At a certain point of system evolution, it may have been recognized that this is what users routinely do: creating a grid of alike objects. With the basic  functions this is rather repetitive and a new function was created, called "copy-and-arrange". Users may now create a single object, specify rows and columns of the grid and give it a run.
 
-The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, Users (people?) have a tendency to stick with their old routines, ignoring new functionality right away. This is called the *active user paradox (AUP)*. 
+The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? Not right so, as [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, as users have a strong tendency to stick with their old routines, ignoring new functionality right away. This troubling observation has been called the *active user paradox (AUP)*. 
 
-Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioral coding system was used to derive an individual AUP resistance score.
+Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioral coding system was used to derive an individual AUP resistance score. Are users with high need-for-cognition and geekism  more explorative and resistant to the AUP?
 
 ```{r, opts.label = "future"}
 attach(AUP)
@@ -856,7 +868,7 @@ detach(AUP)
 ```
 
 
-As we will see, it is better to build a model with two simultaneous predictors. For instructive purposes we begin with two separate LRM, one for each predictor. Throughout the regression models we use z-transformed scores. Neither the personality nor the resistance scores have a natural interpretation, so nothing is lost in translation. 
+As we will see later, it is preferable to build a model with two simultaneous predictors. For instructive purposes we begin with two separate LRM, one for each predictor. Throughout the regression models we use z-transformed scores. Neither the personality nor the resistance scores have a natural interpretation, so nothing is lost in translation. 
 
 $$
 \mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs}\\
@@ -872,51 +884,61 @@ M_1 <-
 M_2 <- 
   AUP_1 %>% 
   stan_glm(zresistance ~ zgex, data = .)
-
-P <-
-  bind_rows(posterior(M_1),
-            posterior(M_2))
 detach(AUP)
 
 ```
 
 
-Table XY below (`M_1` and 'M_2') shows the two separate  effects. We can ignore the intercepts, as the predictors have been z-centered and they are practically zero, therefore. Both personality scores seem to have a weakly positive impact on AUP  resistance.
+\@ref(tab:AUP_coef) shows the two separate effects (`M_1` and `M_2`). Due to the z-transformation of predictors, the intercepts are practically zero. Both personality scores seem to have a weakly positive impact on AUP  resistance.
 
-Next, we estimate a model that regards both predictors simultaneously. For that purpose, we just add the two linear terms:
+Next, we estimate a model that regards both predictors simultaneously. For linear models, that requires nothing more than to make a sum of all involved predictor terms (and the intercept). The result is a `multiple regression model (MRM)`:
 
 $$
 \mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs} + \beta_\mathrm{gex} x_\mathrm{gex}
 $$
 
-It is likewise straight-forward to run a regression model that contains both covariates simultaneously: 
+In Rs regression formula language, this likewise straight-forward. The `+` operator directly corresponds with the `+` in the likelihood formula.
 
 ```{r fit:AUP_MRM, opts.label = "mcmc"}
 attach(AUP)
 M_3 <- 
   AUP_1 %>% 
-  stan_glm(zresistance ~ zncs + zgex, data = .)
-
-P <-  bind_rows(P, posterior(M_3))
+  stan_glm(zresistance ~ zncs + zgex, data = .) #<--
 
 detach(AUP)
 
 ```
 
-```{r tab:AUP_coef, opts.label = "tab"}
+For the comparison of the three models we make use of a feature of the package bayr: the posterior distributions of arbitrary models can be combined into one multi-model posterior object, by just stacking them upon each other. The coefficient table of such a multi-model posterior gains an additional column that identifies the model:
+
+
+
+```{r AUP_coef, opts.label = "tab"}
 attach(AUP)
 
+P <-
+  bind_rows(posterior(M_1),
+            posterior(M_2),
+            posterior(M_3))
+
 T_coef_3 <- P %>% 
-  filter(fixef %in% c("zncs", "zgex")) %>% 
   posterior() %>%  
-  coef()
+  fixef()
 T_coef_3
 ```
 
-When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: with `M_3`, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. 
-NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zncs")`. The reason is that the two *predictors are correlated*:
+The intercepts of all three models are practically zero, which is a consequence of the z-transformation. Recall, that the intercept in an LRM is the predicted value, when the predictor is zero. In MRM this is just the same: here, the intercept is the predicted AUP resistance score, for when NCS and GEX are both zero.
 
-```{r fig:AUP_corr_predictors}
+
+When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: in the MRM, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zncs")`. 
+
+
+
+For any researcher who has carefully conceived research questions that appears to be a disappointing outcome. In fact, there is a reason for the loss of strength and ignoring this issue will mislead the interpretation of results.
+
+The reason is that the two *predictors are correlated*. In this study, participants who are high on NCS also tend to have more pronounced geekism. \@ref(fig:AUP_corr_predictors) reveals the situation:
+
+```{r AUP_corr_predictors}
 G_eda_4 <- 
   AUP_1 %>% 
   ggplot(aes(x = zncs, y = zgex)) +
@@ -924,28 +946,50 @@ G_eda_4 <-
   geom_smooth(method = "lm", se = F) +
   labs(title = str_c("Correlation between ncs and gex: ", 
               round(cor(AUP_1$zncs, AUP_1$zgex), 2)))
+
 G_eda_4
 
 detach(AUP)
 ```
 
-Participants with a higher NCS also tend to have more geekism. Is that surprising? I don't think so. People high on NCS love to think. Computers are a good choice for them, because these devices make you think. Finally, a positive attitude towards hacking makes people resistant for the AUP.  
+
+Participants with a higher NCS also tend to have more geekism. Is that surprising? Actually, it is not. People high on NCS love to think. Computers are a good choice for them, because these are complicated devices that make you think. (Many users may even agree that computers help you think, for example when analyzing your data with R.) In turn, geekism is a positive attitude towards working with computers in sophisticated ways, which means such people are more resistant towards the AUP.
 
 [NCS: love to think] --> [GEX: love computers] --> [resist AUP]
 
 When such a causal chain can be established, some researchers speak of a *mediating variable* GEX.
 Although a bit outdated [REF], *mediator analysis is correct when the causal direction of the three variables is known*. Then, a so-called step-wise regression is performed to find the pure effects. (A better alternative is structural equation modelling, SEM). 
 
-Unfortunately, in the situation here, the causal direction is partly ambiguous. We can exclude that the resistance test has influenced the personality scores, because of the order in the experiment. However, the relation with NCS and GEX is ambiguous as with  the same determination we can put forth: geeks love computers and computers reward you for thinking hard. If you like thinking hard, then you probably also like thinking upfront, when solving computer puzzles.
+Unfortunately, in the situation here, the causal direction is partly ambiguous. We can exclude that the resistance test has influenced the personality scores, because of the order of apperance in the study. But, causally speaking, geekism may well preceed NCS. For example, computers reward you for thinking hard and, hence, you get used to it and make it your lifestyle. If you like thinking hard, then you probably also like the challenge that was given in the experiment.
 
 [GEX: love computers] --> [NCS: love to think] --> [resist AUP]
 
-In causally ambiguous situations, there is no natural order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultaneous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
+In the current case, we can not distinguish between these two competing theories by data alone. This is a central problem in empirical research. An example, routinely re-iterated in social science methods courses is the observation that people who are more intelligent tend to  consume more fresh vegetables. Do carrots make us smart? Perhaps, but it is equally plausible that eating carrots is what smart people do.
 
-Due to the z-transformation, the intercepts became practically zero and could be ignored. Still, what does the intercept mean in MRM? Similar to LRM, it is the predicted value when all predictors take the value zero.
+The issue is that a particular direction of causality can only be established, when all reverse directions can be excluded. Behavioural science reseachers know of only two ways to do so: 
+
+1. By the *arrow of time*, it is excluded that a later event caused a preceding one. In the AUP study, there is no doubt that filling  out the two personality questionnaires cause the behaviour in the computer task, because of the temporal order.
+2. In *strictly controlled experiments*, participants are assigned to the conditions, randomly. That has (virtually) happened in the BrowsingAB case, which gives it an unambiguous causal direction. This was not so, if participants had been allowed to choose themselves which design to test.  
+
+To come back to the AUP study: There is no way to establish a causal order of predictors. The correct procedure is to regard the predictors simultaneously (not step-wise), as in model `M_3`. This results in a redistribution of the overall covariance and the predictors are *mutually controlled*. In `M_2` the effect of GEX was promising at first, but then became spurious in the simultaneous model. Most of the strength was just borrowed from NCS by covariation. The model suggests that loving-to-think has a quite stronger association with AUP resistance than loving-computers.
+
+That *may* suggest, but not prove, that geekism precedes NCS, as in a chain of causal effects, elements that are closer to the final outcome (AUP resistance), tend to exert more salient influence. But, without further theorizing and experimenting this is weak evidence of causal order.
+
+The readers of a paper on geekism, NCS and the AUP will probably be more impressed by the (still moderate) effects in the separate models we had run, initially. The reason why one should not do that is that separate analyses suggest that the predictors are independent. To illustrate this at an extreme example, think of a study where users were asked to rate their agreement with an interface by the following two questions, before ToT is recorded:
+
+1. The interface is beautiful
+2. The interface has an aesthetic appearance?
+
+Initial separate analysis shows strong effects for both predictors. Still, it would not make sense to give the report the title: "Beauty and aesthetics predict usability". Beauty and aesthetics are practically synonyms. For Gex and NCS this may be not so clear, but we cannot exclude the possibility that they are linked to a common factor, perhaps a third trait that makes people more explorative, no matter whether it be thoughts or computers.
+
+So, what to do, when two predictors correlate strongly? First, we always report just a single model. Per default, this is the model with both predictors, simultaneously. The second possibility is to use a disciplined method of *model selection* \@ref(model_selection) and remove this (or those) predictors that do not actually contribute to prediction. The third possibility is, that the results with both predictors become more interesting when including interaction effects \@ref(interaction_effects)
 
 
-### Crossover: multifactorial models
+
+
+
+
+### Crossover: multifactorial models [TBC]
 
 The only necessary precondition for statistical control is that you recorded the influencing variable. This has happened in the BrowsingAB study: the primary research question regarded the design difference, but the careful researcher also recorded the gender of participants.
 
@@ -976,7 +1020,7 @@ The other two fixed effects are, once again, differences to the reference. Here,
 
 
 
-### Line-by-line: regression in groups {#line-by-line}
+### Line-by-line: regression in groups {#line-by-line} [TBC]
 
 Recall that dummy variables make factors compatible with linear regression. No barriers are left for combining factors and covariates in one model. For example, we can estimate the effects age and design simultaneously:
 
@@ -1018,7 +1062,7 @@ M_0 <-
   stan_glm(ToT ~ 1, data = .)
 ```
 
-```{r}
+```{r opts.label = "tab"}
 bind_rows(
   posterior(M_0),
   posterior(M_age_cntr)) %>% 
@@ -1066,7 +1110,7 @@ So far, we have seen two linear models, the GMM and the LRM. They only differ in
 
 $$y_i \sim N(\mu_i, \sigma_\epsilon)$$
 
-In words, the random term says: *observed values $y_i$ are drawn from a Normal distribution with the predicted value $\mu_i$ as mean and a fixed standard deviation $\sigma_\epsilon$*. As we have seen in @\ref(distributions), Normal distributions are one pattern of randomness among many and this choice may therefore be appropriate, or not. One heuristic that may justify this choice is that the observed values are located rather in the center of the scale of measurement. That is certainly much better, than to blindly stick to the Normal random pattern just for convenience. Even better is to check the assumption of Normally distributed randomness. In the following, we will examine the underlying assumptions closer and apply graphical techniques for verification. Before we delve into more depth, I would like to contrast the overall tenor in this section (and [MODSEL]) to the workflow frequently encountered in classic statistics. Boldly speaken, classicically trained researchers often sem to imply, that such assumptions needed to be checked beforehand. In the process called *assumption checking*, arcane non parametric tests are carried out, before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see now, the order of actions is just the other way round. In the workflow called *model criticism*, we start by contemplating what may be a reasonable model, using heuristics or even past data. Then the model is immediatly executed and the estimated model itself undergoes a routine checkup. In linear models, verifying the random pattern assumptions grounds on extracting the estimated residuals from the model object and is hence called *residual analysis*.
+In words, the random term says: *observed values $y_i$ are drawn from a Normal distribution with the predicted value $\mu_i$ as mean and a fixed standard deviation $\sigma_\epsilon$*. As we have seen in \@ref(distributions), Normal distributions are one pattern of randomness among many and this choice may therefore be appropriate, or not. One heuristic that may justify this choice is that the observed values are located rather in the center of the scale of measurement. That is certainly much better, than to blindly stick to the Normal random pattern just for convenience. Even better is to check the assumption of Normally distributed randomness. In the following, we will examine the underlying assumptions closer and apply graphical techniques for verification. Before we delve into more depth, I would like to contrast the overall tenor in this section (and [MODSEL]) to the workflow frequently encountered in classic statistics. Boldly speaken, classicically trained researchers often sem to imply, that such assumptions needed to be checked beforehand. In the process called *assumption checking*, arcane non parametric tests are carried out, before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see now, the order of actions is just the other way round. In the workflow called *model criticism*, we start by contemplating what may be a reasonable model, using heuristics or even past data. Then the model is immediatly executed and the estimated model itself undergoes a routine checkup. In linear models, verifying the random pattern assumptions grounds on extracting the estimated residuals from the model object and is hence called *residual analysis*.
 
 In the notation displayed above, there are possibly as many distributions as there are observed values (due the subscript in $\mu_i$). It appears impossible to evaluate not just one distribution but such many. However, an equivalent notation is routinely used for linear models, that specifies just one *residual distribution*. For the LRM that is:
 
@@ -1076,7 +1120,7 @@ y_i = \mu_i + \epsilon_i\\
 \epsilon_i \sim N(0, \sigma_\epsilon)
 $$
 
-In this notation, observed values $\y_i$ are decomposed into predicted values and *individual* residuals $\epsilon_i$. These are frequently called *errors*, hence the greek symbol $\epsilon$. The standard deviation of residuals $\sigma_\epsilon$ is commonly called the *standard error*. The random pattern of the model can now be expressed as a single Normal distribution. The reason why I do not use this notation routinely, is that it only works for linear models, but not for models with other random patterns. More specifically, Generalized Linear Models @\ref(generalized_linear_models) cannot be specified that way. But, for the purpose of residual analysis, it appears more intuitive. 
+In this notation, observed values $y_i$ are decomposed into predicted values and *individual* residuals $\epsilon_i$. These are frequently called *errors*, hence the greek symbol $\epsilon$. The standard deviation of residuals $\sigma_\epsilon$ is commonly called the *standard error*. The random pattern of the model can now be expressed as a single Normal distribution. The reason why I do not use this notation routinely, is that it only works for linear models, but not for models with other random patterns. More specifically, Generalized Linear Models \@ref(generalized_linear_models) cannot be specified that way. But, for the purpose of residual analysis, it appears more intuitive. 
 
 The first assumption of randomness underlying the linear model simply is that the distribution follows Normal distribution. Visually, Normal distributions is characterized by:
 
@@ -1085,6 +1129,8 @@ The first assumption of randomness underlying the linear model simply is that th
 + at same rates (symmetrity)
 
 For a rough evaluation of this assumption, it suffices to extract the residuals from the model at hand and plot it as a distribution. The `residuals` command returns a vector of residual values, exactly one per observation. With the vector of residuals at hand, we can evaluate this assumption by comparing the residual distribution to its theoretical form, a perfect bell curve. The following command chain extracts the residuals from the model and pipes them into the ggplot engine to create a histogram. With `stat_function` an overlay is created with the theoretical Normal distribution, which is centered at zero. The standard error $\sigma_\epsilon$ has been estimated alongside the coefficients and is extracted using the function `bayr::coef`.
+
+
 
 ```{r}
 attach(BrowsingAB)
@@ -1143,51 +1189,54 @@ detach(BrowsingAB)
 ```
 
 
-The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in @\ref(distributions), but one has been displayed in @\ref(first_program). In brief, a bimodal residual distribution can arise, when two group exists in the data, which lay far apart. The following  code illustrates the situation by simulating a simpole data set with two groups, that is fed into a GMM.
+The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two group exists in the data, which lay far apart. The following  code illustrates the situation by simulating a simpole data set with two groups, that is fed into a GMM.
 
 
 
 ```{r}
-D <- 
+D_1 <- 
   bind_rows(
     data_frame(Group = "A", y = rnorm(50, 4, 1)),
     data_frame(Group = "B", y = rnorm(50, 8, 1))
   )
 
-M <- stan_glm(y ~ 1, data = D)
+M_1 <- stan_glm(y ~ 1, data = D_1, iter = 200)
 
-D  %>%  
-  mutate(resid = residuals(M)) %>% 
+D_1  %>%  
+  mutate(resid = residuals(M_1)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
   
 ```
 
-These two deviations from Normal distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models @\ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Mulitmodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced, in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, in almost comes natural to distinguiish between users who have used the design before, and those who didn't. If the grouping variable is recorded, the solution is group comparison models @\ref(CGM), soon to be introduced.
+These two deviations from Normal distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Mulitmodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced, in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, in almost comes natural to distinguiish between users who have used the design before, and those who didn't. If the grouping variable is recorded, the solution is group comparison models \@ref(CGM), soon to be introduced.
 
 Visual assessment of symmetry and unimodality is simple and effective in many cases. But, Normal distributions are not the only to have these properties. At least logistic distributions and t distributions have these, too, with subtle different in curvature. Normal and t distributions differ in how quickly probability drops in the tails. Normal distributions drop much faster such that extreme events are practically impossible. With t-distributions, extreme values drop in probability, too, but the possibility of catastrophies (or wonders) stays substantial for a long time.
 
 Provided one has a small abundance of data, *quantile-quantile (qq) plots* can be used to evaluate subtle deviations in curvature (and symmetry and unimodality). In qq plots, the observed and theoretical distributions are both flattened and put against each other. This is a powerful and concise method, but it is harder to grasp. The following code illustrates the construction of a qq-plot that compares GMM residuals of a t-distributed measure against the Normal distribution. We simulate t-distributed data, run a GMM and extract residuals, as well as the standard error $\sigma_\epsilon$.
 
+
+
 ```{r}
 set.seed(2)
-D <- data_frame(y = rt(200, 2))
-M <- stan_glm(y ~1, data = D)
+D_2 <- data_frame(y = rt(200, 2))
+M_2 <- stan_glm(y ~1, data = D_2, iter = 200)
 
-D$resid <- residuals(M) 
-C_sigma <- rstanarm::sigma(M)
+D_2 <-   mutate(D_2, resid = residuals(M_2))
+C_sigma <- rstanarm::sigma(M_2)
 ```
 
-We obtain the following residual and theoretical distribution. It is approximately symmetric and unimodal, but the curvature seems to be a bit off.
+We obtain the following residual and theoretical distributions. It is approximately symmetric and unimodal, but the curvature seems to be a bit off.
+
 
 ```{r}
 
-D %>% 
-  ggplot(aes(x = resid)) + 
+D_2 %>%
+  ggplot(aes(x = resid)) +
   geom_histogram(aes(y = ..density..)) +
-  stat_function(fun = dnorm, 
-                args = c(mean = 0, 
-                         sd = C_sigma), 
+  stat_function(fun = dnorm,
+                args = c(mean = 0,
+                         sd = C_sigma),
                 colour = "red")
 
 ```
@@ -1197,14 +1246,14 @@ The next step is where the two curves get flattened. First, we compute a sequenc
 
 ```{r}
 D_QQ <- data_frame(step = 0:100/100,
-           quant_smpl = quantile(D$resid, step),
+           quant_smpl = quantile(D_2$resid, step),
            quant_theo = qnorm(step, 0, C_sigma))
+
 D_QQ %>% 
   ggplot(aes(x = quant_theo, y = quant_smpl)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, col = "red")
 
-D_QQ
 
 ```
 
@@ -1213,7 +1262,7 @@ In the ideal case, they match perfectly, and the quantiles are on a straight  li
 The ggplot engine provides an easy to use geometry for qqlots, which lets us further explore deviant patterns. Variables with t distribution take an inverse-sigmoid shape due to their fat tails. 
 
 ```{r}
-D %>% 
+D_2 %>% 
   ggplot(aes(sample = resid)) +
   geom_qq(distribution = qnorm) +
   geom_abline(intercept = 0, slope = 1, col = "red")
@@ -1228,7 +1277,7 @@ Once mastered, the qq-plot is the swiss knife of Normality check. Next to the su
   geom_abline(intercept = 0, slope = 1, col = "red")
 ```
 
-To the left, extreme values have a lower probability than predicted by the Normal distribution, but the right tail are much fatter, one again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-spedified,  neither predictions nor estimate, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter @\ref(poisson_regression). 
+To the left, extreme values have a lower probability than predicted by the Normal distribution, but the right tail are much fatter, one again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-spedified,  neither predictions nor estimate, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(poisson_regression). 
 
 
 
@@ -1236,7 +1285,7 @@ To the left, extreme values have a lower probability than predicted by the Norma
 
 #### Constant variance {#resid_constant_variance}
 
-In @\ref(testing_normality) we have assessed one assumption that underlies all linear models, namely Normal distribution of residuals. The second assumption underlying the linear model random (or residual) is that residual variance is constant throughout the whole range. In both, classic and modern notation this grounds in the there being just a single $\sigma_\epsilon$ defined. However large $\mu_i$ is, the dispersion of residuals is not supposed to change.
+In \@ref(resid_normality) we have assessed one assumption that underlies all linear models, namely Normal distribution of residuals. The second assumption underlying the linear model random (or residual) is that residual variance is constant throughout the whole range. In both, classic and modern notation this grounds in the there being just a single $\sigma_\epsilon$ defined. However large $\mu_i$ is, the dispersion of residuals is not supposed to change.
 
 Before we dive into the matter of checking the assumption let's do a brief reality check using common sense:
 
@@ -1260,7 +1309,7 @@ BAB1 %>%
 ```
 
 
-Both sets of residuals are reasonably symmetric, but it appears that design B produces more widely spread residual. Something in the design causes individual performance to vary stronger from the population mean. The cause of this effect will be disclosed in @\ref(differential_design_effects). (In essence, design B is rather efficient to use for younger users, whereas older users seem to have severe issues.)
+Both sets of residuals are reasonably symmetric, but it appears that design B produces more widely spread residual. Something in the design causes individual performance to vary stronger from the population mean. The cause of this effect will be disclosed in \@ref(differential_design_effects). (In essence, design B is rather efficient to use for younger users, whereas older users seem to have severe issues.)
 
 Visual checks of constant variance for factors is straight forward using common boxplots. For continuous predictors, such as age, requires a more uncommon graphical representation  known as *quantile plots*. These are not the same as qq plots, but luckily are included with ggplot.
 
@@ -1307,7 +1356,7 @@ AUP_1 %>%
   geom_quantile()
 ```
 
-We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, when we turn towards @\ref(generalized_linear_models), we will find that these  models take provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as interaction effects or heterogeneity in groups.
+We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, when we turn towards \@ref(generalized_linear_models), we will find that these  models take provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as interaction effects or heterogeneity in groups.
 
 ```{r}
 detach(AUP)
@@ -1316,9 +1365,10 @@ detach(AUP)
 
 
 
-##### [EATME]
 
 ```{r eval = F, show = F}
+##### [EATME]
+
 What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(BrowsingAB$P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`r BrowsingAB$C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
 
 
@@ -1360,13 +1410,6 @@ data_frame(age = runif(200, 20, 70),
 
 follow a flat line (at zero), whereas we see in the graph that the residuals tend towards negative values for older people. The same holds for the dispersion of residuals: there is exactly one $\sigma$ in the equation, hence there should not be any difference in variance between young and old.
 Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 75% quantiles. Two visible trends occur in both models. First, the residuals seem to get more dispersed for higher age. Second, there is a downward trend, with the error for older people tending to be on the negative side. It seems that young and old have different residual distributions, although the classic residual term clearly demands that they come from a single distribution:
-
-
-
-
-```
-
-
 
 
 
@@ -2249,12 +2292,13 @@ detach(Uncanny)
 
 
 
-## Stub: How parameter estimation with RSS works
-
-Here I demonstrate a brute force method to find the optimal parameters for the linear regression.
-The parameter space span by $beta_0$ and $\beta_1$ is systematically explored, and for every combination the RSS is computed. The point where the RSS is at its minimum is the _least square estimate_.
 
 ```{r rss_minimization, opt.label = "deprecated"}
+## Stub: How parameter estimation with RSS works
+
+# Here I demonstrate a brute force method to find the optimal parameters for the linear regression.
+# The parameter space span by $beta_0$ and $\beta_1$ is systematically explored, and for every combination the RSS is computed. The point where the RSS is at its minimum is the _least square estimate_.
+
 # ## function for RSS
 # RSS = Vectorize(function(beta_0, beta_1){
 #   Browsing %>%
