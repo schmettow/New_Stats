@@ -1,28 +1,4 @@
----
-title: "New statistics for the design researcher"
-author: "Martin Schmettow"
-date: "August 9, 2017"
-output:
-  word_document:
-    toc: yes
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    theme: journal
-    toc: yes
-subtitle: A Bayesian workshop in R
-bibliography: Bayesian_Stats.bib
----
-
-
-
-<style type="text/css">
-.table {
-     width: auto;
-
-}
-</style>
-
+# Elements of quantitative design research {#design_research}
 
 
 ```{r setup, include = F}
@@ -43,11 +19,9 @@ formals(stan_glm)$chains = 2
 
 
 
-# Elements of quantitative design research
+A *design* is the structure of an artifact or process that people use for a purpose. This definition appears extremely broad as it covers everything from tea kettles to complex information systems, and even silver bullets are included if you wish so. In fact, this definition is even redundant in two points: first, artifacts are usually made for a purpose and some call them just "tools". Second,  who else than people have purposes? Well, many wild animals reportedly create artificial structures for purposes such as shelter, mating and hunting. I have absolutely no objections against using this book to compare the stability of birds nestings, for example. (In such a case, everyone please, read "design" as "part of the extended phenotype" and "purpose" as "emerged by natural selection".
 
-A *design* is the structure of an artifact that people use for a purpose. This definition appears extremely broad as it covers everything from tea kettles to complex information systems, and even silver bullets are included if you wish so. In fact, this definition is even redundant in two points: first, artifacts are usually made for a purpose and some call them just "tools". Second,  who else than people have purposes? Well, many wild animals reportedly create artificial structures for purposes such as shelter, mating and hunting. I have absolutely no objections against using this book to compare the stability of birds nestings, for example. (In such a case, everyone, please, read "design" as "part of the extended phenotype" and "purpose" as "emerged by natural selection".
-
-This book may apply to everything anyone like to call a design; but only so for a specific set of research questions that hinge on the word "purpose". We all have purposes and much of the time it is quite a job to get there. Getting-there typically requires resources and often enough we find ourselves right there only to some extent. So, the two basic questions in *quantitative design research* are:
+This book may apply to everything anyone likes to call a design; but only so for a specific set of research questions that hinge on the word "purpose". We all have purposes and much of the time it is quite a job to get there. Getting-there typically requires resources and often enough we find ourselves right there only to some extent. So, the two basic questions in *quantitative design research* are:
 
 1. to what amount is a purpose fulfilled?
 1. how easy is it to get there?
@@ -170,20 +144,6 @@ Sometimes, you have to go a long way up the qualitative route, before you can de
 
 
 
-
-
-##### EATME: behavioral records
-[A majority of studies observes user behaviour.  *Behavioural records* render a detailed and unique picture of every participants behaviour. 
-
-
-
-### usability [TBC]
-
-
-
-
-
-
 ### performance measures
 
 
@@ -234,6 +194,9 @@ neutral   [CHAIR ]: green
 ### the human factor [TBD]
 
 ### situations [TBD]
+
+
+
 
 
 
@@ -343,6 +306,10 @@ T_desc <-
 
 T_desc %>%
   knitr::kable()
+```
+
+```{r}
+detach(Rainfall)
 ```
 
 These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r Rainfall$T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(Rainfall$T_desc[2,2]), 5) * 100`$%. 
@@ -471,7 +438,7 @@ The first option represents an unspecific tolerance towards risk. Extreme risk t
 The second and third options have something in common: they make use of *external knowledge*. This is explained in the coming section. The fourth option is another way of making *cumulative use of knowledge*, namely *[adaptive testing: find correct term]*. 
 
 
-### Case: 99 seconds
+### Case: 99 seconds {#case99}
 
 Consider Jane: she is chief engineer at a mega-large rent-a-car company smartr.car that is doing their business nothing but online. Jane was responsible for a large scale overhaul of the customer interface for mobile users. Goal of the redesign was to streamline the user interface, which had grown wild over the years and had become boring. Early customer studies indicated that the app needed a serious visual decluttering and stronger funneling of tasks. 300 person months went into the re-development and the team did well: a recent A/B study had shown that users learned the smartr.car v2.0 fast and could use its functionality very efficiently. Jane's team is prepared for the roll-out, when marketing requested the following:
 

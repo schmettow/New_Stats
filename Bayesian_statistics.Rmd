@@ -1,27 +1,4 @@
----
-title: "New statistics for the design researcher"
-author: "Martin Schmettow"
-date: "August 9, 2017"
-output:
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    theme: journal
-    toc: yes
-  word_document:
-    toc: yes
-subtitle: A Bayesian workshop in R
-bibliography: Bayesian_Stats.bib
----
-
-
-
-<style type="text/css">
-.table {
-     width: auto;
-
-}
-</style>
+# Elements of Bayesian statistics {#bayesian_statistics}
 
 
 
@@ -34,18 +11,13 @@ source("RMDR.R")
 CE = c("Rainfall", "Sec99")
 load_CE(CE)
 
-formals(stan_glm)$iter = 500
-formals(stan_glm)$chains = 2
+#formals(stan_glm)$iter = 500
+#formals(stan_glm)$chains = 2
 #opts_chunk$set(cache = T)
 ```
 
 
-
-
-
-# Elements of Bayesian statistics
-
-As human beings we make our decisions by believes. For example, we trust a person or a company more, when we can look back at a series of successful transactions. And we have remarkable skills to recall what has just happened, but also what happened yesterday or years ago. By integrating over all the evidence, we form a view of the world. Usually, when evidence is strong and abundant, this view becomes more stable. We believe stronger and feel less in doubt. Nobody would deny that humans learn by such experience,  nevertheless humans sometimes are terrible decision makers, for a variety of psychological reasons, to name just three:
+As human beings we make our decisions on what has happened to us before. For example, we trust a person or a company more, when we can look back at a series of successful transactions. And we have remarkable skills to recall what has just happened, but also what happened yesterday or years ago. By integrating over all the evidence, we form a view of the world we forage. Usually, when evidence is strong and abundant, this view becomes more stable. We believe stronger and feel less in doubt. Nobody would deny that humans learn by such experience,  nevertheless humans sometimes are terrible decision makers, for a variety of psychological reasons, to name just three:
 
 + the primacy effect: recent events get more weight
 + emotions: researchers typically want their theory to be true, which leads to all kinds of biases
@@ -81,7 +53,47 @@ Whatever happens in the individual case, it is generally accepted that scientifi
 
 In the following the essential ideas and procedures in Bayesian analysis will be introduced. For an illustration, these concepts will be framed by a virtual case study, which comprises a full Bayesian workflow, with one of the most simple models possible.
 
-+ Fault in procedures
+
+
+
+## Descriptive statistics
+
+### What is *a* statistic?
+
+Reconsider Jane \@ref(case99). When asked about whether users can, on average, complete a transaction within 99, she looked at some time-on-task measures. Recall how the research question was defined (based on some fictional laws): the slogan "rent a car in 99 seconds" is only legitimate, when the average time of all users is 99 or below. Just to make sure that we are on the same page, the statement is  *not* about:
+
++ There are at least some users who can (which clearly is the case). That would be the *minimum value*.
++ Half of the users or more can, which is a statistic called the *median*.
++ Most users can in around 99s, which is called the *mode*.
+
+All the above, including the  mean, are numbers that summarize the observations. A single number that summarizes a set of observations is called *a statistic*, formally it is just
+
+$s = f_s(D)$
+
+with $s$ being a statistic on data $D$, defined by the function $f_s$. Characterizing a data set by appropriate statistics is called *descriptive statistics*. 
+
+Most commonly used statistics fall in three classes: cardinality, central tendency (or location) of data, or data dispersion. Cardinality statistics give the number of units of a class in a data set. The most common cardinalities are  the number of observed performance measures $N_{Obs}$, the number of individual participants $N_{Part}$ in the study. 
+
+Reporting the calculated mean of time-on-task in two designs is descriptive. It summarizes the data set in a reasonable way. It is informative in so far as one learns which design to prefer, but coarsely. Consider a case where two designs were just slight variations, come at precisely the same costs, and the researcher has collected performance measures on five subjects per group, without the option of inviting more participants.
+
+## Inferential statistics
+
+Reconsider Jane and Andrew. What did they know about the current state of affairs when running a particular session. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
+
+$$\hat M_{ToT} = 1\over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
+
+So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, the field of statistics strongest contribution is that the level of uncertainty can also be quantified. This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate is imperfect.
+
+A consequence of the imperfect is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
+
+> How certain can you be that in the population of users $M_{ToT] <= 99$?
+
+For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
+
+
+
+
+
 
 ## Some probability theory
 
@@ -144,7 +156,7 @@ A subtle, but noteworthy feature of likelihood functions is that $\mu_i$ and $x_
 
 
 
-### Distributions: patterns of randomness
+### Distributions: patterns of randomness {#distributions}
 
 
 ##### TODO: 
@@ -307,19 +319,18 @@ Many dozens of PMFs and PDFs are known in statistical science and are candidates
 
 For most distributions, strict mathematical definitions exist for under which circumstances randomness takes this particular pattern. Frequently, there is one or more natural phenomena that accurately fall into this pattern, such as the number of radioactive isotope cores decaying in a certain interval (Poisson distributed) or ... .  This is particularly the case for the canonical four random distributions that follow. Why are these canonical? The pragmatic answer is: they cover the basic types of measures: chance of success in a number of trials (binomial), counting (Poisson) and continuous measures (exponential, Gaussian).
 
+
+
+<!--
 However, 
 
-
-
-
-
-
-##### SCRATCH
 
 Imagine, standing slightly elevated in front of a moving crowd and choose one pedestrian to follow with your eyes. The task is easier when the target person is tall, moves straight on while the rest of the crowd is moving in random curly patterns. This method also works to identify the waiter in a crowded bar. 
 
 
 The theorists answer is twofold: first, they are exponential .... second, they are lowest entropy.
+-->
+
 
 
 Random distributions: 
@@ -462,7 +473,7 @@ Another lower bound problem arises, when there are hurdles. In traffic research,
 
 Exponential distributions apply for measures of duration. Exponential distributions have the same generating process as Poisson distributions, except, that the *duration for an event to happen* is  the variable of interest, rather than events in a given time. The same idealized conditions of a completely unaffected subway smurfer player and constant catchability of items, the duration between any two catches is exponentially distributed. In more general, the chance for an event to happen is the same at any moment, completely independent of how long one has been waiting. For this property, the exponential distribution is called *memoryless*.
 
-Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for two reasons: first, the exponential distribution shares with Poisson, that 
+Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for two reasons: first, the exponential distribution shares with Poisson, that it does not allow variance between participants. Second, the distribution always starts at zero, whereas human reactions always include some basic processing, be this just the velocity of signals of nerve cells, which is far below light speed and even speed of sound (in air).
 
 ```{r opts.label = "future"}
 ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
@@ -516,15 +527,16 @@ Measurement is prime and specialized (non-central-limit) distributions remain th
 The dilemma is then solved with the introduction of *generalized linear models*, which is a framework for  using linear models with appropriate error distributions. Fortunately, MLM and GLM work seemlessly together. With MLM we can conveniently build graceful likelihood models, using normal distributions for populations. The GLM part is a thin layer to get the measurement scale right and choose the right error distribution, just like a looking glass.
 
 
+#### t distribution [TBD]
 
 
-#### Plug-in distributions
+
+#### Plug-in distributions [TBD]
 
 The five canonical random distributions match the basic type of measurements, they make strict assumptions on the data generating process  A majority of data does not meet these conditions. A routine problem is that binomial and Poisson assume that the chance for an event to occur is strictly constant. Take the number of successful tasks in . A Poisson distribution with $\lambda = M = \textrm{Var}$ emerges only, if all users in the study have the same chance of errors. Could that be the case?
 
-In GMLM is can happen that a normal distribution sits underneath a Poisson distribution. That is not a plugin distribution, strictly, but a related concept.
+In GLMM is can happen that a normal distribution sits underneath a Poisson distribution. That is not a plugin distribution, strictly, but a related concept.
 
-#### HERE
 
 ```{r opts.label = "future"}
 # Find a data set with overdispersed successes in trials
@@ -558,7 +570,7 @@ IPump$D_successes %>%
 
 ## Bayesian estimation
 
-Frequentist statistics fails at the basic fact that by far most research is incremental and has ever been. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
+Frequentist statistics falls short on recognizing that research is incremental and has always been. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
 
 1. procedures make more or less strong assumptions, limiting their applicability. Procedures become islands.
 2. procedures are asymptotically accurate with inference being accurate at large sample sizes only
@@ -613,41 +625,6 @@ Coming back to MCMC: how is this distribution actually produced. In plain words,
 
 
 
-
-
-## Descriptive statistics
-
-### What is *a* statistic?
-
-Reconsider Jane and Andrew. When asked about whether users can, on average, complete a transaction within 99, they looked at some time-on-task measures. Recall how the research question was defined (based on some fictional laws): the slogan "rent a car in 99 seconds" is only legit, when the average time of all users is 99s or below. Taking the average of a set of measures is everyday knowledge. Often, what is intuitive to people is what they think about the least and don't see the alternatives. So, just to be sure that we are on the same page, the statement is  *not* about:
-
-+ There are at least some users who can (which clearly is the case). That would be the *minimum value*.
-+ Half of the users or more can, which is a statistic called the *median*.
-+ Most users can in around 99s, which is called the *mode*.
-
-All the above, including the  mean, are numbers that summarize the observations. A single number that summarizes a set of observations is called *a statistic*, formally it is just
-
-$s = f_s(D)$
-
-with $s$ being a statistic on data $D$, defined by the function $f_s$. Characterizing a data set by appropriate statistics is called *descriptive statistics*. 
-
-Most commonly used statistics fall in three classes: cardinality, central tendency (or location) of data, or data dispersion. Cardinality statistics give the number of units of a class in a data set. The most common cardinalities are  the number of observed performance measures $N_{Obs}$, the number of individual participants $N_{Part}$ in the study. 
-
-Reporting the calculated mean of time-on-task in two designs is descriptive. It summarizes the data set in a reasonable way. It is informative in so far as one learns which design to prefer, but coarsely. Consider a case where two designs were just slight variations, come at precisely the same costs, and the researcher has collected performance measures on five subjects per group, without the option of inviting more participants.
-
-## Inferential statistics
-
-Reconsider Jane and Andrew. What did they know about the current state of affairs when running a particular session. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
-
-$$\hat M_{ToT} = 1\over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
-
-So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, the field of statistics strongest contribution is that the level of uncertainty can also be quantified. This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate is imperfect.
-
-A consequence of the imperfect is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
-
-> How certain can you be that in the population of users $M_{ToT] <= 99$?
-
-For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
 
 
 

@@ -1,31 +1,17 @@
----
-title: "Cases"
-subtitle: "New statistics for design researcher"
-author: "Martin Schmettow"
-date: "October 26, 2016"
-output:
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    toc: yes
-  pdf_document:
-    toc: yes
-  word_document: default
----
+# Cases
+
+```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+## The following is for running the script through knitr
+source("RMDR.R")
+```
+
 
 TODO: 
 
 + add attributes to all CEs
 + create syncenv print method
 
-```{r profile, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
-## The following is for running the script through knitr
-source("RMDR.R")
-library(syncenv)
-```
 
-
-# Simulation data {#chap:simulation}
 
 1. Identify the classes of objects in your research, such as participants, designs, tasks, situations asf. In the most general case, these are considered *units* sampled from a population
 2. For every class create a *unit table*
@@ -50,18 +36,14 @@ library(syncenv)
 
 It occured indirectly, mediated through 
 
-## Statistical distributions
 
-### Gaussian distribution
+## Chapter environments
 
-### Binomial and Poisson distributions
+```{r}
+new_syncenv("Chapter_LM")
+save_CE("Chapter_LM")
 
-### Exponential and gamma distributions
-
-### Exponential-gaussian distribution
-
-
-
+```
 
 
 ## Case Rainfall
@@ -166,15 +148,19 @@ Sec99$simulate <-
     n_Obs = n_Part
     
     ## OUT
-    Sec99 = data.frame(Obs = 1:n_Part,
+    Sec99 = data_frame(Obs = 1:n_Part,
                        Part = 1:n_Part,
-                       ToT = rnorm(n_Obs, mu_ToT, sigma_ToT))
-    Sec99 %>% 
-      as_data_frame()
+                       ToT = rnorm(n_Obs, mu_ToT, sigma_ToT)) %>% 
+      ## dirty hack to create correlated age
+      mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT/8, 2)))
+    Sec99
   }    
 
-Sec99$Ver20 <- Sec99$simulate()
+(Sec99$Ver20 <- Sec99$simulate())
 
+qplot(Sec99$Ver20$age)
+
+Sec99$Ver20 %>% ggplot(aes(x = age, y = ToT)) + geom_point()
 
 save(Sec99, file = "Cases/Sec99.Rda")
 ```
@@ -493,11 +479,11 @@ names(CUE8)
   
 
 ```{r CUE8_export}
-save(CUE8, file = "Cases/CUE8.Rda")
-write_sav(CUE8$D_study, "Data/CUE8_study.sav")
-write_csv(CUE8$D_study, "Data/CUE8_study.csv")
-write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
-write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
+#save(CUE8, file = "Cases/CUE8.Rda")
+# write_sav(CUE8$D_study, "Data/CUE8_study.sav")
+# write_csv(CUE8$D_study, "Data/CUE8_study.csv")
+# write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
+# write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
 
 ```
 
@@ -549,7 +535,7 @@ new_syncenv("Reading")
 ```
 
 
-```{r Reading_simfunc, opts.label = "sim"}
+```{r Reading_simfunc, opts.label = "sim", eval = F}
 
 
 ## simulating the data set
@@ -604,7 +590,7 @@ save(Reading, file = "Cases/Reading.Rda")
 
   
 
-```{r Reading_export}
+```{r Reading_export, eval = F}
 write_sav(Reading$D_1, "Data/Reading.sav")
 write_csv(Reading$D_1, "Data/Reading.csv")
 
@@ -627,21 +613,20 @@ new_syncenv("AR_game")
 ## simulating the data set
 AR_game$simulate <-
   function(N = 200,
-           beta = c(-1, .7, .8, .5),
-           sigma = .3,
+           beta = c(-1, 1, .4, .6),
+           sigma = .2,
            seed = 42) 
     {
     set.seed(seed)
     out <-
       data_frame(Part = 1:N,
-                 technophile = rbeta(N, 2, 4) * 2 - 1,
+                 technophile = rbeta(N, 2, 3) * 2 - 1,
                  sociophile = rbeta(N, 2, 2) * 2 - 1) %>%
-      
-      mutate( mu = beta[1] + 
+      mutate( eta = beta[1] + 
                 beta[2] * technophile +
                 beta[3] * sociophile +
                 beta[4] * technophile * sociophile,
-              intention = inv.logit(rnorm(N,  mu, sigma)))
+              intention = mascutils::inv_logit(rnorm(N,  eta, sigma)))
     
     class(out) <- append(class(out), "sim_tbl")
     attr(out, "coef") <- list(beta = beta,
@@ -661,9 +646,9 @@ AR_game$D_1 %>%
              color = technophile_grp,
              y = intention)) +
   geom_boxplot()
-  
 
-save(AR_game, file = "Cases/AR_game.Rda")
+lm(intention ~ sociophile * technophile, AR_game$D_1)
+  
 ```
 
 
@@ -672,7 +657,7 @@ save(AR_game, file = "Cases/AR_game.Rda")
 ```{r AR_game_export}
 write_sav(AR_game$D_1, "Data/AR_game.sav")
 write_csv(AR_game$D_1, "Data/AR_game.csv")
-
+save(AR_game, file = "Cases/AR_game.Rda")
 ```
 
 
@@ -697,14 +682,14 @@ Sleep$simulate <-
            seed  = 42){
     set.seed(seed)
     expand.grid(.N = 1:(N/4), 
-                Environment = as.factor(c("calm", "noisy")),
-                Sleep = as.factor(c("rested", "Sleepy"))) %>%
+                Environment = as.factor(c("Calm", "Noisy")),
+                Sleep = as.factor(c("Rested", "Sleepy"))) %>%
       select(-.N) %>% 
       mutate(Part = 1:N,
              mu = beta[1] + 
-               beta[2] * (Environment == "noisy") +
+               beta[2] * (Environment == "Noisy") +
                beta[3] * (Sleep == "Sleepy") +
-               beta[4] * (Environment == "noisy") * (Sleep == "Sleepy"),
+               beta[4] * (Environment == "Noisy") * (Sleep == "Sleepy"),
              gaps = rnorm(N,mu,sigma)) %>% 
       mutate(gaps = ifelse(gaps > 0, gaps, NA)) %>% 
       select(3,1,2,4,5) %>% 
@@ -1026,9 +1011,9 @@ IPump$simulate_1 <-
     Exp
   }
     
-IPump$D_1 <- IPump$simulate_1()
+IPump$D_sim_1 <- IPump$simulate_1()
 
-IPump$D_1 %>% 
+IPump$D_sim_1 %>% 
   ggplot(aes(x = moment, 
              y = ToT, 
              color = Design)) +
@@ -1045,9 +1030,9 @@ load("external_data/PUMPS.Rda", envir = IPump)
 IPump$D_pumps <- 
   IPump$P %>% 
     select(Part = Participant, 
-         # ProfessionalGroup = professionalGroup,
-         # experience,
-         # EducationLevel = educationLevel,
+         Group = professionalGroup,
+         experience,
+         Education = educationLevel,
          Design = design,
          session,
          Task = Task,
@@ -1057,12 +1042,25 @@ IPump$D_pumps <-
          workload = mentalWorkload) %>% 
   mutate(Design = if_else(Design == "Braun", 
                           "Legacy", "Novel"),
-          session = as.integer(session))
+         Education = stringr::str_replace(.$Education, " opleiding", ""),
+         Education = forcats::as_factor(.$Education),
+         Group = ifelse(Group == "VA", "GC", "IC"),
+         Session = as.factor(session),
+         session = as.integer(session) - 1,
+         Obs = as.factor(row_number()))
 
+IPump$D_agg <-
+  IPump$D_pumps %>% 
+  group_by(Part, Group, Education, experience,
+           Design, session, Session) %>% 
+  summarize(ToT = sum(ToT, na.rm = T),
+            deviations = sum(deviations, na.rm = T),
+            workload = mean(workload, na.rm = T))
 
 rm(P, envir = IPump)
 
 IPump$D_pumps
+IPump$D_agg
 
 ```
 
@@ -1072,10 +1070,13 @@ IPump$D_pumps
 
 ```{r IPump_export}
 save(IPump, file = "Cases/IPump.Rda")
-write_sav(IPump$D_1, "Data/IP_1.sav")
-write_csv(IPump$D_1, "Data/IP_1.csv")
+write_sav(IPump$D_sim_1, "Data/IP_1.sav")
+write_csv(IPump$D_sim_1, "Data/IP_1.csv")
 write_sav(IPump$D_pumps, "Data/Pumps.sav")
 write_csv(IPump$D_pumps, "Data/Pumps.csv")
+write_sav(IPump$D_agg, "Data/Pumps_agg.sav")
+write_csv(IPump$D_agg, "Data/Pumps_agg.csv")
+
 ```
 
 
@@ -1098,13 +1099,14 @@ new_syncenv("MMN")
 
 
 ```{r MMN_load_data, opts.label = "sim"}
+
 MMN$MMN_2 <- 
   MMN_raw %>% 
   select(Part = Subject, Website, Task, Corsi, 
          Ospan.A, Ospan.B, time, clicks) %>% 
-  mascutils::z_score(Corsi) %>% 
-  mascutils::z_score(Ospan.A) %>% 
-  mascutils::z_score(Ospan.B) %>% 
+  mascutils::z_score("Corsi") %>% 
+  mascutils::z_score("Ospan.A") %>% 
+  mascutils::z_score("Ospan.B") %>% 
   mutate(ltime = log(time),
          lclicks = log(clicks)) %>% 
   select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)
@@ -1158,10 +1160,10 @@ AUP$AUP_1 <-
          gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
          challenge = AUP_challenge, exploration = AUP_explore) %>% 
   mutate(resistance = challenge + exploration) %>% 
-  mascutils::z_score(gex) %>% 
-  mascutils::z_score(ncs) %>% 
-  mascutils::z_score(compAnx) %>% 
-  mascutils::z_score(resistance)
+  mascutils::z_score("gex") %>% 
+  mascutils::z_score("ncs") %>% 
+  mascutils::z_score("compAnx") %>% 
+  mascutils::z_score("resistance")
 
 names(AUP$AUP_1)
 
@@ -1291,7 +1293,7 @@ write_csv(Schools$D_2, "Data/Schools_2.csv")
 
 
 ```{r Stroop_comp_create, opts.label = "simulate"}
-new_syncenv("Stroop")
+new_syncenv("Stroop_comp")
 ```
 
 
@@ -1400,28 +1402,25 @@ new_syncenv("Egan")
 ```
 
 ```{r Egan_load_data, opts.label = "sim"}
-load("external_data/havinga.Rdata")
-
 Egan$D_egan <- 
-  havinga %>% 
+  read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
   mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
-  select(Part = participantID,
-         Gender = participantGender,
-         age = participantAge,
-         trial = Trialnumber,
-         Website = website,
-         Task = task,
-         outcome = SuccesTask,
+  select(Part = ParticipantID,
+         Gender = ParticipantGender,
+         age = ParticipantAge,
+         trial = TrialNumber,
+         Design = Website,
+         Task,
+         outcome = SuccesOnTask,
          ToT = TimeOnTask,
-         logToT = ltime,
          clicks = NumberOfClicks,
-         returns_hp = TimesReturnedHomepage,
-         return_links = TimesPreviousPressedLinksUsed,
-         workload
-         ) %>% 
-  mutate_at(vars(Part, Gender), as.factor)
+         returns_hp = TimesReturnedHome,
+         return_links = TimesUsedLinks,
+         workload) %>% 
+  mutate_if(is.labelled, as_factor)
 
-names(Egan)
+
+Egan$D_egan
 
 ```
 

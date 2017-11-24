@@ -1,24 +1,18 @@
-# Linear models
+# Linear models {#linear_models}
 
 
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
-# knitr::opts_knit$set(cache = T)
-## The following is for running the script through knitr
 purp.mcmc = F
 source("RMDR.R")
-# library(printr)1
 CE <- 
   c("BrowsingAB", "Sec99", "AUP", "MMN", "Headache", "Reading", 
-    "AR_game", "Sleep", "Uncanny")
+    "AR_game", "Sleep", "Uncanny", "Chapter_LM")
 load_CE(CE)
 
 #formals(stan_glm)$iter <- 200
 #formals(stan_glm)$chains <- 1
-
-#file.remove("_main.Rmd")
-#bookdown::preview_chapter("Classic_linear_models.Rmd")
 ```
 
 
@@ -43,7 +37,8 @@ The larger $\sigma$ is,  the more questionnable it is that the grand mean is tru
 
 So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian distributed error term $\sigma\epsilon$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. As the `stan_glm` command applies to a huge variety of regression model, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number neighboured by 0 and 2. In R's formula language it represents the *intercept*. 
 
-```{r, opts.label = "rtut"}
+
+```{r opts.label = "rtut"}
 attach(Sec99)
 ```
 
@@ -70,14 +65,16 @@ Much of the time a researcher doesn't want to deal with the posterior, directly,
 ```{r tab:99_seconds_post_fixef, opts.label = "tab"}
 T_coef_1 <- coef(P_1)
 T_coef_1
+```
+
+
+```{r opts.label = "rtut"}
 detach(Sec99)
 ```
 
-
 ```{r}
-
+detach(Sec99)
 ```
-
 
 ### Reading coefficient tables
 
@@ -1191,7 +1188,9 @@ detach(BrowsingAB)
 
 The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two group exists in the data, which lay far apart. The following  code illustrates the situation by simulating a simpole data set with two groups, that is fed into a GMM.
 
-
+```{r}
+attach(Chapter_LM)
+```
 
 ```{r}
 D_1 <- 
@@ -1200,14 +1199,21 @@ D_1 <-
     data_frame(Group = "B", y = rnorm(50, 8, 1))
   )
 
-M_1 <- stan_glm(y ~ 1, data = D_1, iter = 200)
+```
 
+
+```{r opts.label = "mcmc"}
+M_1 <- stan_glm(y ~ 1, data = D_1, iter = 200)
+```
+
+```{r}
 D_1  %>%  
   mutate(resid = residuals(M_1)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
-  
+
 ```
+
 
 These two deviations from Normal distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Mulitmodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced, in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, in almost comes natural to distinguiish between users who have used the design before, and those who didn't. If the grouping variable is recorded, the solution is group comparison models \@ref(CGM), soon to be introduced.
 
@@ -1215,21 +1221,24 @@ Visual assessment of symmetry and unimodality is simple and effective in many ca
 
 Provided one has a small abundance of data, *quantile-quantile (qq) plots* can be used to evaluate subtle deviations in curvature (and symmetry and unimodality). In qq plots, the observed and theoretical distributions are both flattened and put against each other. This is a powerful and concise method, but it is harder to grasp. The following code illustrates the construction of a qq-plot that compares GMM residuals of a t-distributed measure against the Normal distribution. We simulate t-distributed data, run a GMM and extract residuals, as well as the standard error $\sigma_\epsilon$.
 
-
-
 ```{r}
 set.seed(2)
 D_2 <- data_frame(y = rt(200, 2))
+```
+
+
+```{r opts.label = "mcmc"}
 M_2 <- stan_glm(y ~1, data = D_2, iter = 200)
 
-D_2 <-   mutate(D_2, resid = residuals(M_2))
-C_sigma <- rstanarm::sigma(M_2)
 ```
 
 We obtain the following residual and theoretical distributions. It is approximately symmetric and unimodal, but the curvature seems to be a bit off.
 
 
 ```{r}
+
+D_2 <-   mutate(D_2, resid = residuals(M_2))
+C_sigma <- rstanarm::sigma(M_2)
 
 D_2 %>%
   ggplot(aes(x = resid)) +
@@ -1267,6 +1276,12 @@ D_2 %>%
   geom_qq(distribution = qnorm) +
   geom_abline(intercept = 0, slope = 1, col = "red")
 ```
+
+```{r opt.label = "invisible"}
+detach(Chapter_LM)
+```
+
+
 
 Once mastered, the qq-plot is the swiss knife of Normality check. Next to the subtleties We can also easily discover deviations from symmetry. This is how the residuals of the returns to homepage model look like:
 
@@ -1740,7 +1755,7 @@ grid.arrange(
 
 
 
-### Hitting the boundaries: saturation
+### Hitting the boundaries of saturation
 
 Most statistically trained researchers are aware of some common assumptions of linear regression, such as the normally distributed residuals and variance homogeneity. Less commonly regarded is the assumption of linearity, which arises from the basic regression formula:
 
@@ -1780,6 +1795,8 @@ When neither pill is given a slight spontaneous reduction seems to occur. Both p
 
 Now, we will estimate and compare a set of three models, starting with the standard factorial MPM and proceeding to two models with interaction effects. The third one is an AGM with two factors, actually, although it may not seem so at first.
 
+
+
 ```{r fit:Headache, opts.label = "mcmc"}
 M_1 <- stan_glm(reduction ~ 1 + PillA + PillB, data = Pills)
 M_2 <- stan_glm(reduction ~ 1 + PillA + PillB + PillA:PillB, data = Pills)
@@ -1800,9 +1817,11 @@ T_fixef_1 <- fixef(M_1)
 T_fixef_1
 ```
 
+
 Given these estimates, we conclude that pill A has an almost double reduction of headache compared to B. The intercept indicates that headache spontaneously diminishes at a rate of `r frm_coef(T_fixef_1, ~fixef == "Intercept")`. Setting the spontaneous recovery aside, what would you predict the effect to be in the group with both pills?
 
-```{r Headache_guess, opts.label ="invisible"}
+
+```{r Headache_guess, opts.label ="deprecated"}
 
 T_guess <-
   T_means %>% 
@@ -1813,15 +1832,14 @@ T_guess <-
   select(-reduction) %>% 
   spread(PillB, guess)
 
-T_guess %>% kable()
+T_guess
 ```
 
 Thinking linearly you probably came up with:
 
-$$`r round(sum(Headache$T_fixef_1$center[2:3]), 2)`
-$$
+$$`r round(sum(Headache$T_fixef_1$center[2:3]), 2)`$$
 
-Does that makes sense? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. Certainly, the effect is not linear. But, is it in the long run? In some Hollywood movies the wounded hero consumes handful of pills before the showdown (With the exception of Leon, the Profi, where it is the scary Gary Oldman consuming some harder stuff). With two pills: how close to the boundaries are we? We can just test that by introducing an *interaction term* to the model: `PillaA:PillB`.
+Does that makes sense? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. Certainly, the effect is not linear. But, is it in the long run? In some Hollywood movies the wounded hero consumes handful of pills before the showdown (With the exception of Leon, the Profi, where it is the scary Gary Oldman consuming some harder stuff). With two pills, how close to the boundaries are we? We can just test that by introducing an *interaction term* to the model: `PillaA:PillB`.
 
 ```{r tab:Headache_fixef_2, opts.label = "tab"}
 T_fixef_2 <-  fixef(M_2)
@@ -1836,7 +1854,13 @@ that increasing from 8pt to 12pt cuts the required reading time by 10 seconds.
 According to the linear model, you had to expect the reading time to decrease 
 by another 10 seconds, when enlarging to 16pt.
 
+```{r}
+detach(Headache)
+```
+
+
 ```{r reading_time}
+attach(Reading)
 D_reading_time <- 
   data_frame(font_size = c(4, 8, 12, 16, 24, 28),
            observed_time = c(NA, 40, 30, NA, NA, NA),
@@ -1854,14 +1878,9 @@ Let's turn to a fictional, yet realistic problem in design research. Design of s
 
 The question arises: can one sufficiently compensate lack of contrast by setting the text in the maximum reasonable font size 12pt, as compared to the more typical 10pt? In the fictional study Reading, this is examined in a 2x2 between-subject design:  the same page of text is presented in four versions, with either 10pt or 12pt, and grey versus black font color. Performance is here measured as time-on-task of reading the full page.
 
-```{r}
-detach(Headache)
-```
 
 
 ```{r tab:reading_data}
-attach(Reading)
-
 D_1 %>% 
   sample_n(8) %>% 
   select(-mu) %>% 
@@ -2069,14 +2088,20 @@ The central argument is that sleep deprivation deteriorates a central nervous ar
 
 The Sleep case study is a simplified simulation of Corcoran's results. Participants were divided into 2x2 groups (quiet/noisy, rested/deprived) and has to react to five signal lamps in a succession of trials. In the original study, as performance measure gaps were counted, which is the number of delayed reactions ($>1500ms$).
 
-```{r fig:Sleep_expl, opts.label = "fig"}
+```{r}
 attach(Sleep)
+
+```
+
+
+```{r fig:Sleep_expl, opts.label = "fig"}
 G_expl <-
   D_1 %>% 
   ggplot(aes(x = Environment,
              color = Sleep,
              y = gaps)) +
   geom_boxplot()
+G_expl
 ```
 
 Using a 2x2 model including an interaction effect, we examine the conditional association between noise and sleepiness. The `*` operator in the model formula is an abbreviation for the fully factorial term `Environment + Sleep + Environment:Sleep`.
@@ -2093,7 +2118,7 @@ T_fixef <-  fixef(M_1)
 T_fixef
 ```
 
-Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested, (intercept). The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy")`. Note however, that we cannot conclude a null effect, as the credibility limits are wide. Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "Environmentnoisy:SleepSleepy")`. This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
+Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested, (intercept). The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(Sleep$T_fixef, ~fixef == "EnvironmentNoisy")`. Note however, that we cannot conclude a null effect, as the credibility limits are wide. Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "EnvironmentNoisy:SleepSleepy")`. This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
 The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law states that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we except that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
 
@@ -2147,14 +2172,11 @@ detach(Sleep)
 
 
 
-## Up and down: polynomial regression [EDIT]
+## Welcome to the rollercoaster: polynomial regression [EDIT]
 
 Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in human-likeness, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very human-like, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
 
 ```{r fig:uncanny_valley}
-# detach(Uncanny)
-attach(Uncanny)
-
 G_uncanny_illu <-
   data_frame(hl = seq(-1, 1, length.out = 100),
              likeability = -.5 * hl + .6 * hl^3 + .2 * hl^4) %>% 
@@ -2195,22 +2217,38 @@ Mathur et al. argue that the Uncanny Valley curve possesses two stationary point
 
 While R provides high-level methods to deal with polynomial regression, it is instructive to build the regression manually. The first step is to add variables to the data frame, which are the exponentiated predictors ($x_k = x^k$). These variables are then straight-forwardly added to the model term, as if they were independent predictors. For better clarity, we rename the Intercept to be $x_0$, before summarizing the fixed effects.
 
-```{r fit:UV_1, opts.label = "mcmc"}
-M_1 <-
-  UV_1 %>% 
-  mutate(huMech_1 = huMech,
-         huMech_2 = huMech^2,
-         huMech_3 = huMech^3) %>% 
-  stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
-           data = ., iter = 500)
+```{r opts.label = "rtut"}
+# attach(Uncanny)
+```
 
-P_1 <-
-  posterior(M_1) %>% 
-  mutate(parameter = str_replace(parameter, "Intercept", "huMech_0"),
-         fixef = str_replace(fixef, "Intercept", "huMech_0")) %>% 
-  posterior()
+
+```{r fit:UV_1, opts.label = "mcmc"}
+Uncanny$M_1 <-
+  Uncanny$UV_1 %>% 
+  mutate(huMech_0 = 1,
+         huMech_1 = huMech,
+         huMech_2 = huMech^2,
+         huMech_3 = huMech^3) %>%
+  stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
+           data = ., iter = 200)
+  # stan_glm(avg_like ~ poly(huMech, 4),
+  #          data = ., iter = 200)
+
+
+Uncanny$P_1 <-  posterior(Uncanny$M_1) 
+Uncanny$P_1$parameter <- str_replace(Uncanny$P_1$parameter, "Intercept", "huMech_0")
+Uncanny$P_1$fixef <- str_replace(Uncanny$P_1$fixef, "Intercept", "huMech_0")
+Uncanny$P_1 <-  posterior(Uncanny$P_1) 
 
 ```
+
+
+
+```{r opts.label = "rtut"}
+library(polynom)
+attach(Uncanny)
+```
+
 
 ```{r tab:UV_1, opts.label = "tab"}
 T_fixef_1 <- fixef(P_1)
@@ -2230,9 +2268,9 @@ If the stationary point is a local minimum, as the trough, slope switches from n
 
 Mathur et al. followed these analytic steps to arrive at an estimate for the position of the trough. The following code uses several high-level functions from package `polynom` to estimate the location of the trough, by drawing on the first and second derivative `d[d]poly` 
 
-```{r trough_from_fixef, opts.label = "rtut"}
-library(polynom)
 
+
+```{r trough_from_fixef, opts.label = "rtut"}
 poly     = polynomial(T_fixef_1$center) # UC function on center
 dpoly    = deriv(poly)                  # 1st derivative
 ddpoly   = deriv(dpoly)                 # 2nd derivative

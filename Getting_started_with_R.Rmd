@@ -1,27 +1,5 @@
----
-title: "New statistics for the design researcher"
-subtitle: "A Bayesian workshop in R"
-author: "Martin Schmettow"
-date: "April 26, 2017"
-bibliography: Bayesian_Stats.bib
-output:
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    theme: journal
-    toc: yes
-  word_document:
-    toc: yes
----
+# Getting started with R {#getting_started_r}
 
-
-
-<style type="text/css">
-.table {
-     width: auto;
-
-}
-</style>
 
 
 
@@ -30,36 +8,29 @@ thisdir = getwd()
 purp.mcmc = F
 source("RMDR.R")
 
-CE <-
-  c("BrowsingAB", "Reading")
+CE <-  c("BrowsingAB","Reading")
 
 load_CE(CE)
-
-
-formals(fun = stan_glm)$chains = 1
-formals(fun = stan_glm)$iter = 200
 ```
 
 
 
-# Getting started with R
-
 
 In this book, we will be using the statistical computing environment R. R at its core is a programming language that specializes on statistics and data analysis. Like all modern programming languages, R is more than just a compiler or interpreter that translates human-writeable formal statements into something a computer understands and can execute. R comes with a complete set of standard libraries that cover the usual basic stuff, as well as a collection of common statistical routines, for example the t-test or functions to compute mean and variance. Even regression analysis and plotting is included with R. Finally, packaged with R comes a rudimentary programming environment, with a console, a simple editor and a help system.
 
-Most of the stuff that comes packaged with R we will set aside. While R at its very core is a brilliantly designed programming language for the task, much of the standard libraries is an inconsistent and outdated mess. For example, R comes with a set of commands to import data from various formats (SPSS, CSV, etc.). Some of these commands produce objects called data.frames, whereas others return list of lists. As another example, to sort a data frame by participant number, one has to write:
+Most of what comes packaged with R we will set aside. R at its very core is a brilliantly designed programming language for the task, but much of the standard libraries is an inconsistent and outdated mess. For example, R comes with a set of commands to import data from various formats (SPSS, CSV, etc.). Some of these commands produce objects called data.frames, whereas others return list of lists. As another example, to sort a data frame by participant number, one has to write the following syntax soup:
 
 `D[order(D$Part),]`
 
-In the past few years, a single man named Hadley Wickham started a movement that became known as the *tidyverse*. The tidyverse is a growing collection of libraries that ground on a coherent and powerful set of principles for data management. One of the core libraries is *dplyr* and it introduces some a rich, yet rather generic, set of commands for data manipulation. The above sorting of a data frame would be written as
+In the past few years, a single person, Hadley Wickham, has almost single-handedly started an initiative known as the *tidyverse*. The tidyverse is a growing collection of libraries that ground on a coherent and powerful set of principles for data management. One of the core packages is *dplyr* and it introduces some a rich, yet rather generic, set of commands for data manipulation. The above sorting of a data frame would be written as
 
 `arrange(D, Part)`
 
 One of Wickham's first and well-known contributions is the **ggplot* system for graphics. Think of R's legacy graphics system as a zoo of individual routines, one for boxplots, another one for scatterplots asf. Like animals in a zoo, they live in different habitats with practically no interaction. ggplot implements a rather abstract framework for data plots, where all pieces can be combined in a myriad of ways, using a simple and consistent syntax.
 
-Where to get these gems? R is an open source system and has spawned an open ecosystem for statistical computing. Thousands of extensions for R have been made available by data scientists for data scientists. The majority of these packages is available through the*comprehensive R archive network (CRAN)*. For the common user it suffices to think of CRAN as an internet catalogue of packages, that can be searched and where desired packages can be downloaded and installed in an instance.
+Where to get these gems? R is an open source system and has spawned an open ecosystem for statistical computing. Thousands of extensions for R have been made available by data scientists for data scientists. The majority of these packages is available through the *comprehensive R archive network (CRAN)*. For the common user it suffices to think of CRAN as an internet catalogue of packages, that can be searched and where desired packages can be downloaded and installed in an instance.
 
-Finally, R somes with a very rudimentary programming environment, with a charm of early eighties. Whereas a few alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. It is the most user-friendly and (at the same time!) feature richest software to program in R. Only some die-hard EMACS users might disagree.
+Finally, R comes with a very rudimentary programming environment that carries the questionable charm of early 1990s. Whereas several alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. It is the most user-friendly and (at the same time!) feature richest software to program in R. Only some die-hard EMACS users might disagree and continue to strain their tendons using the ESS extension.
 
 The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.
 
@@ -142,7 +113,7 @@ In this book we will use a number of additional packages from CRAN. The listing 
 + *stringr* for string matching and manipulation
 
 
-```{r libraries, opts.label = "rtut.nr"}
+```{r packages, opts.label = "rtut.nr"}
 ## tidyverse
 library(tidyverse)
 
@@ -167,13 +138,11 @@ library(bayr)
 We start by *checking the packages*:
 
 1. create a new R file by `File --> New file --> R script`
-2. copy and paste the above code to that file and run it. Run every line one-by-one by repeatedly pressing `Ctrl-Return`.
+2. copy and paste the above code to that file and run it. By repeatedly pressing `Ctrl-Return` you run every line one-by-one. As a first time user with a fresh installation, you will now see error messages like:
 
-As a first time user with a fresh installation, you will now see error messages like:
+> Error in library(tidyverse) : there is no package called 'tidyverse'
 
-> Error in library(haven) : there is no package called 'haven'
-
-This means that the respective package is not yet present in your R library. Before you can use the package _haven_ you have to install. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Ìnstall`, enter the names of the missing package(s) and install.
+This means that the respective package is not yet present in your R library. Before you can use the package _tidyverse_ you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Ìnstall`, enter the names of the missing package(s) and install.
 
 Finally,run the complete code block at once by selecting it and `Ctrl-Return`. You will see some output to the console, which you should check once again. Unless the output does not contain any error messages (like above), you have successfully installed and loaded all packages.
 
@@ -189,17 +158,21 @@ install_github("schmettow/mascutils")
 install_github("schmettow/bayr")
 ```
 
-Again, you have to do that only once after installing R and you can afterwards load the packages with the `library` command. Only if the author of the packages (me) updates the packages to add functionality or remove bugs, you need to run these commands again.
+Again, you have to do that only once after installing R and you can afterwards load the packages with the `library` command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again.
 
-### A first statistical program
+
+
+
+
+### A first statistical program {#first_program}
 
 
 After you have set up your R environment, you are ready to run your first R program:
 
-1. Stay in the file where you have inserted the above code for loading the libraries.
+1. Stay in the file where you have inserted and run the above code for loading the packages.
 2. Find the *environment tab* in Rstudio. It should be empty.
 3. Copy-and-paste the code below into your first file, right after library commands.
-4. Run the code lines one-by-one and observe what happens
+4. Run the code lines one-by-one and observe what happens (in RStudio: Ctrl-Enter)
 
 ```{r first_simulation_1, opts.label = "rtut"}
 ## Simulation of a data set with 100 participants 
@@ -239,7 +212,7 @@ fixef(model)
 Observe Console, Environment and Plots. Did you see 
 
 + how the _Environment_ window is populated with new variables (Values and Data)?
-+ the table appear in the _Console_, when executing the `summary(Experiment)` command?
++ a table appears in the _Console_, when executing the `summary(Experiment)` command?
 + how the "camel-against-the-light" in _Plots_ tab morphed into "two-piles-of-colored-sugar"?
 
 Congratulations! You have just 
@@ -248,31 +221,6 @@ Congratulations! You have just
 * summarized the data
 * plotted the data
 * estimated a Bayesian regression model that compares the two groups
-
-### First exercise
-
-And here is a small exercise:
-
-The variable `Experiment`, which we created in the above code block, is a so called *data frame* with two columns, the factor _Group_, and the continuous variables _age_  and  _outcome_. Using the resources at the end of the chapter (and Google), find out how, in R, you can:
-
-1. compute the mean of _outcome_
-2. run a linear model with _Group_ as predictor
-3. test the effect using an ANOVA-like regression model
-
-If you prefer the fast lane, you can also run and examine the following code, which does the above tasks.
-
-```{r first_exercise_1, opts.label = "rtut"}
-mean(Experiment$outcome)
-var(Experiment$outcome)
-
-model <- stan_glm(formula = outcome ~ Group, 
-            data = Experiment) 
-```
-
-```{r first_exercise_2, opts.label = "tab"}
-
-fixef(model)
-```
 
 
 Isn't it amazing, that in less than 20 simple statements we have just reached the level of a second-year bachelor student? Still, you may find the R output a little inconvenient, as you may want to save the output of your data analysis. Not long ago, that really was an issue, but in the past few years R has become a great tool for *reproducable research*. The most simple procedure of saving your analysis for print or sharing is to:
@@ -289,7 +237,7 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 [Getting started with Rstudio (ebook)](http://it-ebooks.info/book/2253/)
 
-[rstudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/) is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and bring them to the workshop.
+[rstudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/) is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and always keep them on your desk.
 
 [The tidyverse](http://tidyverse.org/) is a meta package that loads all core tidyverse packages by Hadley Wickham.
 
@@ -301,34 +249,27 @@ A new Word document should appear that shows all code and the output. Now, you c
 > cRazy as in 'idiosyncrasy'
 
 
-This book is for applied researchers in design sciences, who's frequent task is to analyze data and report it to stakeholders. Consequently, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R, mostly from the tidyverse, is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data and can readily be pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with programming concepts such as conditionals or loops. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics. Let me first give you a global account of programming in R, albeit that might be more interesting for readers who have experience with other programming languages (and styles). R serves three purposes: interactive data analysis, developing new statistical routines and reporting a data analysis. 
+This book is for applied researchers in design sciences, whose frequent task is to analyze data and report it to stakeholders. Consequently, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R, mostly from the tidyverse, is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data which can then be pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with usual programming concepts such as conditionals, loops or the somewhat eccentric approaches to functional programming. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics, as others have done the hard work for us. 
 
-With R one typically *works interactively through a data analysis*. The analysis often is a rather repetitive series of steps, like: 
+Let me first give you a global account of programming in R, albeit that might be more interesting for readers who have experience with other programming languages (and styles). R serves three purposes: interactive data analysis, creating data analysis reports and developing new statistical routines. 
+
+With R one typically *works interactively through a data analysis*. The analysis often is a rather routine series of steps, like: 
 
 1. load the data 
 1. make a scatter plot
 1. run a regression
 1. create a coefficient table
 
-A program in R is usually developed iteratively: once you've loaded and checked your data, you progress to the next step step of your analysis, test it and proceed. At every step, one or more new objects are created in the environment, that capture intermediate and final results of the analysis:
+A program in R is usually developed iteratively: once you've loaded and checked your data, you progress to the next step step of your analysis, test it and proceed. At every step, one or more new objects are created in the environment, capturing intermediate and final results of the analysis:
 
 1. a data frame holding the data
-1. a graphics object with a scatter plot
-1. a data frame holding the posterior distribution
+1. a graphics object holding a scatterplot
+1. a model obkect holding the results  of a regression analysis
 1. a data frame for the coefficient table
 
 As R is an interpreter language, there is no tedious compile-and-run cycles in everyday R programming. You develop the analysis as it happens. It is even normal to jump back and forth in an R program, while building it.
 
-R is a way to *develop and share statistical programs*. Thousands of packages in the R ecosystem cover any statistical problem you can imagine. Countless researchers and developers have written statistical routines that can be re-used. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Most people have a background in general purpose programming languages, like Java, Python or C++. The following three 
-
-*Functional programming* means that functions are first-class citizens in R. Most notably, almost every operation in R takes an input and creates another output object. In standard R programming there is nothing such as changing an object by setting its attributes. Furthermore, there exist so called higher level functions. These are functions that apply other functions. For example, there is a function `aaply` in the `plyr` package, that applies another function, say `sum` per column or row of a matrix. These higher level functions allow for incredibly compact code and make loops practically unnecessary.
-
-Most programming languages count from zero. If you have worked with Python or Java before, you know these nasty "index out-of-bounds" errors that arise. They are easy to fix, but still annoying. Mathematicians, statisticians and basically everyone, young or old, starts counting from 1. And so does R.
-
-For folks who like object orientation, R is a good choice, too. It even gives you the choice of several object-orientation packages. The most basic mechanism is the so-called *S3 system*, which is rather limited and even a bit informal. S3 mainly provides a simple *overloading* mechanism. Technically, it is a method dispatcher, more or less. When, later, you find out that you can call the function `summary` on a great variety of R objects and it always does something useful, it is S3 at work. However, owing to the functional paradigm, almost all R routines go without side effects. If an object has an attribute and 
-
-
-R is a way to *report and archive* what precisely you have been doing with your data. In statistics, mathematical formulas  are the common form of unambiguously describing a regression model. For example, the following equation defines a linear regression model between the observed outcome $y$ and the predictor $x$:
+R is a way to *report and archive* what precisely you have been doing with your data. In statistics, mathematical formulas  are the common form of unambiguously describing a statistical model. For example, the following equation defines a linear regression model between the observed outcome $y$ and the predictor $x$:
 
 $$
 \mu_i = \beta_0 +  \beta_1x_i\\
@@ -350,13 +291,20 @@ scores[invalids] <- NA
 
 ```
 
+Finally, R is a way to *develop and share statistical programs*. Thousands of packages in the R ecosystem cover any statistical problem you can imagine. Countless researchers and developers have written statistical routines that can be re-used. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Most people have a background in general purpose programming languages, like Java, Python or C++. The following three 
+
+*Functional programming* means that functions are first-class citizens in R. Most notably, almost every operation in R takes an input and creates another output object. In standard R programming there is nothing such as changing an object by setting its attributes. Furthermore, there exist so called higher level functions. These are functions that apply other functions. For example, there is a function `aaply` in the `plyr` package, that applies another function, say `sum` per column or row of a matrix. These higher level functions allow for incredibly compact code and make loops practically unnecessary.
+
+Most programming languages count from zero. If you have worked with Python or Java before, you know these nasty "index out-of-bounds" errors that arise. They are easy to fix, but still annoying. Mathematicians, statisticians and basically everyone, young or old, starts counting from 1. And so does R.
+
+For folks who like object orientation, R is a good choice, too. It even gives you the choice of several object-orientation packages. The most basic mechanism is the so-called *S3 system*, which is rather limited and even a bit informal. S3 mainly provides a simple *overloading* mechanism. Technically, it is a method dispatcher, more or less. When, later, you find out that you can call the function `summary` on a great variety of R objects and it always does something useful, it is S3 at work. However, owing to the functional paradigm, almost all R routines go without side effects. If an object has an attribute and 
 
 
 ### Assigning and calling Objects
 
 Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
-*Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name that chosen by the programmer. By their name, a stored objects can be found back at any time. Two basic operations apply for any objects: an object is stored by *assigning* it a name; it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
+*Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name chosen by the programmer. By its name, a stored objects can be found back at any time. Two basic operations apply for any objects: an object is stored by *assigning* it a name; it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
 ```{r assigning, opts.label = "rtut"}
 N_obs <- 100
@@ -388,8 +336,6 @@ N_Obs/N_Part ## same value, different object
 
 There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the demonstration purpose and you will rarely use it in everyday programming tasks:
 
-
-
 ```{r, opts.label = "rtut"}
 tracemem(N_Obs/N_Part)
 tracemem(N_Obs/N_Part)
@@ -399,9 +345,9 @@ tracemem(N_Obs/N_Part)
 
 ### Vectors
 
-Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming language, all basic data types are all *vectors* in R. Vectors are containers for storing many values *of same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
+Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming language, all basic data types are *vectors* in R. Vectors are containers for storing many values *of same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
-For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. Many frequently used operations work on many values, take the following example:
+For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:
 
 ```{r mean, opts.label = "rtut"}
 
@@ -410,7 +356,9 @@ mean(X)
 
 ```
 
-The `rnorm` command *produces* a vector of length 100 from three values. It does 100 draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
+The `rnorm` command *produces* a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
+
+
 
 ### Basic object types
 
@@ -435,7 +383,7 @@ is_female <- c(FALSE, TRUE, TRUE)
 is_male   <- c(T, F, F)
 ```
 
-Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate `TRUE` and `FALSE` as shown above. As a consequence, one should never assign objects the name reserved for logical values:
+Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate `TRUE` and `FALSE` as shown above. As a consequence, one should never assign objects the name reserved for logical values, so don't do one of the following:
 
 ```{r dont_do_this, opts.label = "rtut.nr"}
 ## never do this
@@ -862,7 +810,7 @@ Do you wonder about the strange use of `%>%` in my code above? This is the tidy 
 
 The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for data manipulation. It chains steps of data manipulation by connecting transformation functions. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.
 
-Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the data frame. Say, you want to variable _Group_ to be called _Condition_, but omit the variable _age_ and store the new data frame as _Exp_. The select command does all this. In the following code the data frame `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
+Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the data frame. Say, you want to variable _Group_ to be called _Condition_, omit the variable _age_ and store the new data frame as _Exp_. The select command does all this. In the following code the data frame `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
 
 ```{r opts.label = "rtut"}
 Exp <-  Experiment %>% 
@@ -910,7 +858,7 @@ Exp %>%
 
 Good statistical graphics can vastly improve your and your readers understanding of data and results. This book exclusively introduces the modern ggplot2 graphics system of R, which is based on the [grammar of graphics](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/).
 
-Every plot starts with a data frame that is chained into the `ggplot(aes(...))` command. The `aes(...)` argument of ggplot creates the *aesthetics*, which is a *mapping  between variables and features of the plot* (and only remotely has something to do with beauty). Review the code once again that produces the piles-of-sugar: the aesthetics map the variable *Group* on the fill color, whereas *outcome* is mapped to the x axis. For a plot to be valid, there must at least one layer with a *geometry*. The above example uses the density geometry, which calculates the density and maps it to the y axis.
+Every plot starts with piping a data frame into the `ggplot(aes(...))` command. The `aes(...)` argument of ggplot creates the *aesthetics*, which is a *mapping  between variables and features of the plot* (and only remotely has something to do with beauty). Review the code once again that produces the piles-of-sugar: the aesthetics map the variable *Group* on the fill color, whereas *outcome* is mapped to the x axis. For a plot to be valid, there must at least one layer with a *geometry*. The above example uses the density geometry, which calculates the density and maps it to the y axis.
 
 The ggplot2 plotting system knows a full set of geometries, like:
 
@@ -1042,9 +990,7 @@ Exp <-
 ```
 
 
-The experiment involves two groups, which in classic statistics would clearly point to an *ANOVA*.  As it will turn out, ANOVA is just one special case of regression model, as you will learn in a later chapter.  The model specification is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. Below is a very basic model, that predicts `outcome` by `Condition`. As the predictor is a factor, it is practically what people often refer to as ANOVA, but from now on I refer to it as a comparison of groups model (CGM). 
-
-We can perform a CGM on the data frame `Exp` using the *regression engine*  `stan_glm`. This produces a regression object that contains an abundance on information, much of it of lesser interest for now. (A piece of information, that it does *not* contain is F statistics and p-values;  and that is good!) The foremost question is how strong the difference between the group is. The `fixef` command extracts the parameter estimates from the model, which answers the question. 
+The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in [LM], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance on information, much of it of lesser interest for now. (A piece of information, that it does *not* contain is F statistics and p-values;  and that is why it is not an ANOVA, strictly!) The foremost question is how strong the difference between the group is. The `fixef` command extracts the parameter estimates from the model to answer the question.
 
 ```{r fit:Condition, opts.label = "tab"}
 M_1 <- 
@@ -1054,7 +1000,7 @@ fixef(M_1)
 ```
 
 
-Another classic model is *linear regression*, where outcome is predicted by the metric variable `age`. The `stan_glm` regression engine is truly multi-purpose and does the job with grace:
+Another classic model is *linear regression*, where outcome is predicted by a metric variable, say `age`. The `stan_glm` regression engine is truly multi-purpose and does the job with grace:
 
 ```{r fit:age, opts.label = "tab"}
 M_2 <- 
@@ -1077,13 +1023,24 @@ A statistical model has several components, for example the coefficients and res
 
 A number of functions can be used to extract certain aspects of the model. For example:
 
-* `fixef(model)`
-* `residuals(model)`
-* `predict(model)`
++ `fixef(model)` extracts the linear effects
++ `residuals(model)` extracts the measurement errors
++ `predict(model)` extracts the expected values
 
-This will all be covered in later chapters.
+These will all be covered in later chapters.
 
-### [TBD] Knitting statistical reports
+
+### Knitting statistical reports
+
+As you have seen throughout this chapter, with R you can effectively manage data, create expresseive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a comprehensive report. And this is the past, because in your modern R environment you can write whole books without much hassle. This works by the following basic principles:
+
+1. text is written in a *markup language*
+1. R code is contained in *chunks* 
+1. the document is *compiled* into a report of a common document format (e.g. Word, HTML, PDF)
+
+During the compilation, the R chunks are executed and, by default, code and output are inserted and formatted formatted.
+
+
 
 ### Exercises
 
@@ -1105,6 +1062,19 @@ This will all be covered in later chapters.
 
 1. Use your own data. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame and summarize what is in the data frame. Use ggplot to create one or more exploratory graphs. Then use dplyr `summarize` to create summary statistics.
 
+1. Do a full exploratory analysis of the dataframe D_agg in case environment IPump. It has the predictors Design, Group, Education and experience. It has the outcome variables ToT, deviations and workload.
+    1. get the data frame into R and produce a summary
+    1. plot a histogram for all dependent variables
+    1. produce a table that counts the number of observations per Education
+    1. produce a table that displays minimum, maximum, median, mean and standard deviation of experience
+    1. exclude participants with less than four years of experience
+    1. produce a table with group means per Design and Session
+    1. for every outcome variable, produce a plot for Design by session 
+    1. explore graphically, what other relations may exist between outcome variables and Group, Education and experience
+    1. Run a regression model for ToT with Design and Session as predictors
+    1. produce a coefficient table
+    1. plot the residuals
+
 
 
 ### Bibliographic notes
@@ -1122,6 +1092,6 @@ This will all be covered in later chapters.
 ```{r save_all, opts.label = "invisible"}
 
 save_CE(CE)
-deploy_CE(CE, "Workshops/GSR/")
+# deploy_CE(CE, "Workshops/GSR/")
 ```
 

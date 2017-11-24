@@ -13,27 +13,24 @@ if(!exists("purp.prnt")) # print (for ioslides, todo)
 if(!exists("purp.rtut")) # show R tutorial code
   purp.rtut = T
 
-
-options(digits=3)
-
-if(!exists("thisdir")) thisdir = getwd()
-#setwd("/..") # manually
-datadir = paste0(thisdir, "/data/")
-mcmcdir = paste0(thisdir, "/mcmc/")
-
-
-
-if(!exists("LOAD_DATA_SETS")) 
-  LOAD_DATA_SETS = F ## a hack for using RMDR.R by external programs
-RELOAD_DATA_SETS = F
-
-if(LOAD_DATA_SETS){ 
-  if(RELOAD_DATA_SETS) {
-    source("load_dat.R")
-  }else{
-    load("Book.Rda")
-  }
-}
+# if(!exists("thisdir")) thisdir = getwd()
+# #setwd("/..") # manually
+# datadir = paste0(thisdir, "/data/")
+# mcmcdir = paste0(thisdir, "/mcmc/")
+# 
+# 
+# 
+# if(!exists("LOAD_DATA_SETS")) 
+#   LOAD_DATA_SETS = F ## a hack for using RMDR.R by external programs
+# RELOAD_DATA_SETS = F
+# 
+# if(LOAD_DATA_SETS){ 
+#   if(RELOAD_DATA_SETS) {
+#     source("load_dat.R")
+#   }else{
+#     load("Book.Rda")
+#   }
+# }
 
 ## Regression models
 # library(lme4)
@@ -51,7 +48,8 @@ library(polynom)
 ## Plotting and setting
 library(knitr)
 library(knitcitations)
-library(ggplot2)
+#library(printr)
+#library(ggplot2)
 library(gridExtra)
 #library(GGally)
 library(DiagrammeR)
@@ -60,13 +58,18 @@ library(DiagrammeR)
 library(foreign)
 library(plyr)
 library(pipeR)
-library(tibble)
-library(dplyr)
-library(tidyr)
+library(tidyverse)
+#library(tibble)
+#library(dplyr)
+#library(tidyr)
 library(stringr)
 library(haven)
 library(readr)
 library(openxlsx)
+
+## ETC
+library(beepr)
+
 
 ## own libraries
 library(mascutils)
@@ -146,8 +149,9 @@ opts_template$set(
   rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
                     fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
   rtut.nr = list(eval = F, echo = purp.rtut),
-  future = list(eval = F, echo = F, eval = F),
-  deprecated = list(eval = F, echo = F, eval = F)
+  future = list(echo = F, eval = F),
+  deprecated = list(eval = F, echo = F, eval = F),
+  scratch = list(eval = F, echo = F, eval = F)
 )
 
 
