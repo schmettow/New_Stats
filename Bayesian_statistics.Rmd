@@ -159,7 +159,7 @@ A subtle, but noteworthy feature of likelihood functions is that $\mu_i$ and $x_
 ### Distributions: patterns of randomness {#distributions}
 
 
-##### TODO: 
+<!--
 + spell out R code hidden in figures and formulas to teach Rs distribution commands along the way
 + change trials to attempts for binomial distributions to not confuse with experimental trails
 - discrete or continuous
@@ -171,7 +171,7 @@ A subtle, but noteworthy feature of likelihood functions is that $\mu_i$ and $x_
 + parameters
 - location and dispersion
 + in R
-
+-->
 
 
 
@@ -329,7 +329,7 @@ Imagine, standing slightly elevated in front of a moving crowd and choose one pe
 
 
 The theorists answer is twofold: first, they are exponential .... second, they are lowest entropy.
--->
+
 
 
 
@@ -341,9 +341,9 @@ Random distributions:
 + parameters
 + location and dispersion
 + data generating process
+-->
 
-
-#### Binomial distributions
+#### Binomial distributions {#binomial_dist}
 
 A very basic performance variable in design research is task success. Think of devices in high risk sitations such as medical infusion pumps in surgery. These devices are remarkably simple, giving a medication at a certain rate into the bloodstream for a given time. Yet, they are operated by humans under high pressure and must therefore be extremely error proof in handling. Imagine, the European government would set up a law that manufacturers of medical infusion pump must prove a 90% error-free operation in routine tasks. A possible validation study could be as follows: a sample of $N = 30$ experienced nurses are invited to a testing lab and asked to complete ten standard tasks with the device. The number of error-free task completions per nurse is the recorded performance variable tpo validate the 90% claim. Under somewhat idealized conditions, namely that all nurses have the same proficiency with the device and all tasks have the success chance of 90%, the outcome follows a *Binomial distribution* and the results could look like the following:
 
@@ -375,7 +375,7 @@ A Binomial distributions has two parameters: $p$ is the chance of success and $k
 The Binomial distribution has two boundaries, zero below and number of attempts $k$ above. While a lower boundary of zero is often natural, one cannot always speak of a number of attempts. For example, the number of times a customer returns to the car rental website does not yield a natural interpretation of number of attempts. Rather, one could imagine the situation as that any moment is an opportunity to hire a car. At the same time, every single moment has a very, very small chance that a car is hired, indeed. Under these conditions, an infinite (or painstakingly large) number of opportunities and a very low rate, the random pattern is neatly summarized by *Poisson distributions*. 
 
 
-#### Poisson distributions
+#### Poisson distributions {#poisson_dist}
 
 Some counting processes have no natural upper limit like the number of trials in a test. In design research, a number of measures are such *unbounds counts*:
 
@@ -471,9 +471,9 @@ Another lower bound problem arises, when there are hurdles. In traffic research,
 
 #### Exponential distribution [TBC]
 
-Exponential distributions apply for measures of duration. Exponential distributions have the same generating process as Poisson distributions, except, that the *duration for an event to happen* is  the variable of interest, rather than events in a given time. The same idealized conditions of a completely unaffected subway smurfer player and constant catchability of items, the duration between any two catches is exponentially distributed. In more general, the chance for an event to happen is the same at any moment, completely independent of how long one has been waiting. For this property, the exponential distribution is called *memoryless*.
+Exponential distributions apply for measures of duration. Exponential distributions have the same generating process as Poisson distributions, except, that the *duration for an event to happen* is  the variable of interest, rather than events in a given time. The same idealized conditions of a completely unaffected subway smurfer player and constant catchability of items, the duration between any two catches is exponentially distributed. In more general, the chance for an event to happen is the same at any moment, completely independent of how long one has been waiting for it. For this property, the exponential distribution is called *memoryless*.
 
-Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for two reasons: first, the exponential distribution shares with Poisson, that it does not allow variance between participants. Second, the distribution always starts at zero, whereas human reactions always include some basic processing, be this just the velocity of signals of nerve cells, which is far below light speed and even speed of sound (in air).
+Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for two reasons: first, the exponential distribution shares with Poisson, that it does not allow variance between participants. Second, the distribution always starts at zero, whereas human reactions always include some basic processing, and be this just the velocity of signals passing nerve cells, which is far below speed of sound (in air).
 
 ```{r opts.label = "future"}
 ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
@@ -561,16 +561,19 @@ IPump$D_successes %>%
 
 ```
 
+#### Exercises: 
+
+1. Google it: speed of sound and signal velocity in nerve cells.
 
 
 
 
-### Bayes rule
+
 
 
 ## Bayesian estimation
 
-Frequentist statistics falls short on recognizing that research is incremental and has always been. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
+Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
 
 1. procedures make more or less strong assumptions, limiting their applicability. Procedures become islands.
 2. procedures are asymptotically accurate with inference being accurate at large sample sizes only
