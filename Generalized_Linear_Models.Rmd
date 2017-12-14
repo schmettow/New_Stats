@@ -1,25 +1,4 @@
----
-title: "New statistics for the design researcher"
-author: "Martin Schmettow"
-date: "April 3, 2017"
-output:
-  word_document:
-    toc: yes
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    theme: journal
-    toc: yes
-bibliography: Bayesian_Stats.bib
----
-
-<style type="text/css">
-.table {
-     width: auto;
-
-}
-</style>
-
+# Generalized Linear Models {#GLM}
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
@@ -27,7 +6,7 @@ bibliography: Bayesian_Stats.bib
 purp.mcmc = F
 source("RMDR.R")
 # library(printr)1
-CE <- c("IPump", "Overdisp")
+CE <- c("IPump", "Overdisp", "CUE8")
 load_CE(CE)
 
 #formals(stan_glm)$iter <- 200
@@ -35,8 +14,6 @@ load_CE(CE)
 
 ```
 
-
-# Generalized Linear Models
 
 Have you wondered about the abundance of simulated data sets up to this point? The reason for using simulated data is: the linear model, as introduced by now, makes assumptions that are *never* met by real data. The simulated data sets so far demonstrated some features found in real data sets, but  unsparingly wiped over some other frequent peculiarities. 
 
@@ -62,24 +39,8 @@ Every assumption that fails, rebounces from one of two building blocks that GzLM
 
 After a full debunk, the *GzLM* framework will rise from the ashes of *LM*. It hosts a variety of models that leaves little reason for crude approximations of the linear model, aka the *Gaussian LM*. The *Poisson LM* is the logical choice for outcome variables that are counted with no limit, like number of errors.  *Binomial regression* covers the case of succesful task completion, where counts have an upper boundary. These two GzLM members have been around for more than half a century in statistics. The quest for a good model for time-on-task was more difficult as the seemingly good candidates disappointed at first. Luckily, the with recent developments in Bayesian regression engines the choice of random distributions has become much broader. For ToT, I here suggest the exponentially-modified Gaussian *(ExGauss) LM*. Also for analogue rating scales will I present a relative novelty, the *Beta LM*.
 
-## Case: user testing infusion pumps
 
-Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream. Pumps are rather simple devices as infusion is a function of volumen and time, only. They are routinely used by trained stuff, anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a hilarious set of completely unnecessary design mistakes:
 
-* tiny 3-row LCD displays
-* flimpsy foil buttons without haptic marking or feedback
-* modes
-* information hidden in menus
-
-For fixing these issues no additional research is needed, as the problems and there fixes are pretty obvious to experienced usability specialists. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
-
-* is the interface safe to use?
-* is it efficient to learn?
-* is a novel interface better than a legacy design? And by how much?
-
-We conducted such a study. 
-
-[DESCRIBE STUDY]
 
 ## Debunking the Gaussian linear model
 
@@ -103,7 +64,7 @@ data_frame(session = as.integer(1:5),
 
 ```
 
-See what happens when the linear model is naivly applied to the deviation counts. In no time, negative values are drawn, which is impossible. Similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
+See what happens when the linear model is naivly applied to the deviation counts. In no time, negative values are produced, which is impossible. Similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
 
 Here is some real world data from the IPump study. We take a look at a small slice of it: the total number of deviations of one participant across the three sessions.
 
@@ -139,12 +100,12 @@ Such a non-linearity happens to all outcome variables that have natural lower or
 
 
 
-### Assumping normal distribution
+### The Normal distribution assumption
 
 
-The second term of a linear model, $y_i \sim Norm(\mu_i, \sigma)$ states that the observed values are drawn from normal distributions. Note that the plural  (distributions) is by intention. Two observed values $y_i$ and $y_j$ are only drawn from the same distribution, when they have the same expected value $\mu_i = \mu_j$. Normal distribution sounds like this were the regular case. In fact, the normal distribution is a reasonable approximation in a limited number of situations. 
+The second term of a linear model, $y_i \sim Norm(\mu_i, \sigma)$ states that the observed values are drawn from normal distributions (see \@ref(resid_normality)). Two observed values $y_i$ and $y_j$ are only drawn from the same distribution, when they have the same expected value $\mu_i = \mu_j$. The Normal distribution has been used ubiquitously in statistics. But in fact, the normal distribution is a reasonable approximation when the measures are far off the boundaries of measures and the error is much smaller than the predicted values (\@ref(normal_distributions)). 
 
-Consider a study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
+In design research studies this is frequently not the case. We begin with a simulated study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
 
 ```{r opts.label = "rtut"}
 N = 80
@@ -165,33 +126,31 @@ pumps_2 %>%
   coord_flip()
 ```
 
-When instantiated by simulation, the linear model looses its unsuspicious flare (just like medical infusion pumps themselves). A substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, the normal distribution supports the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly hitting keys until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
+The simulated predicted values ($\mu_i$) and errors are in a fairly realistic range. Still, we immediatly see, that simulation with Normal distributions is rather inappropriate: a substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, Normal distributions support the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
 
-Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit tend to get squeezed like chewing gum into a corner. And that is true for the distribution of real data as well as the theoretical distributions that are truly edaquate to present the data. Only the normal distribution stoically retains its symmetry in all infinity. The figure below shows the distribution of 
-
-
-
-### Assuming constant variance
+Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit get squeezed like chewing gum into a corner, when approaching the boundaries. Review Binomial and Poisson distribution in chapter 1 for illustrations. As a matter of fact, a lot of real data in design research is skewed that way, whereas the normal distribution eternally retains its symmetry.
 
 
 
+### Assuming constant variance [TBD]
 
 
-## Concepts of Generalized Linear Models
+
+
+
+## Concepts of Generalized Linear Models {#glm_concepts}
 
 GzLM is a *framework for modeling* that produces a *family of models*. Every member of this family uses a specific link functions and chooses a particular random distribution. Sometimes GzLM are confused as a way to relax assumptions of linear models, (or even called non-parametric).  They absolutely are not! Every member of its own makes precise assumptions  on the level of measurement and the shape of randomness (see Table A). One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as they use only one parameter, with the consequence of an even  tighter association between variance and expected value. A few members of GzLM are classic: Poisson, Binomial (aks logistic) and exponential regression have routinely been used before they were united  under the hood of GzLM. These and a few others are called *canonical* GzLM, as they possess some convenient mathematical properties, that made efficient estimation possible, back in the days of expensive computer time. 
 
 
-### Re-linking linearity
+### Re-linking linearity (#relinking_linearity) [TBC]
 
 The strength of the linear term (the likelihood) is its endless versatility in specifying relations between predictor variables and outcome. Unfortunately, it represents all associations as straight lines. These lines extend from $-\infty$ to $\infty$ and will cross the lower or upper boundaries of every known outcome variable. The model could predict what cannot happen.
 
-Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values. We cannot just cut it off,  But it can be bended. In arithmetics an abundance of functions exists for every possible purpose. The  *exponential* function supports the whole range of real numbers and bends it up into the non-negative range. Its inverse, the *logarithm* does the opposite: It restretches strictly positive numbers to the real range.
+Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values. We cannot just cut it off,  But it can be bended. In arithmetics an abundance of functions exists for every possible purpose. The  *exponential* function supports the whole range of real numbers and bends it up into the positive range. Its inverse, the *logarithm* does the opposite: It restretches strictly positive numbers to the real range.
 
 Other variables, like success rates or analog rating scales, have two boundaries. A function that bends the real range into $[0;1]$ is the *logistic* function. The two-sided bending makes its characteristic sigmoid shape. Again there is an inverse function, the log_odds, or *logit*. 
 
-
-It could translate a strictly positive $\mu$
 
 ```{r, opts.label = "fig.wide"}
 data_frame(x = seq(-3, 3, .01)) %>% 
@@ -204,25 +163,14 @@ data_frame(x = seq(-3, 3, .01)) %>%
 ```
 
 
-In GzLM, a layer is drawn between expected value $\mu$ and the linear term, *linear predictor $\theta$*. The *link function* transforms between $\mu$ and $\theta$. For example, when $\y_i$ is a count variable, such that $\mu$ is bounded at zero, the logarithm makes the transformation to th unbounded $\theta$. The transformation bends the scale, but is monotonous, leaving the order intact. The back-transformation to the observed scale is called the *mean function*  
-
-
-
-
-
-
-
-
-
-
-
-
+In GLM, a layer is drawn between expected value $\mu$ and the linear term, *linear predictor $\theta$*. The *link function* transforms between $\mu$ and $\theta$. For example, when $\y_i$ is a count variable, such that $\mu$ is bounded at zero, the logarithm makes the transformation to th unbounded $\theta$. The transformation bends the scale, but is monotonous, leaving the order intact. The back-transformation to the observed scale is called the *mean function*  
 
 Using the link function comes at a cost: the linear coefficients $\beta_i$ no longer  have a natural interpretation, like "movin one step on the predictor, let the outcome change by $\beta_i$". The linear link is now strictly with the linear predictor $\theta_i$. Still, we will see that other, only slightly less intuitive statements can 
 be made for link-transformed linear models.
 
 Who needs a well-defined link between observations and expected values? Applied design researchers do when predictions over time is their business. Reconsider Andrew & Jane in [WIS], who predicted the population mean of ToT from a sample. This is a statement on the status quo, and therefore it is not a prediction, in a strict sense. Comparing designs A and B is status quo, too, as both designs do exist. Generally, we  classify all research questions as *status quo* that stay confined in the range of $y_i$. In the IPump study it is compelling to ask: "how will the nurse perform in session 4?". "When will she reach error-free operation?". These are predictive questions, where the question reaches into the unknown.   
 
+<!--
 With Bayesian regression engines we can compute a best guess for observed ranges and factor levels, but we can also simulate in the void. We estimate a linear model on learning 
 
 ```{r stanglm_predict}
@@ -240,12 +188,15 @@ detach(IPump)
 
 
 
-Some researchers apply transformations to their variables, to make the meet the assumptions. 
+Some researchers apply transformations to their variables, to make the meet the assumptions. We used this workaround in setting up a linear multi-level model for the Egan study (\@ref(crossover))
 
 
-### Fun with random distributions 
+-->
 
-Count measures are bounded to the below. Unlike the normal distribution, the minimal count is 0. Theoretically, there is no upper bound for counts, but larger counts just get more and more unlikely. The Poisson distribution describes count data. Different to the successes-on-trials, these counts have no natural upper limit. The distribution is left-skewed. The smaller the measured values are, the stronger the skew. Vice versa, when the average count gets larger, the distribution becomes more symmetric. A common misconception is that random distributions approach the normal distribution with larger sample sizes. That is not true. Increasing the number of participants just results in a cleaner shape of the distribution, with less ruggedness. Examine yourself, how the shape of Poisson distributions changes by mean count, as well as sample size. The following code simulates a Poisson distribution with a given $\lambda$ and $N$. With every new run of the code, `rpois` generates a new random set of counts. By repeatedly running this code and watching the output, you can get a good idea of how varied the shape of the distribution can be.
+
+### Choosing a patterns of randomness (#choosing_randomness)
+
+Count measures are bounded to the below. Unlike the normal distribution, the minimal count is 0. Theoretically, there is no upper bound for counts, but larger counts just get less and less likely. The Poisson distribution describes count data. Different to the successes-on-trials, these counts have no natural upper limit. The distribution is left-skewed. The smaller the measured values are, the stronger the skew. Vice versa, when the average count gets larger, the distribution becomes more symmetric. A common misconception is that random distributions approach the normal distribution with larger sample sizes. That is not true. Increasing the number of participants just results in a cleaner shape of the distribution, with less ruggedness. Examine yourself, how the shape of Poisson distributions changes by mean count, as well as sample size. The following code simulates a Poisson distribution with a given $\lambda$ and $N$. With every new run of the code, `rpois` generates a new random set of counts. By repeatedly running this code and watching the output, you can get a good idea of how varied the shape of the distribution can be.
 
 ```{r fig:exercise_poisson_dist}
 data_frame(count = rpois(n = 20,
@@ -265,15 +216,316 @@ ddply()
 ```
 
 
+## Case: user testing infusion pumps
+
+Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained stuff, anaesthesiologists and  nurses, mostly. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
+
+* tiny 3-row LCD displays
+* flimpsy foil buttons without haptic marking or feedback
+* modes
+* information hidden in menus
+
+For fixing these issues no additional research is needed, as the problems are pretty obvious to experienced usability specialists. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
+
+* is the interface safe to use?
+* is it efficient to learn?
+* is a novel interface better than a legacy design? And by how much?
+
+We conducted such a study. A novel interface was developed after an exetensive study of user requirements and design guidelines. As even the newest national standards  for medical devices do not spell precise quantitative user requirements (such as, a nurse must be able to complete a standard task in *t* seconds and no more than *e* errors may occur), the novel interface was compared to a device with a legacy design. The participants were nurses and they were asked to complete a set of eight standard tasks with the devices. In order to capture learnability of the devices, every nurse completed the sequence of tasks in three consecutive sessions. A number of performance measures were recorded to reflect safety and efficiency of operation:
+
+1. *task completion*: for every task it was assessed whether the nurse had completed it successfully.
+1. *deviations from optimal path*: using the device manual for every task the shortest sequence was identified that would successfully complete the task. The sequence was then broken down into individual operations that were compared to the observed sequence of operations. An algorithm called *Levenshtein distance* was used to count the number of deviations.
+1. *time on task* was recorded as a measure for efficiency.
+1. *mental workload* was recorded using a one-item rating scale.
+
+As can be expected in the light of what has been said above, each one these measures violate one or more assumptions of the Gaussian linear model. In the following chapters, proper models from teh GLM family are introduced for commonly occuring measures of types:
+
+1. *count data*, such as the number of completed tasks and path deviations
+1. *temporal data*, such as time-on-task
+1. *rating scales*
 
 
 
 
-## Count data
+
+## Count data {#count_data}
 
 
-### Binomial regression
+### Logistic (aka Binomial) regression (#binomial_regression)
 
+The most simple outcome measure can take only one of two values, which is called  *dichtotomous*. Common examples are:
+
++ a user is successful at a task, or fails
++ a visitor returning to a website
++ a usability problem is discovered or remains unseen
++ a driver brakes just in time or crashes
++ a customer would recommend a product to a friend or rather not
++ a web user starts a search for information by keyword query or by following a sequence of links
++ ...
+
+Most dichotomous outcome variables have a more or less clear notion of success and failure (although not necessarily). When the outcome casts a positive light on the design, by convention it is coded as 1, otherwise 0. In computer science jargon, every observation accounts to a *bit*, which  is the smallest amount of information ever possible. Since in statistics, the amount of information is tantamount with the reduction in uncertainty, with dichotomous data one usually needs an abundance of observations to reach reasonably certain conlusions. Because the information of a single observation is so sparse, large samples and repeated measures are important when dealing with dichtomous outcomes.
+
+Early research on foraging strategies of web users revealed that they are extremely impatient companions. They scan a page for visual features, rather than reading [REF: high school students information mall]. Visitor of websites build their first judgement in a time as short as 17ms [REF: Tuch presentation time]. For e-commerce that is a highly important fact about their customers and practically all commercial websites shine with a pleasing visual appearance. But, how would one measure the gratitude of a visitor who actually used the website and may have something to tell beyond visual pleasance.
+
+A simple measure for gratitude is whether a visitor return. And it is a highly available measure, too, as a web administrators can distill such data from the server logfiles with little effort. First, all unique visitors are extracted, if the same visitor returns within a given period of time, this is coded as a success (one) otherwise zero.
+
+```{r}
+set.seed(42)
+D_ret <- data_frame(visitor = as.factor(1:100),
+                returned = rbinom(100, 1, .4))
+
+D_ret %>% sample_n(6) %>% kable()
+
+D_ret %>% 
+  ggplot(aes(x = returned)) +
+  geom_bar()
+```
+
+In total, `r mean(D_ret$returned) * 100`% visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table.
+
+```{r}
+M_ret <- D_ret %>% stan_glm(returned ~ 1, data = .,
+                            family = binomial) # <--
+```
+```{r}
+fixef(M_ret)
+```
+
+As expected from a GMM we retrieve one paraneter that here reflects the average tendency to return to the site. Recall, that the linear model assumes the predictions to be unbounded. However, in case of return rates, we rather speak of either *proportions* of users to return, or *probability* for the next user to be a returner. Both, proportions and probability are on a range from zero to one. Because the quantity of interest it bounded, a link function  is needed that stretches the bounded into an unbounded range. For logistic regression, the *logit* functions maps the expected values $\mu_i \in [0;1]$ onto the *linear predictor* scale $\eta_i \in [-\infty; \infty]$:
+
+$$\eta_i = \textrm{logit}(\mu_i)$$
+The inverse function, commonly called the *mean function* of the logit is the *logistic function*. \@ref(fig:logit_logist) shows link and mean functions side-by-side.
+
+```{r logit_logist}
+grid.arrange(
+  ggplot(data.frame(mu=c(0, 1)), aes(x = mu)) + 
+    stat_function(fun = mascutils::logit) +
+    xlab(expression(mu)) + ylab(expression(eta)) +
+    ggtitle("logit link function"),
+  ggplot(data.frame(eta=c(-5, 5)), aes(x = eta)) + 
+    stat_function(fun = mascutils::inv_logit) + 
+    xlab(expression(mu)) + ylab(expression(eta)) +
+    ggtitle("logistic mean function"),
+  nrow = 1)
+```
+
+In order to obtain a statement on proportion $\mu$ (note that in a GMM, there is only one), we therefore have to perform the mean transformation:
+
+$$
+\eta = \beta_0\\
+\mu = \textrm{logist}(\eta)
+$$
+```{r}
+fixef(M_ret, mean.func = inv_logit)
+```
+
+The apt reader may have noticed that the returners data set has been simulated with an exact return rate of 40%. Despite the sample size of 100, the center estimate seems rather off and hampered by considerable uncertainty. That is precisely because of the low level of information  contained in dichotomous variables (one bit). For a reasonably certain estimate one would need many more observations. These can either be obtained by a larger sample or by repeated measures.
+
+Consider the jump-and-run game  smart smurfer in \@ref(poisson_dist): the goal of the game is that players collect items and for the user experience it is crucial that this is neither too difficult nor too easy. For adjusting the difficulty level, the developers conduct a quick evaluation study, where they place a number of items (trials) in the game and the success rate of a single player is observed in a series of 15 game sessions:
+
+```{r}
+D_smrf <- 
+  data_frame(
+    Session = 1:15,
+    trials = round(runif(15, 0, 25), 0),
+    successes = rbinom(15, trials, .4),
+    failures = trials - successes)
+D_smrf %>% sample_n(6) %>% kable()
+```
+
+Per session the player has a number of opportunities for collecting an item, which is a repeated measures situation. One might expect that we need to include random effects into the model. Later, we will see, that this is necessary when the sessions were observed on a sample of players with different abilities. However, as long as one can reasonably assume the chance of catching an item to be constant across all sessions, plain logistic regression can deal with *successes-in-trials*. In order to estimate a model with more than one trial per observation, it is necessary to add a variable for the number of failures and use a `cbind(successes, failures)` statement for the left-hand-side of the model formula. At the same time this allows to have a different number of trials per observation.
+
+```{r}
+M_smrf <- stan_glm(cbind(successes, failures) ~ 1,# <--
+                   family = binomial,
+                   data = D_smrf)
+```
+
+```{r}
+fixef(M_smrf, mean.func = mascutils::inv_logit)
+```
+
+We turn now to a real case study, the comparison of two medical infusion pumps (\@ref(slope_RE)). On both devices (legacy and novel), 25 nurses completed a set of eight tasks repeatedly over three session. In \@ref(slope_RE) a multi-level model was estimated on the workload outcome. It is tempting to apply the same structural model to success in task completion, using binomial random patterns and logit links. 
+
+    completion ~ Design*Session + (Design*Session|Part) + (Design*Session|Task)
+
+Such a model is practically impossible to estimate, because dichtomous variables are so scarce. Two populations encounter each other in the model: participants and tasks, with 6 observation per combination (6 bit). The situation is a little better on the population level: every one of the six coefficients is estimated on 400 bit. We take a compromise here: estimate the full model on group level and do only intercept random effects, to account for gross differences between participants and tasks. 
+
+
+```{r}
+attach(IPump)
+```
+```{r, opts.label = "mcmc"}
+M_cmpl <-   D_pumps %>%  
+  stan_glmer(completion ~ Design*Session + 
+               (1|Part) + (1|Task),
+             family = binomial,
+             data = .)
+```
+
+```{r}
+T_cmpl <- fixef(M_cmpl)
+T_cmpl
+```
+
+```{r, opts.label = invisible}
+T_cmpl_mu <- 
+  fixef(M_cmpl) %>% 
+  mascutils::discard_redundant() %>% 
+  as.data.frame()
+
+C_cmpl_mu_0 = inv_logit(T_cmpl_mu[1,2])
+C_cmpl_mu_1 = inv_logit(sum(T_cmpl_mu[1:2,2]))
+C_cmpl_mu_2 = inv_logit(sum(T_cmpl_mu[c(1:3,5),2]))
+C_cmpl_mu_3 = inv_logit(sum(T_cmpl_mu[c(1,3:4),2]))
+```
+
+
+The estimates are on the scale of the linear predictor $\eta_i$. This is a boundless space, where we can freely create linear combinations of effects to get the group means. To get a group mean prediction on the more meaningful measurement scale $\mu \in [0;1]$, one must *first* do the linear combination, *followed* by the mean function.
+
++ the completion rate in the first legacy session is `r C_cmpl_mu_0`
++ in novel/session 1: `logist(Intercept + DesignNovel)` = `r C_cmpl_mu_1`
++ in novel/session 2: `logist(Intercept + DesignNovel + Session2-1 + DesignNovel:Session2-1)` = `r C_cmpl_mu_2`
++ in legacy/session 3: `logist(Intercept + DesignNovel + Session2-1)` = `r C_cmpl_mu_3`
+
+```{r ia_cmpl}
+G_cmpl <- 
+  ggeffects::ggpredict(model = M_cmpl, terms = c("Session", "Design")) %>%
+  ggplot(aes(y = predicted, x = x, color = group)) +
+  geom_point(size = 3) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:3) +
+  xlab("Session") + ylab("predicted chance of success")
+
+  G_cmpl  
+
+```
+
+
+#### Talking odds
+
+
+Under the research questions of the IPump study, 
+
+1. Is the novel interface better?
+1. How do the devices compare in learnability?
+
+it is more interesting to interpret the effects directly and speak about the magnitude of an effect and uncertainty.  The linear predictor scale has only very general intuition: 
+
++ zero marks a 50% chance
++ positive values increase the chance, negative decrease
++ bigger effects have larger absolute values
+
+It is the absolute magnitude of effects, in terms of bets and chances. The logit-scaled linear predictor beasr no intuition, instead. Unfortunately it is also not possible to up-convert the individual coefficients (not absolute group means!) to the probability scale and speak of an increase in probability by a probability. The best intuition to speak of logistic regression coefficients is speaking in *odds*.  Odds are a rather common way to express ones chances in a game, say: 
+
++ odds are 1 against one that the coin flip produces Head. If you place €1 on Head, i put €1 on tail.
++ odds are 1 against 12 that Santa wins the dog race. If you place 1€ on Santa, I place €12 against.
+
+For a deeper understanding, we have to first inspect, what the logit actually is. The logit is also called a *log-odds*: $\textrm{logit}(p) := \log(p(1-p))$. The inner part of the function, the *odds* are the chance of success divided by the chance of failure.
+
+If the coefficients are log-odds, than we can extract the odds by the inverse of the logarithm, the exponential function, like in the following call of `fixef`:
+
+```{r}
+T_fixef_1_odds <- 
+  fixef(M_cmpl, mean.func = exp) %>%
+  mascutils::discard_redundant() %>% 
+  as.data.frame()
+
+T_fixef_1_odds
+```
+
+"If you place €100 against the next task with the legacy design in session 1, I place €413 against. What would be the odds of a successful sequence with the novel design? There are two ways to calculate. The first way is to do the respective linear combination on the linear predictor estimates, and than apply the exponential transformation:
+
+$$\textrm(Odds(success|Novel)) = \exp(\beta_{0} + \beta_1) =
+\exp(`r sum(IPump$T_fixef_1[1:2, "center"])`) = 
+`r exp(sum(IPump$T_fixef_1[1:2, "center"]))`$$
+
+However, the following arithmetic law tells that what is a sum on the log-odds scale, is multiplication on the scale of odds:
+
+$$\exp(x + y) = \exp(x)\exp(y)$$
+
+```{r, opts.label = "invisible"}
+C_cmpl_0 = exp(T_fixef_1_odds[1,2])
+
+C_cmpl_1 = exp(sum(T_fixef_1_odds[2,2]))
+C_cmpl_2 = exp(sum(T_fixef_1_odds[c(2,5),2]))
+C_cmpl_3 = exp(sum(T_fixef_1_odds[c(2,3:4),2]))
+```
+
+
+Once, we have transformed the coefficients to the odds scale, we can read coefficients as multipliers of odds.
+
++ the odds for success in the first legacy session is `r C_cmpl_0`
++ odds of success with the novel interface is by factor `r C_cmpl_1` better
++ with the legacy interface the first learning step improves odds by a factor of `r C_cmpl_2`
++ and from first to third session, odds of success improve by factor  $`r C_cmpl_2` \times `r C_cmpl_3` = `r C_cmpl_2 * C_cmpl_3`$
+
+
+```{r}
+detach(IPump)
+```
+
+<!--What is reported here, are the coefficients on the *linear predictor scale*, with the *logit* as link function. 
+-->
+
+
+
+<!-- \@ref(fig:gross_task_completion) is chilling. Successful completion is the exception rather than the rule. Besides that, there is little difference between designs and session. For the mere sake of illustration we run a first logistic regression:
+
+```{r opts.label = "future"}
+#M_1 <-
+#  D_agg %>% 
+#  stan_glm(completion ~ Design + Session, family = binomial, data = .)
+```
+
+```{r opts.label = "future"}
+#T_fixef_1 <- fixef(M_1)
+#T_fixef_1
+```
+
+The Design factor is centered at zero and is highly uncertain. There simply is no clear conclusion possible. However, if Binomial distribution is underlying the logistic regression, should we not expect probability of success? Clearly that is not the case, as the lower credibility limits are negative. 
+
+
+
+<!-- here: Infusion pump -->
+
+<!-- For the two logistic GMM, it seems one can short-circuit $\eta$ and state $\mu = \textrm{logist}(\eta)$ right away. This is not so, but a mere consequence of their only being the intercept $\mu = \beta_0$. It is also legitimate for absolute group mean models (AGM), but not for any other coefficients with contrast settings. In order to find a specific predicted value, the mean function is applied to the linear combination of coefficient. For example, the 
+
+However, in the final example of logistic regression we will see an alternative way to speak of logistic coefficients, *odds*, which allows transformation of individual coefficients.
+
+
+
+<!--What is reported here, are the coefficients on the *linear predictor scale*, with the *logit* as link function. The logit is also called *log odds*: $\textrm{logit}(x) = \log(p(1-p))$. The inner part of the function, the *odds* are the chance of success divided by the chance of failure. That is a rather common way to express ones chances in a bet, say: "odds are 1 against 12 that Santa wins the dog race". If you place 1€ on Santa, I place €12 against.
+
+If the coefficients are log odds, than we can convert them to odds by the inverse of the logarithm, the exponential function, like in the following call of `fixef`:
+
+```{r opts.label = "future"}
+T_fixef_1_odds <- fixef(M_1, mean.func = exp)
+T_fixef_1_odds
+```
+
+If you place €1000 on the next sequence with the legacy design being succesful (which is the reference group), I place €103 against. What would be the odds of a succesful sequence with the novel design? There are two ways to calculate. The first way is to do the respective linear combination on the linear predictor estimates, and than apply the exponential transformation:
+
+$$\textrm(Odds(success|Novel)) = \exp(\beta_{0} + \beta_1) =
+\exp(`r sum(IPump$T_fixef_1[1:2, "center"])`) = 
+`r exp(sum(IPump$T_fixef_1[1:2, "center"]))`$$
+
+The second way makes use of the following arithmetic law:
+
+$$\exp(x + y) = \exp(x)\exp(y)$$
+
+Once, we have transformed the linear predictor coefficients to the odds scale, we receive the combination of odds by multiplication:
+
+$$\textrm(Odds(success|Novel)) = \exp(\beta_{0})\exp(\beta_1)) =
+`r prod(IPump$T_fixef_1_odds[1:2, "center"])`$$
+-->
+
+
+
+
+
+
+<!--
 Now we simulate a data set with the same research design, but the outcome variable is successes in ten tasks. For instance, the designs are three websites and participants are given ten information retrieval tasks.
 
 Because the research design is the same, we can keep the two object data frames. The only issue is that $\beta$ and $\theta$ are on the scale of the linear predictor $\eta$, which is linked to expected values $\mu$ by the *logit link function*:
@@ -286,7 +538,6 @@ $$\mu = \exp(\eta)/{1 + \exp(eta)}$$
 
 Note that values of \mu from the Gaussian data set above, are in the range of 300 - 350, which would result in chances of success of virtually 100%. To get more realistic values, we first divide $\eta$ by 100. 
 
-SNIPPET 
 
 from the experiment on Visual EDA:
 
@@ -306,10 +557,13 @@ Watch out! It is a severe mistake to transform coefficients individually, then d
 eta = logist(Skew * 0.5) + logist(Sampel size * 50)
 In any case, it is much preferred to report the estimates on the probability scale, as this is right-away interpretable. Credibility limits can be reported on the linear predictor scale. 
 
-
 Group effects indicate how homogeneous the overall pattern (Table 1) is on individual units in the data set. Relevant units here are the participant and stimuli. For exanple, the relativels large coefficient Skew means that people differ a lot in how much their response is influenced by skew (which is desireable): The strong effect on stimuli means that (after taking skew and N into account) stimuli differ a lot in which response they provoke. It sounds a bit paradox, but that means that stimuli differ systematically: there exist properties other then Skew and N, that trigger a response.
 
-SNIPPET
+-->
+
+
+
+
 
 ```{r binomial, opts.label = "future"}
 n.subj = 50
@@ -354,7 +608,13 @@ data.frame(summary(M104)$solution) %>%
 ```
 
 
+#### Exercises
 
+1. Run the return rate simulation multiple times. Note down the number of proportion of returners every time. Observe how strongly the proportion varies.
+
+2. Run the return rate simulation multiple times with 6 and 25 participants.
+
+3. The data set `D_agg` contains an outcome variaböle `completion`, too. It is coded as 1 (TRUE), when the full sequence of tasks went flawless. 
 
 ### Poisson regression
 
@@ -589,7 +849,7 @@ D_2 %>%
 
 
 
-```{r fit:ZI, opts.label = "mcmc"}
+```{r fit:ZI, opts.label = "future"}
 M_2 <-
   D_2 %>% brm(visits ~ 1 + (1|Part) , family = zero_inflated_poisson, data = .)
 M_2
@@ -602,7 +862,8 @@ detach(Overdisp)
 
 
 
-## Modelling time
+## Measures of time {#measures_of_time}
+
 
 ```{r}
 attach(IPump)
@@ -623,7 +884,7 @@ detach(IPump)
 
 #### Weibull
 
-```{r fit:tot_weib, opts.label = "mcmc"}
+```{r fit:tot_weib, opts.label = "future"}
 attach(IPump)
 ## Setting successive difference contrasts (library(MASS))
 M_tot_wbl <- D_pumps %>%  
@@ -648,7 +909,7 @@ IPump$M_tot_wbl
 
 ### ExGaussian regression
 
-```{r fit:tot_exg, opts.label = "mcmc"}
+```{r fit:tot_exg, opts.label = "future"}
 attach(IPump)
 ## Setting successive difference contrasts (library(MASS))
 M_tot_exg <- D_pumps %>%  
@@ -696,17 +957,82 @@ detach(IPump)
 
 ```
 
+#### Exercises:
+
+1. Review ten random papers from cognitive psychology involving EEG and reaction times. What is the shortest average onset you can find?
+
+2. Review ten random papers from automotive research that involves braking reaction times. What is the shortest average reaction time can you find?
+
+3. Review ten random papers from HCI that report on time-on-task in complex tasks. What is the shortest average reaction time can you find?
 
 
 
 ## Modelling rating scales
 
-### Gaussian regression
+### beta regression
 
-The classic linear model we have mercilessly debunked at the beginning of the chapter, is a member of the GzLM framework, with some rather unusual properties. It assumes normally distributed randomness, which implies a constant variance. In contrast to all other members so far, there is no relation between mean and variance of randomness. The link function simply is *identity* and is consequential for the problem of linearity and bounded ranges. The general take is that, whenever there is a theoretically justified and reasonably pragmatic choice, one better leaves the Gaussian alone. Here it makes its re-entrance for a type of outcome measures that are so problematic that a pragmatic choice is indicated.
+### ordered regression
+
+## Gaussian regression revisited
+
+The classic linear model has mercilessly been debunked at the beginning of the chapter. Time and count measures are truly not Gaussian distributed. In \@ref() the Gaussian situation was illustrated as a bunch of SMURFS that bump into each other.
+
+<!--However, , is a member of the GzLM framework, with some rather unusual properties. It assumes normally distributed randomness, which implies a constant variance. In contrast to all other members so far, there is no relation between mean and variance of randomness. The link function simply is *identity* and is consequential for the two problems of Gaussian regression: linearity and bounded ranges. The general take is that, whenever there is a theoretically justified and reasonably pragmatic choice, one better leaves the Gaussian alone. Here it makes its re-entrance for a type of outcome measures that are so problematic that a pragmatic choice is indicated. -->
+
+### Outlier removal
+
+Outliers are observations that were hit by one strong force, that is of no further interest. Outliers can be upper or downer.
+
+One often gets the advice to remove outliers that exceed x times the standard deviation of the outcome variable. That is clearly mistaken as we have pointed out in \@ref(residual_analysis). Outliers must be identified by their residuals, first of all. Another problem arises because the removal intervals are symmetric. Boxplots pull up the Tukey fence at $1.35 \sigma_\epsilon$ beyond or above the first and third interquartile range. No matter, whether you can easily imagie that rule, it assumes symmetry. A boxplot of the two conditions X and Y in the CUE8 study looks like this:
+
+```{r}
+
+CUE8$D_cue8 %>% 
+  mutate(Condition = Moderated) %>% 
+  ggplot(aes(x = Condition, y = ToT)) +
+    geom_boxplot()
+
+```
+Boxplots routinely fail at non-symmetric pattens of randomness. Violin plots render a more accurate gestalt of the residual distribution. The distribution in the moderated condition almost resemble a ginko leaf, full of grace and substantial all the way up. The remote condition looks like a moth that fell prey to a spider (or an obese sword-billed hummingbird). The upper part is long but of thin substance. Seeing the condition on its own, one would perhaps pull up the outlier fence at 800 seconds. However, the tail of the moderated condition is substantial and there is no firm cue there being outliers at all. Since both conditions used comparable instructions and equal tasks, the maximum value of the moderated condition is a conservative upper fence.
 
 
-### Beta regression
+
+```{r}
+
+CUE8$D_cue8 %>% 
+  mutate(Condition = Moderated) %>% 
+  ggplot(aes(x = Condition, col = Condition, fill = Condition, y = ToT)) +
+    geom_violin() + geom_jitter(color = "black", alpha = .2, size = .5)
+
+```
+
+Again, the moderated condition is smooth as a leaf. There is no reason to believe that even the shortest observation is an outlier  at all and we pull this fence up in the remote condition. Here we observe a characteristic pattern, the lower socket of the distribution supported by a clear disruption in the cloud. One possoble story for this irregularity is that some remote-testing teams have not checked on task completion and the data set contains observations of cheaters (only if they were payed). Cheating is something that is untypical for the real use of the car rental website. When people enter such a site, they usually want to rent a car. Cheaters in remote studies tell us nothing about performance of real users. They are interuptive, but irrelevant. 
+
+Now, consider the famous *Stroop task*: participants are shown a word that is written to the screen in one of three ink colors (red, blue, green). They are asked to name the ink color as quick as possible, usually by pressing one of four assigned keys (e.g., Y = red, X = blue, N = green). The task has a twist: the presented words are themselves color words. It can happen that the word "RED" appears in red ink, which we call the *congruent condition*, but it can also happen that the word "BLUE" appears in green letters, which is *incongruent*. Hundreds of experiments have shown, that in the incongruent condition people respond noticably slower. This observation is called the *Stroop effect* and dozens of theories have spawned from this observation. Discussing them is beyond the scope, but to not let you completely dissatisfied: people seem to always read the words, although they were not asked to do so and we can conclude:
+
+1. Reading is overlearned. It is easier to catch a thrown stone than to resist a word.
+1. When people do not follow instructions, this is often a sign of *bottom-up processing*.
+
+What strong forces of no interest can disturb a trial in the Stroop task? Here are some examples:
+
+1. a door could slam
+2. participants motivation dropped
+3. participants got really exhausted
+4. participants went into a zen state of mind, absorbed in deep self observation
+
+What about a possible number 5 on the list: some participant saw the word "gun" in red and the following association raced through their minds:
+
+gun --> huntsman --> man who shot the wolf in little red riding hood
+
+
+
+
+What would be a legitimate way to catch outliers? The Stroop task has been replicated dozens-of-dozens times. For rough approximation, one takes a sample of ten papers reporting on variants of the Stroop task and derives a broadly typical range from it. As a rule of thumb, for an upper threshold adding 3 standard deviations to the highest 
+, say, between 500ms and 1500ms. 
+
+
+
+
 
 
 ```{r}
