@@ -3,6 +3,30 @@
 ```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 ## The following is for running the script through knitr
 source("RMDR.R")
+
+as_tbl_obs <- function(x) UseMethod("as_tbl_obs", x)
+as_tbl_obs.tbl_df <- function(x) {
+  class(x) <- c("tbl_obs", class(x))
+  x
+}
+as_tbl_obs.data.frame <- function(x) {
+  x <- as_tibble(x)
+  class(x) <- c("tbl_obs", class(x))
+  x
+}
+
+print.tbl_obs <- function(x, n = 8) {
+  cap <- str_c("showing ", n, " of ", nrow(x), " observations")
+  tab <- dplyr::sample_n(x, n)
+  if("Obs" %in% colnames(tab)) tab <- arrange(tab, Obs)
+  if("Part" %in% colnames(tab)) tab <- arrange(tab, Part)
+  tab <- kable(tab, align = "c") %>% 
+     kableExtra::kable_styling(full_width = F) %>% 
+     kableExtra::add_footnote(c(cap), notation = "symbol")
+  print(tab)
+  
+ }
+
 ```
 
 
@@ -286,7 +310,7 @@ BrowsingAB$simulate <-
     n_Obs = n_Part * n_Design * n_Task
     
     ## Subject frame
-    Part = data.frame(
+    Part = data_frame(
       Part = as.factor(1:n_Part),
       Gender = sample(c("F", "M"), 
                       size = n_Part, replace = T),
@@ -305,17 +329,17 @@ BrowsingAB$simulate <-
     
     
     Task = 
-      data.frame(Task = as.factor(1:n_Task),
+      data_frame(Task = as.factor(1:n_Task),
                       theta_T0 = rnorm(n_Task, 0, sd_T0))
     
     Design = 
-      data.frame(Design = factor(c("A", "B"))) %>% ## LVs
+      data_frame(Design = factor(c("A", "B"))) %>% ## LVs
       mutate(Small_font = (Design == "B"))
     
     
     BrowsingAB =
       ## creating a complete design
-      expand.grid(
+      expand_grid(
         Part = levels(Part$Part),
         Task = levels(Task$Task),
         Design = levels(Design$Design)) %>%
@@ -348,8 +372,7 @@ BrowsingAB$simulate <-
       mutate(Obs = 1:n_Obs) %>% 
       select(Obs, Part, Task, Design, 
              Gender, Education, age, Far_sighted, Small_font, 
-             ToT, clicks, returns) %>% 
-      as_data_frame()
+             ToT, clicks, returns)
     
     BrowsingAB
   }
@@ -1029,7 +1052,8 @@ IPump$D_sim_1 %>%
 load("external_data/PUMPS.Rda", envir = IPump)
 IPump$D_pumps <- 
   IPump$P %>% 
-    select(Part = Participant, 
+  as_data_frame() %>% 
+  select(Part = Participant, 
          Group = professionalGroup,
          experience,
          Education = educationLevel,
@@ -1055,7 +1079,9 @@ IPump$D_agg <-
            Design, session, Session) %>% 
   summarize(ToT = sum(ToT, na.rm = T),
             deviations = sum(deviations, na.rm = T),
-            workload = mean(workload, na.rm = T))
+            workload = mean(workload, na.rm = T),
+            completion = all(completion)) %>% 
+  ungroup()
 
 rm(P, envir = IPump)
 
@@ -1109,7 +1135,8 @@ MMN$MMN_2 <-
   mascutils::z_score("Ospan.B") %>% 
   mutate(ltime = log(time),
          lclicks = log(clicks)) %>% 
-  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)
+  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks) %>% 
+  as_d
 
 names(MMN$MMN_2)
 
@@ -1119,7 +1146,8 @@ MMN$MMN_1 <-
   summarize(time = sum(time),
             clicks = sum(clicks)) %>% 
   mutate(ltime = log(time),
-         lclicks = log(clicks))
+         lclicks = log(clicks)) %>% 
+  as_data_frame()
   
 names(MMN$MMN_1)
 
@@ -1155,7 +1183,8 @@ new_syncenv("AUP")
 
 ```{r AUP_load_data, opts.label = "sim"}
 AUP$AUP_1 <- 
-  AUP_raw %>% 
+  AUP_raw  %>% 
+  as_data_frame() %>% 
   select(Part = Participant, age = Age, gender = Gender, 
          gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
          challenge = AUP_challenge, exploration = AUP_explore) %>% 
@@ -1404,6 +1433,7 @@ new_syncenv("Egan")
 ```{r Egan_load_data, opts.label = "sim"}
 Egan$D_egan <- 
   read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
+  as_data_frame() %>% 
   mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
   select(Part = ParticipantID,
          Gender = ParticipantGender,
