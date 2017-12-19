@@ -1017,7 +1017,7 @@ The other two fixed effects are, once again, differences to the reference. Here,
 
 
 
-### Line-by-line: regression in groups {#line-by-line} [TBC]
+### Line-by-line: regression in groups  [TBC] {#line-by-line}
 
 Recall that dummy variables make factors compatible with linear regression. No barriers are left for combining factors and covariates in one model. For example, we can estimate the effects age and design simultaneously:
 
@@ -1028,11 +1028,15 @@ M_mpm_2 <-
   stan_glm(ToT ~ Design + age_shft, data = .)
 ```
 
-```{r tab:mpm_2, opts.label = "tab"}
+```{r tab:mpm_2}
 T_fixef_mpm_2 <-  fixef(M_mpm_2)
 T_fixef_mpm_2
+```
+
+```{r}
 detach(BrowsingAB)
 ```
+
 
 Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year old in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
 
