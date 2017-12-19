@@ -35,7 +35,7 @@ if(!exists("purp.rtut")) # show R tutorial code
 ## Regression models
 # library(lme4)
 # library(MCMCglmm)
-library(brms)
+# library(brms)
 library(rstanarm)
 
 ## Simulation etc
@@ -48,7 +48,6 @@ library(polynom)
 ## Plotting and setting
 library(knitr)
 library(knitcitations)
-#library(printr)
 #library(ggplot2)
 library(gridExtra)
 #library(GGally)
@@ -85,48 +84,49 @@ options("citation_format" = "pandoc")
 ## cross referencing system
 
 # storing anchors 
-Anchors = data.frame(type=character(), 
-                     label=character(), 
-                     no = integer())
-# registering anchor types
-AnchorTypes = data.frame(type = c("fig", "tab", "sim", "model"), 
-                         prefix = c("Figure", "Table", "Simulation", "Model"))
+# Anchors = data.frame(type=character(), 
+#                      label=character(), 
+#                      no = integer())
+# # registering anchor types
+# AnchorTypes = data.frame(type = c("fig", "tab", "sim", "model"), 
+#                          prefix = c("Figure", "Table", "Simulation", "Model"))
+# 
+# knit_hooks$set(anchor = function(before, options, envir) {
+#   if(!before){
+#     ## cross referencing system
+#     label = opts_current$get("label")
+#     message("label",label,"found")
+#     if(label %in% Anchors$label) warning(paste("anchor hook: label", label, "exists"))
+#     type = stringr::str_split(label, ":", 2)[[1]][1]
+#     if(!(type %in% AnchorTypes$type)) warning(paste("Anchor type", type, "not defined"))
+#     message(paste("Found caption type ", type, " with label ", label))
+#     no = (filter(Anchors, type == type) %>% nrow() + 1)
+#     Anchors <<- bind_rows(Anchors, data.frame(label = label, type = type, no = no))
+#     message(paste("created anchor", type, no, label))
+#     #return(paste0("{#",label,"}"))
+#   }
+# })
 
-knit_hooks$set(anchor = function(before, options, envir) {
-  if(!before){
-    ## cross referencing system
-    label = opts_current$get("label")
-    message("label",label,"found")
-    if(label %in% Anchors$label) warning(paste("anchor hook: label", label, "exists"))
-    type = stringr::str_split(label, ":", 2)[[1]][1]
-    if(!(type %in% AnchorTypes$type)) warning(paste("Anchor type", type, "not defined"))
-    message(paste("Found caption type ", type, " with label ", label))
-    no = (filter(Anchors, type == type) %>% nrow() + 1)
-    Anchors <<- bind_rows(Anchors, data.frame(label = label, type = type, no = no))
-    message(paste("created anchor", type, no, label))
-    #return(paste0("{#",label,"}"))
-  }
-})
-
-figr <- function(ref){
-  #ref = quote(ref)
-  if(ref %in% Anchors$label){
-    entry = (Anchors  %>% inner_join(AnchorTypes, by = "type") %>% filter(label == ref))
-    out = paste0("[",entry$prefix," ",entry$no,"](#",entry$label,")")
-    message(out)
-    return(out)
-  }else{
-    warning(paste("label ", ref, "does not exist"))
-  }
-}
+# figr <- function(ref){
+#   #ref = quote(ref)
+#   if(ref %in% Anchors$label){
+#     entry = (Anchors  %>% inner_join(AnchorTypes, by = "type") %>% filter(label == ref))
+#     out = paste0("[",entry$prefix," ",entry$no,"](#",entry$label,")")
+#     message(out)
+#     return(out)
+#   }else{
+#     warning(paste("label ", ref, "does not exist"))
+#   }
+# }
 
 
 #opts_knit$set(kfigr.prefix = T)
 
-opts_chunk$set(echo = purp.debg, 
+opts_chunk$set(echo = purp.rtut, 
                warning = purp.debg, 
                message = purp.debg,
-               eval = purp.book)
+               eval = purp.book,
+               results = "asis")
 
 options(digits=3)
 
@@ -134,20 +134,19 @@ options(digits=3)
 
 opts_template$set( 
   tab = list(anchor = 'Table', echo = T, eval = T, results = 'asis' ),
-  fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
-  fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
-  fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),
-  fig.wide = list(fig.width = 8, fig.height = 4,  anchor = 'Figure'),
-  fig.slide = list(fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
-  fig.half = list(fig.width = 3.8, fig.height = 4, dpi = 120, dev = "svg"),
-  fig.half = list(fig.width = 4, fig.height = 4, dpi = 120, dev = "svg", echo = purp.rtut),
+  #fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
+  #fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
+  #fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),
+  #fig.wide = list(fig.width = 8, fig.height = 4,  anchor = 'Figure'),
+  #fig.slide = list(fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
+  #fig.half = list(fig.width = 3.8, fig.height = 4, dpi = 120, dev = "svg"),
+  #fig.half = list(fig.width = 4, fig.height = 4, dpi = 120, dev = "svg", echo = purp.rtut),
   invisible = list(eval = purp.book, echo = purp.debg),
-  list(eval = purp.debg, echo = purp.debg),
-  sim = list(eval = purp.book, echo = purp.debg),
+  #sim = list(eval = purp.book, echo = purp.debg),
   mcmc = list(eval = purp.mcmc, echo = purp.rtut),
-  rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut),
-  rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
-                    fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
+  #rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut),
+  #rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
+  #                  fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
   rtut.nr = list(eval = F, echo = purp.rtut),
   future = list(echo = F, eval = F),
   deprecated = list(eval = F, echo = F, eval = F),
