@@ -197,11 +197,11 @@ P_1 %>%
 
 Let's see how this PD "landscape" actually emerged from the random walk. In the current case, the *parameter space* is two-dimensional, as we have  $\mu$ and $\sigma$. The MCMC procedure starts at a deliberate point in parameter space. At every iteration, the MCMC algorithm attempts a probabilistic jump to another location in parameter space and stores the coordinates. This jump is called probabilistic, because it is either carried out, or not, and that depends on a bet. If the new target is in a highly likely region, it is carried out with a higher chance. This sounds circular, but it works and, of course, it has been proven mathematically that it works. 
 
-The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 50 hundred steps of the MCMC random walk are shown in `r figr("fig:99_seconds_random_walk")`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
+The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 50 hundred steps of the MCMC random walk are shown in \@ref(fig:99_seconds_random_walk)`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
 
 
 
-```{r fig:99_seconds_random_walk, opts.label = "fig.small"}
+```{r 99_seconds_random_walk, opts.label = "fig.small"}
 G_random_walk <-
   P_1 %>% 
   filter(iter <= 50) %>% 
@@ -220,7 +220,7 @@ G_random_walk
 
 The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has a three parameter dimensions, which is difficult to visualize. Multi-level models have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting MPDs is the violin plot, which packs a bunch of densities and therefore can be used for models of higher dimension. Still, for simple models histograms do the job:
 
-```{r fig:99_seconds_post, opts.label = "fig.small"}
+```{r 99_seconds_post, opts.label = "fig.small"}
 P_1 %>% 
   ggplot(aes(x = value)) +
   geom_histogram() +
@@ -229,7 +229,7 @@ P_1 %>%
 ```
 
 
-In our example, in `r figr("fig:99_seconds_post")` we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed and there is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, ~fixef == "Intercept", center = F)`$ as "reasonably certain".
+In our example, in \@ref(99_seconds_post) we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed and there is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, ~fixef == "Intercept", center = F)`$ as "reasonably certain".
 
 Andrew and Jane expect some scepticism from the marketing people, and some lack in statistical skills, too. What would be the most comprehensible single number to report? As critical decisions are involved, it seems plausible to report the risk to err: how certain are they that the true value is more than 99 seconds. We inspect the histograms. The MPD of the intercept indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. But what is the precise probability to err for the 99 seconds statement? The above summary with `fixef()` does not answer the question, accurately. The CI gives lower and upper limits for a range of 95% certainty in total. What is needed is the certainty of $\mu \geq 99$. Specific questions deserve precise answers.  And once we have understood the MCMC chain as a frequency distribution, the answer is easy: we simply count how many visited values are larger than 99.  In R, the `quantile` function handles the job:
 
