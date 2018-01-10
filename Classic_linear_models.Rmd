@@ -29,8 +29,8 @@ Reconsider Andrew and Jane. They were faced with the problem that potential comp
 The GMM predicts the expected level of performance when the only thing you know is the population someone is from. Prediction here means that the estimated grand mean we take as a best guess for the population average, that is all realizations we have *not* observed. So, it is a generalization regarding all people we have not invited to the lab, but also potential performance differences by situation, for example the daily shape people are in or their current level of motivation. Just consider the many ways people differ in abilities, experience, strategies, preferences, situations, wishes etc. All these differences may also vary for the same person from day to day and influence performance. All these aspects have not been recorded in the Sec99 study and are therefore not taken into account for prediction. All linear models capture the unpredicted variation in a separate parameter $\sigma$, the *residual standard deviation*.  $\sigma$ measures the amount of variance that is left after subtracting all explanatory variables. Formally, the likelihood and random formulas of the grand mean model are written with the following likelihood and random term:
 
 $$
-\mu_i = \beta_0\\
-y_i \sim Norm(\mu_i, \sigma_\epsilon)
+\mu = \beta_0\\
+y_i \sim \textrm{Norm}(\mu_i, \sigma_\epsilon)
 $$
 
 The larger $\sigma$ is,  the more questionnable it is that the grand mean is truly *representative* for the population. From the GM we will depart in to directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a design condition. These models will still make statements on population averages, although in a more detailed way. In the following chapter on mixed-effects models, individuals will get spot light. Still, what all the advanced models have in common is that they move variance in the outcome variable from the error variance to predictors. An optimist would say: today's error is tomorrow's predictor.
@@ -68,13 +68,15 @@ T_coef_1
 ```
 
 
-```{r opts.label = "rtut"}
-detach(Sec99)
-```
 
 ```{r}
 detach(Sec99)
 ```
+
+```{r opts.label = "invisible"}
+detach(Sec99)
+```
+
 
 ### Reading coefficient tables
 
@@ -106,12 +108,13 @@ Expressing the level of certainty of the posterior distribution makes statistics
 
 The `coef` command by default gives the median and the 2.5% and 97.5% limits. The three parameters have in common that they are quantiles, which are handled by Rs `quantile` command. To demystify the `coef`, here is how you can make a basic coefficient table yourself:
 
-```{r}
+```{r }
 P_1 %>%
   group_by(parameter) %>% 
   summarize(center = quantile(value, 0.5),
          lower  = quantile(value, 0.025),
-         upper  = quantile(value, 0.975))
+         upper  = quantile(value, 0.975)) %>% 
+  kable()
 ```
 
 
@@ -451,6 +454,97 @@ Years of age is a natural and commonly understood unit and my advice would be to
 A general useful application of z-scores is to bootstrap a common unit for a diverse set of measures. Think of a battery of Likert scales, that all choose their own ranges. With z-scores we can compare the relative impact of several predictors in a population. In fact, that even makes sense for the age model. As it happens, the random variation parameter $\sigma$ is given in standard deviation units, too. We can conclude that the age effect causes just a moderate fraction of all the variation observed. More research is needed.
 
 
+
+### Correlations
+
+
+LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$. In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a smimulated data set where X and Y are linearly linked:
+
+```{r}
+D_cor <-
+  data_frame(x = runif(100, 0, 50),
+             y = rnorm(100, x *.2, 3))
+
+```
+
+```{r}
+D_cor %>% 
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+```
+
+
+
+
+Pearson $r$ basically is a *standardized covariance* and a covariance is by itself a measure of association between two variables X and Y, namely:
+
+$$
+\textrm{cov}_{XY} = \frac{1}{n} \sum_{i=1}^n (x_i - E(X)) (y_i - E(Y))
+$$
+
+```{r}
+cov(D_cor$x, D_cor$y)
+```
+
+In plain words, the covariance formula takes the deviations of both variables from their respective expected value and multiplies them. When positive deviations of X coincide with positive deviations of Y, that product gets larger; the same for negative values. The average of the deviation products is the covariance.
+
+The difference between an observation and the mean of observations is nothing else than a center shift transformation. However, the scale of the variables stays. In effect, covariances can hardly be interpreted by themselves and two covariances can only be compared, if they share the scale of measurement. If one wants to compare the association strength of two predictors, say age and number of previous uses on ToT, that is inconvenient.
+
+Pearson $r$ solves the problem by rescaling covariance using the standard deviations of X and Y:
+
+$$
+r_XY = \frac{\textrm{cov}_{XY}}{\textrm{sd}_X \textrm{sd}_Y}
+$$
+
+```{r}
+cov(D_cor$x, D_cor$y)/(sd(D_cor$x) * sd(D_cor$y))
+cor(D_cor$x, D_cor$y)
+```
+
+
+Due to the full standardization, $r$ lets the researcher interpret strength of association independent of scale of measurement. More precisely, $r$ will always sit in the interval $[-1,1]$. That makes $r$ a perfect choice for many purposes. For example, in psychometrics the reliability of a measure is often assessed in test-retest settings. All participants undergo two separate tests and the correlation between the two scores is a measure for stability of the test, also called test-retest reliability.
+
+The slope parameter in an LRM is a measure of association, too. However, it fully remains on the scale of measurement. In the context of quantitative assessment we used to see that as an advantagebecause it allows us to make quantitative statements and predict. Still, one can obtain Pearson $r$ easily by rescaling the slope coefficient $\beta_1$  using the following formula:
+
+$$
+r = \beta_1 \frac{sd_X}{sd_Y}
+$$
+
+For the purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
+
+```{r}
+M_cor <- lm(y ~ x, D_cor)
+beta_1 <- stats::coef(M_cor)[2]
+
+r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
+r
+```
+
+The clue with Pearson $r$ is that it normalized the slope coefficient by the variation found in the sample. This reminds of z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient is once again Pearson's $r$:
+
+```{r}
+M_z <-
+  D_cor %>% 
+  mutate(x_z = (x - mean(x))/sd(x),
+         y_z = (y - mean(y))/sd(y)) %>% 
+  lm(y_z ~ x_z, .)
+
+stats::coef(M_z)[2]
+```
+
+Pearson's $r$ spawns from a different school of thinking than quantitative Bayesian regression: analysis of variance (ANOVA). Roughly, this family of methods draws on the idea of dividing the *total variance* of the outcome variable into two components: *explained variance* and *residual variance*. The very formula the variance statistic reveals the origins (it is even allowed to say, that variance is the covariance of a variable with itself):
+
+$$
+\textrm{Var}_{X} = \frac{1}{n} \sum_{i=1}^n (x_i - E(X))^2
+$$
+In ANOVA models, when explained variance is large compared to residual variance, the F-statistic goes up and stars twinkle behind the p-value. While I am far promoting any legacy approaches, here, a scale-less measure of association strength can be useful in situations, where at least one of the involved variables has no well-defined scale. That is in particular the case, when measuring with rating scales. Measurement theory tells that we may actually transform rating scales fully to our liking, if the order is preserved. That is a pretty weak criterion and, strictly speaking, forbids the application of linear models (and ANOVA) altogether, where at least sums must be well defined.
+
+Not by coincidence, a measure of explained variance, the *coefficient of determination r^2* can be derived as from Pearson's $r$, by simply squaring it. $r^2$ is in the range $[0;1]$ and represents the proportion of variability that is explained by the predictor:
+
+```{r}
+str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
+```
 
 
 
@@ -2221,36 +2315,37 @@ Mathur et al. argue that the Uncanny Valley curve possesses two stationary point
 
 While R provides high-level methods to deal with polynomial regression, it is instructive to build the regression manually. The first step is to add variables to the data frame, which are the exponentiated predictors ($x_k = x^k$). These variables are then straight-forwardly added to the model term, as if they were independent predictors. For better clarity, we rename the Intercept to be $x_0$, before summarizing the fixed effects.
 
-```{r opts.label = "rtut"}
-# attach(Uncanny)
+```{r}
+attach(Uncanny)
 ```
 
 
 ```{r fit:UV_1, opts.label = "mcmc"}
-Uncanny$M_1 <-
-  Uncanny$UV_1 %>% 
+M_1 <-
+  UV_1 %>% 
   mutate(huMech_0 = 1,
          huMech_1 = huMech,
          huMech_2 = huMech^2,
          huMech_3 = huMech^3) %>%
-  stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
-           data = ., iter = 200)
+  stan_glm(avg_like ~  + huMech_1 + huMech_2 + huMech_3,
+           data = ., iter = 400)
   # stan_glm(avg_like ~ poly(huMech, 4),
   #          data = ., iter = 200)
 
+P_1 <- posterior(M_1)
 
-Uncanny$P_1 <-  posterior(Uncanny$M_1) 
-Uncanny$P_1$parameter <- str_replace(Uncanny$P_1$parameter, "Intercept", "huMech_0")
-Uncanny$P_1$fixef <- str_replace(Uncanny$P_1$fixef, "Intercept", "huMech_0")
-Uncanny$P_1 <-  posterior(Uncanny$P_1) 
-
+```
+```{r}
+# Uncanny$P_1 %>% 
+#   mutate(parameter = str_replace(parameter, "Intercept", "huMech_0"),
+#          fixef = str_replace(fixef, "Intercept", "huMech_0"))
+         
 ```
 
 
 
 ```{r opts.label = "rtut"}
 library(polynom)
-attach(Uncanny)
 ```
 
 
@@ -2296,7 +2391,7 @@ P_1_trough <-
   filter(type == "fixef") %>%
   select(chain, iter, fixef, value) %>% 
   spread(fixef, value) %>% 
-  select(starts_with("huMech")) %>% 
+  select(Intercept, starts_with("huMech")) %>% 
   trough()
 
 ```
@@ -2305,7 +2400,7 @@ P_1_trough <-
 From the PD, we can derive statements on uncertainty in the usual way: the 95% credibility limits we get by:
 
 ```{r trough_CI95}
-quantile(P_1_trough, c(.025, .975), na.rm = T) %>% 
+quantile(P_1_trough, c(.025, 0.5, .975), na.rm = T) %>% 
   kable()
 ```
 
