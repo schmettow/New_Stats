@@ -3,17 +3,12 @@
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
-thisdir = getwd()
 purp.mcmc = F
 
-
-library(brms)
 source("RMDR.R")
-CE <- c("BrowsingAB", "Typing", "Uncanny", "CUE8", "Stroop", "Egan", "IPump")
-load_CE(CE)
 
-formals(stan_glmer)$chains = 2
-formals(stan_glmer)$iter = 2000
+CE <- c("BrowsingAB", "Typing", "CUE8", "Egan", "IPump")
+load_CE_(CE)
 ```
 
 
@@ -51,7 +46,7 @@ Imagine you set out to determine the association between typing speed and errors
 
 In terms of statistical skills, the researcher is familiar with linear models, and is aware of the fact, that these may not be applied for repeated measures. Therefore our researcher first averages the scores across participants and receives a data set with a neat 30 data points, one per trial. A first exploratory plot reveals a bizarre relation: it seems that the faster participants type, the less error they make. That is completely against expectations, as there almost always is a trade-off between speed and accuracy.
 
-```{r fig:Typing_average, opts.label = "fig.small"}
+```{r Typing_average, opts.label = "fig.small"}
 attach(Typing)
 
 Type_1_avg %>% 
@@ -64,7 +59,7 @@ Type_1_avg %>%
 
 Could it be true that the faster a person types, the less errors happen? Of course not. The problem is how precisely we ask the question. When averaging over persons, we actually answer a different question, which is on a *population-level*: Do persons who can type faster make fewer errors? This question sees every person as one data point with two performance measures, speed and errors, both representing the ability to type. Now, the above results make more sense: people, who are trained in typing are at the same time fast and more accurate. But, what the experiment was out for is the trade-off between speed and accuracy *within a person*. The experiment provokes this trade-off by asking the same person to accelerate in typing. And, when we visualize the results on an individual level, the speed-accuracy trade-off becomes immediately visible:
 
-```{r fig:Typing_individual, ops.label = "fig.small"}
+```{r Typing_individual, ops.label = "fig.small"}
 Type_1 %>% 
   ggplot(aes(x = speed,
              y = error,
@@ -114,7 +109,7 @@ Imagine, a pre-study to BrowsingAB was done on the existing design A. Data was g
 ```{r}
 attach(BrowsingAB)
 ```
-```{r sim:sources_of_var, opts.label = "tut.nr"}
+```{r sim:sources_of_var}
 n_Part = 25
 n_Task = 8
 n_Obs = n_Part * n_Task
@@ -123,9 +118,8 @@ n_Obs = n_Part * n_Task
 SOV <-
 simulate(n_Part, n_Task) %>% 
 filter(Design == "A") %>% 
-select(Obs, Part, Task, ToT)
-
-SOV %>% sample_n(6)
+select(Obs, Part, Task, ToT) %>% 
+  as_tbl_obs()
 
 
 ```
@@ -134,25 +128,27 @@ We start with some data exploration. The first question we can ask is:
 
 > What is the average ToT in the population?
 
-```{r pop_mean, opts.label = "rtut"}
+```{r pop_mean}
 SOV %>% 
-summarize(mean_Pop = mean(ToT))
+summarize(mean_Pop = mean(ToT)) %>% 
+  kable()
 ```
 
 This question is rather global and does not refer to any individuals in the population. The following question does:
 
 > What is the average ToT of individual participants?
 
-```{r random_effects, opts.label = "rtut"}
+```{r random_effects}
 SOV %>% 
 group_by(Part) %>% 
 summarize(mean_Part = mean(ToT)) %>% 
-  sample_n(6)
+  sample_n(5) %>% 
+  kable()
 ```
 
 This question differs in that it is *grouped* by participant. Now, that we have the individual means, we can plot the variation in task performance. For comparison, the overall variation is added to the plot. It is apparent that individual differences make only part of the overall variance.
 
-```{r re_variation, opts.label = "rtut"}
+```{r re_variation}
 G_sources_variation <-
   SOV %>% 
   group_by(Part) %>% 
@@ -207,6 +203,11 @@ M_1_SOV <- stan_glmer(ToT ~ 1 + (1|Part), data = SOV)
 P_1_SOV <- posterior(M_1_SOV)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB,M_1_SOV, P_1_SOV)
+```
+
+
 The posterior of the mixed-effects  model contains four types of variables: 
 
 1. the *fixed effect* captures the population average (Intercept)
@@ -237,7 +238,7 @@ Speaking of factors: so far, we have used *treatment contrasts* most of the time
 
 The solution is to use a different contrast coding for random factors: *deviation contrasts* represent the individual effects as *difference ($\delta$) towards the population mean*. As the  population mean is represented by the respective fixed effect, we can compute the absolute individual predictions by adding the fixef effect to the random effect:
 
-```{r opts.label = "rtut"}
+```{r }
 data_frame(mu_i = ranef(P_1_SOV)$center + 
              fixef(P_1_SOV)$center) %>% 
   ggplot(aes(x = mu_i)) +
@@ -385,7 +386,7 @@ attach(Egan)
 
 ```{r}
 D_egan <- D_egan %>% mutate(logToT = log(ToT))
-D_egan %>% sample_n(8)
+D_egan %>% as_tbl_obs()
 ```
 
 
@@ -461,6 +462,11 @@ M_1 <- D_egan %>%
 P_1 <-  posterior(M_1)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Egan,M_1, P_1)
+```
+
+
 The group-level variations are recorded as standard deviations and in Bayesian estimation framework, such variance parameters have their posterior distributions like any other. While the `grpef` command would conveniently extract a summary of the posteriors, here we choose to get in full contact with the posteriors. In contrast to the linear coefficients, variance parameters are bounded at zero. For this reason, it usually makes little sense to ask whether there is possibly zero variance in a random effect. But, to answer our question, we should rather compare the posterior distributions of all $\sigma_.$, including the error term (Obs).
 
 ```{r}
@@ -493,7 +499,7 @@ C_Egan_is_right <-
 
 C_Egan_is_right
 ```
-A chance of $`r Egan$C_Egan_is_right`$ can count as good evidence in favor of Egan's claim, although it is outshined by other factors, as we have discussed above. 
+A chance of $`r C_Egan_is_right`$ can count as good evidence in favor of Egan's claim, although it is outshined by other factors, as we have discussed above. 
 
 In this case study we have illustrated a number of useful concepts in design research:
 
@@ -574,15 +580,11 @@ Under this perspective, we examine the data. This time, we have real time-on-tas
 
 attach(CUE8)
 
-D_cue8 <-
-  D_cue8 %>% 
-  mutate(logToT = ifelse(ToT > 0, log(ToT), NA))
-
-summary(D_cue8)
+D_cue8
 
 D_part_mean <-
   D_cue8 %>% 
-  group_by(Part, Moderated) %>% 
+  group_by(Part, Condition) %>% 
   summarize(mean_ToT = mean(ToT), na.rm = T,
             n_Obs = n()) %>%   
   ungroup() %>% 
@@ -592,7 +594,7 @@ D_part_mean <-
 
 D_team_mean <-
   D_cue8 %>% 
-  group_by(Team, Moderated) %>% 
+  group_by(Team, Condition) %>% 
   summarize(mean_ToT = mean(ToT, na.rm = T),
             n_Obs = n()) %>%
   ungroup() %>% 
@@ -602,7 +604,7 @@ D_team_mean <-
 
 D_task_mean <-
   D_cue8 %>% 
-  group_by(Task, Moderated) %>% 
+  group_by(Task, Condition) %>% 
   summarize(mean_ToT = mean(ToT, na.rm = T),
             n_Obs = n()) %>%
   ungroup() %>% 
@@ -611,9 +613,8 @@ D_task_mean <-
          Level = "Task")
 
 
-G_comp_SOV <- 
-  bind_rows(D_team_mean,
-            D_part_mean) %>%
+bind_rows(D_team_mean,
+          D_part_mean) %>%
   ggplot(aes(x = percentile, 
              y = mean_ToT,
              col = Level,
@@ -621,7 +622,6 @@ G_comp_SOV <-
              size = Level)) + 
   geom_point()
 
-G_comp_SOV
 detach(CUE8)
 ```
 
@@ -637,13 +637,19 @@ attach(CUE8)
 
 M_1 <- 
   D_cue8 %>% 
-  stan_glmer(logToT ~ Moderated + (1|Part) + (1|Team),
+  stan_lmer(logToT ~ Condition + (1|Part) + (1|Team),
        data = .)
 
 P_1 <- posterior(M_1)
 
 detach(CUE8)
 ```
+
+```{r opts.label = "mcsync"}
+sync_CE(CUE8, M_1, P_1)
+```
+
+
 
 After running the model, we compare the sources of variation. Recall, that LMM assume that the ramdom effects are drawn from a normal distribution and the amount of systematic variation is represented by $\sigma$. As this is precisely the way, normal distributed errors are represented, we can actually distinguish three levels of variation: participants, team and observations (residuals). The table below tells that the strongest variation is still on observation-level. Almost the same amount of variation is due to teams. And, surprisingly, the variation due to teams is considerably smaller than participant-level variation.
 
@@ -654,7 +660,7 @@ T_sov <- coef(P_1, type = c("grpef", "disp"))
 T_sov
 ```
 
- It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. The discordance, between professional teams is concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is `r frm_coef(fixef(CUE8$P_1), ~fixef == "Moderatedmoderated")`. The fixed effect is rather weak and highly uncertain.
+ It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. The discordance, between professional teams is concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is `r frm_coef(fixef(CUE8$P_1), ~fixef == "Conditionmoderated")`. The fixed effect is rather weak and highly uncertain.
 
 ```{r tab:CUE8_fixef}
 T_fixef <- fixef(P_1)
@@ -679,7 +685,7 @@ Now, the expert is confident that ToT be around 50 seconds and that is probably 
 
 However, the salience of the gestalt may vary. Consider a situation where ToT has been measured by the same procedure, but using five different stop watches. Stop watches are so incredibly accurate that if you know one measure, you basically know them all. What many researcher do with repeated measures data is average over the repetitions. This is the one extreme called *total pooling*.  In the stopwatch case the average across the five measures would be so highly representative, that total pooling is a reasonable thing to do.
 
-In other cases, the levels of a factor are more or less independent, for example tasks in a complex system, where procedure duration ranges from seconds to hours. Guessing the duration of one task from a set of others is highly susceptible and the average duration across tasks is not representative at all. The best choice then is to see tasks as  factor levels, that are independent. This extreme of *no pooling* is exactly represented by fixed effects factors as they have been introduced in \@ref(#linear_models).
+In other cases, the levels of a factor are more or less independent, for example tasks in a complex system, where procedure duration ranges from seconds to hours. Guessing the duration of one task from a set of others is highly susceptible and the average duration across tasks is not representative at all. The best choice then is to see tasks as  factor levels, that are independent. This extreme of *no pooling* is exactly represented by fixed effects factors as they have been introduced in \@ref(linear_models).
 
 Random effects sit right between these two extremes of no and partial pooling and implement *partial pooling*: the more the group mean is representative for the units of the group, the more it is taken into account. The best thing about partial pooling is that, unlike real priors, there is not even the need to determine the amount of pooling in advance. The variation of entities has been observed. The stronger the enities vary, the less can be learned from the group level. The variation is precisely the group-level standard deviation of the random effect. So, we can think of random factors as factors where there is a certain amount of cross-talk between levels. The random effect estimate then draws on two sources of evidence: all data from the over-arching population and data that belongs just to this one entity. As that is the case, the exploratory analysis of individual performance in SOV does not resemble a true random effect, as group means were calculated independently. 
 
@@ -705,11 +711,12 @@ The CUE8 study makes a case for seeing shrinkage in action: Teams of researchers
 
 We estimate two models, a random effects model and a fixed effects model. For the RE model, the absolute group means are calculated on the posterior. Figure XY shows the comparison of FE and RE estimates. 
 
+```{r}
+attach(CUE8)
+```
 
 
 ```{r fit:CUE8_fixef_vs_ranef, opts.label = "mcmc"}
-attach(CUE8)
-
 M_2 <- 
   D_cue8 %>% 
   stan_glm(logToT ~ Team - 1, data = .)
@@ -718,52 +725,168 @@ M_3 <-
   D_cue8 %>% 
   stan_glmer(logToT ~ 1 + (1|Team), data = .)
 
-detach(CUE8)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(CUE8,M_2, M_3)
+```
+
+```{r opts.label = "future"}
+post <- function(model, ...){
+  #model <- IPump$M_wkld
+		# model <- M_cue8_rstn
+		samples <-
+			as.data.frame(model) %>%
+			as_data_frame() %>%
+			mutate(chain = NA,
+						 iter = row_number()) %>%
+			tidyr::gather("parameter", "value", -chain, -iter) %>%
+			mutate(parameter = stringr::str_replace(parameter, "\\(Intercept\\)", "Intercept"),
+						 parameter = stringr::str_replace(parameter, "sigma", "sigma_resid"))
+
+		parnames <-
+			samples %>%
+			select(parameter) %>%
+			distinct() %>%
+			mutate(type = case_when(
+				stringr::str_detect(.$parameter, "sigma_resid") ~ "disp",
+				stringr::str_detect(.$parameter, "^b\\[.*\\]") ~ "ranef",
+				stringr::str_detect(.$parameter, "^Sigma\\[.*\\]") ~ "grpef",
+				stringr::str_detect(.$parameter, "^shape") ~ "shape",
+				TRUE ~ "fixef"),
+				order = row_number())
+
+		par_fe <-
+			parnames %>%
+			filter(type == "fixef") %>%
+			mutate(nonlin = NA,
+						 fixef = parameter,
+						 re_factor = NA,
+						 re_entity = NA) %>%
+			select_(.dots = bayr:::ParameterIDCols)
+
+		par_disp <-
+			parnames %>%
+			filter(type == "disp") %>%
+			mutate(nonlin = NA,
+						 fixef = NA,
+						 re_factor = NA,
+						 re_entity = NA) %>%
+			select_(.dots = bayr:::ParameterIDCols)
+		
+		par_shape <-
+			parnames %>%
+			filter(type == "shape") %>%
+			mutate(nonlin = NA,
+						 fixef = NA,
+						 re_factor = NA,
+						 re_entity = NA) %>%
+			select_(.dots = bayr:::ParameterIDCols)
+
+		par_out <- bind_rows(par_fe, par_disp, par_shape)
+		if("lmerMod" %in% class(model)) {
+			par_re <-
+				parnames %>%
+				filter(type == "ranef") %>%
+				tidyr::extract(parameter,
+											 into = c("fixef", "re_factor", "re_entity"),
+											 "^b\\[(.+) (.+):(.+)\\]$",
+											 remove = F) %>%
+				mutate(nonlin = NA) %>%
+				select_(.dots = bayr:::ParameterIDCols)
+
+
+			par_ge <-
+				parnames %>%
+				filter(type == "grpef") %>%
+				tidyr::extract(parameter,
+											 into = c("re_factor", "fixef", "fixef_2"),
+											 "^Sigma\\[(.+?):(.+),(.+)\\]$",
+											 remove = F) %>%
+			  ## pulling variance and correlations apart
+			  mutate(fixef_2 = if_else(fixef_2 == "(Intercept)", "Intercept", fixef_2),
+			         type = if_else(fixef == fixef_2, "grpef", "corr")) %>% 
+			  mutate(nonlin = NA,
+							 re_entity = NA) %>%
+				select_(.dots = c(bayr:::ParameterIDCols, "fixef_2"))
+			par_out <- bind_rows(par_out, par_re, par_ge)
+		}
+			par_out <-
+				parnames %>%
+			  select(-type) %>%  ## necessary, because above, type is changed (grpef, corr)
+				left_join(par_out, by = c("parameter"))
+
+
+		## putting it back together
+		## and transforming var to sd
+		out <-
+			par_out %>%
+			right_join(samples, by = "parameter") %>%
+			mutate(model = NA) %>%
+			mutate(value = ifelse(type == "grpef", sqrt(value), value)) %>%
+			select_(.dots = bayr:::AllCols)
+
+
+		class(out) <-
+			append("tbl_post", class(out))
+
+		return(out)
+}
+
+post(CUE8$M_3)
+
+post(IPump$M_wkld)
+# 
+#  %>% 
+#   filter(parameter == "Sigma[Part:DesignNovel,DesignNovel]") %>% 
+#   summarize(center = median(value, na.rm = T))
+# 
+# mean(as.data.frame(IPump$M_wkld)[,"Sigma[Part:DesignNovel,(Intercept)]"])
 
 ```
 
-```{r fig:CUE8_fe_vs_re}
-attach(CUE8)
-P_2 <-  posterior(M_2)
-P_3 <-  posterior(M_3)
 
-P_4 <-
-  left_join(
-    filter(P_3, type == "ranef"),
-    filter(P_3, type == "fixef") %>% select(chain,iter, fe_value = value),
-    by = c("chain", "iter")
-  ) %>%
-  mutate(value = value + fe_value) %>% 
-  select(-fe_value) %>% 
-  posterior(model_name =  "M_3_abs")
+```{r CUE8_fe_vs_re}
+P_2 <- posterior(M_2, type = "fixef")
+P_3_fixef <-  posterior(M_3, type = "fixef")
+P_3_ranef <-  posterior(M_3, type = "ranef")
 
-T_fixef_ranef <- 
+## Creating a derived posterior with absolute team-level random effects
+P_3_abs <-
+  left_join(P_3_ranef, P_3_fixef,
+    by = c("chain", "iter", "fixef"),
+    suffix = c("","_fixef"))
+
+P_3_abs$value <-  P_3_abs$value + P_3_abs$value_fixef
+
+
+T_shrinkage <- 
   D_cue8 %>% 
   group_by(Team) %>% 
   summarize(N = n()) %>% 
   mutate(fixef = fixef(P_2)$center,
-         ranef = ranef(P_4)$center,
+         ranef = ranef(P_3_abs)$center,
          diff = fixef - ranef) 
 
-G_fixef_ranef <-
-  T_fixef_ranef %>% 
+
+sd_fixef <- sd(T_shrinkage$fixef)
+sd_ranef <- sd(T_shrinkage$ranef)
+
+
+T_shrinkage %>% 
   ggplot(aes(x = Team, y = fixef, size = N, col = "fixef")) +
   geom_point() +
-  geom_point(aes(y = ranef, col = "ranef"))
+  geom_point(aes(y = ranef, col = "ranef"), alpha = .5)
 
-sd_fixed <- sd(T_fixef_ranef$fixef)
-sd_ranef <- sd(T_fixef_ranef$ranef)
-
-G_fixef_ranef
-
+```
+```{r}
 detach(CUE8)
 ```
 
 
+Team H is far off the population average, but almost no shrinkage occurs due to the large number of observations. Again, no shrinkage occurs for Team L, as it is close to the population mean, and has more than enough data to speak for itself. Team B with the fewest observation (a genereous $N = 45$, still), gets noticable  shrinkage, although it is quite close to the population mean. Overall, the pattern resembles the above properties of random effects: groups that are far off the population mean and have comparably small sample size get a shrinkage correction. In the case of CUE8, these correction are overall negligible, which is due to the fact that all teams gathered ample data. Recall the SOV simulation above, where the set of tasks every user did was beyond control of the researcher. In situations with quite heterogeneous amount of missing data per participant, shrinkage is more pronounced and more information is drawn from the population mean.
 
-Team H is far off the population average, but almost no shrinkage occurs due to the large number of observations. Again, no shrinkage occurs for Team L, as it is close to the population mean, and has more than enough data to speak for itself. Team B with the fewest observation (a genereous $N = 45$, still), gets noticable  shrinkage, although it is quite close to the population mean. Overall, the pattern resembles the above properties of random effects: groups that are far off the population mean and have comparably small sample size get a shrinkage correction. In the case of CUE8, these correction are overall negligible, which is due to the fact that all teams gathered ample data. Recall the SOV simulation above, where the set of tasks every user did was beyond control of th researcher. In situations with quite heterogeneous amount of missing data per participant, shrinkage should be more pronounced and provide more reasonable estimates.
-
-At the same time, shrinkage adjusts the estimates for variation, with $sd_{ranef} = `r CUE8$sd_ranef` < sd_{fixef} = `r CUE8$sd_fixef`$. The random effects estimate is an unbiased estimate for the population mean. With fixed effects, variation would be overestimated. [REF]
+At the same time, shrinkage adjusts the estimates for variation, with $sd_{RE} = `r sd_ranef` < sd_{FE} = `r sd_fixef`$. The random effects estimate is an unbiased estimate for the population variance, whereas fixed effects variation would be  overestimating. [REF]
 
 Now that random effects have been de-mystified as effects with partial pooling, where the amount of pooling is a consequence of observed data, we can move on to applications. The variance in the population is an indicator for heterogeneity of participants (or any non-human population) and random effects variation is an accurate estimator  for that. For designers, it is vital to understand how varied performance with a system is. Furthermore, as we will see in the next section, with slope random effects we can even estimate the variation of how users respond to different design conditions. When comparing two designs A and B, that enables the researcher to assess in how much a desig is uniformly better, a desireable property of universal designs. There also are a useful applications for the random effects, i.e., the individual levels. In some applications the crucial issue is to get good estimates of individual performance, which falls into the domain of psychometrics.
 
@@ -805,7 +928,8 @@ sim <- function(n_Part = 5,
     left_join(Part) %>% 
     left_join(Design) %>% 
     mutate(mu = beta_0 + beta_0P + (beta_1 + beta_1P) * (Design == "B"),
-           ToT = rnorm(nrow(.), mu, 0))
+           ToT = rnorm(nrow(.), mu, 0)) %>% 
+    as_tbl_obs()
 }
 
 sim() %>% 
@@ -857,6 +981,7 @@ G_slope_RE_1 <-
   geom_line(data = group_by(BAB5, Design) %>% summarize(ToT = mean(ToT)), 
             aes(X = Design, y = ToT, group = 1, color = "population effect"), size = 1) +
   labs(color = NULL)
+
 G_slope_RE_1
 
 ```
@@ -866,6 +991,11 @@ The R formula for slope random effects follows the same principles as before. Fo
 M_Des_ME <- stan_glmer(ToT ~ 1 + Design + (1 + Design|Part),
                        data = BAB5)
 ```
+
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_Des_ME)
+```
+
 
 ```{r}
 P_Des_ME <- posterior(M_Des_ME)
@@ -894,15 +1024,18 @@ P_slope_1 <- posterior(M_slope_1)
 detach(BrowsingAB)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB,M_slope_1, P_slope_1)
+```
+
+
 The random factor variation is extracted from the posterior distribution using the `grpef` command. The coefficients are standard deviations of the two random factors INtercept and DesignB. The results confirm the earlier fixed effects analysis on the data set: users experience very different advantages of Design B. The variation of the difference is almost as pronounced as the variation on Design A (Intercept), alone. The standard deviation has the same magnitude as the group level effect, hence some users are likely to experience a disadvantage, even. That matches the earlier results, where design B caused problems for elderly users. In fact, we can phrase the slope random effect in much the same way as interaction effect `age:Design` in \@ref(differential_design_effects), namely as a conditional statement of the form:
 
 > the effect of Design depends on the participant. 
 
 
-```{r}
+```{r results = "tab"}
 attach(BrowsingAB)
-
-P_slope_1
 
 P_slope_1 %>% 
   filter(fixef %in% c("Intercept", "DesignB"),
@@ -910,7 +1043,8 @@ P_slope_1 %>%
   group_by(re_factor, fixef) %>% 
   summarize(center = median(value, na.rm = T),
             lower = quantile(value, .05, na.rm = T),
-            upper = quantile(value, .95, na.rm = T))
+            upper = quantile(value, .95, na.rm = T)) %>% 
+  kable()
 
 
 detach(BrowsingAB)
@@ -938,16 +1072,33 @@ As we will see in \@ref(GLM), most of the recorded performance measures do not c
 ```{r}
 attach(IPump)
 ```
-```{r, opts.label = "mcmc"}
-M_wkld <-   D_pumps %>%  
+
+```{r opts.label = "mcmc"}
+M_wkld <-   
+  D_pumps %>%  
   stan_glmer(workload ~ Design*Session + (Design*Session|Part) + (Design*Session|Task),
                      data = .)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(IPump,M_wkld)
+```
+
+
 ```{r}
 fixef(M_wkld)
-grpef(M_wkld)
+#grpef(M_wkld) FIXME bayr
 ```
+
+```{r results = "tab"}
+posterior(M_wkld) %>% 
+  filter(type == "grpef") %>% 
+  group_by(parameter) %>% 
+  summarize(median = median(value)) %>% 
+  filter(!is.na(median)) %>% 
+  kable()
+```
+
 
 
 ```{r}
@@ -967,17 +1118,6 @@ detach(IPump)
 ## Growing with random effects correlations [TBD]
 
 Here we finally resolve the Typing paradox and encounter another immensely useful element in random effect modelling. Let's take another good look at the Figure X [Average? Neverage. Last one]. 
-
-
-
-
-
-```{r save_all, message = "purp.dbg"}
-# save(Dlme, Plme, Mlme, Slme, Tlme, file = "Linear_mixed-effects_models.Rda")
-save_CE(CE)
-#write.bibtex(file="ref_vis.bib")
-```
-
 
 
 

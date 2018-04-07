@@ -1,14 +1,6 @@
-#rmd_files: ["index.Rmd", "Design_Research.Rmd", "Bayesian_statistics.Rmd", "Getting_started_with_R.rmd", "Getting_started_with_R.Rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd"]
-rmd_files: ["index.Rmd", "Design_Research.Rmd", "Bayesian_statistics.Rmd", "Getting_started_with_R.Rmd", "Classic_linear_models.Rmd"]
-title: "New statistics for the design researcher"
-author: "Martin Schmettow"
-subtitle: "A Bayesian course in tidy R"
-bibliography: Bayesian_Stats.bib
-date: "`r Sys.Date()`"
-site: bookdown::bookdown_site
-output: bookdown::gitbook
+book_filename: "NewStats"
+chapter_name: "Chapter "
+repo: https://github.com/schmettow/NewStats
+output_dir: docs
+rmd_files: ["index.Rmd", "Design_Research.Rmd", "Bayesian_statistics.Rmd", "Getting_started_with_R.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd"]
 new_session: yes
-documentclass: book
-biblio-style: apalike
-github-repo: schmettow/New_Stats
-description: "A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place."

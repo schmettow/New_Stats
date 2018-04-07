@@ -9,7 +9,7 @@ purp.mcmc = F
 source("RMDR.R")
 
 CE = c("Rainfall", "Sec99")
-load_CE(CE)
+load_CE_(CE)
 
 #formals(stan_glm)$iter = 500
 #formals(stan_glm)$chains = 2
@@ -80,13 +80,13 @@ Reporting the calculated mean of time-on-task in two designs is descriptive. It 
 
 Reconsider Jane and Andrew. What did they know about the current state of affairs when running a particular session. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
 
-$$\hat M_{ToT} = 1\over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
+$$\hat M_{ToT} = 1 \over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
 
 So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, the field of statistics strongest contribution is that the level of uncertainty can also be quantified. This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate is imperfect.
 
 A consequence of the imperfect is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
 
-> How certain can you be that in the population of users $M_{ToT] <= 99$?
+> How certain can you be that in the population of users $M_{ToT} <= 99$?
 
 For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
 
@@ -277,7 +277,7 @@ $$
 
 
 
-Probability and density distributions usually are expressed as mathematical functions. For example, the function for the case of task completion is the binomial distribution, which gives the probability for $y$ successes in $k$ trials at a base probability of $p$:
+Probability and density distributions usually are expressed as mathematical functions. For example, the function for the case of task completion is the binomial distribution, which gives the probability for $y$ successes in $k$ trials when the success rate is $p$:
 
 $$
 Pr(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
@@ -289,7 +289,7 @@ In most cases where the binomial distribution applies, base probability $p$ is t
 #### Location and dispersion
 
 
-*Location* and *dispersion* are two immediate properties of plotted distributions that have intuitive interpretations. Location of a distribution usually reflects where the most typical values come to lie (100 in the IQ example). When an experimenter asks for the difference of  two designs in ToT, this is purely about location. Dispersion can either represent *uncertainty* or *variation* in a population, depending on the research design and statistical model. The most common interpretation is uncertainty. The basic problem with dispersion is that spreading out a distribution influences *how typical* the most typical values are. The fake IQ data basically is a perfect Gaussian distribution with a mean of 100 and a standard deviation of 15. The density of this distribution at an IQ of 100 is `r dbinom(100, 100, 15)`. If IQs had a standard deviation of 30, the density at 100 would fall to `r dbinom(100, 100, 15)`. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when dispersion is low.
+*Location* and *dispersion* are two immediate properties of plotted distributions that have intuitive interpretations. Location of a distribution usually reflects where the most typical values come to lie (100 in the IQ example). When an experimenter asks for the difference of  two designs in ToT, this is purely about location. Dispersion can either represent *uncertainty* or *variation* in a population, depending on the research design and statistical model. The most common interpretation is uncertainty. The basic problem with dispersion is that spreading out a distribution influences *how typical* the most typical values are. The fake IQ data basically is a perfect Gaussian distribution with a mean of 100 and a standard deviation of 15. The density of this distribution at an IQ of 100 is `r dnorm(100, 100, 15)`. If IQs had a standard deviation of 30, the density at 100 would fall to `r dnorm(100, 100, 30)`. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when dispersion is low.
 
 ```{r}
 data_frame(IQ = 0:200,
@@ -356,7 +356,7 @@ data_frame(succs = rbinom(30, 10, .9)) %>%
   scale_x_continuous(breaks = 0:10, limits = c(0,11))
 ```
 
-Speaking about the Binomial distribution in terms of *successes in a number of attempts* is common. As a matter of fact, *any* binary classification of outcomes is amenable for Binomial modelling, like on/off, red/blue, ... . Imagine, Jane's big boss needs a catchy phrase for an investor meeting. Together they decide that the return rate of customers could be a good measure, translating into a statement such as  *eighty percent of customers come back*. To prove (or disprove) the claim, Jane uses the customer data base and divides all individuals into two groups: those who have precisely one record and those who returned (no matter how many times). This process results in a distribution, that has two possible outcomes: : $0$ for one-timers and $1$ for returners.  This is in fact, a special case of the Binomial distribution with $k = 1$ attempts. Examples are given in the first row of the figure.
+Speaking about the Binomial distribution in terms of *successes in a number of attempts* is common. As a matter of fact, *any* binary classification of outcomes is amenable for Binomial modelling, like on/off, red/blue, male/female. Imagine, Jane's big boss needs a catchy phrase for an investor meeting. Together they decide that the return rate of customers could be a good measure, translating into a statement such as  *eighty percent of customers come back*. To prove (or disprove) the claim, Jane uses the customer data base and divides all individuals into two groups: those who have precisely one record and those who returned (no matter how many times). This process results in a distribution, that has two possible outcomes: : $0$ for one-timers and $1$ for returners.  This is in fact, a special case of the Binomial distribution with $k = 1$ attempts. Examples are given in the first row of the figure.
 
 
 ```{r}
@@ -454,8 +454,8 @@ data_frame(lambda = 20,
            ci_ovdsp = rpois(100, log(lambda + rnorm(100, 0, 100)))
            ) %>% 
   ggplot(aes(x = ci)) +
-  geom_density(aes(fill = "single participant")) +
-  geom_density(aes(x = ci_ovdsp, fill = "multi participants"), alpha = .5) +
+  geom_histogram(aes(fill = "single participant")) +
+  geom_histogram(aes(x = ci_ovdsp, fill = "multi participants"), alpha = .5) +
   labs(fill="Count distributions", x = "outcome", y = "density")
 ```
 
@@ -499,6 +499,8 @@ Subsmurf$simulate_exp() %>%
 
 ```
 
+
+#### Gamma distribution [TBD]
 
 
 #### Normal distributions
@@ -599,11 +601,16 @@ M_1 <-
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Rainfall, M_1)
+```
+
+
 What the estimation does, is to calculate the *posterior distribution* from the observations. The *posterior distribution* contains the probability (more precisely: the *density*) for all possible values of the parameter in question. The following density plot represents our belief about the parameter $P(rain|cloudy)$ after we have observed twenty days:
 
 ```{r fig:umbrella_post, opts.label = "fig.small"}
-M_1 %>%
-  posterior(M_1) %>%
+
+posterior(M_1) %>%
   filter(type == "fixef") %>% 
   mutate(chance_of_rain = plogis(value)) %>% 
   ggplot(aes(x = chance_of_rain, fill = parameter, col = parameter)) +
@@ -639,5 +646,5 @@ Coming back to MCMC: how is this distribution actually produced. In plain words,
 The p-value [...] Imagine giant replication study that showed that 35% of published psychology studies are not replicable. In fact, such a study exists and it has far-reaching consequences. [...]  [REF] shows that rejection bias is one reason: studies that have not reached the *magic .05 level* of significance, have a lower chance of publication. [REF] sees as a reason that author's implicitly trick the system by *the garden of forking paths*  strategy. The research project collects an array of variables, followed by a fishing expediture. Theory is conventiently considered last, but written up in  a pseudo-a prior way.
 
 ```{r save_CE, opts.label = "invisible"}
-save_CE(CE)
+save_CE_(CE)
 ```

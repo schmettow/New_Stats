@@ -3,30 +3,6 @@
 ```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 ## The following is for running the script through knitr
 source("RMDR.R")
-
-as_tbl_obs <- function(x) UseMethod("as_tbl_obs", x)
-as_tbl_obs.tbl_df <- function(x) {
-  class(x) <- c("tbl_obs", class(x))
-  x
-}
-as_tbl_obs.data.frame <- function(x) {
-  x <- as_tibble(x)
-  class(x) <- c("tbl_obs", class(x))
-  x
-}
-
-print.tbl_obs <- function(x, n = 8) {
-  cap <- str_c("showing ", n, " of ", nrow(x), " observations")
-  tab <- dplyr::sample_n(x, n)
-  if("Obs" %in% colnames(tab)) tab <- arrange(tab, Obs)
-  if("Part" %in% colnames(tab)) tab <- arrange(tab, Part)
-  tab <- kable(tab, align = "c") %>% 
-     kableExtra::kable_styling(full_width = F) %>% 
-     kableExtra::add_footnote(c(cap), notation = "symbol")
-  print(tab)
-  
- }
-
 ```
 
 
@@ -34,6 +10,7 @@ TODO:
 
 + add attributes to all CEs
 + create syncenv print method
++ make all data tables tbl_obs
 
 
 
@@ -64,10 +41,44 @@ It occured indirectly, mediated through
 ## Chapter environments
 
 ```{r}
-new_syncenv("Chapter_LM")
-save_CE("Chapter_LM")
+new_syncenv("Chapter_BS")
+save_CE(Chapter_BS)
 
 ```
+
+```{r}
+new_syncenv("Chapter_GSR")
+save_CE(Chapter_GSR)
+
+```
+
+
+```{r}
+new_syncenv("Chapter_LM")
+save_CE(Chapter_LM)
+
+```
+
+
+```{r}
+new_syncenv("Chapter_MLM")
+save_CE(Chapter_MLM)
+
+```
+
+
+```{r}
+new_syncenv("Chapter_GLM")
+save_CE(Chapter_GLM)
+
+```
+
+```{r}
+new_syncenv("Chapter_LCM")
+save_CE(Chapter_LCM)
+
+```
+
 
 
 ## Case Rainfall
@@ -88,20 +99,22 @@ Rainfall$simulate <-
     n_Days = 20,
     set.seed = 1,
     debug = F){
-
+    
     if (!is.na(set.seed)) set.seed(set.seed)
     ## number of observations
     data_frame(cloudy = rbinom(n_Days, 1, .6)) %>%
-    mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
-    mutate(cloudy = as.logical(cloudy),
-         rain = as.logical(rain))
-
+      mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
+      mutate(cloudy = as.logical(cloudy),
+             rain = as.logical(rain)) %>% 
+      as_tbl_obs()
+    
   }
 
 Rainfall$Rain <- 
   Rainfall$simulate()
 
-names(Rainfall)
+Rainfall
+Rainfall$Rain
 
 ```
 
@@ -177,7 +190,7 @@ Sec99$simulate <-
                        ToT = rnorm(n_Obs, mu_ToT, sigma_ToT)) %>% 
       ## dirty hack to create correlated age
       mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT/8, 2)))
-    Sec99
+    Sec99 %>% as_tbl_obs()
   }    
 
 (Sec99$Ver20 <- Sec99$simulate())
@@ -224,8 +237,9 @@ Rational$simulate <-
                  mu = mu_legacy * ifelse(Design == "proto", eta_proto, 1),
                  shape = mu/scale,
                  scale = scale,
-                 Euro = rgamma(n_Part, shape = shape, scale = scale))
-    RD  
+                 Euro = rgamma(n_Part, shape = shape, scale = scale)) %>% 
+      as_tbl_obs()
+    RD  %>% as_tbl_obs()
   }
 
 Rational$RD <- 
@@ -372,14 +386,16 @@ BrowsingAB$simulate <-
       mutate(Obs = 1:n_Obs) %>% 
       select(Obs, Part, Task, Design, 
              Gender, Education, age, Far_sighted, Small_font, 
-             ToT, clicks, returns)
+             ToT, clicks, returns) %>%
+      as_tbl_obs()
     
-    BrowsingAB
+    BrowsingAB %>% as_tbl_obs()
   }
 
 BrowsingAB$BAB1 <- 
   BrowsingAB$simulate(n_Task = 1) %>% 
-  mutate(Part = Obs) ## tweak to make it between-subject
+  mutate(Part = Obs) %>% as_tbl_obs()
+## tweak to make it between-subject
 
 BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5,
                                        n_Part = 30)
@@ -475,7 +491,9 @@ CUE8$simulate <-
                   Task = as.factor(1:n_Task)) %>% 
       full_join(Participants, by = "Participant") %>% 
       full_join(Tasks, by = "Task") %>% 
-      mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50))
+      mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50)) %>% 
+      as_tbl_obs()
+    Obs %>% as_tbl_obs()
   }    
 ```
 
@@ -488,25 +506,30 @@ CUE8$D_cue8 <-
   foreign::read.spss("external_Data/CUE8 long.sav") %>% 
   as_data_frame() %>% 
   # haven::read_sav("external_Data/CUE8 long.sav") %>% 
-  dplyr::select(Team, Part = Participant, Moderated = moderated, SUS, Task, ToT) %>% 
-  mutate(Moderated = as.factor(Moderated),
-         Team = str_trim(Team),
+  mutate(Obs = row_number()) %>% 
+  select(Obs, Team, Part = Participant, Condition = moderated, SUS, Task, ToT) %>% 
+  mutate(Team = str_trim(Team),
          Team = as.factor(Team),
          Part = as.factor(Part),
-         logToT = log(ToT))
+         Task = as.factor(Task),
+         logToT = log(ToT),
+         logToT = ifelse(logToT == -Inf, NA, logToT)) %>%
+  as_tbl_obs()
 
 names(CUE8)
+
+CUE8$D_cue8
 
 ```
 
   
 
 ```{r CUE8_export}
-#save(CUE8, file = "Cases/CUE8.Rda")
-# write_sav(CUE8$D_study, "Data/CUE8_study.sav")
-# write_csv(CUE8$D_study, "Data/CUE8_study.csv")
-# write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
-# write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
+save(CUE8, file = "Cases/CUE8.Rda")
+write_sav(CUE8$D_study, "Data/CUE8_study.sav")
+write_csv(CUE8$D_study, "Data/CUE8_study.csv")
+write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
+write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
 
 ```
 
@@ -533,11 +556,11 @@ Headache$simulate <-
                                before/7 * log(2 + 8 * PillA + 6 * PillB), 
                                0.5)) %>%
       mutate(PillA = as.factor(PillA),
-             PillB = as.factor(PillB))
+             PillB = as.factor(PillB)) %>% as_tbl_obs()
   }
 
 Headache$Pills <- Headache$simulate(N = 40)
-names(Headache)
+Headache
 save(Headache, file = "Cases/Headache.Rda")
 ```
 
@@ -584,22 +607,23 @@ Reading$simulate <-
                 beta[2] * (font_size == "12pt") +
                 beta[3] * (font_color == "black") +
                 beta[4] * (font_color == "black") * (font_size == "12pt"),
-              ToT = rnorm(N,  mu, sigma))
+              ToT = rnorm(N,  mu, sigma)) %>% 
+    as_tbl_obs()
     
-    class(out) <- append(class(out), "sim_tbl")
+    #class(out) <- append(class(out), "sim_tbl")
     attr(out, "coef") <- list(beta = beta,
                               sigma = sigma)
     attr(out, "seed") <- seed
     
-    out
+    out %>% as_tbl_obs()
     }
 
 Reading$D_1 <- Reading$simulate()
 names(Reading$D_1)
-betaplot::iiaplot_3(fixef = as.list(attr(Reading$D_1, "coef")$beta),
-                    # labels = c("font size", "contrast", "ToT"),
-                    factor_1 = c("10pt", "12pt"),
-                    factor_2 = c("gray", "black"))
+# betaplot::iiaplot_3(fixef = as.list(attr(Reading$D_1, "coef")$beta),
+#                     # labels = c("font size", "contrast", "ToT"),
+#                     factor_1 = c("10pt", "12pt"),
+#                     factor_2 = c("gray", "black"))
 
 Reading$D_1 %>% 
   ggplot(aes(col = font_color,
@@ -649,14 +673,15 @@ AR_game$simulate <-
                 beta[2] * technophile +
                 beta[3] * sociophile +
                 beta[4] * technophile * sociophile,
-              intention = mascutils::inv_logit(rnorm(N,  eta, sigma)))
+              intention = mascutils::inv_logit(rnorm(N,  eta, sigma))) %>% 
+      as_tbl_obs()
     
     class(out) <- append(class(out), "sim_tbl")
     attr(out, "coef") <- list(beta = beta,
                               sigma = sigma)
     attr(out, "seed") <- seed
     
-    out
+    out %>% as_tbl_obs()
     }
 
 AR_game$D_1 <- AR_game$simulate(N = 40)
@@ -715,8 +740,8 @@ Sleep$simulate <-
                beta[4] * (Environment == "Noisy") * (Sleep == "Sleepy"),
              gaps = rnorm(N,mu,sigma)) %>% 
       mutate(gaps = ifelse(gaps > 0, gaps, NA)) %>% 
-      select(3,1,2,4,5) %>% 
-      as_data_frame()
+      select(3,1,2,4,5)  %>% 
+      as_tbl_obs()
   }
 
 
@@ -739,7 +764,8 @@ Sleep$simulate_YD <-
     data_frame(arousal = arousal) %>% 
       mutate(energy = plogis(arousal + offset, scale = .5),
              focus =  (1 - plogis(arousal, scale = .5))) %>% 
-      mutate(performance = energy * focus * scale)
+      mutate(performance = energy * focus * scale) %>% 
+      as_tbl_obs()
   }
 ```
 
@@ -775,7 +801,8 @@ Uncanny$UV_1 <-
   select(Part, Stimulus, huMech, response) %>% 
   group_by(Stimulus, huMech) %>% 
   summarize(avg_like = mean(response, na.rm = T)) %>% 
-  ungroup()
+  ungroup() %>% 
+  as_tbl_obs()
 
 names(Uncanny)
 
@@ -783,14 +810,11 @@ names(Uncanny)
 
 
 ```{r Uncanny_functions}
-try(detach(Uncanny))
-attach(Uncanny)
-
-trough <- function (coef, ...) {
+Uncanny$trough <- function (coef, ...) {
    UseMethod("trough", coef)
  }
 
-trough.numeric <- 
+Uncanny$trough.numeric <- 
     function(coef = c(-.2, -.5, .2, .7)) {
       if(length(coef) != 4) stop("the uncanny valley trough polynomial requires exactly four parameters")
       poly   = polynom::polynomial(coef)
@@ -805,13 +829,12 @@ trough.numeric <-
       }
     }
 
-trough.matrix <- 
+Uncanny$trough.matrix <- 
   function(coef) aaply(as.matrix(coef), .margins = 1, .fun = trough.numeric)
 
-trough.data.frame <- 
+Uncanny$trough.data.frame <- 
   function(coef) trough.matrix(as.matrix(coef))
 
-detach(Uncanny)
 ```
 
 
@@ -820,6 +843,7 @@ detach(Uncanny)
 
 ```{r Uncanny_export}
 save(Uncanny, file = "Cases/Uncanny.Rda")
+
 write_sav(Uncanny$UV_1, "Data/UV_1.sav")
 write_csv(Uncanny$UV_1, "Data/UV_1.csv")
 
@@ -901,9 +925,8 @@ Stroop$simulate <-
                (b_trial + t_trial) * trial) %>% 
       mutate(RT = rnorm(n_Part * n_Stim, mu, sd_resid)) %>% 
       mutate(RT = RT + rbinom(n_Part * n_Stim, 1, outlier_rate) * RT * 3) %>% 
-      mutate(Correct = as.logical(rbinom(n_Part * n_Stim, 1, correct_rate)))
-    
-    as_data_frame(Stroop)
+      mutate %>% 
+      as_tbl_obs()
   }
 
 Stroop$Strp_1 <- 
@@ -913,7 +936,8 @@ Stroop$Strp_1_avg <-
   Stroop$Strp_1 %>% 
   group_by(Part, Condition, Incongruent, age) %>% 
   summarize(RT = mean(RT)) %>% 
-  ungroup() 
+  ungroup()  %>% 
+  as_tbl_obs()
 
 Stroop$Strp_1 %>% 
   ggplot(aes(x = Condition,
@@ -957,7 +981,8 @@ YD$simulate_nonstoch <-
     data_frame(arousal = arousal) %>% 
       mutate(energy = plogis(arousal + offset, scale = .5),
              focus =  (1 - plogis(arousal, scale = .5))) %>% 
-      mutate(performance = energy * focus * scale)
+      mutate(performance = energy * focus * scale) %>% 
+      as_tbl_obs()
   }
 
 YD$D_1 <- 
@@ -1030,7 +1055,8 @@ IPump$simulate_1 <-
                (Design == "N") * beta[2] +
                (moment == 2) * beta[3] +
                (Design == "N") * (moment == 2) * beta[4],
-             ToT = rnorm(n_Obs, mu, sd))
+             ToT = rnorm(n_Obs, mu, sd)) %>% 
+      as_tbl_obs()
     Exp
   }
     
@@ -1071,7 +1097,8 @@ IPump$D_pumps <-
          Group = ifelse(Group == "VA", "GC", "IC"),
          Session = as.factor(session),
          session = as.integer(session) - 1,
-         Obs = as.factor(row_number()))
+         Obs = as.factor(row_number())) %>% 
+  as_tbl_obs()
 
 IPump$D_agg <-
   IPump$D_pumps %>% 
@@ -1081,7 +1108,8 @@ IPump$D_agg <-
             deviations = sum(deviations, na.rm = T),
             workload = mean(workload, na.rm = T),
             completion = all(completion)) %>% 
-  ungroup()
+  ungroup() %>% 
+  as_tbl_obs()
 
 rm(P, envir = IPump)
 
@@ -1135,8 +1163,8 @@ MMN$MMN_2 <-
   mascutils::z_score("Ospan.B") %>% 
   mutate(ltime = log(time),
          lclicks = log(clicks)) %>% 
-  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks) %>% 
-  as_d
+  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)  %>% 
+  as_tbl_obs()
 
 names(MMN$MMN_2)
 
@@ -1147,7 +1175,7 @@ MMN$MMN_1 <-
             clicks = sum(clicks)) %>% 
   mutate(ltime = log(time),
          lclicks = log(clicks)) %>% 
-  as_data_frame()
+  as_tbl_obs()
   
 names(MMN$MMN_1)
 
@@ -1192,7 +1220,8 @@ AUP$AUP_1 <-
   mascutils::z_score("gex") %>% 
   mascutils::z_score("ncs") %>% 
   mascutils::z_score("compAnx") %>% 
-  mascutils::z_score("resistance")
+  mascutils::z_score("resistance") %>% 
+  as_tbl_obs()
 
 names(AUP$AUP_1)
 
@@ -1265,7 +1294,8 @@ Schools$simulate <-
                lv_score = rnorm(n(), eta, sd_Obs),
                score = inv_logit(lv_score) * 100) %>% 
       mutate(Obs = 1:n()) %>% 
-      select(Obs, Stud, income, School, Type, score) 
+      select(Obs, Stud, income, School, Type, score)  %>% 
+    as_tbl_obs()
         
     Obs
 
@@ -1367,7 +1397,8 @@ Stroop_comp$simulate <-
       left_join(Stim) %>% 
       mutate(mu = beta_0 + theta_0 + (beta_1 + theta_1) * (Cond == "I"),
              tau = tau_0 + (tau_1 + theta_3) * (Cond == "I")) %>% 
-      mutate(RT = rexgauss(n_Obs, mu, sigma, tau))
+      mutate(RT = rexgauss(n_Obs, mu, sigma, tau)) %>% 
+      as_tbl_obs()
 
     Obs
   }
@@ -1441,13 +1472,21 @@ Egan$D_egan <-
          trial = TrialNumber,
          Design = Website,
          Task,
-         outcome = SuccesOnTask,
+         success = SuccesOnTask,
          ToT = TimeOnTask,
          clicks = NumberOfClicks,
          returns_hp = TimesReturnedHome,
          return_links = TimesUsedLinks,
          workload) %>% 
-  mutate_if(is.labelled, as_factor)
+  mutate_if(
+    is.labelled, as_factor) %>% 
+  mutate(Part = as.integer(Part),
+         trial = as.integer(trial),
+         success = success == "succes",
+         clicks = as.integer(clicks),
+         returns_hp = as.integer(returns_hp),
+         return_links = as.integer(return_links)) %>% 
+  as_tbl_obs()
 
 
 Egan$D_egan
@@ -1460,6 +1499,128 @@ Egan$D_egan
 save(Egan, file = "Cases/Egan.Rda")
 write_sav(Egan$D_egan, "Data/Egan.sav")
 write_csv(Egan$D_egan, "Data/Egan.csv")
+
+```
+
+
+
+
+
+
+
+## Case: LapTrain
+
+```{r LapTrain_create, opts.label = "simulate"}
+new_syncenv("LapTrain")
+```
+
+
+```{r LapTrain_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+
+```
+
+```{r LapTrain_load_data, opts.label = "sim"}
+load("external_data/Lap15.Rda")
+
+LapTrain$D_laptrain <- Lap15$D %>% 
+  mutate(Obs = row_number()) %>% 
+  mascutils::go_first(~Obs) %>% 
+  as_tbl_obs()
+LapTrain$D_laptrain
+
+```
+
+
+```{r LapTrain_export}
+save(LapTrain, file = "Cases/LapTrain.Rda")
+write_sav(LapTrain$D_laptrain, "Data/LapTrain.sav")
+write_csv(LapTrain$D_laptrain, "Data/LapTrain.csv")
+
+```
+
+
+## Case: Hug me
+
+```{r Hugme_create, opts.label = "simulate"}
+new_syncenv("Hugme")
+```
+
+
+```{r hugme_simfunc, opts.label = "sim"}
+
+
+## reading the data
+
+```
+
+```{r hugme_load_data, opts.label = "sim"}
+load("external_data/HUG3/HUG3.Rda")
+
+Hugme$D_hugme <- HUG3 %>% 
+  rename(Part = Subj) %>% 
+  mutate(Obs = row_number(),
+         RT = RT/1000,
+         WordCat = case_when(
+           HUG  == "h" ~ "hedo",
+           HUG  == "u" ~ "util",
+           HUG  == "g" ~ "geek"
+         ),
+         WordGeek = WordCat == "geek",
+         PrimeGeek = primeCat == "geek") %>% 
+  select(Obs, Part, Gender, Age, GeekField = geekField, starts_with("z"), 
+         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek,
+         correct, RT) %>% 
+  as_tbl_obs()
+
+```
+
+  
+
+```{r hugme_export}
+save(Hugme, file = "Cases/hugme.Rda")
+write_sav(Hugme$D_hugme, "Data/hugme.sav")
+write_csv(Hugme$D_hugme, "Data/hugme.csv")
+
+```
+
+
+## Case Stroop Mind Wandering
+
+https://osf.io/kxpqu/
+
+
+
+```{r StroopMW_create, opts.label = "simulate"}
+new_syncenv("StroopMW")
+```
+
+
+
+```{r StroopMW_load_data, opts.label = "sim"}
+thisdir <- "external_data/OSF - Stroop Mind Wandering/"
+
+StroopMW$D_stroopmw <-
+  dir(pattern = "*.csv", path = thisdir, full.names = T) %>>%
+  ldply(read_csv, skip = 1) %>% 
+  mutate(Obs = row_number(),
+         trial = trial + 1,
+         correct = correct == "correct") %>% 
+  filter(RT > 0) %>% 
+  select(Obs, Part = subj, Condition = condition, Color = color, 
+         Key = response, correct, RT) %>%
+  as_tbl_obs()
+
+```
+
+  
+
+```{r StroopMW_export}
+save(StroopMW, file = "Cases/StroopMW.Rda")
+write_sav(StroopMW$D_stroopmw, "Data/StroopMW.sav")
+write_csv(StroopMW$D_stroopmw, "Data/StroopMW.csv")
 
 ```
 

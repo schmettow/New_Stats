@@ -9,12 +9,15 @@ purp.mcmc = F
 
 source("RMDR.R")
 
-CE = c("Rainfall", "Rational", "Sec99", "IPump")
-load_CE(CE)
+CE = c("Rainfall", "Rational", "Sec99")
+load_CE_(CE)
 
-formals(stan_glm)$iter = 500
-formals(stan_glm)$chains = 2
+#formals(stan_glm)$iter = 500
+#formals(stan_glm)$chains = 2
 #opts_chunk$set(cache = T)
+
+#library(printr)
+
 ```
 
 
@@ -146,11 +149,11 @@ While these criteria originated in the field of Human-Computer Interaction, they
 
 *Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or medical errors. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, in the sense of task completion, is primarily a qualitative issue and we shall rarely encounter it in this book.
 
-A more subtle notion of effectiveness is the *quality of outcome*, and strange enough, that is the truly quantitative notion. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.
+A more subtle notion of effectiveness is the *quality of outcome*, and despite the very term, is a measure. Perhaps, it should better be called *task perfection*. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.
 
-*Efficiency* is where it reaqlly gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. 
+*Efficiency* is where it really gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. 
 
-Counting the *number of clicks* before someone has found teh desired piece of informnation is a coarse, but easy to acquire and intuitive measure of efficiency, and so is *time-on-task (ToT)*, which is just the sum . Still, these  It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, *error rate* can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.
+Counting the *number of clicks* before someone has found the desired piece of informnation is a coarse, but easy to acquire and intuitive measure of efficiency, and so is *time-on-task (ToT)*, which is just the sum . Still, these  It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, *error rate* can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.
 
 ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for *repetition*. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.
 
@@ -225,8 +228,7 @@ $$
 
 
 
-```{r tab:umbrella_1}
-# try(detach(Rainfall))
+```{r umbrella_1, opts.label = "tab"}
 attach(Rainfall)
 
 Actions <-
@@ -247,15 +249,12 @@ Decision <-
   group_by(action) %>%
   summarise(expected_loss = sum(conditional_loss))
 
-Decision  %>% 
-  knitr::kable()
-
-
+Decision
 ```
 
 We conclude that, given the high chance for rain, and the conditional losses, the expected loss is larger for not taking an umbrella with you. It is rational to take an umbrella when it is cloudy.
 
-## Measuring uncertainty
+### Measuring uncertainty
 
 As we have seen above, a decision requires two investigations: the indeterministic  nature of  outcomes, and the assigned loss. Assigning loss to decisions is highly context dependent and often requires domain-specific expertize (or even individual judgment). We will do the formalization of it one more time, then set it aside. The issues of indeterministic processes and the associated uncertainty is basically what the  field of *statistics* deals with. We encounter uncertainty in two forms: first, we usually have just a limited set of observations to draw inference from, this is *uncertainty of parameter estimates*. From just 20 days of observation, we cannot be absolutely certain about the true chance of rain. It can be 60%, but also 62% or 56%. Second, even if we precisely knew the chance of rain, it does not mean we could make a certain statement of the future wheather conditions, which is *predictive uncertainty*. For a perfect forecast, we had to have a complete and exact figure of the physical properties of the atmosphere, and a fully valid model to predict future states from it. For all non-trivial systems (which excludes living organisms and wheather), this is impossible. 
 
@@ -278,11 +277,7 @@ In the umbrella example above, the magnitude of interest is the chance of rain. 
 Maybe, you have recorded the coincidences of clouds and rainfall over a period, of, let's say, 20 days. You made the following observations:
 
 ```{r tab:umbrella_2}
-
-Rain %>% 
-  sample_n(5) %>% 
-  knitr::kable()
-
+Rain %>% as_tbl_obs()
 ```
 
 Intuitively, you would use the average to estimate the probability of rain under every condition.
@@ -293,15 +288,14 @@ T_desc <-
   group_by(cloudy) %>%
   summarize(chance_of_rain = mean(rain))
 
-T_desc %>%
-  knitr::kable()
+T_desc %>% kable()
 ```
 
 ```{r}
 detach(Rainfall)
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r Rainfall$T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(Rainfall$T_desc[2,2]), 5) * 100`$%. 
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(T_desc[2,2]), 5) * 100`$%. 
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -329,7 +323,7 @@ Note how the expert gave two endpoints for the parameter in question, to indicat
 
 The expert feels 95% certain, that the parameter in question is in the interval. However, for many questions of interest, we have no expert at hand (or we may not even trust them altogether). Then we proceed with option 3: making our own observations. 
 
-## Betting on designs
+### Betting on designs
 
 The design of systems can be conceived as a choice between design options. For example, when designing an informational website, you have the choice of making the navigation structure broad (and shallow) or deep (and narrow). Your choice will to some extent, change usability of the website, hence your customer satisfaction, rate of recurrance, revenue etc.
 
@@ -346,17 +340,15 @@ In order to get a rough idea whether this target can be met, Violet conducts a s
 
 The figure below shows the distribution of revenue in the experiment.
 
-```{r fig:rational_design_1, opts.label = "fig.small"}
+```{r}
 attach(Rational)
-G_exploratory_1 <-
-  RD  %>% 
+```
+
+
+```{r fig:rational_design_1, opts.label = "fig.small"}
+RD  %>% 
   ggplot(aes(y = Euro, x = Design)) +
   geom_boxplot()
-  
-
-G_exploratory_1
-
-detach(Rational)
 ```
 
 There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? And how certain can Violet be? A formal regression analysis gives the answer [^gamma_reg].
@@ -364,8 +356,6 @@ There seems to be a slight benefit for the prototype condition. But, is it a 10%
 [^gamma_reg]: What we run here is a Gamma regression, which we will re-encounter in chapter [GLM]. The coefficients can directly be interpreted as changes in rate.
 
 ```{r est:rational_design_2, opts.label = "mcmc"}
-attach(Rational)
-
 M_1 <- 
   RD %>% 
   stan_glm(Euro ~ Design, 
@@ -374,34 +364,26 @@ M_1 <-
 
 P_1 <-  posterior(M_1)
 
-detach(Rational)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Rational, M_1, P_1)
 ```
 
 
 ```{r rational_design_3}
-attach(Rational)
 T_fixef <- fixef(P_1, mean.func = exp)
-T_fixef %>%  kable()
-detach(Rational)
+T_fixef
 
 ```
 
-The results tell her that participants spend $`r Rational$T_fixef[[1,2]]`$ Euro on average with the current design. The prototype seems to increase the revenue per transaction by $`r Rational$T_fixef[[2,2]]`$. That seems sufficient, but uncertainty is strong, too, as indicated by the 95% credibility intervals. There is a chance of more than 2.5%, that the revenue is just $`r Rational$T_fixef[[2,3]]`$ (or lower), such that the target is not met. But what precisely is the chance of falling below EUR 5? In Bayesian analysis we usually get the complete posterior distribution, which we can evaluate to get a definite answer:
+The results tell her that participants spend $`r T_fixef$center[1]`$ Euro on average with the current design. The prototype seems to increase the revenue per transaction by $`r T_fixef$center[2]`$. That seems sufficient, but uncertainty is strong, too, as indicated by the 95% credibility intervals. There is a chance of more than 2.5%, that the revenue is just $`r T_fixef$lower`$ (or lower), such that the target is not met. But what precisely is the chance of falling below EUR 5? In Bayesian analysis we usually get the complete posterior distribution, which we can evaluate to get a definite answer:
 
 *What is the probability of the increase in revenue being less than 5 EUR?*
 
 We inspect the posterior distribution and mark the area of interest
 
-```{r fig:rational_design_risk_of_failure, opts.label = "fig.small"}
-attach(Rational)
-G_risk_of_failure_1 <-
-  P_1 %>%
-  filter(parameter == "Designproto") %>%
-  mutate(value = exp(value),
-         outcome = ifelse(value < 1.1, "failure", "success")) %>%
-  ggplot(aes(x = value, fill = outcome)) +
-  geom_histogram(binwidth = .002)
-
+```{r rational_design_risk_of_failure, opts.label = "fig.small"}
 N_risk_of_failure_1 <-
   P_1 %>%
   filter(parameter == "Designproto") %>%
@@ -410,14 +392,22 @@ N_risk_of_failure_1 <-
   select(outcome) %>%
   colMeans  
 
-G_risk_of_failure_1
+P_1 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+```
 
+```{r}
 detach(Rational)  
 ```
 
-The red area represents the danger zone, where revenue increase does not reach  EUR 5. The area amounts to `r Rational$N_risk_of_failure_1 * 100`% of the total probability. With this information the manager now has several options:
 
-1) decides that `r Rational$N_risk_of_failure_1 * 100`% is a risk she *dares* to take
+The red area represents the danger zone, where revenue increase does not reach  EUR 5. The area amounts to `r N_risk_of_failure_1 * 100`% of the total probability. With this information the manager now has several options:
+
+1) decides that `r N_risk_of_failure_1 * 100`% is a risk she *dares* to take
 2) be confident in herself because *past successes* prove that she should follow her intuition
 3) take into account other *sources of evidence*, for example expert opinions or meta studies
 4) continue the study until sufficient evidence is gathered, but costs of additional  effort have to be accounted for
@@ -442,18 +432,15 @@ Consider Jane: she is chief engineer at a mega-large rent-a-car company smartr.c
 
 Jane takes another look at the performance of users in the smartr car v2.0 condition. As she understands it, she has to find out whether the average of all recorded time-on-tasks with smartr.car 2.0 is 99 seconds, or better. Here is what she sees:
 
+```{r}
+attach(Sec99)
+```
+
 
 ```{r fig:seconds_99_1, opts.label = "fig.small"}
-attach(Sec99)
-
-G_Sec99_expl_1 <-
-  Ver20 %>%   
+Ver20 %>%   
   ggplot(aes(x = ToT)) +
   geom_histogram()
-
-G_Sec99_expl_1
-
-detach(Sec99)
 ```
 
 
@@ -462,29 +449,27 @@ Jane, trained in statistics as she is, figures that if she would make such a sta
 
 
 ```{r seconds_99_2, opts.label = "mcmc"}
-attach(Sec99)
-
-M_Sec99_1 <- 
+M_1 <- 
   Ver20 %>%    
   stan_glm(ToT ~ 1, data = .)
 
-P_Sec99_1 <-
-  posterior(M_Sec99_1)
+P_1 <-
+  posterior(M_1)
 
-detach(Sec99)
-  
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Sec99, M_1, P_1)
 ```
 
 
 ```{r seconds_99_3}
-attach(Sec99)
-
 T_fixef <-  
-  fixef(P_Sec99_1,
+  fixef(P_1,
         interval = .6)
 
 N_99s <- 
-  P_Sec99_1 %>% 
+  P_1 %>% 
   filter(parameter == "Intercept") %>% 
   mutate(confirm = value <= 99) %>% 
   summarise(certainty = mean(confirm)) %>% 
@@ -492,23 +477,25 @@ N_99s <-
   as.numeric()
   
 N_111s <- 
-  P_Sec99_1 %>% 
+  P_1 %>% 
   filter(parameter == "Intercept") %>% 
   mutate(confirm = value <= 111) %>% 
   summarise(certainty = mean(confirm)) %>% 
   mutate(odds = (1-certainty)/certainty) %>% 
   as.numeric()
 
-detach(Sec99)
+```
 
+```{r}
+detach(Sec99)
 ```
 
 
 
 The results tell her that most likely the average time-on-task is 
-$`r Sec99$T_fixef[[1,2]]`$. That is not very promising. In fact, the odds that the average user can do it in 99 seconds is a feeble `r round(Sec99$N_99s[1] * 100, 0)`%. Luckily, Jane had the idea that the slogan could be changed to *"rent a card in 1-1-1 seconds"*. The certainty that this slogan holds is a favorable `r round(Sec99$N_111s[1] * 100, 0)`, a risk that a brave marketing department is surely willing to take.
+$`r T_fixef[[1,2]]`$. That is not very promising. In fact, the odds that the average user can do it in 99 seconds is a feeble `r round(N_99s[1] * 100, 0)`%. Luckily, Jane had the idea that the slogan could be changed to *"rent a card in 1-1-1 seconds"*. The certainty that this slogan holds is a favorable `r round(N_111s[1] * 100, 0)`, a risk that a brave marketing department is surely willing to take.
 
-## Prior information
+### Prior information
 
 It is rarely the case that we encounter a situation *tabula rasa*. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season and the region. Even the planet is sometimes taken into account: the Pathfinder probe carried a bag of gadgets, but the umbrella was for safe landing only.
 
@@ -527,19 +514,20 @@ The impact of prior information can range from negligible to overwhelming. The g
 2) the similarity of the current project with past projects
 3) the amount of evidence (e.g., number of recorded projects)
 
-```{r sim:rational_prior, opts.label = "invisible"}
+```{r}
 attach(Rational)
+```
+
+
+```{r sim:rational_prior, opts.label = "invisible"}
 set.seed(2)
 D_prior <-
   data_frame(project = as.factor(1:5), 
              revenue_increase = exp(rnorm(5, log(1.15), .05)))
-detach(Rational)
 ```
 
 
 ```{r mc:rational_99_prior, opts.label = "mcmc"}
-attach(Rational)
-
 M_prior <-
   D_prior %>% 
   stan_glm(revenue_increase ~ 1, 
@@ -548,19 +536,18 @@ M_prior <-
 
 P_prior <- posterior(M_prior)
 
-detach(Rational)
-
 ```
 
-```{r tab:rational_design_prior, opts.label = "invisible"}
-attach(Rational)
+```{r opts.label = "mcsync"}
+sync_CE(Rational, M_prior, P_prior)
+```
 
+
+```{r tab:rational_design_prior, opts.label = "invisible"}
 T_prior <- 
   P_prior %>% 
   group_by(parameter) %>% 
   summarize(mean = mean(value), sd = sd(value))
-
-detach(Rational)
 ```
 
 Let's assume, the manager had done 5 projects in the past and recorded the resulting change in revenues. On these five values she does a regression, that we will later call an intercept-only model, and concludes that her *prior belief* is distributed as:
@@ -568,25 +555,18 @@ Let's assume, the manager had done 5 projects in the past and recorded the resul
 
 
 ```{r fig:previous_belief_in_revenue, opts.label = "fig.small"}
-attach(Rational)
-G_prior <- 
-  P_prior %>% 
+P_prior %>% 
   filter(parameter == "Intercept") %>% 
   mutate(value = exp(value)) %>% 
   ggplot(aes(x = value)) +
   geom_density()
 
-G_prior
-
-detach(Rational)
 ```
 
-On average, revenues have increased by factor `r exp(Rational$T_prior[[1,2]])` by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.
+On average, revenues have increased by factor `r exp(T_prior[[1,2]])` by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.
 
 
 ```{r opts.label = "mcmc"}
-attach(Rational)
-
 M_2 <-
   RD %>% 
   stan_glm(Euro ~ Design, 
@@ -596,31 +576,22 @@ M_2 <-
       data = .)
 
 P_2 <- posterior(M_2)
-
-detach(Rational)
 ```
 
-```{r rational_design_prior}
-attach(Rational)
-T_fixef_2 <- fixef(P_2, mean.func = exp)
-T_fixef_2 %>%  kable()
-detach(Rational)
+```{r opts.label = "mcsync"}
+sync_CE(Rational, M_2, P_2)
+```
 
+
+
+```{r rational_design_prior}
+T_fixef_2 <- fixef(P_2, mean.func = exp)
+T_fixef_2
 ```
 
 
 
 ```{r fig:rational_design_risk_of_failure_2, opts.label = "fig.small"}
-attach(Rational)
-
-G_risk_of_failure_2 <-
-  P_2 %>%
-  filter(parameter == "Designproto") %>%
-  mutate(value = exp(value),
-         outcome = ifelse(value < 1.1, "failure", "success")) %>%
-  ggplot(aes(x = value, fill = outcome)) +
-  geom_histogram(binwidth = .002)
-  
 N_risk_of_failure_2 <-
   P_2 %>%
   filter(parameter == "Designproto") %>%
@@ -629,8 +600,16 @@ N_risk_of_failure_2 <-
   select(outcome) %>%
   colMeans 
 
-G_risk_of_failure_2
+  P_2 %>%
+  filter(parameter == "Designproto") %>%
+  mutate(value = exp(value),
+         outcome = ifelse(value < 1.1, "failure", "success")) %>%
+  ggplot(aes(x = value, fill = outcome)) +
+  geom_histogram(binwidth = .002)
+  
+```
 
+```{r}
 detach(Rational)
 ```
 
@@ -639,7 +618,6 @@ detach(Rational)
 
 
 
-
 ```{r save_CE, opts.label = "invisible"}
-save_CE(CE)
+# save_CE_(CE)
 ```

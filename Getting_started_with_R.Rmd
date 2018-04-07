@@ -6,11 +6,12 @@
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 thisdir = getwd()
 purp.mcmc = F
+library(printr)
 source("RMDR.R")
 
-CE <-  c("BrowsingAB","Reading")
+CE <-  c("BrowsingAB","Reading", "Chapter_GSR")
 
-load_CE(CE)
+load_CE_(CE)
 ```
 
 
@@ -174,6 +175,7 @@ After you have set up your R environment, you are ready to run your first R prog
 3. Copy-and-paste the code below into your first file, right after library commands.
 4. Run the code lines one-by-one and observe what happens (in RStudio: Ctrl-Enter)
 
+
 ```{r first_simulation_1, opts.label = "rtut"}
 ## Simulation of a data set with 100 participants 
 ## in two between-subject conditions
@@ -182,7 +184,7 @@ levels <- c("control","experimental")
 Group <- rep(levels, N/2)
 age <- round(runif(N, 18, 35),0)
 outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
-Experiment <- data_frame(Group, age, outcome)
+Experiment <- data_frame(Group, age, outcome) %>% mascutils::as_tbl_obs()
 
 summary(Experiment)
 
@@ -196,16 +198,36 @@ Experiment %>%
   ggplot( aes(fill = Group, x = outcome) ) + 
   geom_density()
 
+
+```
+
+```{r opts.label = "invisible"}
+attach(Chapter_GSR)
+```
+
+
+
+```{r opts.label = "mcmc"}
 ## ... statistical model comparing the groups
 
 model <- stan_glm(formula = outcome ~ Group, 
             data = Experiment) 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_GSR, model)
+```
+
+
 ```{r first_simulation_2, opts.label = "tab"}
 
 fixef(model)
 
+```
+
+
+```{r opts.label = "invisible"}
+detach(Chapter_GSR)
 ```
 
 
@@ -723,11 +745,11 @@ In R, *environments* are containers for collections of objects. If an object `BA
 
 ```{r environ_1, opts.label = "rtut"}
 attach(BrowsingAB)
-BAB1
+BAB1 %>% as_tbl_obs()
 detach(BrowsingAB)
 
 attach(Reading)
-D_1
+D_1 %>% as_tbl_obs()
 ```
 
 Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The `detach` command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.
@@ -736,8 +758,8 @@ All case environments provided with this book contain one or more data sets. Man
 Generally, calling the simulation function without any further arguments exactly reproduces the synthetic data set provided with the case environment.
 
 ```{r CE_simulate_1, opts.label = "rtut"}
-simulate() ## reproduces the data frame D_1
-simulate(N = 6) ## simulates first 6 participants only
+simulate()  %>% as_tbl_obs() ## reproduces the data frame D_1
+simulate(N = 6)  %>% as_tbl_obs() ## simulates first 6 participants only
 ```
 
 
@@ -761,6 +783,7 @@ Next to that, Rstudio can be configured to save the current workspace on exit an
 
 ### Structuring data
 
+
 ```{r opts.label = "invisible"}
 ORPO <- 
   mascutils::expand_grid(Part = 1:3, Task = 1:2, Design = c("A", "B"), Item = 1:3) %>% 
@@ -774,7 +797,8 @@ In the whole book, data sets are structured according to the rule *one-row-per-o
 ORPO %>% 
   filter(Task == 1, Item == 1) %>% 
   mascutils::discard_redundant() %>% 
-  spread(Design, response)
+  spread(Design, response) %>% 
+  as_tbl_obs()
 ```
 
 The correct way of setting up the data frame is:
@@ -804,6 +828,7 @@ ORPO %>%
 ```
 
 
+
 ### Data transformation
 
 Do you wonder about the strange use of `%>%` in my code above? This is the tidy way of programming data transformations in R. 
@@ -814,7 +839,7 @@ Importing data from any of the possible resources, will typically give a data fr
 
 ```{r opts.label = "rtut"}
 Exp <-  Experiment %>% 
-  select(Condition = Group, outcome)
+  select(Condition = Group, outcome) %>% as_tbl_obs()
 ```
 
 Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers (>500) in the outcome variable. Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ on board) and add some filtering steps:
@@ -828,7 +853,7 @@ Exp <-
   filter(outcome < 500) %>% 
   filter(age != -99)
 
-Exp
+Exp %>% as_tbl_obs()
   
 ```
 
@@ -838,7 +863,7 @@ During data preparation and analysis, new variables are created, routinely. For 
 mean_age = mean(Exp$age)
 Exp <- Exp %>% 
   mutate(age_cntrd = age - mean_age)
-Exp
+Exp %>% as_tbl_obs()
 
 ```
 
@@ -977,9 +1002,14 @@ Above we have seen examples of functions that boils down a vector to a single st
 
 In the following, we will use another simulated data frame `Exp` to demonstrate linear models. To make this more interesting, we simulate `Exp` in a slightly advanced way, with quantitative associations between variables. Note how the *expected value* $\mu$ is created by drawing on the variables `Condition` and `age`. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of $mu$. 
 
+```{r opts.label = "invisible"}
+attach(Chapter_GSR)
+```
+
+
 ```{r opts.label = "rtut"}
 N_Obs <- 20
-
+set.seed(42)
 Exp <-
   data_frame(Obs = 1:N_Obs,
              Condition = rep(c("Experimental", "Control"),
@@ -992,32 +1022,56 @@ Exp <-
 
 The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in [LM], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance on information, much of it of lesser interest for now. (A piece of information, that it does *not* contain is F statistics and p-values;  and that is why it is not an ANOVA, strictly!) The foremost question is how strong the difference between the group is. The `fixef` command extracts the parameter estimates from the model to answer the question.
 
-```{r fit:Condition, opts.label = "tab"}
+
+
+```{r fit:Condition, opts.label = "mcmc"}
 M_1 <- 
   stan_glm(outcome ~ Condition, 
      data = Exp)
+```
+
+```{r}
 fixef(M_1)
 ```
 
 
 Another classic model is *linear regression*, where outcome is predicted by a metric variable, say `age`. The `stan_glm` regression engine is truly multi-purpose and does the job with grace:
 
-```{r fit:age, opts.label = "tab"}
+```{r fit:age, opts.label = "mcmc"}
 M_2 <- 
   stan_glm(outcome ~ age, 
      data = Exp)
+```
+
+```{r}
 fixef(M_2)
 ```
 
+
 If you are interested in both at the same time, you can combine that in one model by the following formula:
 
-```{r fit:multifac, opts.label = "tab"}
+```{r fit:multifac, opts.label = "mcmc"}
 M_3 <- 
   stan_glm(outcome ~ Condition + age, 
      data = Exp)
+
+```
+
+```{r}
 fixef(M_3)
 
 ```
+
+
+```{r opts.label = "invisible"}
+detach(Chapter_GSR)
+```
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_GSR, M_1, M_2, M_3)
+```
+
+
+
 
 A statistical model has several components, for example the coefficients and residuals. Models are complex objects, from which a variety of inferences can be made. For example, the coefficient estimates can be extracted and used for prediction. This is what `fixef()` does in the above code.
 
@@ -1032,13 +1086,88 @@ These will all be covered in later chapters.
 
 ### Knitting statistical reports
 
-As you have seen throughout this chapter, with R you can effectively manage data, create expresseive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a comprehensive report. And this is the past, because in your modern R environment you can write whole books without much hassle. This works by the following basic principles:
+As you have seen throughout this chapter, with R you can effectively manage data, create expresseive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a neat report. With R and Rstudio it has never been easier than that. In fact, complete books have been written in R, like the one you are reading.
 
-1. text is written in a *markup language*
-1. R code is contained in *chunks* 
-1. the document is *compiled* into a report of a common document format (e.g. Word, HTML, PDF)
+A *minimal statistical report* contains four elements:
 
-During the compilation, the R chunks are executed and, by default, code and output are inserted and formatted formatted.
+1. a recap of the research question
+2. description of how the statistical model relates to the research question
+3. a few figures or tables that answers the research question
+4. an explanation of the results
+
+Of these four elements, three are pure text. For a minimal report it is a fairly convenient to  use a word processor software for the text, craft the figure in R and copy it. One problem with this approach is that a *scrunitable statistical report* contains at least the following elements:
+
+1. data preparation
+1. data exploration (ranges of variables, outlier discovery, visualizing associations etc.)
+1. model estimation (formula specification, checking convergence)
+1. model criticism (normality of residuals etc.)
+
+In advanced statistical workflows this is then multiplied by the number of models an iterative selection process. Because it is easy to lie with statistics, these elements are needed as the build a fundament of credibility. A fully transparency is achieved, when another researcher can exactly reproduce all steps of the original analysis. One obvious way to achieve is to hand over the full R script. However, that is not particularly user-friendly. 
+
+
+The most user-friendly way to achieve both: a good looking report and full transparency is to write a document that contains all before mentioned: text, graphics, tables and R code. In the R environment such mixed documents can be written in the *markdown/knitr* framework. Markdown implements a simple markup language, with that you can typset simple, structured  texts in a plain ASCII editor:
+
+
+\# Results
+    
+In the study we assessed 
+
+1. whether on average users can rent a car in 99 seconds
+1. and if we can say that with sufficient uncertainty
+    
+\#\# Data exploration
+
+
+```{r eval=TRUE}`r ''`
+
+    summary(D)
+
+```
+All variables show good variation.
+
+
+```{r eval=TRUE}`r ''`
+
+    D %>% 
+    ggplot(aes(x = ToT)) +
+    geom_histogram
+
+```
+
+    
+\#\# Regression
+
+```{r eval=TRUE}`r ''`
+
+    M_1 <- stan_lm()
+
+```
+
+```{r eval=TRUE}`r ''`
+
+    coef(M_1) %>% knitr::kable()
+
+```
+
+
+Our main observations are:
+
++ the 99 seconds claim is not supported
++ time-on-task measures are *not* normally distributed
+
+```
+
+The above text is an alternation of markup text and *chunks*, those weirdly decorated pieces of R code. When the document is processed by the knitr engine, the enclosed R code is evaluated and the output is woven into the document and per default, the R code is shown, too. Very conveniently, when the output is a figure, it will be inserted into the document. The `kable`  command from the knitr package produces neatly rendered tables from data frame objects.
+
+A few basic markup tokens are used in the report:
+
++ \#, \#\# mark section headings on first and second level.
++ bullet points are marked by \+ at the beginning of the line
++ enumeration items are marked by *1.* at the beginning of the line
++ *italic* text is enclosed in \*...\*
+
+There are more markup tokens in markdown and good documentation is available. The knitr engine parses the markup and translates everything into good looking HTML or Word documents and by intergration with the typesetting system LaTeX, professional quality PDFs can be produced, too. Still, for most of us mortals, the most pragmatic workflow is to create a comprehen
+
 
 
 
@@ -1091,7 +1220,7 @@ During the compilation, the R chunks are executed and, by default, code and outp
 
 ```{r save_all, opts.label = "invisible"}
 
-save_CE(CE)
+# save_CE_(CE)
 # deploy_CE(CE, "Workshops/GSR/")
 ```
 

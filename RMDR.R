@@ -35,7 +35,7 @@ if(!exists("purp.rtut")) # show R tutorial code
 ## Regression models
 # library(lme4)
 # library(MCMCglmm)
-# library(brms)
+library(brms)
 library(rstanarm)
 
 ## Simulation etc
@@ -48,9 +48,8 @@ library(polynom)
 ## Plotting and setting
 library(knitr)
 library(knitcitations)
-#library(ggplot2)
 library(gridExtra)
-#library(GGally)
+library(GGally)
 library(DiagrammeR)
 
 ## Data management (go last to prevent overwriting dplyr/tidyr namespace)
@@ -58,9 +57,6 @@ library(foreign)
 library(plyr)
 library(pipeR)
 library(tidyverse)
-#library(tibble)
-#library(dplyr)
-#library(tidyr)
 library(stringr)
 library(haven)
 library(readr)
@@ -133,7 +129,7 @@ options(digits=3)
 ## chunk templates
 
 opts_template$set( 
-  tab = list(anchor = 'Table', echo = T, eval = T, results = 'asis' ),
+  tab = list(anchor = 'Table', echo = T, eval = T, results = 'markup' ),
   #fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
   #fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
   #fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),
@@ -141,9 +137,11 @@ opts_template$set(
   #fig.slide = list(fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
   #fig.half = list(fig.width = 3.8, fig.height = 4, dpi = 120, dev = "svg"),
   #fig.half = list(fig.width = 4, fig.height = 4, dpi = 120, dev = "svg", echo = purp.rtut),
-  invisible = list(eval = purp.book, echo = purp.debg),
+  invisible = list(eval = purp.book, echo = purp.debg, message=purp.debg, warning=purp.debg),
+  inv = list(eval = purp.book, echo = purp.debg, message=purp.debg, warning=purp.debg),
   #sim = list(eval = purp.book, echo = purp.debg),
   mcmc = list(eval = purp.mcmc, echo = purp.rtut),
+  mcsync = list(eval = purp.mcmc, echo = purp.debg),
   #rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut),
   #rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
   #                  fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
@@ -182,8 +180,8 @@ inv.logit = function(eta) plogis(eta)
 options(mc.cores = parallel::detectCores())
 # formals(stan_lm)$chains <- 1
 # formals(stan_lm)$iter <- 1000
-formals(stan_glm)$chains <- 2
-formals(stan_glm)$iter <- 3000
+# formals(stan_glm)$chains <- 2
+# formals(stan_glm)$iter <- 3000
 # formals(MCMCglmm)$verbose <- F
 
 
@@ -246,19 +244,60 @@ ia_plot <- function(M, parameters) {
 
 ## Dealing with Case Environments
 
-knit_hooks$set(CE = function(before, options, envir) {
-  CE = opts_current$get("CE")
-  if(before){
-    attach(as.symbol(CE))
-    message("Entering CE ", CE)
-  } else {
-    detach(CE)
-    message("Leaving CE ", CE)
+# knit_hooks$set(CE = function(before, options, envir) {
+#   CE = opts_current$get("CE")
+#   if(before){
+#     attach(as.symbol(CE))
+#     message("Entering CE ", CE)
+#   } else {
+#     detach(CE)
+#     message("Leaving CE ", CE)
+#   }
+# })
+
+# syncenv::new_syncenv("ce")
+# ls(ce)
+
+# nse
+rip_CE <-
+  function(Env){
+    try(rm("<-", envir = eval(Env)), silent = T)
+    try(rm("environment", envir = eval(Env)), silent = T)
   }
-})
 
+# rip_CE(ce)
+# ls(ce)
 
-load_CE <- 
+#nse
+register_CE <-
+  function(Env, ...){
+    varnames <- names(pryr::named_dots(...))
+    print(varnames)
+    varvalues <- rlang::dots_list(...)
+    for (v in 1:length(varnames)){
+        assign(varnames[[v]], varvalues[[v]], envir = Env)
+    }
+  }
+
+# a <- "test"
+# register_CE(ce, a)
+# ls(ce)
+
+#nse
+sync_CE <-
+  function(Env, ...){
+    register_CE(Env, ...)
+    save_CE_(as.character(substitute(Env)))
+  }
+
+# ls(ce)
+# b <- "toast"
+# sync_CE(ce, b)
+# ls(ce)
+# 
+
+#se
+load_CE_ <- 
   function(cases) {
     for(c in cases){
       load(paste0("Cases/",c,".Rda"), envir = globalenv())
@@ -266,7 +305,20 @@ load_CE <-
     }
   }
 
-save_CE <-
+#nse
+load_CE <- 
+  function(...) {
+    cases <- names(pryr::named_dots(...))
+    for(c in cases){
+      load(paste0("Cases/",c,".Rda"), envir = globalenv())
+      message(paste0("Loading case environment ", c))
+    }
+  }
+
+#load_CE(Sec99, Overdisp)
+
+#se
+save_CE_ <-
   function(cases) {
     for(c in cases){
       fname = paste0("Cases/",c,".Rda")
@@ -275,12 +327,27 @@ save_CE <-
     }
   }
 
+#nse
+save_CE <-
+  function(...) {
+    cases <- names(pryr::named_dots(...))
+    for(c in cases){
+      fname = paste0("Cases/",c,".Rda")
+      save(list = c, file = fname)
+      message(paste0("Saving case environment ", c, " to: ", fname))
+    }
+  }
+
+#save_CE(Sec99, Overdisp)
+
+
 deploy_CE <-
   function(cases, path){
     for(c in cases){
       fname = paste0(path,"/",c,".Rda")
       load(paste0("Cases/",c,".Rda"), envir = globalenv())
       rm("<-", envir = eval(parse(text = c)))
+      rm("environment", envir = eval(parse(text = c)))
       save(list = c, file = fname)
       message(paste0("Deploying case environment ", c, " to: ", fname))
     }

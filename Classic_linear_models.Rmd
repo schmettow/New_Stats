@@ -6,10 +6,11 @@
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 purp.mcmc = F
 source("RMDR.R")
+
 CE <- 
   c("BrowsingAB", "Sec99", "AUP", "MMN", "Headache", "Reading", 
     "AR_game", "Sleep", "Uncanny", "Chapter_LM")
-load_CE(CE)
+load_CE_(CE)
 
 #formals(stan_glm)$iter <- 200
 #formals(stan_glm)$chains <- 1
@@ -47,7 +48,13 @@ attach(Sec99)
 M_1 <- stan_glm(ToT ~ 1, data = Ver20)
 
 ```
-```{r opts.label = "rtut"}
+
+```{r opts.label = "mcsync"}
+sync_CE(Sec99, M_1)
+```
+
+
+```{r results = "markup"}
 summary(M_1)
 ```
 
@@ -62,9 +69,8 @@ The posterior object identifies itself by telling the number of MCMC samples, an
 
 Much of the time a researcher doesn't want to deal with the posterior, directly, but desires a brief summary of location and uncertainty. Coefficient tables are frequently used, just like one one shown below.Coefficient tables report the central tendency of every coefficient, which is an indicator for the magnitude of an effect. Next to that, the spread of the posterior distribution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the interval. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value. A coefficient table is produced by the `coef` command of the bayr library:
 
-```{r tab:99_seconds_post_fixef, opts.label = "tab"}
-T_coef_1 <- coef(P_1)
-T_coef_1
+```{r tab:99_seconds_post_fixef}
+coef(P_1)
 ```
 
 
@@ -73,9 +79,6 @@ T_coef_1
 detach(Sec99)
 ```
 
-```{r opts.label = "invisible"}
-detach(Sec99)
-```
 
 
 ### Reading coefficient tables
@@ -98,8 +101,9 @@ For center estimates I use the posterior median by default, for its simplicity. 
 attach(Sec99)
 ```
 
+<!-- FIXME bayr: dispersion parameter gets no name -->
 
-```{r opts.label = "tab"}
+```{r }
 coef(P_1, estimate = modeest::shorth)
 ```
 
@@ -200,7 +204,7 @@ P_1 %>%
 
 Let's see how this PD "landscape" actually emerged from the random walk. In the current case, the *parameter space* is two-dimensional, as we have  $\mu$ and $\sigma$. The MCMC procedure starts at a deliberate point in parameter space. At every iteration, the MCMC algorithm attempts a probabilistic jump to another location in parameter space and stores the coordinates. This jump is called probabilistic, because it is either carried out, or not, and that depends on a bet. If the new target is in a highly likely region, it is carried out with a higher chance. This sounds circular, but it works and, of course, it has been proven mathematically that it works. 
 
-The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 50 hundred steps of the MCMC random walk are shown in \@ref(fig:99_seconds_random_walk)`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
+The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 50 hundred steps of the MCMC random walk are shown in \@ref(99_seconds_random_walk)`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
 
 
 
@@ -232,7 +236,7 @@ P_1 %>%
 ```
 
 
-In our example, in \@ref(99_seconds_post) we can spot that the most likely value for average time-on-task is  `r frm_coef(Sec99$T_coef_1, row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed and there is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the interval  $`r md_coef(Sec99$T_coef_1, ~fixef == "Intercept", center = F)`$ as "reasonably certain".
+In our example, in \@ref(99_seconds_post) we can spot that the most likely value for average time-on-task is  `r frm_coef(fixef(Sec99$P_1), row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed and there is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the credibility interval as "reasonably certain".
 
 Andrew and Jane expect some scepticism from the marketing people, and some lack in statistical skills, too. What would be the most comprehensible single number to report? As critical decisions are involved, it seems plausible to report the risk to err: how certain are they that the true value is more than 99 seconds. We inspect the histograms. The MPD of the intercept indicates that the average time-on-task is rather unlikely in the range of 99 seconds or better. But what is the precise probability to err for the 99 seconds statement? The above summary with `fixef()` does not answer the question, accurately. The CI gives lower and upper limits for a range of 95% certainty in total. What is needed is the certainty of $\mu \geq 99$. Specific questions deserve precise answers.  And once we have understood the MCMC chain as a frequency distribution, the answer is easy: we simply count how many visited values are larger than 99.  In R, the `quantile` function handles the job:
 
@@ -262,9 +266,9 @@ kable(T_certainty)
 ```
 
 
-It turns out that the certainty for average time-on-task above the 99 is an overwhelming `r Sec99$T_certainty[[1,1]]`. The alternative claim, that average completion time is better than 111 seconds, has a rather moderate risk to err (`r Sec99$T_certainty[[1,2]]`).
+It turns out that the certainty for average time-on-task above the 99 is an overwhelming `r T_certainty[[1,1]]`. The alternative claim, that average completion time is better than 111 seconds, has a rather moderate risk to err (`r T_certainty[[1,2]]`).
 
-```{r fig:99_seconds_beta, opts.label = "future"}
+```{r 99_seconds_beta, opts.label = "future"}
 betaplot::iiaplot_1(fixef = c(106, 0, 0, 0, 0))
                               
 
@@ -355,17 +359,22 @@ M_age <-
            data = .)
 ```
 
-```{r tab:BAB_age, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_age)
+```
+
+
+```{r tab:BAB_age}
 T_age <- fixef(M_age)
 T_age
 ```
 
-Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(BrowsingAB$T_age, ~fixef == "age", interval = F)` seconds slower, which is considerable. It also tells us that the predicted performance ate age = 0 is `r frm_coef(BrowsingAB$T_age, ~fixef == "Intercept", interval = F)`.
+Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(T_age, ~fixef == "age",  interval = F)` seconds slower, which is considerable. It also tells us that the predicted performance at age = 0 is `r frm_coef(T_age, ~fixef == "Intercept", interval = F)`.
 
 
 ### Transforming variables
 
-The intercept parameter refers to the predicted ToT of a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(fixef(BrowsingAB$M_age), ~fixef == "Intercept")`.
+The intercept parameter refers to the predicted ToT of a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(T_age, ~fixef == "Intercept")`.
 
 Both, implausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible or have not been recorded. Fortunately, there is a pragmatic solution to the problem: *shifting the predictor*. "Shifting" literally means that the age predictor is moved to the right or the left, such that the zero point is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. Figure XY shows a shift of -20 and a centering shift on the original variable age
 
@@ -396,9 +405,14 @@ M_age_cntr <-
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_age_shft, M_age_cntr)
+```
+
+
 We combine the posterior distributions into one multi-model posterior and read the *multi-model coefficient table*:
 
-```{r opts.label = "tab"}
+```{r }
 P_age <- 
   bind_rows(posterior(M_age), 
             posterior(M_age_shft), 
@@ -441,7 +455,13 @@ M_age_z <-
   stan_glm(ToT ~ 1 + age_z, data = BAB1)
 
 ```
-```{r opts.label = "tab"}
+
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_age_z)
+```
+
+
+```{r }
 P_age <-  bind_rows(P_age, posterior(M_age_z))
 T_age <- fixef(P_age)
 T_age
@@ -449,7 +469,7 @@ T_age
 
 As expected, the itercept matches that of the centered variable. The small deviations are due to the [random walk] (#random_walk) and disappear when running longer MCMC chains. The slope parameter has inflated dramatically. That, of course, is not a magical trick to obtain more impressive numbers, it is simply the effect of dividing the original variable by its standard deviation. A step of one on `age` is exactly one year, whereas in `age_z` it is *one standard deviation*. Z-transformation adjusts a variable by its observed dispersion, measured as standard deviations. In the case of age, this is not very desirable. 
 
-Years of age is a natural and commonly understood unit and my advice would be to use centering, leaving the unit size untouched. When dealing with variables that are pseudo-metric, rating scales in particular, z-transformation makes sense. Imagine you were stranded on a tropical island. While putting together a shelter, you realize of useful a meter stick is. The *ur meter* is thousands of kilometers away. Obviously, you can bootstrap yourself by picking up a reasoable straight stick and mark 10 (or eight) equally spaced sections. With z-transformation you are picking your unit of measurment on what you find, too. Still, "one standard deviation" is hard to swallow for anyone untrained. If we can assume the measurement to be normally distributed, which is frequently a good approximation for rating scale data, we can derive relative statements. As it happens, the central two standard deviations cover around two thirds of the full area, leaving one sixth to each tail. That allows to make quantile statements, such as: "Within central two thirds regarding age, ToT moves up by $2\beta_1 = `r bayr::md_coef(BrowsingAB$T_age, ~fixef == "age_z")`$ seconds.", if the variable is truly Normal.  
+Years of age is a natural and commonly understood unit and my advice would be to use centering, leaving the unit size untouched. When dealing with variables that are pseudo-metric, rating scales in particular, z-transformation makes sense. Imagine you were stranded on a tropical island. While putting together a shelter, you realize of useful a meter stick is. The *ur meter* is thousands of kilometers away. Obviously, you can bootstrap yourself by picking up a reasoable straight stick and mark 10 (or eight) equally spaced sections. With z-transformation you are picking your unit of measurment on what you find, too. Still, "one standard deviation" is hard to swallow for anyone untrained. If we can assume the measurement to be normally distributed, which is frequently a good approximation for rating scale data, we can derive relative statements. As it happens, the central two standard deviations cover around two thirds of the full area, leaving one sixth to each tail. That allows to make quantile statements, such as: "Within central two thirds regarding age, ToT moves up by $ 2 \beta_1 = `r bayr::md_coef(T_age, ~fixef == "age_z")`$ seconds.", if the variable is truly Normal.  
 
 A general useful application of z-scores is to bootstrap a common unit for a diverse set of measures. Think of a battery of Likert scales, that all choose their own ranges. With z-scores we can compare the relative impact of several predictors in a population. In fact, that even makes sense for the age model. As it happens, the random variation parameter $\sigma$ is given in standard deviation units, too. We can conclude that the age effect causes just a moderate fraction of all the variation observed. More research is needed.
 
@@ -483,7 +503,7 @@ $$
 \textrm{cov}_{XY} = \frac{1}{n} \sum_{i=1}^n (x_i - E(X)) (y_i - E(Y))
 $$
 
-```{r}
+```{r results = "markup"}
 cov(D_cor$x, D_cor$y)
 ```
 
@@ -497,23 +517,23 @@ $$
 r_XY = \frac{\textrm{cov}_{XY}}{\textrm{sd}_X \textrm{sd}_Y}
 $$
 
-```{r}
+```{r results = "markup"}
 cov(D_cor$x, D_cor$y)/(sd(D_cor$x) * sd(D_cor$y))
 cor(D_cor$x, D_cor$y)
 ```
 
 
-Due to the full standardization, $r$ lets the researcher interpret strength of association independent of scale of measurement. More precisely, $r$ will always sit in the interval $[-1,1]$. That makes $r$ a perfect choice for many purposes. For example, in psychometrics the reliability of a measure is often assessed in test-retest settings. All participants undergo two separate tests and the correlation between the two scores is a measure for stability of the test, also called test-retest reliability.
+Due to the full standardization, $r$ lets the researcher interpret strength of association independent of scale of measurement. More precisely, $r$ will always sit in the interval $[-1,1]$. That makes $r$ a perfect choice for many purposes. For example, in psychometrics the reliability of a measure is often assessed in test-retest settings. All participants undergo two separate tests and the correlation between the two scores is a measure for stability of the test, also called test-retest reliability. By using correlations, psychometricians can set absolute standards for the reliability of assessments.
 
-The slope parameter in an LRM is a measure of association, too. However, it fully remains on the scale of measurement. In the context of quantitative assessment we used to see that as an advantagebecause it allows us to make quantitative statements and predict. Still, one can obtain Pearson $r$ easily by rescaling the slope coefficient $\beta_1$  using the following formula:
+The slope parameter in an LRM is a measure of association, too. However, it fully remains on the scale of measurement. In the context of quantitative assessment we used to see that as an advantage, because it allows us to make quantitative statements and predict future outcomes. Still, one can easily  obtain Pearson $r$ by rescaling the slope coefficient $\beta_1$  using the following formula:
 
 $$
 r = \beta_1 \frac{sd_X}{sd_Y}
 $$
 
-For the purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
+For the sole purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
 
-```{r}
+```{r results = "markup"}
 M_cor <- lm(y ~ x, D_cor)
 beta_1 <- stats::coef(M_cor)[2]
 
@@ -521,9 +541,9 @@ r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
 r
 ```
 
-The clue with Pearson $r$ is that it normalized the slope coefficient by the variation found in the sample. This reminds of z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient is once again Pearson's $r$:
+The clue with Pearson $r$ is that it normalized the slope coefficient by the variation found in the sample. This reminds of z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$, right away:
 
-```{r}
+```{r results = "markup"}
 M_z <-
   D_cor %>% 
   mutate(x_z = (x - mean(x))/sd(x),
@@ -533,18 +553,21 @@ M_z <-
 stats::coef(M_z)[2]
 ```
 
-Pearson's $r$ spawns from a different school of thinking than quantitative Bayesian regression: analysis of variance (ANOVA). Roughly, this family of methods draws on the idea of dividing the *total variance* of the outcome variable into two components: *explained variance* and *residual variance*. The very formula the variance statistic reveals the origins (it is even allowed to say, that variance is the covariance of a variable with itself):
+Pearson's $r$ spawns from a different school of thinking than Bayesian parameter estimation: analysis of variance (ANOVA). Roughly, this family of methods draws on the idea of dividing the *total variance* of the outcome variable into two components: *explained variance* and *residual variance*. The very formula of the variance parameter reveals its connection to covariance (it is even allowed to say, that variance is the covariance of a variable with itself):
 
 $$
 \textrm{Var}_{X} = \frac{1}{n} \sum_{i=1}^n (x_i - E(X))^2
 $$
-In ANOVA models, when explained variance is large compared to residual variance, the F-statistic goes up and stars twinkle behind the p-value. While I am far promoting any legacy approaches, here, a scale-less measure of association strength can be useful in situations, where at least one of the involved variables has no well-defined scale. That is in particular the case, when measuring with rating scales. Measurement theory tells that we may actually transform rating scales fully to our liking, if the order is preserved. That is a pretty weak criterion and, strictly speaking, forbids the application of linear models (and ANOVA) altogether, where at least sums must be well defined.
+In ANOVA models, when explained variance is large, as compared to residual variance, the F-statistic goes up and stars twinkle behind the p-value. While I am far from promoting any legacy approaches, here, a scale-less measure of association strength bears some intuition in situations, where at least one of the involved variables has no well-defined scale. That is in particular the case, when measuring with rating scales. Measurement theory tells that we may actually transform rating scales fully to our liking, if the order is preserved (ordinal scales). That is a pretty weak criterion and, strictly speaking, forbids the application of linear models (and ANOVA) altogether, where at least sums must be well defined (interval scales).
 
 Not by coincidence, a measure of explained variance, the *coefficient of determination r^2* can be derived as from Pearson's $r$, by simply squaring it. $r^2$ is in the range $[0;1]$ and represents the proportion of variability that is explained by the predictor:
 
-```{r}
+```{r results = "markup"}
 str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
 ```
+
+To sum it up, Perason $r$ and $r^2$ are useful statistic to express the strength of an association, when the scale of measurement does not matter or when obe desires to compare across scales. Furthermore, correlations can be part of advanced multilevel models which we will treat in 
+
 
 
 
@@ -575,7 +598,7 @@ $$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45\\
 
 The predicted value is our best guess under the LRM model. Like coefficients, it is uncertain to some degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . A primitive procedure to get a best guess for someone of age 45 is to find one matching case in the data and take this as face value. The data set contains a few of those participants, but the situation is rather scattered and the prediction is not clear. 
 
-```{r just_a_guess, opts.label = "tab"}
+```{r just_a_guess, results = "markup"}
 BAB1 %>% 
   select(Part, age, ToT) %>% 
   filter(age == 45) %>% 
@@ -584,7 +607,7 @@ BAB1 %>%
 
 A more disciplined way to obtain predicted values is to use the standard command `predict` on the model object:
 
-```{r best_guess, opts.label = "tab"}
+```{r best_guess}
 T_pred_age <-
   BAB1 %>% 
   select(Part, age, ToT) %>% 
@@ -595,6 +618,8 @@ T_pred_age %>%
   kable()
 
 ```
+
+<!-- FIXME: They don't get the same predictions -->
 
 We see that all participants of age 45 get the same prediction. What differs is the observed value, as this contains the influence of all random sources at the time of measuring. We will return to residuals in the next section. 
 
@@ -607,7 +632,7 @@ C_age[1] + 43.5 * C_age[2]
 
 With the same procedure, it is possible to plot observed and expected values next to each other:
 
-```{r fig:expected_values, opts.label = "fig"}
+```{r expected_values, opts.label = "fig"}
 G_pred_age <-
   BAB1 %>% 
   ggplot(aes(x = age, y = ToT)) + 
@@ -625,7 +650,7 @@ detach(BrowsingAB)
 
 This figure does not look too convincing. The regression line is rather flat, indicating a small effect of age. In addition, it looks like a lonely highway in a vast forest area. Just visually, a completely flat line or a slight negative slope would be equally credible.
 
-```{r fig:lin_reg_modelplot, opts.label = "future"}
+```{r lin_reg_modelplot, opts.label = "future"}
 # betaplot::iiaplot_2(list(as.numeric(Tclm[["Browsing_AB_3"]][1,2]),
 #                          as.numeric(Tclm[["Browsing_AB_3"]][2,2])),
 #                     range = c(0,80)) + geom_point(data = Dclm[["Browsing_AB"]], aes(x = age, y = ToT))
@@ -689,7 +714,7 @@ attach(BrowsingAB)
 
 
 
-```{r fig:eda_anova, opts.label = "fig"}
+```{r eda_anova, opts.label = "fig"}
 
 BAB1 %>%
   ggplot(aes(x = ToT)) +
@@ -709,6 +734,11 @@ M_Design <-
            data = .)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_Design)
+```
+
+
 ```{r, opts.label = "future"}
 
 T_resid <- 
@@ -716,7 +746,7 @@ T_resid <-
 ```
 
 
-```{r tab:M_design, opts.label = "tab"}
+```{r tab:M_design}
 T_Design <- fixef(M_Design)
 T_Design
 ```
@@ -782,7 +812,12 @@ M_dummy <-
      data = BAB1)
 ```
 
-```{r tab: dummy_3, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_dummy)
+```
+
+
+```{r tab: dummy_3}
 fixef(M_dummy)
 ```
 
@@ -979,6 +1014,10 @@ detach(AUP)
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(AUP, M_1, M_2)
+```
+
 
 \@ref(tab:AUP_coef) shows the two separate effects (`M_1` and `M_2`). Due to the z-transformation of predictors, the intercepts are practically zero. Both personality scores seem to have a weakly positive impact on AUP  resistance.
 
@@ -1000,11 +1039,16 @@ detach(AUP)
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(AUP, M_3)
+```
+
+
 For the comparison of the three models we make use of a feature of the package bayr: the posterior distributions of arbitrary models can be combined into one multi-model posterior object, by just stacking them upon each other. The coefficient table of such a multi-model posterior gains an additional column that identifies the model:
 
 
 
-```{r AUP_coef, opts.label = "tab"}
+```{r AUP_coef}
 attach(AUP)
 
 P <-
@@ -1021,13 +1065,13 @@ T_coef_3
 The intercepts of all three models are practically zero, which is a consequence of the z-transformation. Recall, that the intercept in an LRM is the predicted value, when the predictor is zero. In MRM this is just the same: here, the intercept is the predicted AUP resistance score, for when NCS and GEX are both zero.
 
 
-When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: in the MRM, the strength of the geekism score is reduced to less than half: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(AUP$T_coef_3, ~model == "M_3", ~fixef == "zncs")`. 
+When using the two predictors simultaneously, the overall positive tendency remains. However, we observe major and minor shifts: in the MRM, the strength of the geekism score is reduced to less than half: `r frm_coef(fixef(AUP$M_3), ~fixef == "zgex")`. NCS has shifted, too, but lost only little of its original strength: `r frm_coef(fixef(AUP$M_3),  ~fixef == "zncs")`. 
 
 
 
 For any researcher who has carefully conceived research questions that appears to be a disappointing outcome. In fact, there is a reason for the loss of strength and ignoring this issue will mislead the interpretation of results.
 
-The reason is that the two *predictors are correlated*. In this study, participants who are high on NCS also tend to have more pronounced geekism. \@ref(fig:AUP_corr_predictors) reveals the situation:
+The reason is that the two *predictors are correlated*. In this study, participants who are high on NCS also tend to have more pronounced geekism. \@ref(AUP_corr_predictors) reveals the situation:
 
 ```{r AUP_corr_predictors}
 G_eda_4 <- 
@@ -1097,13 +1141,19 @@ M_mpm_1 <-
   stan_glm(ToT ~ Design + Gender, data = .)
 ```
 
-```{r tab:mpm_1, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_mpm_1)
+```
+
+
+
+```{r tab:mpm_1}
 T_fixef_mpm_1 <- fixef(M_mpm_1)
 T_fixef_mpm_1
 
 ```
 
-By adding gender to the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design with groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(BrowsingAB$T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
+By adding gender to the model, both effects are estimated simultaneously. In a *factorial MPM* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design with groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
 The other two fixed effects are, once again, differences to the reference. Here, nor does gender do much to performance, nor does the design effect really change, compared to the CGM.
 
 [likelihood]
@@ -1122,6 +1172,11 @@ M_mpm_2 <-
   stan_glm(ToT ~ Design + age_shft, data = .)
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_mpm_2)
+```
+
+
 ```{r tab:mpm_2}
 T_fixef_mpm_2 <-  fixef(M_mpm_2)
 T_fixef_mpm_2
@@ -1132,7 +1187,7 @@ detach(BrowsingAB)
 ```
 
 
-Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year old in condition B are `r frm_coef(BrowsingAB$T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
+Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In GCM it was the mean of the reference group. When *marrying factors with a covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. 20-year old in condition B are `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same with both designs, which is not true, as we will see later. 
 
 [likelihood]
 [interaction plot]
@@ -1157,7 +1212,12 @@ M_0 <-
   stan_glm(ToT ~ 1, data = .)
 ```
 
-```{r opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_0)
+```
+
+
+```{r }
 bind_rows(
   posterior(M_0),
   posterior(M_age_cntr)) %>% 
@@ -1187,7 +1247,7 @@ G_resid_age_1
 
 ```
 
-When adding a predictor to a model, the least one would expect is a noticable reduction in error and \@ref(fig:BAB1_resid_age_1) confirms that the age predictor is pretty useless. 
+When adding a predictor to a model, the least one would expect is a noticable reduction in error and \@ref(BAB1_resid_age_1) confirms that the age predictor is pretty useless. 
 
 
 ```{r}
@@ -1233,7 +1293,7 @@ attach(BrowsingAB)
 ```
 
 
-```{r fig:resid_dist_1, opts.label = "fig"}
+```{r resid_dist_1, opts.label = "fig"}
 
 G_resid_age_shft <-
   data.frame(resid = residuals(M_age_shft)) %>% 
@@ -1255,12 +1315,17 @@ M_age_rtrn <-
 P_age_rtrn <- posterior(M_age_rtrn)
 ```
 
-```{r tab:age_pois, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_age_rtrn, P_age_rtrn)
+```
+
+
+```{r tab:age_pois}
 T_age_rtrn <- coef(P_age_rtrn)
 T_age_rtrn
 ```
 
-```{r fig:resid_dist_2}
+```{r resid_dist_2}
 C_age_rtrn_disp <- 
   T_age_rtrn %>% 
   filter(type == "disp") %>% 
@@ -1284,14 +1349,15 @@ detach(BrowsingAB)
 ```
 
 
-The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two group exists in the data, which lay far apart. The following  code illustrates the situation by simulating a simpole data set with two groups, that is fed into a GMM.
+The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two groups exist in the data, which lay far apart. The following  code illustrates the situation by simulating a simple data set with two groups, that is fed into a GMM.
 
 ```{r}
 attach(Chapter_LM)
 ```
 
 ```{r}
-D_1 <- 
+set.seed(42)
+D_bimod <- 
   bind_rows(
     data_frame(Group = "A", y = rnorm(50, 4, 1)),
     data_frame(Group = "B", y = rnorm(50, 8, 1))
@@ -1301,11 +1367,12 @@ D_1 <-
 
 
 ```{r opts.label = "mcmc"}
-M_1 <- stan_glm(y ~ 1, data = D_1, iter = 200)
+M_bimod <- stan_glm(y ~ 1, data = D_bimod, iter = 200)
 ```
 
+
 ```{r}
-D_1  %>%  
+D_bimod  %>%  
   mutate(resid = residuals(M_1)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
@@ -1321,12 +1388,12 @@ Provided one has a small abundance of data, *quantile-quantile (qq) plots* can b
 
 ```{r}
 set.seed(2)
-D_2 <- data_frame(y = rt(200, 2))
+D_t <- data_frame(y = rt(200, 2))
 ```
 
 
 ```{r opts.label = "mcmc"}
-M_2 <- stan_glm(y ~1, data = D_2, iter = 200)
+M_t <- stan_glm(y ~1, data = D_t, iter = 200)
 
 ```
 
@@ -1335,10 +1402,11 @@ We obtain the following residual and theoretical distributions. It is approximat
 
 ```{r}
 
-D_2 <-   mutate(D_2, resid = residuals(M_2))
-C_sigma <- rstanarm::sigma(M_2)
+D_t <-   mutate(D_t, resid = residuals(M_t))
 
-D_2 %>%
+C_sigma <- rstanarm::sigma(M_t)
+
+D_t %>%
   ggplot(aes(x = resid)) +
   geom_histogram(aes(y = ..density..)) +
   stat_function(fun = dnorm,
@@ -1353,7 +1421,7 @@ The next step is where the two curves get flattened. First, we compute a sequenc
 
 ```{r}
 D_QQ <- data_frame(step = 0:100/100,
-           quant_smpl = quantile(D_2$resid, step),
+           quant_smpl = quantile(D_t$resid, step),
            quant_theo = qnorm(step, 0, C_sigma))
 
 D_QQ %>% 
@@ -1364,12 +1432,17 @@ D_QQ %>%
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_LM, D_bimod, D_t, D_QQ, M_bimod, M_t)
+```
+
+
 In the ideal case, they match perfectly, and the quantiles are on a straight  line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the tuzrning points. here. From these points on the theoretical quantiles start lag behind.  The  lower and upper 1% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Normal distribution  renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem  of misusing a Normal distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Perhaps, researchers used the Normal distribution for the risk models, under-estimating the risk of extreme events.
 
 The ggplot engine provides an easy to use geometry for qqlots, which lets us further explore deviant patterns. Variables with t distribution take an inverse-sigmoid shape due to their fat tails. 
 
 ```{r}
-D_2 %>% 
+D_t %>% 
   ggplot(aes(sample = resid)) +
   geom_qq(distribution = qnorm) +
   geom_abline(intercept = 0, slope = 1, col = "red")
@@ -1482,7 +1555,7 @@ detach(AUP)
 ```{r eval = F, show = F}
 ##### [EATME]
 
-What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(BrowsingAB$P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`r BrowsingAB$C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
+What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
 
 
 Analysis of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is an essential part of the modelling process, too. By residual analysis we reflect on whether the Normality assumption is reasonably defensible. For variables that are counts, the distribution may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
@@ -1503,7 +1576,7 @@ data_frame(resid = residuals(M_age)) %>%
 
 The residual distribution of `M_age` appears perfectly symmetric and has just one peak (unimodality). That is good, although the overall shape more resembles a mole hill rather than a bell curve. While it is easy to discover problems of multimodality or asymmetry in a histogram, a more advanced approach is needed, to uncover more subtle deviations. Recall what cumulative density functions (CDF) (\@ref(density-distributions)) do: for any point $x$ it gives the probability to observe a value $y_x$.
 
-The single residual distribution assumption of linear models, as harmless as it may appear, brings forth two claims:  residuals must have the same dispersion everywhere, which is called *homogeneity  of variance* and residuals must have *independence* from any predictors. Residuals are all supposed to fall into a horizontal band of even width, like in the figure \@ref(fig:quantile_caterpillar). Note how this figure is created by first simulating data using the approximate coefficients of model `M_age`. The independence of residuals emerges by the absence of any relation with age in the data generating code.
+The single residual distribution assumption of linear models, as harmless as it may appear, brings forth two claims:  residuals must have the same dispersion everywhere, which is called *homogeneity  of variance* and residuals must have *independence* from any predictors. Residuals are all supposed to fall into a horizontal band of even width, like in the figure \@ref(quantile_caterpillar). Note how this figure is created by first simulating data using the approximate coefficients of model `M_age`. The independence of residuals emerges by the absence of any relation with age in the data generating code.
 
 ```{r quantile_caterpillar, fig.cap = "", eval = F}
 set.seed(42)
@@ -1517,7 +1590,7 @@ data_frame(age = runif(200, 20, 70),
 ``` 
 
 
-\@ref(fig:BAB1_resid_age_1) reveals some further issues with the models. Note that in the caterpillar plot, the x-axis is labelled with numbers, which is just an identification, but has no metric meaning. Not quite! Review the code to see that the observations were not just taken as they came, but re-arranged by age. Also, in \@ref(fig:BAB1_resid_age_1)  a second geometry is visible, showing a so called *quantile plot*.
+\@ref(BAB1_resid_age_1) reveals some further issues with the models. Note that in the caterpillar plot, the x-axis is labelled with numbers, which is just an identification, but has no metric meaning. Not quite! Review the code to see that the observations were not just taken as they came, but re-arranged by age. Also, in \@ref(BAB1_resid_age_1)  a second geometry is visible, showing a so called *quantile plot*.
 
 
 
@@ -1556,7 +1629,7 @@ First, with the *ggplot* system, we plot the new situation. Recall that
 
 2. selecting an appropriate geometry that carries such properties, e.g. points, bars, box plots
 
-```{r fig:anova_twofact_2, opts.label = "future"}
+```{r anova_twofact_2, opts.label = "future"}
 attach(BrowsingAB)
 
 BAB1 %>%
@@ -1646,8 +1719,9 @@ As to age: it is commonly held that older people tend to have lower performance 
 
 
 
-```{r fig:glm_EDA_3, opts.label = "fig"}
+```{r glm_EDA_3, opts.label = "fig"}
 attach(BrowsingAB)
+
 G_slope_ia <-
   BAB1 %>%
   ggplot(aes(x = age,
@@ -1677,6 +1751,9 @@ M_ia1 <-
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_ia1)
+```
 
 
 ```{r, opts.label="tab"}
@@ -1700,10 +1777,10 @@ C_ia1_ageB <- T_ia1 %>%
 ```
 
 
-The intercept still is the performance of an average twen using reference design A. Compared to the MPM, it is less favorable, with `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "Intercept")` seconds time-on-task. The effect of design B improved dramatically with the DDM: a twen is now `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "DesignB")` faster with it. Is B the clear winner? It is not,  because A has much lower age effect. The age parameter does no longer represent both groups, but just reference A, and it is now very small, `r frm_coef(BrowsingAB$T_ia1, ~model == "M_ia1", ~fixef == "age_shft", interval = T)`. The final coefficient is *not* the age effect in B, but *the difference* to the reference age effect. With design B, users are getting `r BrowsingAB$C_ia1_ageB` seconds slower per year of life. That is a lot!
+The intercept still is the performance of an average twen using reference design A. Compared to the MPM, it is less favorable, with `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "Intercept")` seconds time-on-task. The effect of design B improved dramatically with the DDM: a twen is now `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "DesignB")` faster with it. Is B the clear winner? It is not,  because A has much lower age effect. The age parameter does no longer represent both groups, but just reference A, and it is now very small, `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "age_shft", interval = T)`. The final coefficient is *not* the age effect in B, but *the difference* to the reference age effect. With design B, users are getting `r C_ia1_ageB` seconds slower per year of life. That is a lot!
 
 
-```{r fig:Browsing_interaction, opts.label = "future"}
+```{r Browsing_interaction, opts.label = "future"}
 
 # fe <- fixef(M_ia1)
 # 
@@ -1714,7 +1791,7 @@ The intercept still is the performance of an average twen using reference design
 
 If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level?
 
-```{r fig:BAB_ia2, opts.label = "fig"}
+```{r BAB_ia2, opts.label = "fig"}
 BAB1 %>% 
   ggplot(aes(y = ToT, x = Education, color = Design)) +
   geom_boxplot()
@@ -1739,7 +1816,12 @@ M_ia2 <-
 
 ```
 
-```{r, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_mpm_3, M_ia2)
+```
+
+
+```{r}
 T_ia2 <-
   bind_rows(
     posterior(M_mpm_3),
@@ -1765,9 +1847,9 @@ C_ia2_hiB <-
   sum()
 ```
 
-The model has factors only, so there is a reference group. The intercepts in both models represent low education encountering design A. The main  effect designB on low-educated  users is present in both models. With the interaction term, design B looks much favorable, `r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB")`. The effect of middle education has doubled, whereas it remains stable for high education. 
+The model has factors only, so there is a reference group. The intercepts in both models represent low education encountering design A. The main  effect designB on low-educated  users is present in both models. With the interaction term, design B looks much favorable, `r frm_coef(T_ia2, ~model == "M_ia2", ~fixef == "DesignB")`. The effect of middle education has doubled, whereas it remains stable for high education. 
 
-That may appear strange at first, but keep in mind, that by the interaction term, the education main effects are no longer "main": they only refer to group A, now. In the main effects model, the same education effects are assumed for both designs. Here, it is conditional on design, which brings us to the two interaction effects `B:Middle` and `B:High`. These are, once again, differences. The effect of middle education in B is `r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "DesignB:EducationMiddle", interval = F)`more seconds than in A (r frm_coef(BrowsingAB$T_ia2, ~model == "M_ia2", ~fixef == "EducationMiddle", interval = F)). There practically is no net effect of middle education in B. In contrast, the high education interaction effect is small, with practically makes `DesignB` a *main effect: it is the same in both groups*.
+That may appear strange at first, but keep in mind, that by the interaction term, the education main effects are no longer "main": they only refer to group A, now. In the main effects model, the same education effects are assumed for both designs. Here, it is conditional on design, which brings us to the two interaction effects `B:Middle` and `B:High`. These are, once again, differences. The effect of middle education in B is `r frm_coef(T_ia2, ~model == "M_ia2", ~fixef == "DesignB:EducationMiddle", interval = F)`more seconds than in A (`r frm_coef(T_ia2, ~model == "M_ia2", ~fixef == "EducationMiddle", interval = F)`). There practically is no net effect of middle education in B. In contrast, the high education interaction effect is small, with practically makes `DesignB` a *main effect: it is the same in both groups*.
 
 Count the number of parameters in both models! We have six with interaction and four without. Six is just the number of groups and, indeed, with interaction effects all group means can vary freely. That is best demonstrated by estimating a variant of the model, where six parameters represent six group means, directly. In other words, it is an AGM, without an intercept and without main effects:
 
@@ -1782,15 +1864,20 @@ M_ia3 <-
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_ia3)
+```
+
+
 We extract the coefficients and, with a little preparation, we create an *interaction plot*. It shows the same pattern as the exploratory plot, but is fully inferential, with error bars indicate the 95% credibility interval.
 
-```{r tab:BAB_ia3, opts.label = "tab"}
+```{r tab:BAB_ia3}
 P_ia3 <- posterior(M_ia3)
 T_ia3 <- fixef(M_ia3)
 T_ia3
 ```
 
-```{r fig:BAB_ia3, opts.label = "fig"}
+```{r BAB_ia3, opts.label = "fig"}
 T_ia3 %>% 
   select(fixef, ToT = center, lower, upper) %>% 
   separate(fixef, c("Design", "Education"), ":") %>% 
@@ -1908,9 +1995,14 @@ P <- bind_rows(
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Headache, M_1, M_2, M_3, P)
+```
+
+
 Imagine, the researcher started with the two-way MGM, estimating the fixed effects PillA and PillsB. The result is:
 
-```{r tab:M_1_fixef, opts.label = "tab"}
+```{r tab:M_1_fixef}
 T_fixef_1 <- fixef(M_1)
 T_fixef_1
 ```
@@ -1935,16 +2027,16 @@ T_guess
 
 Thinking linearly you probably came up with:
 
-$$`r round(sum(Headache$T_fixef_1$center[2:3]), 2)`$$
+$$`r round(sum(T_fixef_1$center[2:3]), 2)`$$
 
 Does that makes sense? Do the effects of headache pills simply add up like this? Consider a scenario, where five headache pills were compared in the same manner. If we assume linear addition of effects, some participants in the group with all pills could even experience the breathtaking sensation of *negative* headache. Certainly, the effect is not linear. But, is it in the long run? In some Hollywood movies the wounded hero consumes handful of pills before the showdown (With the exception of Leon, the Profi, where it is the scary Gary Oldman consuming some harder stuff). With two pills, how close to the boundaries are we? We can just test that by introducing an *interaction term* to the model: `PillaA:PillB`.
 
-```{r tab:Headache_fixef_2, opts.label = "tab"}
+```{r tab:Headache_fixef_2}
 T_fixef_2 <-  fixef(M_2)
 T_fixef_2
 ```
 
-We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking either pill alone is more effective than we thought from the multiple CGM. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(Headache$T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects. This is called an *saturation effect*: the more is given, the closer it gets to teh natural boundaries and the less it adds. Let me emphasize that this is not some strange (and therefore interesting) metabolic interaction between pharmaceuticals. Saturation effects must not be confused with any "real" interaction, that is theoretically interesting. Still, as we have seen, ignoring saturation effects results in severely biased estimates. 
+We first examine the main effects for both pills. Interestingly, both effects are now considerably stronger than before. Taking either pill alone is more effective than we thought from the multiple CGM. The fourth coefficient (`PillATRUE:PILLBTRUE`) is the interaction term. With the updated model we, again, predict the net headache reduction when both pills are given. This is as simple as summing up all coefficients from intercept to interaction. The result is a combined effect of both main effects, *reduced* by   `r frm_coef(T_fixef_2, ~fixef == "PillATRUE:PillBTRUE" , interval = F, neg = T)`. As we would expect, the effectiveness of two pills is not their sum, but less. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects. This is called an *saturation effect*: the more is given, the closer it gets to teh natural boundaries and the less it adds. Let me emphasize that this is not some strange (and therefore interesting) metabolic interaction between pharmaceuticals. Saturation effects must not be confused with any "real" interaction, that is theoretically interesting. Still, as we have seen, ignoring saturation effects results in severely biased estimates. 
 
 Back to design research! Imagine, you are testing
 the influence of font size on reading performance. In your experiment, you found 
@@ -1959,12 +2051,14 @@ detach(Headache)
 
 ```{r reading_time}
 attach(Reading)
+
 D_reading_time <- 
   data_frame(font_size = c(4, 8, 12, 16, 24, 28),
            observed_time = c(NA, 40, 30, NA, NA, NA),
-           predicted_time = 60 - font_size/4 * 10)
-D_reading_time %>% 
-  kable()
+           predicted_time = 60 - font_size/4 * 10) %>% 
+  as_tbl_obs()
+
+D_reading_time
 ```
 
 It should be clear by now, that these expectations have no ground: for normally sighted persons, a font size of 12 is easy enough to decipher and another increase will not have the same effect. Taking this further, one would even arrive at absurdly short or 
@@ -1979,15 +2073,11 @@ The question arises: can one sufficiently compensate lack of contrast by setting
 
 
 ```{r tab:reading_data}
-D_1 %>% 
-  sample_n(8) %>% 
-  select(-mu) %>% 
-  arrange(Part) %>% 
-  kable()
+D_1
 ```
 
 
-```{r fig:reading_expl_1}
+```{r reading_expl_1}
 D_1 %>% 
   ggplot(aes(col = font_color,
              x = font_size,
@@ -2009,19 +2099,24 @@ M_2 <-
            data = .)
 ```
 
-```{r tab:comp_coef, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(Reading, M_1, M_2)
+```
+
+
+```{r tab:comp_coef}
 T_read_fixef <-
   right_join(select(fixef(M_1), fixef, M_1 = center),
              select(fixef(M_2), fixef, M_2 = center),
              by = "fixef")
 
-kable(T_read_fixef)
+T_read_fixef
 ```
 
 
 The estimates confirm, that both manipulations have a considerable effect. And, there is an interaction effect as well, correcting the additive effect of font color and size. The combined effect of high contrast and large font is therefore
 
-$$\mu_{12pt, black} = `r Reading$T_read_fixef[1,3]` + `r Reading$T_read_fixef[2,3]` + `r Reading$T_read_fixef[3,3]` + `r Reading$T_read_fixef[4,3]` = `r sum(Reading$T_read_fixef[,3])`$$
+$$\mu_{12pt, black} = `r T_read_fixef[1,3]` + `r T_read_fixef[2,3]` + `r T_read_fixef[3,3]` + `r T_read_fixef[4,3]` = `r sum(T_read_fixef[,3])`$$
 
 In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clarity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthetic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
 
@@ -2039,14 +2134,19 @@ M_3 <-
 
 ```
 
-```{r, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(Reading, M_3)
+```
+
+
+```{r}
 fixef(M_3)
 ```
 
 
 With some basic data transformation on the coefficient table, we create a data frame that encodes the two factors separately. Note how `separate` is used to split the coefficient names into group identifiers. Using `mutate` and `str_replace`, the group labels are stripped the factor names. The resulting coefficient table serves as input to ggplot, creating an interaction plot with overlayed credibility intervals, using `geom_errorbar`.
 
-```{r fig:reading, opts.label = "rtut"}
+```{r reading, opts.label = "rtut"}
 T_2x2_mu <-
   fixef(M_3) %>% 
   separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
@@ -2119,7 +2219,12 @@ M_1 <-
            data = .)
 ```
 
-```{r, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(AR_game, M_1)
+```
+
+
+```{r}
 T_1 <- fixef(M_1)
 T_1
 ```
@@ -2135,7 +2240,7 @@ D_2 <-
   arrange(technophile)
 
 T_1_pred <- 
-  post_pred(M_1, newdata = D_2) %>%
+  post_pred(M_1, newdata = D_2, thin =2) %>%
   predict()
 
 D_2 <- 
@@ -2149,6 +2254,10 @@ D_2 %>%
   geom_line(aes(group = technophile))
 ```
 The effect is not stunning, but visible. The lines diverge, which means they have different slopes. With high technophilia, every (tenth) unit of sociophilia has a stronger effect on intention to play.
+
+```{r opts.label = "mcsync"}
+sync_CE(AR_game, D_2)
+```
 
 
 ```{r}
@@ -2192,7 +2301,7 @@ attach(Sleep)
 ```
 
 
-```{r fig:Sleep_expl, opts.label = "fig"}
+```{r Sleep_expl, opts.label = "fig"}
 G_expl <-
   D_1 %>% 
   ggplot(aes(x = Environment,
@@ -2211,19 +2320,25 @@ M_1 <-
 
 ```
 
-```{r tab:Sleep_fixef, opts.label = "tab"}
+```{r opts.label = "mcsync"}
+sync_CE(Sleep, M_1)
+```
+
+
+
+```{r tab:Sleep_fixef}
 T_fixef <-  fixef(M_1)
 T_fixef
 ```
 
-Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested, (intercept). The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(Sleep$T_fixef, ~fixef == "SleepSleepy")`. Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(Sleep$T_fixef, ~fixef == "EnvironmentNoisy")`. Note however, that we cannot conclude a null effect, as the credibility limits are wide. Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(Sleep$T_fixef, ~fixef == "EnvironmentNoisy:SleepSleepy")`. This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
+Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested, (intercept). The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(T_fixef, ~fixef == "SleepSleepy")`. Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy")`. Note however, that we cannot conclude a null effect, as the credibility limits are wide. Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefor be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy:SleepSleepy")`. This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
 The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law states that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we except that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
 
 Central to the Yerkes-Dodson law is that arousal is a gradually increasing property, but the current experiment only features two levels. A straight line is the only way to unambiguously connect two group means; examining any curved relationships is impossible. We could think of varying noise levels over a wider range for better tracing the non-linear relationship between arousal and performance. The next section introduces polynomial regression for approximating non-linear associations between metric variables.
 
 
-```{r fig:Yerkes_Dodson_1, opts.label = "invisible"}
+```{r Yerkes_Dodson_1, opts.label = "invisible"}
 F_Yerkes <-
   function(range = c(-2, 2)){
     data_frame(arousal = seq(-2, 2, length.out = 200)) %>% 
@@ -2274,7 +2389,7 @@ detach(Sleep)
 
 Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our seniors. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not so. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in human-likeness, but only at the lower end. A feline robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very human-like, but not exactly, face a sudden drop in emotional response, which is called the *uncanny valley*.
 
-```{r fig:uncanny_valley}
+```{r uncanny_valley}
 G_uncanny_illu <-
   data_frame(hl = seq(-1, 1, length.out = 100),
              likeability = -.5 * hl + .6 * hl^3 + .2 * hl^4) %>% 
@@ -2315,13 +2430,18 @@ Mathur et al. argue that the Uncanny Valley curve possesses two stationary point
 
 While R provides high-level methods to deal with polynomial regression, it is instructive to build the regression manually. The first step is to add variables to the data frame, which are the exponentiated predictors ($x_k = x^k$). These variables are then straight-forwardly added to the model term, as if they were independent predictors. For better clarity, we rename the Intercept to be $x_0$, before summarizing the fixed effects.
 
+```{r opts.label = "invisible"}
+try(rm(M_1, P_1))
+```
+
+
 ```{r}
 attach(Uncanny)
 ```
 
 
 ```{r fit:UV_1, opts.label = "mcmc"}
-M_1 <-
+M_poly <-
   UV_1 %>% 
   mutate(huMech_0 = 1,
          huMech_1 = huMech,
@@ -2332,9 +2452,15 @@ M_1 <-
   # stan_glm(avg_like ~ poly(huMech, 4),
   #          data = ., iter = 200)
 
-P_1 <- posterior(M_1)
+P_poly <- posterior(M_poly)
 
 ```
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, M_poly, P_poly)
+```
+
+
 ```{r}
 # Uncanny$P_1 %>% 
 #   mutate(parameter = str_replace(parameter, "Intercept", "huMech_0"),
@@ -2349,8 +2475,8 @@ library(polynom)
 ```
 
 
-```{r tab:UV_1, opts.label = "tab"}
-T_fixef_1 <- fixef(P_1)
+```{r tab:UV_1}
+T_fixef_1 <- fixef(P_poly)
 T_fixef_1
 ```
 
@@ -2385,9 +2511,10 @@ While this procedure is instructive, there is an issue: drawing on the center es
 Every PD sample contains simultaneous draw of the four parameters `huMech_[0:3]`, and therefore fully specifies its own third degree polynomial. A PD for the trough parameter can be obtained by performing the above procedure on every sample separately. For the convenience, the case study Uncanny contains a function `trough(coef)` that includes all the above steps. The following code creates a data frame with one row per MCMC draw and the four huMech variables, the function `trough` acts on this data frame as a matrix of coefficients and returns one trough point per row. We have obtained the PD of the trough.
 
 
-```{r trough_from_PD, opts.label = "rtut"}
-P_1_trough <-
-  P_1 %>%
+
+```{r trough_from_PD}
+P_trough <-
+  P_poly %>%
   filter(type == "fixef") %>%
   select(chain, iter, fixef, value) %>% 
   spread(fixef, value) %>% 
@@ -2399,8 +2526,8 @@ P_1_trough <-
 
 From the PD, we can derive statements on uncertainty in the usual way: the 95% credibility limits we get by:
 
-```{r trough_CI95}
-quantile(P_1_trough, c(.025, 0.5, .975), na.rm = T) %>% 
+```{r trough_CI95, opts.label = "tab"}
+quantile(P_trough, c(.025, 0.5, .975), na.rm = T) %>% 
   kable()
 ```
 
@@ -2414,7 +2541,7 @@ grid.arrange(
     geom_point(size = .3) +
     xlim(-1, 1),
   
-  data_frame(trough = P_1_trough) %>% 
+  data_frame(trough = P_trough) %>% 
     ggplot(aes(x = trough)) +
     geom_density(aes(x = trough)) +
     xlim(-1, 1)
@@ -2430,59 +2557,8 @@ detach(Uncanny)
 
 
 
-```{r rss_minimization, opt.label = "deprecated"}
-## Stub: How parameter estimation with RSS works
-
-# Here I demonstrate a brute force method to find the optimal parameters for the linear regression.
-# The parameter space span by $beta_0$ and $\beta_1$ is systematically explored, and for every combination the RSS is computed. The point where the RSS is at its minimum is the _least square estimate_.
-
-# ## function for RSS
-# RSS = Vectorize(function(beta_0, beta_1){
-#   Browsing %>%
-#     mutate(Predicted = beta_0 + beta_1 * age) %>%
-#     mutate(squrResid = (Predicted - Browsing)^2) %>%
-#     select(squrResid) %>%
-#     sum()
-# })
-# 
-# ## exploring (part of) the parameter space
-# E1 = expand.grid(beta_0 = seq(-14, -12, length.out = 100),
-#                   beta_1 = seq(0.2, 0.5, length.out = 100)) %>%
-#   mutate(logRSS = log(RSS(beta_0, beta_1)))
-# 
-# ## here is the minimum
-# E1 %>%
-#   filter(logRSS == min(logRSS))
-# 
-# ## exloring it graphically
-# grid.arrange(
-#   E1 %>%
-#     ggplot(aes(x = beta_0, y = beta_1, col = logRSS)) +
-#     geom_point(),
-#   E1 %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   E1 %>%
-#     filter(abs(-13 - beta_0) < 0.5 & abs(0.3 - beta_1) < 0.1) %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   E1 %>%
-#     filter(abs(-13.25 - beta_0) < 0.1 & abs(0.31 - beta_1) < 0.03) %>%
-#     gather(parameter, value, 1:2) %>%
-#     ggplot(aes(x = value, y = logRSS)) +
-#     geom_point(alpha = .5) +
-#     facet_grid(.~parameter, scales = "free_x"),
-#   ncol = 2
-#   )
-
-```
-
 
 ```{r save_all, opts.label = "invisible"}
-save_CE(CE)
+save_CE_(CE)
 
 ```

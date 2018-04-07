@@ -1,3 +1,15 @@
+---
+title: "New statistics for the design researcher"
+subtitle: "A Bayesian course in tidy R"
+author: "Martin Schmettow"
+date: "`r Sys.Date()`"
+description: "A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place."
+site: bookdown::bookdown_site
+documentclass: book
+github-repo: schmettow/NewStats
+---
+
+
 # Introduction
 
 This book makes the following assumptions:
