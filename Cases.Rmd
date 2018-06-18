@@ -378,27 +378,25 @@ BrowsingAB$simulate <-
           theta_S0 +
           theta_S1 * (Design == "A") +
           theta_T0 +
-          lambda_SD1 * Far_sighted * Small_font
-      ) %>%
+          lambda_SD1 * Far_sighted * Small_font) %>%
       mutate(ToT = rnorm(n_Obs, mu, sd_epsilon),
              clicks = rpois(n_Obs, mu/20),
-             returns = rpois(n_Obs, mu/80)) %>%
-      mutate(Obs = 1:n_Obs) %>% 
-      select(Obs, Part, Task, Design, 
+             returns = rpois(n_Obs, mu/80),
+             rating = ceiling(inv_logit((mu - 150)/50) * 7)) %>%
+      select(Part, Task, Design, 
              Gender, Education, age, Far_sighted, Small_font, 
-             ToT, clicks, returns) %>%
+             ToT, clicks, returns, rating) %>%
       as_tbl_obs()
-    
-    BrowsingAB %>% as_tbl_obs()
   }
 
 BrowsingAB$BAB1 <- 
   BrowsingAB$simulate(n_Task = 1) %>% 
-  mutate(Part = Obs) %>% as_tbl_obs()
+  mutate(Part = Obs)
 ## tweak to make it between-subject
 
 BrowsingAB$BAB5 <- BrowsingAB$simulate(n_Task = 5,
                                        n_Part = 30)
+
 
 names(BrowsingAB)
 
@@ -419,9 +417,13 @@ BrowsingAB$BAB1 %>%
   ggplot(aes(x = age, y = ToT)) +
   geom_smooth(se = F)
 
-
+BrowsingAB$BAB1 %>% 
+  ggplot(aes(x = rating, col = Design, fill = Design)) +
+  geom_histogram(position = "dodge")
 
 ```
+
+
 
 ```{r eval = F}
 BrowsingAB
@@ -1623,4 +1625,93 @@ write_sav(StroopMW$D_stroopmw, "Data/StroopMW.sav")
 write_csv(StroopMW$D_stroopmw, "Data/StroopMW.csv")
 
 ```
+
+
+## Case: Joystick
+
+With the emerge of automation in automotives, there are opportunities to  thoroughly redesign the cockpit of cars. In particular, the steering wheel is a rather clunky control. A automotive research team has developed an alternative joystick control that sits right in the middle console.
+
+The following study was undertaken to examine driving performance with the novel design, in direct comparison to the classic steering wheel. Participants drove five rounds on a test track with either control and performance was measured by the number of steering correction responses (SCR), with lower numbers indicating better performance.
+
+```{r joystick_create, opts.label = "simulate"}
+new_syncenv("Joystick")
+```
+
+
+```{r joystick_simfunc, opts.label = "sim"}
+Joystick$simulate <- 
+  function(N_Part = 30,
+           N_round = 4, 
+           seed = 42){
+    set.seed(42)
+    N_Obs <- N_Part * N_round * 2
+    
+    Parts <- 
+      data_frame(
+        Part = 1:N_Part,
+        age = round(runif(N_Part, 20, 60), 0),
+        experience = age * rbeta(N_Part, 45, 5)) %>% 
+      mutate(part_asym = rbeta(N_Part, 45, 5) - 18, ## scales, not additive
+             part_rate = rbeta(N_Part, 20, experience),
+             part_ampl = rbeta(N_Part, 45, 5))
+    
+    Conditions <-
+      frame_data(~Control, ~ampl, ~rate, ~asym,
+                 "joystick", 100, .5, 30,
+                 "classic",    30, .9, 40)
+    
+    Exp <- expand_grid(Part = Parts$Part, 
+                       Control = Conditions$Control, 
+                       round = as.integer(1:N_round)) %>% 
+      left_join(Parts) %>% 
+      left_join(Conditions) %>% 
+      mutate(
+        Round = as.factor(round),
+        ampl = ampl * part_ampl,
+        rate = rate / part_rate,
+        asym = asym * part_asym,
+        mu = asymptote::ary(ampl, rate, asym, round),
+        SCR = brms::rexgaussian(N_Obs, mu, 5, 10))
+  }
+
+Joystick$D_joy <- Joystick$simulate()
+
+Joystick$D_joy$SCR[c(5, 12, 56)] <- Joystick$D_joy$SCR[c(5, 12, 56)]*10
+
+Joystick$D_joy %>% 
+  ggplot(aes(x = age, y = experience)) +
+  geom_point()
+
+Joystick$D_joy %>% 
+  ggplot(aes(x = Round, y = SCR, color = Control)) +
+  geom_jitter()
+
+Joystick$D_joy %>% 
+  ggplot(aes(x = Round, y = SCR, color = Control)) +
+  geom_point() +
+  geom_line(aes(group = Control)) +
+  facet_wrap(~Part)
+
+M_1 <- stan_glm(SCR ~ Control*experience + Control * Round, 
+                data = Joystick$D_joy)
+
+fixef(M_1)
+```
+
+
+```{r joystick_export}
+save(Joystick, file = "Cases/Joystick.Rda")
+write_sav(Joystick$D_joy, "Data/joystick.sav")
+write_csv(Joystick$D_joy, "Data/joystick.csv")
+
+```
+
+
+
+
+
+
+
+
+
 

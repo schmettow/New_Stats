@@ -35,9 +35,8 @@ Finally, R comes with a very rudimentary programming environment that carries th
 
 The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.
 
-## Installing R
 
-### Installing R and Rstudio
+## Setting up the R environment
 
 First, we make sure that you have R and Rstudio downloaded and installed on your computer. The two programs can be retrieved from the below addresses. Make sure to select the version for your operating system. 
 
@@ -110,7 +109,7 @@ In this book we will use a number of additional packages from CRAN. The listing 
 + *ggplot* for graphics
 + *haven* for reading and  writing files from other statistical packages
 + *readr* for reading and writing text-based data files (e.g., CSV)
-+ *readxl* fro reading Excel files
++ *readxl* for reading Excel files
 + *stringr* for string matching and manipulation
 
 
@@ -1084,9 +1083,14 @@ A number of functions can be used to extract certain aspects of the model. For e
 These will all be covered in later chapters.
 
 
+
+
+
+
+
 ### Knitting statistical reports
 
-As you have seen throughout this chapter, with R you can effectively manage data, create expresseive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a neat report. With R and Rstudio it has never been easier than that. In fact, complete books have been written in R, like the one you are reading.
+As you have seen throughout this chapter, with R you can effectively manage data, create impressively expressive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a neat report. With R and Rstudio it has never been easier than that. In fact, complete books have been written in R, like the one you are reading.
 
 A *minimal statistical report* contains four elements:
 
@@ -1095,78 +1099,35 @@ A *minimal statistical report* contains four elements:
 3. a few figures or tables that answers the research question
 4. an explanation of the results
 
-Of these four elements, three are pure text. For a minimal report it is a fairly convenient to  use a word processor software for the text, craft the figure in R and copy it. One problem with this approach is that a *scrunitable statistical report* contains at least the following elements:
+Of these four elements, three are pure text. For a minimal report it is a fairly convenient to  use a word processor software for the text, craft the figure in R and copy it. One problem with this approach is that a *scrunitable statistical report* contains at least the following *additional* elements:
 
-1. data preparation
+1. procedures of data preparation (sources, transformations, variable names, outlier removal)
 1. data exploration (ranges of variables, outlier discovery, visualizing associations etc.)
-1. model estimation (formula specification, checking convergence)
+1. model estimation (formula specification, convergence checks)
 1. model criticism (normality of residuals etc.)
 
-In advanced statistical workflows this is then multiplied by the number of models an iterative selection process. Because it is easy to lie with statistics, these elements are needed as the build a fundament of credibility. A fully transparency is achieved, when another researcher can exactly reproduce all steps of the original analysis. One obvious way to achieve is to hand over the full R script. However, that is not particularly user-friendly. 
+In advanced statistical workflows this is then multiplied by the number of models an iterative selection process. Because it is easy to lie with statistics, these elements are needed as the build a fundament of credibility. A fully transparency is achieved, when another researcher can exactly reproduce all steps of the original analysis. It is obvious that the easiest way to achieve is to hand over the full R script.
+
+The most user-friendly way to achieve both, a good looking report and full transparency, is to write a document that contains all before mentioned: text, graphics, tables and R code. In the R environment such mixed documents can be written in the *markdown/knitr* framework. 
+
+Markdown implements a simple markup language, with that you can typset simple, structured  texts in a plain ASCII editor. Later in the workflow, such a markup document is transformed into one of various output formats, that are rendered by the respective programs, such as Microsoft Word or an HTML browser.
+
+![A minimal statistical report in markdown](figures/markup_minimal_report.png)
 
 
-The most user-friendly way to achieve both: a good looking report and full transparency is to write a document that contains all before mentioned: text, graphics, tables and R code. In the R environment such mixed documents can be written in the *markdown/knitr* framework. Markdown implements a simple markup language, with that you can typset simple, structured  texts in a plain ASCII editor:
+The above text is an alternation of markup text and *chunks*, those  weirdly enclosed pieces of R code. While the text is static, the chunks are processed by the knitr engine, evaluating the enclosed R code and knitting the the output into the document. Very conveniently, when the output is a figure, it will be inserted into the document, right away. The `kable`  command from the knitr package, in turn, produces neatly rendered tables from data frame objects. By default, the R code is shown, too, but that can be customized. 
 
+The minimal workflow for statistical reporting with knitr is as follows:
 
-\# Results
-    
-In the study we assessed 
+1. Use markdown right away, covering all steps of your data analysis, i.e. a scrunitable report. You may even start writing when only one part of your data gathering is completed, because due to the dynamic chunks. updating the report when new data arrives is just a button click away.
+1. When the data analysis is complete, compile the scrunitable report to Word format
+1. extract the passages, figures and tables for a minimal statistical report. This is your results section.
+1. provide the scrunitable report as appendix or supplementary material
 
-1. whether on average users can rent a car in 99 seconds
-1. and if we can say that with sufficient uncertainty
-    
-\#\# Data exploration
+In the notion of this chapter, this is just to get you started and knitr is so tightly integrated with the Rstudio environment, that I don't even bother to explain the commands for knitting a document. Once acquainted with the basics, markdown provides a few additional markup tokens, like footnotes, hyperlinks or including images. The customization options and addons for knitr are almost endless and various interesting addons are available, just to mention two:
 
-
-```{r eval=TRUE}`r ''`
-
-    summary(D)
-
-```
-All variables show good variation.
-
-
-```{r eval=TRUE}`r ''`
-
-    D %>% 
-    ggplot(aes(x = ToT)) +
-    geom_histogram
-
-```
-
-    
-\#\# Regression
-
-```{r eval=TRUE}`r ''`
-
-    M_1 <- stan_lm()
-
-```
-
-```{r eval=TRUE}`r ''`
-
-    coef(M_1) %>% knitr::kable()
-
-```
-
-
-Our main observations are:
-
-+ the 99 seconds claim is not supported
-+ time-on-task measures are *not* normally distributed
-
-```
-
-The above text is an alternation of markup text and *chunks*, those weirdly decorated pieces of R code. When the document is processed by the knitr engine, the enclosed R code is evaluated and the output is woven into the document and per default, the R code is shown, too. Very conveniently, when the output is a figure, it will be inserted into the document. The `kable`  command from the knitr package produces neatly rendered tables from data frame objects.
-
-A few basic markup tokens are used in the report:
-
-+ \#, \#\# mark section headings on first and second level.
-+ bullet points are marked by \+ at the beginning of the line
-+ enumeration items are marked by *1.* at the beginning of the line
-+ *italic* text is enclosed in \*...\*
-
-There are more markup tokens in markdown and good documentation is available. The knitr engine parses the markup and translates everything into good looking HTML or Word documents and by intergration with the typesetting system LaTeX, professional quality PDFs can be produced, too. Still, for most of us mortals, the most pragmatic workflow is to create a comprehen
+1. The bookdown package provides an infrastructure for writing and publishing longer reports and books.
+1. With the shiny package one can add dynamic widgets to HTML reports. Think of a case, where your statistical model is more complicated than a linear regression line or a few group means,, say you are estimating a polynomial model or a learning curve. Then, with a simple shiny app, you can enable your readers to understand the model by playful exploration.
 
 
 
@@ -1217,6 +1178,8 @@ There are more markup tokens in markdown and good documentation is available. Th
 [Quick-R](http://www.statmethods.net/) is a comprehensive introduction to many common statistical techniques with R.
 
 [Code as manuscript](http://codeasmanuscript.org/lessons/) features a small set of lessons with code examples, assignments and further resources. For if you are in a haste.
+
+[bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) fully unleashes the power of knitr for writing and publishing longer reports and books.
 
 ```{r save_all, opts.label = "invisible"}
 

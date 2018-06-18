@@ -39,15 +39,15 @@ library(brms)
 library(rstanarm)
 
 ## Simulation etc
-library(modeest)
-library(retimes, quietly = !purp.debg)
-library(MCMCpack)
+#library(modeest)
+#library(retimes, quietly = !purp.debg)
+#library(MCMCpack)
 library(polynom)
 # library(wakefield)
 
 ## Plotting and setting
 library(knitr)
-library(knitcitations)
+#library(knitcitations)
 library(gridExtra)
 library(GGally)
 library(DiagrammeR)
@@ -63,7 +63,7 @@ library(readr)
 library(openxlsx)
 
 ## ETC
-library(beepr)
+#library(beepr)
 
 
 ## own libraries
@@ -74,8 +74,8 @@ library(syncenv)
 
 
 ## literature
-cleanbib()
-options("citation_format" = "pandoc")
+#cleanbib()
+#options("citation_format" = "pandoc")
 
 ## cross referencing system
 
@@ -124,7 +124,7 @@ opts_chunk$set(echo = purp.rtut,
                eval = purp.book,
                results = "asis")
 
-options(digits=3)
+options(digits=1)
 
 ## chunk templates
 
