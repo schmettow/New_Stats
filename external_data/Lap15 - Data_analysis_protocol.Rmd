@@ -1,0 +1,1235 @@
+---
+title: "Predictors for laparoscopic skills"
+author: "Martin Schmettow"
+date: "October 11, 2016"
+output:
+  word_document: default
+  html_document: default
+---
+
+# Preparing the R environment
+
+The following libraries are used for the analysis. They are available at CRAN.
+
+```{r, warning = F, message = F}
+library(foreign)
+library(haven)
+library(openxlsx)
+
+# library(plyr)
+# library(pipeR)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+library(ggplot2)
+library(GGally)
+library(knitr)
+library(devtools)
+```
+
+The regression analysis has been carried out with package `brms` in version 1.0.1. Unfortunately, the interface of the package has changed in the meantime, which requires to install the older version:
+
+```{r, warning = F, message = F, eval = F}
+devtools::install_version(package = "brms", version = "1.0.1", repos = "http://cran.us.r-project.org", quiet = T)
+```
+
+```{r, warning = F, message = F}
+library(brms)
+```
+
+
+The following two libraries are not yet published on CRAN, but have to be installed from Github repositories:
+
+```{r, warning = F, message = F, eval = F}
+devtools::install_github("schmettow/mascutils")
+devtools::install_github("schmettow/bayr")
+```
+
+
+```{r, warning = F, message = F}
+library(mascutils)
+library(bayr)
+```
+
+
+```{r setup, eval = T, echo = F, warning = F, message = F, include = F}
+purp.book = T
+purp.tutorial = F
+purp.debg = F
+purp.prep_input = F
+purp.gather = F
+purp.mcmc = F | purp.gather
+purp.future = F
+
+
+## chunk control
+
+opts_chunk$set(eval = T,
+               echo = T,
+               message = F,
+               warning = F,
+               results = "asis")
+
+options(digits=3)
+
+opts_template$set( 
+  fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
+  fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
+  fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),
+  fig.wide = list(fig.width = 8, fig.height = 4, anchor = 'Figure'),
+  fig.slide = list(fig.width = 8, fig.height = 4, dpi = 96),
+  fig.half = list(fig.width = 4, fig.height = 4, dpi = 96),
+  functionality = list(eval = purp.book, echo = purp.debg),
+  invisible = list(eval = purp.book, echo = purp.debg),
+  future = list(eval = F, echo = F),
+  sim = list(eval = purp.book, echo = purp.tutorial),
+  mcmc = list(eval = purp.mcmc, echo = purp.book, message=purp.debg),
+  gather = list(eval = purp.gather, echo = purp.gather)
+)
+
+## ggplot
+theme_set(theme_minimal())
+
+## default parameters for MCMC
+formals(brm)["chains"] <- 4
+formals(brm)["iter"]   <- 5000
+formals(brm)["warmup"] <- 3000
+
+#rstan_options(auto_write = T)
+options(mc.cores = 4)
+
+## loading the synced environment
+load("Lap15.Rda")
+# names(Lap15)
+```
+
+```{r sync_env, eval = F, include = F}
+# new_syncenv("Lap15")
+```
+
+
+
+```{r prepare_data, opts.label = "gather"}
+
+## performance data
+load(file = "Lap15_raw.Rda")
+Lap15$D_Lap <- 
+  Data %>% 
+  as_data_frame() %>% 
+  select(-ends_with("_z")) %>% 
+  dplyr::rename(trial = Attempt) %>% 
+  mutate(Part = str_replace(Login, "p", ""),
+         trial = as.integer(trial)) %>% 
+  select(-Login) %>% 
+  go_arrange(~Part, ~trial) %>%
+  mutate(Duration = Duration/60,
+         MotionEfficiency = MotionEfficiency/100) %>%  ## adjust magnitudes
+  z_score(Duration:MotionEfficiency)
+  
+  
+rm(Data)
+
+Lap15$D_Lap_long <-
+  Lap15$D_Lap %>% 
+  select(-Gaming) %>% 
+  gather(key = parameter, value = value, -Part, -trial) %>% 
+  mutate(type = ifelse(str_detect(parameter, "_z$"), "z_score", "raw_score"),
+         parameter = str_replace(parameter, "_z", "")) %>% 
+  spread(key = type, value = value)
+
+
+
+## cognitive tests
+
+Lap15$D_Cog <- 
+  read.xlsx(xlsxFile = "CognitiveTestData_20142015.xlsx", colNames = TRUE) %>% 
+  as_data_frame() %>% 
+  mutate(Part = as.factor(str_pad(ID, 2, "left", "0"))) %>% 
+  select(-ID) %>% 
+  go_arrange(~Part) %>%
+  z_score(RotShap:Corsi2) %>% 
+  mutate(SM = (Corsi1 + Corsi2)/2, ## equally weighted "latent" variables
+         VSA = (MRT + PapFold + RotShap + SurfDev)/4) %>% 
+  z_score(SM:VSA)
+
+Lap15$D <-
+  full_join(Lap15$D_Cog, Lap15$D_Lap) %>% 
+  go_arrange(~Part, ~trial)
+
+names(Lap15)
+
+Lap15$D %>% 
+  sample_n(10)
+```
+
+
+
+# Description of the non-linear mixed-effects model
+
+For fitting the  learning curves is a non-linear mixed effects model. For the  individual-level learning trajectory a variant of the exponential growth formula (Heathcote, Brown and Mewhort, 2000) is chosen, as this has proven best for individual learning curves. The original function is:
+
+$$Y_ {PT} = m_{P} + a_{P}\exp(-r_{P}T)$$
+
+with participant $P$ on trial $N$. The parameters have the following meaning:
+
++ *m* is the level of maximum performance, which is reached asymptotically with continued practice
++ *a* is the amount of improvement, the difference between performance *before* the first trial and the asymptote.
++ *r* is the rate, the overall speed of learning
+
+The problem with the function above is that the amplitude parameter can hardly be interpreted on its own. On the first glance, low amplitude seems to suggests that someone is a poor learner. However, low amplitude can also arise if someone starts on a very good level and therefore has little room for improvement. Learners who start on a very good level can be thought as having earned experience before the first session. An alternative parametrization of the exponential model replaces the amplitude parameter $a$ with (virtual) previous experience $e$:
+
+$$\mu_ {PT} = m_{P} 1 + \exp(-r_{P}(T + e_{P}))$$
+
+In this model, the amplitude parameter is "pulled"" into the exponent, where it becomes a linear shift on the x axis. With more previous experience, the curve is shifted to the left, which makes it appear flatter in the observed range.
+
+The three learning parameters are estimated per participant. It is assumed that the parameters do not vary freely (following a uniform distribution), but have a *group-level distribution* from which they were drawn. 
+
+$$m_p \sim N(\beta_m, \sigma_m)$$
+
+($a_p$ and $r_p$ accordingly)
+
+This is commonly referred to as a *random effect*. The variation parameter $\sigma$ is estimated simultaneously with the individual scores. It is a measure for variation in the population. Random effects are estimated as individual deviance from the group-level mean, which is the *intercept fixed effect*.
+
+The assumption being tested is whether there is a relation between cognitive scores $x_.$ and learning parameters. These relations form the *fixed effects* part of the model: 
+
+$$r_{p} = \beta_{r} + \beta_\mathrm{VSA}x_\mathrm{VSA}$$
+
+$$a_{p} = \beta_{e} + \beta_\mathrm{SM}x_\mathrm{SM}$$
+
+Performance is bounded as there cannot be less than zero tissue damage. This has consequences for the association with predictors and the residual distribution.
+
+The fixed effects were established as a linear associations of predictors and learning parameters. As the asymptote parameter $m_{p}$ is bounded, this can result in impossible predictions (like negative damage). We establish an unbound range by using the logarithm link function. (This is *not* a transformation of the performance variable). The same procedure applies to the parameter $a_{p}$
+
+For the linear parts (fixed-effects and random-effects), we let the parameter be in the range $[-\infty;\infty]$. For the non-linear part, we transform to $[0;\infty]$ by exponentiation, hence the non-linear part of the likelihood function:
+
+$$\mu_ {pt} = \exp(maxp_{p}) (1 + \exp(-rate_{p}(t + pexp_{p})))$$
+
+While the non-linear likelihood function grants strictly positive predicted values $\mu_{pt}$, the normal distribution may not apply as an error distribution for the observation-level deviations. Bounded variables often have skewed distributions, the more they approach the boundary. A common choice in such cases is the gamma distribution.
+
+Lastly, it is likely that, despite their different interpretations, the parameters are correlated. For example, one would typically assume that someone who learns fast, also reaches a high level of proficiency. Therefore, the three parameters are taken from a multi-variate normal distributions, with estimated covariances. 
+
+# Data analysis protocol
+
+
+## Data Exploration
+
+The following plot shows the association between practice and performance,
+dependent on Participant.
+
+```{r}
+attach(Lap15)
+```
+
+
+```{r EDA_1}
+
+G_expl_1 <- 
+  D_Lap_long %>% 
+  filter(str_detect(parameter, "^z")) %>% 
+  ggplot(aes(x = trial, y = raw_score, col = parameter)) +
+  geom_point() +
+  geom_smooth(se = F) + 
+  facet_wrap(~Part, nrow = 5, scales = "free_y")
+
+G_expl_1
+
+```
+
+
+It is essential for any regression model, that the predictors actually vary. The following table shows the summary statistics per predictor:
+
+
+```{r}
+D_Cog %>% 
+  select(RotShap:Corsi2) %>% 
+  gather("ability_test", "score") %>% 
+  group_by(ability_test) %>% 
+  summarize(mean = mean(score),
+            sd = sd(score),
+            min = min(score),
+            max = max(score)) %>% 
+  kable()
+```
+
+
+We now explore all cross-correlations between predictors.
+
+```{r corr_tab}
+G_corr_pred <-
+  D_Cog %>% 
+  select(starts_with("z")) %>% 
+  ggpairs()
+
+G_corr_pred
+```
+
+Observations:
+
+* Corsi is not test-retest reliable
+* cross-correlations within the SM variables are generally good, except for MRT
+
+```{r}
+detach(Lap15)
+```
+
+
+
+## Regression
+
+### Building and estimating regression models
+
+For instructional purposes, we build the final model for every one of the three performance variables in two steps:
+
+1. `M_1`: pure estimation of individual learning curves with random effects
+2. `M_2`: learning curves with the predictors accoring to our hypotheses
+
+We also present a third model `M_3` that includes both predictors and an interaction effect for exploratory purposes.
+
+```{r}
+attach(Lap15)
+```
+
+The following function extracts the correlations between 
+
+```{r functions}
+corr <- 
+  function(tbl_post)  
+  {  tbl_post %>% 
+      filter(type == "cor") %>%
+      separate(parameter, into = c("re_factor_", "nonlin_x", "fixef_x", 
+                                   "nonlin_y", "fixef_y")) %>% 
+      select(-re_factor_, -fixef_x, -fixef_y) %>% 
+      group_by(nonlin_x, nonlin_y) %>% 
+      summarize(center = modeest::shorth(value),
+                lower = quantile(value, .025),
+                upper = quantile(value, .975))
+  }
+
+```
+
+
+
+```{r model_formulas}
+F_nonlinear <-
+  formula(performance ~ exp(etamaxp) + exp(-inv_logit(etarate) * (trial + pexp)))
+
+## priors are vague on the lp scale
+F_priors <-
+  c(set_prior("normal (0, 5)", nlpar = "etamaxp"),   # vague
+    set_prior("normal (0, 100)", nlpar = "pexp"),  # vague
+    set_prior("normal (0, 5)", nlpar = "etarate"))   # vague
+
+F_RE <- 
+  list(etamaxp  ~ (1|corr1|Part),
+       etarate ~ (1|corr1|Part),
+       pexp ~ (1|corr1|Part))
+
+F_ME <- 
+  list(etamaxp  ~ zVSA + (1|corr1|Part),
+       etarate ~ zSM + (1|corr1|Part),
+       pexp ~ (1|corr1|Part))
+
+
+F_ME_full <- 
+  list(etamaxp ~ zSM * zVSA + (1|corr1|Part),
+       etarate ~ zSM * zVSA + (1|corr1|Part),
+       pexp ~ zSM * zVSA + (1|corr1|Part))
+
+
+```
+
+
+```{r compile_models, opts.label = "mcmc"}
+M_1 <- 
+  D %>% 
+  rename(performance = Damage) %>% 
+  mutate(performance = ifelse(performance == 0, 
+                              .01, performance)) %>% 
+  brm(formula = F_nonlinear,
+      nonlinear = F_RE,
+      prior = F_priors,
+      family = Gamma(link = "identity"),
+      chains = 1, warmup = 100, iter = 200)
+
+M_2 <-
+  D %>%
+  rename(performance = Damage) %>%
+    mutate(performance = ifelse(performance == 0,
+                              .01, performance)) %>%
+  brm(formula = F_nonlinear,
+      nonlinear = F_ME,
+      prior = F_priors,
+      family = Gamma(link = "identity"),
+      chains = 1, warmup = 100, iter = 200)
+
+M_3 <-
+  D %>%
+  rename(performance = Damage) %>%
+  mutate(performance = ifelse(performance == 0,
+                              .01, performance)) %>%
+  brm(formula = F_nonlinear,
+      nonlinear = F_ME_full,
+      prior = F_priors,
+      family = Gamma(link = "identity"),
+      chains = 1, warmup = 100, iter = 200)
+
+```
+
+### Duration: random effects model
+
+
+```{r mcmc:Dur_1, opts.label = "mcmc"}
+
+M_1_Dur <- 
+  D_Lap %>% 
+  rename(performance = Duration) %>% 
+  mutate(performance = ifelse(performance == 0, 
+                              .01, performance)) %>% 
+  update(M_1, newdata = ., iter = 4000, chains = 4)
+
+P_1_Dur <-
+  posterior(M_1_Dur)
+
+D_1_Dur <-
+  predict(M_1_Dur) %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dur_resid = residuals(M_1_Dur)[,1])
+
+
+
+
+```
+
+```{r}
+detach(Lap15)
+```
+
+
+The regression gives the following results (MAP and CI 95)
+
+
+```{r}
+attach(Lap15)
+
+```
+
+
+```{r tab:Dur_1_coef}
+
+fixef(P_1_Dur)
+grpef(P_1_Dur)
+
+```
+
+
+
+
+We examine the posterior prediction for Duration. We observe:
+
++ performance differences are huge in the beginning
++ differences diminish with training
++ the curves run almost parallel, we can expect little differences in rate
+
+The individual curves in most cases neatly align the observations. The outlier in case 13 pulls the asympote up, slightly.
+
+```{r fig:Dur_post_pred}
+
+G_1_postpred_Dur_1 <- 
+  D_1_Dur %>% 
+  ggplot(aes(x = trial, y = Duration)) +
+  geom_point() +
+  geom_line(aes(y = Estimate)) +
+  facet_wrap(~Part, ncol = 5, scale = "free")
+
+G_1_postpred_Dur_1
+
+```
+
+```{r}
+detach(Lap15)
+
+```
+
+
+
+#### model criticism
+
+We check convergence of the MCMC on fixed effects, random effect and group effects. This looks all pretty good.
+
+```{r}
+attach(Lap15)
+
+```
+
+
+```{r Dur_1_converge}
+
+P_1_Dur %>% 
+  filter(type == "fixef") %>% 
+  ggplot(aes(x = iter, y = value)) +
+  geom_line() +
+  facet_grid(parameter~., scale = "free_y")
+  
+P_1_Dur %>% 
+  filter(type == "ranef") %>% 
+  ggplot(aes(x = iter, y = value)) +
+  geom_line() +
+  facet_wrap(~parameter, scale = "free_y", ncol =  5)
+
+P_1_Dur %>% 
+  filter(type == "grpef") %>% 
+  ggplot(aes(x = iter, y = value)) +
+  geom_line() +
+  facet_grid(parameter~., scale = "free_y")
+
+
+```
+
+
+
+We check the distribution of residuals. As assumed by the Gamma model, the 
+residual distribution gets wider with higher fitted values. There is a slight left skew.
+
+
+```{r fig:Dur_1_resid, opts.label = "fig.large"}
+G_1_Dur_resid_1 <- 
+  D_1_Dur %>% 
+  ggplot(aes(x = Estimate, y = M_1_Dur_resid)) +
+  geom_point() +
+  geom_quantile()
+
+G_1_Dur_resid_1
+
+detach(Lap15)
+```
+
+
+### Duration:  mixed effects model
+
+We extend the random effects model by fixed effects according to our RQs:
+
+1. Is spatial memory beneficial for the learning rate?
+1. Is visual-spatial ability beneficial for maximum performance
+
+Recall, that we linearized rate and maximum performance using link functions for. The predictors `VSA` and `SM` are linked to the linear predictors `etamaxp` and `etarate`. Note that in *linear* Gamma regression, the log link function is used to establish linearity (preventing negative predictions). Here, positivity is granted by the non-linear function and we can conveniently use the identity link.
+
+```{r mcmc:Dur_2, opts.label = "mcmc"}
+attach(Lap15)
+
+
+M_2_Dur <- 
+  D %>% 
+  mutate(performance = ifelse(Duration == 0, 
+                              .01, Duration)) %>% 
+  update(M_2, newdata = ., chains = 4, iter = 4000, 
+         control = list(adapt_delta = 0.99))
+
+
+P_2_Dur <-
+  posterior(M_2_Dur)
+
+
+D_2_Dur <-
+  brms:::fitted.brmsfit(M_2_Dur, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dur_resid = residuals(M_2_Dur)[,1])
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+The regression gives the following results (MAP and CI 95): With reasonable certainty we can exclude the assumed predictive power of SM and VSA on performance as measured by duration.
+
+```{r tab:Dur_2_coef}
+attach(Lap15)
+
+
+fixef(P_2_Dur)  
+grpef(P_2_Dur)  
+corr(P_2_Dur)  %>%  kable()
+
+detach(Lap15)
+```
+
+
+### Duration: full model
+
+Still, we may have drawn invalid conclusions from theory and therefore 
+missed out predictive value. For exploratory purposes, we run a full model where every learning parameter is explained by `VSA_z * SM_z`.
+
+```{r mcmc:Dur_3, opts.label = "mcmc"}
+attach(Lap15)
+
+
+M_3_Dur <- 
+  D %>% 
+  mutate(performance = ifelse(Duration == 0, 
+                              .01, Duration)) %>% 
+  update(M_3, newdata = ., iter = 2000, chains = 3)
+
+P_3_Dur <-
+  posterior(M_3_Dur)
+
+D_3_Dur <-
+  brms:::fitted.brmsfit(M_3_Dur, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dur_resid = residuals(M_3_Dur)[,1])
+
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+### Model selection
+
+```{r}
+attach(Lap15)
+```
+
+
+```{r}
+brms::WAIC(M_1_Dur, M_2_Dur, M_3_Dur)
+```
+
+
+The regression gives the following results (MAP and CI 95)
+
+```{r tab:Dur_3_coef}
+
+fixef(P_3_Dur)  
+grpef(P_3_Dur)  
+corr(P_3_Dur) %>% kable() 
+
+
+```
+
+```{r}
+detach(Lap15)
+```
+
+
+### Damage: ramdom effects model
+
+```{r mcmc:Dam_1, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+
+M_1_Dam <- 
+  D_Lap %>% 
+  mutate(performance = ifelse(Damage > 0, Damage, .001)) %>%
+  update(M_1, newdata = ., iter = 2000, chains = 3)
+
+P_1_Dam <-
+  posterior(M_1_Dam)
+
+
+D_1_Dam <-
+  brms:::fitted.brmsfit(M_1_Dam, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dam_resid = residuals(M_1_Dam)[,1])
+
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+
+```
+
+```{r fig:Dam_post_pred}
+attach(Lap15)
+G_1_postpred_Dam_1 <- 
+  D_1_Dam %>% 
+  ggplot(aes(x = trial, y = Damage)) +
+  geom_point() +
+  geom_line(aes(y = Estimate)) +
+  facet_wrap(~Part, ncol = 5, scale = "free")
+
+G_1_postpred_Dam_1
+detach(Lap15)
+```
+
+
+### Damage:  mixed effects model
+
+The same model is evaluated on the Damage data. `r sum(Lap15$D$Damage == 0)` values were exactly zero, whereas Gamma regression requires strictly positive values. The pragmatic solution to the problem is to increase all zeros by a negligible value.
+
+```{r mcmc:Dam_2, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+
+M_2_Dam <- 
+  D %>% 
+  mutate(performance = ifelse(Damage > 0, Damage, .01)) %>% 
+  update(M_2, newdata = ., chains = 4, iter = 4000, control = list(adapt_delta = 0.99))
+
+P_2_Dam <-
+  posterior(M_2_Dam)
+
+D_2_Dam <-
+  brms:::fitted.brmsfit(M_2_Dam, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dam_resid = residuals(M_2_Dam)[,1])
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+
+The regression gives the following results (MAP and CI 95)
+
+```{r tab:Dam_2_coef}
+attach(Lap15)
+
+fixef(P_2_Dam)  
+grpef(P_2_Dam)  
+corr(P_2_Dam)  %>%  kable()
+
+detach(Lap15)
+```
+
+
+### Damage: Exploration
+
+Still, we may have drawn invalid conclusions from theory and therefore 
+missed out predictive value. For exploratory purposes, we run a full model where every learning parameter is explained by `VSA_z * SM_z`.
+
+```{r mcmc:Dam_3, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+
+M_3_Dam <- 
+  D %>% 
+  mutate(performance = ifelse(Damage > 0, Damage, .01)) %>% 
+  update(M_3, newdata = ., iter = 2000, chains = 3)
+
+P_3_Dam <-
+  posterior(M_3_Dam)
+
+D_3_Dam <-
+  brms:::fitted.brmsfit(M_3_Dam, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_Dam_resid = residuals(M_3_Dam)[,1])
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+The regression gives the following results (MAP and CI 95)
+
+```{r tab:Dam_3_coef}
+attach(Lap15)
+
+fixef(P_3_Dam)  
+grpef(P_3_Dam)  
+corr(P_3_Dam)  %>% kable()
+
+detach(Lap15)
+```
+
+
+
+
+
+
+### Motion Efficiency:  random effects model
+
+
+
+```{r mcmc:ME_1, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+
+M_1_ME <-
+  D %>% 
+  mutate(performance = MotionEfficiency) %>% 
+  update(M_1, newdata = ., chains = 3, iter = 2000)
+
+P_1_ME <-
+  posterior(M_1_ME)
+
+
+D_1_ME <-
+  brms:::fitted.brmsfit(M_1_ME, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_ME_resid = residuals(M_1_ME)[,1])
+
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+
+```{r fig:ME_post_pred}
+attach(Lap15)
+G_1_postpred_ME <- 
+  D_1_ME %>% 
+  ggplot(aes(x = trial, y = MotionEfficiency)) +
+  geom_point() +
+  geom_line(aes(y = Estimate)) +
+  facet_wrap(~Part, ncol = 5, scale = "free")
+
+G_1_postpred_ME
+
+detach(Lap15)
+```
+
+
+### Motion Efficiency: mixed-effects model
+
+```{r mcmc:ME_2, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+M_2_ME <- 
+  D %>% 
+  mutate(performance = MotionEfficiency) %>% 
+  update(M_2, newdata = ., chains = 4, iter = 4000, 
+         control = list(adapt_delta = 0.99))
+
+P_2_ME <-
+  posterior(M_2_ME)
+
+D_2_ME <-
+  brms:::fitted.brmsfit(M_2_ME, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_ME_resid = residuals(M_2_ME)[,1])
+
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+
+The regression gives the following results (MAP and CI 95)
+
+```{r tab:ME_2_coef}
+attach(Lap15)
+
+fixef(P_2_ME)  
+grpef(P_2_ME)  
+
+detach(Lap15)
+```
+
+
+### Motion Efficiency: full model
+
+Still, we may have drawn invalid conclusions from theory and therefore 
+missed out predictive value. For exploratory purposes, we run a full model where every learning parameter is explained by `VSA_z * SM_z`.
+
+```{r mcmc:ME_3, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+
+
+M_3_ME <- 
+  D %>% 
+  mutate(performance = MotionEfficiency) %>% 
+  update(M_3, newdata = ., iter = 2000, chains = 3)
+
+P_3_ME <-
+  posterior(M_3_ME)
+
+D_3_ME <-
+  brms:::fitted.brmsfit(M_3_ME, scale = "response") %>% 
+  as.data.frame() %>% 
+  as_data_frame() %>% 
+  bind_cols(D_Lap) %>% 
+  mutate(M_1_ME_resid = residuals(M_3_ME)[,1])
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+The regression gives the following results (MAP and CI 95)
+
+```{r tab:ME_3_coef}
+attach(Lap15)
+
+fixef(P_3_ME)  
+grpef(P_3_ME)  
+corr(P_3_ME) %>% kable()
+
+detach(Lap15)
+```
+
+## Post-hoc: predicting maximum performance
+
++ how varied are random effects of `maxp`?
++ how certain are participant-level estimates at 10 and 5 trials?
++ are performance variables correlated? does this improve accuracy of prediction?
+
+Recall, that the nonlinear mixed-effects model estimates a bunch of individual learning curves. In consequence, we obtain a convenient estimate for individual participants' maximum performance: the absolute random effects $m_0 + m_{p}$. (group average plus individual deviation) How accurate can we predict maximum performance? We explore this in a hypothetical situation, where applicants may only proceed with a MIS training, if they will be able to do a certain test task in 3 minutes, i.e. $m_{p} \leq 3$. As the estimate of maximum performance is uncertain, an additional criterion is required. As this is meant as a screening test with a low false alarm rate, lets say: maximum performance is below 200ms, with 20% certainty at least.
+
+
+```{r extract_participant_scores}
+
+attach(Lap15)
+
+P_ranef_mu <-
+  bind_rows(P_1_Dur, P_1_ME, P_1_Dam) %>% 
+  filter(type  == "ranef") %>% 
+  select(model, chain, iter, nonlin, re_entity, value) %>% 
+  left_join(
+    bind_rows(P_1_Dur, P_1_ME, P_1_Dam) %>% 
+      filter(type  == "fixef") %>% 
+      select(model, chain, iter, nonlin, fixed = value)) %>% 
+  mutate(eta_Part = fixed + value) %>% 
+  mutate(mu_Part = ifelse(nonlin == "etarate", 
+                           inv_logit(eta_Part),
+                           eta_Part),
+         mu_Part = ifelse(nonlin == "etamaxp", 
+                           exp(eta_Part),
+                           eta_Part),
+         nonlin = str_replace(nonlin, "^eta", ""))
+
+
+T_ranef_mu <-
+  P_ranef_mu %>% 
+  group_by(model, nonlin, re_entity) %>% 
+  dplyr::summarize(center = modeest::shorth(mu_Part),
+            lower = quantile(mu_Part, .2),
+            upper = quantile(mu_Part, .8)) %>% 
+  group_by(model, nonlin) %>% 
+  mutate(rank = dense_rank(center))
+
+G_ranef <-
+  T_ranef_mu %>% 
+  filter(nonlin == "maxp",
+         model == "M_1_Dur") %>% 
+  ggplot(aes(x = rank, 
+             y = center, ymin = lower, ymax = upper)) +
+  geom_errorbar() +
+  ylab("maximum performance (min)") +
+  xlab("participants (ranked)")
+
+G_ranef
+
+detach(Lap15)
+```
+
+This criterion is testable against posterior distributions of $m_p$, which we obtained as follows. In a random effects model, the individual linear predictor $m_{p}$ is the sum of group intercept $maxp$ and the random effects. Subsequently, the exponential function transforms the linear predictor to the original scales of duration, damage and ME. These transformations are applied separately on all iterations of the MCMC chain, yielding the full marginal posteriors of $maxp_{Part}$ Figure [XY] shows the center of $maxp_{Part}$, as well as the 80% certainty threshold. If this threshold is above 200 seconds, the applicant is rejected. In the case here, this happens for the two outliers.
+
+
+The screening procedure possibly also works in an adaptive protocol. Further test sessions are added, until the 80% certainty level is reached for an applicant. We approximate the procedure by asking, whether the two rejections has been identified after fewer sessions, say 10. The results are shown in Figure [XY]. Apparently, after ten sessions, uncertainty is very pronounced, not allowing for any firm statements on maximum performance.
+
+```{r mcmc:M_1_Dur_n10, opts.label = "mcmc"}
+try(detach(Lap15))
+attach(Lap15)
+M_1_Dur_n10 <-
+  D %>%
+  mutate(performance = Duration) %>% 
+  filter(trial <= 10) %>% 
+  update(M_1_Dur, newdata = ., iter = 2000, chains = 3)
+
+P_1_Dur_n10 <-
+  posterior(M_1_Dur_n10)
+
+detach(Lap15)
+save(Lap15, file = "Lap15.Rda")
+
+# unique(Lap15$P_1_Dur_n10$parameter)
+# unique(Lap15$P_1_Dur$parameter)
+
+```
+
+```{r extract_scores_at_n10}
+attach(Lap15)
+
+P_ranef_mu_10 <-
+  P_1_Dur_n10 %>% 
+  filter(type  == "ranef") %>% 
+  select(model, chain, iter, nonlin, re_entity, value) %>% 
+  left_join(
+    bind_rows(P_1_Dur_n10) %>% 
+      filter(type  == "fixef") %>% 
+      select(model, chain, iter, nonlin, fixed = value)) %>% 
+  mutate(eta_Part = fixed + value) %>% 
+  mutate(mu_Part = ifelse(nonlin == "etarate", 
+                           inv_logit(eta_Part),
+                           eta_Part),
+         mu_Part = ifelse(nonlin == "etamaxp", 
+                           exp(eta_Part),
+                           eta_Part),
+         nonlin = str_replace(nonlin, "^eta", ""))
+
+
+T_ranef_mu_n10 <-
+  P_ranef_mu %>% 
+  group_by(nonlin, re_entity) %>% 
+  dplyr::summarize(center = modeest::shorth(mu_Part),
+            lower = quantile(mu_Part, .025),
+            upper = quantile(mu_Part, .975),
+            cert_80 = quantile(mu_Part, .20)) %>% 
+  group_by(nonlin) %>% 
+  mutate(rank = dense_rank(center)) %>% 
+  ungroup()
+
+G_screening_n10 <-
+  T_ranef_mu_n10 %>% 
+  filter(nonlin == "maxp") %>% 
+  ggplot(aes(x = rank)) +
+  geom_point(aes(y = center)) +
+  geom_line(aes(y = center, linetype = "center")) +
+  geom_point(aes(y = cert_80)) + 
+  geom_line(aes(y = cert_80, linetype = "better than (p = 80%)")) +
+  ylab("maximum performance") +
+  xlab("participants (ranked)")
+
+G_screening_n10
+
+
+detach(Lap15)
+```
+
+
+
+### Overview models
+
+```{r models_overview}
+attach(Lap15)
+T_1_coef_all <-
+  bind_rows(P_1_Dur, P_1_Dam, P_1_ME) %>% 
+  filter(type %in% c("fixef", "grpef")) %>% 
+  group_by(model, type, nonlin, fixef, re_factor) %>% 
+  summarize(center = modeest::shorth(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975)) %>% 
+  ungroup()
+
+T_1_coef_all  %>% kable()
+
+T_2_coef_all <-
+  bind_rows(P_2_Dur, P_2_Dam, P_2_ME) %>% 
+  filter(type %in% c("fixef", "grpef")) %>% 
+  group_by(model, type, nonlin, fixef, re_factor) %>% 
+  summarize(center = modeest::shorth(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975)) %>% 
+  ungroup()
+
+T_2_coef_all  %>% kable()
+  
+
+detach(Lap15)
+```
+
+
+```{r save_all, eval = F}
+try(detach(Lap15))
+save(Lap15, file = "Lap15.Rda")
+
+```
+
+
+
+# Paper
+
+```{r}
+opts_chunk$set(eval = T,
+               echo = T,
+               message = F,
+               warning = F)
+
+```
+
+
+## Introduction
+
+Figure XY shows three learning curves from our experiment, with lower values on ME being better. Learning clearly takes place for all three participants, but grossly varying in shape: 03 and 06 travel down at almost the same rate, but arrive at rather different asymptotes. At the same time, 01 is flatter than 06, but reaches much better maximum performance.
+
+```{r fig:examples_lc}
+attach(Lap15)
+
+G_Fig_1 <-
+  D %>% 
+  mutate(Estimate = predict(M_1_ME)$center) %>% 
+  select(Part, trial, MotionEfficiency = Estimate) %>% 
+  filter(Part %in% c("01", "03", "06")) %>% 
+  ggplot(aes(x = trial,
+             y = MotionEfficiency,
+             linetype = Part)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1:12)) +
+  theme_minimal()
+
+G_Fig_1
+
+ggsave(plot = G_Fig_1, width = 120, height = 80, units = "mm", filename = "../submitted/Fig_1.png")
+
+detach(Lap15)
+
+
+
+```
+
+## Methods
+
+### Statistical model
+
+The statistical analysis aims at tracing associations between the cognitive scores (SM and VSA) scores and learning. This requires the statistical model operate on the individual level learning trajectories. For the individual learning trajectory a variant of the exponential growth formula (Heathcote, Brown and Mewhort, 2000) was chosen, with the likelihood function:
+
+$$\mu_{pt} = m_{p} + \exp(-r_{p}(t + e_{p}))$$
+The expected performance outcome (e.g., the damage score) $\mu_\mathrm{pt}$ depends on trial $t$ and three person-specific learning parameters:
+
++ $m_p$ is the maximum performance (asymptote) that participant $P$ will reach with continued practice
++ $r_p$ is the rate, or overall speed of learning 
++ $e_p$ the virtual prior experience
+
+The parameter $e_p$ is a re-parametrization of the more common amplitude parameter [ref]. It adds on the trial number $t$, as if the participant had enjoyed a number of trials before entering the experiment.
+
+While learning parameters were estimated per participant, they were assumed to stem from a Normal *group-level distribution*. This is commonly called a *random effect* and reflects the situation that participants come from the same population, where variation happens, but to a limited degree [ref].
+
+$$m_p \sim N(\beta_m, \sigma_m)$$
+A slight complication arises from the parameter $m_p$ being strictly positive and $r_p$ between 0 and 1. To establish linearity,  link functions (log and logit) were added to mediate between the original scaled parameters and a linear predictor $\eta$, e.g.
+
+$$\eta_\mathrm{m, pt} = \log(r_\mathrm{pt})$$
+
+Finally, the learning parameters are linked to the cognitive predictors, which forms the *fixed-effects* part form the model: 
+
+$$\eta_\mathrm{r,pt} = \beta_{r} + \beta_\mathrm{VSA}x_\mathrm{VSA}$$
+
+$$\eta_\mathrm{m, pt} = \beta_{e} + \beta_\mathrm{SM}x_\mathrm{SM}$$
+
+Finally,  as all performance outcomes are continuous and positive, 
+the error term was modeled as Gamma distributed. The model was estimated using the regression package brms v1.0.1 [ref] in the statistical computing environment R [ref]. The full implementation of the model and some model variants are given in a separately supplied data analysis protocol.
+
+## Results
+
+For every performance variable (damage, duration and ME), we estimated the non-linear mixed-effects model as described above, using z-transformed cognitive predictors spatial memory capacity (SM) and visual-spatial ability (VSA). The estimated effects for all outcome variables are shown in Table XY. The shown intercepts represent learning performance at average VSA or SM and can serve as a baseline to judge the strength of effects.
+
+
+```{r coef_overview, echo = F}
+
+attach(Lap15)
+
+T_coef_all <-
+  bind_rows(P_2_Dam, P_2_Dur, P_2_ME) %>% 
+  fixef()
+
+T_coef_all %>% 
+  filter(nonlin != "pexp") %>% 
+  select(`learning par` = nonlin,
+         performance = model,  
+         `fixed effect` = fixef,
+         center, lower, upper) %>% 
+  mutate(performance = str_replace(performance, "M_2_", "")) %>% 
+  arrange(`learning par`) %>% 
+  kable()
+
+detach(Lap15)
+```
+
+Effects for VSA on maximum performance all show the expected tendency towards better performance (e.g., lower damage). However,  all effects are tiny in comparison to the respective intercept and are tightly centered around zero. We can say with high certainty that no practically relevant association exists between VSA and maximum performance.
+
+For the prediction of learning rate by SM, a general trend towards *lower* learning rates appears, which is against our hypothesis. However, the 95% credibility ranges all include the possibility of no effect at all. The most noticeable effect of SM is with damage, but not even that does stand out from the noise, $`r md_coef(Lap15$T_coef_all, ~model == "M_2_Dam", ~fixef == "zSM")`$.
+
+
+
+```{r fig:strongest_signal_SM, eval = F, echo = F}
+attach(Lap15)
+
+P_2_Dam %>% 
+  filter(fixef == "zSM") %>% 
+  ggplot(aes(x = value)) +
+  geom_histogram()
+
+P_2_Dam %>% 
+  filter(type == "ranef", nonlin == "etarate", re_factor == "Part") %>% 
+  ggplot(aes(x = value)) +
+  facet_wrap(~re_entity) +
+  geom_density() +
+  xlim(-2, 2)
+  
+  
+  
+ranef(P_2_Dam) %>% 
+  filter(nonlin == "etarate") %>% 
+  select(Part = re_entity, etarate = center) %>% 
+  join(D_Cog, by = "Part") %>% 
+  ggplot(aes(x = SM, y = etarate)) +
+  geom_point()+
+  geom_smooth()
+  
+detach(Lap15)
+```
+
+```{r fig:strongest_signal_VSA, eval = F, echo = F}
+attach(Lap15)
+ranef(P_2_Dam) %>% 
+  filter(nonlin == "etamaxp") %>% 
+  select(Part = re_entity, etarate = center) %>% 
+  join(D_Cog, by = "Part") %>% 
+  ggplot(aes(x = VSA, y = etarate)) +
+  geom_point()+
+  geom_smooth(method = "lm")
+  
+detach(Lap15)
+```
+
+
+As first conclusion, any association between cognitive predictors and learning progress cannot be fully excluded, but the signals are extremely weak. It does not seem as if these experimental testing procedures could be used for serious predictions of how fast or well a participant will learn. How should one act for selection of MIS talents when cognitive tests do not apply? In the following we explore the next best alternative: how well can maximum performance for a task be estimated *by the task itself*?
+
+Recall, that the nonlinear mixed-effects model estimates a bunch of individual learning curves. In consequence, we obtain a convenient estimate for the absolute maximum performance score $m_p = \exp(\beta_m + \beta_p)$ (group average plus individual deviation). How accurately can we predict how well a participant will perform after continued practice? We demonstrate this by a hypothetical situation, where applicants may only proceed with an MIS training, if they will probably be able to do the test task in 3 minutes, i.e. $m_{p} \leq 3$. As the estimate of maximum performance is uncertain, an additional criterion is required. For a screening test with a low false alarm rate, the following seems reasonable: maximum performance is below 3 minutes, with 20% certainty at least. For the estimation, we ran a simplified model, where only learning curves are estimated, without any predictors. Figure [XY] shows the 60% credibility limits (ranked by posterior median): two participants that have their lower 20% limit above 3 minutes would be excluded from the training.
+
+```{r, echo = F}
+attach(Lap15)
+G_ranef
+detach(Lap15)
+```
+
+
+
+
+
+## Discussion
+
+A more realistic approach is the application of learning curves by estimating maximum performance a trainee is likely to reach. We demonstrated how a screening test could sort out extreme low performers. Theoretically, this procedure also lends itself to a more fine-grained selection, like the identification of talents.  Such a program would involve decisions affecting safety of surgical procedures, as well as career paths of participants. It must not be taken lightly; more specifically it must take uncertainty into account and require further validation. 
+
+Whereas measures of uncertainty are readily provided by the suggested statistical model, validation requires further research. Principally, a surgical test task can be considered valid if it highly correlates with external criteria that can be assumed to be valid. In a perfect world one would test a group of representative attendants and relate the results to their long-term performance, e.g. [...]. Such a study would be extremely challenging as it had to run over a long period of time with tight control of potentially many influencing factors. A less compelling, but reasonably economic strategy would be to trace learning on a variety of surgical tasks and assess whether maximum performance (or rate) correlates between tasks. With a careful selection of tasks one can assume face validity and test for consistency of the set of tasks. With good internal consistency, participants can be tested on multiple task. This is common in psychometric procedures (e.g. intelligence tests) and yields estimates of better certainty. The model we presented can be extended to such a situation and random effects models have good psychometric properties [ref].
+
+
+## Limitations
+
+In our study, performance estimates were taken on one procedure, only.
+
+It is possible, that for other tasks learning could depend more 
+strongly on the cognitive predictors. The same holds for our analysis on predicting by the task itself.
+
+As was elaborated already, it deems likely that the task at hand has some predictive value for other surgical tasks, but this is not certain. Future studies could assess the cross-validity of different procedures.
+
+It may seem uncommon to use a regression model for psychometric purposes. Psychometric applications of random effects have been demonstrated by [REF, JSS, lme4]. Gelman argues that due to skrinkage of random effects unlimited pairwise comparison is possible [ref].
