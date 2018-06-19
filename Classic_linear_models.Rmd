@@ -1,4 +1,4 @@
-# Linear models {#linear_models}
+# Classic Linear models {#linear_models}
 
 
 
