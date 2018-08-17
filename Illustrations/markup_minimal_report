@@ -1,0 +1,40 @@
+
+
+
+# Results
+    
+In the study we examined
+
+1. whether on average users can rent a car in 99 seconds
+2. and if we can say that with sufficient certainty
+    
+## Data exploration
+
+
+```{r}
+summary(D)
+```
+
+```{r}
+summary(D)
+```
+
+All variables show good variation.
+    
+## Regression
+
+```{r}
+M_1 <- stan_lm(ToT ~ 1, data = D)
+```
+
+```{r}
+coef(M_1) %>% knitr::kable()
+```
+
+
+Our main observations are:
+
++ the 99 seconds claim is not supported
++ time-on-task measures are not normally distributed
+
+
