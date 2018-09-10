@@ -475,10 +475,10 @@ A general useful application of z-scores is to bootstrap a common unit for a div
 
 
 
-### Correlations
+### Correlations {#correlations}
 
 
-LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$. In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a smimulated data set where X and Y are linearly linked:
+LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a smimulated data set where X and Y are linearly linked:
 
 ```{r}
 D_cor <-
@@ -495,37 +495,7 @@ D_cor %>%
 ```
 
 
-
-
-Pearson $r$ basically is a *standardized covariance* and a covariance is by itself a measure of association between two variables X and Y, namely:
-
-$$
-\textrm{cov}_{XY} = \frac{1}{n} \sum_{i=1}^n (x_i - E(X)) (y_i - E(Y))
-$$
-
-```{r results = "markup"}
-cov(D_cor$x, D_cor$y)
-```
-
-In plain words, the covariance formula takes the deviations of both variables from their respective expected value and multiplies them. When positive deviations of X coincide with positive deviations of Y, that product gets larger; the same for negative values. The average of the deviation products is the covariance.
-
-The difference between an observation and the mean of observations is nothing else than a center shift transformation. However, the scale of the variables stays. In effect, covariances can hardly be interpreted by themselves and two covariances can only be compared, if they share the scale of measurement. If one wants to compare the association strength of two predictors, say age and number of previous uses on ToT, that is inconvenient.
-
-Pearson $r$ solves the problem by rescaling covariance using the standard deviations of X and Y:
-
-$$
-r_XY = \frac{\textrm{cov}_{XY}}{\textrm{sd}_X \textrm{sd}_Y}
-$$
-
-```{r results = "markup"}
-cov(D_cor$x, D_cor$y)/(sd(D_cor$x) * sd(D_cor$y))
-cor(D_cor$x, D_cor$y)
-```
-
-
-Due to the full standardization, $r$ lets the researcher interpret strength of association independent of scale of measurement. More precisely, $r$ will always sit in the interval $[-1,1]$. That makes $r$ a perfect choice for many purposes. For example, in psychometrics the reliability of a measure is often assessed in test-retest settings. All participants undergo two separate tests and the correlation between the two scores is a measure for stability of the test, also called test-retest reliability. By using correlations, psychometricians can set absolute standards for the reliability of assessments.
-
-The slope parameter in an LRM is a measure of association, too. However, it fully remains on the scale of measurement. In the context of quantitative assessment we used to see that as an advantage, because it allows us to make quantitative statements and predict future outcomes. Still, one can easily  obtain Pearson $r$ by rescaling the slope coefficient $\beta_1$  using the following formula:
+Recall, that $r$ is covariance standardized for dispersion and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. In contrast, slope parameter in an LRM is a measure of association, too. It is agnostic of the overall location of measures, because this is captured by the intercept. However, dispersion remains intact.  That makes that slope and intercept together retain information about location, dispersion and association of data and we can ultimately make predictions. Still, there is a tight re.lationship between Pearson $r$ and a slope coefficient $\beta_1$, namely:
 
 $$
 r = \beta_1 \frac{sd_X}{sd_Y}
@@ -553,6 +523,8 @@ M_z <-
 stats::coef(M_z)[2]
 ```
 
+<!-- #29
+
 Pearson's $r$ spawns from a different school of thinking than Bayesian parameter estimation: analysis of variance (ANOVA). Roughly, this family of methods draws on the idea of dividing the *total variance* of the outcome variable into two components: *explained variance* and *residual variance*. The very formula of the variance parameter reveals its connection to covariance (it is even allowed to say, that variance is the covariance of a variable with itself):
 
 $$
@@ -567,6 +539,22 @@ str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
 ```
 
 To sum it up, Perason $r$ and $r^2$ are useful statistic to express the strength of an association, when the scale of measurement does not matter or when obe desires to compare across scales. Furthermore, correlations can be part of advanced multilevel models which we will treat in 
+-->
+
+In regression modelling the use of coefficients prevales because they allow for predictions. However, correlation coefficients play a major role in two situations: in exploratory data analysis and in multilevel models. With the latter we will deal in @\ref(re_correlations). For exploratory data analysis it is recommended to inspect pairwise correlations for the following reasons:
+
+1. Correlations between predictors and responses are a quick and dirty assessment of the expected associations
+2. Correlations between multiple response modalities  (e.g., ToT and number of errors) indicate to what extent these responses can be considered exchangeable.
+3. Correlations between predictors should be checked upfront to avoid problems arising from so-called colinearity.
+
+<!-- #30 
+Linear models link multiple predictors to an outcome variable. In the MMN case we observed that, by adding another predictor to a model, the strength of the original predictor only changes marginally. That is *not* the general rule as we will see now!
+
+Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. Never is there bending needed to connect three points.
+-->
+
+<!--
+Elaborations on Euclidean space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable.-->
 
 
 
@@ -1596,18 +1584,6 @@ data_frame(age = runif(200, 20, 70),
 
 follow a flat line (at zero), whereas we see in the graph that the residuals tend towards negative values for older people. The same holds for the dispersion of residuals: there is exactly one $\sigma$ in the equation, hence there should not be any difference in variance between young and old.
 Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 75% quantiles. Two visible trends occur in both models. First, the residuals seem to get more dispersed for higher age. Second, there is a downward trend, with the error for older people tending to be on the negative side. It seems that young and old have different residual distributions, although the classic residual term clearly demands that they come from a single distribution:
-
-
-
-
-
-### Co-linearity [TBC]
-
-Linear models link multiple predictors to an outcome variable. In the MMN case we observed that, by adding another predictor to a model, the strength of the original predictor only changes marginally. That is *not* the general rule as we will see now!
-
-Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. Never is there bending needed to connect three points.
-
-[Elaborations on Euclidean space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable]
 
 
 
