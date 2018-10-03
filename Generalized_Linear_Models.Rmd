@@ -518,141 +518,6 @@ This is different for higher order methods for obtaining point and interval esti
 
 
 
-#### Overdispersion
-
-Poisson, binomial and exponential distributions are one-parameter distributions such that  location and variance are tightly entangled. As we usually are interested in 
-are two completely independent choices for Gaussian distributions, whereas for variables with Binomial or Poisson distribution, only the location parameter is estimated. The subtle consequence is that the variance of any such distributions is strictly tied to the mean. In fact, for Poisson distributions the variance *is* the mean:
-
-$x \sim Pois(\lambda) \implies \mu = \sigma^2 = \lambda$
-
-The variance of binomial variables is:
-
-$x \sim Bin(p, k) \implies \mu = k\mu(1-\mu) = p$, where k is the number of trials.
-
-[ILLUSTRATION]
-
-The strict variance assumptions of Poisson, binomial and exponential models are frequently violated by real data. The violation happens when impact factors have not been included in the likelhood equation. Whenever there is one or more impact factors on the outcome at question that the researcher has not regarded, overdispersion inevitably happens. That means it always happens in studies other than purified physics experiments. 
-
-Within the framework of GLM, there exist solutions. For all three one-parameter distributions, there exists a two-parameter distribution that allows for extra variance. 
-
-```{r opts.label = "invisible"}
-readxl::read_excel("figures/GLM_distributions.xlsx", sheet = "plugin") %>% kable()
-```
-
-
-
-is to switch to a two parameter random component, like from Poisson fo negative-binomial, from exponential to gamma and from binomial to beta-binomial. In all three cases, the two parameter distribution can be ascribed as plugin distributions. 
-
-
-Using Poisson regression for overdispersed  count data results in inflated certainty of estimates. When strictly inferential statistics is done, this must be accounted for. A classic way to regard overdispersion is to choose yet another random distríbution that adds a scale parameter for randomness variation. For Poisson regression that is the negative binomial distribution (never mind its name!), for binomial the beta-binomial and for exponential it is the gamma distribution. These are respected members of the broader GLM family and two of them, negative binomial and gamma, are even canonical. Negative binomial and gamma distributions introduce a scale parameter for variance. They keep the basic relation between $\mu$ and variance intact, but 
-
-With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance without extending the family any further. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
-
-$$
-\theta_{pi} = \beta_0 + x_p\beta_{0p} \\
-\mu_{pi} = \exp(\theta_{pi})\\
-\beta_{0p} \sim N(\mu_{p}, \sigma_p)\\
-y_{p} \sim \textrm{Pois}(\mu_{ij})$$
-
-The OLRE is normally distributed but  does not cause any bounded-range range, as it is added on the level of the linear predictor, before applying the exponential transformation. Observation-level random effects are completely analogous, except that every observation becomes its own group, in a Poisson grand mean model with added variation:
-
-$$
-\theta_{i} = \beta_0 + \beta_{i} \\
-\mu_i = \exp(\theta_i)\\
-y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
-
-See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive. Compare this to the negative binomial distribution where variance is scaled up, which is multiplication. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
-
-```{r opts.label = "invisible"}
-attach(Chapter_GLM)
-```
-
-For demonstration of the concept, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
-
-```{r}
-
-sim_ovdsp <- function(
-  beta_0 = 2,   # mu = 8
-  sd_Obs = .3, 
-  sd_Part   = .4,
-  N_Part = 30,
-  N_Rep  = 20, 
-  N_Obs =  N_Part * N_Rep,
-  seed = 42){
-  set.seed(seed)
-  Part <- data_frame(Part = 1:N_Part,
-                     beta_0p = rnorm(N_Part, 0, sd_Part)) ## participant-level RE
-  D <- data_frame(Obs  = 1:N_Obs,
-                    Part = rep(1:N_Part, N_Rep),
-                    beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
-                    beta_0 = beta_0) %>%
-    left_join(Part) %>% 
-    mutate(theta_i = beta_0 + beta_0p + beta_0i,
-           mu_i    = exp(theta_i),               ## inverse link function
-           y_i     = rpois(N_Obs, mu_i))
-  D %>% as_tbl_obs()
-}
-
-D_ovdsp <- sim_ovdsp()
-
-D_ovdsp %>%
-  ggplot(aes(x = y_i)) +
-  geom_histogram()
-```
-
-```{r opts.label = "inv"}
-sync_CE(Chapter_GLM, sim_ovdsp, D_ovdsp)
-```
-
-
-```{r opts.label = "mcmc"}
-M_ovdsp <- 
-  D_ovdsp %>% 
-  stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
-             family = poisson, iter = iter)
-
-```
-
-```{r opts.label = "mcsync"}
-sync_CE(Chapter_GLM, M_ovdsp)
-```
-
-
-Random effect variation is accurately recovered from the simulated data. The following two plots show, the participant latent scores can be recovered and even the observation levels themselves. Every observation gets an accurate measure of how much it had been pushed by unrecorded sources of variation. Practically, we obtain residuals which can be used for model criticism. For example, extreme outliers can be identified and relations between random variation and predicted values (or groups)  are open to scrutiny.
-
-
-```{r}
-grpef(M_ovdsp)
-```
-
-Frequently, I reminded the reader to interpret parameters quantitatively, by translating their magnitude to statements of practical relevance. For random effects variance this isn't always straight forward. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GLMM, the marriage of LMM and GLM this claim is testable.
-
-```{r opts.label = "future"}
-D_ovdsp %>% 
-  bind_cols(filter(RE_1, re_factor == "Obs")) %>% 
-  ggplot(aes(x = beta_0i, y = center, ymin = lower, ymax = upper)) +
-  geom_errorbar()
-
-
-D_ovdsp %>% 
-  distinct(Part, beta_0p) %>% 
-  bind_cols(filter(RE_1, re_factor == "Part")) %>% 
-  ggplot(aes(x = beta_0p, y = center, ymin = lower, ymax = upper)) +
-  geom_errorbar()
-
-```
-
-
-
-
-From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we won't need one of those twisted two parameter random distribution to account for overdispersion. With OLRE models we get an estimate that is very similar to a *residuals*, which have proven very useful in model criticism. In the next section, we will use OLRE to diagnose a particularly wicked source of overdispersion that cannot be covered by OLRE, zero inflation.
-
-
-```{r opts.label = "invisible"}
-detach(Chapter_GLM)
-sync_CE(Chapter_GLM, sim_ovdsp, D_ovdsp)
-```
-
 
 #### Zero inflation
 
@@ -1047,6 +912,173 @@ Group effects indicate how homogeneous the overall pattern (Table 1) is on indiv
 
 -->
 
+
+### Modelling overdispersion
+
+Poisson and binomial distributions are one-parameter distributions, with the  effect that location and dispersion are tightly entangled. 
+
+$x \sim Pois(\lambda) \implies \mu = \sigma^2 = \lambda$
+
+The variance of binomial variables is:
+
+$x \sim Bin(p, k) \implies \mu = k\mu(1-\mu) = p$, where k is the number of trials.
+
+[ILLUSTRATION]
+
+The strict variance assumptions of Poisson and binomial models are frequently violated by real data. The violation happens when impact factors have not been included in the likelhood equation. Whenever there is one or more impact factors on the outcome at question that the researcher has not regarded, overdispersion inevitably happens. That means it practically always happens in studies involving objects with complex dynamics, such as the human mind. 
+
+Two solutions exist for overdispersed count data: we can either switch to an appropriate two parameter response distribution, that disentangles mean and variance, or introduce an observation-level random effect.
+
+For all three one-parameter distributions, there exists a two-parameter distribution that allows to estimate the amount of random dispersion (almost) independently of the mean.
+
+```{r opts.label = "invisible"}
+readxl::read_excel("figures/GLM_distributions.xlsx", sheet = "plugin") %>% kable()
+```
+
+Using Poisson regression for overdispersed  count data results in too favorable certainty of estimates, which is a mistake, of course. One solution to the problem is to switch to yet another response distribution that has a second parameter, thereby allowing the variance to vary (almost) freely. For the Poisson case (i.e., counts without an upper limit) that typically is the negative binomial distribution (never mind its name!), for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the original distribution is not constant, but allowed to vary, typically according
+to some other distribution. Under this perspective, the negative binomial distribution is equivalent to a Poisson distribution, where the parameter $\lambda$ follows a certain gamma distribution:
+
+```{r}
+rnegbinom <- function(n, mu, size){
+  shape = size
+  scale = mu/size
+  lambda = rgamma(n, shape = shape, scale = scale)
+  rpois(n, lambda = lambda)
+}
+
+rnegbinom(1000, mu = 3, size = 2) %>%  qplot()
+```
+
+The figure below shows a negative binomial distribution and Poisson distribution with the same mean.
+
+```{r}
+data_frame(x = 0:15,
+           nbinom = dnbinom(x, mu = 3, size = 2),
+           poisson  = dpois(x, 3)) %>% 
+  gather(distribution, prob, -x) %>% 
+  ggplot(aes(x = x, y = prob)) +
+  facet_grid(distribution ~ .) +
+  geom_col(position = "dodge")
+
+```
+
+For beta-binomial distributions, the mixture is even more straight forward:
+
+```{r}
+rbetabinom <- function(n, size, a, b) rbinom(n, size, rbeta(n, a, b))
+rbetabinom(1000, 10, 1, 2) %>% qplot()
+```
+
+The brms regression engine implements both response distributions for overdispersed count data. Both families, negative binomial and beta-binomial are repqrq 
+
+#### [HERE]
+
+With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance without extending the family any further. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
+
+$$
+\theta_{pi} = \beta_0 + x_p\beta_{0p} \\
+\mu_{pi} = \exp(\theta_{pi})\\
+\beta_{0p} \sim N(\mu_{p}, \sigma_p)\\
+y_{p} \sim \textrm{Pois}(\mu_{ij})$$
+
+The OLRE is normally distributed but  does not cause any bounded-range range, as it is added on the level of the linear predictor, before applying the exponential transformation. Observation-level random effects are completely analogous, except that every observation becomes its own group, in a Poisson grand mean model with added variation:
+
+$$
+\theta_{i} = \beta_0 + \beta_{i} \\
+\mu_i = \exp(\theta_i)\\
+y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+
+See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive. Compare this to the negative binomial distribution where variance is scaled up, which is multiplication. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
+
+```{r opts.label = "invisible"}
+attach(Chapter_GLM)
+```
+
+For demonstration of the concept, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
+
+```{r}
+
+sim_ovdsp <- function(
+  beta_0 = 2,   # mu = 8
+  sd_Obs = .3, 
+  sd_Part   = .4,
+  N_Part = 30,
+  N_Rep  = 20, 
+  N_Obs =  N_Part * N_Rep,
+  seed = 42){
+  set.seed(seed)
+  Part <- data_frame(Part = 1:N_Part,
+                     beta_0p = rnorm(N_Part, 0, sd_Part)) ## participant-level RE
+  D <- data_frame(Obs  = 1:N_Obs,
+                    Part = rep(1:N_Part, N_Rep),
+                    beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
+                    beta_0 = beta_0) %>%
+    left_join(Part) %>% 
+    mutate(theta_i = beta_0 + beta_0p + beta_0i,
+           mu_i    = exp(theta_i),               ## inverse link function
+           y_i     = rpois(N_Obs, mu_i))
+  D %>% as_tbl_obs()
+}
+
+D_ovdsp <- sim_ovdsp()
+
+D_ovdsp %>%
+  ggplot(aes(x = y_i)) +
+  geom_histogram()
+```
+
+```{r opts.label = "inv"}
+sync_CE(Chapter_GLM, sim_ovdsp, D_ovdsp)
+```
+
+
+```{r opts.label = "mcmc"}
+M_ovdsp <- 
+  D_ovdsp %>% 
+  stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
+             family = poisson, iter = iter)
+
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_GLM, M_ovdsp)
+```
+
+
+Random effect variation is accurately recovered from the simulated data. The following two plots show, the participant latent scores can be recovered and even the observation levels themselves. Every observation gets an accurate measure of how much it had been pushed by unrecorded sources of variation. Practically, we obtain residuals which can be used for model criticism. For example, extreme outliers can be identified and relations between random variation and predicted values (or groups)  are open to scrutiny.
+
+
+```{r}
+grpef(M_ovdsp)
+```
+
+Frequently, I reminded the reader to interpret parameters quantitatively, by translating their magnitude to statements of practical relevance. For random effects variance this isn't always straight forward. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GLMM, the marriage of LMM and GLM this claim is testable.
+
+```{r opts.label = "future"}
+D_ovdsp %>% 
+  bind_cols(filter(RE_1, re_factor == "Obs")) %>% 
+  ggplot(aes(x = beta_0i, y = center, ymin = lower, ymax = upper)) +
+  geom_errorbar()
+
+
+D_ovdsp %>% 
+  distinct(Part, beta_0p) %>% 
+  bind_cols(filter(RE_1, re_factor == "Part")) %>% 
+  ggplot(aes(x = beta_0p, y = center, ymin = lower, ymax = upper)) +
+  geom_errorbar()
+
+```
+
+
+
+
+From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we won't need one of those twisted two parameter random distribution to account for overdispersion. With OLRE models we get an estimate that is very similar to a *residuals*, which have proven very useful in model criticism. In the next section, we will use OLRE to diagnose a particularly wicked source of overdispersion that cannot be covered by OLRE, zero inflation.
+
+
+```{r opts.label = "invisible"}
+detach(Chapter_GLM)
+sync_CE(Chapter_GLM, sim_ovdsp, D_ovdsp)
+```
 
 
 
@@ -1730,7 +1762,7 @@ When observations are censored, the regression engine interpolates the missing p
 1. The user can only do things one after the other and therefore, RT and ToT will never come close to zero. Conceive examples of independently triggered events that *happen* to users and effect user satisfaction. 
 
 
-# Rating scales
+## Rating scales
 
 
 

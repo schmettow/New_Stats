@@ -47,6 +47,7 @@ library(polynom)
 
 ## Plotting and setting
 library(knitr)
+library(printr)
 #library(knitcitations)
 library(gridExtra)
 library(GGally)
@@ -121,10 +122,9 @@ library(syncenv)
 opts_chunk$set(echo = purp.rtut, 
                warning = purp.debg, 
                message = purp.debg,
-               eval = purp.book,
-               results = "asis")
+               eval = purp.book, results = "asis")
 
-options(digits=1)
+options(digits=3)
 
 ## chunk templates
 
@@ -142,7 +142,7 @@ opts_template$set(
   #sim = list(eval = purp.book, echo = purp.debg),
   mcmc = list(eval = purp.mcmc, echo = purp.rtut),
   mcsync = list(eval = purp.mcmc, echo = purp.debg),
-  #rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut),
+  #rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut, results = "markup"),
   #rtut.slide = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut,
   #                  fig.width = 8, fig.height = 4, dpi = 120, dev = "svg"),
   rtut.nr = list(eval = F, echo = purp.rtut),

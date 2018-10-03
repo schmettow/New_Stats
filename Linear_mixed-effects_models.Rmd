@@ -1115,7 +1115,7 @@ detach(IPump)
 
 
 
-## Growing with random effects correlations [TBD]
+## Growing with random effects correlations [TBD] {#re_correlations}
 
 Here we finally resolve the Typing paradox and encounter another immensely useful element in random effect modelling. Let's take another good look at the Figure X [Average? Neverage. Last one]. 
 

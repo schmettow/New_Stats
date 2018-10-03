@@ -87,6 +87,16 @@ People had been using the data to come to conclusions, but they also relied on t
 
 ### Model convergence
 
+Throughout this book I have fooled you into thinking that the regression engine is something where you put your data and model in and you get some tidy MCMC chains as output, like putting gras into a coow produces milk. MCMC chains are random walks and they are not at all as cows. MCMC chains are like a bulk of young kitten, everyone on their own route, bumping into things or getting stuck in corners. Stan is very good with kitten and safely guides their path through the unknowns of a multidimensional parameter space. Most of the time.
+
+Pathologies of MCMC chains:
+
+1. too few cycles
+2. chains plateau for longer periods
+3. chains do not arrive at similar distributions
+4. chains wipe over tiny gaps in the distribution
+
+
 
 + MCMC convergence
 + eff sample size

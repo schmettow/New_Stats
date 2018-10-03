@@ -6,7 +6,7 @@
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 thisdir = getwd()
 purp.mcmc = F
-library(printr)
+#library(printr)
 source("RMDR.R")
 
 CE <-  c("BrowsingAB","Reading", "Chapter_GSR")
@@ -25,15 +25,13 @@ Most of what comes packaged with R, we will set aside. R is basically a brillian
 
 In the past few years, a single person, Hadley Wickham, has almost single-handedly started an initiative known as the *tidyverse*. The tidyverse is a growing collection of libraries that ground on a coherent and powerful set of principles for data management. One of the core packages is *dplyr* and it introduces a rich, yet rather generic, set of commands for data manipulation. The  sorting of a data frame mentioned above would be written as
 
-`arrange(D, Part)`
+`D %>% arrange(Part)`
 
 One of Wickham's first and well-known contributions is the *ggplot* system for graphics. Think of R's legacy graphics system as a zoo of individual routines, one for boxplots, another one for scatterplots asf. Like animals in a zoo, they live in different habitats with practically no interaction. ggplot implements a rather abstract framework for data plots, where all pieces can be combined in a myriad of ways, using a simple and consistent syntax.
 
 Where to get these gems? R is an open source system and has spawned an open ecosystem for statistical computing. Thousands of extensions for R have been made available by data scientists for data scientists. The majority of these packages is available through the *comprehensive R archive network (CRAN)*. For the common user it suffices to think of CRAN as an internet catalogue of packages, that can be searched and where desired packages can be downloaded and installed in an instance.
 
-Finally, R comes with a very rudimentary programming environment that carries the questionable charm of early 1990s. Whereas several alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. It is the most user-friendly and (at the same time!) feature richest software to program in R. Only some die-hard EMACS <!-- #3 --> users might disagree and continue to strain their tendons using the ESS extension.
-
-The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.
+Finally, R comes with a very rudimentary programming environment that carries the questionable charm of early 1990s. Whereas several alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. At the time of writing, it is the most user-friendly and feature rich software to program in R. The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.
 
 
 ## Setting up the R environment
@@ -142,7 +140,17 @@ We start by *checking the packages*:
 
 > Error in library(tidyverse) : there is no package called 'tidyverse'
 
-This means that the respective package is not yet present in your R library. Before you can use the package _tidyverse_ you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Install`, enter the names of the missing package(s) and install.
+This means that the respective package is not yet present in your R library. Before you can use the package _tidyverse_ you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Install`, enter the names of the missing package(s) and install. On the R console the following command downloads and installs the package _tidyverse_.
+
+```{r opts.label = "rtut.nr"}
+install.packages("tidyverse")
+```
+
+CRAN is like a giant stream of software pebbles, shaped over time in a growing tide. Typically, a package gets better with every version, be it in reliability or versatility, so you want to be up-to-date. Rstudio has a nice dialogue to update packages and there is the R command:
+
+```{r opts.label = "rtut.nr"}
+update.packages("tidyverse")
+```
 
 Finally, run the complete code block at once by selecting it and `Ctrl-Enter`. You will see some output to the console, which you should check once again. Unless the output contains any error messages (like above), you have successfully installed and loaded all packages.
 
@@ -150,7 +158,7 @@ Finally, run the complete code block at once by selecting it and `Ctrl-Enter`. Y
 
 ### Installing packages from Github
 
-Two packages, *mascutils* and *bayr* are written by the author of this book. They have not yet been committed to CRAN, but they are available on *Github* which is a general purpose versioning system for programmers. Fortunately, with the help of the *devtools* package it is rather easy to install these packages, too. Just enter the Rstudio console and type:
+Two packages, *mascutils* and *bayr* are written by the author of this book. They have not yet been committed to CRAN, but they are available on *Github* which is a general purpose versioning system for software developers and few authors. Fortunately, with the help of the *devtools* package it is rather easy to install these packages, too. Just enter the Rstudio console and type:
 
 ```{r install_github, opts.label = "rtut.nr"}
 library(devtools)
@@ -158,8 +166,7 @@ install_github("schmettow/mascutils")
 install_github("schmettow/bayr")
 ```
 
-Again, you have to do that only once after installing R and you can afterwards load the packages with the `library` command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again. <!-- #6 -->
-
+Again, you have to do that only once after installing R and you can afterwards load the packages with the `library` command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again.
 
 
 
@@ -218,7 +225,7 @@ sync_CE(Chapter_GSR, model)
 ```
 
 
-```{r first_simulation_2, opts.label = "tab"}
+```{r first_simulation_2}
 
 fixef(model)
 
@@ -264,7 +271,7 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 
 
-## Programming in R: a primer
+## Learning R: a primer
 
 
 > cRazy as in 'idiosyncrasy'
@@ -272,7 +279,12 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 This book is for applied researchers in design sciences, whose frequent task is to analyze data and report it to stakeholders. Consequently, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R, mostly from the tidyverse, is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data which can then be pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with usual programming concepts such as conditionals, loops or the somewhat eccentric approaches to functional programming. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics, as others have done the hard work for us. 
 
-Let me first give you a global account of programming in R, albeit that might be more interesting for readers who have experience with other programming languages (and styles). R serves three purposes: interactive data analysis, creating data analysis reports and developing new statistical routines. 
+R mainly serves three purposes, from easy to advanced: 
+1. interactive data analysis
+2. creating data analysis reports 
+3. developing new statistical routines. 
+
+It turns out that creating multimedia reports in R has become very easy by the knitr/markdown framework that is neatly integrated into the Rstudio environment. I 
 
 With R one typically *works interactively through a data analysis*. The analysis often is a rather routine series of steps, like: 
 
@@ -301,24 +313,60 @@ As we will later see [CLM], in Rs formula language the same model is unambiguous
 
 `y ~ x`
 
-R is currently the *lingua franca* of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, the following line of code identifies all scores that are more than a magnitude higher than the average score and marks them as invalid. We just applied our own rule of outlier removal to the data. Others may consider the rule invalid or arbitrary, at best. But, at least, we are fully transparent about what we had done. As you type your data analysis, you *formally report* what precisely you have been doing to the data. 
+R is currently the *lingua franca* of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, consider an outlier removal rule of:
+
+  >> An observation is valid if it does not exceed the tenfold of the observation mean.
+
+We just applied our own rule of outlier removal to the data. Others may consider this rule invalid or arbitrary. Disagreement is virtue in science and one can only disagree with what one actually sees. In R, the researcher *formally reports* what precisely has been done with the data. For example, the same outlier removal rule is unambiguously specified by the following code (the first line just simulates some data).
 
 
-```{r, opts.label = "rtut"}
-scores     <- c(1,2,4,3,6,5,50,1,2,5,800)
-mean_score <- mean(scores)
-invalids   <- scores > (mean_score * 10)
-scores[invalids] <- NA
+```{r, opts.label = "rtut", results = "markup"}
+D <- data_frame(score = c(1, 2, 4, 3, 5, 6, 50, 800))
 
+D %>% filter(score < mean(score)) 
 ```
 
-Finally, R is a way to *develop and share statistical programs*. Thousands of packages in the R ecosystem cover any statistical problem you can imagine. Countless researchers and developers have written statistical routines that can be re-used. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Most of the people who are developing R have a background in general purpose programming languages, like Java, Python or C++.  <!-- #7 -->
+Finally, R is a way to *develop and share statistical programs*. Thousands of packages in the R ecosystem cover almost all statistical problems you can imagine. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Readers with programming experience can fly over the R basics that follow. But, as a specific purpose language  R has a few idiosyncracies you should know about:
 
-*Functional programming* means that functions are first-class citizens in R. Most notably, almost every operation in R takes an input and creates an output object. In standard R programming there is nothing such as changing an object by setting its attributes. <!-- #8 --> Furthermore, there exist so called higher level functions. These are functions that apply other functions. For example, there is a function `aaply` in the `plyr` package, that applies another function, say `sum` per column or row of a matrix. These higher level functions allow for incredibly compact code and make loops practically unnecessary.
+Almost all programming languages the first element of a list has the index zero. We got used to it, but for beginners it is a another hurdle that is unnecessary. Mathematicians, catholiques, software developers in bars and everyone, young or old, counts
 
-Most programming languages count from zero. If you have worked with Python or Java before, you know these nasty "index out-of-bounds" errors that arise. They are easy to fix, but still annoying. Mathematicians, statisticians and basically everyone, young or old, starts counting from 1. And so does R.
+>> "one", "two" ,"three".
 
-For folks who like object orientation, R is a good choice, too. It even gives you the choice of several object-orientation packages. The most basic mechanism is the so-called *S3 system*, which is rather limited and even a bit informal. S3 mainly provides a simple *overloading* mechanism. Technically, it is a method dispatcher, more or less. When, later, you find out that you can call the function `summary` on a great variety of R objects and it always does something useful, it is S3 at work. However, owing to the functional paradigm, almost all R routines go without side effects. If an object has an attribute and <!-- #7 -->
+And so does R:
+
+```{r}
+c(1:3)[1:3]
+```
+
+
+Counting from one is perhaps the most lovable idiosyncracy of R. But, lets also welcome people who have experience with other programming languages:
+
+The first thing one has to know about R is that it is a *functional programming* language. A function simply is a programmed procedure that takes data as input, applies some transformation and returns data as output. That sounds trivial, but there is an important difference to most other languages: Different to procedures in Pascal or object oriented methods (in Java or Python), functions are forbidden to modify any external object. A certain function is a black box, but one can be sure that the only thing it does is return a new object.
+
+At the same time, functions are first-class citizens in R and can be called everywhere, even as an *argument to another function*. The _plyr_ package is famous for functions that call functions, also called high-level functions. The following three liner makes heavy use of high level functions. First, a list of binary matrices is generated by repeatedly calling a random number generator, then the row sum of all matrices is computed and returned as a (new) list.
+
+```{r}
+make_binary_matrix <- 
+  function(size) as.matrix(rbernoulli(size^2, p = 1/4))
+
+LoM <- llply(c(5:7), make_binary_matrix)
+
+llply(LoM, rowSums)
+```
+
+
+What we have seen is a routine application of higher level functions: apply a transformation to a sequence of data sets. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is: 
+
+>> Whenever you think you need a loop, you don't.
+
+For me it helped to imagine the following: loops carry the notion of chain of data that moves over a fixed transformation device. In functional programing functions the can work in a hierarchy, a high-level device moves along a string of data. It carries an exchangeable low-level device that applies the desired  transformation to every position.
+
+If you come from relational data bases you you have something in common with the statistician: you both think in transformation of tables. Not coincidently, the features in _dplyr_, the tidy data transformation engine, are clearly borrowed from SQL. You will also feel at home with the idea of reports powered by  functional chunks embedded in a templating system.
+
+For object orientation folks, R is a good choice, but you have to get used to it. First, it gives you the choice of several object orientation systems, which sometimes requires to install a package. The so-called *S3 system* is the original. It is rather limited and some even call it informal. The approach is as simple as it is unusal. S3 mainly is a raw method dispatcher that can handles overloading of functions.  S3 puts methods first, then objects, whereas in traditional object orientation, the method belongs to the class, making the object "knows" its methods. In S3, the object and the method both know their class. When calling an S3 method, you actually  call a generic method that finds the matching method and applies it. 
+
+Beginners are at peace with all of this. You can count like you do. Functional programming is intuitive for working on research data. And because of S3 the function `summary` always does something useful.
+
 
 
 ### Assigning and calling Objects
@@ -578,7 +626,7 @@ Experiment
 
 This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above.
 
-```{r df_call_print, opts.label = "rtut.nr"}
+```{r df_call_print, opts.label = "rtut.nr", results = "markup"}
 print(Experiment)
 
 ```
@@ -591,14 +639,14 @@ The dedicated print function does what way back a developer thought would be the
 
 Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
-```{r opts.label = "rtut"}
+```{r opts.label = "rtut", results = "markup"}
 summary(Experiment)
 ```
 
 
 The `str` (structure) command works on any R object and displays the hierarchical structure (if there is one):
 
-```{r opts.label = "rtut"}
+```{r opts.label = "rtut", results = "markup"}
 str(Experiment)
 ```
 
@@ -617,7 +665,7 @@ As data frames are rectangular structures, you can also access individual values
 + the first to third elements of _Group_
 + the complete first row
 
-```{r df_slicing, opts.label = "rtut"}
+```{r df_slicing, opts.label = "rtut", results = "markup"}
 Experiment[  1, 3]
 Experiment[1:3, 2]
 Experiment[  1,  ]
@@ -628,7 +676,7 @@ Addressing one or more elements in square brackets, always requires two elements
 There is an important difference, however, when using R's classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with  `data.frame`, when the addressed elements expand over multiple columns, like 
 `Experiment[, 1:2]`, the result will be a `data.frame` object, too. However, when slicing a single column, the result is a vector:
 
-```{r df_classic_odd, opts.label = "rtut"}
+```{r df_classic_odd, opts.label = "rtut", results = "markup"}
 Exp_classic <- as.data.frame(Experiment)
 Exp_classic[1:2,1:2]  ## data.frame
 Exp_classic[1,]       ## data.frame
@@ -652,7 +700,7 @@ Experiment$Group      ## the same
 
 Sometimes, it may be necessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a data frame can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to `NA`.
 
-```{r df_injecting, opts.label = "rtut"}
+```{r df_injecting, opts.label = "rtut", results = "markup"}
 ## injecting
 Experiment[2,      "outcome"] <- 660
 Experiment[6,      "outcome"] <- 987
@@ -802,7 +850,7 @@ ORPO %>%
 
 The correct way of setting up the data frame is:
 
-```{r opts.label = "table"}
+```{r opts.label = "table", results = "markup"}
 ORPO %>% 
   filter(Task == 1, Item == 1) %>% 
   mascutils::discard_redundant()
@@ -819,7 +867,7 @@ Using identifiers is good practice for several reasons. First, it reduces proble
 
 Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.
 
-```{r opts.label = "table"}
+```{r opts.label = "table", results = "markup"}
 ORPO %>% 
   sample_n(6) %>% 
   arrange(Part, Task, Design, Item)
@@ -869,7 +917,7 @@ Exp %>% as_tbl_obs()
 
 Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the data frame, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
 
-```{r opts.label = "rtut"}
+```{r opts.label = "rtut", results = "markup"}
 Exp %>% 
   group_by(Condition) %>% 
   summarize(mean = mean(outcome),
@@ -896,7 +944,7 @@ For a brief demonstration of ggplots basic functionality, we use the `BAB1` data
 
 ```{r opts.label = "rtut"}
 attach(BrowsingAB)
-BAB1
+BAB1 %>% as_tbl_obs()
 ```
 
 The BrowsingAB case is a virtual series of studies, where two websites were compared by how long it takes users to complete a given task, time-on-task (ToT). Besides the design factor, a number of additional variables exist, that could possibly play a role for ToT, too. We explore the data set with ggplot:
