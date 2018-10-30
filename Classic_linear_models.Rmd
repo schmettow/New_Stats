@@ -1537,13 +1537,9 @@ detach(AUP)
 ```
 
 
+<!-- 37
 
-
-
-```{r eval = F, show = F}
-##### [EATME]
-
-What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `r frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`r C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
+What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
 
 
 Analysis of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is an essential part of the modelling process, too. By residual analysis we reflect on whether the Normality assumption is reasonably defensible. For variables that are counts, the distribution may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
@@ -1553,9 +1549,11 @@ Drawing on expected values, *residual analysis is something you can only do afte
 $$
 \epsilon_i \sim \textrm{Norm}(0, \sigma)
 $$
+
+
 The first assumption of linear models is obvious: the residual distribution must follow a *Normal distribution*. There is one easy and one advanced way to check that this is true. It is easiest to create a density plot from residuals and compare it to the known properties of a Normal distribution:
 
-```{r BAB1_check_normal, fig.cap= "A histogram on residuals", eval = F}
+```{BAB1_check_normal, fig.cap= "A histogram on residuals", eval = F}
 data_frame(resid = residuals(M_age)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
@@ -1566,7 +1564,7 @@ The residual distribution of `M_age` appears perfectly symmetric and has just on
 
 The single residual distribution assumption of linear models, as harmless as it may appear, brings forth two claims:  residuals must have the same dispersion everywhere, which is called *homogeneity  of variance* and residuals must have *independence* from any predictors. Residuals are all supposed to fall into a horizontal band of even width, like in the figure \@ref(quantile_caterpillar). Note how this figure is created by first simulating data using the approximate coefficients of model `M_age`. The independence of residuals emerges by the absence of any relation with age in the data generating code.
 
-```{r quantile_caterpillar, fig.cap = "", eval = F}
+```{quantile_caterpillar, fig.cap = "", eval = F}
 set.seed(42)
 data_frame(age = runif(200, 20, 70),
            resid = rnorm(200, 0, 46),
@@ -1587,7 +1585,7 @@ Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 7
 
 
 
-
+-->
 
 
 
@@ -1644,15 +1642,15 @@ With *pair matching*, potentially relevant participant traits are recorded upfro
 
 However, there are better alternatives: the best pair  match is the person herself. Experimental studies that expose the same person to several conditions are called *within-subject*. In the special case that all participants encounter all conditions, the variable is *complete within-subject*. [A special  case of within-subject design is *repeated measures*.] In the following chapter, we use mixed-effects models [LMM] to deal with within-subject designs, gracefully.
 
-In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in levels: *basic representation* is reached when all influencing properties have occurred a few times during observation. [...]
-*Proportional representation* means that user and situational properties have the same relative frequency in sample as in population. 
+In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in two levels: *coverage representation* is reached when all influencing properties have occurred a few times during observation. So, if your target population contains several subgroups, such as age groups, experience or people with different goals, they should all be covered to some extent.
+*Proportional representation* means all user and situational properties are covered *and* they have about the same proportion in teh sample as in the population.  
 
 You can only match what you can measure and you only measure what you expect. Human behavior in everyday life is influenced by many factors in complex ways. Although a plethora of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
 
 When influencing variables cannot be measured for matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportional representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogeneous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
 
 Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
-But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model.
+But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model. Statistical control requires at least coverage representation of the sample.
 
 ### Exercises
 
@@ -2092,7 +2090,12 @@ T_read_fixef
 
 The estimates confirm, that both manipulations have a considerable effect. And, there is an interaction effect as well, correcting the additive effect of font color and size. The combined effect of high contrast and large font is therefore
 
-$$\mu_{12pt, black} = `r T_read_fixef[1,3]` + `r T_read_fixef[2,3]` + `r T_read_fixef[3,3]` + `r T_read_fixef[4,3]` = `r sum(T_read_fixef[,3])`$$
+$$
+\mu_{12pt, black} = 
+`r T_read_fixef[1,3]` + `r T_read_fixef[2,3]` + 
+`r T_read_fixef[3,3]` + `r T_read_fixef[4,3]` = 
+`r sum(T_read_fixef[,3])`
+$$
 
 In the research scenario, that was not the question, strictly, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`)) Still, including the  interaction term is the right choice, for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clarity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthetic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially, the effects of the two manipulations get considerably under-estimated. 
 
@@ -2204,6 +2207,7 @@ sync_CE(AR_game, M_1)
 T_1 <- fixef(M_1)
 T_1
 ```
+
 The regression model confirms that sociophilia and technophilia both have a moderate effect on intention. Both main effects are clearly in the positive range. Yet, when both increase, the intention increases overlinearly. The sociophile-technophile personality is the primary target group.
 
 While plotting the relationship between three metric variables is difficult, there are alternative ways to illustrate the effect. For example, we could ask: how does intention change by .1 unit sociophilia for two imaginary participants with extreme positions on technophilia (e.g., .2 and .8). We could calculate these values arithmetically using the model formula and the center estimates. The better and genuinely Bayesian way of doing it is sampling from the *posterior predictive distribution* (PPD). This distribution is generated during parameter estimation. While the posterior distribution (PD) represents the predictors, the PPD is linked to the outcome variable. More specifically, the PPD is the models best guess of the true value $\mu$, separated from the random component. Once the posterior has been estimated, we can draw from it with any values of interest. As these can be combinations of values that have never been observed, we can truly speak of prediction. Regression engines usually provide easy means to simulate from a PD and generate predictions. In the following example, we simulate some equidistant steps of sociophilia for three participants with technophilia scores from .1 to .9.
