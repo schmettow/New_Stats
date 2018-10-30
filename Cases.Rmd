@@ -1568,11 +1568,13 @@ new_syncenv("Hugme")
 
 ```{r hugme_load_data, opts.label = "sim"}
 load("external_data/HUG3/HUG3.Rda")
+load("external_data/HUG3/Q3.Rda")
 
-Hugme$D_hugme <- HUG3 %>% 
+Hugme$D_hugme <- 
+
+  HUG3 %>% 
   rename(Part = Subj) %>% 
-  mutate(Obs = row_number(),
-         RT = RT/1000,
+  mutate(RT = RT/1000,
          WordCat = case_when(
            HUG  == "h" ~ "hedo",
            HUG  == "u" ~ "util",
@@ -1580,11 +1582,28 @@ Hugme$D_hugme <- HUG3 %>%
          ),
          WordGeek = WordCat == "geek",
          PrimeGeek = primeCat == "geek") %>% 
-  select(Obs, Part, Gender, Age, GeekField = geekField, starts_with("z"), 
-         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek,
-         correct, RT) %>% 
-  as_tbl_obs()
+  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
+         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
+  mascutils:::as_tbl_obs.tbl_df()
 
+## for chapter Data Modelling
+Hugme$HUG_exp <- Hugme$D_hugme
+
+## questionnaires
+
+Hugme$HUG_resp <- 
+  Q3 %>% 
+  select(Part = Subj, Geek01:GeekR34, NCS01:NCS11) %>% 
+  gather(Item, rating, -Part) %>% 
+  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
+  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
+  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>% 
+  arrange(Part, Scale, Item) %>% 
+  mascutils:::as_tbl_obs.tbl_df()
+
+Hugme$HUG_part <- Q3 %>% 
+  select(Part = Subj, gender = Gender, age = Age) %>% 
+  mascutils:::as_tbl_obs.tbl_df()
 ```
 
   
@@ -1593,7 +1612,10 @@ Hugme$D_hugme <- HUG3 %>%
 save(Hugme, file = "Cases/hugme.Rda")
 write_sav(Hugme$D_hugme, "Data/hugme.sav")
 write_csv(Hugme$D_hugme, "Data/hugme.csv")
-
+write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
+write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
+write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
+write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
 ```
 
 
