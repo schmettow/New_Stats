@@ -193,6 +193,14 @@ Sec99$simulate <-
     Sec99 %>% as_tbl_obs()
   }    
 
+## missing values in age
+
+Sec99$Ver20$age[c(6, 19, 73)] <- NA
+
+## Gender
+Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
+                             "male", "female")
+
 (Sec99$Ver20 <- Sec99$simulate())
 
 qplot(Sec99$Ver20$age)
