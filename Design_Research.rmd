@@ -288,7 +288,6 @@ T_desc <-
   group_by(cloudy) %>%
   summarize(chance_of_rain = mean(rain))
 
-T_desc %>% kable()
 ```
 
 ```{r}
