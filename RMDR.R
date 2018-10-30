@@ -122,7 +122,7 @@ library(syncenv)
 opts_chunk$set(echo = purp.rtut, 
                warning = purp.debg, 
                message = purp.debg,
-               eval = purp.book, results = "asis")
+               eval = purp.book, results = "markup")
 
 options(digits=3)
 
