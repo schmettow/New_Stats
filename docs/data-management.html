@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>New statistics for the design researcher</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="New statistics for the design researcher" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="New statistics for the design researcher" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  
+
+<meta name="author" content="Martin Schmettow">
+
+
+<meta name="date" content="2018-11-01">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="GLM.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-this-book-is-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#the-empirical-design-researcher"><i class="fa fa-check"></i><b>1.1.1</b> The empirical design researcher</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#the-experimentalist"><i class="fa fa-check"></i><b>1.1.2</b> The experimentalist</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#the-applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#assumptions"><i class="fa fa-check"></i><b>1.2</b> Assumptions</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-research.html"><a href="design-research.html"><i class="fa fa-check"></i><b>2</b> Elements of quantitative design research</a><ul>
+<li class="chapter" data-level="2.1" data-path="design-research.html"><a href="design-research.html#studies"><i class="fa fa-check"></i><b>2.1</b> Studies</a></li>
+<li class="chapter" data-level="2.2" data-path="design-research.html"><a href="design-research.html#observations-and-measurestbc"><i class="fa fa-check"></i><b>2.2</b> Observations and measures[TBC]</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="design-research.html"><a href="design-research.html#interaction-sequences"><i class="fa fa-check"></i><b>2.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-research.html"><a href="design-research.html#performance-measures"><i class="fa fa-check"></i><b>2.2.2</b> performance measures</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-research.html"><a href="design-research.html#experience-tbd"><i class="fa fa-check"></i><b>2.2.3</b> experience [TBD]</a></li>
+<li class="chapter" data-level="2.2.4" data-path="design-research.html"><a href="design-research.html#design-features-tbd"><i class="fa fa-check"></i><b>2.2.4</b> design features [TBD]</a></li>
+<li class="chapter" data-level="2.2.5" data-path="design-research.html"><a href="design-research.html#the-human-factor-tbd"><i class="fa fa-check"></i><b>2.2.5</b> the human factor [TBD]</a></li>
+<li class="chapter" data-level="2.2.6" data-path="design-research.html"><a href="design-research.html#situations-tbd"><i class="fa fa-check"></i><b>2.2.6</b> situations [TBD]</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="design-research.html"><a href="design-research.html#decision_making"><i class="fa fa-check"></i><b>2.3</b> Decision making under uncertainty</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="design-research.html"><a href="design-research.html#measuring-uncertainty"><i class="fa fa-check"></i><b>2.3.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="2.3.2" data-path="design-research.html"><a href="design-research.html#betting-on-designs"><i class="fa fa-check"></i><b>2.3.2</b> Betting on designs</a></li>
+<li class="chapter" data-level="2.3.3" data-path="design-research.html"><a href="design-research.html#case-e-commerce-ab"><i class="fa fa-check"></i><b>2.3.3</b> Case: e-commerce A/B</a></li>
+<li class="chapter" data-level="2.3.4" data-path="design-research.html"><a href="design-research.html#case99"><i class="fa fa-check"></i><b>2.3.4</b> Case: 99 seconds</a></li>
+<li class="chapter" data-level="2.3.5" data-path="design-research.html"><a href="design-research.html#prior-information"><i class="fa fa-check"></i><b>2.3.5</b> Prior information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a><ul>
+<li class="chapter" data-level="3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#descriptive-statistics"><i class="fa fa-check"></i><b>3.1</b> Descriptive statistics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#frequencies"><i class="fa fa-check"></i><b>3.1.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#central-tendency"><i class="fa fa-check"></i><b>3.1.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#dispersion"><i class="fa fa-check"></i><b>3.1.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#associations"><i class="fa fa-check"></i><b>3.1.4</b> Associations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-inferential-statistics"><i class="fa fa-check"></i><b>3.2</b> Bayesian Inferential statistics</a></li>
+<li class="chapter" data-level="3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-probability-theory"><i class="fa fa-check"></i><b>3.3</b> Bayesian probability theory</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#some-set-theory"><i class="fa fa-check"></i><b>3.3.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#probability"><i class="fa fa-check"></i><b>3.3.2</b> Probability</a></li>
+<li class="chapter" data-level="3.3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#certainty-as-probability"><i class="fa fa-check"></i><b>3.3.3</b> Certainty as probability</a></li>
+<li class="chapter" data-level="3.3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayes-theorem"><i class="fa fa-check"></i><b>3.3.4</b> Bayes theorem</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#statistical-models"><i class="fa fa-check"></i><b>3.4</b> Statistical models</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#predictions-and-likelihood"><i class="fa fa-check"></i><b>3.4.1</b> Predictions and likelihood</a></li>
+<li class="chapter" data-level="3.4.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#distributions"><i class="fa fa-check"></i><b>3.4.2</b> Distributions: patterns of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-estimation"><i class="fa fa-check"></i><b>3.5</b> Bayesian estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#what-is-wrong-with-classic-statistics-tbc"><i class="fa fa-check"></i><b>3.6</b> What is wrong with classic statistics? [TBC]</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-r.html"><a href="getting-started-r.html"><i class="fa fa-check"></i><b>4</b> Getting started with R</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-r.html"><a href="getting-started-r.html#setting-up-the-r-environment"><i class="fa fa-check"></i><b>4.1</b> Setting up the R environment</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-cran-packages"><i class="fa fa-check"></i><b>4.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="4.1.2" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-packages-from-github"><i class="fa fa-check"></i><b>4.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="4.1.3" data-path="getting-started-r.html"><a href="getting-started-r.html#first_program"><i class="fa fa-check"></i><b>4.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="4.1.4" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes"><i class="fa fa-check"></i><b>4.1.4</b> Bibliographic notes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-r.html"><a href="getting-started-r.html#learning-r-a-primer"><i class="fa fa-check"></i><b>4.2</b> Learning R: a primer</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="getting-started-r.html"><a href="getting-started-r.html#assigning-and-calling-objects"><i class="fa fa-check"></i><b>4.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="4.2.2" data-path="getting-started-r.html"><a href="getting-started-r.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="getting-started-r.html"><a href="getting-started-r.html#basic-object-types"><i class="fa fa-check"></i><b>4.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="4.2.4" data-path="getting-started-r.html"><a href="getting-started-r.html#operators-and-functions"><i class="fa fa-check"></i><b>4.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="4.2.5" data-path="getting-started-r.html"><a href="getting-started-r.html#storing-data-in-data-frames"><i class="fa fa-check"></i><b>4.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="4.2.6" data-path="getting-started-r.html"><a href="getting-started-r.html#import-export-and-archiving"><i class="fa fa-check"></i><b>4.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="4.2.7" data-path="getting-started-r.html"><a href="getting-started-r.html#case-environments"><i class="fa fa-check"></i><b>4.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="4.2.8" data-path="getting-started-r.html"><a href="getting-started-r.html#structuring-data"><i class="fa fa-check"></i><b>4.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="4.2.9" data-path="getting-started-r.html"><a href="getting-started-r.html#data-transformation"><i class="fa fa-check"></i><b>4.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="4.2.10" data-path="getting-started-r.html"><a href="getting-started-r.html#plotting-data"><i class="fa fa-check"></i><b>4.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="4.2.11" data-path="getting-started-r.html"><a href="getting-started-r.html#fitting-regression-models"><i class="fa fa-check"></i><b>4.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="4.2.12" data-path="getting-started-r.html"><a href="getting-started-r.html#knitting-statistical-reports"><i class="fa fa-check"></i><b>4.2.12</b> Knitting statistical reports</a></li>
+<li class="chapter" data-level="4.2.13" data-path="getting-started-r.html"><a href="getting-started-r.html#exercises-1"><i class="fa fa-check"></i><b>4.2.13</b> Exercises</a></li>
+<li class="chapter" data-level="4.2.14" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes-1"><i class="fa fa-check"></i><b>4.2.14</b> Bibliographic notes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i><b>5</b> Linear models</a><ul>
+<li class="chapter" data-level="5.1" data-path="linear-models.html"><a href="linear-models.html#quantification-at-work-grand-mean-models"><i class="fa fa-check"></i><b>5.1</b> Quantification at work: grand mean models</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-models.html"><a href="linear-models.html#reading-coefficient-tables"><i class="fa fa-check"></i><b>5.1.1</b> Reading coefficient tables</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-models.html"><a href="linear-models.html#likelihood-and-random-term"><i class="fa fa-check"></i><b>5.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="5.1.3" data-path="linear-models.html"><a href="linear-models.html#random_walk"><i class="fa fa-check"></i><b>5.1.3</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-models.html"><a href="linear-models.html#linear-regression"><i class="fa fa-check"></i><b>5.2</b> Walk the line: linear regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-models.html"><a href="linear-models.html#transforming-variables"><i class="fa fa-check"></i><b>5.2.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="linear-models.html"><a href="linear-models.html#correlations"><i class="fa fa-check"></i><b>5.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="5.2.3" data-path="linear-models.html"><a href="linear-models.html#endlessly-linear"><i class="fa fa-check"></i><b>5.2.3</b> Endlessly linear</a></li>
+<li class="chapter" data-level="5.2.4" data-path="linear-models.html"><a href="linear-models.html#posterior-predictions"><i class="fa fa-check"></i><b>5.2.4</b> Posterior predictions</a></li>
+<li class="chapter" data-level="5.2.5" data-path="linear-models.html"><a href="linear-models.html#exercises-2"><i class="fa fa-check"></i><b>5.2.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="linear-models.html"><a href="linear-models.html#CGM"><i class="fa fa-check"></i><b>5.3</b> A versus B: Comparison of groups</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="linear-models.html"><a href="linear-models.html#dummy_variables"><i class="fa fa-check"></i><b>5.3.1</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="linear-models.html"><a href="linear-models.html#contrasts"><i class="fa fa-check"></i><b>5.3.2</b> Getting it sharper with contrasts [TBC]</a></li>
+<li class="chapter" data-level="5.3.3" data-path="linear-models.html"><a href="linear-models.html#sharper-on-the-fly-derived-quantities-tbd"><i class="fa fa-check"></i><b>5.3.3</b> Sharper on the fly: derived quantities [TBD]</a></li>
+<li class="chapter" data-level="5.3.4" data-path="linear-models.html"><a href="linear-models.html#exercises-3"><i class="fa fa-check"></i><b>5.3.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="linear-models.html"><a href="linear-models.html#putting-it-all-together-multi-predictor-models"><i class="fa fa-check"></i><b>5.4</b> Putting it all together: multi predictor models</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="linear-models.html"><a href="linear-models.html#on-surface-multiple-regression-models"><i class="fa fa-check"></i><b>5.4.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="5.4.2" data-path="linear-models.html"><a href="linear-models.html#crossover-multifactorial-models-tbc"><i class="fa fa-check"></i><b>5.4.2</b> Crossover: multifactorial models [TBC]</a></li>
+<li class="chapter" data-level="5.4.3" data-path="linear-models.html"><a href="linear-models.html#line-by-line"><i class="fa fa-check"></i><b>5.4.3</b> Line-by-line: regression in groups [TBC]</a></li>
+<li class="chapter" data-level="5.4.4" data-path="linear-models.html"><a href="linear-models.html#residual-analysis"><i class="fa fa-check"></i><b>5.4.4</b> Residual analysis</a></li>
+<li class="chapter" data-level="5.4.5" data-path="linear-models.html"><a href="linear-models.html#how-to-plot-mpm-tbc-move-to-interaction-effects"><i class="fa fa-check"></i><b>5.4.5</b> How to plot MPM? [TBC, move to Interaction effects]</a></li>
+<li class="chapter" data-level="5.4.6" data-path="linear-models.html"><a href="linear-models.html#empirical-versus-statistical-control"><i class="fa fa-check"></i><b>5.4.6</b> Empirical versus statistical control</a></li>
+<li class="chapter" data-level="5.4.7" data-path="linear-models.html"><a href="linear-models.html#exercises-4"><i class="fa fa-check"></i><b>5.4.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="linear-models.html"><a href="linear-models.html#interaction-effects"><i class="fa fa-check"></i><b>5.5</b> Interaction effects</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="linear-models.html"><a href="linear-models.html#differential_design_effects"><i class="fa fa-check"></i><b>5.5.1</b> Users differ: differential design effects</a></li>
+<li class="chapter" data-level="5.5.2" data-path="linear-models.html"><a href="linear-models.html#hitting-the-boundaries-of-saturation"><i class="fa fa-check"></i><b>5.5.2</b> Hitting the boundaries of saturation</a></li>
+<li class="chapter" data-level="5.5.3" data-path="linear-models.html"><a href="linear-models.html#more-than-the-sum-amplification"><i class="fa fa-check"></i><b>5.5.3</b> More than the sum: amplification</a></li>
+<li class="chapter" data-level="5.5.4" data-path="linear-models.html"><a href="linear-models.html#theoretically-interesting-interaction-effects-edit"><i class="fa fa-check"></i><b>5.5.4</b> Theoretically interesting interaction effects [EDIT]</a></li>
+<li class="chapter" data-level="5.5.5" data-path="linear-models.html"><a href="linear-models.html#exercises-5"><i class="fa fa-check"></i><b>5.5.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="linear-models.html"><a href="linear-models.html#polynomial_regression"><i class="fa fa-check"></i><b>5.6</b> Doing the rollercoaster: polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>6</b> Multilevel models</a><ul>
+<li class="chapter" data-level="6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#average-neverage"><i class="fa fa-check"></i><b>6.1</b> Average? Neverage!</a></li>
+<li class="chapter" data-level="6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#the-human-factor-intercept-random-effects"><i class="fa fa-check"></i><b>6.2</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="multilevel-models.html"><a href="multilevel-models.html#designs-and-other-non-human-populations"><i class="fa fa-check"></i><b>6.3</b> Designs and other non-human populations</a></li>
+<li class="chapter" data-level="6.4" data-path="multilevel-models.html"><a href="multilevel-models.html#crossover"><i class="fa fa-check"></i><b>6.4</b> Crossover: Testing Egans assumption</a></li>
+<li class="chapter" data-level="6.5" data-path="multilevel-models.html"><a href="multilevel-models.html#measuring-entities-psychometric-applications-tbc"><i class="fa fa-check"></i><b>6.5</b> Measuring entities: psychometric applications [TBC]</a></li>
+<li class="chapter" data-level="6.6" data-path="multilevel-models.html"><a href="multilevel-models.html#nested-random-effects"><i class="fa fa-check"></i><b>6.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="6.7" data-path="multilevel-models.html"><a href="multilevel-models.html#what-are-random-effects-on-pooling-and-shrinkage"><i class="fa fa-check"></i><b>6.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="6.8" data-path="multilevel-models.html"><a href="multilevel-models.html#slope_RE"><i class="fa fa-check"></i><b>6.8</b> Variance in variation: slope random effects [TBC]</a></li>
+<li class="chapter" data-level="6.9" data-path="multilevel-models.html"><a href="multilevel-models.html#re_correlations"><i class="fa fa-check"></i><b>6.9</b> Growing with random effects correlations [TBD]</a></li>
+<li class="chapter" data-level="6.10" data-path="multilevel-models.html"><a href="multilevel-models.html#advanced-tricks"><i class="fa fa-check"></i><b>6.10</b> Advanced tricks</a></li>
+<li class="chapter" data-level="6.11" data-path="multilevel-models.html"><a href="multilevel-models.html#exercises-7"><i class="fa fa-check"></i><b>6.11</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="GLM.html"><a href="GLM.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.1" data-path="GLM.html"><a href="GLM.html#debunking-the-gaussian-linear-model"><i class="fa fa-check"></i><b>7.1</b> Debunking the Gaussian linear model</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="GLM.html"><a href="GLM.html#assuming-linearity"><i class="fa fa-check"></i><b>7.1.1</b> Assuming linearity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="GLM.html"><a href="GLM.html#assuming-normal-distribution-of-randomness"><i class="fa fa-check"></i><b>7.1.2</b> Assuming Normal distribution of randomness</a></li>
+<li class="chapter" data-level="7.1.3" data-path="GLM.html"><a href="GLM.html#assume-constant-variance"><i class="fa fa-check"></i><b>7.1.3</b> Assuming constant variance of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="GLM.html"><a href="GLM.html#glm_concepts"><i class="fa fa-check"></i><b>7.2</b> Elements of Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="GLM.html"><a href="GLM.html#re-linking-linearity-relinking_linearity-tbc"><i class="fa fa-check"></i><b>7.2.1</b> Re-linking linearity (#relinking_linearity) [TBC]</a></li>
+<li class="chapter" data-level="7.2.2" data-path="GLM.html"><a href="GLM.html#choosing-patterns-of-randomness-choosing_randomness"><i class="fa fa-check"></i><b>7.2.2</b> Choosing patterns of randomness (#choosing_randomness)</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="GLM.html"><a href="GLM.html#case-user-testing-infusion-pumps"><i class="fa fa-check"></i><b>7.3</b> Case: user testing infusion pumps</a></li>
+<li class="chapter" data-level="7.4" data-path="GLM.html"><a href="GLM.html#count_data"><i class="fa fa-check"></i><b>7.4</b> Count data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="GLM.html"><a href="GLM.html#poisson-regression"><i class="fa fa-check"></i><b>7.4.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="GLM.html"><a href="GLM.html#logistic-aka-binomial-regression-logistic_regression"><i class="fa fa-check"></i><b>7.4.2</b> Logistic (aka Binomial) regression (#logistic_regression)</a></li>
+<li class="chapter" data-level="7.4.3" data-path="GLM.html"><a href="GLM.html#modelling-overdispersion"><i class="fa fa-check"></i><b>7.4.3</b> Modelling overdispersion</a></li>
+<li class="chapter" data-level="7.4.4" data-path="GLM.html"><a href="GLM.html#exercises-8"><i class="fa fa-check"></i><b>7.4.4</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="GLM.html"><a href="GLM.html#measures_of_time"><i class="fa fa-check"></i><b>7.5</b> Measures of time</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="GLM.html"><a href="GLM.html#exponential-regression"><i class="fa fa-check"></i><b>7.5.1</b> Exponential regression</a></li>
+<li class="chapter" data-level="7.5.2" data-path="GLM.html"><a href="GLM.html#gamma-regression"><i class="fa fa-check"></i><b>7.5.2</b> Gamma regression</a></li>
+<li class="chapter" data-level="7.5.3" data-path="GLM.html"><a href="GLM.html#exgaussian-regression"><i class="fa fa-check"></i><b>7.5.3</b> ExGaussian regression</a></li>
+<li class="chapter" data-level="7.5.4" data-path="GLM.html"><a href="GLM.html#literature"><i class="fa fa-check"></i><b>7.5.4</b> Literature</a></li>
+<li class="chapter" data-level="7.5.5" data-path="GLM.html"><a href="GLM.html#exercises-9"><i class="fa fa-check"></i><b>7.5.5</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="GLM.html"><a href="GLM.html#rating-scales"><i class="fa fa-check"></i><b>7.6</b> Rating scales</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="GLM.html"><a href="GLM.html#ordered-logistic-regression"><i class="fa fa-check"></i><b>7.6.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="7.6.2" data-path="GLM.html"><a href="GLM.html#beta-regression"><i class="fa fa-check"></i><b>7.6.2</b> Beta regression</a></li>
+<li class="chapter" data-level="7.6.3" data-path="GLM.html"><a href="GLM.html#distributional-models"><i class="fa fa-check"></i><b>7.6.3</b> Distributional models</a></li>
+<li class="chapter" data-level="7.6.4" data-path="GLM.html"><a href="GLM.html#exercises-10"><i class="fa fa-check"></i><b>7.6.4</b> Exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data-management.html"><a href="data-management.html"><i class="fa fa-check"></i><b>8</b> Data management</a><ul>
+<li class="chapter" data-level="8.1" data-path="data-management.html"><a href="data-management.html#modelling-questionnaire-responses"><i class="fa fa-check"></i><b>8.1</b> Modelling questionnaire responses</a></li>
+<li class="chapter" data-level="8.2" data-path="data-management.html"><a href="data-management.html#modelling-experimental-responses"><i class="fa fa-check"></i><b>8.2</b> Modelling experimental responses</a></li>
+<li class="chapter" data-level="8.3" data-path="data-management.html"><a href="data-management.html#modelling-design-studies-tbd"><i class="fa fa-check"></i><b>8.3</b> Modelling design studies (tbd)</a></li>
+<li class="chapter" data-level="8.4" data-path="data-management.html"><a href="data-management.html#modelling-organizational-structures-tbd"><i class="fa fa-check"></i><b>8.4</b> Modelling organizational structures (tbd)</a></li>
+<li class="chapter" data-level="8.5" data-path="data-management.html"><a href="data-management.html#modelling-longitudinal-data-tbd"><i class="fa fa-check"></i><b>8.5</b> Modelling longitudinal data (tbd)</a></li>
+<li class="chapter" data-level="8.6" data-path="data-management.html"><a href="data-management.html#doing-it-in-r"><i class="fa fa-check"></i><b>8.6</b> Doing it in R</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="data-management.html"><a href="data-management.html#creating-and-reading-data"><i class="fa fa-check"></i><b>8.6.1</b> Creating and reading data</a></li>
+<li class="chapter" data-level="8.6.2" data-path="data-management.html"><a href="data-management.html#reshaping-data"><i class="fa fa-check"></i><b>8.6.2</b> Reshaping data</a></li>
+<li class="chapter" data-level="8.6.3" data-path="data-management.html"><a href="data-management.html#tipps-and-tricks"><i class="fa fa-check"></i><b>8.6.3</b> Tipps and tricks</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for the design researcher</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data-management" class="section level1">
+<h1><span class="header-section-number">8</span> Data management</h1>
+<p>The process of <strong>data modelling</strong> starts with analyzing a domain of concepts (of interest), by identifying the properties of concepts as well as the relationships between concepts. The results of the analysis is then formalized using one of several possible standards. Most of the time, the formalization is computer-readable or computer executable. Here, I first introduce the formalization approach of Entity-Relationship Modelling and demonstrate how this approach is handled in R, using data frames and data transformations.</p>
+<p>In statistical analysis, a good data model has three qualities:</p>
+<ol style="list-style-type: decimal">
+<li>efficient and accurate data entry</li>
+<li>all information is preserved</li>
+<li>efficient reshaping of data for subsequent analyses</li>
+</ol>
+<p>Let us first consider the task of data entry and further describe what “efficiently and accurately” means here: first of all, data entry is more efficient if you have to type less. In consequence, every datum should be entered only once. That saves key presses and also reduces the risk of erroneous input, hence better accuracy. Furthermore, during the process of data entry, as much information as possible should be preserved. That regards two aspects, one should not do any aggregation during data entry. For example, the individual responses to several items of a scale should be kept and not just summed up. Second, all known, even secondary aspects of the data should be kept, such as the order of responses in an experiment. Also, relations in the data must be kept. Obviously, the identity of a participant needs to be kept for examining associations. A less obvious example is one should keep detailed information about stimuli and items of rating scales.</p>
+<p>Now, consider the following situation: you want to validate a new personality scale using real behavioural measures. By <em>real</em> I mean that you are not just correlating the scores with scores from another rating scale, but you predict that the trait at question has impact on how people behave in an experimental task. For example, Schmettow, Mundt &amp; Noordzij (2013) tested whether persons with high need for cognition (NFC) have stronger associations with pictures showing computers with open cases (treatment), as compared to control pictures. This study uses data from three sources:</p>
+<ol style="list-style-type: decimal">
+<li>the experimental data consists of dozens or hundreds of trials per participant with a response (correct/incorrect or RT).</li>
+<li>the questionnaire data consists of every participants ratings on a numnber of given items</li>
+<li>demographic data captures the usual variables such as gender, age or level of education</li>
+</ol>
+<p>Are you a former SPSS user, perhaps? Then, please, take a moment, a sheet and a pencil, and think about how you would structure the data from the hybrid questionnaire/experimental study. I bet, that you attempted to create <em>one</em> table that has one row per participant and is very wide, because you have assigned a column for every item and every trial of the experiment. This is the data format dictated by many of the legacy dialogues in SPSS and other statistical programs. Unfortunately, this format has severe limitations: you can add as many variables that “belong” to participants, e.g. their field of study, but you cannot properly record properties of other entities, such as stimuli or items. To give an almost trivial example: the depicted experiment used a randomized order for the pictures to occur. There might be training effects, which you may want to control (i.e. add as a covariate to your model). But, in the wide scheme you can either use the order of columns to represent the order of stimulus presentations or the target words, but not both.</p>
+<p>Now, I will briefly present a framework for structuring (and using) data that is called <em>entity relationship modelling (ERM)</em>. ERM comes from computer science, more specifically the field of databases. In modern software systems, databases contain huge amount of data with often extremely complex relationships. As the name says, the ERM approach handles complex data by decomposition into <em>entities</em> and <em>relationships</em>. Take as an example, the data base of a company selling products to customers. The data base will contain, at least, two entities: customers and products. In the very moment the customer enters the checkout, there must be a data structure represent the shopping cart. Formally, shopping cart structure relates customers to products, in plain words: “customer x has selected products a and b”. Now, returning to the wide format, this would still be possible: you simply had to create a (huge) table with all customers in rows and all (ten thousands) products in columns. To indicate that a customer has selected products a and b, mark the respective cells with 1, and leave all other cells at 0.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">Customer =</span> <span class="kw">c</span>(<span class="st">&quot;...&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>, <span class="st">&quot;Z&quot;</span>), 
+           <span class="dt">Prod_a =</span> <span class="kw">c</span>(<span class="st">&quot;...&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>), 
+           <span class="dt">Prod_b =</span> <span class="kw">c</span>(<span class="st">&quot;...&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>),
+           <span class="dt">Prod_c =</span> <span class="kw">c</span>(<span class="st">&quot;...&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>),
+           <span class="st">&quot;Prod_...&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;...&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gtable</span>()</code></pre></div>
+<p><img src="Data_Management_files/figure-html/tab_shopping_cart_wide_table-1.png" width="672" /></p>
+<p>However, in this structure it would not be possible to reasonably store the price of the product, or any other product information. And the problem becomes completely intractable when we consider all the other entities that play a role in the process, for example the fact that the same customer can have different addresses.</p>
+<p>So, what is done in data modelling, is that <em>multiple tables</em> are being used. Áll classes of entities, customer and product, or participant and stimulus, get their own table. And, what you may find surprising at first, most relationships get their own tables, too. In the shopping cart example, we have two entities, <em>Customer</em> and <em>Product</em>, and the relationship <em>has_selected</em>. As you can see in tab_shopping_cart_wide_table, properties can be attached to entities, for example, customers have names and products have prices. These properties are called <em>attributes</em>. However, there is a twist. Could one not consider the selected products as a property, and use such an attribute? There are theoretical and practical reasons, not to do so. Here, it should suffice to state the following rule, for when a property is an attribute, and when it is a relationship: first, the property must be expressable as a singular value, such as a number, a piece of text, or a factor level. Second, the value must be literal, in the sense that it does not represent another complex entity. If a property is atomic and literal, it can be added as an attribute to the entity and will later become a column in the respective data table.</p>
+<p>We will return to representation of complex properties, soon. But, first we need to introduce a concept of ERM, that literally ties everything together: <em>keys</em> are unique identifier of entities. Because natural names of persons and things are often, but not always unique (think of “John Smith”), most of the time, one chooses a numerical counter as a key, like a customer ID or product number. In ERM, the attribute that uniquely identifies an entity is called the <em>primary key (PK)</em>. These keys are used for identification, but also for marking relations between entities. In Figure XY, the relation <code>has_selected</code> identifies the customer, as well as the product. These references to entities are called <em>foreign keys (FK)</em>.</p>
+<p>By using entities with PK and establishing relations by FK, one avoids any redundancy as much as possible. As a general rule, when instantiating an entity-relationship model, one must create one table per entity and one table per relationship. There is only one exception from this rule, which has to do with the <em>cardinality</em> of a relation. The <code>has_selected</code> relationship as we have modelled it, allows that several customers select the same product, and that one customer selects multiple products. This is called an <em>n:m</em> relationship, which is the most general case. However, other cardinalities exist: consider the entity relationship model of a family tree. This model, will for certain have a entity <code>person</code>. But, do we need a seperate table for the relationship <code>is_child_of</code>? The answer is: no, because the property is singular, so we could just add it as an attribute, if it were also literal. It is not, which in the context here is just a formal issue. Still, in case of <em>n:1</em> relationships, we can add the foreign key directly to the entity. It is just not called an attribute, but a FK. There would be no harm done in terms of adding redundancy.</p>
+<div class="figure">
+<img src="Illustrations/DM/erm_1.png" alt="Entity relationship model of a shopping cart" />
+<p class="caption">Entity relationship model of a shopping cart</p>
+</div>
+<div id="modelling-questionnaire-responses" class="section level2">
+<h2><span class="header-section-number">8.1</span> Modelling questionnaire responses</h2>
+<p>Returning to the original problem of a hybrid experimental/survey study, what are the entities? Clearly, participants are entities. The second set of entities are the items of personality questionnaires, and the data we can conceive as the <em>encounter of items and participants</em> that results in participants-by-items responses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(Hugme)
+
+T_some_items &lt;-
+<span class="st">  </span>HUG3_resp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(Item, Scale) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(Item <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Geek01&quot;</span>, <span class="st">&quot;Geek02&quot;</span>, <span class="st">&quot;NCS01&quot;</span>))
+
+T_some_part &lt;-
+<span class="st">  </span>HUG_part <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+
+T_some_resp &lt;-
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">Part =</span> T_some_part<span class="op">$</span>Part,
+              <span class="dt">Item =</span> T_some_items<span class="op">$</span>Item) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(T_some_part) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(T_some_items) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rating =</span> <span class="kw">round</span>(<span class="kw">runif</span>(<span class="dv">9</span>, <span class="dv">1</span>,<span class="dv">7</span>), <span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(Part, Item, Scale, rating)
+
+<span class="kw">grid.arrange</span>(
+  T_some_part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_some_items <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_some_resp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  <span class="dt">layout_matrix =</span> <span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))
+)</code></pre></div>
+<p><img src="Data_Management_files/figure-html/fig_questionnaire_entity-1.png" width="672" /></p>
+<p>So, according to the ERM framework, we are going to have two separate entity tables, at least. The <em>participants table</em> has one row per participant, identified by a unique participant ID, and all singular attributes of participants, like gender, age etc. The <em>items table</em> carries the questionnaires. Items are uniquely identified by an ID. When several scales are used, it is recommended to add a separate factor variable assigning an item to a scale. This can creates some redundancy as the item name might already identify the scale. As we will later see, this Scale variable is very useful for calculating the aggregated scores. fig_questionnaire_entity gives the smallest possible item table, but further useful information about items can be added as variables, such as:</p>
+<ul>
+<li>item text in all used language</li>
+<li>item labels</li>
+<li>if an item is reversed or not</li>
+<li>the position of an item in the questionnaire</li>
+<li>any sub scale (or sub sub scale) the item belongs to</li>
+</ul>
+<p>Finally, the <em>questionnaire table</em> stores the “encounter” between participants and items in the study. In ERM speak it is a <em>relationship table</em>, as it borrows entities and their keys from participants and items. The so-called <em>foreign key</em> is the combination of participants and items. Like with the entity tables, it is important that every observation (that is a response of one participant to one item) is uniquely identified by the foreign key.</p>
+<p>In more complicated cases, the combination of participant and item might not identify every observation uniquely. For example, a preferred method to assess a questionnaires reliability is to repeat the measurement in a second session. If we would use the item table as in fig_questionnaire_entity, the observations were no longer uniquely identified, as all participants encounter every item twice. As a solution one would simply extend the key of the table by a variable called <code>session</code>.</p>
+</div>
+<div id="modelling-experimental-responses" class="section level2">
+<h2><span class="header-section-number">8.2</span> Modelling experimental responses</h2>
+<p>Storing experimental data follows the same principles as for questionnaire data. In terms of ERM an experiment is a relationship, the encounter, between participants and experimental stimuli. Consequently, the complete data model will comprise two entity tables, participants and stimuli, and one relationship table for the experiment. However, depending on the design of the experiment and the nature of stimuli, we can distinguish several variations. These variations regard</p>
+<ol style="list-style-type: decimal">
+<li>the identity versus exchangeability of stimuli</li>
+<li>the research design</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_exchangeable_between_subj_part &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+             <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>),
+             <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">23</span>,<span class="dv">22</span>,<span class="dv">26</span>),
+             <span class="dt">Group =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="st">&quot;gamer&quot;</span>, <span class="st">&quot;gamer&quot;</span>, <span class="st">&quot;no_gamer&quot;</span>)))
+
+T_exchangeable_between_subj_exp &lt;-
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">Participant =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+              <span class="dt">position =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">waiting_time =</span> <span class="kw">runif</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">60</span>),
+         <span class="dt">RT =</span> brms<span class="op">::</span><span class="kw">rexgaussian</span>(<span class="dv">9</span>, <span class="dv">200</span>, <span class="dv">20</span>, <span class="dv">100</span>))
+
+<span class="kw">grid.arrange</span>(T_exchangeable_between_subj_part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+             T_exchangeable_between_subj_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+             <span class="dt">ncol =</span> <span class="dv">2</span>)</code></pre></div>
+<p><img src="Data_Management_files/figure-html/fig_experiment_exchangeable_data_model-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Hugme)</code></pre></div>
+<p>The model gets just slightly more complex when the experiment comprises a condition. Assume an experiment that examines the difference in vigilance between gamers and non-gamers. As this is a between-subject design, the condition is assigned to the participant table, as is shown in fig_experiment_exchangeable_data_model. Note that the experiment table only contains the absolute necessary attributes, namely all information that characterizes the encounter itself. Of course, for the data analysis we need a table that contains information on participants as well. A later section will show how to combine and manipulate data from separate tables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_Stroop_part &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+             <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>),
+             <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">23</span>,<span class="dv">22</span>,<span class="dv">26</span>))
+
+T_Stroop_stim &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Stim =</span> <span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>),
+             <span class="dt">Word =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;wood&quot;</span>, <span class="st">&quot;dog&quot;</span>),
+             <span class="dt">Color =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;green&quot;</span>,<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>),
+             <span class="dt">Condition =</span> <span class="kw">ifelse</span>(Word <span class="op">==</span><span class="st"> </span>Color, <span class="st">&quot;congruent&quot;</span>,
+                                <span class="kw">ifelse</span>(Word <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="st">&quot;congruent&quot;</span>,
+                                       <span class="st">&quot;neutral&quot;</span>)))
+T_Stroop_exp &lt;-
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+              <span class="dt">Stim =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">RT =</span> brms<span class="op">::</span><span class="kw">rexgaussian</span>(<span class="kw">n</span>(), <span class="dv">200</span>, <span class="dv">20</span>, <span class="dv">100</span> )) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(Part) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>)
+
+<span class="kw">grid.arrange</span>(
+  T_Stroop_part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_Stroop_stim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_Stroop_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  <span class="dt">layout_matrix =</span> <span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))
+)</code></pre></div>
+<p><img src="Data_Management_files/figure-html/fig_experiment_Stroop-1.png" width="672" /></p>
+<p>In other experiments stimuli are not exchangeable at all, but have a clear identity. Typically this is the case when stimuli are not strictly designed, but taken from a natural population of stimuli, such as words or statements (from a language) and pictures (of faces, websites, objects etc.). Take as an example, the classic Stroop experiment, where participants respond to the color a word is shown in. A typical finding is that when the word denotes an incongruent color (like the word “yellow” in red letters), then response times are delayed as when the word is congruent or just neutral. Most experimenters would probably just record the condition of presentation (congruent, incongruent or neutral). However, it could be worth the effort to be able to distinguish between words. Imagine in a Stroop experiment the word “wood” were used in the neutral condition. One could then well argue whether this word was neutral, indeed, as trees are associated with green color. Only if the identity of word stimuli is preserved in the data, is this a testable issue, and only then would the experimenter be able to remove the critical trials from the data set.</p>
+<p>In the HUG3 experiment, the semantic Stroop task was used to detect whether a person feels attarcted by computers as objects of playful exploration and intellectual challenge. The stimuli were rather complex: first, a picture was shown, then a word was displayed and the participant had to respond to the color. The idea behind the semantic Stroop task is that a strong semnatic association between picture and word would cause a moment of distraction. Delayed responses on pictures of computers followed by words such as “playful” or “challenging” is therefore taken as an indicator for a person’s computer enthusiasm (or: geekism).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_SemStroop_part &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+             <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>),
+             <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">23</span>,<span class="dv">22</span>,<span class="dv">26</span>),
+             <span class="dt">Study =</span> <span class="kw">c</span>(<span class="st">&quot;psy&quot;</span>, <span class="st">&quot;cs&quot;</span>, <span class="st">&quot;psy&quot;</span>))
+
+T_SemStroop_word &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Word_EN =</span> <span class="kw">c</span>(<span class="st">&quot;mastering&quot;</span>, <span class="st">&quot;chic&quot;</span>, <span class="st">&quot;useful&quot;</span>, <span class="st">&quot;adapting&quot;</span>),
+             <span class="dt">Word_NL =</span> <span class="kw">c</span>(<span class="st">&quot;behappen&quot;</span>, <span class="st">&quot;vlot&quot;</span>, <span class="st">&quot;nuttig&quot;</span>, <span class="st">&quot;aanpassen&quot;</span>),
+             <span class="dt">word_cat =</span> <span class="kw">c</span>(<span class="st">&quot;geek&quot;</span>, <span class="st">&quot;hedonist&quot;</span>, <span class="st">&quot;utility&quot;</span>, <span class="st">&quot;geek&quot;</span>))
+
+
+T_SemStroop_prime &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Prime =</span> <span class="kw">c</span>(<span class="st">&quot;img001.png&quot;</span>, <span class="st">&quot;img002.png&quot;</span>, <span class="st">&quot;img003.png&quot;</span>, <span class="st">&quot;img004.png&quot;</span>),
+             <span class="dt">Prime_cat =</span> <span class="kw">c</span>(<span class="st">&quot;geek&quot;</span>, <span class="st">&quot;control&quot;</span>, <span class="st">&quot;geek&quot;</span>, <span class="st">&quot;neutral&quot;</span>))
+
+T_SemStroop_stim &lt;-
+<span class="kw">expand.grid</span>(<span class="dt">Prime =</span> <span class="kw">unique</span>(T_SemStroop_prime<span class="op">$</span>Prime),
+            <span class="dt">Word_EN =</span> <span class="kw">unique</span>(T_SemStroop_word<span class="op">$</span>Word_EN),
+            <span class="dt">stringsAsFactors =</span> F) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">slice</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">6</span>,<span class="dv">9</span>,<span class="dv">13</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="co">#   left_join(T_SemStroop_prime) %&gt;% </span>
+<span class="co">#   left_join(T_SemStroop_word) %&gt;% </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Stim =</span> <span class="kw">as.factor</span>(<span class="kw">row_number</span>())) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>)
+
+T_SemStroop_exp &lt;-
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)),
+              <span class="dt">Stim =</span> <span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(Part) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(Part) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">position =</span> <span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">RT =</span> brms<span class="op">::</span><span class="kw">rexgaussian</span>(<span class="kw">n</span>(), <span class="dv">700</span>, <span class="dv">20</span>, <span class="dv">100</span> )) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(Part, position) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>)
+
+<span class="kw">grid.arrange</span>(
+  T_SemStroop_part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_SemStroop_word <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_SemStroop_prime <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_SemStroop_stim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  T_SemStroop_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtable</span>(<span class="dt">plot =</span> F),
+  <span class="dt">layout_matrix =</span> <span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>))
+)</code></pre></div>
+<p><img src="Data_Management_files/figure-html/fig_HUG3_experiment_data_model-1.png" width="672" /></p>
+<p>Both, prime pictures and target words were collected upfront and classified. As shown in fig_HUG3_experiment_data_model, the data model for this experiment consists of three entity tables (participants, pictures and words), one intermediate relationship table for stimuli and finaqlly the experiment table. As color only plays a minor role (the classic Stroop conditions no longer apply), it is not recorded in the target word table, but is generated during the experiment and could be recorded in the experiment table. Still, we could think of other properties of words to be added, such as word length an familiarity (as potential control variables), or as shown, translations for another languages.</p>
+</div>
+<div id="modelling-design-studies-tbd" class="section level2">
+<h2><span class="header-section-number">8.3</span> Modelling design studies (tbd)</h2>
+<p>Design studies assess how users respond to designs. Typically, in such a test, users encounter a set of tasks. The situation is similar to that of questionnaires: a participant encounters several tasks, which may differ in relevant respects, like difficulty, length or how much it triggers frustration.</p>
+</div>
+<div id="modelling-organizational-structures-tbd" class="section level2">
+<h2><span class="header-section-number">8.4</span> Modelling organizational structures (tbd)</h2>
+</div>
+<div id="modelling-longitudinal-data-tbd" class="section level2">
+<h2><span class="header-section-number">8.5</span> Modelling longitudinal data (tbd)</h2>
+</div>
+<div id="doing-it-in-r" class="section level2">
+<h2><span class="header-section-number">8.6</span> Doing it in R</h2>
+<p>Now that we have seen how to structure data in various research situations, we will see how this works out in R. I will demonstrate the full workflow by example of a hybrid questionnaire/experimental study that explored in how much the <em>uncanny valley</em> phenomenon depends on attitude and personality. Participants were asked to fill out five personality scales and completed an experiment, where they rated morphing sequences of faces using items of the eeriness scale.</p>
+<div class="figure">
+<img src="Illustrations/DM/erm_2.png" alt="Entity relationship model of a hybrid survey/experimental study" />
+<p class="caption">Entity relationship model of a hybrid survey/experimental study</p>
+</div>
+<div id="creating-and-reading-data" class="section level3">
+<h3><span class="header-section-number">8.6.1</span> Creating and reading data</h3>
+<p>We start by creating an item table in Excel, using the following structure:</p>
+<ul>
+<li><em>Scale</em> identifies the scale an item belongs to</li>
+<li><em>Item</em> is the item name</li>
+<li><em>Label</em> is a short phrase representing the item content</li>
+<li><em>reverse</em> is set to -1, when an item is reversed, otherwise 1</li>
+<li><em>minValue</em> and <em>maxValue</em> give the range of possible responses</li>
+</ul>
+<p>Then we read the item table into R, create an empty data frame for the planned 42 participants and write it to an Excel file. In the process, we add a few demographic variables, like <em>Gender</em> and <em>Age</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;external_data/UC2/&quot;</span>)
+## reading in the items table
+UC_items &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read.xlsx</span>(<span class="dt">xlsxFile =</span> <span class="st">&quot;UC_items.xlsx&quot;</span>)
+
+UC_items <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">slice</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">13</span><span class="op">:</span><span class="dv">16</span>, <span class="dv">23</span>))
+
+
+## generating the questionnaire table with all participant-item combinations
+## and an empty response column
+UC_resp &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">Participant =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">42</span>,
+              <span class="dt">Item =</span> UC_items<span class="op">$</span>Item) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(Participant, Item) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">response =</span> <span class="st">&quot;&quot;</span>)
+
+## printing a random selection of rows for control
+UC_resp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">10</span>)
+
+## preparing an Excel file
+UC_resp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">write.xlsx</span>(<span class="dt">file =</span> <span class="st">&quot;UC_resp_empty.xlsx&quot;</span>)
+
+UC_resp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>mascutils<span class="op">:::</span><span class="kw">as_tbl_obs.tbl_df</span>()</code></pre></div>
+<p>The above code used a few commands for data creation and manipulation that I will now briefly explain. First, <code>expand.grid(Participant = ..., Item = ...)</code> creates a long data frame with all possible combinations of the given levels of the given variables (here: Participant, Item). The resulting data frame is then chained into another data transformation command: <code>arrange</code> orders a data frame by the given variables (here: Participant, then Item), and outputs the re-arranged data frame. Then, <code>mutate</code> adds new variables to the data frame. Often <code>mutate</code> is used to alter variables or compute new ones. When creating the empty response table, it is trivially used to newly create the variable for responses, which is manually entered. The full chain, from making the grid to creating the empty response variable is then stored in the variable <code>UC_resp</code></p>
+<p>The next command, <code>sample_n()</code>, randomly selects a number of rows from a data frame and outputs it as a data frame. Here I used it to illustrate the structure by a few examples observations. The advantage above the more common use of <code>summary</code> is that, seeing individual observations hints you at the grouping structure. Even the small sample shown here, its is easily conveyed that observations are “cross-classified” by participants and items, as we wanted it to be. In interactive programming with R, it is highly recommended to frequently do such intermediate checks on the results of computations. Finally, teh data frame is written to an Excel file, using <code>write.xlsx()</code> (openxlsx).</p>
+<p>The general principle of the above (and all following) code is the <em>chaining</em> of commands that read a data frame, do a transformation and output an altered data frame. The chaining of commands is done with magritte operator <code>%&gt;%</code>. Most transformatiomn commands used in this book come from the dplyr/tidyr package bundle. The main idea of these libraries is to provide a comprehensive set of comparably intuitive transformations. Complex tasks can be done by chaining these commands together. In terms of flexibility and productivity this approach is a great improvement over the classic R way of doing things. To give just one example, the following “classic” code would order our data frame by Participants:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UC_resp[<span class="kw">order</span>(UC_resp<span class="op">$</span>Participant),]</code></pre></div>
+<p>With dplyr, this just becomes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UC_resp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Participant)</code></pre></div>
+<p>Before a chain can be established, data frames have to come from somewhere. They are either produced by reading from a file, or creating it to certain rules, such as with <code>expand.grid</code>. In chapter [SIM], we will use a combination of transformation and random number generators to simulate complete data sets. However, the regular case is that data has been stored in a file. <code>read.xlsx(file, sheet)</code> is a command from the openxlsx package, that reads a sheet from an Excel file and puts it into a data frame. For a smooth workflow, the researcher should now rename the file to <em>UC_resp.xlsx</em> (in order to not accidently overwrite it) and fill in the responses as they arrive. Then the questionnaire is read back into R with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;external_data/UC2/&quot;</span>)
+## reading EXcel
+UC_resp &lt;-
+<span class="st">  </span><span class="kw">read.xlsx</span>(<span class="st">&quot;UC_resp.xlsx&quot;</span>)</code></pre></div>
+<p>While R does not have an own data editor, it can read many different formats. The packages <em>foreign</em> and <em>haven</em> provide an abundance of methods for reading in other data formats. One commonly used format is comma-separated-value (CSV), which is shown in the code below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;external_data/UC2/&quot;</span>)
+## reading CSV
+UC_resp &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read.csv</span>(<span class="st">&quot;UC_resp.csv&quot;</span>)</code></pre></div>
+<p>As described in the data model, the properties of participants are kept with their entity, in a separate table. Assumed, this table (<code>UC_part</code>) has been created in SPSS format (.sav), the following code will read it in:</p>
+<!-- #44 fix sav file -->
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;external_data/UC2/&quot;</span>)
+## reading SPSS
+UC_demo &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read.spss</span>(<span class="st">&quot;UC_part.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Part =</span> <span class="kw">as_factor</span>(Participant))</code></pre></div>
+<p>Unfortunately, there are minor incompatibilities between SPSS tables and R data frames that require some extra data cleaning with <code>mutate()</code> on the data frame returned by <code>read_sav()</code> (from package haven). SPSS knows a data type <em>labelled vector</em> which is almost like a factor in R, but not exactly. While a data frame can store such a variable, other functions in R cannot deal with it. The call of <code>as_factor()</code> inside <code>mutate()</code> converts labelled vectors into real factors.</p>
+<p>Experimental data often arrives as CSV files and often already is in the long form, with one row per observation. In the uncanny valley study, the experiment was run in PsychoPy, which generates one file per participant. In R, the following chain of transformation reads in all CSV file to be found in the given directory and combine them into one large data frame. As experimental responses are uniquely identified by the stimulus (a morphed robot face), it is required that the CSV files contain a variable for the Participant identity. Here this is <em>participant</em>, which we rename to <em>Participant</em> to comply to the rule, that identifier variables are starting with capital letters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setwd</span>(<span class="st">&quot;external_data/UC2/&quot;</span>)
+UC_exp &lt;-
+<span class="st">  </span><span class="kw">dir</span>(<span class="dt">pattern =</span> <span class="st">&quot;csv$&quot;</span>, <span class="dt">recursive =</span> T) <span class="op">%&gt;&gt;%</span><span class="st"> </span>## piping a list
+<span class="st">    </span><span class="kw">ldply</span>(read.csv) <span class="op">%&gt;%</span><span class="st"> </span>## appending data frames
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">Participant  =</span> participant,
+                 Item,
+                 <span class="dt">Stimulus =</span> trialStimulus,
+                 presentationTime,
+         <span class="dt">response =</span> rating.response) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(response)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Stimulus =</span> <span class="kw">str_replace</span>(Stimulus, <span class="st">&quot;.png&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">separate</span>(Stimulus, <span class="kw">c</span>(<span class="st">&quot;Face&quot;</span>, <span class="st">&quot;morphLevel&quot;</span>))
+
+UC_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">10</span>)</code></pre></div>
+<p>The code for loading the bunch of CSV files introduces a few new functions that deserve attention. Two commands operate on the filesystem of the computer: <code>setwd()</code> sets a new working directory. Here it is used to enter the subdirectory containing the CSV files. Note how <code>setwd(&quot;/..&quot;)</code> is used to go back to the upper directory. The <code>dir(...)</code> command returns a list of all files and subdirectories in the working directory. Here we add two arguments <code>pattern = &quot;csv$</code> filters the output, such that only files ending with “csv” are regarded. <code>recursive = T</code> searches for files in all sub and sub-sub (etc) directories. This is useful as researchers and experimental programs often organize their data in one directory per participant. Note that the results of <code>dir()</code> is not stored as a variable, but piped into the next command: the pipeline operator <code>%&gt;&gt;%</code> (from package pipeR) is similar to the magritte operator, but works with lists instead of data frames.</p>
+<p>The next command <code>ldply(read.csv)</code> picks up the list of csv files from the pipeline. The special thing about <code>ldply</code> is that is takes another function, <code>read.csv()</code>, as an argument, which does the actual work. <code>ldply()</code> is a so-called higher-level function that organizes the call of another function on some data. It is a member of a whole family of –plyr functions (package plyr). The two first letters of the –plyr functions indicates the format of data input and output. Here, this is a list (of file names) as input and a data frame as output. Internally, <code>ldply</code> performs the function argument on every element of the input list, expecting that the function returns a data frame (which <code>read.csv</code> does) and stacking all data frames into one.</p>
+<p><code>ldply</code> returns a data frame and the chain proceeds with the <code>select</code> command (dplyr) that selects the needed columns from the input data frame. It is possible to rename columns on the spot by using assignments, such as <code>Stimulus = trialStimulus</code>. The chain proceeds with <code>filter</code>, which is the row-wise counterpart, in that it selects observations. Here it is used to filter out missing observations, which in R are coded as <code>NA</code>. Finally, we are doing some data manipulation: the stimuli stem from 20 morphing sequences with four morphing levels each. This is indirectly coded in variable Stimulus, which actually is the filename of the stimulus, with the form <code>&lt;face&gt;.&lt;morphlevel&gt;.png</code>. By calling <code>mutate</code> with the string manipulation command <code>str_replace</code> (stringr) we chop off the “.png” file ending. Then <code>separate</code> (tidyr) splits the remainders into two new variables, Face and morphLevel. After this final step we have every observation uniquely identified by participant, item, face and morphing level.</p>
+</div>
+<div id="reshaping-data" class="section level3">
+<h3><span class="header-section-number">8.6.2</span> Reshaping data</h3>
+<p>After all data has been imported, we have two data files, that we need to merge and transform for the final analysis. Before we come to that, some more processing is required on the questionnaire data for turning the raw responses into workable scores. All the needed information is stored in the <em>items table</em>, which we have to join with the questionnaire data first. Then, we proceed in three steps:</p>
+<ol style="list-style-type: decimal">
+<li>reversely coded items are handled</li>
+<li>scores are rescaled to the interval <span class="math inline">\([-1;1]\)</span></li>
+<li>scores are created by averaging over items</li>
+</ol>
+<p>The result of the processing chain is a data frame <code>UC_scores</code> that contains exactly one score per participant and scale.</p>
+<p><em>Note</em> that I am here making the assumption that personality scores are predictors. This is may not be the case if associations between personality factors are studied, or in longitudinal studies.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UC_scores &lt;-<span class="st"> </span>
+<span class="st">  </span>UC_resp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(UC_items, <span class="dt">by =</span> <span class="st">&quot;Item&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">response =</span> ((response <span class="op">-</span><span class="st"> </span>minValue) <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">/</span>(maxValue <span class="op">-</span><span class="st"> </span>minValue) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>reverse) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(Participant, Scale) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">score =</span> <span class="kw">mean</span>(response, <span class="dt">na.rm =</span> T)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>()
+
+UC_scores <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">10</span>)</code></pre></div>
+<p>The first operation in the above command chain is <code>left_join</code>, which has the effect, that all columns of <em>UC_items</em> (Scale, nimValue, maxValue, reverse) are added to <em>UC_resp</em>, where they match by Item. <code>left_join()</code> is one of several functions for joining tables. A join usually operates on the identifiers that the two input tables have in common, here <em>Item</em>. The various join commands differ in how they deal with rows that are present in the one table, but not in the the other. <code>left_join()</code> preserves all identities from the left table (first argument or “piped in”), even if they are not present in the right table. Missing values (<code>NA</code>) are used to fill the gaps. Identities that are only present in the right table are being dropped. A <code>right_join()</code> does the exact opposite and <code>full_join()</code> preserves all identities from both tables. <code>inner_join()</code> only uses identities that are present in both tables. <code>anti_join()</code> is a useful function for diagnosting errors, because it returns the identities that are not present in both tables.</p>
+<p>The second element in the chain is another call to <code>mutate()</code>. It uses <em>minValue</em> and <em>maxValue</em> and <em>reversed</em> to normalize all responses to consistently be in the interval <span class="math inline">\([0;1]\)</span> and have the correct direction. Often, this transformation is more cosmetic, but here it is necessary, as one of the scales (arem) has items with differing ranges.</p>
+<p>The subsequent <code>group_by()</code> declares a grouping structure on the observations. Here we want to compute the scores as the average on all items per participant, per scale. The <code>group_by()</code> is followed by <code>summarize()</code>, which computes the mean. The final command <code>ungroup()</code> turns the result into a regular data frame, which now has two key variables (Participant, Scale) and the average score. Note the argument <code>na.rm = T</code> used with <code>mean()</code>. Many commands that summarize a vector of numbers, such as <code>mean()</code>, <code>sum()</code>, <code>var()</code> and <code>sd()</code>, play it extremely safe in returning <code>NA</code>, when there is a single missing value. That is in so far good behaviour, as it reminds the researcher that missing values are present. The <code>na.rm = T</code> argument makes the functions ignore missing values.</p>
+<p>After preparing the questionnaire data, we are now left with two data tables <em>UC_exp</em> and <em>UC_resp</em> that are both organized by one-row-per-observation principle and have the key Participant in common. In general, the further shaping of data depends on the research question and on the choice of a dependent variable. The purpose of the uncanny valley study is to predict the eeriness ratings of morphed faces by the personality and attitude scores. Accordingly, the eeriness ratings are the dependent variable and we leave the structure of the table <em>UC_exp</em> intact, while joining in the personality scores.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UC_<span class="dv">1</span> &lt;-<span class="st"> </span>
+<span class="st">  </span>UC_exp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">join</span>(UC_scores, <span class="dt">by =</span> <span class="st">&quot;Participant&quot;</span>)</code></pre></div>
+</div>
+<div id="tipps-and-tricks" class="section level3">
+<h3><span class="header-section-number">8.6.3</span> Tipps and tricks</h3>
+<div id="as-few-variables-as-possible-but-no-more" class="section level4">
+<h4><span class="header-section-number">8.6.3.1</span> As few variables as possible, but no more</h4>
+<p>Classic R data transforming goes like below and we can make two observations on it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_frame_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">transformation_1</span>(data_frame_<span class="dv">1</span>)
+data_frame_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">transformation_1</span>(data_frame_<span class="dv">2</span>)
+data_frame_i &lt;-<span class="st"> </span>transformation_i<span class="op">+</span><span class="dv">1</span>(data_frame_i<span class="op">+</span><span class="dv">1</span>)</code></pre></div>
+<p>The first observation is that the syntax is counter-intuitive as the order of terms is output &gt; transformation &gt; input. The second observation is that, with five transformation steps we would create six data frames, that are hanging around in your R environment. You could, of course, re-assign the result of every transformation the same data frame (and then have a lot of fun with debugging your program). Chaining transformations of lists and data frames (pipeR, plyr, dplyr and tidyr) doesn’t have these problems:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_frame_<span class="dv">2</span> &lt;-<span class="st"> </span>
+<span class="st">  </span>data.frame_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">transformation_1</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">transformation_2</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">transformation_3</span>()</code></pre></div>
+<p>This is almost as intuitive as programming ScratchJR, and one could be tempted to just make the whole data analysis <em>one chain</em>. Still, there are good reasons to create <em>intermediate variables</em>. As a general rule: a transformation sequence that involves costly operations should stop right after this operation, plus a few trivial data cleaning steps.</p>
+<p>Below you see the workflow we have used for un-canning the uncanny valley data.</p>
+<!-- #45 fix to work with pdf_document -->
+</div>
+<div id="transforming-between-wide-and-long-format" class="section level4">
+<h4><span class="header-section-number">8.6.3.2</span> Transforming between wide and long format</h4>
+<p>Before we turn to merging the questionnaire and Let’s first begin with an issue that of the questionnaire data: it currently is in its long form, but many statistical routines still require the broad format, like exploratory factor analysis does. The tidyr package provides the command <code>spread()</code> to accomplish this.</p>
+<p>It can also be the other way round: you have some legacy questionnaire data, which is coded in the wide format. In this case, there is an antagonist to <code>spread</code>, the command <code>gather</code>.</p>
+</div>
+<div id="grouping-variables-factors-or-strings" class="section level4">
+<h4><span class="header-section-number">8.6.3.3</span> Grouping variables: factors or strings?</h4>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="GLM.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["New_Stats.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
