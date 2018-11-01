@@ -1,17 +1,70 @@
 ---
 title: "New statistics for the design researcher"
-author: "Martin Schmettow"
-date: "2018-10-30"
-output: pdf_document
-github-repo: schmettow/NewStats
-documentclass: book
-site: bookdown::bookdown_site
 subtitle: A Bayesian course in tidy R
+author: "Martin Schmettow"
+date: "2018-11-01"
+github-repo: schmettow/New_Stats
+site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers,  applied psychologists and everyone else who works hard to make this world a better  place.
+documentclass: svmono
 ---
 
-
 # Introduction
+
+
+## Whom this book is for
+
+### The empirical design researcher
+
+If you are not a designer, chances are good that you are a design researcher very well. Are you doing studies with people and is your work about ways to achieve or improve products, services, trainings or business? Welcome to the not-so-special  club of people I call design researchers. 
+
+Of course, I have no idea who you are, personally, but I figure you as one of the following personas:
+
+You are an industrial design researcher, thirty-three years old, leading a small team in the center for research of a car maker. Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light. Downstream research relies on your competent assessment of what is feasible. For example, you have just been asked to evaluate the following: 
+Blue light makes people wake up easier, could it also be used to let car drivers not fall asleep? Several engineers and one industrial engineering student are involved in putting a light color stimulator for a premium car of the brand and stuff two workstations in its back, hooked to the recording systems and driving performance and physiological measures. Yes, this is as expensive as it sounds, and this why you have skin in the game, when you do a study.
+
+You are a young academic and just got a cum laude master’s degree in computer science. For your thesis you developed and implemented an animated avatar for a digital assistant. A professor from the social psychology department has read your thesis. He just got a funding for research on mass emergency communication using projected virtual characters. He fears that a young psychologist would not be up to the technical part of the project and found you. But, you ask yourself, am I up to the task of running experimental studies and do the statistics?
+
+
+<!-- 42 -->
+
+
+
+### The experimentalist
+
+If you are doing research with people, but the answers you seek are far from being applicable to anything in sight, don't put this book away. Chances are good that you will be able to read through the ephemeral details of the cases I present and recognize your own research situations, for example that you are comparing two groups. As you can see in the table of contents, you don't even have to read more than half the book to get there. 
+
+It may be true that strictly experimental data does not require more than group comparison. Still, I please you: also read the chapter on multilevel models. So much contemporary experimental research mistakens *average* for *universal*. It makes a difference to ask:
+
+>"Are responses in the Stroop task responses delayed in the incongruent condition?"
+
+or to ask:
+
+>"Every person responds delayed in the incongruent condition?"
+
+If your work is about revealing universal laws of behaviour, you have to search for the answer on an individual level. Technically, that means a rather simple multi-level model and a spaghetti plot will do the rest. But note that such a model is composed of many little participant-level models and all of them need their data. For multi-level models you need a within-subject design and repeated measures. On the second thought that makes full sense, as what really ask is:
+
+>"Do all people shift into a slower mode in the incongruent condition?"
+
+This is not about groups of people, but mode transitions in individual brains. These transitions can only be observed by putting one-and-the-same person into all the conditions. If you fear that the order of modes makes a difference, why not put order under statistical control? Record what you cannot control and check the interaction effects. Maybe it is not so bad.
+
+Just another candy for you: Response times! Have you been struggling with them forever, because they are not Normal distributed? Have you resorted to non-parametric tests so many times that what you say became "response times are non-parametric"? You shouldn't say that. Furthermore, your non-parametric sacrifices can be history with Generalized Linear Models.
+
+Then again, you may soon notice a disturbing lack of stars. Is this book like a very dark night? Consider the opposite possibility: most times when you don't see the stars is at daylight. But let me hand you a torch with a chapter on model selection. The following paragraph may help you pushing your work through the review process:
+
+>In order to confirm that the Stroop effect exists, we compared the predictive power of two models by information crieria. M_0 is an intercept-only model that denies the Stroop effect, M_1 allows for it. In order to evaluate universality of the Stroop effect, the models got participant-level random effects. As response times tend to have an offset and are left-skewed we chose exponential-Gaussian error distributions.
+
+
+### The applied researcher
+
+Tongue-in-cheek, applied researchers take real problems to get their questions, but rarely solve them. Why not? It is legitimate, almost natural, to ask what causes the Uncanny Valley effect, for instance. You do a series of experimental study and also throw personality scales into the  game. Maybe, the effect is not unversal. Why? Just that.
+
+<!-- 43 -->
+
+
+
+
+## Assumptions
 
 This book makes the following assumptions:
 
@@ -28,6 +81,7 @@ This book makes the following assumptions:
 9.	R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.
 
 
+## How to read this book
 
 Chapter \@ref(design_research) introduces a framework for quantitative design research. It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems. Then the idea of design as decision making under uncertainty is developed at the example of two case studies.
 

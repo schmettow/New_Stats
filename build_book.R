@@ -20,12 +20,12 @@ bookdown::render_book("_bookdown.yml",
 
 ### DOC
 
-bookdown::render_book("_bookdown.yml", 
-                      output_format = "bookdown::word_document2", 
-                      clean = F,
-                      new_session = T,
-                      output_dir = "docs",
-                      encoding = "UTF-8")
+# bookdown::render_book("_bookdown.yml", 
+#                       output_format = "bookdown::word_document2", 
+#                       clean = F,
+#                       new_session = T,
+#                       output_dir = "docs",
+#                       encoding = "UTF-8")
 
 
 

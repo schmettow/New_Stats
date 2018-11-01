@@ -14,7 +14,7 @@
   
   
   <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
-  <meta name="github-repo" content="schmettow/NewStats" />
+  <meta name="github-repo" content="schmettow/New_Stats" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="New statistics for the design researcher" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Martin Schmettow">
 
 
-<meta name="date" content="2018-10-30">
+<meta name="date" content="2018-11-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -87,7 +87,6 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="NewStats.css" type="text/css" />
 </head>
 
 <body>
@@ -100,7 +99,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-this-book-is-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#the-empirical-design-researcher"><i class="fa fa-check"></i><b>1.1.1</b> The empirical design researcher</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#the-experimentalist"><i class="fa fa-check"></i><b>1.1.2</b> The experimentalist</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#the-applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#assumptions"><i class="fa fa-check"></i><b>1.2</b> Assumptions</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="design-research.html"><a href="design-research.html"><i class="fa fa-check"></i><b>2</b> Elements of quantitative design research</a><ul>
 <li class="chapter" data-level="2.1" data-path="design-research.html"><a href="design-research.html#studies"><i class="fa fa-check"></i><b>2.1</b> Studies</a></li>
 <li class="chapter" data-level="2.2" data-path="design-research.html"><a href="design-research.html#observations-and-measurestbc"><i class="fa fa-check"></i><b>2.2</b> Observations and measures[TBC]</a><ul>
@@ -245,6 +252,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.6.4" data-path="GLM.html"><a href="GLM.html#exercises-10"><i class="fa fa-check"></i><b>7.6.4</b> Exercises</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="8" data-path="data-management.html"><a href="data-management.html"><i class="fa fa-check"></i><b>8</b> Data management</a><ul>
+<li class="chapter" data-level="8.1" data-path="data-management.html"><a href="data-management.html#modelling-questionnaire-responses"><i class="fa fa-check"></i><b>8.1</b> Modelling questionnaire responses</a></li>
+<li class="chapter" data-level="8.2" data-path="data-management.html"><a href="data-management.html#modelling-experimental-responses"><i class="fa fa-check"></i><b>8.2</b> Modelling experimental responses</a></li>
+<li class="chapter" data-level="8.3" data-path="data-management.html"><a href="data-management.html#modelling-design-studies-tbd"><i class="fa fa-check"></i><b>8.3</b> Modelling design studies (tbd)</a></li>
+<li class="chapter" data-level="8.4" data-path="data-management.html"><a href="data-management.html#modelling-organizational-structures-tbd"><i class="fa fa-check"></i><b>8.4</b> Modelling organizational structures (tbd)</a></li>
+<li class="chapter" data-level="8.5" data-path="data-management.html"><a href="data-management.html#modelling-longitudinal-data-tbd"><i class="fa fa-check"></i><b>8.5</b> Modelling longitudinal data (tbd)</a></li>
+<li class="chapter" data-level="8.6" data-path="data-management.html"><a href="data-management.html#doing-it-in-r"><i class="fa fa-check"></i><b>8.6</b> Doing it in R</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="data-management.html"><a href="data-management.html#creating-and-reading-data"><i class="fa fa-check"></i><b>8.6.1</b> Creating and reading data</a></li>
+<li class="chapter" data-level="8.6.2" data-path="data-management.html"><a href="data-management.html#reshaping-data"><i class="fa fa-check"></i><b>8.6.2</b> Reshaping data</a></li>
+<li class="chapter" data-level="8.6.3" data-path="data-management.html"><a href="data-management.html#tipps-and-tricks"><i class="fa fa-check"></i><b>8.6.3</b> Tipps and tricks</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -266,10 +285,50 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 class="title">New statistics for the design researcher</h1>
 <h3 class="subtitle"><em>A Bayesian course in tidy R</em></h3>
 <h4 class="author"><em>Martin Schmettow</em></h4>
-<h4 class="date"><em>2018-10-30</em></h4>
+<h4 class="date"><em>2018-11-01</em></h4>
 </div>
 <div id="introduction" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="whom-this-book-is-for" class="section level2">
+<h2><span class="header-section-number">1.1</span> Whom this book is for</h2>
+<div id="the-empirical-design-researcher" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> The empirical design researcher</h3>
+<p>If you are not a designer, chances are good that you are a design researcher very well. Are you doing studies with people and is your work about ways to achieve or improve products, services, trainings or business? Welcome to the not-so-special club of people I call design researchers.</p>
+<p>Of course, I have no idea who you are, personally, but I figure you as one of the following personas:</p>
+<p>You are an industrial design researcher, thirty-three years old, leading a small team in the center for research of a car maker. Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light. Downstream research relies on your competent assessment of what is feasible. For example, you have just been asked to evaluate the following: Blue light makes people wake up easier, could it also be used to let car drivers not fall asleep? Several engineers and one industrial engineering student are involved in putting a light color stimulator for a premium car of the brand and stuff two workstations in its back, hooked to the recording systems and driving performance and physiological measures. Yes, this is as expensive as it sounds, and this why you have skin in the game, when you do a study.</p>
+<p>You are a young academic and just got a cum laude master’s degree in computer science. For your thesis you developed and implemented an animated avatar for a digital assistant. A professor from the social psychology department has read your thesis. He just got a funding for research on mass emergency communication using projected virtual characters. He fears that a young psychologist would not be up to the technical part of the project and found you. But, you ask yourself, am I up to the task of running experimental studies and do the statistics?</p>
+<!-- 42 -->
+</div>
+<div id="the-experimentalist" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> The experimentalist</h3>
+<p>If you are doing research with people, but the answers you seek are far from being applicable to anything in sight, don’t put this book away. Chances are good that you will be able to read through the ephemeral details of the cases I present and recognize your own research situations, for example that you are comparing two groups. As you can see in the table of contents, you don’t even have to read more than half the book to get there.</p>
+<p>It may be true that strictly experimental data does not require more than group comparison. Still, I please you: also read the chapter on multilevel models. So much contemporary experimental research mistakens <em>average</em> for <em>universal</em>. It makes a difference to ask:</p>
+<blockquote>
+<p>“Are responses in the Stroop task responses delayed in the incongruent condition?”</p>
+</blockquote>
+<p>or to ask:</p>
+<blockquote>
+<p>“Every person responds delayed in the incongruent condition?”</p>
+</blockquote>
+<p>If your work is about revealing universal laws of behaviour, you have to search for the answer on an individual level. Technically, that means a rather simple multi-level model and a spaghetti plot will do the rest. But note that such a model is composed of many little participant-level models and all of them need their data. For multi-level models you need a within-subject design and repeated measures. On the second thought that makes full sense, as what really ask is:</p>
+<blockquote>
+<p>“Do all people shift into a slower mode in the incongruent condition?”</p>
+</blockquote>
+<p>This is not about groups of people, but mode transitions in individual brains. These transitions can only be observed by putting one-and-the-same person into all the conditions. If you fear that the order of modes makes a difference, why not put order under statistical control? Record what you cannot control and check the interaction effects. Maybe it is not so bad.</p>
+<p>Just another candy for you: Response times! Have you been struggling with them forever, because they are not Normal distributed? Have you resorted to non-parametric tests so many times that what you say became “response times are non-parametric”? You shouldn’t say that. Furthermore, your non-parametric sacrifices can be history with Generalized Linear Models.</p>
+<p>Then again, you may soon notice a disturbing lack of stars. Is this book like a very dark night? Consider the opposite possibility: most times when you don’t see the stars is at daylight. But let me hand you a torch with a chapter on model selection. The following paragraph may help you pushing your work through the review process:</p>
+<blockquote>
+<p>In order to confirm that the Stroop effect exists, we compared the predictive power of two models by information crieria. M_0 is an intercept-only model that denies the Stroop effect, M_1 allows for it. In order to evaluate universality of the Stroop effect, the models got participant-level random effects. As response times tend to have an offset and are left-skewed we chose exponential-Gaussian error distributions.</p>
+</blockquote>
+</div>
+<div id="the-applied-researcher" class="section level3">
+<h3><span class="header-section-number">1.1.3</span> The applied researcher</h3>
+<p>Tongue-in-cheek, applied researchers take real problems to get their questions, but rarely solve them. Why not? It is legitimate, almost natural, to ask what causes the Uncanny Valley effect, for instance. You do a series of experimental study and also throw personality scales into the game. Maybe, the effect is not unversal. Why? Just that.</p>
+<!-- 43 -->
+</div>
+</div>
+<div id="assumptions" class="section level2">
+<h2><span class="header-section-number">1.2</span> Assumptions</h2>
 <p>This book makes the following assumptions:</p>
 <ol style="list-style-type: decimal">
 <li>Design research is for decision making, where one accounts for expected utility of design options. This requires</li>
@@ -288,6 +347,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>The best way to anticipate and plan data analysis is to simulate data upfront.</li>
 <li>R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.</li>
 </ol>
+</div>
+<div id="how-to-read-this-book" class="section level2">
+<h2><span class="header-section-number">1.3</span> How to read this book</h2>
 <p>Chapter @ref(design_research) introduces a framework for quantitative design research. It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems. Then the idea of design as decision making under uncertainty is developed at the example of two case studies.</p>
 <p>Chapter @ref(bayesian_statistics) introduces the basic idea of Bayesian statistics, which boils down to three remarkably intuitive conjectures:</p>
 <ol style="list-style-type: decimal">
@@ -312,6 +374,7 @@ re-organize the reading guide into three learning routes:
 for all routes, distinguish between reader types, perhaps make a cross table
 -->
 
+</div>
 </div>
             </section>
 
@@ -352,7 +415,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["New_Stats.pdf"],
 "toc": {
 "collapse": "subsection"
 }
