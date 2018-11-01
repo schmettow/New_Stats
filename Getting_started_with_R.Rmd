@@ -190,9 +190,9 @@ levels <- c("control","experimental")
 Group <- rep(levels, N/2)
 age <- round(runif(N, 18, 35),0)
 outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
-Experiment <- data_frame(Group, age, outcome) %>% mascutils::as_tbl_obs()
+Experiment <- data_frame(Group, age, outcome)
 
-summary(Experiment)
+Experiment %>% sample_n(8)
 
 ## Plotting the distribution of outcome
 Experiment %>% 
@@ -640,7 +640,7 @@ The dedicated print function does what way back a developer thought would be the
 Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
 ```{r}
-summary(Experiment)
+print(summary(Experiment))
 ```
 
 

@@ -23,8 +23,10 @@ The GLM framework rests on two extensions that bring us a huge step closer to th
 
 In the following three sections I will explain the three core assumptions of linear models, recall the canonical model formulation:
 
-$$\mu_i=\beta_0+ \beta_1 x_1i+ …+\beta_k x_{ki}\\
-y_i \sim \textrm{Norm}(\mu_i,\sigma)$$
+$$
+\mu_i=\beta_0+ \beta_1 x_1i+ …+\beta_k x_{ki}\\
+y_i \sim \textrm{Norm}(\mu_i,\sigma)
+$$
 
 The first term, we call the likelihood and it represents the systematic quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is a frequently under-regarded assumption of linear models and it is doomed to fall. The second term defines the  pattern of randomness and it hosts two further assumptions: *normal distribution*  and *constant error variance* of the random component.
 
@@ -256,9 +258,11 @@ In arithmetics an abundance of functions exists for every possible purpose. Howe
 
 Intuitively speaking, a monotonically increasing function preserves the order in magnitude, such that the following holds for a link function.
 
-$$\mu_a \gt \mu_b \rightarrow \theta_a \gt \theta_b$$
+$$
+\mu_a > \mu_b \rightarrow \theta_a > \theta_b
+$$
 
-The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g., \sqrt{x} = $[2, -2]$) and therefore is not a function, strictly.
+The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g., $\sqrt{x} = [2, -2]$) and therefore is not a function, strictly.
 
 An adequate link function for count variables would map the range of natural numbers to the *linear range* of $\eta$ that is $[-\infty; \infty]$. The logarithm is such a function and its inverse is the *exponential* function, which bends the linear range back into the boundary. Figure XY shows them side-by-side. Note that the logarithm is *not asymptotic* as it may seem. This function truly approaches ininity, albeit at a decelerating pace (which is mind boggling). Other variables, like success rates or rating scales, have lower and upper boundaries. A suitable pair of functions is the *logit* link function and the *logistic* mean function.  
 
@@ -305,7 +309,7 @@ In chapter \@ref(distributions) a number of random distributions were introduced
 In GLM, the researcher has a larger choice for modelling  the random component and Table XY lists some common candidates.
 
 ```{r echo = F}
- readxl::read_excel("Illustrations/GLM_distributions.xlsx") %>%  kable()
+ readxl::read_excel("Illustrations/GLM_distributions.xlsx")
 ```
 
 
@@ -438,7 +442,7 @@ detach(Chapter_GLM)
 attach(IPump)
 ```
 
-```{r fit:deviations, opts.label = "mcmc"}
+```{r fit_deviations, opts.label = "mcmc"}
 M_dev <- 
   stan_glmer(deviations ~ Design + session + session:Design + 
                (1 + Design + session|Part) +
@@ -488,7 +492,9 @@ Hence, the exponentiated coefficients have a *multiplicative interpretation*, li
 
 With counts we usually expect the variance of randomness to rise with the mean. The Poisson distribution  is very strict in the sense that the variance equals the mean 
 
-$$y_i \sim \textrm{Pois}(\lambda) \rightarrow \textrm{Var}(x_i) = \textrm{Mean}(x_i) = \lambda$$. 
+$$
+y_i \sim \textrm{Pois}(\lambda) \rightarrow \textrm{Var}(x_i) = \textrm{Mean}(x_i) = \lambda
+$$. 
 
 Real count data frequently has variance that raises proportionally with the mean, but is inflated. This is called *overdispersion* and is accounted for by an observation-level random effect, which will be explained in a separate section \@ref(overdispersion).
 
@@ -513,7 +519,10 @@ The  transformation of coefficients to the original scale has been applied to th
 
 For all GLM, the link and mean functions are monotonically increasing, with the consequence that the order of observations is preserved. Formally, for any two MCMC iterations $i$ and  $j$ for a parameter $\beta_i$:
 
-$$\beta_{1i} \lt \beta_{1j} \rightarrow \exp(\beta_{1i}) \lt \exp(\beta_{1j})$$
+$$
+\beta_{1i} < \beta_{1j} \rightarrow \exp(\beta_{1i}) < \exp(\beta_{1j})
+$$
+
 Recall that throughout this book, center and interval estimates have been obtained by simple quantiles, marking the points where 2.5%, 50% and 97.5% of all iterations are smaller. Order does not change with monotonous transformations, if 2.5% (50%, 97.5%) of draws are smaller on the linear  scale, they will still be after applying the mean function. Quantiles are not affected by monotonous transformation and transformation after summary is therefore valid. Some researchers prefer the mode of the posterior to represent its center location. The mode is the point of highest density and does not rely on ranks, it therefore even invariant under all transformations that preserve identity.
 
 This is different for higher order methods for obtaining point and interval estimates. Most notably the mean and the highest posterior density intervals are not invariant to mean functions. When using those, the mean function must be applied before summarizing the posterior, which is inconvenient and inconsistent.
@@ -530,7 +539,7 @@ attach(Chapter_GLM)
 ```
 
 
-```{r sim:ZI, ops.label = "rtut"}
+```{r sim_ZI, ops.label = "rtut"}
 sim_zi <- function(
   beta_0  = 2.5,
   N_Part  = 120,
@@ -556,7 +565,7 @@ D_zi %>%
 
 
 
-```{r fit:ZI, opts.label = "future"}
+```{r fit_ZI, opts.label = "future"}
 M_zi <-
   D_zi %>% brm(visits ~ 1 + (1|Part) , family = zero_inflated_poisson, data = ., iter = iter)
 M_zi
@@ -637,7 +646,10 @@ As expected from a GMM we retrieve one parameter that here reflects the average 
 
 Proportions are on a range from zero to one. Because the quantity of interest is bounded, a link function  is needed that stretches the bounded into an unbounded range. For logistic regression, the *logit* functions maps the expected values $\mu_i \in [0;1]$ onto the *linear predictor* scale $\eta_i \in [-\infty; \infty]$:
 
-$$\eta_i = \textrm{logit}(\mu_i)$$
+$$
+\eta_i = \textrm{logit}(\mu_i)
+$$
+
 The inverse function, commonly called the *mean function*, of the logit is the *logistic function*. \@ref(logit_logist) shows link and mean functions side-by-side.
 
 ```{r logit_logist}
@@ -803,7 +815,9 @@ C_cmpl <- T_fixef_cmpl_odds$center
 
 But is it legitimate to apply the transformation on individual coefficients in order to speak of changes of odds? The following arithmetic law tells that what is a sum on the log-odds scale, is multiplication on the scale of odds:
 
-$$\exp(x + y) = \exp(x)\exp(y)$$
+$$
+\exp(x + y) = \exp(x)\exp(y)
+$$
 
 Consequently, we may speak of changes of odds using *multiplicative language*: 
 
@@ -936,8 +950,10 @@ Two solutions exist for overdispersed count data: we can either switch to an app
 
 For all three one-parameter distributions, there exists a two-parameter distribution that allows to estimate the amount of random dispersion (almost) independently of the mean.
 
-```{r opts.label = "invisible"}
-readxl::read_excel("Illustrations/GLM_distributions.xlsx", sheet = "plugin") %>% kable()
+<!-- 46 make work with LaTeX -->
+
+```{r}
+readxl::read_excel("Illustrations/GLM_distributions.xlsx", sheet = "plugin")
 ```
 
 Using Poisson regression for overdispersed  count data results in too favorable certainty of estimates, which is a mistake, of course. One solution to the problem is to switch to yet another response distribution that has a second parameter, thereby allowing the variance to vary (almost) freely. For the Poisson case (i.e., counts without an upper limit) that typically is the negative binomial distribution (never mind its name!), for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the original distribution is not constant, but allowed to vary, typically according
@@ -1034,14 +1050,16 @@ $$
 \theta_{pi} = \beta_0 + x_p\beta_{0p} \\
 \mu_{pi} = \exp(\theta_{pi})\\
 \beta_{0p} \sim N(\mu_{p}, \sigma_p)\\
-y_{p} \sim \textrm{Pois}(\mu_{ij})$$
+y_{p} \sim \textrm{Pois}(\mu_{ij})
+$$
 
 The OLRE is normally distributed but  does not cause any bounded-range range, as it is added on the level of the linear predictor, before applying the exponential transformation. Observation-level random effects are completely analogous, except that every observation becomes its own group, in a Poisson grand mean model with added variation:
 
 $$
 \theta_{i} = \beta_0 + \beta_{i} \\
 \mu_i = \exp(\theta_i)\\
-y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+y_{ij} \sim \textrm{Pois}(\mu_{ij})
+$$
 
 See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive. Compare this to the negative binomial distribution where variance is scaled up, which is multiplication. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
 
@@ -1382,7 +1400,7 @@ Noteworthy, the brm engine uses the identity link function by default. While thi
 <!-- In chapter \@ref(crossover) we have tested Egan's assumption that user differences produce more variation in performance than designs do. In order to "normalize" the ToT outcome, log transformation was applied. Using an exgaussian regression as part of the GLM framework, we are now set to do without this humble trick. -->
 
 
-```{r fit:tot_exg, opts.label = "future"}
+```{r fit_tot_exg, opts.label = "future"}
 M_tot_exg <- D_egan %>%  
   brm(ToT ~ 1 + (1|Part+Design+Task+Design:Task),
       family="exgaussian", data = .,
@@ -1978,17 +1996,21 @@ C_fixef <- round(fixef(M_ord_1)$center, 1)
 The six intercepts correspond with the thresholds between the seven levels. It is no coincidence that the intercept estimates increase by order, as they are cumulative (the "c" in cratio). The first intercept estimate represents (the logit of) the proportion of responses $y_i \leq 1$, the second $y_i \leq 2$ etc.
 The Design effect has the usual interpretation as compared to logistic regression, an increase in logit. The only difference is that it refers to all six reference points. The expected proportion of responses equal to or smaller than 2 for design A  is:
 
-$$\pi(y_i \leq 2|A) = \\
+$$
+\pi(y_i \leq 2|A) = \\
 \text{logit}^{-1}(\beta_{0[2]}) = \\ 
 \text{logit}^{-1}(`r C_fixef[2]`) = \\
-`r inv_logit(C_fixef[2])`$$
+`r inv_logit(C_fixef[2])`
+$$
 
 The expected proportion of responses equal to or smaller than 2 for design B  we get by the usual linear combination:
 
-$$\pi(y_i \leq 2|B) = \\
+$$
+\pi(y_i \leq 2|B) = \\
 \text{logit}^{-1}(\beta_{0[2]} + \beta_1) = \\ 
 \text{logit}^{-1}(`r C_fixef[2] + C_fixef[7]`) = \\
-`r inv_logit(sum(C_fixef[c(2,7)]))`$$
+`r inv_logit(sum(C_fixef[c(2,7)]))`
+$$
 
 
 All coefficients are shifting all threshold by the same amount (on the linear predictor scale). You can picture this as a single puppetier controlling multiple puppets by just one stick, making them dance in sync. As long as the ordinal scale has only a low number of bins, that keeps the number of parameters at a reasonable level. Just imagine, you were estimating an ordinal multilevel model and all participant-level effects were five or sevenfolded, too. However, the equidistancy of effects on bin thresholds is an assumption by itself, and in the presence of response styles on rating scales, it cannot be taken for granted.

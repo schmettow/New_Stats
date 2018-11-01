@@ -4,11 +4,10 @@ subtitle: A Bayesian course in tidy R
 author: "Martin Schmettow"
 date: "`r Sys.Date()`"
 github-repo: schmettow/New_Stats
-documentclass: book
 site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers,  applied psychologists and everyone else who works hard to make this world a better  place.
+documentclass: svmono
 ---
-
 
 # Introduction
 

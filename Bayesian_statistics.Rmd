@@ -153,20 +153,49 @@ median <- function(x){
 }
 ```
 
+
+
 ```{r}
 mode <- function(x, bin_width = 10) {
   bins <- bin(x, bin_width)
   bins[which.max(tabulate(match(x, bins)))] + bin_width/2
 }
+```
 
 
+```{r}
+knit_print.tbl_obs <- function(x, ...) {
+  #data_set <- deparse(substitute(x))
+  n <- min(8, nrow(x))
+  tab <- dplyr::sample_n(x, n)
+  if("Obs" %in% colnames(tab)) tab <- dplyr::arrange(tab, Obs)
+  if("Part" %in% colnames(tab)) tab <- dplyr::arrange(tab, Part)
+  cap <- stringr::str_c("Data set",": showing ", n, " of ", nrow(x), " observations")
+
+  res = paste(c("", "", knitr::kable(tab, caption = cap, format = "markdown", ...)),
+              collapse = "\n")
+  knitr::asis_output(res)
+}
+
+```
+
+
+```{r}
+Ver20
+```
+
+
+```{r}
 Ver20 %>% 
   group_by() %>% 
   summarize(
     mean_ToT   = mean(ToT),
     median_ToT = median(ToT),
-    mode_ToT = mode(ToT))
+    mode_ToT = mode(ToT)) %>% 
+  knit_print.tbl_obs()
 ```
+
+
 
 The table above shows the three statistics for central tendency side-by-side. Mean and median are close together. This is frequently the case, but not always. When the distribution of measures is completely symmetric mean and median perfectly coincide. In section @\ref(distributions) we will encounter distributions that are not symmetric. The more a distribution is skewed, the stronger the difference between mean and median increases.
 
@@ -531,8 +560,8 @@ The elements should be clearly identified, but need not have a particular order.
 
 + empty like all opponents who can defeat Chuck Norris, $\{\}$ or $\oslash$
 + finite like the possible states of a traffic light
-+ infinite, but countable, like the natural numbers $\N$
-+ infinite, uncountable, like the real numbers $\R$
++ infinite, but countable, like the natural numbers $N$
++ infinite, uncountable, like the real numbers $R$
 
 You may wonder now, whether you would ever need such a strange concept as uncaountable infinite sets in your down-to-earth design research. Well, the set of primary interest in every design study is the possible outcomes. Sometimes, these are finite, like $\{\textrm{success}, \textrm{failure}\}$, but when you measure durations or distances, you enter the realm of real numbers. We will set this issue aside for the moment and return to it later in the context of continuous distributions of randomness.
 
@@ -547,8 +576,8 @@ In order to introduce the mathematical concept of probability, we first have to 
 ```{r opts.label = "invisible"}
 D_sets <- 
   readxl::read_excel("Data/Probability_example.xlsx", sheet = "D_sets") %>% 
+  mutate_at(vars(Timely:Success), as.logical) %>% 
   mutate(freq = as.integer(round(freq))) %>% 
-  mutate_if(is.character, as.logical) %>% 
   uncount(freq) %>% 
   as_tbl_obs()
 
@@ -927,7 +956,7 @@ The random part of a statistical model is what  changes between observation and 
 
 #### Probability distributions
 
-Probability distributions are mathematical functions that assign probabilities to the outcome of a measured variable $y$. Consider a participant who is asked to complete three tasks of constant difficulty, such that there is a chance of $30%$ for each one to be solved. The outcome variable of interest is the number of correct completions (0, 1, 2 or 3). Under idealized consitions, the following random distribution gives the probability of every possible outcome.
+Probability distributions are mathematical functions that assign probabilities to the outcome of a measured variable $y$. Consider a participant who is asked to complete three tasks of constant difficulty, such that there is a chance of $30$ percent for each one to be solved. The outcome variable of interest is the number of correct completions (0, 1, 2 or 3). Under idealized consitions, the following random distribution gives the probability of every possible outcome.
 
 ```{r opts.label = "fig.small"}
 D_three_tasks <- 
@@ -1205,7 +1234,7 @@ data_frame(lambda = 20,
 Poisson distributions' lower boundary can cause trouble: the measure at hand is truly required to include the lower bound. A person can perform a sequence with no errors, catch zero items or have no friends on facebook.  But, you cannot complete an interaction sequence in zero steps or have a conversation with less than two statements. Fortunately, once a count measure has a lower boundary right of zero, the offset is often available, such as the minimum necessary steps to complete a task. In such a case, the number of errornous steps can be derived and used as a measure, instead:
 
 $$
-\textrm{#errors} = \textrm{#steps} - \textrm{#neccessary steps}
+\textrm{\#errors} = \textrm{\#steps} - \textrm{\#neccessary steps}
 $$
 
 Another lower bound problem arises, when there are hurdles. In traffic research, the frequency of use public transport certainly is an interesting variable. A straight-forward assessment would be to ask bus passengers "How many times have you taken the bus the last five days?". This clearly is a count measure, but it cannot be zero, because the person is sitting in the bus right now. This could be solved by a more inclusive form of inquiry, such as approaching random households. But, the problem is deeper: actually, the whole population is of two classes, those who use public transport and those who don't.
@@ -1250,7 +1279,7 @@ Subsmurf$simulate_exp() %>%
 
 The best known distributions are *normal distributions* or *Gaussian distributions*. These distributions arise mathematically under the assumption of a myriad of small unrelated forces (SMURF) pushing performance (or any other outcome) up or down. As SMURFs work  in all directions independently, their effects often average out and the majority of observations stays clumped together in the center, more or less.
 
-Normal distributions have two parameters: $\mu$ marks the center and mean of the distribution. The linear models introduced later are aiming at predicting $\mu$. The second parameter \sigma$ represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get wider. 
+Normal distributions have two parameters: $\mu$ marks the center and mean of the distribution. The linear models introduced later are aiming at predicting $\mu$. The second parameter $\sigma$ represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get wider. 
 
 Different to Poisson and Binomial distributions, mean and variance of the distribution can be set independently and overdispersion is never an issue.
 
@@ -1354,7 +1383,7 @@ sync_CE(Rainfall, M_1)
 
 What the estimation does, is to calculate the *posterior distribution* from the observations. The *posterior distribution* contains the probability (more precisely: the *density*) for all possible values of the parameter in question. The following density plot represents our belief about the parameter $P(rain|cloudy)$ after we have observed twenty days:
 
-```{r fig:umbrella_post, opts.label = "fig.small"}
+```{r umbrella_post, opts.label = "fig.small"}
 
 posterior(M_1) %>%
   filter(type == "fixef") %>% 

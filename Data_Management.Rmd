@@ -31,7 +31,7 @@ Are you a former SPSS user, perhaps? Then, please, take a moment, a sheet and a 
 
 Now, I will briefly present a framework for structuring (and using) data that is called *entity relationship modelling (ERM)*. ERM comes from computer science, more specifically the field of databases. In modern software systems, databases contain huge amount of data with often extremely complex relationships. As the name says, the ERM approach handles complex data by decomposition into *entities* and *relationships*. Take as an example, the data base of a company selling products to customers. The data base will contain, at least, two entities: customers and products. In the very moment the customer enters the checkout, there must be a data structure represent the shopping cart. Formally, shopping cart structure relates customers to products, in plain words: "customer x has selected products a and b". Now, returning to the wide format, this would still be possible: you simply had to create a (huge) table with all customers in rows and all (ten thousands) products in columns. To indicate that a customer has selected products a and b, mark the respective cells with 1, and leave all other cells at 0. 
 
-```{r tab:shopping_cart_wide_table, opts.label = "fig.small"}
+```{r tab_shopping_cart_wide_table, opts.label = "fig.small"}
 data.frame(Customer = c("...", "X", "Y", "Z"), 
            Prod_a = c("...", "1", "0", "0"), 
            Prod_b = c("...", "1", "0", "1"),
@@ -43,7 +43,7 @@ data.frame(Customer = c("...", "X", "Y", "Z"),
 
 However, in this structure it would not be possible to reasonably store the price of the product, or any  other product information. And the problem becomes completely intractable when we consider all the other entities that play a role in the process, for example the fact that the same customer can have different addresses.
 
-So, what is done in data modelling, is that *multiple tables* are being used. Áll classes of entities, customer and product, or participant and stimulus, get their own table. And, what you may find surprising at first, most relationships get their own tables, too. In the shopping cart example, we have two entities, *Customer* and *Product*, and the relationship *has_selected*. As you can see in `r figr("tab:shopping_cart_wide_table")`, properties can be attached to entities, for example, customers have names and products have prices. These properties are called *attributes*. However, there is a twist. Could one not consider the selected products as a property, and use such an attribute? There are theoretical and practical reasons, not to do so. Here, it should suffice to  state the following rule, for when a property is an attribute, and when it is a relationship: first, the property must be expressable as a singular value, such as a number, a piece of text, or a factor level. Second, the value must be literal, in the sense that it does not represent another complex entity. If a property is atomic and literal, it can be added as an attribute to the entity and will later become a column in the respective data table. 
+So, what is done in data modelling, is that *multiple tables* are being used. Áll classes of entities, customer and product, or participant and stimulus, get their own table. And, what you may find surprising at first, most relationships get their own tables, too. In the shopping cart example, we have two entities, *Customer* and *Product*, and the relationship *has_selected*. As you can see in `r figr("tab_shopping_cart_wide_table")`, properties can be attached to entities, for example, customers have names and products have prices. These properties are called *attributes*. However, there is a twist. Could one not consider the selected products as a property, and use such an attribute? There are theoretical and practical reasons, not to do so. Here, it should suffice to  state the following rule, for when a property is an attribute, and when it is a relationship: first, the property must be expressable as a singular value, such as a number, a piece of text, or a factor level. Second, the value must be literal, in the sense that it does not represent another complex entity. If a property is atomic and literal, it can be added as an attribute to the entity and will later become a column in the respective data table. 
 
 We will return to representation of complex properties, soon. But, first we need to introduce a concept of ERM, that literally ties everything together: *keys* are unique identifier of entities. Because natural names of persons and things are often, but not always unique (think of "John Smith"), most of the time, one chooses a numerical counter as a key, like a customer ID or product number. In ERM, the attribute that uniquely identifies an entity is called the *primary key (PK)*. These keys are used for identification, but also for marking relations between entities. In Figure XY, the relation `has_selected` identifies the customer, as well as the product. These references to entities are called *foreign keys (FK)*. 
 
@@ -55,7 +55,7 @@ By using entities with PK and establishing relations by FK, one avoids any redun
 
 Returning to the original problem of a hybrid experimental/survey study, what are the entities? Clearly, participants are entities. The second set of entities are the items of personality questionnaires, and the data we can conceive as the *encounter of items and participants* that results in participants-by-items responses.
 
-```{r fig:questionnaire_entity, opts.label = "fig.wide"}
+```{r fig_questionnaire_entity, opts.label = "fig.wide"}
 attach(Hugme)
 
 T_some_items <-
@@ -87,7 +87,7 @@ grid.arrange(
 ```
 
 
-So, according to the ERM framework, we are going to have two separate entity tables, at least. The *participants table* has one row per participant, identified by a unique participant ID, and all singular attributes of participants, like gender, age etc. The *items table* carries the questionnaires. Items are uniquely identified by an ID. When several scales are used, it is recommended to add a separate factor variable assigning an item to a scale. This can creates some redundancy as the item name might already identify the scale. As we will later see, this Scale variable is very useful for calculating the aggregated scores. `r figr("fig:questionnaire_entity")`  gives the smallest possible item table, but further useful information about items can be added as variables, such as: 
+So, according to the ERM framework, we are going to have two separate entity tables, at least. The *participants table* has one row per participant, identified by a unique participant ID, and all singular attributes of participants, like gender, age etc. The *items table* carries the questionnaires. Items are uniquely identified by an ID. When several scales are used, it is recommended to add a separate factor variable assigning an item to a scale. This can creates some redundancy as the item name might already identify the scale. As we will later see, this Scale variable is very useful for calculating the aggregated scores. `r figr("fig_questionnaire_entity")`  gives the smallest possible item table, but further useful information about items can be added as variables, such as: 
 
 + item text in all used language
 + item labels
@@ -97,7 +97,7 @@ So, according to the ERM framework, we are going to have two separate entity tab
 
 Finally, the *questionnaire table* stores the "encounter" between participants and items in the study. In ERM speak it is a *relationship table*, as it borrows entities and their keys from participants and items. The so-called *foreign key* is the combination of participants and items. Like with the entity tables, it is important that every observation (that is a response of one participant to one item) is uniquely identified by the foreign key.
 
-In more complicated cases, the combination of participant and item might not identify every observation uniquely. For example, a preferred method to assess a questionnaires reliability is to repeat the measurement in a second session. If we would use the item table as in `r figr("fig:questionnaire_entity")`, the observations were no longer uniquely identified, as all participants encounter every item twice. As a solution one would simply extend the key of the table by a variable called `session`.
+In more complicated cases, the combination of participant and item might not identify every observation uniquely. For example, a preferred method to assess a questionnaires reliability is to repeat the measurement in a second session. If we would use the item table as in `r figr("fig_questionnaire_entity")`, the observations were no longer uniquely identified, as all participants encounter every item twice. As a solution one would simply extend the key of the table by a variable called `session`.
 
 ## Modelling experimental responses
 
@@ -107,7 +107,7 @@ Storing experimental data follows the same principles as for questionnaire data.
 2. the research design
 
 
-```{r fig:experiment_exchangeable_data_model, opts.label = "fig.wide"}
+```{r fig_experiment_exchangeable_data_model, opts.label = "fig.wide"}
 T_exchangeable_between_subj_part <-
   data_frame(Part = as.factor(c(1:3)),
              Gender = c("f","m","m"),
@@ -130,9 +130,9 @@ detach(Hugme)
 ```
 
 
-The model gets just slightly more complex when the experiment comprises a condition. Assume an experiment that examines the difference in vigilance between gamers and non-gamers. As this is a between-subject design, the condition is assigned to the participant table, as is shown in `r figr("fig:experiment_exchangeable_data_model")`. Note that the experiment table only contains the absolute necessary attributes, namely all information that characterizes the encounter itself. Of course, for the data analysis we need a table that contains information on participants as well. A later section will show how to combine and manipulate data from separate tables.
+The model gets just slightly more complex when the experiment comprises a condition. Assume an experiment that examines the difference in vigilance between gamers and non-gamers. As this is a between-subject design, the condition is assigned to the participant table, as is shown in `r figr("fig_experiment_exchangeable_data_model")`. Note that the experiment table only contains the absolute necessary attributes, namely all information that characterizes the encounter itself. Of course, for the data analysis we need a table that contains information on participants as well. A later section will show how to combine and manipulate data from separate tables.
 
-```{r fig:experiment_Stroop, opts.label = "fig.wide"}
+```{r fig_experiment_Stroop, opts.label = "fig.wide"}
 T_Stroop_part <-
   data_frame(Part = as.factor(c(1:3)),
              Gender = c("f","m","m"),
@@ -166,7 +166,7 @@ In other experiments stimuli are not exchangeable at all, but have a clear ident
 
 In the HUG3 experiment, the semantic Stroop task was used to detect whether a person feels attarcted by computers as objects of playful exploration and intellectual challenge. The stimuli were rather complex: first, a picture was shown, then a word was displayed and the participant had to respond to the color. The idea behind the semantic Stroop task is that a strong semnatic association between picture and word would cause a moment of distraction. Delayed responses on pictures of computers followed by words such as "playful" or "challenging" is therefore taken as an indicator for a person's computer enthusiasm (or: geekism).
 
-```{r fig:HUG3_experiment_data_model, opts.label = "fig.wide"}
+```{r fig_HUG3_experiment_data_model, opts.label = "fig.wide"}
 T_SemStroop_part <-
   data_frame(Part = as.factor(c(1:3)),
              Gender = c("f","m","m"),
@@ -216,7 +216,7 @@ grid.arrange(
 ```
 
 
-Both, prime pictures and target words were collected upfront and classified. As shown in `r figr("fig:HUG3_experiment_data_model")`, the data model for this experiment consists of three entity tables (participants, pictures and words), one intermediate relationship table for stimuli and finaqlly the experiment table. As color only plays a minor role (the classic Stroop conditions no longer apply), it is not recorded in the target word table, but is generated during the experiment and could be recorded in the experiment table. Still, we could think of other properties of words to be added, such as word length an familiarity (as potential control variables), or as shown,  translations for another languages.
+Both, prime pictures and target words were collected upfront and classified. As shown in `r figr("fig_HUG3_experiment_data_model")`, the data model for this experiment consists of three entity tables (participants, pictures and words), one intermediate relationship table for stimuli and finaqlly the experiment table. As color only plays a minor role (the classic Stroop conditions no longer apply), it is not recorded in the target word table, but is generated during the experiment and could be recorded in the experiment table. Still, we could think of other properties of words to be added, such as word length an familiarity (as potential control variables), or as shown,  translations for another languages.
 
 ## Modelling design studies (tbd)
 
@@ -227,13 +227,13 @@ Design studies assess how users respond to designs. Typically, in such a test, u
 ## Modelling longitudinal data (tbd)
 
 
-# Doing it in R
+## Doing it in R
 
 Now that we have seen how to structure data in various research situations, we will see how this works out in R. I will demonstrate the full workflow by example of a hybrid questionnaire/experimental study that explored in how much the *uncanny valley* phenomenon depends on attitude and personality. Participants were asked to fill out five personality scales and completed an experiment, where they rated morphing sequences of faces using items of the eeriness scale.
 
 ![Entity relationship model of a hybrid survey/experimental study](Illustrations/DM/erm_2.png)
 
-## Creating and reading data
+### Creating and reading data
 
 We start by creating an item table in Excel, using the following structure:
 
@@ -359,7 +359,7 @@ The next command `ldply(read.csv)` picks up the list of csv files from the pipel
 
 `ldply` returns a data frame and the chain proceeds with the `select` command (dplyr) that selects the needed columns from the input data frame. It is possible to rename columns on the spot by using assignments, such as `Stimulus = trialStimulus`. The chain proceeds with `filter`, which is the row-wise counterpart, in that it selects observations. Here it is used to filter out missing observations, which in R are coded as `NA`. Finally, we are doing some data manipulation: the stimuli stem from 20 morphing sequences with four morphing levels each. This is indirectly coded in variable Stimulus, which actually is the filename of the stimulus, with the form `<face>.<morphlevel>.png`. By calling `mutate` with the string manipulation command `str_replace` (stringr) we chop off the ".png" file ending. Then `separate` (tidyr) splits the remainders into two new variables, Face and morphLevel. After this final step we have every observation uniquely identified by participant, item, face and morphing level.
 
-## Reshaping data
+### Reshaping data
 
 After all data has been imported, we have two data files, that we need to merge and transform for the final analysis. Before we come to that, some more processing is required on the questionnaire data for turning the raw responses into workable scores. All the needed information is stored in the *items table*, which we have to join with the questionnaire data first. Then, we proceed in three steps:
 
@@ -399,11 +399,11 @@ UC_1 <-
 
 ```
 
-## Tipps and tricks
+### Tipps and tricks
 
 
 
-### As few variables as possible, but no more
+#### As few variables as possible, but no more
 
 Classic R data transforming goes like below and we can make two observations on it:
 
@@ -429,7 +429,9 @@ This is almost as intuitive as programming ScratchJR, and one could be tempted t
 
 Below you see the workflow we have used for un-canning the uncanny valley data.
 
-```{r fig:latent_variable_models, opts.label = "fig.small", echo = F}
+<!-- #45 fix to work with pdf_document -->
+
+```{r fig_latent_variable_models, opts.label = "fig.small", echo = F, eval = F}
 DiagrammeR::grViz('
    digraph rmarkdown {
 
@@ -449,7 +451,7 @@ DiagrammeR::grViz('
 
                 
                 
-### Transforming between wide and long format
+#### Transforming between wide and long format
 
 Before we turn to merging the questionnaire and Let's first begin with an issue that of the questionnaire data: it currently is in its long form, but many statistical routines still require the broad format, like exploratory factor analysis does. The tidyr package provides the command `spread()` to accomplish this. 
 
@@ -457,7 +459,7 @@ Before we turn to merging the questionnaire and Let's first begin with an issue 
 It can also be the other way round: you have some legacy questionnaire data, which is coded in the wide format. In this case, there is an antagonist to `spread`, the command `gather`.
 
 
-### Grouping variables: factors or strings?
+#### Grouping variables: factors or strings?
 
 
 
