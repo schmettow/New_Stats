@@ -4,7 +4,7 @@ purp.rtut = T
 
 source("RMDR.R")
 
-CE <- c("Uncanny", "BrowsingAB", "CUE8", "Hugme")
+CE <- c("Uncanny", "BrowsingAB", "CUE8", "Hugme", "Stroop_comp", "IPump", "Sec99")
 load_CE_(CE)
 
 
@@ -103,8 +103,6 @@ Pathologies of MCMC chains:
 + Tuning the Stan engine
 
 
-
-
 ### Model criticism
 
 + residual analysis
@@ -116,10 +114,15 @@ Gelman, a, Gelman, a, Meng, X.-L., Meng, X.-L., Stern, H., & Stern, H. (1996). P
 
 
 
+
+
+
+
 ## Model comparison
 
+There are a number of ways to evaluate a model by absolute standards, by butting its predictive ability to test against other data. Collecting more data is not what most people desire. In this chapter we introduce the opposite approach, which is fitting several models to the same data and see which one fits best. 
 
-While model criticism deals with the one model that is being presented to the audience, there are many situations where more than one model is involved. One such situation we have outlined in the beginning: during model building the researcher adds or removes predictors in an iterative way, this actually is a series of models.
+While model criticism deals with the one model that is being presented to the audience, most of the time, there actually are two, at least. AndOne such situation we have outlined in the beginning: during model building the researcher adds or removes predictors in an iterative way, this actually is a series of models.
 
 
 + F-values: fit and parsimony
@@ -130,6 +133,153 @@ While model criticism deals with the one model that is being presented to the au
 
 
 As we will see in the remainder of this chapter, comparing models relative to each other has useful applications beyond die-hard hypothesis testing. As it turns out, the predictive value of a model depends on two counteracting aspects: the *model fit*, that is how neatly the model aligns with the data and *model parsimony*. Generally spoken, adding a parameter to a model gives you an advantage in fit, but reduces parsimony. As it turns out, models that have the optimal balance between fit and parsimony are better in predicting future observations. The next section introduces a number of criteria to choose the models with better predictive accuracy. The following sections introduce in more depth the modelling strategies where these criteria apply, model pruning, model selection and model averaging.
+
+
+## Forecasting performance with LOO
+
+
+This model does not take any predictors into account and therefore, in this special case, the intercept is the only prediction.
+
+<!-- #47 -->
+
+
+```{r opts.label = "mcmc"}
+attach(Sec99)
+
+D <- Sec99$Ver20 %>% 
+  filter(!is.na(age)) %>% 
+  select(age, ToT) %>% 
+  sample_n(20)
+
+fit_M_1  <-  function(sample) 
+  stan_glm(ToT ~    1, family = gaussian(), 
+           iter = 400, chain = 1, data = sample)
+
+fit_M_2  <-  function(sample) 
+  stan_glm(ToT ~    1 + age, family = gaussian(), 
+           iter = 400, chain = 1, data = sample)
+
+do_loo <- function(data, f_fit, f_predict){ 
+  # data <- Ver20
+  # f_fit <- fit_M_1
+  leave_out <- function(obs) slice(data,-obs)
+  left_out  <- function(obs) slice(data, obs)
+  f_predict <- function(fit, obs) predict(fit, newdata = obs)$center[1]
+  
+  out <- data_frame(obs     = 1:nrow(data),
+                    Sample  = map(obs, leave_out),
+                    Obs     = map(obs, left_out),
+                    Fitted  = map(Sample, f_fit)) %>% 
+    mutate(forecast = unlist(map2(Fitted, Obs, f_predict)))
+  return(out)
+}
+
+Loo_1 <- do_loo(D, fit_M_1)
+
+Loo_1 %>%
+  mutate(ToT = D$ToT,
+         error = ToT - forecast) %>% 
+  ggplot(aes(x = error)) +
+  geom_histogram()
+
+Loo_2 <- do_loo(D, fit_M_2)
+
+Loo_2 %>%
+  mutate(ToT = D$ToT,
+         error = ToT - forecast) %>% 
+  ggplot(aes(x = error)) +
+  geom_histogram()
+
+
+mse <- function(obs, forecast)
+  mean((obs - forecast)^2)
+
+mse(D$ToT, Loo_1$forecast)
+mse(D$ToT, Loo_2$forecast)
+
+
+detach(Sec99)
+
+```
+
+
+
+
+
+
+## Scoring functions
+
+The imaginary researchers of the Sec99 could evaluate the predictive performance of their GMM by doing leave-one-ot cross validation. As a score function, a common choice is the mean square error, which is:
+
+
+
+
+
+## 
+
+
+### Cross validation and information criteria
+
+Models are all about their predictive ability. Predictive ability seems to imply that the data must speak about the furture, which sounds like gathering more data. In fact, it suffices to have just *out-of-samnple data*, not true forecasting.
+
+A very common procedure to assess reliability of a scale is splitting the items into two parts and assess how the average person score on the first part predicts the second. These two parts are often called *training sample* and  *validation sample*. The procedure of *leave-one-out cross validation* generalizes this idea in that:
+
+1. The validation sample is just one observation at a time
+2. As many models as there are observations to leave out
+3. A suitable cost function determines how well each model has predicted the left-out observation
+
+In theory, every practitioner who does research for decision making on a specific case should construct a specific cost function and use it to evaluate models. This is an ideal and almost nobody ever does it, because it at least expensive, if not impossible. That is why most researchers evaluate their model by generic cost functions, also called *score functions*. 
+
+One in
+
+
+
+
+
+### Model parsimony
+
+Occam's razor sounds bloody business. In words of Bertrand Russell it says:
+
+>if one can explain a phenomenon without assuming this or that hypothetical entity, there is no ground for assuming it.
+
+Why not? And mind how the speaker carefully avoids to condempt unnecessary hypotheses right away. Occam's razor is sometimes taken as what mathematicians call an axiom, which is an assumption that  cannot have another Why.
+
+One good reason for *parsimony principle* is that people assume things for their own grounds a lot. For scientists, parsimony acts as a counter balance, preventing that things are getting too creative. Unfortunately, that also means less fun, because you weren't right with your hypothesis, or there was not enough data to say.
+
+The other good reason for parsimony is that unnecessary hypotheses inflate the posterior distri 
+
+
+If you are an experimental scientist Occam's razor applies to you in the following form: 
+
+> ..., there is no ground for assuming it, even if it is your darling
+
+
+Luckily a statistician barely has to worry about the philosphical issues, but can right away replace "hypothetical entity" with "parameter" and "explain a phenomenon" with "predictive power". That implies that we are comparing two models: the one with the assumption, and the one without. Let's see that on the Stroop data set. We build the model with the assumption that the Stroop effect exists in form of a delay in  the incongruent condition.
+
+```{r opts.label = "mcmc"}
+attach(Stroop_comp)
+
+M_0 <-  brm(RT ~    1, family = "exgaussian", data = D_1) 
+M_1 <-  brm(RT ~ Cond, family = "exgaussian", data = D_1) 
+
+detach(Stroop_comp)
+```
+
+
+
+```{r opts.label = "mcsync"}
+sync_CE(Stroop_comp, M_1, M_0)
+```
+
+
+
+
+
+### One-sample cross validation
+
+
+
+
 
 
 <!--
