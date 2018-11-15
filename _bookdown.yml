@@ -1,6 +1,6 @@
 book_filename: New_Stats
 output_dir: docs
-rmd_files: ["index.Rmd", "Design_Research.Rmd", "Bayesian_statistics.Rmd", "Getting_started_with_R.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Data_Management.Rmd"]
+rmd_files: ["index.Rmd", "Design_Research.Rmd", "Bayesian_statistics.Rmd", "Getting_started_with_R.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd"]
 #rmd_files: ["index.Rmd", "Design_Research.Rmd"]
 #rmd_files: ["index.Rmd", "Test_bd_pdf.Rmd"]
 new_session: yes
