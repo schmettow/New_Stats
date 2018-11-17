@@ -138,18 +138,59 @@ As we will see in the remainder of this chapter, comparing models relative to ea
 ## Forecasting performance with LOO
 
 
-This model does not take any predictors into account and therefore, in this special case, the intercept is the only prediction.
 
 <!-- #47 -->
 
 
-```{r opts.label = "mcmc"}
-attach(Sec99)
+```{r}
 
-D <- Sec99$Ver20 %>% 
+
+do_loo <- 
+  function(data,
+           f_fit, 
+           f_predict = function(fit, obs) predict(fit, newdata = obs)$center[1]
+           ) 
+    { 
+    leave_out <- function(obs) data %>% slice(-obs) # Quosure
+    left_out  <- function(obs) data %>% slice(obs)  # Quosure
+    f_predict <-  
+      
+      out <- data_frame(obs     = 1:nrow(data),
+                        Sample  = obs %>% map(leave_out), # meta function
+                        Obs     = obs %>% map(left_out),
+                        Fitted  = Sample %>% map(f_fit)) %>% 
+      mutate(forecast = unlist(map2(Fitted, Obs, f_predict)))
+    return(out)
+  }
+
+
+```
+
+
+
+
+
+### Side note on R programming
+
+The `do_loo` function is a remarkable piece of code, thanks to others. Despite its brevity, it is highly generic as it computes a leave-one-out score no matter what model you through at it. *Functional programming* is flexing its muscles.
+
+1. `doo_loo` is a *meta function* as argument `f_fit` is not data, but functional.
+1. The two functions that are defined inside `do_loo` are *quosures*. Notice how they make use of `data`, which has been defined one level up in the functional hierarchy. Only seemingly this is just passing on a parameter. These function definintions are invoked everytime the user uses `do_loo`. At that moment `data` has become real, as the user provided it and the function *gets it own copy*. It sounds like putting *inverted object-orientation*. Not the object brings the function, the quosure brings its own data. The advantage is mostly computational as it prevents data to be copied every time it runs.
+1. `map` is a meta function from package purrr. It takes a list of objects and applies a function that the user has to provide as an argument.
+1. `map2` takes two parallel input lists and applies a function. Here the forecast is created by matching observations with the model they had been excluded from.
+1. The function output is created as a *data_frame*. This one differs in that it carries complex objects. It stores every single model that has been estimated, neatly aligned with its matching observation. 
+1. LOO runs are long runs. Here, it is extremely to keep a copy of the results on your disk: `save(Loo_1, file = "Loo_1.Rda")`
+
+
+
+
+```{r opts.label = "mcmc"}
+
+Ver20_1 <- Sec99$Ver20 %>% 
   filter(!is.na(age)) %>% 
   select(age, ToT) %>% 
   sample_n(20)
+
 
 fit_M_1  <-  function(sample) 
   stan_glm(ToT ~    1, family = gaussian(), 
@@ -159,30 +200,28 @@ fit_M_2  <-  function(sample)
   stan_glm(ToT ~    1 + age, family = gaussian(), 
            iter = 400, chain = 1, data = sample)
 
-do_loo <- function(data, f_fit, f_predict){ 
-  # data <- Ver20
-  # f_fit <- fit_M_1
-  leave_out <- function(obs) slice(data,-obs)
-  left_out  <- function(obs) slice(data, obs)
-  f_predict <- function(fit, obs) predict(fit, newdata = obs)$center[1]
-  
-  out <- data_frame(obs     = 1:nrow(data),
-                    Sample  = map(obs, leave_out),
-                    Obs     = map(obs, left_out),
-                    Fitted  = map(Sample, f_fit)) %>% 
-    mutate(forecast = unlist(map2(Fitted, Obs, f_predict)))
-  return(out)
-}
 
-Loo_1 <- do_loo(D, fit_M_1)
+Loo_1 <- do_loo(Ver20_1, fit_M_1)
+Loo_2 <- do_loo(Ver20_1, fit_M_2)
+
+
+
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Sec99, Ver20_1, Loo_1, Loo_2)
+```
+
+
+
+```{r opts.label = "mcmc"}
+
 
 Loo_1 %>%
   mutate(ToT = D$ToT,
          error = ToT - forecast) %>% 
   ggplot(aes(x = error)) +
   geom_histogram()
-
-Loo_2 <- do_loo(D, fit_M_2)
 
 Loo_2 %>%
   mutate(ToT = D$ToT,
@@ -198,10 +237,8 @@ mse(D$ToT, Loo_1$forecast)
 mse(D$ToT, Loo_2$forecast)
 
 
-detach(Sec99)
 
 ```
-
 
 
 
@@ -220,7 +257,7 @@ The imaginary researchers of the Sec99 could evaluate the predictive performance
 
 ### Cross validation and information criteria
 
-Models are all about their predictive ability. Predictive ability seems to imply that the data must speak about the furture, which sounds like gathering more data. In fact, it suffices to have just *out-of-samnple data*, not true forecasting.
+Models are all about their predictive ability. Predictive ability seems to imply that the data must speak about the future, which sounds like gathering more data. In fact, it suffices to have just *out-of-samnple data*, not true forecasting.
 
 A very common procedure to assess reliability of a scale is splitting the items into two parts and assess how the average person score on the first part predicts the second. These two parts are often called *training sample* and  *validation sample*. The procedure of *leave-one-out cross validation* generalizes this idea in that:
 
@@ -264,6 +301,7 @@ M_1 <-  brm(RT ~ Cond, family = "exgaussian", data = D_1)
 
 detach(Stroop_comp)
 ```
+
 
 
 
