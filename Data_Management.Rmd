@@ -1,7 +1,5 @@
 # (PART) Workflow {-}
 
-# Data management
-
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
 ## The following is for running the script through knitr
 purp.mcmc = F
@@ -13,47 +11,145 @@ figr <- function(x) x
 ```
 
 
-The process of **data modelling** starts with analyzing a domain of concepts (of interest), by identifying the properties of concepts as well as the relationships between concepts. The results of the analysis is then formalized using one of several possible standards. Most of the time, the formalization is computer-readable or computer executable. Here, I first introduce the formalization approach of Entity-Relationship Modelling and demonstrate how this approach is handled in R, using data frames and data transformations.
+# Data management
 
-In statistical analysis, a good data model has three qualities:
-  
-  1. efficient and accurate data entry
-  2. all information is preserved
-  3. efficient reshaping of data for subsequent analyses
-  
-Let us first consider the task of data entry and further describe what "efficiently and accurately" means here: first of all, data entry is more efficient if you have to type less. In consequence, every datum should be entered only once. That saves key presses and also reduces the risk of erroneous input, hence better accuracy. Furthermore, during the process of data entry, as much information as possible should be preserved. That regards two aspects, one should not do any aggregation during data entry. For example, the individual responses to several items of a scale should be kept and not just summed up. Second, all known, even secondary aspects of the data should be kept, such as the order of responses in an experiment.  Also, relations in the data must be kept. Obviously, the identity of a participant needs to be kept for examining associations. A less obvious example is one should keep detailed information about stimuli and items of rating scales.
+## Populations and Entities
 
-Now, consider the following situation: you want to validate a new personality scale using real behavioural measures. By *real* I mean that you are not just correlating the scores with scores from another rating scale, but you predict that the trait at question has impact on how people behave in an experimental task. For example, Schmettow, Mundt & Noordzij (2013) tested whether persons with high need for cognition (NFC) have stronger associations with pictures showing computers with open cases (treatment), as compared to control pictures. This study uses data from three sources: 
+## Reshaping data
 
-1. the experimental data consists of dozens or hundreds of trials per participant with a response (correct/incorrect or RT).
-2. the questionnaire data consists of every participants ratings on a numnber of given items
-3. demographic data captures the usual variables such as gender, age or level of education
+It will be very convenient to have  a set of clean entity tables at the beginning of the data analysis. Unfortunately, data often arrives in such a tidy form. In particular,  questionnaire responses notoriously arrives in a wide form and psychometricians tend to think in terms of response matrices.
 
-Are you a former SPSS user, perhaps? Then, please, take a moment, a sheet and a pencil, and think about how you would structure the data from the hybrid questionnaire/experimental study. I bet, that you attempted to create *one* table that has one row per participant and is very wide, because you have assigned a column for every item and every trial of the experiment. This is the data format dictated by many of the legacy dialogues in SPSS and other statistical programs. Unfortunately, this format has severe limitations: you can add as many variables that "belong" to participants, e.g. their field of study, but you cannot properly record properties of other entities, such as stimuli or items. To give an almost trivial example: the depicted experiment  used a randomized order for the pictures to occur. There might be training effects, which you may want to control (i.e. add as a covariate to your model). But, in the wide scheme you can either use the order of columns to represent the order of stimulus presentations or the target words, but not both.
+<!-- ... -->
 
-Now, I will briefly present a framework for structuring (and using) data that is called *entity relationship modelling (ERM)*. ERM comes from computer science, more specifically the field of databases. In modern software systems, databases contain huge amount of data with often extremely complex relationships. As the name says, the ERM approach handles complex data by decomposition into *entities* and *relationships*. Take as an example, the data base of a company selling products to customers. The data base will contain, at least, two entities: customers and products. In the very moment the customer enters the checkout, there must be a data structure represent the shopping cart. Formally, shopping cart structure relates customers to products, in plain words: "customer x has selected products a and b". Now, returning to the wide format, this would still be possible: you simply had to create a (huge) table with all customers in rows and all (ten thousands) products in columns. To indicate that a customer has selected products a and b, mark the respective cells with 1, and leave all other cells at 0. 
 
-```{r tab_shopping_cart_wide_table, opts.label = "fig.small"}
-data.frame(Customer = c("...", "X", "Y", "Z"), 
-           Prod_a = c("...", "1", "0", "0"), 
-           Prod_b = c("...", "1", "0", "1"),
-           Prod_c = c("...", "0", "0", "0"),
-           "Prod_..." = c("...", "0", "0", "0")) %>% 
-  gtable()
 
+
+## Encounters and joins
+
+
+
+## Rating scale responses
+
+When participants fill out a rating scale, a human sample encounters a set of items. Therefore, we wish two entity tables and a long encounter table. When responses are collected on paper, the best strategy is to create both entity tables, expand them to an empty encounter table and let a student fill it in.
+
+```{r}
+attach(Hugme)
 ```
 
-However, in this structure it would not be possible to reasonably store the price of the product, or any  other product information. And the problem becomes completely intractable when we consider all the other entities that play a role in the process, for example the fact that the same customer can have different addresses.
 
-So, what is done in data modelling, is that *multiple tables* are being used. Áll classes of entities, customer and product, or participant and stimulus, get their own table. And, what you may find surprising at first, most relationships get their own tables, too. In the shopping cart example, we have two entities, *Customer* and *Product*, and the relationship *has_selected*. As you can see in `r figr("tab_shopping_cart_wide_table")`, properties can be attached to entities, for example, customers have names and products have prices. These properties are called *attributes*. However, there is a twist. Could one not consider the selected products as a property, and use such an attribute? There are theoretical and practical reasons, not to do so. Here, it should suffice to  state the following rule, for when a property is an attribute, and when it is a relationship: first, the property must be expressable as a singular value, such as a number, a piece of text, or a factor level. Second, the value must be literal, in the sense that it does not represent another complex entity. If a property is atomic and literal, it can be added as an attribute to the entity and will later become a column in the respective data table. 
+```{r}
+D_resp_input <-
+  expand_grid(Part = D_Part$Part, Item = D_Items$Item) %>% 
+  mutate(response = "") %>% 
+  as_tbl_obs() %>% 
+  print()
+```
 
-We will return to representation of complex properties, soon. But, first we need to introduce a concept of ERM, that literally ties everything together: *keys* are unique identifier of entities. Because natural names of persons and things are often, but not always unique (think of "John Smith"), most of the time, one chooses a numerical counter as a key, like a customer ID or product number. In ERM, the attribute that uniquely identifies an entity is called the *primary key (PK)*. These keys are used for identification, but also for marking relations between entities. In Figure XY, the relation `has_selected` identifies the customer, as well as the product. These references to entities are called *foreign keys (FK)*. 
+```{r}
+detach(Hugme)
+```
 
-By using entities with PK and establishing relations by FK, one avoids any redundancy as much as possible. As a general rule, when instantiating an entity-relationship model, one must create one table per entity and one table per relationship. There is only one exception from this rule, which has to do with the *cardinality* of a relation. The `has_selected` relationship as we have modelled it, allows that several customers select the same product, and that one customer selects multiple products. This is called an *n:m* relationship, which is the most general case. However, other cardinalities exist: consider the entity relationship model of a family tree. This model, will for certain have a entity `person`. But, do we need a seperate table for the relationship `is_child_of`? The answer is: no, because the property is singular, so we could just add it as an attribute, if it were also literal. It is not, which in the context here is just a formal issue. Still, in case of *n:1* relationships, we can add the foreign key directly to the entity. It is just not called an attribute, but a FK. There would be no harm done in terms of adding redundancy.
+However, ever more often, researchers use web-based survey software to admininster questionnaires and often demographic variables are gathered along the way. These systems typically output responses in wide format not unsimilar to the following:
 
-![Entity relationship model of a shopping cart](Illustrations/DM/erm_1.png)
+```{r}
+colnames(R_quest)
+```
 
-## Modelling questionnaire responses
+For the demographic data, there is no repeated measures and we can extract the participant entity table in a straight-forward manner:
+
+```{r}
+D_Part <- 
+  R_quest %>% 
+  select(Part = UserID, Gender, age = Age) %>% 
+  as_tbl_obs() %>% 
+  print()
+```
+
+Notice that there is a reason for the wide format, as the variable Gender has a non-numerical data type. In the long form it is required that all measures are of the same type.
+
+Items are stored wide and reshaping is required, but not sufficient, as item attributes are encoded in the variable names. In this case, two attributes are stored: first, the scale (Geek or NCS). Second, the Geekism scale has been presented a second time (GeekR), in order to assess test-retest reliability. While one could first extract the entity table, it is more practical to start with reshaping and processing the observations table.
+
+The moment of assessment is extracted and put into a separate variable *session* and the GeekR items are renamed. That is a task for *regular expression* pattern matching.
+
+```{r}
+D_quest <- 
+  R_quest %>% 
+  select(Part = UserID, Geek01:Geek34, GeekR01:GeekR34, NCS01:NCS18) %>% 
+  gather(Item_raw, response, -Part) %>% 
+  mutate(Scale = str_extract(Item_raw, "Geek|NCS"),
+         Item_no = str_extract(Item_raw, "\\d{2}"),
+         Item = str_c(Scale, Item_no),
+         session = if_else(str_detect(Item_raw, "GeekR"), 2, 1 )) %>% 
+  select(Part, Item, session, response) %>% 
+  as_tbl_obs() %>% 
+  print()
+  
+```
+
+Now, we can extract an entity table `D_Item` that assigns items to their scale:
+
+```{r}
+D_Item <- 
+  D_quest %>% 
+  distinct(Item) %>%
+  mutate(Scale = str_extract(Item, "Geek|NCS"))
+
+sample_n(D_Item, 5)
+```
+
+
+The three resulting tables are minimal in that they provide completely distinct information: `D_Part` only contains elementary information on participants, `D_Item` links items to their respective scale and `D_quest` only deals with the encounter of participants and items. It would have been possible to leave the variable Scale in `D_quest` and not even create the entity table. However, this table can be used to store additional information, such as sub-scales or whether an item is reversed.
+
+For the data analysis these tables can be shaped joined together in various ways, depending on the relationships the researcher wants to examine. In the following example,  the researcher wants to examine the test-retest reliability of the geekism scales and the association between Geek and NCS. That is accomplished by joining with `D_Item`, computing the mean score per participant and session and make it wide:
+
+```{r}
+D_scores <-
+  D_quest %>% 
+  left_join(D_Item) %>%
+  #filter(Scale == "Geek") %>% 
+  group_by(Part, Scale, session) %>% 
+  summarize(score = mean(response, na.rm = T)) %>% 
+  ungroup() %>% 
+  mutate(Scale = str_c(Scale, session)) %>% 
+  select(Part, Scale, score) %>% 
+  tidyr::spread(Scale, score) 
+
+D_scores %>% 
+  select(-Part) %>% 
+  cor(use = "complete.obs")
+
+  
+```
+
+Another way to put `D_scores` to use is to examine the association between personality scores and demographic variables that are in `D_Part`. For example, are boys really more geeky than girls?
+
+```{r}
+D_Part %>% 
+  join(D_scores, by = "Part") %>% 
+  ggplot(aes(x = Gender, y = Geek1)) +
+  geom_boxplot()
+```
+
+It seems a little overdone to create a separate entity table for items as the only property is the scale it belongs to. In fact, there is more you can do with it. For example:
+
++ some scales use reversed  items to prevent automatisms. For the data analysis they have to be aligned and `D_Item` is a good place to keep book of it.
++ Many scales have sub-scales. If that matters, `D_Item` just gains another grouping variable.
+
+There even is a case for going one more level up in abstraction and use an entity table for scales. It frequently  happens that rating scales differ in range (of ordinal response categories). Sometimes ordinal response are coded from 1 to 5, sometimes 1 to 7 and an analogue scales could range from 0 to 1. It is practical, though, to normalize rating scale responses  during the data cleaning process. So, where to store the range? In `D_scales`:
+
+```{r}
+D_scales <-
+  tribble(~Scale, ~min, ~max,
+          "NCS" ,    1,    5,
+          "Geek",    1,    7)
+```
+
+
+
+
+
+
+
 
 Returning to the original problem of a hybrid experimental/survey study, what are the entities? Clearly, participants are entities. The second set of entities are the items of personality questionnaires, and the data we can conceive as the *encounter of items and participants* that results in participants-by-items responses.
 
@@ -229,6 +325,94 @@ Design studies assess how users respond to designs. Typically, in such a test, u
 ## Modelling longitudinal data (tbd)
 
 
+
+## Reshaping data
+
+After all data has been imported, we have two data files, that we need to merge and transform for the final analysis. Before we come to that, some more processing is required on the questionnaire data for turning the raw responses into workable scores. All the needed information is stored in the *items table*, which we have to join with the questionnaire data first. Then, we proceed in three steps:
+
+1. reversely coded items are handled
+2. scores are rescaled to the interval $[-1;1]$
+3. scores are created by averaging over items
+
+The result of the processing chain is a data frame `UC_scores` that contains exactly one score per participant and scale.
+
+*Note* that I am here making the assumption that personality scores are predictors. This is may not be the case if associations between personality factors are studied, or in longitudinal studies.
+
+```{r process_questionnaire, opts.label = "rtut", eval = F}
+UC_scores <- 
+  UC_resp %>% 
+  left_join(UC_items, by = "Item") %>% 
+  mutate(response = ((response - minValue) * 2/(maxValue - minValue) - 1) * reverse) %>% 
+  group_by(Participant, Scale) %>% 
+  summarize(score = mean(response, na.rm = T)) %>% 
+  ungroup()
+
+UC_scores %>% sample_n(10)
+```
+
+The first operation in the above command chain is `left_join`, which has the effect, that all columns of *UC_items* (Scale, nimValue, maxValue, reverse) are added to *UC_resp*, where they match by Item. `left_join()` is one of several functions for joining tables. A join usually operates on the identifiers that the two input tables have in common, here *Item*. The various join commands differ in how they deal with rows that are present in the one table, but not in the the other. `left_join()` preserves all identities from the left table (first argument or "piped in"), even if they are not present in the  right table. Missing values (`NA`) are used to fill the gaps. Identities that are only present in the right table are being dropped. A `right_join()` does the exact opposite and `full_join()` preserves all identities from both tables. `inner_join()` only uses identities that are present in both tables. `anti_join()` is a useful function for diagnosting errors, because it returns the identities that are not present in both tables.
+
+The second element in the chain is another call to `mutate()`. It uses *minValue* and *maxValue* and *reversed* to normalize all responses to consistently be in the interval $[0;1]$ and have the correct direction. Often, this transformation is more cosmetic, but here it is necessary, as one of the scales (arem) has items with differing ranges.
+
+The subsequent `group_by()` declares a grouping structure on the observations. Here we want to compute the scores as the average on all items per participant, per scale. The `group_by()` is followed by `summarize()`, which computes the mean. The final command `ungroup()` turns the result into a regular data frame, which now has two key variables (Participant, Scale) and the average score. Note the argument `na.rm = T` used with `mean()`. Many commands that summarize a vector of numbers, such as `mean()`, `sum()`, `var()` and `sd()`, play it extremely safe in returning `NA`, when there is a single missing value. That is in so far good behaviour, as it reminds the researcher that missing values are present. The `na.rm = T` argument makes the functions ignore missing values.
+
+After preparing the questionnaire data, we are now left with two data tables *UC_exp* and *UC_resp* that are both organized by one-row-per-observation principle and have the key Participant in common. In general, the further shaping of data depends on the research question and on the choice of a dependent variable. The purpose of the uncanny valley study is to predict the eeriness ratings of morphed faces by the personality and attitude scores. Accordingly, the eeriness ratings are the dependent variable and we leave the structure of the table *UC_exp* intact, while joining in the personality scores.
+
+```{r UC_join_exp_resp, opts.label = "rtut", eval = F}
+UC_1 <- 
+  UC_exp %>% 
+  join(UC_scores, by = "Participant")
+
+
+```
+
+
+
+
+
+The process of **data modelling** starts with analyzing a domain of concepts (of interest), by identifying the properties of concepts as well as the relationships between concepts. The results of the analysis is then formalized using one of several possible standards. Most of the time, the formalization is computer-readable or computer executable. Here, I first introduce the formalization approach of Entity-Relationship Modelling and demonstrate how this approach is handled in R, using data frames and data transformations.
+
+In statistical analysis, a good data model has three qualities:
+  
+  1. efficient and accurate data entry
+  2. all information is preserved
+  3. efficient reshaping of data for subsequent analyses
+  
+Let us first consider the task of data entry and further describe what "efficiently and accurately" means here: first of all, data entry is more efficient if you have to type less. In consequence, every datum should be entered only once. That saves key presses and also reduces the risk of erroneous input, hence better accuracy. Furthermore, during the process of data entry, as much information as possible should be preserved. That regards two aspects, one should not do any aggregation during data entry. For example, the individual responses to several items of a scale should be kept and not just summed up. Second, all known, even secondary aspects of the data should be kept, such as the order of responses in an experiment.  Also, relations in the data must be kept. Obviously, the identity of a participant needs to be kept for examining associations. A less obvious example is one should keep detailed information about stimuli and items of rating scales.
+
+Now, consider the following situation: you want to validate a new personality scale using real behavioural measures. By *real* I mean that you are not just correlating the scores with scores from another rating scale, but you predict that the trait at question has impact on how people behave in an experimental task. For example, Schmettow, Mundt & Noordzij (2013) tested whether persons with high need for cognition (NFC) have stronger associations with pictures showing computers with open cases (treatment), as compared to control pictures. This study uses data from three sources: 
+
+1. the experimental data consists of dozens or hundreds of trials per participant with a response (correct/incorrect or RT).
+2. the questionnaire data consists of every participants ratings on a numnber of given items
+3. demographic data captures the usual variables such as gender, age or level of education
+
+Are you a former SPSS user, perhaps? Then, please, take a moment, a sheet and a pencil, and think about how you would structure the data from the hybrid questionnaire/experimental study. I bet, that you attempted to create *one* table that has one row per participant and is very wide, because you have assigned a column for every item and every trial of the experiment. This is the data format dictated by many of the legacy dialogues in SPSS and other statistical programs. Unfortunately, this format has severe limitations: you can add as many variables that "belong" to participants, e.g. their field of study, but you cannot properly record properties of other entities, such as stimuli or items. To give an almost trivial example: the depicted experiment  used a randomized order for the pictures to occur. There might be training effects, which you may want to control (i.e. add as a covariate to your model). But, in the wide scheme you can either use the order of columns to represent the order of stimulus presentations or the target words, but not both.
+
+Now, I will briefly present a framework for structuring (and using) data that is called *entity relationship modelling (ERM)*. ERM comes from computer science, more specifically the field of databases. In modern software systems, databases contain huge amount of data with often extremely complex relationships. As the name says, the ERM approach handles complex data by decomposition into *entities* and *relationships*. Take as an example, the data base of a company selling products to customers. The data base will contain, at least, two entities: customers and products. In the very moment the customer enters the checkout, there must be a data structure represent the shopping cart. Formally, shopping cart structure relates customers to products, in plain words: "customer x has selected products a and b". Now, returning to the wide format, this would still be possible: you simply had to create a (huge) table with all customers in rows and all (ten thousands) products in columns. To indicate that a customer has selected products a and b, mark the respective cells with 1, and leave all other cells at 0. 
+
+```{r tab_shopping_cart_wide_table, opts.label = "fig.small"}
+data.frame(Customer = c("...", "X", "Y", "Z"), 
+           Prod_a = c("...", "1", "0", "0"), 
+           Prod_b = c("...", "1", "0", "1"),
+           Prod_c = c("...", "0", "0", "0"),
+           "Prod_..." = c("...", "0", "0", "0")) %>% 
+  gtable()
+
+```
+
+However, in this structure it would not be possible to reasonably store the price of the product, or any  other product information. And the problem becomes completely intractable when we consider all the other entities that play a role in the process, for example the fact that the same customer can have different addresses.
+
+So, what is done in data modelling, is that *multiple tables* are being used. Áll classes of entities, customer and product, or participant and stimulus, get their own table. And, what you may find surprising at first, most relationships get their own tables, too. In the shopping cart example, we have two entities, *Customer* and *Product*, and the relationship *has_selected*. As you can see in `r figr("tab_shopping_cart_wide_table")`, properties can be attached to entities, for example, customers have names and products have prices. These properties are called *attributes*. However, there is a twist. Could one not consider the selected products as a property, and use such an attribute? There are theoretical and practical reasons, not to do so. Here, it should suffice to  state the following rule, for when a property is an attribute, and when it is a relationship: first, the property must be expressable as a singular value, such as a number, a piece of text, or a factor level. Second, the value must be literal, in the sense that it does not represent another complex entity. If a property is atomic and literal, it can be added as an attribute to the entity and will later become a column in the respective data table. 
+
+We will return to representation of complex properties, soon. But, first we need to introduce a concept of ERM, that literally ties everything together: *keys* are unique identifier of entities. Because natural names of persons and things are often, but not always unique (think of "John Smith"), most of the time, one chooses a numerical counter as a key, like a customer ID or product number. In ERM, the attribute that uniquely identifies an entity is called the *primary key (PK)*. These keys are used for identification, but also for marking relations between entities. In Figure XY, the relation `has_selected` identifies the customer, as well as the product. These references to entities are called *foreign keys (FK)*. 
+
+By using entities with PK and establishing relations by FK, one avoids any redundancy as much as possible. As a general rule, when instantiating an entity-relationship model, one must create one table per entity and one table per relationship. There is only one exception from this rule, which has to do with the *cardinality* of a relation. The `has_selected` relationship as we have modelled it, allows that several customers select the same product, and that one customer selects multiple products. This is called an *n:m* relationship, which is the most general case. However, other cardinalities exist: consider the entity relationship model of a family tree. This model, will for certain have a entity `person`. But, do we need a seperate table for the relationship `is_child_of`? The answer is: no, because the property is singular, so we could just add it as an attribute, if it were also literal. It is not, which in the context here is just a formal issue. Still, in case of *n:1* relationships, we can add the foreign key directly to the entity. It is just not called an attribute, but a FK. There would be no harm done in terms of adding redundancy.
+
+![Entity relationship model of a shopping cart](Illustrations/DM/erm_1.png)
+
+
+
+
 ## Doing it in R
 
 Now that we have seen how to structure data in various research situations, we will see how this works out in R. I will demonstrate the full workflow by example of a hybrid questionnaire/experimental study that explored in how much the *uncanny valley* phenomenon depends on attitude and personality. Participants were asked to fill out five personality scales and completed an experiment, where they rated morphing sequences of faces using items of the eeriness scale.
@@ -361,45 +545,6 @@ The next command `ldply(read.csv)` picks up the list of csv files from the pipel
 
 `ldply` returns a data frame and the chain proceeds with the `select` command (dplyr) that selects the needed columns from the input data frame. It is possible to rename columns on the spot by using assignments, such as `Stimulus = trialStimulus`. The chain proceeds with `filter`, which is the row-wise counterpart, in that it selects observations. Here it is used to filter out missing observations, which in R are coded as `NA`. Finally, we are doing some data manipulation: the stimuli stem from 20 morphing sequences with four morphing levels each. This is indirectly coded in variable Stimulus, which actually is the filename of the stimulus, with the form `<face>.<morphlevel>.png`. By calling `mutate` with the string manipulation command `str_replace` (stringr) we chop off the ".png" file ending. Then `separate` (tidyr) splits the remainders into two new variables, Face and morphLevel. After this final step we have every observation uniquely identified by participant, item, face and morphing level.
 
-### Reshaping data
-
-After all data has been imported, we have two data files, that we need to merge and transform for the final analysis. Before we come to that, some more processing is required on the questionnaire data for turning the raw responses into workable scores. All the needed information is stored in the *items table*, which we have to join with the questionnaire data first. Then, we proceed in three steps:
-
-1. reversely coded items are handled
-2. scores are rescaled to the interval $[-1;1]$
-3. scores are created by averaging over items
-
-The result of the processing chain is a data frame `UC_scores` that contains exactly one score per participant and scale.
-
-*Note* that I am here making the assumption that personality scores are predictors. This is may not be the case if associations between personality factors are studied, or in longitudinal studies.
-
-```{r process_questionnaire, opts.label = "rtut", eval = F}
-UC_scores <- 
-  UC_resp %>% 
-  left_join(UC_items, by = "Item") %>% 
-  mutate(response = ((response - minValue) * 2/(maxValue - minValue) - 1) * reverse) %>% 
-  group_by(Participant, Scale) %>% 
-  summarize(score = mean(response, na.rm = T)) %>% 
-  ungroup()
-
-UC_scores %>% sample_n(10)
-```
-
-The first operation in the above command chain is `left_join`, which has the effect, that all columns of *UC_items* (Scale, nimValue, maxValue, reverse) are added to *UC_resp*, where they match by Item. `left_join()` is one of several functions for joining tables. A join usually operates on the identifiers that the two input tables have in common, here *Item*. The various join commands differ in how they deal with rows that are present in the one table, but not in the the other. `left_join()` preserves all identities from the left table (first argument or "piped in"), even if they are not present in the  right table. Missing values (`NA`) are used to fill the gaps. Identities that are only present in the right table are being dropped. A `right_join()` does the exact opposite and `full_join()` preserves all identities from both tables. `inner_join()` only uses identities that are present in both tables. `anti_join()` is a useful function for diagnosting errors, because it returns the identities that are not present in both tables.
-
-The second element in the chain is another call to `mutate()`. It uses *minValue* and *maxValue* and *reversed* to normalize all responses to consistently be in the interval $[0;1]$ and have the correct direction. Often, this transformation is more cosmetic, but here it is necessary, as one of the scales (arem) has items with differing ranges.
-
-The subsequent `group_by()` declares a grouping structure on the observations. Here we want to compute the scores as the average on all items per participant, per scale. The `group_by()` is followed by `summarize()`, which computes the mean. The final command `ungroup()` turns the result into a regular data frame, which now has two key variables (Participant, Scale) and the average score. Note the argument `na.rm = T` used with `mean()`. Many commands that summarize a vector of numbers, such as `mean()`, `sum()`, `var()` and `sd()`, play it extremely safe in returning `NA`, when there is a single missing value. That is in so far good behaviour, as it reminds the researcher that missing values are present. The `na.rm = T` argument makes the functions ignore missing values.
-
-After preparing the questionnaire data, we are now left with two data tables *UC_exp* and *UC_resp* that are both organized by one-row-per-observation principle and have the key Participant in common. In general, the further shaping of data depends on the research question and on the choice of a dependent variable. The purpose of the uncanny valley study is to predict the eeriness ratings of morphed faces by the personality and attitude scores. Accordingly, the eeriness ratings are the dependent variable and we leave the structure of the table *UC_exp* intact, while joining in the personality scores.
-
-```{r UC_join_exp_resp, opts.label = "rtut", eval = F}
-UC_1 <- 
-  UC_exp %>% 
-  join(UC_scores, by = "Participant")
-
-
-```
 
 ### Tipps and tricks
 

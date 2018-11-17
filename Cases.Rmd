@@ -1413,7 +1413,9 @@ Stroop_comp$simulate <-
     Obs
   }
 
-Stroop_comp$D_1 <-  Stroop_comp$simulate()
+Stroop_comp$D_1 <-  
+  Stroop_comp$simulate() %>% 
+  
 
 Stroop_comp$G_1 <-
   Stroop_comp$D_1 %>%
@@ -1571,7 +1573,6 @@ load("external_data/HUG3/HUG3.Rda")
 load("external_data/HUG3/Q3.Rda")
 
 Hugme$D_hugme <- 
-
   HUG3 %>% 
   rename(Part = Subj) %>% 
   mutate(RT = RT/1000,
@@ -1586,14 +1587,46 @@ Hugme$D_hugme <-
          Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
   mascutils:::as_tbl_obs.tbl_df()
 
-## for chapter Data Modelling
-Hugme$HUG_exp <- Hugme$D_hugme
+## For chapter data modelling
+
+## Raw data
+
+Hugme$R_quest <- 
+  Hugme$Q3 %>%
+  select(UserID = Subj,
+         Gender, Age, Geek01:GeekR34, NCS01:NCS18) %>% 
+  as.tibble()
+
+## Entities
+
+Hugme$D_Part <- 
+  Hugme$Q3 %>% 
+  as.tibble() %>% 
+  select(Part = Subj, gender = Gender, age = Age) %>% 
+  mutate(Part = as.factor(Part),
+         age = as.integer(age))
+
+Hugme$D_Items <- 
+  Hugme$Q3 %>% 
+  select(Geek01:Geek34, NCS01:NCS18) %>% 
+  gather(Item, response) %>% 
+  mutate(Scale = str_extract(Item, "Geek|NCS"))
+
+## Observations
+
+Hugme$D_exp <- Hugme$D_hugme
+
+## Scores
+
+
+
+## Relationships
 
 ## questionnaires
 
 Hugme$HUG_resp <- 
   Q3 %>% 
-  select(Part = Subj, Geek01:GeekR34, NCS01:NCS11) %>% 
+  select(Part = Subj, Geek01:GeekR34, NCS01:NCS18) %>% 
   gather(Item, rating, -Part) %>% 
   mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
   mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
@@ -1601,9 +1634,6 @@ Hugme$HUG_resp <-
   arrange(Part, Scale, Item) %>% 
   mascutils:::as_tbl_obs.tbl_df()
 
-Hugme$HUG_part <- Q3 %>% 
-  select(Part = Subj, gender = Gender, age = Age) %>% 
-  mascutils:::as_tbl_obs.tbl_df()
 ```
 
   
