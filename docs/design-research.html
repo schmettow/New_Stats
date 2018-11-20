@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>New statistics for the design researcher</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="New statistics for the design researcher" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="New statistics for the design researcher" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  
+
+<meta name="author" content="Martin Schmettow">
+
+
+<meta name="date" content="2018-11-20">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="bayesian-statistics.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-this-book-is-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#the-empirical-design-researcher"><i class="fa fa-check"></i><b>1.1.1</b> The empirical design researcher</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#the-experimentalist"><i class="fa fa-check"></i><b>1.1.2</b> The experimentalist</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#the-applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#assumptions"><i class="fa fa-check"></i><b>1.2</b> Assumptions</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-research.html"><a href="design-research.html"><i class="fa fa-check"></i><b>2</b> Elements of quantitative design research</a><ul>
+<li class="chapter" data-level="2.1" data-path="design-research.html"><a href="design-research.html#studies"><i class="fa fa-check"></i><b>2.1</b> Studies</a></li>
+<li class="chapter" data-level="2.2" data-path="design-research.html"><a href="design-research.html#observations-and-measurestbc"><i class="fa fa-check"></i><b>2.2</b> Observations and measures[TBC]</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="design-research.html"><a href="design-research.html#interaction-sequences"><i class="fa fa-check"></i><b>2.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-research.html"><a href="design-research.html#performance-measures"><i class="fa fa-check"></i><b>2.2.2</b> performance measures</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-research.html"><a href="design-research.html#experience-tbd"><i class="fa fa-check"></i><b>2.2.3</b> experience [TBD]</a></li>
+<li class="chapter" data-level="2.2.4" data-path="design-research.html"><a href="design-research.html#design-features-tbd"><i class="fa fa-check"></i><b>2.2.4</b> design features [TBD]</a></li>
+<li class="chapter" data-level="2.2.5" data-path="design-research.html"><a href="design-research.html#the-human-factor-tbd"><i class="fa fa-check"></i><b>2.2.5</b> the human factor [TBD]</a></li>
+<li class="chapter" data-level="2.2.6" data-path="design-research.html"><a href="design-research.html#situations-tbd"><i class="fa fa-check"></i><b>2.2.6</b> situations [TBD]</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="design-research.html"><a href="design-research.html#decision_making"><i class="fa fa-check"></i><b>2.3</b> Decision making under uncertainty</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="design-research.html"><a href="design-research.html#measuring-uncertainty"><i class="fa fa-check"></i><b>2.3.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="2.3.2" data-path="design-research.html"><a href="design-research.html#betting-on-designs"><i class="fa fa-check"></i><b>2.3.2</b> Betting on designs</a></li>
+<li class="chapter" data-level="2.3.3" data-path="design-research.html"><a href="design-research.html#case-e-commerce-ab"><i class="fa fa-check"></i><b>2.3.3</b> Case: e-commerce A/B</a></li>
+<li class="chapter" data-level="2.3.4" data-path="design-research.html"><a href="design-research.html#case99"><i class="fa fa-check"></i><b>2.3.4</b> Case: 99 seconds</a></li>
+<li class="chapter" data-level="2.3.5" data-path="design-research.html"><a href="design-research.html#prior-information"><i class="fa fa-check"></i><b>2.3.5</b> Prior information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a><ul>
+<li class="chapter" data-level="3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#descriptive-statistics"><i class="fa fa-check"></i><b>3.1</b> Descriptive statistics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#frequencies"><i class="fa fa-check"></i><b>3.1.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#central-tendency"><i class="fa fa-check"></i><b>3.1.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#dispersion"><i class="fa fa-check"></i><b>3.1.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#associations"><i class="fa fa-check"></i><b>3.1.4</b> Associations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-inferential-statistics"><i class="fa fa-check"></i><b>3.2</b> Bayesian Inferential statistics</a></li>
+<li class="chapter" data-level="3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-probability-theory"><i class="fa fa-check"></i><b>3.3</b> Bayesian probability theory</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#some-set-theory"><i class="fa fa-check"></i><b>3.3.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#probability"><i class="fa fa-check"></i><b>3.3.2</b> Probability</a></li>
+<li class="chapter" data-level="3.3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#certainty-as-probability"><i class="fa fa-check"></i><b>3.3.3</b> Certainty as probability</a></li>
+<li class="chapter" data-level="3.3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayes-theorem"><i class="fa fa-check"></i><b>3.3.4</b> Bayes theorem</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#statistical-models"><i class="fa fa-check"></i><b>3.4</b> Statistical models</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#predictions-and-likelihood"><i class="fa fa-check"></i><b>3.4.1</b> Predictions and likelihood</a></li>
+<li class="chapter" data-level="3.4.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#distributions"><i class="fa fa-check"></i><b>3.4.2</b> Distributions: patterns of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-estimation"><i class="fa fa-check"></i><b>3.5</b> Bayesian estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#what-is-wrong-with-classic-statistics-tbc"><i class="fa fa-check"></i><b>3.6</b> What is wrong with classic statistics? [TBC]</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-r.html"><a href="getting-started-r.html"><i class="fa fa-check"></i><b>4</b> Getting started with R</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-r.html"><a href="getting-started-r.html#setting-up-the-r-environment"><i class="fa fa-check"></i><b>4.1</b> Setting up the R environment</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-cran-packages"><i class="fa fa-check"></i><b>4.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="4.1.2" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-packages-from-github"><i class="fa fa-check"></i><b>4.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="4.1.3" data-path="getting-started-r.html"><a href="getting-started-r.html#first_program"><i class="fa fa-check"></i><b>4.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="4.1.4" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes"><i class="fa fa-check"></i><b>4.1.4</b> Bibliographic notes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-r.html"><a href="getting-started-r.html#learning-r-a-primer"><i class="fa fa-check"></i><b>4.2</b> Learning R: a primer</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="getting-started-r.html"><a href="getting-started-r.html#assigning-and-calling-objects"><i class="fa fa-check"></i><b>4.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="4.2.2" data-path="getting-started-r.html"><a href="getting-started-r.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="getting-started-r.html"><a href="getting-started-r.html#basic-object-types"><i class="fa fa-check"></i><b>4.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="4.2.4" data-path="getting-started-r.html"><a href="getting-started-r.html#operators-and-functions"><i class="fa fa-check"></i><b>4.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="4.2.5" data-path="getting-started-r.html"><a href="getting-started-r.html#storing-data-in-data-frames"><i class="fa fa-check"></i><b>4.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="4.2.6" data-path="getting-started-r.html"><a href="getting-started-r.html#import-export-and-archiving"><i class="fa fa-check"></i><b>4.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="4.2.7" data-path="getting-started-r.html"><a href="getting-started-r.html#case-environments"><i class="fa fa-check"></i><b>4.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="4.2.8" data-path="getting-started-r.html"><a href="getting-started-r.html#structuring-data"><i class="fa fa-check"></i><b>4.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="4.2.9" data-path="getting-started-r.html"><a href="getting-started-r.html#data-transformation"><i class="fa fa-check"></i><b>4.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="4.2.10" data-path="getting-started-r.html"><a href="getting-started-r.html#plotting-data"><i class="fa fa-check"></i><b>4.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="4.2.11" data-path="getting-started-r.html"><a href="getting-started-r.html#fitting-regression-models"><i class="fa fa-check"></i><b>4.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="4.2.12" data-path="getting-started-r.html"><a href="getting-started-r.html#knitting-statistical-reports"><i class="fa fa-check"></i><b>4.2.12</b> Knitting statistical reports</a></li>
+<li class="chapter" data-level="4.2.13" data-path="getting-started-r.html"><a href="getting-started-r.html#exercises-1"><i class="fa fa-check"></i><b>4.2.13</b> Exercises</a></li>
+<li class="chapter" data-level="4.2.14" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes-1"><i class="fa fa-check"></i><b>4.2.14</b> Bibliographic notes</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Models</b></span></li>
+<li class="chapter" data-level="5" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i><b>5</b> Linear models</a><ul>
+<li class="chapter" data-level="5.1" data-path="linear-models.html"><a href="linear-models.html#quantification-at-work-grand-mean-models"><i class="fa fa-check"></i><b>5.1</b> Quantification at work: grand mean models</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-models.html"><a href="linear-models.html#reading-coefficient-tables"><i class="fa fa-check"></i><b>5.1.1</b> Reading coefficient tables</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-models.html"><a href="linear-models.html#likelihood-and-random-term"><i class="fa fa-check"></i><b>5.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="5.1.3" data-path="linear-models.html"><a href="linear-models.html#random_walk"><i class="fa fa-check"></i><b>5.1.3</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-models.html"><a href="linear-models.html#linear-regression"><i class="fa fa-check"></i><b>5.2</b> Walk the line: linear regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-models.html"><a href="linear-models.html#transforming-variables"><i class="fa fa-check"></i><b>5.2.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="linear-models.html"><a href="linear-models.html#correlations"><i class="fa fa-check"></i><b>5.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="5.2.3" data-path="linear-models.html"><a href="linear-models.html#endlessly-linear"><i class="fa fa-check"></i><b>5.2.3</b> Endlessly linear</a></li>
+<li class="chapter" data-level="5.2.4" data-path="linear-models.html"><a href="linear-models.html#posterior-predictions"><i class="fa fa-check"></i><b>5.2.4</b> Posterior predictions</a></li>
+<li class="chapter" data-level="5.2.5" data-path="linear-models.html"><a href="linear-models.html#exercises-2"><i class="fa fa-check"></i><b>5.2.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="linear-models.html"><a href="linear-models.html#CGM"><i class="fa fa-check"></i><b>5.3</b> A versus B: Comparison of groups</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="linear-models.html"><a href="linear-models.html#dummy_variables"><i class="fa fa-check"></i><b>5.3.1</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="linear-models.html"><a href="linear-models.html#contrasts"><i class="fa fa-check"></i><b>5.3.2</b> Getting it sharper with contrasts [TBC]</a></li>
+<li class="chapter" data-level="5.3.3" data-path="linear-models.html"><a href="linear-models.html#sharper-on-the-fly-derived-quantities-tbd"><i class="fa fa-check"></i><b>5.3.3</b> Sharper on the fly: derived quantities [TBD]</a></li>
+<li class="chapter" data-level="5.3.4" data-path="linear-models.html"><a href="linear-models.html#exercises-3"><i class="fa fa-check"></i><b>5.3.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="linear-models.html"><a href="linear-models.html#putting-it-all-together-multi-predictor-models"><i class="fa fa-check"></i><b>5.4</b> Putting it all together: multi predictor models</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="linear-models.html"><a href="linear-models.html#on-surface-multiple-regression-models"><i class="fa fa-check"></i><b>5.4.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="5.4.2" data-path="linear-models.html"><a href="linear-models.html#crossover-multifactorial-models-tbc"><i class="fa fa-check"></i><b>5.4.2</b> Crossover: multifactorial models [TBC]</a></li>
+<li class="chapter" data-level="5.4.3" data-path="linear-models.html"><a href="linear-models.html#line-by-line"><i class="fa fa-check"></i><b>5.4.3</b> Line-by-line: regression in groups [TBC]</a></li>
+<li class="chapter" data-level="5.4.4" data-path="linear-models.html"><a href="linear-models.html#residual-analysis"><i class="fa fa-check"></i><b>5.4.4</b> Residual analysis</a></li>
+<li class="chapter" data-level="5.4.5" data-path="linear-models.html"><a href="linear-models.html#how-to-plot-mpm-tbc-move-to-interaction-effects"><i class="fa fa-check"></i><b>5.4.5</b> How to plot MPM? [TBC, move to Interaction effects]</a></li>
+<li class="chapter" data-level="5.4.6" data-path="linear-models.html"><a href="linear-models.html#empirical-versus-statistical-control"><i class="fa fa-check"></i><b>5.4.6</b> Empirical versus statistical control</a></li>
+<li class="chapter" data-level="5.4.7" data-path="linear-models.html"><a href="linear-models.html#exercises-4"><i class="fa fa-check"></i><b>5.4.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="linear-models.html"><a href="linear-models.html#interaction-effects"><i class="fa fa-check"></i><b>5.5</b> Interaction effects</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="linear-models.html"><a href="linear-models.html#differential_design_effects"><i class="fa fa-check"></i><b>5.5.1</b> Users differ: differential design effects</a></li>
+<li class="chapter" data-level="5.5.2" data-path="linear-models.html"><a href="linear-models.html#hitting-the-boundaries-of-saturation"><i class="fa fa-check"></i><b>5.5.2</b> Hitting the boundaries of saturation</a></li>
+<li class="chapter" data-level="5.5.3" data-path="linear-models.html"><a href="linear-models.html#more-than-the-sum-amplification"><i class="fa fa-check"></i><b>5.5.3</b> More than the sum: amplification</a></li>
+<li class="chapter" data-level="5.5.4" data-path="linear-models.html"><a href="linear-models.html#theoretically-interesting-interaction-effects-edit"><i class="fa fa-check"></i><b>5.5.4</b> Theoretically interesting interaction effects [EDIT]</a></li>
+<li class="chapter" data-level="5.5.5" data-path="linear-models.html"><a href="linear-models.html#exercises-5"><i class="fa fa-check"></i><b>5.5.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="linear-models.html"><a href="linear-models.html#polynomial_regression"><i class="fa fa-check"></i><b>5.6</b> Doing the rollercoaster: polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>6</b> Multilevel models</a><ul>
+<li class="chapter" data-level="6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#average-neverage"><i class="fa fa-check"></i><b>6.1</b> Average? Neverage!</a></li>
+<li class="chapter" data-level="6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#the-human-factor-intercept-random-effects"><i class="fa fa-check"></i><b>6.2</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="multilevel-models.html"><a href="multilevel-models.html#designs-and-other-non-human-populations"><i class="fa fa-check"></i><b>6.3</b> Designs and other non-human populations</a></li>
+<li class="chapter" data-level="6.4" data-path="multilevel-models.html"><a href="multilevel-models.html#crossover"><i class="fa fa-check"></i><b>6.4</b> Crossover: Testing Egans assumption</a></li>
+<li class="chapter" data-level="6.5" data-path="multilevel-models.html"><a href="multilevel-models.html#measuring-entities-psychometric-applications-tbc"><i class="fa fa-check"></i><b>6.5</b> Measuring entities: psychometric applications [TBC]</a></li>
+<li class="chapter" data-level="6.6" data-path="multilevel-models.html"><a href="multilevel-models.html#nested-random-effects"><i class="fa fa-check"></i><b>6.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="6.7" data-path="multilevel-models.html"><a href="multilevel-models.html#what-are-random-effects-on-pooling-and-shrinkage"><i class="fa fa-check"></i><b>6.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="6.8" data-path="multilevel-models.html"><a href="multilevel-models.html#slope_RE"><i class="fa fa-check"></i><b>6.8</b> Variance in variation: slope random effects [TBC]</a></li>
+<li class="chapter" data-level="6.9" data-path="multilevel-models.html"><a href="multilevel-models.html#re_correlations"><i class="fa fa-check"></i><b>6.9</b> Growing with random effects correlations [TBD]</a></li>
+<li class="chapter" data-level="6.10" data-path="multilevel-models.html"><a href="multilevel-models.html#advanced-tricks"><i class="fa fa-check"></i><b>6.10</b> Advanced tricks</a></li>
+<li class="chapter" data-level="6.11" data-path="multilevel-models.html"><a href="multilevel-models.html#exercises-7"><i class="fa fa-check"></i><b>6.11</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="GLM.html"><a href="GLM.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.1" data-path="GLM.html"><a href="GLM.html#debunking-the-gaussian-linear-model"><i class="fa fa-check"></i><b>7.1</b> Debunking the Gaussian linear model</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="GLM.html"><a href="GLM.html#assuming-linearity"><i class="fa fa-check"></i><b>7.1.1</b> Assuming linearity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="GLM.html"><a href="GLM.html#assuming-normal-distribution-of-randomness"><i class="fa fa-check"></i><b>7.1.2</b> Assuming Normal distribution of randomness</a></li>
+<li class="chapter" data-level="7.1.3" data-path="GLM.html"><a href="GLM.html#assume-constant-variance"><i class="fa fa-check"></i><b>7.1.3</b> Assuming constant variance of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="GLM.html"><a href="GLM.html#glm_concepts"><i class="fa fa-check"></i><b>7.2</b> Elements of Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="GLM.html"><a href="GLM.html#re-linking-linearity-relinking_linearity-tbc"><i class="fa fa-check"></i><b>7.2.1</b> Re-linking linearity (#relinking_linearity) [TBC]</a></li>
+<li class="chapter" data-level="7.2.2" data-path="GLM.html"><a href="GLM.html#choosing-patterns-of-randomness-choosing_randomness"><i class="fa fa-check"></i><b>7.2.2</b> Choosing patterns of randomness (#choosing_randomness)</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="GLM.html"><a href="GLM.html#case-user-testing-infusion-pumps"><i class="fa fa-check"></i><b>7.3</b> Case: user testing infusion pumps</a></li>
+<li class="chapter" data-level="7.4" data-path="GLM.html"><a href="GLM.html#count_data"><i class="fa fa-check"></i><b>7.4</b> Count data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="GLM.html"><a href="GLM.html#poisson-regression"><i class="fa fa-check"></i><b>7.4.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="GLM.html"><a href="GLM.html#logistic-aka-binomial-regression-logistic_regression"><i class="fa fa-check"></i><b>7.4.2</b> Logistic (aka Binomial) regression (#logistic_regression)</a></li>
+<li class="chapter" data-level="7.4.3" data-path="GLM.html"><a href="GLM.html#modelling-overdispersion"><i class="fa fa-check"></i><b>7.4.3</b> Modelling overdispersion</a></li>
+<li class="chapter" data-level="7.4.4" data-path="GLM.html"><a href="GLM.html#exercises-8"><i class="fa fa-check"></i><b>7.4.4</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="GLM.html"><a href="GLM.html#measures_of_time"><i class="fa fa-check"></i><b>7.5</b> Measures of time</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="GLM.html"><a href="GLM.html#exponential-regression"><i class="fa fa-check"></i><b>7.5.1</b> Exponential regression</a></li>
+<li class="chapter" data-level="7.5.2" data-path="GLM.html"><a href="GLM.html#gamma-regression"><i class="fa fa-check"></i><b>7.5.2</b> Gamma regression</a></li>
+<li class="chapter" data-level="7.5.3" data-path="GLM.html"><a href="GLM.html#exgaussian-regression"><i class="fa fa-check"></i><b>7.5.3</b> ExGaussian regression</a></li>
+<li class="chapter" data-level="7.5.4" data-path="GLM.html"><a href="GLM.html#literature"><i class="fa fa-check"></i><b>7.5.4</b> Literature</a></li>
+<li class="chapter" data-level="7.5.5" data-path="GLM.html"><a href="GLM.html#exercises-9"><i class="fa fa-check"></i><b>7.5.5</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="GLM.html"><a href="GLM.html#rating-scales"><i class="fa fa-check"></i><b>7.6</b> Rating scales</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="GLM.html"><a href="GLM.html#ordered-logistic-regression"><i class="fa fa-check"></i><b>7.6.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="7.6.2" data-path="GLM.html"><a href="GLM.html#beta-regression"><i class="fa fa-check"></i><b>7.6.2</b> Beta regression</a></li>
+<li class="chapter" data-level="7.6.3" data-path="GLM.html"><a href="GLM.html#distributional-models"><i class="fa fa-check"></i><b>7.6.3</b> Distributional models</a></li>
+<li class="chapter" data-level="7.6.4" data-path="GLM.html"><a href="GLM.html#exercises-10"><i class="fa fa-check"></i><b>7.6.4</b> Exercises</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for the design researcher</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design_research" class="section level1">
+<h1><span class="header-section-number">2</span> Elements of quantitative design research</h1>
+<p>A <em>design</em> is the structure of an artifact or process that people use for a purpose. This definition appears extremely broad as it covers everything from tea kettles to complex information systems, and even silver bullets are included if you wish so. In fact, this definition is even redundant in two points: first, artifacts are usually made for a purpose and some call them just “tools”. Second, who else than people have purposes? Well, many wild animals reportedly create artificial structures for purposes such as shelter, mating and hunting. I have absolutely no objections against using this book to compare the stability of birds nestings, for example. (In such a case, everyone please, read “design” as “part of the extended phenotype” and “purpose” as “emerged by natural selection”.</p>
+<p>This book may apply to everything anyone likes to call a design; but only so for a specific set of research questions that hinge on the word “purpose”. We all have purposes and much of the time it is quite a job to get there. Getting-there typically requires resources and often enough we find ourselves right there only to some extent. So, the two basic questions in <em>quantitative design research</em> are:</p>
+<ol style="list-style-type: decimal">
+<li>to what amount is a purpose fulfilled?</li>
+<li>how easy is it to get there?</li>
+</ol>
+<p>To the apt reader this may sound as i would next reduce all quantitative design research to the concept of usability and in a way i will be doing just that below (even discarding some subconcepts). The point here is that statistician actually don’t care much about definitions from a domain, but think about research problems in a more abstract manner. Here is a number of things, a statistician would inquire:</p>
+<ul>
+<li>On what a scale is the measurement of purpose fulfillment?</li>
+<li>What is the expected precision of measures? Is a lot of noise to be expected?</li>
+<li>How many observations are available?</li>
+<li>Is the research concerned with how purpose fulfillment compares under various conditions?</li>
+<li>How are observations grouped?</li>
+</ul>
+<p>In this book, quantitative design research is rather defined by a set of typical research problems, which includes the structure of the research question, as well as the empirical circumstances. In the following I will break this down one by one, and will also point out why the statistical framework of this book <em>Bayesian regression models</em> will do the job.</p>
+<div id="introduce-magnitude-as-this-is-used-when-explaining-uncertainty." class="section level5">
+<h5><span class="header-section-number">2.0.0.0.1</span> Introduce magnitude, as this is used when explaining uncertainty.</h5>
+<p>One obvious element is <em>quantification</em>, but that carries some ambiguity, as we can speak of measures or research questions. In much research, quantification happens during the process of measuring. Recording reaction times or counting errors certainly is quantitative. But, what matters is to really ask <em>quantitative research questions</em> and try to answer them. In the real world, decisions are (or should be) based on benefits and rational allocation of resources. Changing the background color of a website might just be a switch (and can have undesired effects as users hate change), but restructuring an intranet site can cost a million. In industrial design research, there usually is someone who wants to know whether this or that redesign is worth it, and that requires to ask research questions like the following:</p>
+<ul>
+<li>By how much does reaction ability degrade with age and it is safe that people beyond 80 still drive?</li>
+<li>Does design B reduce the required number of steps by a third, at least?</li>
+<li>What proportion of users prefers red over yellow? All websites better go red?</li>
+</ul>
+<p>Sadly, in much existing research, quantification is frequently lost along the way and conclusions read more like:</p>
+<ul>
+<li>Older people have longer reaction times in traffic situations (<span class="math inline">\(p \leq .05\)</span>).</li>
+<li>People find information more easily with design A, compared to B (<span class="math inline">\(p \leq .05\)</span>).</li>
+<li>Chinese people on average prefer red color schemes over yellow (<span class="math inline">\(p \leq .001\)</span>).</li>
+</ul>
+<p>There simply is no numbers in these statements (except for the notorious p-values, which I will briefly discuss in chapter @ref(bayesian_statistics)).</p>
+<p>Regression models are just right for measures and they are terrific at drawing quantitative conclusions. Every regression model features a so called <em>outcome</em>, which must be a measure (rather than a category). At the same time, regression models can deal with a broad class of measures and their peculiarities.</p>
+<p>Modern designs tend to be very complex and so are research questions, potentially. The options for designing just your personal homepage are myriad and there is considerable uncertainty about which options, or rather which configuration works best. Consider every option, say font type, font size, color, background color, position of menu, a potential impact factor on how pleasant the page is to read. Perhaps, someone should once and for all figure out the optimal configuration. It is recommended in such a case, that as many as possible impact factors are represented in a single study and evaluated by a single comprehensive statistical model. The primary reason for this recommendation is given in chapter @ref(interaction_effects): impact factors have the nasty tendency to not act out independent of each other. Regression models handle such complexity with grace. There is theoretically no limit for the number of impact factors or <em>predicors</em> and interaction effects.</p>
+<p>The central peculiarity in all behavioural research is that measures are extremely <em>noisy</em>. In the next chapter, the concept of measurement errors will be elaborated upon, but for now it suffices to understand that all measures approximate the measured property, only and that leaves room for <em>uncertainty</em>. In a simple experiment where participants respond to a signal and time is recorded, the first three trials will more likely have values that are widely scattered, like 900ms, 1080ms, 1110ms. Imagine this were an ability test in a training for, say, astronauts. To be admissioned to the space program the applicant needs a score of less than 1000ms. Would you dare to decide on the career of a young person based on these three observations? Hardly so.</p>
+<p>On the other side, consider measuring a persons waste length for the purpose of tayloring a suit. By using a meter the taylor measures 990mm, and would be perfectly fine with that. Why did the taylor not take a second and a third measure? Well, experience tells that meters are pretty precise measures and waste length shows relatively little variation (under constant habits). Say the two measures were 995mm and 989mm. Such small deviations have practically no influence on cutting the linen.</p>
+<blockquote>
+<p>“Our minds are not run as top - down dictatorships ; they are rambunctious parliaments, populated by squabbling factions and caucuses, with much more going on beneath the surface than our conscious awareness ever accesses.”</p>
+</blockquote>
+<blockquote>
+<p>Carroll, Sean. The Big Picture (Kindle Locations 5029-5031). Oneworld Publications. Kindle Edition.</p>
+</blockquote>
+<p>Vast fluctuations of measures are common in design research, simply for the fact that human behaviour is involved. Every magnitude we derive from a study is uncertain to some degree. Uncertainty makes that at any moment, we can rely on a quantitative result only to some extent, which influences how we take risks. Statistics is called inferential, when every derived magnitude comes with a degree of certainty attached. Section @ref(decision_making) gives some reasoning and examples, how to operate rationally under uncertainty, and drives at right into the arms of Bayesian statistics.</p>
+<p>In an admission test for astronaut training, a decision is raised on very few individuals. Down on earth, everyday designs affect many people at once. Consider your personal homepage. If you decide, for aesthetic reasons, to shrink the font size, I promise you, that you just start loosing all visitors from the e-senior generation. Or, if your content is really good, they start using looking glasses on their o-pads. As a researcher, you can approach this in two ways: do a user study to compare the new design to the current design, or be the one who finds out, once and for all, what the optimal trade-off is between readability and aesthetic pleasure. Your method of choice would be an experiment.</p>
+<p>When you have no greater goal in mind than proving your design is of quality, <em>user studies</em> are effective and quick. In the easiest case, you want to put your design against a fixed benchmark. For example, in the design of automotives, media devices in the cockpit may not distract the driver for more than 1.5 seconds at times [REF]. To prove that, you will have to plug some advanced eye tracking gear into a prototype car and send people on the test drive. But once the precise data is in, things get really simple. The saccade measures directly represent what you were out for: the length of episodes of visual attention on the media display. You can take the average value. IN web design, it is common to compare two or more designs in order to make the best choice. An e-commerce company can put a potential future design on the test drive, delivering it to a customer sample. Performance is measured as hard currency, which is as close to the purpose as it can get.</p>
+<p>A user studies solves the momentary problem of comparing a local design to a benchmark (which can be another design). In the long run, design configurations are too manyfold to be compared in a one-by-one manner. It is inevitable that we try to trace some general patterns and apply our knowledge to a whole class of designs at once. Our research design just got one step more complex. Instead of just checking whether a smaller font size creates problems on a single website, the reseacher reaches out to comparing the combined effect of aging and font size on reading time, in general. This is what I call a <em>design experiment</em>.</p>
+<p>Design experiments allow for much broader conclusions, if done right, and there are a some issues:</p>
+<ol style="list-style-type: decimal">
+<li>The design features under scrunity must be under control of the researcher. It does not suffice to collect some websites with varying font sizes, but every website needs to undergo the test at various font sizes.</li>
+<li>The design feature must undergo a full range of manipulations. You will not find the laws of readability by just comparing 10pt versus 12pt.</li>
+<li>Design features usually do not stand on their own. Readability is influenced by other factors, such as contrast and comprehensibility. Deriving a model from just one design will only generalize to this one design. Hence, the researcher must run the experiment on a sample of designs, with one of two strategies (or a mix of both): the <em>randomization strategy</em> takes a representative sample of designs, hoping that other impact factors average out. As we will see in @ref(interaction_effects), this is a daring assumption. Therefore, the preferred way is <em>statistical control</em>, where potential impact factors are recorded and added as control variables to the regression model.</li>
+</ol>
+</div>
+<div id="todo" class="section level5">
+<h5><span class="header-section-number">2.0.0.0.2</span> TODO</h5>
+<ul>
+<li>Designing is wicked</li>
+<li>Evaluative design research</li>
+<li>Decision problems in design research</li>
+<li>Design research as exploration</li>
+<li>Mapping multidimensional impact factors</li>
+<li>Quantification for decision making</li>
+<li>Minimax decision making on designs</li>
+<li>Measures and psychometrics</li>
+<li>Emergent design theories</li>
+</ul>
+</div>
+<div id="studies" class="section level2">
+<h2><span class="header-section-number">2.1</span> Studies</h2>
+<ul>
+<li>user studies</li>
+<li>experimental/fundamental studies</li>
+<li>qualitative vs quantitative</li>
+</ul>
+</div>
+<div id="observations-and-measurestbc" class="section level2">
+<h2><span class="header-section-number">2.2</span> Observations and measures[TBC]</h2>
+<div id="interaction-sequences" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Interaction sequences</h3>
+<p>Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. The difficult part is the following: When observing 50 users while doing a non-trivial task, no two interaction sequences are exactly the same (if i had to bet on it). By itself, there is little value without further means of interpretation and this can go two ways up:</p>
+<p>The diligent and skilled <em>qualitative</em> researchers are able to extract meaningful patterns from such sequences. For example, in usability tests, the following patterns are frequently observed and interpreted.</p>
+<ul>
+<li>a user jumping back to the main screen possibly went into a wrong direction</li>
+<li>users randomly probing around either have no clue or no motivation</li>
+<li>users in a longitudinal study who only interact at the begin and the end of the period, have no use for the system, really.</li>
+</ul>
+<p>The <em>quantitative</em> researcher will aim at deriving measures from the interaction sequence. Formally, <em>to measure</em> means assigning numbers to observed sequences, so that these can be brought into an <em>order</em>, at least. Obviously, we need some sort of transformation that gives us a single <em>performance score</em>. This we call here the <em>performance function</em> and we have many choices, for example:</p>
+<ul>
+<li>the number of all exploratory events</li>
+<li>their relative frequency</li>
+<li>their longest uninterrupted sequence</li>
+<li>total time spent in exploration</li>
+</ul>
+<p>Sometimes, you have to go a long way up the qualitative route, before you can derive useful measures. In [Schnittker, Schmettow &amp; Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, <em>Levensthein distance</em> counts the number of edits to transform one sequence into the other and we used it as the performance score: <em>deviation from optimal path</em>. Even more interpreting was another study we did on the active user paradox. We recorded interaction sequences of users doing some repetitive tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. First, events were classified on a low level (e.g. “reading the handbook”, “first time trying a function”) and later aggregated to broader classes (e.g. “exploratory behavior”). The number of events in a given time frame that were classified as such were finally taken as a measure, representing the exploratory tendencies.</p>
+</div>
+<div id="performance-measures" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> performance measures</h3>
+<p>A good point to start with is the classic concept of “usability”, which the ISO 9142-11 defines by the following three high-level criteria:</p>
+<ul>
+<li>effectiveness: can users accomplish their tasks?</li>
+<li>efficiency: what resources have to be spend for a task, e.g. time.</li>
+<li>satisfaction: how did the user like it?</li>
+</ul>
+<p>While these criteria originated in the field of Human-Computer Interaction, they can easily be adapted to compare everything that people do their work with. Even within the field, it has been adapted to hundreds of studies and a hundred ways are reported of assessing these criteria.</p>
+<p><em>Effectiveness</em> is often measured by <em>completion rate (CR)</em>. A classic waterfall approach would be to consult the user requirements documents and identify the, let’s say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with <em>distinct tasks</em>. Strictly, the set of tasks also had to be <em>complete</em>, covering the whole system. When completion rate is taken from in series of <em>repetitive tasks</em>, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or medical errors. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on <em>why</em> users failed? Effectiveness, in the sense of task completion, is primarily a qualitative issue and we shall rarely encounter it in this book.</p>
+<p>A more subtle notion of effectiveness is the <em>quality of outcome</em>, and despite the very term, is a measure. Perhaps, it should better be called <em>task perfection</em>. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.</p>
+<p><em>Efficiency</em> is where it really gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving.</p>
+<p>Counting the <em>number of clicks</em> before someone has found the desired piece of informnation is a coarse, but easy to acquire and intuitive measure of efficiency, and so is <em>time-on-task (ToT)</em>, which is just the sum . Still, these It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, <em>error rate</em> can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.</p>
+<p>ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for <em>repetition</em>. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.</p>
+<p>Above, I did not mean to say that design research always requires the sometimes painful recording of interaction sequences. The majority of studies jumps over them and proceed to performance measures, directly, by counting attempts or pressing stop watches.</p>
+<p>In many situations, such <em>direct measures</em> are right spot-on: When controlling a car in dense city traffic, a few hundred milliseconds is what makes huge a difference and therefore <em>reaction time</em> is a valid performance measure. In experimental cognitive research reaction times are a dominant tool to reveal the structure of the mind. The Stroop tasks is a golden evergreen cognitive psychology and serves as an example. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it. In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of participants. We showed them pictures with computers on them, followed by a printed word (e.g., “explore”) on which to perform the Stroop task. It was conceived that reaction time is increased when a participant experiences a strong association, like:</p>
+<p>black tower PC + “explore” –&gt; “can someone hand me a screwdriver”</p>
+<p>CONDITION WORD : Ink congruent [GREEN ]: green incongr [YELLOW]: green neutral [CHAIR ]: green</p>
+<div id="satisfaction" class="section level4">
+<h4><span class="header-section-number">2.2.2.1</span> –&gt;<em>Satisfaction</em></h4>
+</div>
+</div>
+<div id="experience-tbd" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> experience [TBD]</h3>
+</div>
+<div id="design-features-tbd" class="section level3">
+<h3><span class="header-section-number">2.2.4</span> design features [TBD]</h3>
+</div>
+<div id="the-human-factor-tbd" class="section level3">
+<h3><span class="header-section-number">2.2.5</span> the human factor [TBD]</h3>
+</div>
+<div id="situations-tbd" class="section level3">
+<h3><span class="header-section-number">2.2.6</span> situations [TBD]</h3>
+</div>
+</div>
+<div id="decision_making" class="section level2">
+<h2><span class="header-section-number">2.3</span> Decision making under uncertainty</h2>
+<ul>
+<li>I see clouds. Should I take my umbrella?</li>
+<li>Should I do this bungee jump? How many people came to death by jumping? (More or less than alpine skiing?) And how much fun is it really?</li>
+<li>Overhauling our company website will cost us EUR 100.000. Is it worth it?</li>
+</ul>
+<p>All the above cases are examples of decision making under uncertainty. The actors aim for maximizing their outcome, be it well being, fun or money. But, they are uncertain. And their uncertainty occurs on two levels:</p>
+<ol style="list-style-type: decimal">
+<li>One cannot precisely foresee the exact outcome of one’s chosen action:</li>
+</ol>
+<ul>
+<li>Taking the umbrella with you can have two consequences: if it rains, you have the benefit of staying dry. If it does not rain, you have the inconvenience of carrying it with you.</li>
+<li>You don’t know if you will be the unlucky one, who’s bungee rope breaks, with fatal consequences.</li>
+<li>You don’t know whether the new design will attracts more visitors to your website and serves them better.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>It can be difficult to precisely determine the benefits or losses of potential outcomes:</li>
+</ol>
+<ul>
+<li>How much worse is your day when carrying a useless object with you? How much do you hate moisture? In order to compare the two, they must be assessed on the same scale.</li>
+<li>How much fun (or other sources of reward, like social acknowledgements) is it to jump a 120 meter canyon? And how much worth is your own life to you?</li>
+<li>What is the average revenue generated per visit? What is an increase of recurrance rate of, say, 50% worth?</li>
+</ul>
+<p>Once you know the probabilities of events and the respective values, <em>decision theory</em> provides an intuitive framework to estimate these values. <em>Expected utility</em> <span class="math inline">\(U\)</span> is the sum product of <em>outcome probabilities</em> <span class="math inline">\(P\)</span> and the involved <em>losses</em> <span class="math inline">\(L\)</span>. As such, it is the average loss one can expect, when following a particular strategy.</p>
+<p>In the given case, two strategies exist, namely taking an umbrella versus taking no umbrella, when it is cloudy. We calculate and compare the expected utilities <code>U</code> as follows:</p>
+<p><span class="math display">\[\begin{aligned}
+P(rain) = 0.6 \\
+P(no rain) = 1 - P(rain) = 0.4 \\
+L(carry) = 2 \\
+L(wet) = 4 \\
+U(umbrella) = P(rain) L(carry) + P(no rain) L(carry)  = L(carry) = 2\\
+U(no umbrella) = P(rain) L(wet) = 2.4
+\end{aligned}
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(Rainfall)
+
+Actions &lt;-
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">action =</span> <span class="kw">c</span>(<span class="st">&quot;umbrella&quot;</span>, <span class="st">&quot;no umbrella&quot;</span>))
+
+Events  &lt;-
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">event  =</span> <span class="kw">c</span>(<span class="st">&quot;rain&quot;</span>, <span class="st">&quot;no rain&quot;</span>),
+                     <span class="dt">prob   =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>))
+
+Loss  &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">action =</span> Actions<span class="op">$</span>action, <span class="dt">event =</span> Events<span class="op">$</span>event) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">join</span>(Events) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">loss =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">0</span>))
+
+Decision &lt;-<span class="st"> </span>
+<span class="st">  </span>Loss <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">conditional_loss =</span> prob <span class="op">*</span><span class="st"> </span>loss) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(action) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">expected_loss =</span> <span class="kw">sum</span>(conditional_loss))
+
+Decision</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">action</th>
+<th align="right">expected_loss</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">no umbrella</td>
+<td align="right">2.4</td>
+</tr>
+<tr class="even">
+<td align="left">umbrella</td>
+<td align="right">2.0</td>
+</tr>
+</tbody>
+</table>
+<p>We conclude that, given the high chance for rain, and the conditional losses, the expected loss is larger for not taking an umbrella with you. It is rational to take an umbrella when it is cloudy.</p>
+<div id="measuring-uncertainty" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Measuring uncertainty</h3>
+<p>As we have seen above, a decision requires two investigations: the indeterministic nature of outcomes, and the assigned loss. Assigning loss to decisions is highly context dependent and often requires domain-specific expertize (or even individual judgment). We will do the formalization of it one more time, then set it aside. The issues of indeterministic processes and the associated uncertainty is basically what the field of <em>statistics</em> deals with. We encounter uncertainty in two forms: first, we usually have just a limited set of observations to draw inference from, this is <em>uncertainty of parameter estimates</em>. From just 20 days of observation, we cannot be absolutely certain about the true chance of rain. It can be 60%, but also 62% or 56%. Second, even if we precisely knew the chance of rain, it does not mean we could make a certain statement of the future wheather conditions, which is <em>predictive uncertainty</em>. For a perfect forecast, we had to have a complete and exact figure of the physical properties of the atmosphere, and a fully valid model to predict future states from it. For all non-trivial systems (which excludes living organisms and wheather), this is impossible.</p>
+<p>Review the rainfall example: the strategy of taking an umbrella with you has proven to be superior under the very assumption of <em>predictive uncertainty</em>. As long as you are interested in long-term benefit (i.e. optimizing the average loss on a long series of days), this is the best strategy. This may sound obvious, but it is not. In many cases, where we make decisions under uncertainty, the decision is not part of a homogeneous series. If you are member of a startup team, you only have this one chance to make a fortune. There is not much opportunty to average out a single failure at future occasions. In contrast, the investor, who lends you the money for your endeavour, probably has a series. You and the investor are playing to very different rules. For the investor it is rational to optimize his strategy towards a minimum average loss. The entrepreneur is best advised to keep the maximum possible loss at a minimum.</p>
+<p>As we have seen, predictive uncertainty is already embebedded in the framework of rational decision making. Some concepts in statistics can be of help here: the uncertainty regarding future events can be quantified (for example, with posterior predictive distributions) and the process of model selection can assist in finding the model that provides the best predictive power.</p>
+<p>Still, in our formalization of the Rainfall case, what magically appears are the estimates for the chance of rain. Having these estimates is crucial for finding an optimal decision, but they are created outside of the framework. Furthermore, we pretended t o know the chance of rain exactly, which is unrealistic. Estimating parameters from observations is the reign of statistics. From naive calculöations , statistical reasoning differs by also regarding uncertainty of estimates. Generally, we aim for making statements of the following form:</p>
+<p>“With probability <span class="math inline">\(p\)</span>, the attribute <span class="math inline">\(A\)</span> is of magnitude <span class="math inline">\(X\)</span>.”</p>
+<p>In the umbrella example above, the magnitude of interest is the chance of rain. It was assumed to be 60%. This appears extremely high for an average day. A more realistic assumption would be that the probability of rainfall is 60% <em>given the observation of a cloudy sky</em>. How could we have come to the belief that with 60% chance, it will rain when the sky is cloudy? We have several options, here:</p>
+<ol style="list-style-type: decimal">
+<li><p>Supposed, you know that, on average, it rains 60% of all days, it is a matter of common sense, that the probability of rain must be equal or larger than that, when it’s cloudy.</p></li>
+<li><p>You could go and ask a number of experts about the association of clouds and rain.</p></li>
+<li><p>You could do some systematic observations yourself.</p></li>
+</ol>
+<p>Maybe, you have recorded the coincidences of clouds and rainfall over a period, of, let’s say, 20 days. You made the following observations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Rain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="left">cloudy</th>
+<th align="left">rain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="right">14</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+<p>Intuitively, you would use the average to estimate the probability of rain under every condition.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_desc &lt;-
+<span class="st">  </span>Rain <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(cloudy) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">chance_of_rain =</span> <span class="kw">mean</span>(rain))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Rainfall)</code></pre></div>
+<p>These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter <span class="math inline">\(P(rain|cloudy) = 60\)</span>%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the <em>true</em> parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, <span class="math inline">\(P(rain|cloudy) = 64.441\)</span>%.</p>
+<p>The trust you put in your estimation is called <em>level of certainty</em> or <em>belief</em> or <em>confidence</em>. It is the primary aim of statistics to rationally deal with uncertainty, which involves to <em>measure the level of certainty</em> associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding <span class="math inline">\(P(rain|cloudy)\)</span>?</p>
+<p>Maybe, the conversation would be as follows:</p>
+<blockquote>
+<p>YOU: In your experience, what is the chance of rain, when it’s cloudy.</p>
+</blockquote>
+<blockquote>
+<p>EXPERT: Wow, difficult question. I don’t have a definite answer.</p>
+</blockquote>
+<blockquote>
+<p>YOU: Oh, c’mon. I just need a rough answer. Is it more like 50%-ish, or rather 70%-ish.</p>
+</blockquote>
+<blockquote>
+<p>EXPERT: Hmm, maybe somewhere between 50 and70%.</p>
+</blockquote>
+<blockquote>
+<p>YOU: Then, I guess, taking an umbrella with me is the rational choice of action.</p>
+</blockquote>
+<p>Note how the expert gave two endpoints for the parameter in question, to indicate the location and the level of uncertainty. If she had been more certain, she had said “between 55 and 65%. While this is better than nothing, it remains unclear, which level of uncertainty is enclosed. Is the expert 100%, 90% or just 50% sure the true chance is in the interval? Next time, you could ask as follows:</p>
+<blockquote>
+<p>…</p>
+</blockquote>
+<blockquote>
+<p>EXPERT: Hmm, maybe somewhere between 70-90%</p>
+</blockquote>
+<blockquote>
+<p>YOU: What do you bet? I’m betting 5 EUR that the true parameter is outside the range you just gave.</p>
+</blockquote>
+<blockquote>
+<p>EXPERT: I dare you! 95 EUR it’s inside!</p>
+</blockquote>
+<p>The expert feels 95% certain, that the parameter in question is in the interval. However, for many questions of interest, we have no expert at hand (or we may not even trust them altogether). Then we proceed with option 3: making our own observations.</p>
+</div>
+<div id="betting-on-designs" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Betting on designs</h3>
+<p>The design of systems can be conceived as a choice between design options. For example, when designing an informational website, you have the choice of making the navigation structure broad (and shallow) or deep (and narrow). Your choice will to some extent, change usability of the website, hence your customer satisfaction, rate of recurrance, revenue etc.</p>
+</div>
+<div id="case-e-commerce-ab" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Case: e-commerce A/B</h3>
+<p>Consider the following example: Violet is development manager of a e-commerce website. At present, there is debate about a major overhaul of the website. Most management team members agree that implementing a better search function will increase the revenue per existing customer. At the opposite, there are considerable development costs involved, which you have estimated to EUR 100.000.</p>
+<p>Upper management has a keen eye on shareholder value and wants the costs to be covered by increased revenues within one year. As the company’s total revenue per year is 1.000.000 Euro, an increase by factor 1.1 is required to cover the development costs.</p>
+<p>In order to get a rough idea whether this target can be met, Violet conducts a study where she observes the transactions of 50 random customers using the current system with 50 transactions with a prototype of the new system. The measured variable is the money every participant spends during the visit. The question is:</p>
+<p><em>“Do customers in the prototype condition spend 10% more on average?”</em></p>
+<p>The figure below shows the distribution of revenue in the experiment.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(Rational)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RD  <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Euro, <span class="dt">x =</span> Design)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p><img src="Design_Research_files/figure-html/rational_design_1-1.png" width="672" /></p>
+<p>There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? And how certain can Violet be? A formal regression analysis gives the answer <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">1</span> &lt;-<span class="st"> </span>
+<span class="st">  </span>RD <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(Euro <span class="op">~</span><span class="st"> </span>Design, 
+           <span class="dt">family =</span> <span class="kw">Gamma</span>(<span class="dt">link=</span><span class="st">&quot;log&quot;</span>),
+      <span class="dt">data =</span> .)
+
+P_<span class="dv">1</span> &lt;-<span class="st">  </span><span class="kw">posterior</span>(M_<span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_fixef &lt;-<span class="st"> </span><span class="kw">fixef</span>(P_<span class="dv">1</span>, <span class="dt">mean.func =</span> exp)
+T_fixef</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">5.00e+01</td>
+<td align="right">4.70e+01</td>
+<td align="right">5.30e+01</td>
+</tr>
+<tr class="even">
+<td align="left">Designproto</td>
+<td align="right">1.13e+00</td>
+<td align="right">1.03e+00</td>
+<td align="right">1.23e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">shape</td>
+<td align="right">1.77e+09</td>
+<td align="right">8.00e+06</td>
+<td align="right">1.13e+12</td>
+</tr>
+</tbody>
+</table>
+<p>The results tell her that participants spend <span class="math inline">\(49.975\)</span> Euro on average with the current design. The prototype seems to increase the revenue per transaction by <span class="math inline">\(1.126\)</span>. That seems sufficient, but uncertainty is strong, too, as indicated by the 95% credibility intervals. There is a chance of more than 2.5%, that the revenue is just <span class="math inline">\(47.035, 1.035, 8.003\times 10^{6}\)</span> (or lower), such that the target is not met. But what precisely is the chance of falling below EUR 5? In Bayesian analysis we usually get the complete posterior distribution, which we can evaluate to get a definite answer:</p>
+<p><em>What is the probability of the increase in revenue being less than 5 EUR?</em></p>
+<p>We inspect the posterior distribution and mark the area of interest</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_risk_of_failure_<span class="dv">1</span> &lt;-
+<span class="st">  </span>P_<span class="dv">1</span> <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Designproto&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">exp</span>(value),
+         <span class="dt">outcome =</span> value <span class="op">&lt;</span><span class="st"> </span><span class="fl">1.1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(outcome) <span class="op">%&gt;%</span>
+<span class="st">  </span>colMeans  
+
+P_<span class="dv">1</span> <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Designproto&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">exp</span>(value),
+         <span class="dt">outcome =</span> <span class="kw">ifelse</span>(value <span class="op">&lt;</span><span class="st"> </span><span class="fl">1.1</span>, <span class="st">&quot;failure&quot;</span>, <span class="st">&quot;success&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">fill =</span> outcome)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> .<span class="dv">002</span>)</code></pre></div>
+<p><img src="Design_Research_files/figure-html/rational_design_risk_of_failure-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Rational)  </code></pre></div>
+<p>The red area represents the danger zone, where revenue increase does not reach EUR 5. The area amounts to 28.65% of the total probability. With this information the manager now has several options:</p>
+<ol style="list-style-type: decimal">
+<li>decides that 28.65% is a risk she <em>dares</em> to take</li>
+<li>be confident in herself because <em>past successes</em> prove that she should follow her intuition</li>
+<li>take into account other <em>sources of evidence</em>, for example expert opinions or meta studies</li>
+<li>continue the study until sufficient evidence is gathered, but costs of additional effort have to be accounted for</li>
+</ol>
+<p>The first option represents an unspecific tolerance towards risk. Extreme risk tolerance of managers is infamous as one cause for large scale economic crises [BLACK_SWANs]. Her motives could be manifold, still: maybe she was nursed to take risks in her life; or she is confident that consequences in case of failure will be bearable.</p>
+<p>The second and third options have something in common: they make use of <em>external knowledge</em>. This is explained in the coming section. The fourth option is another way of making <em>cumulative use of knowledge</em>, namely <em>[adaptive testing: find correct term]</em>.</p>
+</div>
+<div id="case99" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> Case: 99 seconds</h3>
+<p>Consider Jane: she is chief engineer at a mega-large rent-a-car company smartr.car that is doing their business nothing but online. Jane was responsible for a large scale overhaul of the customer interface for mobile users. Goal of the redesign was to streamline the user interface, which had grown wild over the years and had become boring. Early customer studies indicated that the app needed a serious visual decluttering and stronger funneling of tasks. 300 person months went into the re-development and the team did well: a recent A/B study had shown that users learned the smartr.car v2.0 fast and could use its functionality very efficiently. Jane’s team is prepared for the roll-out, when marketing requested the following:</p>
+<blockquote>
+<p>marketing: we want to support market introduction with the following slogan: “rent a car in 99 seconds”.</p>
+</blockquote>
+<blockquote>
+<p>Jane: not all users manage a full transaction in that short time. That could be a lie.</p>
+</blockquote>
+<blockquote>
+<p>marketing: legally, the claim is fine if it holds on average.</p>
+</blockquote>
+<blockquote>
+<p>Jane: i can find out for you (but we won’t violate any rules).</p>
+</blockquote>
+<p>Jane takes another look at the performance of users in the smartr car v2.0 condition. As she understands it, she has to find out whether the average of all recorded time-on-tasks with smartr.car 2.0 is 99 seconds, or better. Here is what she sees:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(Sec99)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ver20 <span class="op">%&gt;%</span><span class="st">   </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> ToT)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
+<p><img src="Design_Research_files/figure-html/seconds_99_1-1.png" width="672" /></p>
+<p>Jane, trained in statistics as she is, figures that if she would make such a statement, she wanted to be 90% sure. The performance is not completely off 99 seconds. But given the huge variance in the sample, it seems impossible to hold the desired claim with a certainty of 80%. Still, she gives it a try and runs an estimation (which we will later get to know as a <em>grand mean model</em>)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">1</span> &lt;-<span class="st"> </span>
+<span class="st">  </span>Ver20 <span class="op">%&gt;%</span><span class="st">    </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(ToT <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> .)
+
+P_<span class="dv">1</span> &lt;-
+<span class="st">  </span><span class="kw">posterior</span>(M_<span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_fixef &lt;-<span class="st">  </span>
+<span class="st">  </span><span class="kw">fixef</span>(P_<span class="dv">1</span>,
+        <span class="dt">interval =</span> .<span class="dv">6</span>)
+
+N_99s &lt;-<span class="st"> </span>
+<span class="st">  </span>P_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Intercept&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">confirm =</span> value <span class="op">&lt;=</span><span class="st"> </span><span class="dv">99</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">certainty =</span> <span class="kw">mean</span>(confirm)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">odds =</span> (<span class="dv">1</span><span class="op">-</span>certainty)<span class="op">/</span>certainty) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as.numeric</span>()
+  
+N_111s &lt;-<span class="st"> </span>
+<span class="st">  </span>P_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Intercept&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">confirm =</span> value <span class="op">&lt;=</span><span class="st"> </span><span class="dv">111</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">certainty =</span> <span class="kw">mean</span>(confirm)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">odds =</span> (<span class="dv">1</span><span class="op">-</span>certainty)<span class="op">/</span>certainty) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as.numeric</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Sec99)</code></pre></div>
+<p>The results tell her that most likely the average time-on-task is <span class="math inline">\(fixef\)</span>. That is not very promising. In fact, the odds that the average user can do it in 99 seconds is a feeble 2%. Luckily, Jane had the idea that the slogan could be changed to <em>“rent a card in 1-1-1 seconds”</em>. The certainty that this slogan holds is a favorable 95, a risk that a brave marketing department is surely willing to take.</p>
+</div>
+<div id="prior-information" class="section level3">
+<h3><span class="header-section-number">2.3.5</span> Prior information</h3>
+<p>It is rarely the case that we encounter a situation <em>tabula rasa</em>. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season and the region. Even the planet is sometimes taken into account: the Pathfinder probe carried a bag of gadgets, but the umbrella was for safe landing only.</p>
+<p>In behavioural research it has been general standard that every experiment had to be judged on the produced data alone. For the sake of objectivity, researchers were not allowed to take into account previous results, let alone their personal opinion.</p>
+<p>In Bayesian statistics, you have the choice. You can make use of external knowledge, but you don’t have to. In Bayesian terminology, previous or external knowledge is called <em>prior information</em>. Kowledge that comes from the data is called the <em>likelihood</em> and both are combined to <em>posterior</em> knowledge by multiplication:</p>
+<p><span class="math inline">\(posterior = likelihood * prior\)</span></p>
+<p>Reconsider Violet, the rational e-commerce development manager. She had this role for years and has supervised several large scale outrolls. Couldn’t she be more daring, taking into account her past successes? This is not a completely new situation, after all.</p>
+<p>The impact of prior information can range from negligible to overwhelming. The gain in confidence in our example depends on three factors:</p>
+<ol style="list-style-type: decimal">
+<li>the average magnitude of past successes, the higher, the better</li>
+<li>the similarity of the current project with past projects</li>
+<li>the amount of evidence (e.g., number of recorded projects)</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(Rational)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_prior &lt;-
+<span class="st">  </span>D_prior <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(revenue_increase <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
+           <span class="dt">family =</span> <span class="kw">Gamma</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),
+           <span class="dt">data =</span> .)
+
+P_prior &lt;-<span class="st"> </span><span class="kw">posterior</span>(M_prior)</code></pre></div>
+<p>Let’s assume, the manager had done 5 projects in the past and recorded the resulting change in revenues. On these five values she does a regression, that we will later call an intercept-only model, and concludes that her <em>prior belief</em> is distributed as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">P_prior <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Intercept&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">exp</span>(value)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>()</code></pre></div>
+<p><img src="Design_Research_files/figure-html/previous_belief_in_revenue-1.png" width="672" /></p>
+<p>On average, revenues have increased by factor 1.211 by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">2</span> &lt;-
+<span class="st">  </span>RD <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(Euro <span class="op">~</span><span class="st"> </span>Design, 
+      <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),
+      <span class="dt">prior =</span> <span class="kw">normal</span>(T_prior[[<span class="dv">1</span>,<span class="dv">2</span>]], T_prior[[<span class="dv">1</span>,<span class="dv">3</span>]]),
+      <span class="dt">family =</span> <span class="kw">Gamma</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),
+      <span class="dt">data =</span> .)
+
+P_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">posterior</span>(M_<span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">T_fixef_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">fixef</span>(P_<span class="dv">2</span>, <span class="dt">mean.func =</span> exp)
+T_fixef_<span class="dv">2</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">4.99e+01</td>
+<td align="right">4.70e+01</td>
+<td align="right">5.31e+01</td>
+</tr>
+<tr class="even">
+<td align="left">Designproto</td>
+<td align="right">1.13e+00</td>
+<td align="right">1.04e+00</td>
+<td align="right">1.23e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">shape</td>
+<td align="right">1.66e+09</td>
+<td align="right">7.29e+06</td>
+<td align="right">1.13e+12</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_risk_of_failure_<span class="dv">2</span> &lt;-
+<span class="st">  </span>P_<span class="dv">2</span> <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Designproto&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">exp</span>(value),
+         <span class="dt">outcome =</span> value <span class="op">&lt;</span><span class="st"> </span><span class="fl">1.1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(outcome) <span class="op">%&gt;%</span>
+<span class="st">  </span>colMeans 
+
+  P_<span class="dv">2</span> <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(parameter <span class="op">==</span><span class="st"> &quot;Designproto&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="kw">exp</span>(value),
+         <span class="dt">outcome =</span> <span class="kw">ifelse</span>(value <span class="op">&lt;</span><span class="st"> </span><span class="fl">1.1</span>, <span class="st">&quot;failure&quot;</span>, <span class="st">&quot;success&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">fill =</span> outcome)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> .<span class="dv">002</span>)</code></pre></div>
+<p><img src="Design_Research_files/figure-html/rational_design_risk_of_failure_2-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Rational)</code></pre></div>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>What we run here is a Gamma regression, which we will re-encounter in chapter [GLM]. The coefficients can directly be interpreted as changes in rate.<a href="design-research.html#fnref1">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bayesian-statistics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
