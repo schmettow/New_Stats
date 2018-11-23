@@ -1046,7 +1046,7 @@ BAB1 %>%
 
 We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored  sigmoid curves. 
 
-Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *facetting*. A facet splits the data by a grouping variable and creates one single plot for every group:
+Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *faceting*. A facet splits the data by a grouping variable and creates one single plot for every group:
 
 ```{r   }
 BAB1 %>% 
@@ -1196,7 +1196,7 @@ The minimal workflow for statistical reporting with knitr is as follows:
 1. Use markdown right away, covering all steps of your data analysis, i.e. a scrutable report. You may even start writing when only one part of your data gathering is completed, because due to the dynamic chunks, updating the report when new data arrives is just a button click away.
 1. When the data analysis is complete, compile the scrutable report to Word format
 1. Extract the passages, figures and tables for a minimal statistical report. This is your results section.
-1. provide the scrutable report as appendix or supplementary material
+1. Provide the scrutable report as appendix or supplementary material
 
 In the notion of this chapter, this is just to get you started and knitr is so tightly integrated with the Rstudio environment that I don't even bother to explain the commands for knitting a document. Once acquainted with the basics, markdown provides a few additional markup tokens, like footnotes, hyperlinks or including images. The customization options and addons for knitr are almost endless and various interesting addons are available, just to mention two:
 
