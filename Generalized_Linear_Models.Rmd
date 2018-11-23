@@ -23,8 +23,10 @@ The GLM framework rests on two extensions that bring us a huge step closer to th
 
 In the following three sections I will explain the three core assumptions of linear models, recall the canonical model formulation:
 
-$$\mu_i=\beta_0+ \beta_1 x_1i+ …+\beta_k x_{ki}\\
-y_i \sim \textrm{Norm}(\mu_i,\sigma)$$
+$$
+\mu_i=\beta_0+ \beta_1 x_1i+ …+\beta_k x_{ki}\\
+y_i \sim \textrm{Norm}(\mu_i,\sigma)
+$$
 
 The first term, we call the likelihood and it represents the systematic quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is a frequently under-regarded assumption of linear models and it is doomed to fall. The second term defines the  pattern of randomness and it hosts two further assumptions: *normal distribution*  and *constant error variance* of the random component.
 
@@ -256,9 +258,11 @@ In arithmetics an abundance of functions exists for every possible purpose. Howe
 
 Intuitively speaking, a monotonically increasing function preserves the order in magnitude, such that the following holds for a link function.
 
-$$\mu_a \gt \mu_b \rightarrow \theta_a \gt \theta_b$$
+$$
+\mu_a > \mu_b \rightarrow \theta_a > \theta_b
+$$
 
-The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g., \sqrt{x} = $[2, -2]$) and therefore is not a function, strictly.
+The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g., $\sqrt{x} = [2, -2]$) and therefore is not a function, strictly.
 
 An adequate link function for count variables would map the range of natural numbers to the *linear range* of $\eta$ that is $[-\infty; \infty]$. The logarithm is such a function and its inverse is the *exponential* function, which bends the linear range back into the boundary. Figure XY shows them side-by-side. Note that the logarithm is *not asymptotic* as it may seem. This function truly approaches ininity, albeit at a decelerating pace (which is mind boggling). Other variables, like success rates or rating scales, have lower and upper boundaries. A suitable pair of functions is the *logit* link function and the *logistic* mean function.  
 
@@ -305,7 +309,7 @@ In chapter \@ref(distributions) a number of random distributions were introduced
 In GLM, the researcher has a larger choice for modelling  the random component and Table XY lists some common candidates.
 
 ```{r echo = F}
- readxl::read_excel("figures/GLM_distributions.xlsx") %>%  kable()
+ readxl::read_excel("Illustrations/GLM_distributions.xlsx")
 ```
 
 
@@ -408,9 +412,11 @@ M_Pois <-
 sync_CE(Chapter_GLM, M_Pois)
 ```
 
+<!-- bayr #1 -->
 
 ```{r}
 fixef(M_Pois)
+# bayr:::knit_print.tbl_coef(M_Pois)
 ```
 
 The Poisson parameter $\lambda$ (lambda) has a direct interpretation as it represents the expected mean (and variance) of the distribution. Instead, the regression coefficient is on a logarithmic scale, to ensure it has no boundaries. To scale it down to the 
@@ -436,7 +442,7 @@ detach(Chapter_GLM)
 attach(IPump)
 ```
 
-```{r fit:deviations, opts.label = "mcmc"}
+```{r fit_deviations, opts.label = "mcmc"}
 M_dev <- 
   stan_glmer(deviations ~ Design + session + session:Design + 
                (1 + Design + session|Part) +
@@ -486,7 +492,9 @@ Hence, the exponentiated coefficients have a *multiplicative interpretation*, li
 
 With counts we usually expect the variance of randomness to rise with the mean. The Poisson distribution  is very strict in the sense that the variance equals the mean 
 
-$$y_i \sim \textrm{Pois}(\lambda) \rightarrow \textrm{Var}(x_i) = \textrm{Mean}(x_i) = \lambda$$. 
+$$
+y_i \sim \textrm{Pois}(\lambda) \rightarrow \textrm{Var}(x_i) = \textrm{Mean}(x_i) = \lambda
+$$. 
 
 Real count data frequently has variance that raises proportionally with the mean, but is inflated. This is called *overdispersion* and is accounted for by an observation-level random effect, which will be explained in a separate section \@ref(overdispersion).
 
@@ -511,7 +519,10 @@ The  transformation of coefficients to the original scale has been applied to th
 
 For all GLM, the link and mean functions are monotonically increasing, with the consequence that the order of observations is preserved. Formally, for any two MCMC iterations $i$ and  $j$ for a parameter $\beta_i$:
 
-$$\beta_{1i} \lt \beta_{1j} \rightarrow \exp(\beta_{1i}) \lt \exp(\beta_{1j})$$
+$$
+\beta_{1i} < \beta_{1j} \rightarrow \exp(\beta_{1i}) < \exp(\beta_{1j})
+$$
+
 Recall that throughout this book, center and interval estimates have been obtained by simple quantiles, marking the points where 2.5%, 50% and 97.5% of all iterations are smaller. Order does not change with monotonous transformations, if 2.5% (50%, 97.5%) of draws are smaller on the linear  scale, they will still be after applying the mean function. Quantiles are not affected by monotonous transformation and transformation after summary is therefore valid. Some researchers prefer the mode of the posterior to represent its center location. The mode is the point of highest density and does not rely on ranks, it therefore even invariant under all transformations that preserve identity.
 
 This is different for higher order methods for obtaining point and interval estimates. Most notably the mean and the highest posterior density intervals are not invariant to mean functions. When using those, the mean function must be applied before summarizing the posterior, which is inconvenient and inconsistent.
@@ -528,7 +539,7 @@ attach(Chapter_GLM)
 ```
 
 
-```{r sim:ZI, ops.label = "rtut"}
+```{r sim_ZI, ops.label = "rtut"}
 sim_zi <- function(
   beta_0  = 2.5,
   N_Part  = 120,
@@ -554,7 +565,7 @@ D_zi %>%
 
 
 
-```{r fit:ZI, opts.label = "future"}
+```{r fit_ZI, opts.label = "future"}
 M_zi <-
   D_zi %>% brm(visits ~ 1 + (1|Part) , family = zero_inflated_poisson, data = ., iter = iter)
 M_zi
@@ -635,7 +646,10 @@ As expected from a GMM we retrieve one parameter that here reflects the average 
 
 Proportions are on a range from zero to one. Because the quantity of interest is bounded, a link function  is needed that stretches the bounded into an unbounded range. For logistic regression, the *logit* functions maps the expected values $\mu_i \in [0;1]$ onto the *linear predictor* scale $\eta_i \in [-\infty; \infty]$:
 
-$$\eta_i = \textrm{logit}(\mu_i)$$
+$$
+\eta_i = \textrm{logit}(\mu_i)
+$$
+
 The inverse function, commonly called the *mean function*, of the logit is the *logistic function*. \@ref(logit_logist) shows link and mean functions side-by-side.
 
 ```{r logit_logist}
@@ -727,8 +741,8 @@ sync_CE(IPump, M_cmpl)
 
 ```{r}
 T_cmpl <- 
-  fixef(M_cmpl) %>% 
-  print()
+  fixef(M_cmpl)
+T_cmpl
 ```
 
 ```{r opts.label = "invisible"}
@@ -801,7 +815,9 @@ C_cmpl <- T_fixef_cmpl_odds$center
 
 But is it legitimate to apply the transformation on individual coefficients in order to speak of changes of odds? The following arithmetic law tells that what is a sum on the log-odds scale, is multiplication on the scale of odds:
 
-$$\exp(x + y) = \exp(x)\exp(y)$$
+$$
+\exp(x + y) = \exp(x)\exp(y)
+$$
 
 Consequently, we may speak of changes of odds using *multiplicative language*: 
 
@@ -915,28 +931,33 @@ Group effects indicate how homogeneous the overall pattern (Table 1) is on indiv
 
 ### Modelling overdispersion
 
-Poisson and binomial distributions are one-parameter distributions, with the  effect that location and dispersion are tightly entangled. 
+If you are in a hurry: real data is always overdispersed. If your data is real, prefer the negative binomial family over Poisson and beta-binomial over logistic regression. Or do observation-level random effects.
+
+Poisson and binomial distributions are one-parameter distributions. As there is only one parameter, it is impossible to set location and dispersion separately. In effect, both properties are tightly entangled. For Poisson distributions they are even the same.
 
 $x \sim Pois(\lambda) \implies \mu = \sigma^2 = \lambda$
 
-The variance of binomial variables is:
-
-$x \sim Bin(p, k) \implies \mu = k\mu(1-\mu) = p$, where k is the number of trials.
-
-[ILLUSTRATION]
+For binomial variables, mean and variance both depend on probability $p$ and are entangled in cigar shaped form, as the dispersion shrinks when approaching either two boundaries.
 
 The strict variance assumptions of Poisson and binomial models are frequently violated by real data. The violation happens when impact factors have not been included in the likelhood equation. Whenever there is one or more impact factors on the outcome at question that the researcher has not regarded, overdispersion inevitably happens. That means it practically always happens in studies involving objects with complex dynamics, such as the human mind. 
 
 Two solutions exist for overdispersed count data: we can either switch to an appropriate two parameter response distribution, that disentangles mean and variance, or introduce an observation-level random effect.
 
+
+
+
+#### Negative-binomial regression for overdispersed counts
+
 For all three one-parameter distributions, there exists a two-parameter distribution that allows to estimate the amount of random dispersion (almost) independently of the mean.
 
-```{r opts.label = "invisible"}
-readxl::read_excel("figures/GLM_distributions.xlsx", sheet = "plugin") %>% kable()
+<!-- 46 make work with LaTeX -->
+
+```{r}
+readxl::read_excel("Illustrations/GLM_distributions.xlsx", sheet = "plugin")
 ```
 
 Using Poisson regression for overdispersed  count data results in too favorable certainty of estimates, which is a mistake, of course. One solution to the problem is to switch to yet another response distribution that has a second parameter, thereby allowing the variance to vary (almost) freely. For the Poisson case (i.e., counts without an upper limit) that typically is the negative binomial distribution (never mind its name!), for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the original distribution is not constant, but allowed to vary, typically according
-to some other distribution. Under this perspective, the negative binomial distribution is equivalent to a Poisson distribution, where the parameter $\lambda$ follows a certain gamma distribution:
+to some other distribution. Under this perspective, negative binomial distribution is equivalent to a Poisson distribution, when we let parameter $\lambda$ follows a certain gamma distribution:
 
 ```{r}
 rnegbinom <- function(n, mu, size){
@@ -962,31 +983,83 @@ data_frame(x = 0:15,
 
 ```
 
-For beta-binomial distributions, the mixture is even more straight forward:
+
+#### Beta-binomial regression for successes in trials
+
+For beta-binomial distributions, the binomial parameter $p$ is mixed from a beta distribution, with parameters $a$ and $b$:
 
 ```{r}
 rbetabinom <- function(n, size, a, b) rbinom(n, size, rbeta(n, a, b))
 rbetabinom(1000, 10, 1, 2) %>% qplot()
 ```
 
-The brms regression engine implements both response distributions for overdispersed count data. Both families, negative binomial and beta-binomial are repqrq 
 
-#### [HERE]
+Predictions and interpretation of coefficients of negative-binomial and beta-binomial models are just as with their counterparts, using the same link functions.  There is just a tiny difference: a single parameter has been added to the model, which modifies the dispersion. In a standard analysis these parameters have very little meaning, even less than the standard error in a Gaussian model. No misunderstanding: these parameters are *not* the constant standard deviation of residuals. They act as scalers for the "natural" dispersion at any point.
 
-With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance without extending the family any further. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
+The brms regression engine currently only implements the negative binomial, but not the beta-binomial family. That is a minor problem, because the brms regression engine can be extended. The following code is directly taken from the brms documentation and provides a betabinomial model. The canonical parametrization of the betabinomial distribution takes the parameters a and b from the inner beta distribution. Note, how the author of this code transforms the parameters to obtain an expected value $\mu$ and a dispersion parameter $\phi$. Like in logistic regression, coefficients are on a logit scale.
+
+```{r opts.label = "inv"}
+attach(Chapter_GLM)
+```
+
+
+```{r opts.label = "mcmc"}
+# define a custom beta-binomial family
+beta_binomial2 <- custom_family(
+  "beta_binomial2", dpars = c("mu", "phi"),
+  links = c("logit", "log"), lb = c(NA, 0),
+  type = "int", vars = "trials[n]"
+)
+
+# define custom stan functions
+bb_stan_funs <- "
+  real beta_binomial2_lpmf(int y, real mu, real phi, int N) {
+    return beta_binomial_lpmf(y | N, mu * phi, (1 - mu) * phi);
+  }
+  int beta_binomial2_rng(real mu, real phi, int N) {
+    return beta_binomial_rng(N, mu * phi, (1 - mu) * phi);
+  }
+"
+
+D_betabin <- data_frame(y = rbetabinom(100, 10, 4,2), n = 10) 
+
+M_betabin <- D_betabin %>% 
+  brm(y | trials(n) ~ 1, family = beta_binomial2, 
+      stan_funs = bb_stan_funs, data = .)
+```
+
+```{r}
+coef(M_betabin)
+```
+
+
+```{r opts.label = "mcsync"}
+detach(Chapter_GLM)
+
+sync_CE(Chapter_GLM, beta_binomial2, bb_stan_funs, M_betabin, D_betabin)
+```
+
+
+
+
+#### Using observation-level random effects
+
+With the broad implementation of random effects models in Bayesian regression engines, there is a generic procedure to capture the extra variance even with one parameter distributions. The trick is to introduce an *observation-level random effect*. Recall how we regard variation between members of a population as normally distributed deviations from the population mean, by the example of a Poisson grand mean model with a participant-level ($p$) random effect:
 
 $$
 \theta_{pi} = \beta_0 + x_p\beta_{0p} \\
 \mu_{pi} = \exp(\theta_{pi})\\
 \beta_{0p} \sim N(\mu_{p}, \sigma_p)\\
-y_{p} \sim \textrm{Pois}(\mu_{ij})$$
+y_{p} \sim \textrm{Pois}(\mu_{ij})
+$$
 
 The OLRE is normally distributed but  does not cause any bounded-range range, as it is added on the level of the linear predictor, before applying the exponential transformation. Observation-level random effects are completely analogous, except that every observation becomes its own group, in a Poisson grand mean model with added variation:
 
 $$
 \theta_{i} = \beta_0 + \beta_{i} \\
 \mu_i = \exp(\theta_i)\\
-y_{ij} \sim \textrm{Pois}(\mu_{ij})$$
+y_{ij} \sim \textrm{Pois}(\mu_{ij})
+$$
 
 See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance parameter $\sigma$ appears in an otherwise purely Poisson model. Observation-level random effects are on the linear predictor level, and therefore additive. Compare this to the negative binomial distribution where variance is scaled up, which is multiplication. We find a resemblance with how sums on the linear predictor become multiplications on the expected values scale.
 
@@ -1072,7 +1145,7 @@ D_ovdsp %>%
 
 
 
-From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we won't need one of those twisted two parameter random distribution to account for overdispersion. With OLRE models we get an estimate that is very similar to a *residuals*, which have proven very useful in model criticism. In the next section, we will use OLRE to diagnose a particularly wicked source of overdispersion that cannot be covered by OLRE, zero inflation.
+From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we won't need one of those twisted two parameter random distribution to account for overdispersion. With OLRE models we get an estimate that is very similar to a *residuals*, which have proven very useful in model criticism.
 
 
 ```{r opts.label = "invisible"}
@@ -1084,12 +1157,6 @@ sync_CE(Chapter_GLM, sim_ovdsp, D_ovdsp)
 
 
 ### Exercises:
-
-
-
-
-
-
 
 
 
@@ -1333,7 +1400,7 @@ Noteworthy, the brm engine uses the identity link function by default. While thi
 <!-- In chapter \@ref(crossover) we have tested Egan's assumption that user differences produce more variation in performance than designs do. In order to "normalize" the ToT outcome, log transformation was applied. Using an exgaussian regression as part of the GLM framework, we are now set to do without this humble trick. -->
 
 
-```{r fit:tot_exg, opts.label = "future"}
+```{r fit_tot_exg, opts.label = "future"}
 M_tot_exg <- D_egan %>%  
   brm(ToT ~ 1 + (1|Part+Design+Task+Design:Task),
       family="exgaussian", data = .,
@@ -1766,15 +1833,15 @@ When observations are censored, the regression engine interpolates the missing p
 
 
 
-In classic design research of the past millenium, die hard Human Factors researchers have mainly been asking objectively sounding questions, like:
+In classic design research of the last millenium, die-hard Human Factors researchers have mainly been asking objectively sounding questions, like:
 
 + Can a user achieve accurate results with the system?
 + Can they do so in less time?
 + Is the number of errors reasonably confined?
 
-For professional and especially critical systems, these are highly valid questions, indeed. The purpose of a medical infusion pump is to improve the health status of a patient by accurately and reliebly delivering medication into the bloodstream and the extent to that this is happening can be measured dircetly. 
+For professional, and especially critical, systems, these are highly valid questions, indeed. The purpose of a medical infusion pump is to improve the health status of a patient by accurately and reliably delivering medication into the bloodstream and the extent to that this is happening can be measured dircetly. 
 
-However, starting with the 1990s, wave after wave of novel electronic entertainment systems and and digital gadgets rolled over the comsumer mass market. The purpose of a video recorder or a smartphone is to deliver joy ... and to be sold in large batches. The sole purpose  of a commercial website is to sell and nothing else. With the millenium change, design researchers began to recognize what consumer psychologists had discovered two decades earlier: users are not rational decision makers in a utilitarian sense. When people decide to adopt (or buy) a new system, this is only partly driven by their expectation of productivity. These additional expectations are commonly called *hedonistic values* and cover a broad class of human needs, such as:
+However, starting with the 1990s, wave after wave of novel electronic entertainment systems and digital gadgets rolled over the comsumer mass market. The purpose of a video recorder or a smartphone is to deliver joy ... and to be sold in large batches. The sole purpose  of a commercial website is to sell and nothing else. With the new millenium, design researchers began to recognize what consumer psychologists had discovered two decades earlier: users are not rational decision makers in a utilitarian sense. When people decide to adopt (or buy) a new system, this is only partly driven by their expectation of productivity. These additional expectations are commonly called *hedonistic values* and cover a broad class of human needs, such as:
 
 + positive emotions
 + expression of self
@@ -1782,30 +1849,34 @@ However, starting with the 1990s, wave after wave of novel electronic entertainm
 + aesthetic perception
 + personal growth
 
-Whether or not these concepts are well-defined from a psychological point-of-view is beyond the scope of this book. What matters is that these concepts are so elusive that sincere researchers have not yet found objective criteria to measure them. Instead, almost everyone resorts to use of *self-report rating scales*, like this one:
+Whether or not these concepts are well-defined from a psychological point-of-view is beyond the scope of this book. What matters is that these concepts are so elusive that the most sincere researchers have not yet found objective criteria to measure them. Instead, almost everyone resorts to use of *self-report rating scales*, like this one:
 
 How beautiful do you perceive the user interface to be?
 
 unattractive 1 -- 2 -- 3 -- 4 -- 5 a piece of art
 
-If you use a 7 point rating scale, asking for, let's say, perceived beauty, the following might happen in the mind of your participant:
+If you use a 5 point rating scale like this one to measure perceived beauty, participants have to convert their guts feeling into a number, which involves the following three processes somewhere in their minds:
 
 1. anchoring
 1. introspection
 1. binning
 
-By *anchoring* participants establish an idea of how ugly or beautiful something has be to get a 1 or a 5. These imaginary endpoints define the *absolute range* of the rating scale. The researcher might early on give explicit or implicit cues to let the participant guess the range the researcher has in mind. If an experiment is overtly about webdesign, then probably "very ugly" means the least attractive commercial website the participant can think of. However, participants that mature enough to remember web design in its infancy (say the early attempts of disney.com), they may end up with a lower anchor than today's kids. If too few cues are given upfront, participant will probably adjust their anchors to the stimuli they see throughout the experiment. Probably, it will make a difference for what 1 or 5 mean, when the  set of stimuli contain just websites, or websites  *and* impressionist paintings *and* screenshots from 1980 splatter movies. 
+By *anchoring* participants establish an idea of how ugly or beautiful something has be to get an extreme rating of 1 or 5. These imaginary endpoints define the *absolute range* of the rating scale. The researcher might early on give explicit or implicit cues to let the participant guess the range the researcher has in mind. If an experiment is overtly about web design, then probably "very ugly" means the least attractive commercial website the participant can think of. However, participants old enough to remember web design in its infancy (say the early attempts of disney.com), they may end up with a lower anchor than today's kids. If too few cues are given upfront, participant will probably adjust their anchors to the stimuli they see throughout the experiment. Probably, it will make a difference for what 1 or 5 mean, when the  set of stimuli contain just websites, or websites  *and* impressionist paintings *and* screenshots from 1980 splatter movies.
 
-By *introspection* participants intuitively assess the intensity of their *real feelings* as compared to the anchors. Reportedly, this process can be influenced by:
-    1. visual simplicity
-    2. prototypicality
-    3. second exposure
-    4. Gestalt principles
-    5. fluency of processing
-    6. attribute substitution heuristics
-    7. color aesthetics
-    8. fashion
-    9. previous stimuli
+By *introspection* participants intuitively assess the intensity of their *real feelings* as compared to the anchors. Reportedly, feelings are influenced by:
+
+1. visual simplicity
+2. prototypicality
+3. second exposure
+4. Gestalt principles
+5. fluency of processing
+6. attribute substitution heuristics
+7. color aesthetics
+8. fashion
+9. previous stimuli
+10. current mood
+11. a person's history
+12. and cultural background
     
 By *binning* the participant mentally divides the absolute range into five categories that are either fuzzy or defined by stereotypes, like "It must look at least as elegant as the website of Mapple to get a 4." 
 
@@ -1828,9 +1899,9 @@ Part <-
           "D", .5, )
 ```
 
-Many unkowns are in the game. Only one special cases we can alleviate with the multilevel modelling tools in our hands. Anchoring can (but not necessarily does) result in a constant *shift* between participants. Compare participants A and B: A collects almost all stimuli in categories 2, 3 and 4, whereas B uses 3, 4 and 5.  Obviously, this is nothing else than a participant-level intercept random effect.
+Many unkowns are in the game. Only one special cases we can alleviate with the multilevel modelling tools in our hands. Anchoring can (but not necessarily does) result in a constant *shift* between participants. Compare participants A and B: A collects almost all stimuli in categories 2, 3 and 4, whereas B uses 3, 4 and 5.  This is not much else than a participant-level intercept random effect. Unfortunately, the situation can be more difficult than that. When participants differ in how extreme they set their endpoints, like  C and D, than their responses will differ in variance. The maximum variance, however, will be found in participant E. 
 
-Unfortunately, the situation can be more difficult than that. When participants differ in how extreme they set their endpoints, like  C and D, than their responses will differ in variance. The maximum variance, however, will be found in participant E. To speak of a real case: In the IPump study, a single item rating scale was used to measure mental workload. The results suggest that all participants used the lower range of the scale, but differed vastly in where they set their upper point. Figure XY orders participants by the maximum value they used. This is obviously related to variance, but almost not with location. Unfortunately, we do not even see the familiar pattern of variance increasing with magnitude.
+To speak of a real case: In the IPump study, a single-item rating scale was used to measure mental workload. The results suggest that all participants used the lower range of the scale, but differed vastly in where they set their upper point. Figure XY orders participants by the maximum value they used. This is obviously related to variance, but seemingly not so much with location. It does not suffice to use a response distribution with mean-variance relationship, as we used to. All these issues make rating scales peculiar and we should not pretend they have the same neat arithmetic properties as objective measures. 
 
 ```{r}
 attach(IPump)
@@ -1848,26 +1919,24 @@ D_pumps %>%
 detach(IPump)
 ```
 
-All these issues make rating scales peculiar and we should not pretend they have the same neat arithmetic properties as objective measures. In particular, it is highly problematic to make absolute and relative quantitative statements. 
+Setting the idiosyncracies rating scales responses aside, how does a common rating scale appear in our framework of link functions and patterns of randomness? Rating scales are bounded on two sides and we already know what that means: a suitable model for rating scales will likely contain a logit link function and a distribution of randomness that is bounded on two sides.
 
-Setting these issues aside, how does a common rating scale look like in our framework of link functions and patterns of randomness? Rating scales are bounded on two sides and we already know what that means: a suitable model for rating scales will likely contain a logit link function and a distribution of randomness that is bounded on two sides.
+A real problem with rating scales is that they often are discrete. Most scales force participants to give their answer as a choice between five or seven ordered levels. When the response variable has just a few levels, *ordinal regression* is a good choice. Ordinal regression itself is a generalization of logistic regression. 
 
-A real problem with rating scales is that they are discrete. Most scales force participants to give their answer as a choice between five or seven ordered levels. When the response variable has just a few level, *ordinal regression* applies. Ordinal regression is a generalization of logistic regression where the levels are represented as the thresholds between them. However, if it is true that your response variable has just five or seven levels, it is very likely you have made a mistake in your research and applied a one-item rating scale. (For example, researchers on the Technological Acceptance Model do that a lot. And we did in the infusion pump study). From a psychometric point of view, one-item rating scales are a bad idea, for two reasons, at least:
+However, with most properly designed self-report instruments, a scale comprises several items, because only that can sufficiently reduce measurement error and allow for in-depth psychometric assessments. Take the well-known Cronbach $\alpha$, which assesses reliability of a scale by correlating every items score with the sum score. Obviously, that only makes sense when there are multiple items. 
+While frokm a psychometric perspective, single-item scales are susceptible, there can be situations where a researcher may use a validated single item scale for pragmatic reasons. Especially, when measures happen in situ, such as during a usability test or even a real operation, being brief and unobtrusive might be more important than good quality of measures.
 
-1. The measurement error is not reduced by multiple measures.
-1. Essential psychometric properties (like reliability) are difficult or impossible to assess.
+<!-- 40 write a separate subsection on multilevel models with multi-item scales -->
 
-Still, we can imagine situations where a researcher may use a validated single item scale for pragmatic reasons. Especially, when measures happen in situ, such as during a usability test or even a real operation, being brief and unobtrusive might be more important than good quality of measures.
-
-The other possibility is that you are building a psychometric multi-level model, where a multi-item rating scale  is considered a sample from a population of items. That is actually a very good idea, as the item-level random effects control for differences in item location. For example, the following item is likely to produce generally lower beauty ratings than the one shown earlier, because the anchors have been moved downwards:
+With multi-item rating scales, one also has the possibility to build a psychometric multi-level model, where items are considered a sample of a population of possible items. That is actually a very good idea, as the item-level random effects control for differences in item location. For example, the following item is likely to produce generally lower beauty ratings than the one shown earlier, because the anchors have been moved downwards:
 
 How beautiful do you perceive the user interface?
 
 like a screenshot from a splatter movie 1 -- 2 -- 3 -- 4 -- 5 quite attractive
 
-Most scales have multiple items and most people just use the sum score as their response variable. The sum score is still binned, but more finely grained so. A sum score over three seven-binned items already has 21 bins, and one might already be willing to regard it continuous. Furthermore, there actually is no strong reason to use binned rating scales, at all. So called *visual analog scales* let participants make continuous choices by either drawing a cross on a line or move a slider control.
+Unless one builds such a psychometric multi-level model, ordinal regression is not very suitable for multi-item scales and here is why: The sum (or mean) score The sum score is still binned, but more finely grained so. A sum score over three seven-binned items already has 21 bins, which would result in an inflation of number of parameters in ordinal regression. 
 
-For sum scores and visual analogue scales, the problem of choice reduces to a logit link function and a continuous distribution bounded on both sides. That is precisely what *beta regression* does. And, as we shall see, this distribution is flexible enough to smooth over several of the rating scale pathologies that we just discussed.
+As a rescue one might well regard a measure with 21 bins  as continuous. Furthermore, there actually is no strong reason to use binned rating scales, at all. So called *visual analog scales* let participants make continuous choices by either drawing a cross on a line or move a slider control. For sum scores and visual analogue scales, the problem of choice reduces to a logit link function (they still have two boundaries) and a continuous distribution bounded on both sides. That is precisely what is behind *beta regression* and, as we shall see, this distribution is flexible enough to smooth over several of the rating scale pathologies that were just discussed.
 
 
 <!--Moreover, they are not directly linked 
@@ -1915,7 +1984,7 @@ M_ord_1 <-
 
 <!--We have to keep in mind, though, that the constant shift of thresholds is an assumption, which may fail. For example, when participants choose different anchor points for their judgements, such as in the IPump study, this is no longer the case. [WHY NOT?] -->
 
-```{r results = "asis"}
+```{r}
 fixef(M_ord_1)
 ```
 
@@ -1925,23 +1994,28 @@ C_fixef <- round(fixef(M_ord_1)$center, 1)
 
 
 The six intercepts correspond with the thresholds between the seven levels. It is no coincidence that the intercept estimates increase by order, as they are cumulative (the "c" in cratio). The first intercept estimate represents (the logit of) the proportion of responses $y_i \leq 1$, the second $y_i \leq 2$ etc.
-The Design effect has the usual interpretation as compared to logistic regression, an increase in logit. The only difference is that it refers to all sic reference points. The expected proportion of responses equal to or smaller than 2 for design A  is:
+The Design effect has the usual interpretation as compared to logistic regression, an increase in logit. The only difference is that it refers to all six reference points. The expected proportion of responses equal to or smaller than 2 for design A  is:
 
-$$\pi(y_i \leq 2|A) = \\
+$$
+\pi(y_i \leq 2|A) = \\
 \text{logit}^{-1}(\beta_{0[2]}) = \\ 
 \text{logit}^{-1}(`r C_fixef[2]`) = \\
-`r inv_logit(C_fixef[2])`$$
+`r inv_logit(C_fixef[2])`
+$$
 
 The expected proportion of responses equal to or smaller than 2 for design B  we get by the usual linear combination:
 
-$$\pi(y_i \leq 2|B) = \\
+$$
+\pi(y_i \leq 2|B) = \\
 \text{logit}^{-1}(\beta_{0[2]} + \beta_1) = \\ 
 \text{logit}^{-1}(`r C_fixef[2] + C_fixef[7]`) = \\
-`r inv_logit(sum(C_fixef[c(2,7)]))`$$
+`r inv_logit(sum(C_fixef[c(2,7)]))`
+$$
 
 
+All coefficients are shifting all threshold by the same amount (on the linear predictor scale). You can picture this as a single puppetier controlling multiple puppets by just one stick, making them dance in sync. As long as the ordinal scale has only a low number of bins, that keeps the number of parameters at a reasonable level. Just imagine, you were estimating an ordinal multilevel model and all participant-level effects were five or sevenfolded, too. However, the equidistancy of effects on bin thresholds is an assumption by itself, and in the presence of response styles on rating scales, it cannot be taken for granted.
 
-So, any effects are implemented as shifting all threshold by the same amount on the linear predictor scale. In particular, when building a multilevel model, that also holds for all intercept and slope random effects. Ony may argue whether this is a defendable assumption, but at least, the model is reasonably parsimomous. Conceptually, the ordinal model appears very snug to the structure in the data. It does not wipe over the fact that the response is discrete and the thresholds represent the order. Conveniently, effects are represented by a single estimate, which one can use to communicate direction and certainty of effects. On the downside, communicating absolute performance is more complicated, as there are just a set of thresholds, rather than a straight forward group mean.
+Besides that, the ordinal model appears very snug to the structure of the data. It does not wipe over the fact that the response is discrete and the thresholds represent the order. Conveniently, effects are represented by a single estimate, which one can use to communicate direction and certainty of effects. On the downside, communicating absolute performance (that is, including the intercept) is more complicated. When presenting predictions from an ordinal model one actually has to present all thresholds, rather than a single mean. In practice that probably is less relevant than one might think at first, because predictions on self-report scales is less useful than metric performance data. Ordinal data also does not lend itself so much to further calculations. For example, you can use ToT measures on infusion pumps in calculating the required staffing of an intensive care unit, because seconds are metric and can be summed and divided. In contrast, it does not make sense to calculate the cognitive workload of a team of nurses by summing their self-report scores.  The only possibility is to compare the strengths of predictors, but that does not require predictions. 
 
 
 ```{r opts.label = "future"}
@@ -1972,9 +2046,11 @@ detach(BrowsingAB)
 
 ### Beta regression
 
-Probably, one of the most futile discussions in methodology research is whether one should use a four, five or seven binned Likert scale. From a pure measurement point of view, more bins give better resolution. The ultimate consequence is to not use binning at all, but use continuous rating scales. At the same time, many rating responses come from multiple item scales, which multiplies the number of bins. It still seems reasonable to have seven intercepts for a single item scale, but who would want 14 or 21 for a two, respectivcely three-item scale? In the case of a (quasi)continuous rating response, a continuous error distribution is needed, that has a lower and an upper boundary. Currently, the only choice is beta distribution, which requires the response to be between 0 and 1. As usual with double boundaries, the logit link function applies.
+One of the most futile discussions in methodology research to my mind is whether one should use a four, five or seven binned Likert scale. From a pure measurement point of view, more bins give better resolution, the ultimate consequence being to bin at all, that is using continuous rating scales. At the same time, many rating responses come from multiple item scales, which multiplies the number of bins. Speaking of ordinal regression, it seems reasonable to have seven intercepts for a single item scale, but who would want 14 or 21 for a two or three-item scale? And most scales have more items than that, which is good from a psychometric perspective. 
 
-We demonstrate beta regression on rating scales at the example of the CUE8 study. This study aimed at assessing whether remote usability testing arrives at the same ToT measures as in moderated sessions. As we have seen in [CROSSREF], the difference is marginal (and cheating is much more a problem). Rating scales, on the other hand, are susceptible for all kinds of cognitive and social biases. Therefore, a golden rule for user test moderators is to constantly remind participants to not blame themselves for errors. Reportedly, test moderators also do help participants (after counting to 10) in order to minimize frustration (and maximize information flow). What could the presence or absence of a moderator do to satisfaction ratings? Perhaps, remote participants feel the lack of assurance and support as higher levels of frustration. Furthermore, it is not unlikely that satisfaction ratings are sensitive to idiosyncratics in the process and setting of the user test, such that we could even expect differences between teams.
+In fact, psychometric research in the process of developing rating scales routinely uses a method called *confirmatory factor analysis*, which derives from the Gaussian linear model and inherits its assumptions. Not surprisingly, most research applying the very same instruments also use plain linear models. It seems fair enough to take a multi-item scale as a continuous measure, but given the framework of GLM, it is unnecessary (to put it mildly) to go along with the assumptions of Normality and linearity. While the link function for a double bounded response variable is simply the logit, the only missing ingredient is a double bounded error distribution. Enter beta distribution!
+
+We demonstrate beta regression on rating scales at the example of the CUE8 study. This study aimed at assessing whether remote usability testing arrives at the same ToT measures as in moderated sessions. As we have seen in [CROSSREF], the difference is marginal. But, rating scales are susceptible for all kinds of cognitive and social biases. For that reason, a golden rule for user test moderators is to constantly remind participants to not blame themselves for errors. Reportedly, test moderators also do help participants (after counting to 10) in order to minimize frustration (and maximize information flow). What could the presence or absence of a moderator do to satisfaction ratings? Perhaps, remote participants feel the lack of assurance and support as higher levels of frustration. Furthermore, it is not unlikely that satisfaction ratings are sensitive to idiosyncratics in the process and setting of the user test, such that we could even expect differences between teams.
 
 
 <!--
@@ -2018,7 +2094,7 @@ sync_CE(M_ord_3, Env = BrowsingAB)
 ```
 -->
 
-Before we build the model, there are two issues to regard: first, the boundaries are 0 and 1, which requires a rescaling of responses into this interval. The SUS scores are on a scale from 0 to 100 and a divisor of 100 would produce the desired interval. Not just so, because second, the responses must lie *strictly between 0 and 1*, excluding values 0 and 1. On (quasi)continuous scales, it seems not very likely to have 0 or 1 as response, but it can happen. Indeed, participants in the CUE8 study have responded with a satisfaction rating of 100 quite often.
+Before we build the model, there are two issues to regard: first, the boundaries are 0 and 1, which requires a rescaling of responses into this interval. The SUS scores are on a scale from 0 to 100 and a divisor of 100 would produce the desired interval. Not just so, because second, the responses must actually lie *strictly between 0 and 1*, excluding the boundaries. On (quasi)continuous scales, it seems not very likely to have 0 or 1 as response, but it can happen. Indeed, participants in the CUE8 study have responded with a satisfaction rating of 100 quite often.
 
 
 ```{r include = F, eval = F}
@@ -2036,13 +2112,11 @@ detach(CUE8)
 
 A practical solution is to scale the responses in such a way as to avoid the two boundaries, which is what the following hack does.
 
-1. add a tiny value to all responses (e.g. 1)
+1. add a tiny value to all responses
 1. create a divisor by adding double that value to the maximum value the responses can take
 1. divide all responses by that divisor
 
-You may find it inappropriate to mangle a respnse variable in such an arbitrary way. However, keep in mind that the levels of ordinal responses are highly arbitrary. In terms of measurement theory, all transformations that maintain the order are permitted for ordinal scales.
-
-For the analysis, the data set was further reduced by averaging the scores across tasks and excluding probable cheaters with a ToT < 30s.
+You may find it inappropriate to mangle a response variable in such an arbitrary way. However, keep in mind that the levels of ordinal responses are highly arbitrary. In terms of measurement theory, all transformations that maintain the order are permitted for ordinal scales. For the following analysis, the data set was further reduced by averaging the scores across tasks and excluding probable cheaters with a ToT < 30s.
 
 
 ```{r}
@@ -2088,7 +2162,7 @@ fixef(M_5_bet)
 grpef(M_5_bet)
 ```
 
-Do participants in remote session feel less satisfied? There seems to be a  slight disadvantage, but we cannot confirm this with sufficient certainty. In contrast, the variation between teams is substantial, which indicates that SUS ratings are not independent of the particular setting. That is rather concerning for a widely used, an allegedly validated rating scale. 
+Do participants in remote sessions feel less satisfied? There seems to be a  slight disadvantage, but we cannot confirm this with sufficient certainty. In contrast, the variation between teams is substantial, which indicates that SUS ratings are not independent of the particular setting. That is rather concerning for a widely used, an allegedly validated rating scale. 
 
 Is that a realistic model for the SUS responses? Another glance at the violin plot suggests another pathology: the teams seem to differ in variation. In the closing section I will briefly demonstrate how to deal with differences in variance (rather than mean) by a *distributional model*.
 
@@ -2217,24 +2291,24 @@ sync_CE(M_6_bet, Env = CUE8)
 ```
 
 
-```{r results = "markup"}
+```{r}
 T_fixef <- 
   brms::fixef(M_6_bet)[,c(1,3,4)] %>% 
   as_data_frame(rownames = "fixef") %>% 
-  dplyr::rename(center = Estimate) %>% 
-  print()
+  dplyr::rename(center = Estimate)
+T_fixef
 ```
 
 
 The default behaviour of brm is that the scale parameter $\phi$ is on a log scale. As usual, lifting it to original scale by exponantiation makes it a multiplier. By $\exp(`r T_fixef$center[4]`) = `r exp(T_fixef$center[4])`$, we see that there is just a small difference between the two conditions. But, are there other differences between teams? The following table shows the scale multipliers for individual teams. All multipliers are closely arranged around 1, which means there is little differences. The SUS scale can safely be adminstsred in remote and moderated usability testing.
 
-```{r results = "markup"}
+```{r}
 T_ranef <-
   ranef(M_6_bet) %>%
   filter(nonlin == "phi") %>% 
   mutate_if(is.numeric, exp) %>% 
-  discard_redundant() %>% 
-  print()
+  discard_redundant()
+T_ranef
 ```
 
  
@@ -2283,8 +2357,8 @@ M_bet <-
 
 T_ranef <-
   ranef(M_bet) %>% 
-  filter(nonlin == "phi") %>% 
-  print()
+  filter(nonlin == "phi")
+T_ranef
 ```
 
 

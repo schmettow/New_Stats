@@ -182,7 +182,7 @@ After you have set up your R environment, you are ready to run your first R prog
 4. Run the code lines one-by-one and observe what happens (in RStudio: Ctrl-Enter)
 
 
-```{r first_simulation_1, opts.label = "rtut"}
+```{r first_simulation_1}
 ## Simulation of a data set with 100 participants 
 ## in two between-subject conditions
 N <- 100
@@ -190,9 +190,9 @@ levels <- c("control","experimental")
 Group <- rep(levels, N/2)
 age <- round(runif(N, 18, 35),0)
 outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
-Experiment <- data_frame(Group, age, outcome) %>% mascutils::as_tbl_obs()
+Experiment <- data_frame(Group, age, outcome)
 
-summary(Experiment)
+Experiment %>% sample_n(8)
 
 ## Plotting the distribution of outcome
 Experiment %>% 
@@ -320,7 +320,7 @@ R is currently the *lingua franca* of statistical computing. As a programming la
 We just applied our own rule of outlier removal to the data. Others may consider this rule invalid or arbitrary. Disagreement is virtue in science and one can only disagree with what one actually sees. In R, the researcher *formally reports* what precisely has been done with the data. For example, the same outlier removal rule is unambiguously specified by the following code (the first line just simulates some data).
 
 
-```{r, opts.label = "rtut", results = "markup"}
+```{r}
 D <- data_frame(score = c(1, 2, 4, 3, 5, 6, 50, 800))
 
 D %>% filter(score < mean(score)) 
@@ -375,13 +375,13 @@ Any statistical analysis can be thought of as a production chain. You take the r
 
 *Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name chosen by the programmer. By its name, a stored object can be found back at any time. Two basic operations apply for all objects: an object is stored by *assigning* it a name and it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
-```{r assigning, opts.label = "rtut"}
+```{r assigning}
 N_obs <- 100
 ```
 
 Now, that the value is stored, you can call it any time by simply calling its name:
 
-```{r calling, opts.label = "rtut"}
+```{r calling}
 N_obs
 ```
 
@@ -389,7 +389,7 @@ Just calling the name prints the value to Console. In typical interactive progra
 
 Often, what you want is to do calculations with the value. For example, you have a repeated measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
 
-```{r, opts.label = "rtut"}
+```{r}
 N_Obs <- 100
 N_Part <- 25
 avg_N_Obs <- N_Obs/N_Part
@@ -398,14 +398,14 @@ avg_N_Obs
 
 Objects can exist without a name, but are volatile, then. They cannot be used any further. The following arithmetic operation does create an object, a single number. For a moment or so this number exists somewhere in your computers memory, but once it is printed to the screen, it is gone. Of course, the same expression can be called again, resulting in the same number. But, strictly, it is a different object.
 
-```{r, opts.label = "rtut"}
+```{r}
 N_Obs/N_Part ## gone after printing
 N_Obs/N_Part ## same value, different object
 ```
 
 There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the purpose of demonstration and you will rarely use it in everyday programming tasks:
 
-```{r, opts.label = "rtut"}
+```{r}
 tracemem(N_Obs/N_Part)
 tracemem(N_Obs/N_Part)
 ```
@@ -418,7 +418,7 @@ Notice the `[1]` that R put in front of the single value when printing it? This 
 
 For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:
 
-```{r mean, opts.label = "rtut"}
+```{r mean}
 
 X <- rnorm(100, 2, 1)
 mean(X)
@@ -435,7 +435,7 @@ Objects can be of various *classes*. In R the common basic classes are: logical,
 
 Objects of type *logical* store the two levels `TRUE`, `FALSE`, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
 
-```{r class_logic, opts.label = "rtut"}
+```{r class_logic6}
 
 Apple <- TRUE
 Pear  <- FALSE
@@ -465,7 +465,7 @@ F    <- "All gods existed before the big bang"
 
 The class `numeric` stores real numbers and is therefore abundant in statistical programming. All the usual arithmetic operations apply: 
 
-```{r class_num_1, opts.label = "rtut"}
+```{r class_num_1}
 a <- 1.0
 b <- a + 1
 sqrt(b)
@@ -474,7 +474,7 @@ sqrt(b)
 
 Objects of class `integer` are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices. 
 
-```{r class_int_1, opts.label = "rtut"}
+```{r class_int_1}
 friends <- c(anton = 1, 
              berta = 3, 
              carlo = 2)
@@ -484,7 +484,7 @@ order(friends)
 
 The usual arithmetic operations apply, although the result of operation may no longer be `integer`, but `numeric`
 
-```{r class_int_2, opts.label = "rtut"}
+```{r class_int_2}
 N <- 3
 sum_of_scores <- 32
 mean_score <- 32/3
@@ -494,7 +494,7 @@ class(mean_score)
 
 Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value `TRUE` in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will use in [LM: dummy variables].
 
-```{r logical_arithmetics, opts.label = "rtut"}
+```{r logical_arithmetics }
 TRUE + TRUE
 sqrt(3 + TRUE)
 is_car <- c(TRUE, TRUE, FALSE) ## bicycle otherwise
@@ -526,7 +526,7 @@ Statistical analyses deal with real world data which ever so often is messy. Fre
 
 Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any `NA` values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.
 
-```{r mean_NA, opts.label = "rtut"}
+```{r mean_NA }
 
 clicks <- c(3, NA, 2)
 mean(clicks)
@@ -586,7 +586,7 @@ M_2 = stan_glm(X ~ 1,
 
 R brings the usual set of arithmetic operators, like `+`, `-`, `*`, `/` and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in these two ways:
 
-```{r operators_are_functions, opts.label = "rtut"}
+```{r operators_are_functions }
 1 + 2
 `+`(1,2)
 ```
@@ -620,13 +620,13 @@ R knows the `data.frame` objects to store variable-by-observation tables. Data f
 Data frames are objects. By just calling a data frame it gets printed to the screen. This is a good moment to reflect on one idiosyncrasy in R, a feature, of course.
 R is primarily used interactively, which has the immense advantage that the programmer can incrementally build the data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call `Experiment`:
 
-```{r df_call, opts.label = "rtut"}
+```{r df_call }
 Experiment
 ```
 
 This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above.
 
-```{r df_call_print, opts.label = "rtut.nr", results = "markup"}
+```{r df_call_print, opts.label = "rtut.nr"}
 print(Experiment)
 
 ```
@@ -639,14 +639,14 @@ The dedicated print function does what way back a developer thought would be the
 
 Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
-```{r opts.label = "rtut", results = "markup"}
-summary(Experiment)
+```{r}
+print(summary(Experiment))
 ```
 
 
 The `str` (structure) command works on any R object and displays the hierarchical structure (if there is one):
 
-```{r opts.label = "rtut", results = "markup"}
+```{r}
 str(Experiment)
 ```
 
@@ -655,7 +655,7 @@ Data frames store variables, but statistical procedures operate on variables. We
 
 Internally, data frames are a collection of "vertical" vectors that are equally long. Being a collection of vectors, the variables of a data frame can be of different classes, like `character`, `factor` or `numeric`. In the most basic case, you want to calculate a statistic for a single variable out of a data frame. The `$` operator pulls the variable out as a vector:
 
-```{r opts.label = "rtut"}
+```{r  }
 mean(Experiment$outcome)
 ```
 
@@ -665,7 +665,7 @@ As data frames are rectangular structures, you can also access individual values
 + the first to third elements of _Group_
 + the complete first row
 
-```{r df_slicing, opts.label = "rtut", results = "markup"}
+```{r df_slicing}
 Experiment[  1, 3]
 Experiment[1:3, 2]
 Experiment[  1,  ]
@@ -676,7 +676,7 @@ Addressing one or more elements in square brackets, always requires two elements
 There is an important difference, however, when using R's classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with  `data.frame`, when the addressed elements expand over multiple columns, like 
 `Experiment[, 1:2]`, the result will be a `data.frame` object, too. However, when slicing a single column, the result is a vector:
 
-```{r df_classic_odd, opts.label = "rtut", results = "markup"}
+```{r df_classic_odd}
 Exp_classic <- as.data.frame(Experiment)
 Exp_classic[1:2,1:2]  ## data.frame
 Exp_classic[1,]       ## data.frame
@@ -700,7 +700,7 @@ Experiment$Group      ## the same
 
 Sometimes, it may be necessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a data frame can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to `NA`.
 
-```{r df_injecting, opts.label = "rtut", results = "markup"}
+```{r df_injecting}
 ## injecting
 Experiment[2,      "outcome"] <- 660
 Experiment[6,      "outcome"] <- 987
@@ -790,7 +790,7 @@ load("BrowsingAB.Rda")
 
 In R, *environments* are containers for collections of objects. If an object `BAB1` is placed in an environment `BrowsingAB`, it can be called as `BrowsingAB$BAB1`. This way, no brevity is gained. Another way to assess objects in an environment is to *attach the environment first* as:
 
-```{r environ_1, opts.label = "rtut"}
+```{r environ_1 }
 attach(BrowsingAB)
 BAB1 %>% as_tbl_obs()
 detach(BrowsingAB)
@@ -804,7 +804,7 @@ Calling `attach` gets you into the *namespace* of the environment (formally corr
 All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called `simulate`, is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
 Generally, calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.
 
-```{r CE_simulate_1, opts.label = "rtut"}
+```{r CE_simulate_1 }
 simulate()  %>% as_tbl_obs() ## reproduces the data frame D_1
 simulate(N = 6)  %>% as_tbl_obs() ## simulates first 6 participants only
 ```
@@ -812,7 +812,7 @@ simulate(N = 6)  %>% as_tbl_obs() ## simulates first 6 participants only
 
 Furthermore, once you delve deeper into R, you can critically inspect the simulation function's code for its behavioral and psychological assumptions (working through the later chapters on data management and simulation will help).
 
-```{r CE_simulate_2, opts.label = "rtut"}
+```{r CE_simulate_2 }
 simulate ## calling a function without parantheses prints its code
 detach(Reading)
 ```
@@ -850,7 +850,7 @@ ORPO %>%
 
 The correct way of setting up the data frame is:
 
-```{r opts.label = "table", results = "markup"}
+```{r}
 ORPO %>% 
   filter(Task == 1, Item == 1) %>% 
   mascutils::discard_redundant()
@@ -867,7 +867,7 @@ Using identifiers is good practice for several reasons. First, it reduces proble
 
 Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.
 
-```{r opts.label = "table", results = "markup"}
+```{r}
 ORPO %>% 
   sample_n(6) %>% 
   arrange(Part, Task, Design, Item)
@@ -884,14 +884,14 @@ The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for
 
 Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the data frame. Say, you want the variable _Group_ to be called _Condition_, omit the variable _age_ and store the new data frame as _Exp_. The `select` command does all this. In the following code the data frame `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
 
-```{r opts.label = "rtut"}
+```{r  }
 Exp <-  Experiment %>% 
   select(Condition = Group, outcome) %>% as_tbl_obs()
 ```
 
 Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers (>500) in the outcome variable. Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ on board) and add some filtering steps:
 
-```{r opts.label = "rtut"}
+```{r  }
 
 ## rename, then filtering
 Exp <-  
@@ -906,7 +906,7 @@ Exp %>% as_tbl_obs()
 
 During data preparation and analysis, new variables are created routinely. For example, the covariate is often shifted to the center before using linear regression:
 
-```{r opts.label = "rtut"}
+```{r  }
 mean_age = mean(Exp$age)
 Exp <- Exp %>% 
   mutate(age_cntrd = age - mean_age)
@@ -917,7 +917,7 @@ Exp %>% as_tbl_obs()
 
 Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the data frame, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
 
-```{r opts.label = "rtut", results = "markup"}
+```{r}
 Exp %>% 
   group_by(Condition) %>% 
   summarize(mean = mean(outcome),
@@ -942,7 +942,7 @@ The ggplot2 plotting system knows a full set of geometries, like:
 
 For a brief demonstration of ggplots basic functionality, we use the `BAB1` data set of the BrowsingAB case. We attach the case environment and use the `str` command to take a first look at the data:
 
-```{r opts.label = "rtut"}
+```{r  }
 attach(BrowsingAB)
 BAB1 %>% as_tbl_obs()
 ```
@@ -951,7 +951,7 @@ The BrowsingAB case is a virtual series of studies, where two websites were comp
 
 We begin with a plot that shows the association between age of the participant and ToT. Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a *scatter plot*. 
 
-```{r build_ggpl_2, opts.label = "rtut"}
+```{r build_ggpl_2 }
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT)) +
   geom_point()
@@ -984,7 +984,7 @@ BAB1 %>%
 
 The function `aes` creates a mapping where the aesthetics per variable are given. When call `aes` directly, we see that it is just a table.
 
-```{r opts.label = "rtut"}
+```{r  }
 aes(x = age, y = ToT)
 ```
 
@@ -992,7 +992,7 @@ One tiny detail in the above chain has not yet been explained: the `+`. When cho
 
 Let's move on with a slightly different situation that will result in a different geometry. Say, we are interested in the distribution of the time-on-task measures under the two designs. We need a geometry, that visualizes the distribution of quantitative variables split by a grouping variable, factor. The box plot does the job:
 
-```{r  opts.label = "rtut"}
+```{r   }
 BAB1 %>% 
   ggplot(aes(x = Design,  y = ToT)) +
   geom_boxplot()
@@ -1003,7 +1003,7 @@ The box plot maps ToT to y (again). The factor Design is represented as a split 
 
 Now, we combine all three variables in one plot: how does the association between ToT and age differ by design? As we have two quantitative variables, we stay with the scatter plot for now. As we intend to separate the groups, we need a property of points to distinguish them. Points offer several additional aesthetics, such as color, size and shape. We choose color, and add it to the aesthetic mapping by `aes`. Note, that it does not matter whether you use the British or American way of writing (colour vs. color).
 
-```{r  opts.label = "rtut"}
+```{r   }
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point()
@@ -1011,7 +1011,7 @@ BAB1 %>%
 
 Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the box plot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For scatter plots, a geometry that does the job of summarizing the trend is `geom_smooth`. This geometry summarizes a cloud of points by drawing a LOESS-smooth line through it. Note how the color mapping is applied to all geometry layers. 
 
-```{r  opts.label = "rtut"}
+```{r   }
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point() +
@@ -1022,7 +1022,7 @@ We see a highly interesting pattern: the association between age and ToT follows
 
 Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *faceting*. A facet splits the data by a grouping variable and creates one single plot for every group:
 
-```{r  opts.label = "rtut"}
+```{r   }
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point() +
@@ -1032,7 +1032,7 @@ BAB1 %>%
 
 See, how the `facet_grid` command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:
 
-```{r  opts.label = "rtut"}
+```{r   }
 BAB1 %>% 
   ggplot(aes(x = age,  y = ToT)) +
   geom_point() +
@@ -1054,7 +1054,7 @@ attach(Chapter_GSR)
 ```
 
 
-```{r opts.label = "rtut"}
+```{r  }
 N_Obs <- 20
 set.seed(42)
 Exp <-
@@ -1160,7 +1160,7 @@ The most user-friendly way to achieve both, a good looking report and full trans
 
 Markdown implements a simple markup language, with that you can typset simple, structured  texts in a plain ASCII editor. Later in the workflow, such a markup document is transformed into one of various output formats, that are rendered by the respective programs, such as Microsoft Word or an HTML browser.
 
-![A minimal statistical report in markdown](figures/markup_minimal_report.png)
+![A minimal statistical report in markdown](Illustrations/markup_minimal_report.png)
 
 
 The above text is an alternation of markup text and *chunks*, those  weirdly enclosed pieces of R code. While the text is static, the chunks are processed by the knitr engine, evaluating the enclosed R code and knitting the output into a document. Very conveniently, when the output is a figure, it will be inserted into the document right away. The `kable`  command from the knitr package, in turn, produces neatly rendered tables from data frame objects. By default, the R code is shown, too, but that can be customized. 

@@ -193,6 +193,14 @@ Sec99$simulate <-
     Sec99 %>% as_tbl_obs()
   }    
 
+## missing values in age
+
+Sec99$Ver20$age[c(6, 19, 73)] <- NA
+
+## Gender
+Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
+                             "male", "female")
+
 (Sec99$Ver20 <- Sec99$simulate())
 
 qplot(Sec99$Ver20$age)
@@ -1405,7 +1413,9 @@ Stroop_comp$simulate <-
     Obs
   }
 
-Stroop_comp$D_1 <-  Stroop_comp$simulate()
+Stroop_comp$D_1 <-  
+  Stroop_comp$simulate() %>% 
+  
 
 Stroop_comp$G_1 <-
   Stroop_comp$D_1 %>%
@@ -1560,11 +1570,12 @@ new_syncenv("Hugme")
 
 ```{r hugme_load_data, opts.label = "sim"}
 load("external_data/HUG3/HUG3.Rda")
+load("external_data/HUG3/Q3.Rda")
 
-Hugme$D_hugme <- HUG3 %>% 
+Hugme$D_hugme <- 
+  HUG3 %>% 
   rename(Part = Subj) %>% 
-  mutate(Obs = row_number(),
-         RT = RT/1000,
+  mutate(RT = RT/1000,
          WordCat = case_when(
            HUG  == "h" ~ "hedo",
            HUG  == "u" ~ "util",
@@ -1572,10 +1583,56 @@ Hugme$D_hugme <- HUG3 %>%
          ),
          WordGeek = WordCat == "geek",
          PrimeGeek = primeCat == "geek") %>% 
-  select(Obs, Part, Gender, Age, GeekField = geekField, starts_with("z"), 
-         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek,
-         correct, RT) %>% 
-  as_tbl_obs()
+  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
+         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
+  mascutils:::as_tbl_obs.tbl_df()
+
+## For chapter data modelling
+
+## Raw data
+
+Hugme$R_quest <- 
+  Hugme$Q3 %>%
+  select(UserID = Subj,
+         Gender, Age, Geek01:GeekR34, NCS01:NCS18) %>% 
+  as.tibble()
+
+## Entities
+
+Hugme$D_Part <- 
+  Hugme$Q3 %>% 
+  as.tibble() %>% 
+  select(Part = Subj, gender = Gender, age = Age) %>% 
+  mutate(Part = as.factor(Part),
+         age = as.integer(age))
+
+Hugme$D_Items <- 
+  Hugme$Q3 %>% 
+  select(Geek01:Geek34, NCS01:NCS18) %>% 
+  gather(Item, response) %>% 
+  mutate(Scale = str_extract(Item, "Geek|NCS"))
+
+## Observations
+
+Hugme$D_exp <- Hugme$D_hugme
+
+## Scores
+
+
+
+## Relationships
+
+## questionnaires
+
+Hugme$HUG_resp <- 
+  Q3 %>% 
+  select(Part = Subj, Geek01:GeekR34, NCS01:NCS18) %>% 
+  gather(Item, rating, -Part) %>% 
+  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
+  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
+  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>% 
+  arrange(Part, Scale, Item) %>% 
+  mascutils:::as_tbl_obs.tbl_df()
 
 ```
 
@@ -1585,7 +1642,10 @@ Hugme$D_hugme <- HUG3 %>%
 save(Hugme, file = "Cases/hugme.Rda")
 write_sav(Hugme$D_hugme, "Data/hugme.sav")
 write_csv(Hugme$D_hugme, "Data/hugme.csv")
-
+write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
+write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
+write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
+write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
 ```
 
 

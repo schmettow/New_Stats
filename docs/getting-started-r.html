@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>New statistics for the design researcher</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="New statistics for the design researcher" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="New statistics for the design researcher" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  
+
+<meta name="author" content="Martin Schmettow">
+
+
+<meta name="date" content="2018-11-20">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="bayesian-statistics.html">
+<link rel="next" href="linear-models.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-this-book-is-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#the-empirical-design-researcher"><i class="fa fa-check"></i><b>1.1.1</b> The empirical design researcher</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#the-experimentalist"><i class="fa fa-check"></i><b>1.1.2</b> The experimentalist</a></li>
+<li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#the-applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#assumptions"><i class="fa fa-check"></i><b>1.2</b> Assumptions</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read-this-book"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-research.html"><a href="design-research.html"><i class="fa fa-check"></i><b>2</b> Elements of quantitative design research</a><ul>
+<li class="chapter" data-level="2.1" data-path="design-research.html"><a href="design-research.html#studies"><i class="fa fa-check"></i><b>2.1</b> Studies</a></li>
+<li class="chapter" data-level="2.2" data-path="design-research.html"><a href="design-research.html#observations-and-measurestbc"><i class="fa fa-check"></i><b>2.2</b> Observations and measures[TBC]</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="design-research.html"><a href="design-research.html#interaction-sequences"><i class="fa fa-check"></i><b>2.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-research.html"><a href="design-research.html#performance-measures"><i class="fa fa-check"></i><b>2.2.2</b> performance measures</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-research.html"><a href="design-research.html#experience-tbd"><i class="fa fa-check"></i><b>2.2.3</b> experience [TBD]</a></li>
+<li class="chapter" data-level="2.2.4" data-path="design-research.html"><a href="design-research.html#design-features-tbd"><i class="fa fa-check"></i><b>2.2.4</b> design features [TBD]</a></li>
+<li class="chapter" data-level="2.2.5" data-path="design-research.html"><a href="design-research.html#the-human-factor-tbd"><i class="fa fa-check"></i><b>2.2.5</b> the human factor [TBD]</a></li>
+<li class="chapter" data-level="2.2.6" data-path="design-research.html"><a href="design-research.html#situations-tbd"><i class="fa fa-check"></i><b>2.2.6</b> situations [TBD]</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="design-research.html"><a href="design-research.html#decision_making"><i class="fa fa-check"></i><b>2.3</b> Decision making under uncertainty</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="design-research.html"><a href="design-research.html#measuring-uncertainty"><i class="fa fa-check"></i><b>2.3.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="2.3.2" data-path="design-research.html"><a href="design-research.html#betting-on-designs"><i class="fa fa-check"></i><b>2.3.2</b> Betting on designs</a></li>
+<li class="chapter" data-level="2.3.3" data-path="design-research.html"><a href="design-research.html#case-e-commerce-ab"><i class="fa fa-check"></i><b>2.3.3</b> Case: e-commerce A/B</a></li>
+<li class="chapter" data-level="2.3.4" data-path="design-research.html"><a href="design-research.html#case99"><i class="fa fa-check"></i><b>2.3.4</b> Case: 99 seconds</a></li>
+<li class="chapter" data-level="2.3.5" data-path="design-research.html"><a href="design-research.html#prior-information"><i class="fa fa-check"></i><b>2.3.5</b> Prior information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a><ul>
+<li class="chapter" data-level="3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#descriptive-statistics"><i class="fa fa-check"></i><b>3.1</b> Descriptive statistics</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#frequencies"><i class="fa fa-check"></i><b>3.1.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#central-tendency"><i class="fa fa-check"></i><b>3.1.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#dispersion"><i class="fa fa-check"></i><b>3.1.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#associations"><i class="fa fa-check"></i><b>3.1.4</b> Associations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-inferential-statistics"><i class="fa fa-check"></i><b>3.2</b> Bayesian Inferential statistics</a></li>
+<li class="chapter" data-level="3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-probability-theory"><i class="fa fa-check"></i><b>3.3</b> Bayesian probability theory</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#some-set-theory"><i class="fa fa-check"></i><b>3.3.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.3.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#probability"><i class="fa fa-check"></i><b>3.3.2</b> Probability</a></li>
+<li class="chapter" data-level="3.3.3" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#certainty-as-probability"><i class="fa fa-check"></i><b>3.3.3</b> Certainty as probability</a></li>
+<li class="chapter" data-level="3.3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayes-theorem"><i class="fa fa-check"></i><b>3.3.4</b> Bayes theorem</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#statistical-models"><i class="fa fa-check"></i><b>3.4</b> Statistical models</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#predictions-and-likelihood"><i class="fa fa-check"></i><b>3.4.1</b> Predictions and likelihood</a></li>
+<li class="chapter" data-level="3.4.2" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#distributions"><i class="fa fa-check"></i><b>3.4.2</b> Distributions: patterns of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#bayesian-estimation"><i class="fa fa-check"></i><b>3.5</b> Bayesian estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="bayesian-statistics.html"><a href="bayesian-statistics.html#what-is-wrong-with-classic-statistics-tbc"><i class="fa fa-check"></i><b>3.6</b> What is wrong with classic statistics? [TBC]</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-r.html"><a href="getting-started-r.html"><i class="fa fa-check"></i><b>4</b> Getting started with R</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-r.html"><a href="getting-started-r.html#setting-up-the-r-environment"><i class="fa fa-check"></i><b>4.1</b> Setting up the R environment</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-cran-packages"><i class="fa fa-check"></i><b>4.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="4.1.2" data-path="getting-started-r.html"><a href="getting-started-r.html#installing-packages-from-github"><i class="fa fa-check"></i><b>4.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="4.1.3" data-path="getting-started-r.html"><a href="getting-started-r.html#first_program"><i class="fa fa-check"></i><b>4.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="4.1.4" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes"><i class="fa fa-check"></i><b>4.1.4</b> Bibliographic notes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-r.html"><a href="getting-started-r.html#learning-r-a-primer"><i class="fa fa-check"></i><b>4.2</b> Learning R: a primer</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="getting-started-r.html"><a href="getting-started-r.html#assigning-and-calling-objects"><i class="fa fa-check"></i><b>4.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="4.2.2" data-path="getting-started-r.html"><a href="getting-started-r.html#vectors"><i class="fa fa-check"></i><b>4.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="4.2.3" data-path="getting-started-r.html"><a href="getting-started-r.html#basic-object-types"><i class="fa fa-check"></i><b>4.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="4.2.4" data-path="getting-started-r.html"><a href="getting-started-r.html#operators-and-functions"><i class="fa fa-check"></i><b>4.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="4.2.5" data-path="getting-started-r.html"><a href="getting-started-r.html#storing-data-in-data-frames"><i class="fa fa-check"></i><b>4.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="4.2.6" data-path="getting-started-r.html"><a href="getting-started-r.html#import-export-and-archiving"><i class="fa fa-check"></i><b>4.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="4.2.7" data-path="getting-started-r.html"><a href="getting-started-r.html#case-environments"><i class="fa fa-check"></i><b>4.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="4.2.8" data-path="getting-started-r.html"><a href="getting-started-r.html#structuring-data"><i class="fa fa-check"></i><b>4.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="4.2.9" data-path="getting-started-r.html"><a href="getting-started-r.html#data-transformation"><i class="fa fa-check"></i><b>4.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="4.2.10" data-path="getting-started-r.html"><a href="getting-started-r.html#plotting-data"><i class="fa fa-check"></i><b>4.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="4.2.11" data-path="getting-started-r.html"><a href="getting-started-r.html#fitting-regression-models"><i class="fa fa-check"></i><b>4.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="4.2.12" data-path="getting-started-r.html"><a href="getting-started-r.html#knitting-statistical-reports"><i class="fa fa-check"></i><b>4.2.12</b> Knitting statistical reports</a></li>
+<li class="chapter" data-level="4.2.13" data-path="getting-started-r.html"><a href="getting-started-r.html#exercises-1"><i class="fa fa-check"></i><b>4.2.13</b> Exercises</a></li>
+<li class="chapter" data-level="4.2.14" data-path="getting-started-r.html"><a href="getting-started-r.html#bibliographic-notes-1"><i class="fa fa-check"></i><b>4.2.14</b> Bibliographic notes</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Models</b></span></li>
+<li class="chapter" data-level="5" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i><b>5</b> Linear models</a><ul>
+<li class="chapter" data-level="5.1" data-path="linear-models.html"><a href="linear-models.html#quantification-at-work-grand-mean-models"><i class="fa fa-check"></i><b>5.1</b> Quantification at work: grand mean models</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-models.html"><a href="linear-models.html#reading-coefficient-tables"><i class="fa fa-check"></i><b>5.1.1</b> Reading coefficient tables</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-models.html"><a href="linear-models.html#likelihood-and-random-term"><i class="fa fa-check"></i><b>5.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="5.1.3" data-path="linear-models.html"><a href="linear-models.html#random_walk"><i class="fa fa-check"></i><b>5.1.3</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-models.html"><a href="linear-models.html#linear-regression"><i class="fa fa-check"></i><b>5.2</b> Walk the line: linear regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="linear-models.html"><a href="linear-models.html#transforming-variables"><i class="fa fa-check"></i><b>5.2.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="linear-models.html"><a href="linear-models.html#correlations"><i class="fa fa-check"></i><b>5.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="5.2.3" data-path="linear-models.html"><a href="linear-models.html#endlessly-linear"><i class="fa fa-check"></i><b>5.2.3</b> Endlessly linear</a></li>
+<li class="chapter" data-level="5.2.4" data-path="linear-models.html"><a href="linear-models.html#posterior-predictions"><i class="fa fa-check"></i><b>5.2.4</b> Posterior predictions</a></li>
+<li class="chapter" data-level="5.2.5" data-path="linear-models.html"><a href="linear-models.html#exercises-2"><i class="fa fa-check"></i><b>5.2.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="linear-models.html"><a href="linear-models.html#CGM"><i class="fa fa-check"></i><b>5.3</b> A versus B: Comparison of groups</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="linear-models.html"><a href="linear-models.html#dummy_variables"><i class="fa fa-check"></i><b>5.3.1</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="linear-models.html"><a href="linear-models.html#contrasts"><i class="fa fa-check"></i><b>5.3.2</b> Getting it sharper with contrasts [TBC]</a></li>
+<li class="chapter" data-level="5.3.3" data-path="linear-models.html"><a href="linear-models.html#sharper-on-the-fly-derived-quantities-tbd"><i class="fa fa-check"></i><b>5.3.3</b> Sharper on the fly: derived quantities [TBD]</a></li>
+<li class="chapter" data-level="5.3.4" data-path="linear-models.html"><a href="linear-models.html#exercises-3"><i class="fa fa-check"></i><b>5.3.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="linear-models.html"><a href="linear-models.html#putting-it-all-together-multi-predictor-models"><i class="fa fa-check"></i><b>5.4</b> Putting it all together: multi predictor models</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="linear-models.html"><a href="linear-models.html#on-surface-multiple-regression-models"><i class="fa fa-check"></i><b>5.4.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="5.4.2" data-path="linear-models.html"><a href="linear-models.html#crossover-multifactorial-models-tbc"><i class="fa fa-check"></i><b>5.4.2</b> Crossover: multifactorial models [TBC]</a></li>
+<li class="chapter" data-level="5.4.3" data-path="linear-models.html"><a href="linear-models.html#line-by-line"><i class="fa fa-check"></i><b>5.4.3</b> Line-by-line: regression in groups [TBC]</a></li>
+<li class="chapter" data-level="5.4.4" data-path="linear-models.html"><a href="linear-models.html#residual-analysis"><i class="fa fa-check"></i><b>5.4.4</b> Residual analysis</a></li>
+<li class="chapter" data-level="5.4.5" data-path="linear-models.html"><a href="linear-models.html#how-to-plot-mpm-tbc-move-to-interaction-effects"><i class="fa fa-check"></i><b>5.4.5</b> How to plot MPM? [TBC, move to Interaction effects]</a></li>
+<li class="chapter" data-level="5.4.6" data-path="linear-models.html"><a href="linear-models.html#empirical-versus-statistical-control"><i class="fa fa-check"></i><b>5.4.6</b> Empirical versus statistical control</a></li>
+<li class="chapter" data-level="5.4.7" data-path="linear-models.html"><a href="linear-models.html#exercises-4"><i class="fa fa-check"></i><b>5.4.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="linear-models.html"><a href="linear-models.html#interaction-effects"><i class="fa fa-check"></i><b>5.5</b> Interaction effects</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="linear-models.html"><a href="linear-models.html#differential_design_effects"><i class="fa fa-check"></i><b>5.5.1</b> Users differ: differential design effects</a></li>
+<li class="chapter" data-level="5.5.2" data-path="linear-models.html"><a href="linear-models.html#hitting-the-boundaries-of-saturation"><i class="fa fa-check"></i><b>5.5.2</b> Hitting the boundaries of saturation</a></li>
+<li class="chapter" data-level="5.5.3" data-path="linear-models.html"><a href="linear-models.html#more-than-the-sum-amplification"><i class="fa fa-check"></i><b>5.5.3</b> More than the sum: amplification</a></li>
+<li class="chapter" data-level="5.5.4" data-path="linear-models.html"><a href="linear-models.html#theoretically-interesting-interaction-effects-edit"><i class="fa fa-check"></i><b>5.5.4</b> Theoretically interesting interaction effects [EDIT]</a></li>
+<li class="chapter" data-level="5.5.5" data-path="linear-models.html"><a href="linear-models.html#exercises-5"><i class="fa fa-check"></i><b>5.5.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="linear-models.html"><a href="linear-models.html#polynomial_regression"><i class="fa fa-check"></i><b>5.6</b> Doing the rollercoaster: polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multilevel-models.html"><a href="multilevel-models.html"><i class="fa fa-check"></i><b>6</b> Multilevel models</a><ul>
+<li class="chapter" data-level="6.1" data-path="multilevel-models.html"><a href="multilevel-models.html#average-neverage"><i class="fa fa-check"></i><b>6.1</b> Average? Neverage!</a></li>
+<li class="chapter" data-level="6.2" data-path="multilevel-models.html"><a href="multilevel-models.html#the-human-factor-intercept-random-effects"><i class="fa fa-check"></i><b>6.2</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="6.3" data-path="multilevel-models.html"><a href="multilevel-models.html#designs-and-other-non-human-populations"><i class="fa fa-check"></i><b>6.3</b> Designs and other non-human populations</a></li>
+<li class="chapter" data-level="6.4" data-path="multilevel-models.html"><a href="multilevel-models.html#crossover"><i class="fa fa-check"></i><b>6.4</b> Crossover: Testing Egans assumption</a></li>
+<li class="chapter" data-level="6.5" data-path="multilevel-models.html"><a href="multilevel-models.html#measuring-entities-psychometric-applications-tbc"><i class="fa fa-check"></i><b>6.5</b> Measuring entities: psychometric applications [TBC]</a></li>
+<li class="chapter" data-level="6.6" data-path="multilevel-models.html"><a href="multilevel-models.html#nested-random-effects"><i class="fa fa-check"></i><b>6.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="6.7" data-path="multilevel-models.html"><a href="multilevel-models.html#what-are-random-effects-on-pooling-and-shrinkage"><i class="fa fa-check"></i><b>6.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="6.8" data-path="multilevel-models.html"><a href="multilevel-models.html#slope_RE"><i class="fa fa-check"></i><b>6.8</b> Variance in variation: slope random effects [TBC]</a></li>
+<li class="chapter" data-level="6.9" data-path="multilevel-models.html"><a href="multilevel-models.html#re_correlations"><i class="fa fa-check"></i><b>6.9</b> Growing with random effects correlations [TBD]</a></li>
+<li class="chapter" data-level="6.10" data-path="multilevel-models.html"><a href="multilevel-models.html#advanced-tricks"><i class="fa fa-check"></i><b>6.10</b> Advanced tricks</a></li>
+<li class="chapter" data-level="6.11" data-path="multilevel-models.html"><a href="multilevel-models.html#exercises-7"><i class="fa fa-check"></i><b>6.11</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="GLM.html"><a href="GLM.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.1" data-path="GLM.html"><a href="GLM.html#debunking-the-gaussian-linear-model"><i class="fa fa-check"></i><b>7.1</b> Debunking the Gaussian linear model</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="GLM.html"><a href="GLM.html#assuming-linearity"><i class="fa fa-check"></i><b>7.1.1</b> Assuming linearity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="GLM.html"><a href="GLM.html#assuming-normal-distribution-of-randomness"><i class="fa fa-check"></i><b>7.1.2</b> Assuming Normal distribution of randomness</a></li>
+<li class="chapter" data-level="7.1.3" data-path="GLM.html"><a href="GLM.html#assume-constant-variance"><i class="fa fa-check"></i><b>7.1.3</b> Assuming constant variance of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="GLM.html"><a href="GLM.html#glm_concepts"><i class="fa fa-check"></i><b>7.2</b> Elements of Generalized Linear Models</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="GLM.html"><a href="GLM.html#re-linking-linearity-relinking_linearity-tbc"><i class="fa fa-check"></i><b>7.2.1</b> Re-linking linearity (#relinking_linearity) [TBC]</a></li>
+<li class="chapter" data-level="7.2.2" data-path="GLM.html"><a href="GLM.html#choosing-patterns-of-randomness-choosing_randomness"><i class="fa fa-check"></i><b>7.2.2</b> Choosing patterns of randomness (#choosing_randomness)</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="GLM.html"><a href="GLM.html#case-user-testing-infusion-pumps"><i class="fa fa-check"></i><b>7.3</b> Case: user testing infusion pumps</a></li>
+<li class="chapter" data-level="7.4" data-path="GLM.html"><a href="GLM.html#count_data"><i class="fa fa-check"></i><b>7.4</b> Count data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="GLM.html"><a href="GLM.html#poisson-regression"><i class="fa fa-check"></i><b>7.4.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="GLM.html"><a href="GLM.html#logistic-aka-binomial-regression-logistic_regression"><i class="fa fa-check"></i><b>7.4.2</b> Logistic (aka Binomial) regression (#logistic_regression)</a></li>
+<li class="chapter" data-level="7.4.3" data-path="GLM.html"><a href="GLM.html#modelling-overdispersion"><i class="fa fa-check"></i><b>7.4.3</b> Modelling overdispersion</a></li>
+<li class="chapter" data-level="7.4.4" data-path="GLM.html"><a href="GLM.html#exercises-8"><i class="fa fa-check"></i><b>7.4.4</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="GLM.html"><a href="GLM.html#measures_of_time"><i class="fa fa-check"></i><b>7.5</b> Measures of time</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="GLM.html"><a href="GLM.html#exponential-regression"><i class="fa fa-check"></i><b>7.5.1</b> Exponential regression</a></li>
+<li class="chapter" data-level="7.5.2" data-path="GLM.html"><a href="GLM.html#gamma-regression"><i class="fa fa-check"></i><b>7.5.2</b> Gamma regression</a></li>
+<li class="chapter" data-level="7.5.3" data-path="GLM.html"><a href="GLM.html#exgaussian-regression"><i class="fa fa-check"></i><b>7.5.3</b> ExGaussian regression</a></li>
+<li class="chapter" data-level="7.5.4" data-path="GLM.html"><a href="GLM.html#literature"><i class="fa fa-check"></i><b>7.5.4</b> Literature</a></li>
+<li class="chapter" data-level="7.5.5" data-path="GLM.html"><a href="GLM.html#exercises-9"><i class="fa fa-check"></i><b>7.5.5</b> Exercises:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="GLM.html"><a href="GLM.html#rating-scales"><i class="fa fa-check"></i><b>7.6</b> Rating scales</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="GLM.html"><a href="GLM.html#ordered-logistic-regression"><i class="fa fa-check"></i><b>7.6.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="7.6.2" data-path="GLM.html"><a href="GLM.html#beta-regression"><i class="fa fa-check"></i><b>7.6.2</b> Beta regression</a></li>
+<li class="chapter" data-level="7.6.3" data-path="GLM.html"><a href="GLM.html#distributional-models"><i class="fa fa-check"></i><b>7.6.3</b> Distributional models</a></li>
+<li class="chapter" data-level="7.6.4" data-path="GLM.html"><a href="GLM.html#exercises-10"><i class="fa fa-check"></i><b>7.6.4</b> Exercises</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for the design researcher</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="getting_started_r" class="section level1">
+<h1><span class="header-section-number">4</span> Getting started with R</h1>
+<p>In this book, we will be using the statistical computing environment R. R at its core is a programming language that specializes on statistics and data analysis. Like all modern programming languages, R is more than just a compiler or interpreter that translates human-writeable formal statements into something a computer understands and can execute. R comes with a complete set of standard libraries that cover the usual basic stuff, as well as a collection of common statistical routines, for example the t-test or functions to compute mean and variance. Even regression analysis and plotting is included in R. Finally, packaged with R comes a rudimentary programming environment, including a console, a simple editor and a help system.</p>
+<p>Most of what comes packaged with R, we will set aside. R is basically a brilliantly designed programming language for the task, but many of the standard libraries are an inconsistent and outdated mess. For example, R comes with a set of commands to import data from various formats (SPSS, CSV, etc.). Some of these commands produce objects called data.frames, whereas others return lists of lists. Although one can convert lists into dataframes, it is easier and prevents confusion if all import functions simply create dataframes. As another example, to sort a data frame by participant number, one has to write the following syntax soup:</p>
+<p><code>D[order(D$Part),]</code></p>
+<p>In the past few years, a single person, Hadley Wickham, has almost single-handedly started an initiative known as the <em>tidyverse</em>. The tidyverse is a growing collection of libraries that ground on a coherent and powerful set of principles for data management. One of the core packages is <em>dplyr</em> and it introduces a rich, yet rather generic, set of commands for data manipulation. The sorting of a data frame mentioned above would be written as</p>
+<p><code>D %&gt;% arrange(Part)</code></p>
+<p>One of Wickham’s first and well-known contributions is the <em>ggplot</em> system for graphics. Think of R’s legacy graphics system as a zoo of individual routines, one for boxplots, another one for scatterplots asf. Like animals in a zoo, they live in different habitats with practically no interaction. ggplot implements a rather abstract framework for data plots, where all pieces can be combined in a myriad of ways, using a simple and consistent syntax.</p>
+<p>Where to get these gems? R is an open source system and has spawned an open ecosystem for statistical computing. Thousands of extensions for R have been made available by data scientists for data scientists. The majority of these packages is available through the <em>comprehensive R archive network (CRAN)</em>. For the common user it suffices to think of CRAN as an internet catalogue of packages, that can be searched and where desired packages can be downloaded and installed in an instance.</p>
+<p>Finally, R comes with a very rudimentary programming environment that carries the questionable charm of early 1990s. Whereas several alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. At the time of writing, it is the most user-friendly and feature rich software to program in R. The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.</p>
+<div id="setting-up-the-r-environment" class="section level2">
+<h2><span class="header-section-number">4.1</span> Setting up the R environment</h2>
+<p>First, we <!-- #4 --> make sure that you have R and Rstudio downloaded and installed on your computer. The two programs can be retrieved from the addresses below. Make sure to select the version fit for your operating system.</p>
+<ul>
+<li><a href="http://www.r-project.org">R</a></li>
+<li><a href="http://www.rstudio.com">Rstudio</a></li>
+</ul>
+<p>If you fully own the computer you are working with, meaning that you have administrator rights, just do the usual downloading and running of the setup. If everything is fine, you’ll find R and Rstudio installed under <code>c\Programs\</code> and both are in your computers start menu. You can directly proceed to the installation of packages.</p>
+<p>In corporate environments, two issues can arise with the installation: first a user may not have administrator rights to install programs to the common path <code>c:\programs\</code>. Second, the home directory may reside on a network drive, which is likely to cause trouble when installing packages.</p>
+<p>If you have no administrator rights, you must choose your home directory during the setup. If that is a local directory, (<code>c:/Users/YourName/</code>), this should work fine and you can proceed with the installation of packages.</p>
+<p>If your home directory (i.e. <code>My Documents</code>) is located on a network drive, this is likely to cause trouble. In such a case, you must install R and Rstudio to a local directory (on your computers hard drive), where you have full read/write access. In the following, it is assumed that this directory is <code>D:/Users/YourName/</code>:</p>
+<ol style="list-style-type: decimal">
+<li>create a directory <code>D:/Users/YourName/R/</code>. This is where both programs, as well as packages will reside.</li>
+<li>create a sub directory <code>Rlibrary</code> where all additional packages reside (R comes with a pack of standard packages, which are in a read-only system directory).</li>
+<li>start Rstudio</li>
+<li>create a regular text file <code>File -&gt; New File -&gt; Text file</code></li>
+<li>copy and paste code from the box below</li>
+<li>save the file as <code>.Rprofile</code> in <code>D:/Users/YourName/R/</code></li>
+<li>open the menu and go to <code>Tools -&gt; Global options -&gt; General -&gt; Default working directory</code>. Select <code>D:/Users/YourName/R/</code>.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## .Rprofile
+
+<span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+.First &lt;-<span class="st"> </span><span class="cf">function</span>(){
+  RHOME &lt;&lt;-<span class="st"> </span><span class="kw">getwd</span>()
+    <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Loading .Rprofile in&quot;</span>, <span class="kw">getwd</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="kw">.libPaths</span>(<span class="kw">c</span>(<span class="kw">paste0</span>(RHOME,<span class="st">&quot;Rlibrary&quot;</span>), <span class="kw">.libPaths</span>()))
+}
+
+.Last &lt;-<span class="st"> </span><span class="cf">function</span>(){ 
+  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Goodbye at &quot;</span>, <span class="kw">date</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+}</code></pre></div>
+<p>With the above steps you have created a customized start-up profile for R. The profile primarily sets the library path to point to a directory on the computers drive. As you are owning this directory, R can install the packages without admin rights. In the second part, you configure Rstudio’s default path, which is where R, invoked from Rstudio, searches for the .Rprofile.</p>
+<p>After closing and reopening Rstudio, you should see a message in the console window saying:</p>
+<blockquote>
+<p>Loading .Rprofile in D:/Users/YourName/R/</p>
+</blockquote>
+<p>That means that R has found the <code>.Rprofile</code> file and loaded it at start-up. The <code>.Rprofile</code> file primarily sets the path of the <em>library</em>, which is the collection of packages you install yourself. Whether this was successful can be checked by entering the <code>console</code> window in Rstudio, type the command below and hit Enter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">.libPaths</span>()</code></pre></div>
+<p>If your installation went fine, you should see an output like the following. If the output lacks the first entry, your installation was not successful and you need to check all the above steps.</p>
+<blockquote>
+<p>[1] “D:/Users/YourName/R/Rlibrary” “C:/Program Files/R/R-3.3.0/library”</p>
+</blockquote>
+<div id="installing-cran-packages" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Installing CRAN packages</h3>
+<p>While R comes with a set of standard packages, thousands of packages are available to enhance functionality for every purpose you can think of. Most packages are available from the <em>Comprehensive R Network Archive (CRAN)</em>.</p>
+<p>For example, the package <em>foreign</em> is delivered with R and provides functions to read data files in various formats, e.g. SPSS files. The package <em>haven</em> is a rather new package, with enhanced functionality and usability. It is not delivered with R, hence, so we have to fetch it.</p>
+<p>Generally, packages need to be <em>installed once</em> on your system and to be <em>loaded everytime</em> you need them. Installation is fairly straight-forward once your R environment has been setup correctly and you have an internet connection.</p>
+<p>In this book we will use a number of additional packages from CRAN. The listed packages below are all required packages, all can be loaded using the <code>library(package)</code> command. The package <em>tidyverse</em> is a metapackage that installs and loads a number of modern packages. The ones being used in this book are:</p>
+<ul>
+<li><em>dplyr</em> and <em>tidyr</em> for data manipulation</li>
+<li><em>ggplot</em> for graphics</li>
+<li><em>haven</em> for reading and writing files from other statistical packages</li>
+<li><em>readr</em> for reading and writing text-based data files (e.g., CSV)</li>
+<li><em>readxl</em> for reading Excel files</li>
+<li><em>stringr</em> for string matching and manipulation</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## tidyverse
+<span class="kw">library</span>(tidyverse)
+
+## data manipulation
+<span class="kw">library</span>(openxlsx)
+
+## plotting
+<span class="kw">library</span>(gridExtra)
+
+## regression models
+<span class="kw">library</span>(rstanarm)
+
+## other
+<span class="kw">library</span>(devtools) ## only needed for installing from Github
+<span class="kw">library</span>(knitr)
+
+## non-CRAN packages
+<span class="kw">library</span>(mascutils)
+<span class="kw">library</span>(bayr)</code></pre></div>
+<p>We start by <em>checking the packages</em>:</p>
+<ol style="list-style-type: decimal">
+<li>create a new R file by <code>File --&gt; New file --&gt; R script</code></li>
+<li>copy and paste the above code to that file and run it. By repeatedly pressing <code>Ctrl-Return</code> you run every line one-by-one. As a first time user with a fresh installation, you will now see error messages like:</li>
+</ol>
+<blockquote>
+<p>Error in library(tidyverse) : there is no package called ‘tidyverse’</p>
+</blockquote>
+<p>This means that the respective package is not yet present in your R library. Before you can use the package <em>tidyverse</em> you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab <em>Packages</em>. At the first time, you may have to select a repository and refresh the package list, before you can find and install packages. Then click <code>Install</code>, enter the names of the missing package(s) and install. On the R console the following command downloads and installs the package <em>tidyverse</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre></div>
+<p>CRAN is like a giant stream of software pebbles, shaped over time in a growing tide. Typically, a package gets better with every version, be it in reliability or versatility, so you want to be up-to-date. Rstudio has a nice dialogue to update packages and there is the R command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">update.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</code></pre></div>
+<p>Finally, run the complete code block at once by selecting it and <code>Ctrl-Enter</code>. You will see some output to the console, which you should check once again. Unless the output contains any error messages (like above), you have successfully installed and loaded all packages.</p>
+<p><em>Note</em> that R has a somewhat idiosyncratic jargon: many languages, such as Java or Python, call “libraries” what R calls “packages”. <em>The</em> library in R is strictly the set of packages installed on your computer and the <code>library</code> command loads a package from the library.</p>
+</div>
+<div id="installing-packages-from-github" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Installing packages from Github</h3>
+<p>Two packages, <em>mascutils</em> and <em>bayr</em> are written by the author of this book. They have not yet been committed to CRAN, but they are available on <em>Github</em> which is a general purpose versioning system for software developers and few authors. Fortunately, with the help of the <em>devtools</em> package it is rather easy to install these packages, too. Just enter the Rstudio console and type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&quot;schmettow/mascutils&quot;</span>)
+<span class="kw">install_github</span>(<span class="st">&quot;schmettow/bayr&quot;</span>)</code></pre></div>
+<p>Again, you have to do that only once after installing R and you can afterwards load the packages with the <code>library</code> command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again.</p>
+</div>
+<div id="first_program" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> A first statistical program</h3>
+<p>After you have set up your R environment, you are ready to run your first R program (you will not yet understand all the code, but as you proceed with this book, all will become clear):</p>
+<ol style="list-style-type: decimal">
+<li>Stay in the file where you have inserted and run the above code for loading the packages.</li>
+<li>Find the <em>environment tab</em> in Rstudio. It should be empty.</li>
+<li>Copy-and-paste the code below into your first file, right after library commands.</li>
+<li>Run the code lines one-by-one and observe what happens (in RStudio: Ctrl-Enter)</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Simulation of a data set with 100 participants 
+## in two between-subject conditions
+N &lt;-<span class="st"> </span><span class="dv">100</span>
+levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;control&quot;</span>,<span class="st">&quot;experimental&quot;</span>)
+Group &lt;-<span class="st"> </span><span class="kw">rep</span>(levels, N<span class="op">/</span><span class="dv">2</span>)
+age &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">runif</span>(N, <span class="dv">18</span>, <span class="dv">35</span>),<span class="dv">0</span>)
+outcome &lt;-<span class="st"> </span><span class="kw">rnorm</span>(N, <span class="dv">42</span> <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">10</span>) <span class="op">+</span><span class="st"> </span>(Group <span class="op">==</span><span class="st"> &quot;experimental&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">42</span>
+Experiment &lt;-<span class="st"> </span><span class="kw">data_frame</span>(Group, age, outcome)
+
+Experiment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">225</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">255</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">216</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">35</td>
+<td align="right">252</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">210</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">35</td>
+<td align="right">254</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Plotting the distribution of outcome
+Experiment <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="dv">1</span>)</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/first_simulation_1-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ... outcome by group
+Experiment <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">fill =</span> Group, <span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_density</span>()</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/first_simulation_1-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ... statistical model comparing the groups
+
+model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(<span class="dt">formula =</span> outcome <span class="op">~</span><span class="st"> </span>Group, 
+            <span class="dt">data =</span> Experiment) </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(model)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">211.9</td>
+<td align="right">209.1</td>
+<td align="right">214.7</td>
+</tr>
+<tr class="even">
+<td align="left">Groupexperimental</td>
+<td align="right">38.5</td>
+<td align="right">34.6</td>
+<td align="right">42.3</td>
+</tr>
+</tbody>
+</table>
+<p>Observe Console, Environment and Plots. Did you see</p>
+<ul>
+<li>how the <em>Environment</em> window is populated with new variables (Values and Data)?</li>
+<li>a table appears in the <em>Console</em>, when executing the <code>summary(Experiment)</code> command?</li>
+<li>how the “camel-against-the-light” in <em>Plots</em> tab morphed into “two-piles-of-colored-sugar”?</li>
+</ul>
+<p>Congratulations! You have just</p>
+<ul>
+<li>simulated data of a virtual experiment with two groups</li>
+<li>summarized the data</li>
+<li>plotted the data and</li>
+<li>estimated a Bayesian regression model that compares the two groups.</li>
+</ul>
+<p>Isn’t it amazing, that in less than 20 simple statements we have just reached the level of a second-year bachelor student? Still, you may find the R output a little inconvenient, as you may want to save the output of your data analysis. Not long ago, that really was an issue, but in the past few years R has become a great tool for <em>reproducable research</em>. The most simple procedure of saving your analysis for print or sharing is to:</p>
+<ol style="list-style-type: decimal">
+<li>save the R file your have created by hitting <code>CTRL-S</code> and selecting a directory and name.</li>
+<li>in RStudio open <code>File --&gt; Compile notebook</code> and select Word as a format.</li>
+<li>Hit <code>Compile</code></li>
+</ol>
+<p>A new Word document should appear that shows all code and the output. Now, you can copy-and-paste the graphics into another document or a presentation.</p>
+</div>
+<div id="bibliographic-notes" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Bibliographic notes</h3>
+<p><a href="http://www.calvin.edu/~rpruim/talks/Rminis/RStartingUp.pdf">Getting started with Rstudio (presentation)</a></p>
+<p><a href="http://it-ebooks.info/book/2253/">Getting started with Rstudio (ebook)</a></p>
+<p><a href="http://www.rstudio.com/resources/cheatsheets/">rstudio cheat sheets</a> is a collection of beautifully crafted cheat sheets for ggplot, dplyr and more. I suggest you print the data mangling and ggplot cheat sheets and always keep them on your desk.</p>
+<p><a href="http://tidyverse.org/">The tidyverse</a> is a meta package that loads all core tidyverse packages by Hadley Wickham.</p>
+</div>
+</div>
+<div id="learning-r-a-primer" class="section level2">
+<h2><span class="header-section-number">4.2</span> Learning R: a primer</h2>
+<blockquote>
+<p>cRazy as in ‘idiosyncrasy’</p>
+</blockquote>
+<p>This book is for applied researchers in design sciences, whose frequent task is to analyze data and report it to stakeholders. Consequently, the way I use R in this book capitalizes on interactive data analysis and reporting. As it turns out, a small fraction of R, mostly from the tidyverse, is sufficient to write R code that is effective and fully transparent. In most cases, a short chain of simple data transformations tidies the raw data which can then be pushed into a modelling or graphics engine that will do the hard work. We will not bother (ourselves and others) with usual programming concepts such as conditionals, loops or the somewhat eccentric approaches to functional programming. At the same time, we can almost ignore all the clever and advanced routines that underlay statistical inference and production of graphics, as others have done the hard work for us.</p>
+<p>R mainly serves three purposes, from easy to advanced: 1. interactive data analysis 2. creating data analysis reports 3. developing new statistical routines.</p>
+<p>It turns out that creating multimedia reports in R has become very easy by the knitr/markdown framework that is neatly integrated into the Rstudio environment. I</p>
+<p>With R one typically <em>works interactively through a data analysis</em>. The analysis often is a rather routine series of steps, like:</p>
+<ol style="list-style-type: decimal">
+<li>load the data</li>
+<li>make a scatter plot</li>
+<li>run a regression</li>
+<li>create a coefficient table</li>
+</ol>
+<p>A program in R is usually developed iteratively: once you’ve loaded and checked your data, you progress to the next step step of your analysis, test it and proceed. At every step, one or more new objects are created in the environment, capturing intermediate and final results of the analysis:</p>
+<ol style="list-style-type: decimal">
+<li>a data frame holding the data</li>
+<li>a graphics object holding a scatterplot</li>
+<li>a model object holding the results of a regression analysis</li>
+<li>a data frame for the coefficient table</li>
+</ol>
+<p>As R is an interpreter language, meaning there is no tedious compile-and-run cycles in everyday R programming. You develop the analysis as it happens. It is even normal to jump back and forth in an R program, while building it.</p>
+<p>R is a way to <em>report and archive</em> what precisely you have been doing with your data. In statistics, mathematical formulas are the common form of unambiguously describing a statistical model. For example, the following equation defines a linear regression model between the observed outcome <span class="math inline">\(y\)</span> and the predictor <span class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[
+\mu_i = \beta_0 +  \beta_1x_i\\
+y_i \sim N(\mu_i, \sigma)
+\]</span></p>
+<p>As we will later see [CLM], in Rs formula language the same model is unambiguously specified as:</p>
+<p><code>y ~ x</code></p>
+<p>R is currently the <em>lingua franca</em> of statistical computing. As a programming language, R has the same precision as math, but is more expressive. You can specify complex models, but also graphics and the steps of data checking and preparation. As an example, consider an outlier removal rule of:</p>
+<blockquote>
+<blockquote>
+<p>An observation is valid if it does not exceed the tenfold of the observation mean.</p>
+</blockquote>
+</blockquote>
+<p>We just applied our own rule of outlier removal to the data. Others may consider this rule invalid or arbitrary. Disagreement is virtue in science and one can only disagree with what one actually sees. In R, the researcher <em>formally reports</em> what precisely has been done with the data. For example, the same outlier removal rule is unambiguously specified by the following code (the first line just simulates some data).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">D &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">50</span>, <span class="dv">800</span>))
+
+D <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(score <span class="op">&lt;</span><span class="st"> </span><span class="kw">mean</span>(score)) </code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">50</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, R is a way to <em>develop and share statistical programs</em>. Thousands of packages in the R ecosystem cover almost all statistical problems you can imagine. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Readers with programming experience can fly over the R basics that follow. But, as a specific purpose language R has a few idiosyncracies you should know about:</p>
+<p>Almost all programming languages the first element of a list has the index zero. We got used to it, but for beginners it is a another hurdle that is unnecessary. Mathematicians, catholiques, software developers in bars and everyone, young or old, counts</p>
+<blockquote>
+<blockquote>
+<p>“one”, “two” ,“three”.</p>
+</blockquote>
+</blockquote>
+<p>And so does R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</code></pre></div>
+<pre><code>## [1] 1 2 3</code></pre>
+<p>Counting from one is perhaps the most lovable idiosyncracy of R. But, lets also welcome people who have experience with other programming languages:</p>
+<p>The first thing one has to know about R is that it is a <em>functional programming</em> language. A function simply is a programmed procedure that takes data as input, applies some transformation and returns data as output. That sounds trivial, but there is an important difference to most other languages: Different to procedures in Pascal or object oriented methods (in Java or Python), functions are forbidden to modify any external object. A certain function is a black box, but one can be sure that the only thing it does is return a new object.</p>
+<p>At the same time, functions are first-class citizens in R and can be called everywhere, even as an <em>argument to another function</em>. The <em>plyr</em> package is famous for functions that call functions, also called high-level functions. The following three liner makes heavy use of high level functions. First, a list of binary matrices is generated by repeatedly calling a random number generator, then the row sum of all matrices is computed and returned as a (new) list.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">make_binary_matrix &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="cf">function</span>(size) <span class="kw">as.matrix</span>(<span class="kw">rbernoulli</span>(size<span class="op">^</span><span class="dv">2</span>, <span class="dt">p =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>))
+
+LoM &lt;-<span class="st"> </span><span class="kw">llply</span>(<span class="kw">c</span>(<span class="dv">5</span><span class="op">:</span><span class="dv">7</span>), make_binary_matrix)
+
+<span class="kw">llply</span>(LoM, rowSums)</code></pre></div>
+<pre><code>## [[1]]
+##  [1] 0 0 0 0 0 0 0 1 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1
+## 
+## [[2]]
+##  [1] 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0
+## [36] 0
+## 
+## [[3]]
+##  [1] 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0
+## [36] 1 0 0 0 0 0 0 0 0 0 1 0 0 0</code></pre>
+<p>What we have seen is a routine application of higher level functions: apply a transformation to a sequence of data sets. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is:</p>
+<blockquote>
+<blockquote>
+<p>Whenever you think you need a loop, you don’t.</p>
+</blockquote>
+</blockquote>
+<p>For me it helped to imagine the following: loops carry the notion of chain of data that moves over a fixed transformation device. In functional programing functions the can work in a hierarchy, a high-level device moves along a string of data. It carries an exchangeable low-level device that applies the desired transformation to every position.</p>
+<p>If you come from relational data bases you you have something in common with the statistician: you both think in transformation of tables. Not coincidently, the features in <em>dplyr</em>, the tidy data transformation engine, are clearly borrowed from SQL. You will also feel at home with the idea of reports powered by functional chunks embedded in a templating system.</p>
+<p>For object orientation folks, R is a good choice, but you have to get used to it. First, it gives you the choice of several object orientation systems, which sometimes requires to install a package. The so-called <em>S3 system</em> is the original. It is rather limited and some even call it informal. The approach is as simple as it is unusal. S3 mainly is a raw method dispatcher that can handles overloading of functions. S3 puts methods first, then objects, whereas in traditional object orientation, the method belongs to the class, making the object “knows” its methods. In S3, the object and the method both know their class. When calling an S3 method, you actually call a generic method that finds the matching method and applies it.</p>
+<p>Beginners are at peace with all of this. You can count like you do. Functional programming is intuitive for working on research data. And because of S3 the function <code>summary</code> always does something useful.</p>
+<div id="assigning-and-calling-objects" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Assigning and calling Objects</h3>
+<p>Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.</p>
+<p><em>Objects</em> are a basic feature of R. They are temporary storage places in the computer’s memory. Objects always have a name chosen by the programmer. By its name, a stored object can be found back at any time. Two basic operations apply for all objects: an object is stored by <em>assigning</em> it a name and it is retrieved by <em>calling</em> its name. If you wanted to store the number of observations in your data set under the name <code>N_obs</code>, you use the assignment operator <code>&lt;-</code>. The name of the variable is left of the operator, the assigned value is right of it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_obs &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
+<p>Now, that the value is stored, you can call it any time by simply calling its name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_obs</code></pre></div>
+<pre><code>## [1] 100</code></pre>
+<p>Just calling the name prints the value to Console. In typical interactive programming sessions with R, this is already quite useful. But, you can do much more with this mechanism.</p>
+<p>Often, what you want is to do calculations with the value. For example, you have a repeated measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of <code>&lt;-</code>) and stores it in another object <code>avg_N_Obs</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_Obs &lt;-<span class="st"> </span><span class="dv">100</span>
+N_Part &lt;-<span class="st"> </span><span class="dv">25</span>
+avg_N_Obs &lt;-<span class="st"> </span>N_Obs<span class="op">/</span>N_Part
+avg_N_Obs</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>Objects can exist without a name, but are volatile, then. They cannot be used any further. The following arithmetic operation does create an object, a single number. For a moment or so this number exists somewhere in your computers memory, but once it is printed to the screen, it is gone. Of course, the same expression can be called again, resulting in the same number. But, strictly, it is a different object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_Obs<span class="op">/</span>N_Part ## gone after printing</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_Obs<span class="op">/</span>N_Part ## same value, different object</code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the purpose of demonstration and you will rarely use it in everyday programming tasks:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</code></pre></div>
+<pre><code>## [1] &quot;&lt;0000000042968AF8&gt;&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</code></pre></div>
+<pre><code>## [1] &quot;&lt;00000000429D9BE8&gt;&quot;</code></pre>
+</div>
+<div id="vectors" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Vectors</h3>
+<p>Notice the <code>[1]</code> that R put in front of the single value when printing it? This is an <em>index</em>. Different to other programming languages, all basic data types are <em>vectors</em> in R. Vectors are containers for storing many values <em>of the same type</em>. The values are addressed by the index, <code>N_Obs[1]</code> calls the first element. In R, <em>indices start counting with 1</em>, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.</p>
+<p>For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">1</span>)
+<span class="kw">mean</span>(X)</code></pre></div>
+<pre><code>## [1] 1.98</code></pre>
+<p>The <code>rnorm</code> command <em>produces</em> a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The <code>mean</code> command takes the collection and <em>reduces</em> it to a single value. By the way, this is precisely, what we call <em>a statistic: a single quantity that characterizes a collection of quantities</em>.</p>
+</div>
+<div id="basic-object-types" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Basic object types</h3>
+<p>Objects can be of various <em>classes</em>. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.</p>
+<p>Objects of type <em>logical</em> store the two levels <code>TRUE</code>, <code>FALSE</code>, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Apple &lt;-<span class="st"> </span><span class="ot">TRUE</span>
+Pear  &lt;-<span class="st"> </span><span class="ot">FALSE</span>
+
+Apple <span class="op">&amp;</span><span class="st"> </span>Pear ## and</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Apple <span class="op">|</span><span class="st"> </span>Pear ## or</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>More generally, logical values can be used for categorization, when their are only two categories, which is called a <em>dichotomous variable</em>. For example, gender is usually coded as a vector of characters (<code>&quot;m&quot;, &quot;f&quot;, &quot;f&quot;</code>), but one can always do:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_female &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>)
+is_male   &lt;-<span class="st"> </span><span class="kw">c</span>(T, F, F)</code></pre></div>
+<p>Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate <code>TRUE</code> and <code>FALSE</code> as shown above. As a consequence, one should never assign objects the name reserved for logical values, so don’t do one of the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## never do this
+<span class="ot">TRUE</span> &lt;-<span class="st"> &quot;All philosophers have beards&quot;</span> ## a character object, see below
+F    &lt;-<span class="st"> &quot;All gods existed before the big bang&quot;</span>
+<span class="dv">42</span> <span class="op">*</span><span class="st"> </span>F</code></pre></div>
+<p>The class <code>numeric</code> stores real numbers and is therefore abundant in statistical programming. All the usual arithmetic operations apply:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="fl">1.0</span>
+b &lt;-<span class="st"> </span>a <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+<span class="kw">sqrt</span>(b)</code></pre></div>
+<pre><code>## [1] 1.41</code></pre>
+<p>Objects of class <code>integer</code> are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">friends &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">anton =</span> <span class="dv">1</span>, 
+             <span class="dt">berta =</span> <span class="dv">3</span>, 
+             <span class="dt">carlo =</span> <span class="dv">2</span>)
+<span class="kw">order</span>(friends)</code></pre></div>
+<pre><code>## [1] 1 3 2</code></pre>
+<p>The usual arithmetic operations apply, although the result of operation may no longer be <code>integer</code>, but <code>numeric</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N &lt;-<span class="st"> </span><span class="dv">3</span>
+sum_of_scores &lt;-<span class="st"> </span><span class="dv">32</span>
+mean_score &lt;-<span class="st"> </span><span class="dv">32</span><span class="op">/</span><span class="dv">3</span>
+mean_score</code></pre></div>
+<pre><code>## [1] 10.7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(mean_score)</code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value <code>TRUE</code> in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will use in [LM: dummy variables].</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="ot">TRUE</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_car &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>) ## bicycle otherwise
+wheels &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>is_car <span class="op">*</span><span class="st"> </span><span class="dv">2</span>
+wheels</code></pre></div>
+<pre><code>## [1] 4 4 2</code></pre>
+<p>Data sets usually contain variables that are not numeric, but partition the data into groups. For example, we frequently group observations by the following</p>
+<ul>
+<li><code>Part</code>: participant</li>
+<li><code>Condition</code>: experimental condition</li>
+<li><code>Design</code>: one of several designs</li>
+<li><code>Education</code>: level of education (e.g., low, middle or high)</li>
+</ul>
+<p>Two object types apply for grouping observations: <em>factor</em> and <em>character</em>. While factors specialize on grouping observations, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of designs A and B. Note how the factor identifies its <em>levels</em> when called to the screen:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_char &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>)
+design_char</code></pre></div>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;B&quot; &quot;A&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design_fact &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>))
+design_fact</code></pre></div>
+<pre><code>## [1] A B B A
+## Levels: A B</code></pre>
+<p>Statistical analyses deal with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work properly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as <code>-999</code> and then declared this a missing value. In R <em>missing values are first-class citizens</em>. Every vector of a certain class can contain missing values, which are identified as <code>NA</code>.</p>
+<p>Most basic data manipulation functions, like <code>mean</code> are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any <code>NA</code> values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clicks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">2</span>)
+<span class="kw">mean</span>(clicks)</code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(clicks, <span class="dt">na.rm =</span> T)</code></pre></div>
+<pre><code>## [1] 2.5</code></pre>
+<p>This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a “variable”. In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In general programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls <em>objects</em> what is usually called a programming variable.</p>
+</div>
+<div id="operators-and-functions" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Operators and functions</h3>
+<p>R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterize a vector. The following functions do that with to the vector <code>X</code>, every in their own way:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(X)
+<span class="kw">sum</span>(X)
+<span class="kw">mean</span>(X)
+<span class="kw">var</span>(X)
+<span class="kw">sd</span>(X)
+<span class="kw">min</span>(X)
+<span class="kw">max</span>(X)
+<span class="kw">median</span>(X)</code></pre></div>
+<p>These functions are a transformation of data. The input to these transformations is <code>X</code> and is given as an <em>argument</em> to the function. Other functions require more than one argument. The <code>quantile</code> function is routinely used to summarize a variable. Recall that <code>X</code> has been drawn from a Normal distribution of <span class="math inline">\(\mu=2\)</span> and standard deviation <span class="math inline">\(\sigma = 1\)</span>. All Normal distributions have the property that about 66% of the mass is within the range of <span class="math inline">\(\mu-\sigma\)</span> and <span class="math inline">\(\mu+\sigma\)</span> <!-- #9 -->. That means in turn: 17% are below <span class="math inline">\(\mu-\sigma\)</span> and 66 + 17 = 83% are <em>below</em> <span class="math inline">\(\mu+\sigma\)</span>. The number of observations in a certain range of values is called a <em>quantile</em>. The <code>quantile</code> function operates on X, but takes an (optional) vector of quantiles as second argument:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(X, <span class="kw">c</span>(.<span class="dv">17</span>, .<span class="dv">83</span>))</code></pre></div>
+<pre><code>##  17%  83% 
+## 1.06 2.87</code></pre>
+<p>Most functions in R have <em>optional arguments</em> that let you change how the function performs. The basic mathematical functions all have the optional argument <code>na.rm</code>. This is a switch that determines how the function deals with missing values <code>NA</code>. Many optional arguments have <em>defaults</em>. The default of <code>na.rm</code> is <code>FALSE</code> (“return NA in case of NAs in the vector”). By setting it to <code>TRUE</code>, they are removed before operation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">3</span>)
+<span class="kw">mean</span>(B)
+<span class="kw">mean</span>(B, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Most more complex routines in R have an abundance of parameters, most of which have reasonable defaults, fortunately. To give a more complex example, the first call of <code>stan_glm</code> performs a Bayesian estimation of the grand mean model. The second does a Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</code> has been fixed, every subsequent run will produce the exact same chains. My apologies for the jargon! <!-- #10 --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">D_<span class="dv">1</span> =<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">X =</span> <span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">2</span>, <span class="dv">1</span>))
+M_<span class="dv">1</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
+               <span class="dt">data =</span> D_<span class="dv">1</span>)
+
+D_<span class="dv">2</span> =<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">X =</span> <span class="kw">rpois</span>(<span class="dv">20</span>, <span class="dv">2</span>))
+M_<span class="dv">2</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+               <span class="dt">family =</span> poisson,
+               <span class="dt">seed =</span> <span class="dv">42</span>,
+               <span class="dt">iter =</span> <span class="dv">5000</span>,
+               <span class="dt">data =</span> D_<span class="dv">1</span>)</code></pre></div>
+<p>R brings the usual set of arithmetic operators, like <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in these two ways:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">+</span><span class="st">`</span>(<span class="dv">1</span>,<span class="dv">2</span>)</code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>The second term is a function that takes two numbers as input and returns a third. It is just a different syntax, and this one is called the <em>polish notation</em>. I will never use it throughout the rest of this book.</p>
+<p>Another set of commonly used operators are logical, they implement <em>Boolean algebra</em>. Some common Boolean operators are shown in the truth table:</p>
+<table>
+<thead>
+<tr class="header">
+<th>A</th>
+<th>B</th>
+<th>!A</th>
+<th>A &amp; B</th>
+<th>A | B</th>
+<th>A == B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>not</td>
+<td>and</td>
+<td>or</td>
+<td>equals</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr class="odd">
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+</tr>
+<tr class="odd">
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+</tbody>
+</table>
+<p>Be careful not to confuse Boolean “and” and “or” with their common natural language use. If you ask: “Can you buy apples <em>or</em> pears on the market?”, the natural answer would be: “both”. The Boolean answer is: TRUE. In a requirements document you could state “This app is for children and adults”. In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: “The envisioned users can be adult or child”. <!-- #11 --></p>
+<p>Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, “either A or B” can be written as: <code>(A | B) &amp; !(A &amp; B)</code>. This term only gets TRUE when A or B is TRUE, but not both.</p>
+<p>In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.</p>
+</div>
+<div id="storing-data-in-data-frames" class="section level3">
+<h3><span class="header-section-number">4.2.5</span> Storing data in data frames</h3>
+<p>Most behavioral research collects <em>real data</em> to work with. As behavior researchers are obsessed about finding associations between variables, real data usually contains several. If you have a sample of observations (e.g. participants) and every case has the same variables (measures or groups), data is stored in a table structure, where columns are variables and rows are observations.</p>
+<p>R knows the <code>data.frame</code> objects to store variable-by-observation tables. Data frames are tables, where columns represent statistical variables. Variables have names and can be of different data types, as they usually appear in empirical research. In many cases data frames are imported to R, as they represent real data. Here, we first see how to create data frames by simulation. First, we usually want some initial inspection of a freshly harvested data frame.</p>
+<p>Data frames are objects. By just calling a data frame it gets printed to the screen. This is a good moment to reflect on one idiosyncrasy in R, a feature, of course. R is primarily used interactively, which has the immense advantage that the programmer can incrementally build the data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call <code>Experiment</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Experiment</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">27</td>
+<td align="right">202</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">275</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">213</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">29</td>
+<td align="right">252</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">26</td>
+<td align="right">208</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">255</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">29</td>
+<td align="right">203</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">27</td>
+<td align="right">238</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">220</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">34</td>
+<td align="right">248</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">23</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">33</td>
+<td align="right">244</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">216</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">31</td>
+<td align="right">260</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">205</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">34</td>
+<td align="right">260</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">33</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">253</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">208</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">248</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">21</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">24</td>
+<td align="right">257</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">209</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">28</td>
+<td align="right">269</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">201</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">23</td>
+<td align="right">251</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">33</td>
+<td align="right">205</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">256</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">18</td>
+<td align="right">216</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">28</td>
+<td align="right">257</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">33</td>
+<td align="right">218</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">30</td>
+<td align="right">271</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">30</td>
+<td align="right">202</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">33</td>
+<td align="right">262</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">24</td>
+<td align="right">193</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">33</td>
+<td align="right">238</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">18</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">203</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">20</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">34</td>
+<td align="right">248</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">211</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">31</td>
+<td align="right">273</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">208</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">253</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">213</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">27</td>
+<td align="right">234</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">26</td>
+<td align="right">210</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">28</td>
+<td align="right">251</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">33</td>
+<td align="right">207</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">30</td>
+<td align="right">241</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">209</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">27</td>
+<td align="right">241</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">30</td>
+<td align="right">206</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">259</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">23</td>
+<td align="right">222</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">256</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">24</td>
+<td align="right">252</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">20</td>
+<td align="right">208</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">20</td>
+<td align="right">244</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">20</td>
+<td align="right">222</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">25</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">30</td>
+<td align="right">215</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">256</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">209</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">32</td>
+<td align="right">237</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">186</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">196</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">30</td>
+<td align="right">255</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">18</td>
+<td align="right">206</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">257</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">222</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">29</td>
+<td align="right">258</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">27</td>
+<td align="right">236</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">259</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">217</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">245</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">225</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">266</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">210</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">35</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">202</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">249</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">19</td>
+<td align="right">234</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">26</td>
+<td align="right">256</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">18</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">24</td>
+<td align="right">247</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">24</td>
+<td align="right">196</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">30</td>
+<td align="right">255</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">207</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">254</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">200</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">27</td>
+<td align="right">244</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">214</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">33</td>
+<td align="right">244</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">26</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">35</td>
+<td align="right">252</td>
+</tr>
+</tbody>
+</table>
+<p>This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: <code>NewExp &lt;- Experiment</code>. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if <em>called to the console in an intercative session</em>, R silently uses the <code>print</code> function on the object. The following would give precisely the same results as above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(Experiment)</code></pre></div>
+<p>Such <code>print</code> functions exist for dozens of classes of objects. They represent what the developers thought would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand.</p>
+<p>However, when working interactively, most of the time you do a data transformation and assign it to a new variable, thus you check it immediately. As the assignment is always silent (unless there occurs an error), you are forced to type a print statement afterwards. There is shortcut for that: if you embrace the assignment statement in brackets, the result will be printed to the screen. As convenient as this is, especially when creating longer data transformation chains, it introduces some visual clutter. In this book I use it sparingly, at most.</p>
+<p>The dedicated print function does what way back a developer thought would be the most useful information in most cases. Depending on the situation, it can provide too much, too little or just the wrong information. For example: when simulating a data set, like in [First Exercise], we want to check whether the resulting data frame has the desired length and whether the variables have the correct class. The standard implementation of the print command, dumps the whole data frame to the screen, which can be much more than ever needed. The newer dplyr implementation <code>data_frame</code> (from the tidyverse, also called <em>tibble</em>) you have seen in action already, is much better suited for this situation, as it displays dimensions and variable classes. In contrast, if the job is to spot whether there are many missing values (<code>NA</code>), the classic print performs better.</p>
+<p>Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is <code>summary</code>. For all data frames, it produces an overview with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">summary</span>(Experiment))</code></pre></div>
+<pre><code>##     Group                age          outcome   
+##  Length:100         Min.   :18.0   Min.   :186  
+##  Class :character   1st Qu.:22.0   1st Qu.:210  
+##  Mode  :character   Median :26.5   Median :235  
+##                     Mean   :26.6   Mean   :232  
+##                     3rd Qu.:30.0   3rd Qu.:254  
+##                     Max.   :35.0   Max.   :275</code></pre>
+<p>The <code>str</code> (structure) command works on any R object and displays the hierarchical structure (if there is one):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(Experiment)</code></pre></div>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    100 obs. of  3 variables:
+##  $ Group  : chr  &quot;control&quot; &quot;experimental&quot; &quot;control&quot; &quot;experimental&quot; ...
+##  $ age    : num  27 22 25 29 26 21 29 27 28 34 ...
+##  $ outcome: num  202 275 213 252 208 ...</code></pre>
+<p>Data frames store variables, but statistical procedures operate on variables. We need ways of accessing and manipulating statistical variables and we will have plenty. First, recall that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.</p>
+<p>Internally, data frames are a collection of “vertical” vectors that are equally long. Being a collection of vectors, the variables of a data frame can be of different classes, like <code>character</code>, <code>factor</code> or <code>numeric</code>. In the most basic case, you want to calculate a statistic for a single variable out of a data frame. The <code>$</code> operator pulls the variable out as a vector:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(Experiment<span class="op">$</span>outcome)</code></pre></div>
+<pre><code>## [1] 232</code></pre>
+<p>As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call</p>
+<ul>
+<li>the first <em>outcome</em> measure</li>
+<li>the first to third elements of <em>Group</em></li>
+<li>the complete first row</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Experiment[  <span class="dv">1</span>, <span class="dv">3</span>]</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">202</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Experiment[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">2</span>]</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="right">22</td>
+</tr>
+<tr class="odd">
+<td align="right">25</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Experiment[  <span class="dv">1</span>,  ]</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">27</td>
+<td align="right">202</td>
+</tr>
+</tbody>
+</table>
+<p>Addressing one or more elements in square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression <code>Experiment[,]</code> is fully valid and will just the return the whole data frame.</p>
+<p>There is an important difference, however, when using R’s classic <code>data.frame</code> as compared to dplyr’s <code>data_frame</code>implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with <code>data.frame</code>, when the addressed elements expand over multiple columns, like <code>Experiment[, 1:2]</code>, the result will be a <code>data.frame</code> object, too. However, when slicing a single column, the result is a vector:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Exp_classic &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(Experiment)
+Exp_classic[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]  ## data.frame</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Exp_classic[<span class="dv">1</span>,]       ## data.frame</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">27</td>
+<td align="right">202</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Exp_classic[,<span class="dv">1</span>]       ## vector</code></pre></div>
+<pre><code>##   [1] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##   [5] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##   [9] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [13] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [17] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [21] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [25] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [29] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [33] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [37] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [41] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [45] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [49] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [53] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [57] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [61] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [65] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [69] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [73] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [77] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [81] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [85] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [89] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [93] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;
+##  [97] &quot;control&quot;      &quot;experimental&quot; &quot;control&quot;      &quot;experimental&quot;</code></pre>
+<p>Predictability and a few other useful tweaks made me prefer <code>data_frame</code> over <code>data.frame</code>. But, many third-party packages continue to produce classic <code>data.frame</code> objects. For example, there is an alternative to package `<code>readxl</code>, <code>openxlsx</code>, which reads (and writes) Excel files. It returns classic data.frames, which can easily be converted as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">D_foo &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read.xlsx</span>(<span class="st">&quot;foo.xlsx&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as_data_frame</span>()</code></pre></div>
+<p>While <code>data_frame[]</code> behaves perfectly predictable, in that it always returns a data frame, even when this is just a single column or cell. Sometimes, one wants to truly extract a vector. With a <code>data_frame</code> a single column can be extracted as a vector, using double square brackets, or using the <code>$</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Experiment[[<span class="dv">1</span>]]       ## vector
+Experiment<span class="op">$</span>Group      ## the same</code></pre></div>
+<p>Sometimes, it may be necessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values. The syntax for indexing elements in a data frame can be used in conjunction with the assignment operator <code>&lt;-</code>. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to <code>NA</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## injecting
+Experiment[<span class="dv">2</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">660</span>
+Experiment[<span class="dv">6</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">987</span>
+Experiment[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="op">-</span><span class="dv">99</span>
+
+## printing first few observations
+<span class="kw">head</span>(Experiment)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">-99</td>
+<td align="right">202</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">660</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">-99</td>
+<td align="right">213</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">29</td>
+<td align="right">252</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">26</td>
+<td align="right">208</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">21</td>
+<td align="right">987</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## setting to NA
+Experiment[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">6</span>),<span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>
+Experiment[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),<span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre></div>
+<p>Besides the injection, note two more features of addressing data frame elements. The first is, that vectors can be used to address multiple rows, e.g. 2 and 6. In fact, the range operator <code>1:3</code> we used above is just a convenient way of creating a vector <code>c(1,2,3)</code>. Although not shown in the example, this works for columns alike.</p>
+<p>The careful reader may also have noted another oddity in the above example. With <code>Experiment[c(2, 6),&quot;outcome&quot;]</code> we addressed two elements, but right-hand side of <code>&lt;-</code> is only one value. That is a basic mechanism of R, called <em>reuse</em>. When the left-hand side is longer than the right-hand side, the right-hand side is reused as many times as needed. Many basic functions in R work like this, and it can be quite useful. <!-- #12 --> For example, you may want to create a vector of 20 random numbers, where one half has a different mean as the second half of observations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">sd =</span> <span class="dv">1</span>)</code></pre></div>
+<p>The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the <code>sd = 1</code> parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions.</p>
+</div>
+<div id="import-export-and-archiving" class="section level3">
+<h3><span class="header-section-number">4.2.6</span> Import, export and archiving</h3>
+<p>R lets you import data from almost every conceivable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for Excel files). Besides that R has its own file format for storing data, which is <em>.Rda</em> files. With these files you can save data frames (and any other object in R), using the <code>save(data, file = &quot;some_file.Rda&quot;)</code> and <code>load(file = &quot;some_file.Rda&quot;)</code> commands.</p>
+<p>Few people create their data tables directly in R, but have legacy data sets in Excel (<em>.xslx</em>) and SPSS files (<em>.sav</em>). Moreover, the data can be produced by electronic measurement devices (e.g. electrodermal response measures) or programmed experiments can provide data in different forms, for example as <em>.csv</em> (comma-separated-values) files. All these files can be opened by the following commands:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Text files
+Experiment &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Experiment.csv&quot;</span>)
+
+## Excel
+Experiment &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read_excel</span>(<span class="st">&quot;Data/Experiment.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">1</span>)
+
+## SPSS (haven)
+Experiment &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">read_sav</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>)
+
+## SPSS (foreign)
+Experiment &lt;-
+<span class="st">  </span><span class="kw">read.spss</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>, <span class="dt">to.data.frame =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Note that I gave two options for reading SPSS files. The first (with an underscore) is from the newer haven package (part of tidyverse). With some SPSS files, I experienced problems with this command, as it does not convert SPSS’s data type <em>labelled</em> (which is almost the same as an R factor). The alternative is the classic <code>read.spss</code> command which works almost always, but as a default it creates a list of lists, which is not what you typically want. With the extra argument, as shown, it behaves as expected.</p>
+<p>Remember, data frames are objects and volatile as such. If you leave your session, they are gone. Once you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to have a complete R-based workflow, you can conveniently use R’s own format for storing data, <code>Rdata</code> files. For storing a data frame and then reading it back in (in your next session), simply do:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(Experiment, <span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)
+<span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)</code></pre></div>
+<p>Note that with <code>save</code> and <code>load</code> all objects are restored by their original names, without using any assignments. Take care, as this will not overwrite any object with the same name. Another issue is that for the <code>save</code> command you have to explicitly refer to the <code>file</code> argument and provide the file path as a character object. In Rstudio, begin typing <code>file=&quot;&quot;</code>, put the cursor between the quotation marks and hit <code>Tab</code>, which opens a small dialogue for navigation to the desired directory.</p>
+<p>Once you have loaded, prepared and started to analyze a data frame in R, there is little reason to go back to any legacy program. Still, the <code>haven</code> and <code>foreign</code> packages contain commands to write to various file formats. I’ll keep that as an exercise to the reader.</p>
+</div>
+<div id="case-environments" class="section level3">
+<h3><span class="header-section-number">4.2.7</span> Case environments</h3>
+<p>This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: <code>BrowsingAB_M_1</code>, <code>AUP_M_1</code>, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.</p>
+<p>For these reasons, all cases are enclosed in <em>case environments</em> and provided with this book. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;BrowsingAB.Rda&quot;</span>)</code></pre></div>
+<p>In R, <em>environments</em> are containers for collections of objects. If an object <code>BAB1</code> is placed in an environment <code>BrowsingAB</code>, it can be called as <code>BrowsingAB$BAB1</code>. This way, no brevity is gained. Another way to assess objects in an environment is to <em>attach the environment first</em> as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(BrowsingAB)
+BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="4%" />
+<col width="12%" />
+<col width="11%" />
+<col width="4%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="left">Task</th>
+<th align="left">Design</th>
+<th align="left">Gender</th>
+<th align="left">Education</th>
+<th align="right">age</th>
+<th align="left">Far_sighted</th>
+<th align="left">Small_font</th>
+<th align="right">ToT</th>
+<th align="right">clicks</th>
+<th align="right">returns</th>
+<th align="right">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">34</td>
+<td align="right">34</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">34</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="right">207</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">46</td>
+<td align="right">46</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">61</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">245</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">85</td>
+<td align="right">85</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">39</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">178</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">95</td>
+<td align="right">95</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">Low</td>
+<td align="right">22</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">215</td>
+<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">100</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">47</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">209</td>
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">116</td>
+<td align="right">116</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">M</td>
+<td align="left">Middle</td>
+<td align="right">75</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="right">185</td>
+<td align="right">10</td>
+<td align="right">4</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">181</td>
+<td align="right">181</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">49</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="right">141</td>
+<td align="right">8</td>
+<td align="right">2</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">197</td>
+<td align="right">197</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">F</td>
+<td align="left">Middle</td>
+<td align="right">52</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="right">227</td>
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(BrowsingAB)
+
+<span class="kw">attach</span>(Reading)
+D_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="left">font_size</th>
+<th align="left">font_color</th>
+<th align="right">mu</th>
+<th align="right">ToT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">51.2</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">62.0</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">9</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">70.1</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">11</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">66.5</td>
+</tr>
+<tr class="odd">
+<td align="right">18</td>
+<td align="right">18</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">34.7</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="right">21</td>
+<td align="left">10pt</td>
+<td align="left">black</td>
+<td align="right">50</td>
+<td align="right">48.5</td>
+</tr>
+<tr class="odd">
+<td align="right">28</td>
+<td align="right">28</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">37.2</td>
+</tr>
+<tr class="even">
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">49.5</td>
+</tr>
+</tbody>
+</table>
+<p>Calling <code>attach</code> gets you into the <em>namespace</em> of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The <code>detach</code> command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.</p>
+<p>All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called <code>simulate</code>, is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects. Generally, calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simulate</span>()  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() ## reproduces the data frame D_1</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="left">font_size</th>
+<th align="left">font_color</th>
+<th align="right">mu</th>
+<th align="right">ToT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">61.8</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">7</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">67.6</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">47.5</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="right">14</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">46.6</td>
+</tr>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">20</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">54.6</td>
+</tr>
+<tr class="even">
+<td align="right">24</td>
+<td align="right">24</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">52.1</td>
+</tr>
+<tr class="odd">
+<td align="right">28</td>
+<td align="right">28</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">37.2</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="right">40</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">46.2</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simulate</span>(<span class="dt">N =</span> <span class="dv">6</span>)  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() ## simulates first 6 participants only</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="left">font_size</th>
+<th align="left">font_color</th>
+<th align="right">mu</th>
+<th align="right">ToT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">66.9</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">12pt</td>
+<td align="left">gray</td>
+<td align="right">48</td>
+<td align="right">45.2</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="left">10pt</td>
+<td align="left">gray</td>
+<td align="right">60</td>
+<td align="right">61.8</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">49.2</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="left">10pt</td>
+<td align="left">black</td>
+<td align="right">50</td>
+<td align="right">52.0</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">6</td>
+<td align="left">12pt</td>
+<td align="left">black</td>
+<td align="right">46</td>
+<td align="right">45.5</td>
+</tr>
+</tbody>
+</table>
+<p>Furthermore, once you delve deeper into R, you can critically inspect the simulation function’s code for its behavioral and psychological assumptions (working through the later chapters on data management and simulation will help).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulate ## calling a function without parantheses prints its code</code></pre></div>
+<pre><code>## function(N = 40,
+##            beta = c(Intercpt = 60, 
+##                     fnt_size_12 = -12, 
+##                     fnt_color_blk = -10, 
+##                     ia_blk_12 = 8),
+##            sigma = 5,
+##            seed = 42) 
+##     {
+##     set.seed(seed)
+##     out &lt;-
+##       data_frame(Part = 1:N,
+##                  font_size = factor(rep(c(1, 2), N/2), 
+##                                     levels = c(1,2), 
+##                                     labels = c(&quot;10pt&quot;, &quot;12pt&quot;)),
+##                  font_color = factor(c(rep(1, N/2), rep(2, N/2)),
+##                                      levels = c(1,2), 
+##                                      labels = c(&quot;gray&quot;, &quot;black&quot;))) %&gt;%
+##        mutate( mu = beta[1] + 
+##                 beta[2] * (font_size == &quot;12pt&quot;) +
+##                 beta[3] * (font_color == &quot;black&quot;) +
+##                 beta[4] * (font_color == &quot;black&quot;) * (font_size == &quot;12pt&quot;),
+##               ToT = rnorm(N,  mu, sigma)) %&gt;% 
+##     as_tbl_obs()
+##     
+##     #class(out) &lt;- append(class(out), &quot;sim_tbl&quot;)
+##     attr(out, &quot;coef&quot;) &lt;- list(beta = beta,
+##                               sigma = sigma)
+##     attr(out, &quot;seed&quot;) &lt;- seed
+##     
+##     out %&gt;% as_tbl_obs()
+##     }
+## &lt;bytecode: 0x000000002fd9e230&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(Reading)</code></pre></div>
+<p>Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.</p>
+<p>Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do <em>not</em> recommend using environments in everday data analysis, with one exception: at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call <code>ls()</code> for a listing). Saving all objects and retrieving them when returning from a break is as easy as:<!-- #13 --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(<span class="dt">file =</span> <span class="st">&quot;my_data_analysis.Rda&quot;</span>)
+## have a break
+<span class="kw">load</span>(<span class="st">&quot;my_data_analysis.Rda&quot;</span>)</code></pre></div>
+<p>Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.</p>
+</div>
+<div id="structuring-data" class="section level3">
+<h3><span class="header-section-number">4.2.8</span> Structuring data</h3>
+<p>In the whole book, data sets are structured according to the rule <em>one-row-per-observation of the dependent variable</em> (the ORPO rule). Many researchers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models. Consider a study where two designs were evaluated by three participants using a self-report item, like “how easy to use is the interface?” Then, the <em>wrong way</em> of structuring the data would be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ORPO <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(Design, response) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="right">A</th>
+<th align="right">B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>The correct way of setting up the data frame is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ORPO <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Part</th>
+<th align="left">Design</th>
+<th align="right">response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">A</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">A</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">B</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">B</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">B</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>The ORPO rule dictates another principle: every row should have a unique identifier, which can be a combination of values. In the example above, every observation is uniquely identified by the participant identifier and the design condition. If we extend the example slightly, it is immediatly apparent, why the ORPO rule is justified. Imagine, the study actually asked three partcipants to rate two different tasks on two different designs by three self-report items. By the ORPO rule, we can easily extend the data frame as below (showing a random selection of rows). I leave it up to the reader to figure out how to press such a data set in the wide legacy format.</p>
+<p>Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record data in multi-method experiments and join them automatically. This is shown in chapter [DM]. Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects models and the notion of <em>members of a population</em>. Throughout the book I will use standard names for recurring identifier variables in design research:</p>
+<ul>
+<li>Part</li>
+<li>Design</li>
+<li>Item</li>
+<li>Task</li>
+</ul>
+<p>Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ORPO <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(Part, Task, Design, Item)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Part</th>
+<th align="right">Task</th>
+<th align="left">Design</th>
+<th align="right">Item</th>
+<th align="right">response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="left">B</td>
+<td align="right">3</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">B</td>
+<td align="right">2</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="left">A</td>
+<td align="right">2</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="left">B</td>
+<td align="right">2</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="data-transformation" class="section level3">
+<h3><span class="header-section-number">4.2.9</span> Data transformation</h3>
+<p>Do you wonder about the strange use of <code>%&gt;%</code> in my code above? This is the tidy way of programming data transformations in R.</p>
+<p>The so-called magritte operator <code>%&gt;%</code> is part of the <em>dplyr/tidyr</em> framework for data manipulation. It chains steps of data manipulation by connecting transformation functions, also called piping. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.</p>
+<p>Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to <em>select</em> or <em>rename</em> variables in the data frame. Say, you want the variable <em>Group</em> to be called <em>Condition</em>, omit the variable <em>age</em> and store the new data frame as <em>Exp</em>. The <code>select</code> command does all this. In the following code the data frame <code>Experiment</code> is piped into <code>select</code>. The variable <em>Condition</em> is renamed to <em>Group</em>, and the variable <em>outcome</em> is taken as-is. All other variables are discarded.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Exp &lt;-<span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, outcome) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<p>Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first “inject” a few missing values for age (which were coded as -99) and outliers (&gt;500) in the outcome variable. Note that I am using some R commands that you don’t need to understand by now. Then we reuse the above code for renaming (this time keeping <em>age</em> on board) and add some filtering steps:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## rename, then filtering
+Exp &lt;-<span class="st">  </span>
+<span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, age, outcome) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(outcome <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(age <span class="op">!=</span><span class="st"> </span><span class="op">-</span><span class="dv">99</span>)
+
+Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="left">Condition</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">experimental</td>
+<td align="right">27</td>
+<td align="right">238</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="left">experimental</td>
+<td align="right">24</td>
+<td align="right">257</td>
+</tr>
+<tr class="odd">
+<td align="right">22</td>
+<td align="left">experimental</td>
+<td align="right">23</td>
+<td align="right">251</td>
+</tr>
+<tr class="even">
+<td align="right">26</td>
+<td align="left">experimental</td>
+<td align="right">28</td>
+<td align="right">257</td>
+</tr>
+<tr class="odd">
+<td align="right">55</td>
+<td align="left">control</td>
+<td align="right">22</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="right">64</td>
+<td align="left">experimental</td>
+<td align="right">32</td>
+<td align="right">237</td>
+</tr>
+<tr class="odd">
+<td align="right">77</td>
+<td align="left">control</td>
+<td align="right">25</td>
+<td align="right">225</td>
+</tr>
+<tr class="even">
+<td align="right">81</td>
+<td align="left">control</td>
+<td align="right">28</td>
+<td align="right">202</td>
+</tr>
+</tbody>
+</table>
+<p>During data preparation and analysis, new variables are created routinely. For example, the covariate is often shifted to the center before using linear regression:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean_age =<span class="st"> </span><span class="kw">mean</span>(Exp<span class="op">$</span>age)
+Exp &lt;-<span class="st"> </span>Exp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_cntrd =</span> age <span class="op">-</span><span class="st"> </span>mean_age)
+Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="left">Condition</th>
+<th align="right">age</th>
+<th align="right">outcome</th>
+<th align="right">age_cntrd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">experimental</td>
+<td align="right">29</td>
+<td align="right">252</td>
+<td align="right">2.24</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">experimental</td>
+<td align="right">22</td>
+<td align="right">253</td>
+<td align="right">-4.76</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">209</td>
+<td align="right">7.24</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="left">control</td>
+<td align="right">32</td>
+<td align="right">201</td>
+<td align="right">5.24</td>
+</tr>
+<tr class="odd">
+<td align="right">34</td>
+<td align="left">experimental</td>
+<td align="right">18</td>
+<td align="right">254</td>
+<td align="right">-8.76</td>
+</tr>
+<tr class="even">
+<td align="right">46</td>
+<td align="left">experimental</td>
+<td align="right">28</td>
+<td align="right">251</td>
+<td align="right">1.24</td>
+</tr>
+<tr class="odd">
+<td align="right">67</td>
+<td align="left">control</td>
+<td align="right">34</td>
+<td align="right">196</td>
+<td align="right">7.24</td>
+</tr>
+<tr class="even">
+<td align="right">94</td>
+<td align="left">experimental</td>
+<td align="right">33</td>
+<td align="right">244</td>
+<td align="right">6.24</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the data frame, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Exp <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(Condition) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(outcome),
+           <span class="dt">sd =</span> <span class="kw">sd</span>(outcome) )</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Condition</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">211</td>
+<td align="right">9.31</td>
+</tr>
+<tr class="even">
+<td align="left">experimental</td>
+<td align="right">252</td>
+<td align="right">8.56</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="plotting-data" class="section level3">
+<h3><span class="header-section-number">4.2.10</span> Plotting data</h3>
+<p>Good statistical graphics can vastly improve your and your readers understanding of data and results. This book exclusively introduces the modern ggplot2 graphics system of R, which is based on the <a href="http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/">grammar of graphics</a>.</p>
+<p>Every plot starts with piping a data frame into the <code>ggplot(aes(...))</code> command. The <code>aes(...)</code> argument of ggplot creates the <em>aesthetics</em>, which is a <em>mapping between variables and features of the plot</em> (and only remotely has something to do with beauty). Review the code once again that produces the piles-of-sugar: the aesthetics map the variable <em>Group</em> on the fill color, whereas <em>outcome</em> is mapped to the x axis. For a plot to be valid, there must at least one layer with a <em>geometry</em>. The above example uses the density geometry, which calculates the density and maps it to the y axis.</p>
+<p>The ggplot2 plotting system knows a full set of geometries, like:</p>
+<ul>
+<li>scatter plots with <code>geom_point()</code></li>
+<li>smooth line plots with <code>geom_smooth()</code></li>
+<li>histograms with <code>geom_histogram()</code></li>
+<li>box plots with <code>geom_boxplot()</code> and</li>
+<li>my personal favorite: horizontal density diagrams with <code>geom_violin()</code></li>
+</ul>
+<p>For a brief demonstration of ggplots basic functionality, we use the <code>BAB1</code> data set of the BrowsingAB case. We attach the case environment and use the <code>str</code> command to take a first look at the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(BrowsingAB)
+BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="4%" />
+<col width="12%" />
+<col width="11%" />
+<col width="4%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">Part</th>
+<th align="left">Task</th>
+<th align="left">Design</th>
+<th align="left">Gender</th>
+<th align="left">Education</th>
+<th align="right">age</th>
+<th align="left">Far_sighted</th>
+<th align="left">Small_font</th>
+<th align="right">ToT</th>
+<th align="right">clicks</th>
+<th align="right">returns</th>
+<th align="right">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">Middle</td>
+<td align="right">49</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="right">190</td>
+<td align="right">12</td>
+<td align="right">4</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">Middle</td>
+<td align="right">34</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="right">196</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">46</td>
+<td align="right">46</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">M</td>
+<td align="left">High</td>
+<td align="right">61</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">245</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">71</td>
+<td align="right">71</td>
+<td align="left">1</td>
+<td align="left">A</td>
+<td align="left">F</td>
+<td align="left">High</td>
+<td align="right">48</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="right">149</td>
+<td align="right">9</td>
+<td align="right">3</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">110</td>
+<td align="right">110</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">M</td>
+<td align="left">Low</td>
+<td align="right">51</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="right">223</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">116</td>
+<td align="right">116</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">M</td>
+<td align="left">Middle</td>
+<td align="right">75</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="right">185</td>
+<td align="right">10</td>
+<td align="right">4</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">127</td>
+<td align="right">127</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">F</td>
+<td align="left">High</td>
+<td align="right">35</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="right">114</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">152</td>
+<td align="right">152</td>
+<td align="left">1</td>
+<td align="left">B</td>
+<td align="left">F</td>
+<td align="left">Low</td>
+<td align="right">77</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="right">233</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+<p>The BrowsingAB case is a virtual series of studies, where two websites were compared by how long it takes users to complete a given task, time-on-task (ToT). Besides the design factor, a number of additional variables exist, that could possibly play a role for ToT, too. We explore the data set with ggplot:</p>
+<p>We begin with a plot that shows the association between age of the participant and ToT. Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a <em>scatter plot</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/build_ggpl_2-1.png" width="672" /></p>
+<p>Let’s take a look at the elements of the command chain: The first two lines pipe the data frame into the ggplot engine.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(...)</code></pre></div>
+<p>At that moment, the ggplot engine “knows” which variables the data frame contains and hence are available for the plot. It does not yet know, which variables are being used, and how. The next step is, usually, to consider a basic (there exist more than 30) <em>geometry</em> and put it on a <em>layer</em>. The scatter plot geometry of ggplot is <code>geom_point</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(...) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p>The last step is the <em>aesthetic mapping</em>, which tells ggplot the variables to use and how to map them to <em>aesthetic</em> properties of the geometry. The basic properties of points in a coordinate system are the x and y-positions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p>The function <code>aes</code> creates a mapping where the aesthetics per variable are given. When call <code>aes</code> directly, we see that it is just a table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)</code></pre></div>
+<pre><code>## Aesthetic mapping: 
+## * `x` -&gt; `age`
+## * `y` -&gt; `ToT`</code></pre>
+<p>One tiny detail in the above chain has not yet been explained: the <code>+</code>. When choosing the geometry, you actually <em>add a layer</em> to the plot. This is, of course, not the literal mathematical sum. Technically, what the author of the ggplot2 package did, was to <em>overload</em> the <code>+</code> operator. A large set of ggplot functions can be combined in a myriad of ways, just using <code>+</code>. The overloaded <code>+</code> in ggplot is a brilliant analogy: you can infinitely chain ggplot functions, like you can create long sums. You can store ggplot object and later modify it by adding functions. The analogy has its limits, though: other than sums, order matters in ggplot combinations: the first in the chain is always <code>ggplot</code> and layers are drawn upon each other.</p>
+<p>Let’s move on with a slightly different situation that will result in a different geometry. Say, we are interested in the distribution of the time-on-task measures under the two designs. We need a geometry, that visualizes the distribution of quantitative variables split by a grouping variable, factor. The box plot does the job:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Design,  <span class="dt">y =</span> ToT)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>The box plot maps ToT to y (again). The factor Design is represented as a split on the x-axis. Interestingly, the box plot does not represent the data as raw as in the scatter plot example. The geometry actually performs an analysis on ToT, which produces five statistics: min, first quartile, median, third quartile and max. These statistics define the vertical positions of bars and end points.</p>
+<p>Now, we combine all three variables in one plot: how does the association between ToT and age differ by design? As we have two quantitative variables, we stay with the scatter plot for now. As we intend to separate the groups, we need a property of points to distinguish them. Points offer several additional aesthetics, such as color, size and shape. We choose color, and add it to the aesthetic mapping by <code>aes</code>. Note, that it does not matter whether you use the British or American way of writing (colour vs. color).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the box plot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For scatter plots, a geometry that does the job of summarizing the trend is <code>geom_smooth</code>. This geometry summarizes a cloud of points by drawing a LOESS-smooth line through it. Note how the color mapping is applied to all geometry layers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>()</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored sigmoid curves.</p>
+<p>Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use <em>facetting</em>. A facet splits the data by a grouping variable and creates one single plot for every group:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>.)</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>See, how the <code>facet_grid</code> command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BAB1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>Design)</code></pre></div>
+<p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable, but not vice versa.</p>
+</div>
+<div id="fitting-regression-models" class="section level3">
+<h3><span class="header-section-number">4.2.11</span> Fitting regression models</h3>
+<p>Above we have seen examples of functions that boil down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the <code>lm</code> command, that applies regression models to data (provided as data frames).</p>
+<p>In the following, we will use another simulated data frame <code>Exp</code> to demonstrate linear models. To make this more interesting, we simulate <code>Exp</code> in a slightly advanced way, with quantitative associations between variables. Note how the <em>expected value</em> <span class="math inline">\(\mu\)</span> is created by drawing on the variables <code>Condition</code> and <code>age</code>. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of <span class="math inline">\(mu\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N_Obs &lt;-<span class="st"> </span><span class="dv">20</span>
+<span class="kw">set.seed</span>(<span class="dv">42</span>)
+Exp &lt;-
+<span class="st">  </span><span class="kw">data_frame</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span>N_Obs,
+             <span class="dt">Condition =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Experimental&quot;</span>, <span class="st">&quot;Control&quot;</span>),
+                             N_Obs<span class="op">/</span><span class="dv">2</span>),
+             <span class="dt">age =</span> <span class="kw">runif</span>(N_Obs, <span class="dv">18</span>, <span class="dv">35</span>),
+             <span class="dt">mu =</span> <span class="dv">200</span> <span class="op">+</span><span class="st"> </span>(Condition <span class="op">==</span><span class="st"> &quot;Control&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">50</span> <span class="op">+</span><span class="st"> </span>age <span class="op">*</span><span class="st"> </span><span class="dv">1</span>,
+             <span class="dt">outcome =</span> <span class="kw">rnorm</span>(N_Obs, mu, <span class="dv">10</span>))</code></pre></div>
+<p>The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as <em>ANOVA</em>. As it will turn out in [LM], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call comparison of groups model (CGM). The estimation of regression models is done by a <em>regression engine</em>, which basically is a (very powerful) R command. The specification for any regression model is given in R’s formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame <code>Exp</code> using the regression engine <code>stan_glm</code>. The desired model estimates the effect of <code>Condition</code> on <code>outcome</code>. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does <em>not</em> contain is F-statistics and p-values; and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The <code>fixef</code> command extracts the parameter estimates from the model to answer the question.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">1</span> &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition, 
+     <span class="dt">data =</span> Exp)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(M_<span class="dv">1</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">274.0</td>
+<td align="right">266</td>
+<td align="right">282.4</td>
+</tr>
+<tr class="even">
+<td align="left">ConditionExperimental</td>
+<td align="right">-46.1</td>
+<td align="right">-58</td>
+<td align="right">-34.5</td>
+</tr>
+</tbody>
+</table>
+<p>Another classic model is <em>linear regression</em>, where outcome is predicted by a metric variable, say <code>age</code>. The <code>stan_glm</code> regression engine is truly multi-purpose and does the job with grace:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">2</span> &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>age, 
+     <span class="dt">data =</span> Exp)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(M_<span class="dv">2</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">206.60</td>
+<td align="right">126.1</td>
+<td align="right">285.79</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">1.58</td>
+<td align="right">-1.2</td>
+<td align="right">4.46</td>
+</tr>
+</tbody>
+</table>
+<p>If you are interested in both at the same time, you can combine that in one model by the following formula:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M_<span class="dv">3</span> &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition <span class="op">+</span><span class="st"> </span>age, 
+     <span class="dt">data =</span> Exp)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(M_<span class="dv">3</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">231.69</td>
+<td align="right">199.310</td>
+<td align="right">265.46</td>
+</tr>
+<tr class="even">
+<td align="left">ConditionExperimental</td>
+<td align="right">-46.21</td>
+<td align="right">-56.362</td>
+<td align="right">-36.43</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">1.51</td>
+<td align="right">0.344</td>
+<td align="right">2.66</td>
+</tr>
+</tbody>
+</table>
+<p>A statistical model has several components, for example the coefficients and residuals. Models are complex objects, from which a variety of inferences can be made. For example, the coefficient estimates can be extracted and used for prediction. This is what <code>fixef()</code> does in the above code.</p>
+<p>A number of functions can be used to extract certain aspects of the model. For example:</p>
+<ul>
+<li><code>fixef(model)</code> extracts the linear effects</li>
+<li><code>residuals(model)</code> extracts the measurement errors</li>
+<li><code>predict(model)</code> extracts the expected values</li>
+</ul>
+<p>These will all be covered in later chapters.</p>
+</div>
+<div id="knitting-statistical-reports" class="section level3">
+<h3><span class="header-section-number">4.2.12</span> Knitting statistical reports</h3>
+<p>As you have seen throughout this chapter, with R you can effectively manage data, create impressively expressive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a neat report. With R and Rstudio it has never been easier than that. In fact, complete books have been written in R, like the one you are reading.</p>
+<p>A <em>minimal statistical report</em> contains four elements:</p>
+<ol style="list-style-type: decimal">
+<li>a recap of the research question</li>
+<li>description of how the statistical model relates to the research question</li>
+<li>a few figures or tables that answers the research question</li>
+<li>an explanation of the results</li>
+</ol>
+<p>Of these four elements, three are pure text. For a minimal report it is a fairly convenient to use a word processor software for the text, craft the figure in R and copy it. One problem with this approach is that a <em>scrunitable statistical report</em> contains at least the following <em>additional</em> elements:</p>
+<ol style="list-style-type: decimal">
+<li>procedures of data preparation (sources, transformations, variable names, outlier removal)</li>
+<li>data exploration (ranges of variables, outlier discovery, visualizing associations, etc.)</li>
+<li>model estimation (formula specification, convergence checks)</li>
+<li>model criticism (normality of residuals, etc.)</li>
+</ol>
+<p>In advanced statistical workflows this is then multiplied by the number of models, an iterative selection process. Because it is easy to lie with statistics, these elements are needed as to build a fundament of credibility. Full transparency is achieved, when another researcher can exactly reproduce all steps of the original analysis. It is obvious that the easiest way to achieve this, is to hand over the full R script.</p>
+<p>The most user-friendly way to achieve both, a good looking report and full transparency, is to write a document that contains all before mentioned: text, graphics, tables and R code. In the R environment such mixed documents can be written in the <em>markdown/knitr</em> framework.</p>
+<p>Markdown implements a simple markup language, with that you can typset simple, structured texts in a plain ASCII editor. Later in the workflow, such a markup document is transformed into one of various output formats, that are rendered by the respective programs, such as Microsoft Word or an HTML browser.</p>
+<div class="figure">
+<img src="Illustrations/markup_minimal_report.png" alt="A minimal statistical report in markdown" />
+<p class="caption">A minimal statistical report in markdown</p>
+</div>
+<p>The above text is an alternation of markup text and <em>chunks</em>, those weirdly enclosed pieces of R code. While the text is static, the chunks are processed by the knitr engine, evaluating the enclosed R code and knitting the output into a document. Very conveniently, when the output is a figure, it will be inserted into the document right away. The <code>kable</code> command from the knitr package, in turn, produces neatly rendered tables from data frame objects. By default, the R code is shown, too, but that can be customized.</p>
+<p>The minimal workflow for statistical reporting with knitr is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Use markdown right away, covering all steps of your data analysis, i.e. a scrutable report. You may even start writing when only one part of your data gathering is completed, because due to the dynamic chunks, updating the report when new data arrives is just a button click away.</li>
+<li>When the data analysis is complete, compile the scrutable report to Word format</li>
+<li>Extract the passages, figures and tables for a minimal statistical report. This is your results section.</li>
+<li>provide the scrutable report as appendix or supplementary material</li>
+</ol>
+<p>In the notion of this chapter, this is just to get you started and knitr is so tightly integrated with the Rstudio environment that I don’t even bother to explain the commands for knitting a document. Once acquainted with the basics, markdown provides a few additional markup tokens, like footnotes, hyperlinks or including images. The customization options and addons for knitr are almost endless and various interesting addons are available, just to mention two:</p>
+<ol style="list-style-type: decimal">
+<li>The bookdown package provides an infrastructure for writing and publishing longer reports and books.</li>
+<li>With the shiny package one can add dynamic widgets to HTML reports. Think of a case, where your statistical model is more complicated than a linear regression line or a few group means, say you are estimating a polynomial model or a learning curve. Then, with a simple shiny app, you can enable your readers to understand the model by playful exploration.</li>
+</ol>
+</div>
+<div id="exercises-1" class="section level3">
+<h3><span class="header-section-number">4.2.13</span> Exercises</h3>
+<ol style="list-style-type: decimal">
+<li><p>In the book package (directory <code>/Data</code>) you will find the data set of the (virtual) study BAB1, which we will be using in coming chapters. This data comes as comma-separated value file with the file ending <code>.csv</code>. Load this file into R using the <code>read_csv</code> command and check the dataframe.</p></li>
+<li><p>Find the documentation of the packages <code>haven</code> and <code>readr</code>. Find two import functions. The one that is most useful for you and the one that you consider most exotic.</p></li>
+<li><p>We have seen how to extract a data frame column as a vector using the double square brackets. There seems to be no such option to extract an individual row as a vector. Why? (Think about object types). &lt;–! #14 –&gt;</p></li>
+<li><p>Use the world wide web to find geometries that are useful for plotting associations between grouping variables (factors) and a metric variables. Try them all on the BAB1 data frame. Compare the geometries on what properties of the data they convey.</p></li>
+<li><p>Like data frames and regression results, plots produced by ggplot are complex objects, too. Create an arbitrary plot, store it in a variable and inspect it using <code>class</code>, <code>summary</code> and <code>str</code>. In addition, what happens when you assign the plot to a variable and what happens when you call the variable?</p></li>
+<li><p>Revisit the python-swallowed-camel plot and check out how the aesthetic mapping is created. The plot uses a density geometry. Change it into a histogram. Then produce a box plot that shows the two conditions (think carefully about the mappings of x and y).</p></li>
+<li><p>Use the data set BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet grid, and use color to represent Design again.</p></li>
+<li><p>Use the data set BAB5 in BrowsingAB. Using a transformation chain, take the sum or average of participants’ ToT. Then run a few simple regression models.</p></li>
+<li><p>Use your own data. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame and summarize what is in the data frame. Use ggplot to create one or more exploratory graphs. Then use dplyr <code>summarize</code> to create summary statistics.</p></li>
+<li>Do a full exploratory analysis of the dataframe D_agg in case environment IPump. It has the predictors Design, Group, Education and experience. It has the outcome variables ToT, deviations and workload.
+<ol style="list-style-type: decimal">
+<li>Get the data frame into R and produce a summary.</li>
+<li>Plot a histogram for all dependent variables.</li>
+<li>Produce a table that counts the number of observations per Education(al level).</li>
+<li>Produce a table that displays minimum, maximum, median, mean and standard deviation of experience.</li>
+<li>Exclude participants with less than four years of experience.</li>
+<li>Produce a table with group means per Design and Session.</li>
+<li>For every outcome variable, produce a plot for Design by session.</li>
+<li>Explore graphically, what other relations may exist between outcome variables and Group, Education and experience.</li>
+<li>Run a regression model for ToT with Design and Session as predictors.</li>
+<li>Produce a coefficient table.</li>
+<li>Plot the residuals.</li>
+</ol></li>
+</ol>
+</div>
+<div id="bibliographic-notes-1" class="section level3">
+<h3><span class="header-section-number">4.2.14</span> Bibliographic notes</h3>
+<p><a href="http://r4ds.had.co.nz/">R for Data Science</a> is a book co-authored by Hadley “Tidy” Wickham.</p>
+<p><a href="http://www.r-bloggers.com/ggplot2-version-of-figures-in-%E2%80%9C25-recipes-for-getting-started-with-r%E2%80%9D/">ggplot2 Version of Figures in “25 Recipes for Getting Started with R”</a> for readers who are familiar with the legacy plotting commands in R.</p>
+<p><a href="http://rpubs.com/justmarkham/dplyr-tutorial">Introduction to dplyr for Faster Data Manipulation in R</a> introduces dplyr, the next generation R interface for data manipulation, which is used extensively in this book.</p>
+<p><a href="http://www.statmethods.net/">Quick-R</a> is a comprehensive introduction to many common statistical techniques with R.</p>
+<p><a href="http://codeasmanuscript.org/lessons/">Code as manuscript</a> features a small set of lessons with code examples, assignments and further resources. For if you are in a haste.</p>
+<p><a href="https://bookdown.org/yihui/bookdown/">bookdown: Authoring Books and Technical Documents with R Markdown</a> fully unleashes the power of knitr for writing and publishing longer reports and books.</p>
+
+</div>
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="bayesian-statistics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

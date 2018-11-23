@@ -12,11 +12,6 @@ source("RMDR.R")
 CE = c("Rainfall", "Rational", "Sec99")
 load_CE_(CE)
 
-#formals(stan_glm)$iter = 500
-#formals(stan_glm)$chains = 2
-#opts_chunk$set(cache = T)
-
-#library(printr)
 
 ```
 
@@ -276,7 +271,7 @@ In the umbrella example above, the magnitude of interest is the chance of rain. 
 
 Maybe, you have recorded the coincidences of clouds and rainfall over a period, of, let's say, 20 days. You made the following observations:
 
-```{r tab:umbrella_2}
+```{r tab_umbrella_2}
 Rain %>% as_tbl_obs()
 ```
 
@@ -288,14 +283,18 @@ T_desc <-
   group_by(cloudy) %>%
   summarize(chance_of_rain = mean(rain))
 
-T_desc %>% kable()
 ```
+```{r opts.label = "inv"}
+C_desc <- as.matrix(ungroup(T_desc))
+```
+
+
 
 ```{r}
 detach(Rainfall)
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r T_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(T_desc[2,2]), 5) * 100`$%. 
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = `r C_desc[2,2] * 100`$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = `r jitter(as.numeric(C_desc[2,2]), 5) * 100`$%. 
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -345,7 +344,7 @@ attach(Rational)
 ```
 
 
-```{r fig:rational_design_1, opts.label = "fig.small"}
+```{r rational_design_1, opts.label = "fig.small"}
 RD  %>% 
   ggplot(aes(y = Euro, x = Design)) +
   geom_boxplot()
@@ -437,7 +436,7 @@ attach(Sec99)
 ```
 
 
-```{r fig:seconds_99_1, opts.label = "fig.small"}
+```{r seconds_99_1, opts.label = "fig.small"}
 Ver20 %>%   
   ggplot(aes(x = ToT)) +
   geom_histogram()
@@ -543,7 +542,7 @@ sync_CE(Rational, M_prior, P_prior)
 ```
 
 
-```{r tab:rational_design_prior, opts.label = "invisible"}
+```{r tab_rational_design_prior, opts.label = "invisible"}
 T_prior <- 
   P_prior %>% 
   group_by(parameter) %>% 
@@ -554,7 +553,7 @@ Let's assume, the manager had done 5 projects in the past and recorded the resul
 
 
 
-```{r fig:previous_belief_in_revenue, opts.label = "fig.small"}
+```{r previous_belief_in_revenue, opts.label = "fig.small"}
 P_prior %>% 
   filter(parameter == "Intercept") %>% 
   mutate(value = exp(value)) %>% 
@@ -591,7 +590,7 @@ T_fixef_2
 
 
 
-```{r fig:rational_design_risk_of_failure_2, opts.label = "fig.small"}
+```{r rational_design_risk_of_failure_2, opts.label = "fig.small"}
 N_risk_of_failure_2 <-
   P_2 %>%
   filter(parameter == "Designproto") %>%
