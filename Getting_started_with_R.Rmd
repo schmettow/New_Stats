@@ -369,7 +369,7 @@ Beginners are at peace with all of this. You can count like you do. Functional p
 
 
 
-### Assigning and calling Objects
+### Objects
 
 Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
@@ -410,6 +410,7 @@ tracemem(N_Obs/N_Part)
 tracemem(N_Obs/N_Part)
 ```
 
+<!--This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls these containers *objects*.-->
 
 
 ### Vectors
@@ -428,10 +429,12 @@ mean(X)
 The `rnorm` command *produces* a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
 
 
+### Classes
 
-### Basic object types
 
-Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.
+Objects can be of various *classes*. In R the basic classes are: logical, factor, character, integer and numeric. Advanced  programmers can create their own  classes, for example, to store the results of an estimation into an object.
+
+In most programming languages, basic objects contain one number or one character string. If you have a line of object to handle, you have to store them in lists. In statistical computing it is the common case 
 
 Objects of type *logical* store the two levels `TRUE`, `FALSE`, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
 
@@ -524,7 +527,7 @@ design_fact
 
 Statistical analyses deal with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work properly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this a missing value. In R *missing values are first-class citizens*. Every vector of a certain class can contain missing values, which are identified as `NA`. 
 
-Most basic data manipulation functions, like `mean` are aware of missing values and act conservatively in their presence: the programmer has to explicitly ask to ignore any `NA` values. While this appears slightly inconvenient, it helps to catch errors early in data analysis, and creates better transparency.
+Most basic statistics functions, like `mean()`, `sd()`  or `median()` act very strict if the data contains missing values. If there is a single `NA` in the variable to be summarized, the result is `NA`. While it is importamt to be aware of missing values, much of the time what the researcher wants is to have the summary statistic with `NA` values being removed, first. 
 
 ```{r mean_NA }
 
@@ -534,11 +537,8 @@ mean(clicks, na.rm = T)
 
 ```
 
-This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In general programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls *objects* what is usually called a programming variable.
 
-
-
-### Operators and functions
+### Functions
 
 R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterize a vector. The following functions do that with to the vector `X`, every in their own way:
 
@@ -561,28 +561,51 @@ quantile(X, c(.17, .83))
 
 Most functions in R have *optional arguments* that let you change how the function performs. The basic mathematical  functions all have the optional argument `na.rm`. This is a switch that determines how the function deals with missing values `NA`. Many optional arguments have *defaults*. The default of `na.rm` is `FALSE` ("return NA in case of NAs in the vector"). By setting it to `TRUE`, they are removed before operation.
 
-```{r na_rm, opts.label = "rtut.nr"}
+```{r na_rm}
 B <- c(1, 2, NA, 3)
 mean(B)
 mean(B, na.rm = TRUE)
 
 ```
-Most more complex routines in R have an abundance of parameters, most of which have reasonable defaults, fortunately. To give a more complex example, the first call of `stan_glm` performs a Bayesian estimation of the grand mean model. The second does a 
-Poisson grand mean model with 5000 iterations per MCMC chain. As `seed` has been fixed, every subsequent run will produce the exact same chains. My apologies for the jargon! <!-- #10 -->
+
+
+Most  complex routines in R have an abundance of arguments, most of which have reasonable defaults. To give a more complex example, the following call of `stan_glm` performs a Bayesian estimation of a grand mean model. The required arguments of `stan_glm` are the model and the data. The model is given as a formula and data is expected to be a dataframe. By default this will run the model on the data, with a Normal random component, with three chains and with 1000 iterations per chain.
+
+The second invocation of `stan_glm` changes the defaults of two arguments. The same model is estimated, but with a Poisson random component and only 500 iterations are done per chain. (What that precisely means will be explained in Part 2.) <!-- #10 -->
 
 ```{r gmm, opts.label = "rtut.nr"}
-D_1 = data_frame(X = rnorm(20, 2, 1))
-M_1 = stan_glm(X ~ 1, 
+D_1 = data_frame(X = rnorm(n = 20, mean = 2, sd = 1))
+M_1 = stan_glm(formula = X ~ 1, 
                data = D_1)
 
 D_2 = data_frame(X = rpois(20, 2))
 M_2 = stan_glm(X ~ 1,
                family = poisson,
-               seed = 42,
-               iter = 5000,
+               iter = 500,
                data = D_1)
 
 ```
+
+Finally, it sometimes is convenient or necessary to program own functions. A full coverage of developing functions is beyond the scope of this introduction, so I show just one simple example. If one desires a more convenient function to compute the mean that ignore missing values by default, this can be constructed as follows:
+
+```{r}
+mean_conv <- function(x) {
+  mean(x = B, na.rm = TRUE)
+}
+
+mean_conv(B)
+```
+
+Notice that:
+
++ the `function()` function creates a new function that gets a name assigned.
++ the argument `x` given to `function()` is passed on to become the arguments of the  `mean_conv(x)`.
++ code enclosed by `{...}` are called a *code block*. 
+
+More examples of creating basic functions can be found in section \@ref(descriptive_stats). As R is a functional programming language, it offers very elaborate ways of programming functions, way beyond what is found in common languages, such as Python or Java. An advanced example of functional programming is given in section \@ref(forecasting_LOO).
+
+
+### Operators
 
 R brings the usual set of arithmetic operators, like `+`, `-`, `*`, `/` and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in these two ways:
 
@@ -590,6 +613,8 @@ R brings the usual set of arithmetic operators, like `+`, `-`, `*`, `/` and more
 1 + 2
 `+`(1,2)
 ```
+
+
 
 The second term is a function that takes two numbers as input and returns a third. It is just a different syntax, and this one is called the *polish notation*. I will never use it throughout the rest of this book.
 
@@ -606,9 +631,10 @@ Another set of commonly used operators are logical, they implement *Boolean alge
 
 Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child". <!-- #11 -->
 
-Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, "either A or B" can be written as: `(A | B) & !(A & B)`. This term only gets TRUE when A or B is TRUE, but not both.
+Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, "either A or B" can be written as: `(A | B) & !(A & B)`. This term only gets TRUE when A or B is TRUE, but not both. In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.
 
-In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.
+
+
 
 
 ### Storing data in data frames
