@@ -326,15 +326,15 @@ The second parameter, $\beta_1$ is called the *slope*. The slope determines the 
 $$f(x_1 + 1) = \beta_0 + \beta_1x_{1i} + \beta_1$$
 
 There is also the possibility that the slope is zero. In such a case, the predictor has no effect and can be left out. 
-Setting $\beta_1 = 0$ produces a horizontal line, with $y$  being constant over the whole range. This shows that The LRM can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
+Setting $\beta_1 = 0$ produces a horizontal line, with $y$  being constant over the whole range. This shows that The linear regression model (LRM) can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
 
 
-Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this synthetic experiment,  two designs A and B are compared, but this is what we ignore for now. Instead, we ask: are older people slower on the internet? Or: is there a linear relationship between age and ToT? The likelihood and random terms of the LRM are:
+Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this synthetic experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower on the internet? Or: is there a linear relationship between age and ToT? The likelihood and random terms of the LRM are: <!-- #49 -->
 
 $$\mu_i = \beta_0 + \beta_1x_{1i}$$
 $$Y_i = N(\mu_i, \sigma)$$
 
-This literally means: with every year of age, ToT increases by the $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we visually explore the association between age and ToT using a scatter plot. The blue line in the graph is a so called a *smoother*, more specifically a LOESS. A smoother is an estimated line, just as linear function. But, it is way more flexible. Where the linear function is a lever fixed at a pivotal point, LOESS is a pipe cleaner. LOESS shows a more detailed picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. Actually, that does not look like a straight line, but at least there is steady upwards trend. 
+This literally means: with every year of age, ToT increases by $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we visually explore the association between age and ToT using a scatter plot. The blue line in the graph is a so called a *smoother*, more specifically a LOESS. A smoother is an estimated line, just as linear function. But, it is way more flexible. Where the linear function is a lever fixed at a pivotal point, LOESS is a pipe cleaner. LOESS shows a more detailed picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. Actually, that does not look like a straight line, but at least there is steady upwards trend. 
 
 ```{r}
 attach(BrowsingAB)
@@ -352,7 +352,7 @@ G_eda_1 <-
 G_eda_1
 ```
 
-In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we currently make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric, here. Therefore, it is treated as a metric predictor or *covariate*.
+In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we currently make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric in this case. Therefore, it is treated as a metric predictor or *covariate* <!-- #51-->.
 
 ```{r age_lm1, opts.label = "mcmc"}
 M_age <-
@@ -376,9 +376,9 @@ Is age associated with ToT? The coefficient table tells us that with every year 
 
 ### Transforming variables
 
-The intercept parameter refers to the predicted ToT of a new born. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we not? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(T_age, ~fixef == "Intercept")`.
+The intercept parameter refers to the predicted ToT of a newborn. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(T_age, ~fixef == "Intercept")`.
 
-Both, implausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are impossible or have not been recorded. Fortunately, there is a pragmatic solution to the problem: *shifting the predictor*. "Shifting" literally means that the age predictor is moved to the right or the left, such that the zero point is in a region populated with observations. In the case, here, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. Figure XY shows a shift of -20 and a centering shift on the original variable age
+Both, implausibility and high certainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are either  impossible or have not been recorded. Fortunately, there is a pragmatic solution to the problem: *shifting the predictor*. "Shifting" literally means that the age predictor is moved to the right or the left, such that the zero point is in a region populated with observations. Here in this case, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. Figure XY shows a shift of -20 and a centering shift on the original variable age
 
 ```{r}
 BAB1 <-
@@ -431,7 +431,7 @@ C_age <- fixef(M_age_shft)$center
 ```
 
 
-When comparing the regression results The shifted intercepts have moved to higher values, as expected. Surprisingly, the simple shift is not exactly 20 years.  This is due to the high uncertainty of the first model, as well as the relation not being exactly linear (see Figure XY). The shifted age predictor has a slightly better uncertainty, but not by much. This is, because the region around the lowest age is scarcely populated with data for the very reason. Centering on the other hand results in a highly certain estimate, no surprisingly, as the region is densily populated. At the same time, the slope parameter practically does not change, neither in magnitude nor in certainty.
+When comparing the regression results the shifted intercepts have moved to higher values, as expected. Surprisingly, the simple shift is not exactly 20 years.  This is due to the high uncertainty of the first model, as well as the relation not being exactly linear (see Figure XY). The shifted age predictor has a slightly better uncertainty, but not by much. This is, because the region around the lowest age is scarcely populated with data. Centering, on the other hand, results in a highly certain estimate, not surprisingly, as the region is densely populated. The slope parameter, however, practically does not change, neither in magnitude nor in certainty.
 
 An even stronger standardization is *z-transformation*, where the predictor is centered at zero and all values are divided by the standard deviation, which results in a change of spread:
 
@@ -450,7 +450,7 @@ BAB1 %>%
 ```
 
 
-A z-transformed variable is centered on zero and has a standard deviation of one. As can be seen, z-transformation has a considerable effect on the slope. Pulling the data cloud together pulls up the slope. Again, we run an LRM and compare against the original model:
+A z-transformed variable is centered on zero and has a standard deviation of one. As can be seen, z-transformation has a considerable effect on the slope; Pulling the data cloud together pulls up the slope. Again, we run an LRM and compare against the original model:
 
 ```{r opts.label = "mcmc"}
 M_age_z <- 
@@ -469,18 +469,18 @@ T_age <- fixef(P_age)
 T_age
 ```
 
-As expected, the intercept matches that of the centered variable. The small deviations are due to the [random walk] (#random_walk) and disappear when running longer MCMC chains. The slope parameter has inflated dramatically. That, of course, is not a magical trick to obtain more impressive numbers, it is simply the effect of dividing the original variable by its standard deviation. A step of one on `age` is exactly one year, whereas in `age_z` it is *one standard deviation*. Z-transformation adjusts a variable by its observed dispersion, measured as standard deviations. In the case of age, this is not very desirable. 
+As expected, the intercept matches that of the centered variable. The small deviations are due to the [random walk] (#random_walk) and disappear when running longer MCMC chains. The slope parameter has inflated dramatically. That, of course, is not a magic trick to obtain more impressive numbers, it is simply the effect of dividing the original variable by its standard deviation. A step of one on `age` is exactly one year, whereas in `age_z` it is *one standard deviation*. 
 
-Years of age is a natural and commonly understood unit and my advice would be to use centering, leaving the unit size untouched. When dealing with variables that are pseudo-metric, rating scales in particular, z-transformation makes sense. Imagine you were stranded on a tropical island. While putting together a shelter, you realize of useful a meter stick is. The *ur meter* is thousands of kilometers away. Obviously, you can bootstrap yourself by picking up a reasoable straight stick and mark 10 (or eight) equally spaced sections. With z-transformation you are picking your unit of measurment on what you find, too. Still, "one standard deviation" is hard to swallow for anyone untrained. If we can assume the measurement to be normally distributed, which is frequently a good approximation for rating scale data, we can derive relative statements. As it happens, the central two standard deviations cover around two thirds of the full area, leaving one sixth to each tail. That allows to make quantile statements, such as: Within central two thirds regarding age, ToT moves up by $2 \beta_1 = `r bayr::md_coef(T_age, ~fixef == "age_z")`$ seconds, if age is truly Normal, of course.
+Z-transformation adjusts a variable by its observed dispersion, measured as standard deviations. In the case of age, this is not very desirable. Years of age is a natural and commonly understood unit and my advice would be to use centering, leaving the unit size untouched. When dealing with variables that are pseudo-metric, rating scales in particular, z-transformation makes sense. Imagine you were stranded on a tropical island. While putting together a shelter, you realize how useful a yardstick is. The *ur meter* <!-- #52 --> is thousands of kilometers away. Obviously, you can bootstrap yourself by picking up a reasoable straight stick and mark 10 (or eight) equally spaced sections. With z-transformation you are picking your unit of measurment on what you find, too. Still, "one standard deviation" is hard to swallow for anyone untrained. If we can assume the measurement to be normally distributed, which is frequently a good approximation for rating scale data, we can derive relative statements. As it happens, the central two standard deviations cover around two thirds of the full area, leaving one sixth to each tail. That allows us to make quantile statements, such as: within the central two thirds regarding age, ToT moves up by $2 \beta_1 = `r bayr::md_coef(T_age, ~fixef == "age_z")`$ <!-- #53 --> seconds, if age is truly Normal, of course.
 
-A general useful application of z-scores is to bootstrap a common unit for a diverse set of measures. Think of a battery of Likert scales, that all choose their own ranges. With z-scores we can compare the relative impact of several predictors in a population. In fact, that even makes sense for the age model. As it happens, the random variation parameter $\sigma$ is given in standard deviation units, too. We can conclude that the age effect causes just a moderate fraction of all the variation observed. More research is needed.
+A general useful application of z-scores is to bootstrap a common unit for a diverse set of measures. Think of a battery of Likert scales, that all have their own ranges. With z-scores we can compare the relative impact of several predictors in a population. In fact, that even makes sense for the age model. As it happens, the random variation parameter $\sigma$ is given in standard deviation units, too. We can conclude that the age effect causes just a moderate fraction of all the variation observed. More research is needed.
 
 
 
 ### Correlations {#correlations}
 
 
-LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a smimulated data set where X and Y are linearly linked:
+LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
 
 ```{r}
 D_cor <-
@@ -497,7 +497,7 @@ D_cor %>%
 ```
 
 
-Recall, that $r$ is covariance standardized for dispersion and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. In contrast, slope parameter in an LRM is a measure of association, too. It is agnostic of the overall location of measures, because this is captured by the intercept. However, dispersion remains intact.  That makes that slope and intercept together retain information about location, dispersion and association of data and we can ultimately make predictions. Still, there is a tight re.lationship between Pearson $r$ and a slope coefficient $\beta_1$, namely:
+Recall, that $r$ is covariance standardized for dispersion and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
 
 $$
 r = \beta_1 \frac{sd_X}{sd_Y}
@@ -513,7 +513,7 @@ r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
 r
 ```
 
-The clue with Pearson $r$ is that it normalized the slope coefficient by the variation found in the sample. This reminds of z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$, right away:
+The clue with Pearson's $r$ is that it normalized the slope coefficient by the variation found in the sample. This resembles z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$ exactely:
 
 ```{r results = "markup"}
 M_z <-
@@ -540,38 +540,38 @@ Not by coincidence, a measure of explained variance, the *coefficient of determi
 str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
 ```
 
-To sum it up, Perason $r$ and $r^2$ are useful statistic to express the strength of an association, when the scale of measurement does not matter or when obe desires to compare across scales. Furthermore, correlations can be part of advanced multilevel models which we will treat in 
+To sum it up, Pearson $r$ and $r^2$ are useful statistics to express the strength of an association, when the scale of measurement does not matter or when one desires to compare across scales. Furthermore, correlations can be part of advanced multilevel models which we will treat in 
 -->
 
-In regression modelling the use of coefficients prevales because they allow for predictions. However, correlation coefficients play a major role in two situations: in exploratory data analysis and in multilevel models. With the latter we will deal in @\ref(re_correlations). For exploratory data analysis it is recommended to inspect pairwise correlations for the following reasons:
+In regression modelling the use of <!-- #54 --> coefficients prevails because they allow for predictions. However, correlation coefficients play a major role in two situations: in exploratory data analysis and in multilevel models. With the latter we will deal in @\ref(re_correlations). For exploratory data analysis it is recommended to inspect pairwise correlations for the following reasons:
 
-1. Correlations between predictors and responses are a quick and dirty assessment of the expected associations
+1. Correlations between predictors and responses are a quick and dirty assessment of the expected associations.
 2. Correlations between multiple response modalities  (e.g., ToT and number of errors) indicate to what extent these responses can be considered exchangeable.
-3. Correlations between predictors should be checked upfront to avoid problems arising from so-called colinearity.
+3. Correlations between predictors should be checked upfront to avoid problems arising from so-called collinearity.
 
 <!-- #30 
 Linear models link multiple predictors to an outcome variable. In the MMN case we observed that, by adding another predictor to a model, the strength of the original predictor only changes marginally. That is *not* the general rule as we will see now!
 
-Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. Never is there bending needed to connect three points.
+Why is it better to have three legs under a table than four? Because three legs are always stable, no beer coasters needed. Recall basic geometry: the straight connection between two points is called a line (like in regression line). Three points make a triangle. An astonishing property of triangles is that in a three-dimension space they are always flat. There is never bending needed to connect three points.
 -->
 
 <!--
-Elaborations on Euclidean space, how double linear regression creates flat surfaces and how colinearity reduces this to a line that is unstable.-->
+Elaborations on Euclidean space, how double linear regression creates flat surfaces and how collinearity reduces this to a line that is unstable.-->
 
 
 
 
 ### Endlessly linear
 
-On a deeper level the bizarre age = 0 prediction is an example of a principle, that will re-occur several times throughout this book.
+On a deeper level the bizarre age = 0 prediction is an example of a principle <!-- #55 -->, that will re-occur several times throughout this book.
 
 **In an endless universe, everything is finite.**
 
-A well understood fact about LRM is that they allow us to fit a straight line to data. A lesser regarded consequence from the mathematical underpinnings of such models is that this line extends infinitely in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary magnitude in physics are finite: all speeds are limited to $\approx 300.000 km/s$, the speed of light and temperature has a lower limit of -276°C (or 0K). If there can neither be endless acceleration nor cold, it would be daring to assume any psychological effect to be infinite in both directions.
+A well understood fact about LRM is that they allow us to fit a straight line to data. A lesser regarded consequence from the mathematical underpinnings of such models is that this line extends infinitely in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-\infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary magnitudes in physics are finite: all speeds are limited to $\approx 300.000 km/s$, the speed of light and temperature has a lower limit of -276°C (or 0K). If there can neither be endless acceleration nor cold, it would be daring to assume any psychological effect to be infinite in both directions.
 
-The endlessly linear assumption (ELA) is a central piece of all LRM. From a formal perspective, the ELA is always violated in a universe like ours. So, should we never ever use a linear model and move on to non-linear models right away? Pragmatically, the LRM often is a reasonably effective approximation. From figure [G_eda_1] we have seen that the increase is not strictly linear, but follows a more complex curved pattern. This pattern might be of interest to someone studying the psychological causes of the decline in performance. For the applied design researcher it probably suffices to summarize the monotonous relationship by the slope coefficient. In \@ref(line-by-line) we will estimate the age effects for designs A and B, separately, which lets us compare fairness towards older people.
+The endlessly linear assumption (ELA) is a central piece of all LRMs. From a formal perspective, the ELA is always violated in a universe like ours. So, should we never ever use a linear model and move on to non-linear models right away? Pragmatically, the LRM often is a reasonably effective approximation. From figure [G_eda_1] we have seen that the increase is not strictly linear, but follows a more complex curved pattern. This pattern might be of interest to someone studying the psychological causes of the decline in performance. For the applied design researcher it probably suffices to summarize the monotonous relationship by the slope coefficient. In \@ref(line-by-line) we will estimate the age effects for designs A and B separately, which lets us compare fairness towards older people.
 
-As has been said theorists may desire more detailed picture and see disruptions of linearity as indicators for interesting psychological processes. An uncanny example of theoretical work will be given in polynomial regression. For the rest of us, linear regression is a pragmatic choice, as long as:
+As has been said, theorists may desire a more detailed picture and see disruptions of linearity as indicators for interesting psychological processes. An uncanny example of theoretical work will be given in polynomial regression. For the rest of us, linear regression is a pragmatic choice, as long as:
 
 1. the pattern is monotonically increasing
 1. any predictions stay in the observed range and avoid the boundary regions, or beyond.
@@ -579,14 +579,14 @@ As has been said theorists may desire more detailed picture and see disruptions 
 
 ### Posterior predictions 
 
-In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In yet another perspective they are  *idealized responses* and as such address both, present and future. Posterior predictions are routinely compared to *observed values* $y_i$ which are known beforehand, but still contain the randomness component. Fitting a linear model basically means separating the idealized effect from the randomness.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
+In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In yet another perspective they are  *idealized responses* and as such address both, present and future. Posterior predictions are routinely compared to *observed values* $y_i$, which are known beforehand but still contain a random component. Fitting a linear model basically means separating the idealized effect from the randomness.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
 
 In the BrowsingAB case, we have repeatedly recorded age of participant. LRM found the repeating pattern, that with every unit of age, ToT increased by  `r C_age[2]` seconds. This pattern is what the model predicts, now and forever. If we ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
 
 $$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45\\ 
 = `r C_age[1] + C_age[2] * 45`$$
 
-The predicted value is our best guess under the LRM model. Like coefficients, it is uncertain to some degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . A primitive procedure to get a best guess for someone of age 45 is to find one matching case in the data and take this as face value. The data set contains a few of those participants, but the situation is rather scattered and the prediction is not clear. 
+The predicted value is our best guess under the LRM model. Like coefficients, it is uncertain to some degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . A primitive procedure to get a (best) guess for someone of age 45 is to find one matching case in the data and take this as face value. The data set contains a few of those participants, but the situation is rather scattered and the prediction is not clear. 
 
 ```{r just_a_guess, results = "markup"}
 BAB1 %>% 
@@ -671,7 +671,7 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 1. Examine the linear parameters of model `M_age_rtrn` and derive some impossible predictions, as was done in the previous section.
 
-1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LR with age and examine the residual distribution. Is the Normality assumption reasonably defensible? What is the difference to home returns, despite both variables being counts?
+1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LRM with age and examine the residual distribution. Is the Normality assumption reasonably defensible? What is the difference to home returns, despite both variables being counts?
 
 1. Review the two figures in the first example of [GSR]. The observations are bi-modally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
 
