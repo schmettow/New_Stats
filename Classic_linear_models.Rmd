@@ -686,15 +686,15 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 ## A versus B: Comparison of groups {#CGM}
 
-Another basic liknear model is the *comparison of groups* (CGM), which replaces the commonly known analysis of variance (ANOVA). In design research group comparisons are all over the place, for example:
+Another basic linear model is the *comparison of groups* (CGM), which replaces the commonly known analysis of variance (ANOVA). In design research group comparisons are all over the place, for example:
 
 + comparing designs: as we have seen in the A/B testing scenario
-+ comparing groups of people, like  gender or whether they have a high school degree
++ comparing groups of people, based on e.g.  gender or whether they have a high school degree
 + comparing situations, like whether someone uses an app on the go, or sitting still behind a computer
 
 In order to perform a CGM, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the prominent factor is Design with its levels A and B.
 
-Asking for differences between two (or more) designs is routine in design research. For example, it could occur during an overhaul of a municipal website. With the emerge of e-government, many municipal websites have grown wildly over a decade. What once was a lean (but not pretty) 1990 website over time has grown into a jungles, to the disadvantage for the users. The BrowsingAB case could represent the prototype of a novel web design, which is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *do two web designs A and B differ in user performance?*
+Asking for differences between two (or more) designs is routine in design research. For example, it could occur during an overhaul of a municipal website. With the emerge of e-government, many municipal websites have grown wildly over a decade. What once was a lean (but not pretty) 1990 website has grown into a jungle over time, to the disadvantage for users. The BrowsingAB case could represent the prototype of a novel web design, which is developed and tested via A/B testing at 200 users. Every user is given the same task,  but sees only one of the two designs. The design team is interested in: *Do the two web designs A and B differ in user performance?*
 
 Again, we first take a look at the raw data:
 
@@ -714,8 +714,8 @@ BAB1 %>%
 
 This doesn't look too striking. We might consider a slight advantage for design B, but the overlap is immense. We perform the CGM. Again, this is a two-step procedure:
 
-1. the `stan_glm` command lets you specify a simple formula to express the dependency between predictors (education) and outcome variable (ToT). It performs the parameter estimation, using the method of _Markov-Chain Monte-Carlo Sampling_. The results are stored in a new object `M_Design`.
-1. With the `fixef` command the estimates are extracted and interpreted
+1. The `stan_glm` command lets you specify a simple formula to express the dependency between one or more predictors (education) and an outcome variable (ToT). It performs the parameter estimation using the method of _Markov-Chain Monte-Carlo Sampling_. The results are stored in a new object `M_Design`.
+1. With the `fixef` command the estimates are extracted and can be interpreted.
 
 ```{r fit:anova_lm, opts.label = "mcmc"}
 M_Design <-
@@ -746,9 +746,9 @@ detach(BrowsingAB)
 ```
 
 
-The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups. You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is the *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "Intercept")`. 
+The model contains two parameters, the first one being the *intercept*, again. How can you have a "crossing point zero", when there is no line, but just two groups? You can't. When speaking of pure factor models, like the one above or the multifactorial models of the next section, the intercept has a different meaning, it is the *mean of a reference group*. Per default, stan_glm chooses the alphabetically first group label as the reference group, in this case design A. We can therefore say that design A has an average performance of `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "Intercept")`. 
 
-The second parameter is the effect of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "DesignB", neg = T)` less time to complete the task. This effect appears rather small and there is huge uncertainty about it. It barely justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
+The second parameter is the effect of "moving to design B". It is given as the *difference to the reference group*. With design B it took users `r frm_coef(fixef(BrowsingAB$M_Design), ~fixef == "DesignB", neg = T)` seconds less to complete the task. However, this effect appears rather small and there is huge uncertainty about it. It barely justifies the effort to replace design A with B. If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
 
 
 
@@ -758,9 +758,9 @@ The second parameter is the effect of "moving to design B". It is given as the *
 
 ### Not stupid: dummy variables {#dummy_variables}
 
-Are we missing something so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor, a non-metric variable. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{DesignB} \times\beta_1$?
+Are we missing anything so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor, i.e. a non-metric variable. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{DesignB} \times\beta_1$?
 
-*Factors* basically answer the question: *What group does the observation belong to?*. This is a label, not a number, and cannot enter the regression formula. *Dummy variables* solve the dilemma by converzing factor levels to numbers. A dumma variable represents only one level of a factor, by asking the simple question: *Does this observation belong to group DesignB?* The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? At least, R assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
+*Factors* basically answer the question: *What group does the observation belong to?*. This is a label, not a number, and cannot enter the regression formula. *Dummy variables* solve the dilemma by converting factor levels to numbers. A dummy variable represents only one level of a factor, by asking the simple question: *Does this observation belong to group DesignB?*  The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? R at least assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. <!-- #56 --> Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
 
 ```{r}
 attach(BrowsingAB)
@@ -779,21 +779,21 @@ BAB1 %>%
 
 ```
 
-Vice versa, numbers in a logical context are always interpreted in complete reverse.
+Vice versa, numbers in a logical context are always interpreted in complete reverse <!-- #57 -->.
 
 $$ 
 v = 1 \mapsto \mathrm{TRUE}\\ v = 0 \mapsto \mathrm{FALSE} 
 $$
 
-Boolean variables can be used in all contexts, including numerical and categorical. It is unfortunate that we call them dummies in such a belittling manner, as they are truly bridges between the world of categories and arithmetic. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables `d_A` and `d_B`, the likelihood is written as:
+Boolean variables can be used in all contexts, including numerical and categorical. It is unfortunate that we call them dummies in such a belittling manner, as they are truly bridges between the world of categories and arithmetic. However, if preferred, they can also be called indicator variable, Boolean indicator or binary variable. They identify groups in our data set and switch on or off the effect in the linear term. For a factor G with levels A and B and zero/one-coded dummy variables `d_A` and `d_B`, the likelihood is written as:
 
 $$ 
 \mu_i = d_{Ai} \beta_{A} + d_B \beta_{Bi} 
 $$
 
-When $d_{Ai}=1, d_{Ai}=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. `sum(TRUE, FALSE, TRUE)` (the result is 2). In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variables truly is zeroes and ones, it will be interpreted as desired. This has been done that with the explicit typecast `as.numeric` above.
+When $d_{Ai}=1, d_{Bi}=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. for `sum(TRUE, FALSE, TRUE)` the result is 2. In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variable truly consists of zeroes and ones, it will be interpreted as desired. This has been done that with the explicit typecast `as.numeric` above.
 
-Most research deals with estimating effects as differences and all regression engines quietly assume that what you want is a model with a reference group. When expanding the dummy variables manually, this automatism gets into the way and the needs to be switched off, explicitly.  In Rs linear models formula language, that is done by adding the term `0 +` to the formula.
+Most research deals with estimating effects as differences, and all regression engines quietly assume that what you want is a model with a reference group. When expanding the dummy variables manually, this automatism gets into the way and needs to be switched off explicitly.  In Rs linear models formula language, that is done by adding the term `0 +` to the formula.
 
 
 ```{r fit:dummy_2, opts.label = "mcmc"}
@@ -811,9 +811,9 @@ sync_CE(BrowsingAB, M_dummy)
 fixef(M_dummy)
 ```
 
-In its predictions, the model `M_dummy` is equivalent to the fomer model `M_design`, but contains two effects that are exactly the group means. This model we  call an *absolute group means model (AGM)*.
+In its predictions, the model `M_dummy` is equivalent to the former model `M_design`, but contains two effects that are exactly the group means. This model we  call an *absolute group means model (AGM)*.
 
-Regression engines expand dummy variables automatically, when they encounter a factor. However, when formally specifying the likelihood, dummy variables must be made explicit. When doing an AGM on a factor $x_1$ with $1,...,k$ levels, the likelihood function becomes:
+Regression engines expand dummy variables automatically when they encounter a factor. However, when formally specifying the likelihood <!-- #58 -->, dummy variables must be made explicit. When doing an AGM on a factor $x_1$ with $1,...,k$ levels, the likelihood function becomes:
 
 $$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$
 
@@ -838,7 +838,7 @@ BAB1 %>%
 
 
 
-Regression engines take care of factors, automatically, expanding the dummy variables under the hood. Still, by understanding the concept, we gained additional flexibility in specifying factorial models. One variant is to estimate an AGM, which leaves out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second benefit is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean, by setting contrasts.
+Regression engines take care of factors by automatically expanding the dummy variables under the hood. Still, by understanding the concept we gained additional flexibility in specifying factorial models. One version is to estimate an AGM, which leaves out the intercept. Of course, this can also be done right-away with the formula `ToT ~ 0 + Design`. Later, we will see a very practical application of AGMs, when drawing interaction plots. The second benefit is that we can specify the reference level as we want. It just depends on which dummy variable one sets to always-on. In the next section we will gain even more control over what the effects mean by setting contrasts.
 
 ```{r}
 detach(BrowsingAB)
@@ -847,16 +847,16 @@ detach(BrowsingAB)
 
 ### Getting it sharper with contrasts [TBC] {#contrasts}
 
-The default behavior of regression engines when encountering a factor is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense when you are after the effect of a treatment and is therefore called *treatment contrasts*. Treatment contrasts do not have anything special to them. They are just a default of the regression engines, because so many people work experimentally. 
+The default behaviour of regression engines, when encountering a factor, is to select the first level as reference group and estimate all other levels relative to that. This fully makes sense if you are after the effect of a treatment, and is therefore called *treatment contrast*. Treatment contrasts do not have anything special to them. They are just a default of the regression engines, because so many people work experimentally. 
 
-Before we come to an understanding what contrasts are, let me point out what they are not: In \@ref(dummy_variables) it was mentioned, that the AGM and CGM make exactly the same predictions (even though the formulas differ by the `+0` term). For contrasts, this holds in general. Setting contrasts never changes the predictions $\mu_i$. In contrast, *contrast change what the coefficients $\beta_i$ mean*. Recall, that in an CGM, $\beta_1$ has the meaning of "difference to the reference group", whereas in an AGM, it is "the mean of the second group". 
+Before we come to an understanding of what contrasts are, let me point out what they are not: In \@ref(dummy_variables) it was mentioned, that the AGM and CGM make exactly the same predictions (even though the formulas differ by the `0+` term). For contrasts, this holds in general. Setting contrasts never changes the predictions $\mu_i$. On the contrary, *contrast changes what the coefficients $\beta_i$ mean*. Recall that in a CGM $\beta_1$ has the meaning of "difference to the reference group", whereas in an AGM it is "the mean of the second group". 
 
 In the following, I will illustrate contrasts that represent two different types of questions:
 
 + To what extent does a group deviate from the overall mean in the sample?
 +	With three ordered factor levels, how large is the rolling effect, i.e. from level 1 to level 2, and the average of 1 and 2 to level 3?
 
-So, how are contrasts set?  Although, this is a bit odd, they are neither set by modifications to the regression formula, nor by additional command arguments. Instead, *contrasts are set as attributes of the factor  variable*, which we can retrieve by and set by the standard command `contrasts`. For example, the variable Education has the three levels "Low", "Middle", "High", in that order:
+So, how are contrasts set?  Although this is a bit odd, they are neither set by modifications to the regression formula, nor by additional command arguments. Instead, *contrasts are set as attributes of the factor variable*, which we can retrieve and set by the standard command `contrasts`. For example, the variable Education has the three levels "Low", "Middle", "High", in that exact order:
 
 ```{r}
 attach(BrowsingAB)
@@ -871,7 +871,7 @@ contrasts(BAB1$Education) %>%
 
 ```
 
-If you believe to have seen something similar before, you are right. Contrast tables are related to dummy variables (\@ref(dummy_variables)). The column Low is omitted in the contrasts table as it is the reference level with an always-on intercept. In the previous section I mentioned that you can choose the reference level freely by constructing the dummy variables accordingly. However, that would mean to always bypass the regression engines dummy handling. The package `forcats` provides a set of commands to change the order of levels. In the following code, the factor levels are reversed, such that High becomes the reference group:
+If you believe to have seen something similar before, you are right. Contrast tables are related to dummy variables (\@ref(dummy_variables)). The column Low is omitted in the contrasts table, due to being the reference level with an always-on intercept. In the previous section I mentioned that you can choose the reference level freely by constructing the dummy variables accordingly. However, that would mean to always bypass the regression engines dummy handling. The package `forcats` provides a set of commands to change the order of levels. In the following code the factor levels are reversed such that High becomes the reference group:
 
 ```{r contrasts_2, opts.label = "rtut"}
 BAB1 <-
@@ -889,15 +889,15 @@ detach(BrowsingAB)
 
 
 
-If we were running a CGM on `Education_rev`, the intercept would represent level High, now. Again, this model would make the very same predictions and residuals. In that respect, it is the same model as before, only the meaning (and values) of the coefficients changes and become differences to the level High. 
+If we were running a CGM on `Education_rev`, the intercept would now represent level High. Again, this model would make the very same predictions and residuals. In that respect, it is the same model as before, only the meanings (and values) of the coefficients change and become differences to the level High. 
 
-Sometimes, it is useful to have contrasts other than treatment, as this more closely matches the research question. A plethora of contrasts is known, I will introduce *deviation contrasts* and *successive difference contrasts* in the following.
+Sometimes, it is useful to have contrasts other than treatment, as this matches the research question more closely. A plethora of contrasts is known and in the following I will introduce *deviation contrasts* and *successive difference contrasts*.
 
 [Example for deviation coding]
 
-*Successive difference coding (SDC)* applies when one is interested in effects of progressive effects, such as performance gain in a number of sessions. Consider the following research situation. Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules, just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted, too, and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users".
+*Successive difference coding (SDC)* applies when one is interested in progressive effects, such as performance gain in a number of sessions. Consider the following research situation: Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules. Just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted as well and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users".
 
-That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it, then? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there, yet [see LMM].
+That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it then already? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there yet [see LMM].
 
 [TODO: 
 
@@ -916,7 +916,7 @@ That means you have to first introduce and train your users to get fluent with t
 
 ### Sharper on the fly: derived quantities [TBD]
 
-Contrasts are classic in aligning regression estimates with research questions that state a differences. With two groups A and B the following hypotheses of difference can be formed:
+Contrasts are classic in aligning regression estimates with research questions that explore differences. With two groups A and B the following hypotheses of difference can be formed:
 
     A - 0
     B - 0
@@ -932,11 +932,11 @@ Contrasts are classic in aligning regression estimates with research questions t
 
 ### Exercises
 
-1. The `simulate` function in case environment BrowsingAB lets you change the residual error (in standard deviations). Simulate three data sets with different residual variance, and estimate them by the same model. See how the uncertainty of effects behaves.
+1. The `simulate` function in case environment BrowsingAB lets you change the residual error (in standard deviations). Simulate three data sets with different residual variance, and estimate them by the same model. See how the uncertainties of effects behave.
 
-1. BrowsingAB, simulate several data sets of very small sample size. Observe how strongly the composition of education and age varies.
+1. With BrowsingAB, simulate several data sets of very small sample size. Observe how strongly the composition of education and age varies.
 
-1.	BAB1 contains the variable Education, which separates the participants by three education level (Low, Middle, High). Construct the dummy variables and run an AGM.
+1.	BAB1 contains the variable Education, which separates the participants by three education levels (Low, Middle, High). Construct the dummy variables and run an AGM.
 
 1.	Specify the expanded CGM likelihood for education. Construct the dummy variables and run a regression.
 
@@ -960,7 +960,7 @@ Productivity software, like word processors, presentation and calculation softwa
 
 The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? Not right so, as [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, as users have a strong tendency to stick with their old routines, ignoring new functionality right away. This troubling observation has been called the *active user paradox (AUP)*. 
 
-Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioral coding system was used to derive an individual AUP resistance score. Are users with high need-for-cognition and geekism  more explorative and resistant to the AUP?
+Do all users behave that way? Or can we find users of certain traits that are involved. What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score. Are users with high need-for-cognition and geekism  more explorative and resistant to the AUP?
 
 ```{r, opts.label = "future"}
 attach(AUP)
@@ -1647,7 +1647,7 @@ However, there are better alternatives: the best pair  match is the person herse
 In design research, pair matching applies for situations, where designs are compared. In the simpler situation that a design is evaluated against set standard (e.g. 111 seconds to rent a car), it is more important to do *population matching*. The sample of participants is drawn to be *representative for the target population*. Representativeness comes in two levels: *coverage representation* is reached when all influencing properties have occurred a few times during observation. So, if your target population contains several subgroups, such as age groups, experience or people with different goals, they should all be covered to some extent.
 *Proportional representation* means all user and situational properties are covered *and* they have about the same proportion in teh sample as in the population.  
 
-You can only match what you can measure and you only measure what you expect. Human behavior in everyday life is influenced by many factors in complex ways. Although a plethora of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
+You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethora of personality inventories exists,  doing them all prior to the real study is impossible. It would probably not even be effective. Never have i seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
 
 When influencing variables cannot be measured for matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportional representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogeneous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
 
@@ -2269,7 +2269,7 @@ The Boolean OR is an extreme case of saturation. Once one of the factors is pres
 
 ### Theoretically interesting interaction effects [EDIT]
 
-Explaining or predicting complex behavior with psychological theory is one corner stone of design research. Unfortunately, it is not that easy. While design is definitely multifactorial, with a variety of cognitive processes, individual diferences and behavioural strategies, few psychological theories cover more than three associations between external or individual conditions and behavior. The design researcher is often forced to enter a rather narrow perspective, or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
+Explaining or predicting complex behaviour with psychological theory is one corner stone of design research. Unfortunately, it is not that easy. While design is definitely multifactorial, with a variety of cognitive processes, individual diferences and behavioural strategies, few psychological theories cover more than three associations between external or individual conditions and behaviour. The design researcher is often forced to enter a rather narrow perspective, or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
 
 Vigilance is the ability to endure in attention for rarely occurring events. Think of truck drivers on lonely night rides, where most of the time they spend keeping the truck on a straight 80km/h course. Only every now and then is the driver required to react to an event like braking lights flaring up ahead. Vigilance tasks are among the hardest thing to ask from a human operator, yet, they are safety relevant in a number of domains. Keeping up vigilance most people perceive as tiring, and vigilance deteriorates with tiredness.
 
