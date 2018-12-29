@@ -673,7 +673,7 @@ This figure does not look too convincing. The regression line is rather flat, in
 
 1. The BAB1 data set contains another outcome variable where the number of clicks was measured until the participant found the desired information. Specify a LRM with age and examine the residual distribution. Is the Normality assumption reasonably defensible? What is the difference to home returns, despite both variables being counts?
 
-1. Review the two figures in the first example of [GSR]. The observations are bi-modally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model?
+1. Review the two figures in the first example of [GSR]. The observations are bi-modally distributed, nowhere near Gaussian. After (graphically) applying the model they are well-shaped. What does that tell you about checking residual assumptions before running the model? <!-- #82 -->
 
 
 
@@ -689,7 +689,7 @@ This figure does not look too convincing. The regression line is rather flat, in
 Another basic linear model is the *comparison of groups* (CGM), which replaces the commonly known analysis of variance (ANOVA). In design research group comparisons are all over the place, for example:
 
 + comparing designs: as we have seen in the A/B testing scenario
-+ comparing groups of people, based on e.g.  gender or whether they have a high school degree
++ comparing groups of people, based on e.g. gender or whether they have a high school degree
 + comparing situations, like whether someone uses an app on the go, or sitting still behind a computer
 
 In order to perform a CGM, a variable is needed that establishes the groups. This is commonly called a *factor*. A factor is a variable that identifies members of groups,   like "A" and "B" or "male" and "female". The groups are called *factor levels*. In the BrowsingAB case, the prominent factor is Design with its levels A and B.
@@ -758,7 +758,7 @@ The second parameter is the effect of "moving to design B". It is given as the *
 
 ### Not stupid: dummy variables {#dummy_variables}
 
-Are we missing anything so far? We have not seen the model formula, yet. The CGM is a linear model, but this is not so apparent as it contains a factor, i.e. a non-metric variable. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{DesignB} \times\beta_1$?
+Are we missing anything so far? We have not yet seen the model formula. The CGM is a linear model, but this is not so apparent as it contains a factor, i.e. a non-metric variable. Linear model terms are a sum of products $\beta_ix_i$, but factors cannot just enter such a term. What would be the result of $\mathrm{DesignB} \times\beta_1$?
 
 *Factors* basically answer the question: *What group does the observation belong to?*. This is a label, not a number, and cannot enter the regression formula. *Dummy variables* solve the dilemma by converting factor levels to numbers. A dummy variable represents only one level of a factor, by asking the simple question: *Does this observation belong to group DesignB?*  The answer is yes/no and can be coded by a Boolean variable. For every level, a separate dummy variable is constructed to answer the simple yes/no question of membership. But, can Boolean variables enter arithmetic equations? R at least assumes that this is safe, as they can always be converted to ones and zeros using `as.numeric`. <!-- #56 --> Routinely, we can leave the whole dummy variable business to the linear model engine. Still, it is instructive to do it yourself once.
 
@@ -793,7 +793,7 @@ $$
 
 When $d_{Ai}=1, d_{Bi}=0$, the parameter $\beta_A$ is switched on, and $\beta_B$ is switched off. An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice versa for members of group B. All arithmetic commands in R do an implicit typecast when encountering a Boolean variable, e.g. for `sum(TRUE, FALSE, TRUE)` the result is 2. In contrast, regression engines interpret Boolean variables as categorical. Therefore, dummy variables have to be passed on as explicitly numeric to the regression engine. Only when a variable truly consists of zeroes and ones, it will be interpreted as desired. This has been done that with the explicit typecast `as.numeric` above.
 
-Most research deals with estimating effects as differences, and all regression engines quietly assume that what you want is a model with a reference group. When expanding the dummy variables manually, this automatism gets into the way and needs to be switched off explicitly.  In Rs linear models formula language, that is done by adding the term `0 +` to the formula.
+Most research deals with estimating effects as differences, and all regression engines quietly assume that what you want is a model with a reference group. When expanding the dummy variables manually, this automatism gets into the way and needs to be switched off explicitly.  In R's linear models formula language, that is done by adding the term `0 +` to the formula.
 
 
 ```{r fit:dummy_2, opts.label = "mcmc"}
@@ -817,13 +817,13 @@ Regression engines expand dummy variables automatically when they encounter a fa
 
 $$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$
 
-In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models \@ref(multilevel-models)). With expanded dummy variables, the likelihood can become unduly long. However, many other textbooks avoid this altogether and the model is unambiguously specified in Rs regression formula language.
+In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models \@ref(multilevel-models)). With expanded dummy variables, the likelihood can become unduly long. However, many other textbooks avoid this altogether and the model is unambiguously specified in R's regression formula language.
 
 Up to this point, I have introduced dummy variables at the example of AGMs, where at any moment only one factor level is switched on. A more common CGMs  would have a the following likelihood specification (with a factor of $k$ levels):
 
 $$\mu_i = \beta_0 + d_1 \beta_{1[1]}+...+d_k \beta_{1[k-1]}$$
 
-For a factor with $k$ levels in a CGM with intercept, $k-1$ dummy variables need to be constructed in the way shown above. As all non-reference levels are seen as difference towards the reference, *the reference level is set to always on*. To see so, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, for all observations the `(Intercept)` column takes the value `1`, whereas level `DesignB` is switched on and off.
+For a factor with $k$ levels in a CGM with intercept, $k-1$ dummy variables need to be constructed in the way shown above. As all non-reference levels are seen as difference towards the reference, *the reference level is set to always on*. To see that, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, for all observations the `(Intercept)` column takes the value `1`, whereas level `DesignB` is switched on and off.
 
 ```{r dummy_4, opts.label = "rtut"}
 BAB1 %>% 
@@ -956,11 +956,11 @@ Design researchers are often forced to obtain their data under rather wild condi
 
 ### On surface: multiple regression models 
 
-<!-- #62 -->Productivity software, like word processors, presentation and calculation software or graphics programs have evolved over decades. For every new release, dozens of developers have worked hard to make the handling more efficient and the user experience more pleasant.  Consider a program for drawing illustrations: basic functionality, such as drawing lines, selecting objects, moving or colourizing them, have practically always been there. A user wanting  to draw six rectangles, painting them red and arranging them in a grid pattern, can readily do that using basic functionality.  At a certain point of system evolution, it may have been recognized that this is what users routinely do: creating a grid of alike objects. With the basic  functions this is rather repetitive and a new function was created, called "copy-and-arrange". Users may now create a single object, specify rows and columns of the grid and give it a run.
+<!-- #62 -->Productivity software, like word processors, presentation and calculation software or graphics programs have evolved over decades. For every new release, dozens of developers have worked hard to make the handling more efficient and the user experience more pleasant.  Consider a program for drawing illustrations: basic functionality, such as drawing lines, selecting objects, moving or colourizing them, have practically always been there. A user wanting  to draw six rectangles, painting them red and arranging them in a grid pattern, can readily do that using basic functionality.  At a certain point of system evolution, it may have been recognized that this is what users routinely do: creating a grid of alike objects. With the basic functions this is rather repetitive and a new function was created, called "copy-and-arrange". Users may now create a single object, specify rows and columns of the grid and give it a run.
 
 The new function saves time and leads to better results. Users should be very excited about the new feature, should they not? Not quite, as [Carroll in Rosson] made a very troubling observation: adding functionality for the good of efficiency may turn out ineffective in practice, as users have a strong tendency to stick with their old routines, ignoring new functionality right away. This troubling observation has been called the *active user paradox (AUP)*. 
 
-Do all users behave that way? Or can we find users of certain traits that are different? What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score. Are users with high need-for-cognition and geekism  more explorative and resistant to the AUP?
+Do all users behave that way? Or can we find users of certain traits that are different? What type of person would be less likely to fall for the AUP? And how can we measure resistance towards the AUP? We did a study, where we explored the impact of two user traits *need-for-cognition (ncs)* and *geekism (gex)* on AUP resistance. To measure AUP resistance we observed users while they were doing drawing tasks. A moderately complex behavioural coding system was used to derive an individual AUP resistance score. Are users with high need-for-cognition and geekism more explorative and resistant to the AUP?
 
 ```{r, opts.label = "future"}
 attach(AUP)
@@ -1017,7 +1017,7 @@ $$
 \mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs} + \beta_\mathrm{gex} x_\mathrm{gex}
 $$
 
-In Rs regression formula language, this is similarly straight-forward. The `+` operator directly corresponds with the `+` in the likelihood formula.
+In R's regression formula language, this is similarly straight-forward. The `+` operator directly corresponds with the `+` in the likelihood formula.
 
 ```{r fit:AUP_MRM, opts.label = "mcmc"}
 attach(AUP)
@@ -1059,7 +1059,7 @@ When using the two predictors simultaneously, the overall positive tendency rema
 
 
 
-For any researcher who has carefully conceived research questions that appears to be a disappointing outcome. In fact, there is a reason for the loss of strength and ignoring this issue will mislead the interpretation of results.
+For any researcher who has carefully conceived a research question this appears to be a disappointing outcome. In fact, there is a reason for the loss of strength and ignoring this issue will mislead the interpretation of results.
 
 The reason is that the two *predictors are correlated*. In this study, participants who are high on NCS also tend to have more pronounced geekism. \@ref(AUP_corr_predictors) reveals the situation:
 
@@ -1089,7 +1089,7 @@ Unfortunately, in the situation here, the causal direction is partly ambiguous. 
 
 [GEX: love computers] --> [NCS: love to think] --> [resist AUP]
 
-In the current case, we can not distinguish between these two competing theories by data alone. This is a central problem in empirical research. An example, routinely re-iterated in social science methods courses is the observation that people who are more intelligent tend to  consume more fresh vegetables. Do carrots make us smart? Perhaps, but it is equally plausible that eating carrots is what smart people do.
+In the current case, we can not distinguish between these two competing theories with this data alone. This is a central problem in empirical research. An example, routinely re-iterated in social science methods courses is the observation that people who are more intelligent tend to  consume more fresh vegetables. Do carrots make us smart? Perhaps, but it is equally plausible that eating carrots is what smart people do.
 
 The issue is that a particular direction of causality can only be established, when all reverse directions can be excluded. Behavioural science reseachers know of only two ways to do so: 
 
@@ -1107,7 +1107,7 @@ The readers of a paper on geekism, NCS and the AUP will probably be more impress
 
 Initial separate analyses show strong effects for both predictors. Still, it would not make sense to give the report the title: "Beauty and aesthetics predict usability". Beauty and aesthetics are practically synonyms. For Gex and NCS this may be not so clear, but we cannot exclude the possibility that they are linked to a common factor, perhaps a third trait that makes people more explorative, no matter whether it be thoughts or computers.
 
-So, what to do if two predictors correlate strongly? First, we always report just a single model. Per default, this is the model with both predictors, simultaneously. The second possibility is to use a disciplined method of *model selection* \@ref(model_selection) and remove the predictor (or predictors) that does not actually contribute to prediction. The third possibility is, that the results with both predictors become more interesting when including interaction effects \@ref(interaction_effects)
+So, what to do if two predictors correlate strongly? First, we always report just a single model. Per default, this is the model with both predictors simultaneously. The second possibility is to use a disciplined method of *model selection* \@ref(model_selection) and remove the predictor (or predictors) that does not actually contribute to prediction. The third possibility is, that the results with both predictors become more interesting when including interaction effects \@ref(interaction_effects)
 
 
 
@@ -1144,7 +1144,7 @@ T_fixef_mpm_1
 ```
 
 By adding gender to the model, both effects are estimated simultaneously. In a *factorial multiple predictor model (MPM)* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design with groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
-The other two fixed effects are, once again, differences to the reference. Here, nor does gender do much to performance, nor does the design effect really change, compared to the CGM.
+The other two fixed effects are, once again, differences to the reference. It is neither the case that gender effects performance much, nor does the design effect really change, compared to the CGM.
 
 [likelihood]
 [interaction plot]
@@ -1177,7 +1177,7 @@ detach(BrowsingAB)
 ```
 
 
-Once again, we get an intercept, first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In the GCM it was the mean of the reference group. When *marrying factors with covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same for both designs, which is not true, as we will see later. 
+Once again, we get an intercept first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In the GCM it was the mean of the reference group. When *marrying factors with covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same for both designs, which is not true, as we will see later. 
 
 [likelihood]
 [interaction plot]
@@ -1257,7 +1257,7 @@ $$y_i \sim N(\mu_i, \sigma_\epsilon)$$
 
 In words, the random term says: *observed values $y_i$ are drawn from a Normal distribution with the predicted value $\mu_i$ as mean and a fixed standard deviation $\sigma_\epsilon$*. As we have seen in \@ref(distributions), Normal distributions are one pattern of randomness among many and this choice may therefore be appropriate, or not. One heuristic that may justify this choice is that the observed values are located rather in the center of the scale of measurement. That is certainly much better, than to blindly stick to the normal random pattern just for convenience. Even better is to check the assumption of normally distributed randomness. In the following, we will examine the underlying assumptions closer and apply graphical techniques for verification. Before we delve more into depth, I would like to contrast the overall tenor in this section (and [MODEL]) to the workflow frequently encountered in classic statistics. Boldly speaking, classicically trained researchers often seem to imply, that such assumptions needed to be checked beforehand. In the process called *assumption checking*, arcane non-parametric tests are carried out, before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see now, the order of actions is just the other way round. In the workflow called *model criticism*, we start by contemplating what may be a reasonable model, using heuristics or even past data. Then the model is immediatly executed and the estimated model itself undergoes a routine checkup. In linear models, verifying the random pattern assumptions grounds on extracting the estimated residuals from the model object and is hence called *residual analysis*. <!-- #60 -->
 
-In the notation displayed above, there are possibly as many distributions as there are observed values (due the subscript in $\mu_i$). It appears impossible to evaluate not just one distribution but such many. However, an equivalent notation is routinely used for linear models, that specifies just one *residual distribution*. For the LRM that is:
+In the notation displayed above, there are possibly as many distributions as there are observed values (due the subscript in $\mu_i$). It appears impossible to evaluate not just one distribution, but this many. However, an equivalent notation is routinely used for linear models, that specifies just one *residual distribution*. For the LRM that is:
 
 $$
 \mu_i = \beta_0 + \beta_1x_1\\
@@ -1339,7 +1339,7 @@ detach(BrowsingAB)
 ```
 
 
-The estimation produces the usual coefficients, as well as a standard error. However, the residuals not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two groups exist in the data, which lay far apart. The following  code illustrates the situation by simulating a simple data set with two groups, that is fed into a GMM.
+The estimation produces the usual coefficients, as well as a standard error. However, the residuals do not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two groups exist in the data, which lay far apart. The following  code illustrates the situation by simulating a simple data set with two groups, that is fed into a GMM.
 
 ```{r}
 attach(Chapter_LM)
@@ -1370,7 +1370,7 @@ D_bimod  %>%
 ```
 
 
-These two deviations from normal distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Mulitmodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, it almost comes natural to distinguish between users who have used the design before and those who did not. If the grouping variable is recorded, the solution is group comparison models \@ref(CGM), already introduced.
+These two deviations from normal distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Multimodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, it almost comes natural to distinguish between users who have used the design before and those who did not. If the grouping variable is recorded, the solution is group comparison models \@ref(CGM), already introduced.
 
 Visual assessment of symmetry and unimodality is simple and effective in many cases. But, normal distributions are not the only ones to have these properties. At least logistic distributions and t distributions have these, too, with subtle differences in curvature. Normal and t distributions differ in how quickly probability drops in the tails. Normal distributions drop much faster, meaning that extreme events are practically impossible. With t-distributions, extreme values drop in probability, too, but the possibility of catastrophies (or wonders) stays substantial for a long time.
 
@@ -1427,7 +1427,7 @@ sync_CE(Chapter_LM, D_bimod, D_t, D_QQ, M_bimod, M_t)
 ```
 
 
-In the ideal case, they match perfectly and the quantiles are on a straight  line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the turning points. From these points on the theoretical quantiles start lag behind.  The  lower and upper 1% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Normal distribution  renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem  of misusing a Normal distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Perhaps, researchers used the Normal distribution for the risk models, under-estimating the risk of extreme events. <!-- #63 -->
+In the ideal case, they match perfectly and the quantiles are on a straight line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the turning points. From these points on the theoretical quantiles start to lag behind. The lower and upper 1% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Normal distribution  renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem of misusing a Normal distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Perhaps, researchers used the Normal distribution for the risk models, under-estimating the risk of extreme events. <!-- #63 -->
 
 The ggplot engine provides an easy to use geometry for qqlots, which lets us further explore deviant patterns. Variables with t distribution take an inverse-sigmoid shape due to their fat tails. 
 
@@ -1444,7 +1444,7 @@ detach(Chapter_LM)
 
 
 
-Once mastered, the qq-plot is the swiss knife of Normality check. Next to the subtleties, we can also easily discover deviations from symmetry. This is how the residuals of the returns to homepage model look like:
+Once mastered, the qq-plot is the swiss knife of Normality check. Next to the subtleties, we can also easily discover deviations from symmetry. This is how the residuals of the returns-to-homepage model look like:
 
 ```{r}
   data_frame(resid = residuals(BrowsingAB$M_age_rtrn)) %>% 
@@ -1453,7 +1453,7 @@ Once mastered, the qq-plot is the swiss knife of Normality check. Next to the su
   geom_abline(intercept = 0, slope = 1, col = "red")
 ```
 
-To the left, extreme values have a lower probability than predicted by the Normal distribution, but the right tail are much fatter, one again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified,  neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(poisson_regression). 
+To the left, extreme values have a lower probability than predicted by the Normal distribution, but the right tail is much fatter, once again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified,  neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(poisson_regression). 
 
 
 
@@ -1532,7 +1532,7 @@ AUP_1 %>%
   geom_quantile()
 ```
 
-We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, when we turn towards \@ref(generalized_linear_models), we will find that these  models take provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as interaction effects or heterogeneity in groups.
+We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, when we turn towards \@ref(generalized_linear_models), we will find that these  models provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as interaction effects or heterogeneity in groups.
 
 ```{r}
 detach(AUP)
@@ -1541,10 +1541,10 @@ detach(AUP)
 
 <!-- 37
 
-What has happened here is another flavor of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
+What has happened here is another flavour of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
 
 
-Analyses of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is an essential part of the modelling process, too. By residual analysis we reflect on whether the Normality assumption is reasonably defensible. For variables that are counts, the distribution may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
+Analyses of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is another essential part of the modelling process. By analysing residuals, we reflect on whether the Normality assumption is reasonably defensible. For the distribution of count variables may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
 
 Drawing on expected values, *residual analysis is something you can only do after estimation*. It is usually part of a process called *checking assumptions*, which somehow implies you do it beforehand, which lured many into analyzing the *distribution of the outcome* variable $y_i$ before running the model. This is a false meme, because assumptions are always checked after a certain model has been estimated. In particular, we should check three assumptions on linear models: Normal distribution, independence and homogeneity of variance, which all are codified in the classic residual formula:
 
@@ -1629,7 +1629,7 @@ using the AMM]
 
 Fundamental researchers have a knack for the experimental method. An *experiment*, strictly, is a study where you measure the effects of variables you *manipulate*. Manipulation is, almost literally, that it is *in your hands*, who receives the treatment. The fantastic thing about manipulation is that it allows for *causal conclusions*. A *strictly controlled experiment* is when all influencing variables are either manipulated or kept constant. That is an ideal and would not even be the case if you test the same person over-and-over again (like researchers in psychophysics often do). You never jump into the same river twice.
 
-Sometimes an influencing variables lends itself to be kept constant. For example, in cognitive psychological experiments environment and equipment is usually kept constant. For applied research, keeping things constant comes at a major disadvantage: it limits the possible conclusions drawn from the study. Imagine, you tested a smartphone app with participants, all students, comfortably sitting in a quiet environment. Would you dare to make conclusions on how any users perform in real life situations, say while driving a car? When keeping things constant, *ecological validity* and *generalizability* suffer.
+Sometimes an influencing variable lends itself to be kept constant. For example, in cognitive psychological experiments environment and equipment is usually kept constant. For applied research, keeping things constant comes at a major disadvantage: it limits the possible conclusions drawn from the study. Imagine, you tested a smartphone app with participants, all students, comfortably sitting in a quiet environment. Would you dare to make conclusions on how any users perform in real life situations, say while driving a car? When keeping things constant, *ecological validity* and *generalizability* suffer.
 
 In most applied design studies we need ecological validity and generalizability. If performance differs under certain conditions, you certainly want to know that.
 The solution is to *let conditions vary and record them* as variables, as good as possible. For example, if you were to compare two voice-controlled intelligent agent apps, you could manipulate the ambient noise level, if you are in the lab.
@@ -1649,7 +1649,7 @@ In design research, pair matching applies for situations where designs are compa
 
 You can only match what you can measure and you only measure what you expect. Human behaviour in everyday life is influenced by many factors in complex ways. Although a plethora of personality inventories exists, doing them all prior to the real study is impossible. It would probably not even be effective. Never have I seen a design research study, where even the most established personality tests explain more than a few percent of variation. As another example, take the primacy effect: what you experienced first, has the strongest influence. In real life, impressions are constantly pouring on people and you will never be able to record and match that to a reasonable extent.
 
-When influencing variables cannot be measured for matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportional representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small sample, it can still easily happen that one ends up with more or less biased samples or heterogeneous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
+When influencing variables cannot be measured for matching or statistical control, the last resort is *randomized control*. This is a misleading term, insofar as what the researcher actually does is to *let go to chance*. Indeed, if the process of drawing participants and assigning them to manipulations is completely left to chance, then *in the long-term*, the sample will be proportional representative and all groups will have the same composition of traits.  *Randomization* works well with larger samples. With small samples, it can still easily happen that one ends up with more or less biased samples or heterogeneous groups. Just by chance, more higher-educated people could have ended up in condition A of BrowsingAB.
 
 Using manipulation, matching or randomization in in-the-wild research may work in some cases. In other cases, it will be ineffective or impractical. The ultimate problem is the attempt to keep things constant.  In applied design research the questions rarely come down to a "Is A better than B?". If there is an age effect, you may certainly want to know it and see how the design effect compares to it.
 But, you can only examine what is varied and recorded. The approach of *statistical control* is to record (instead of manipulate) all variables that may influence the results and add them to the statistical model. As we will see now, the linear model puts no limits on the number of predictors. If you believe that user age may play a role for performance, just record it and add it to the model. Statistical control requires at least coverage representation of the sample.
@@ -1679,11 +1679,11 @@ Some will also refer to the concept of usability by the ISO 9241-11, which conta
 
 The definition explicitly requires you to state for *for whom* you intended to design. It thereby implicitly acknowledges that usability of a design could be very different for another user group. In other words, statements on usability are by the ISO 9241-11 definition *conditional* on the target user group.
 
-In statistical terms, conditional statements of the form:
+In statistical terms, conditional statements have this form:
 
 > the effect of design changes with (some) user properties
 
-In regression models, conditional statements like these are represented by *interaction effects*. Interactions between user properties and designs are the most genuine in design research, and deserve a neologism: *differential design effects (DDM)*<!-- #64-->. They come with some of their siblings. *Saturation* occurs when physical (or other) boundaries are reached and the result is less than the sum. *Amplification*, a rare one, is like compound glue: it will harden only if the two components are present. The final section is a plea for interaction effects in theorizing.
+In regression models, conditional statements like these are represented by _interaction effects_. Interactions between user properties and designs are the most genuine in design research, and deserve a neologism: *differential design effects (DDM)*<!-- #64-->. They come with some of their siblings. *Saturation* occurs when physical (or other) boundaries are reached and the result is less than the sum. *Amplification*, a rare one, is like compound glue: it will harden only if the two components are present. The final section is a plea for interaction effects in theorizing.
 
 
 
@@ -1753,7 +1753,7 @@ C_ia1_ageB <- T_ia1 %>%
 ```
 
 
-The intercept still is the performance of an average twenty-year-old using reference design A. Compared to the MPM, it is less favorable, with `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "Intercept")` seconds time-on-task. The effect of design B improved dramatically with the DDM: a twenty-year-old is now `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "DesignB")` faster with it. Is B the clear winner? It is not,  because A has much lower age effect. The age parameter does no longer represent both groups, but just reference A, and it is now very small, `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "age_shft", interval = T)`. The final coefficient is *not* the age effect in B, but *the difference* to the reference age effect. With design B, users are getting `r C_ia1_ageB` seconds slower per year of life. That is a lot!
+The intercept still is the performance of an average twenty-year-old using design A. Compared to the MPM, it is less favorable, with `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "Intercept")` seconds time-on-task. The effect of design B improved dramatically with the DDM: a twenty-year-old is now `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "DesignB")` faster with it. Is B the clear winner? It is not,  because A has a much lower age effect. The age parameter does no longer represent both groups, but just reference A, and it is now very small, `r frm_coef(T_ia1, ~model == "M_ia1", ~fixef == "age_shft", interval = T)`. The final coefficient is *not* the age effect in B, but *the difference* to the reference age effect. With design B, users are getting `r C_ia1_ageB` seconds slower per year of life. That is a lot!
 
 
 ```{r Browsing_interaction, opts.label = "future"}
@@ -2061,7 +2061,7 @@ D_1 %>%
   geom_boxplot()
 ```
 
-We see immediately, that both design choices have a an impact: more contrast, as well as larger letters lead to improved reading performance. But, do they add up? Or do both factors behave like headache pills, where more is more, but less than the sum. Clearly, the 12pt-black group could read fastest on average. Neither with large font, nor with optimal contrast alone has the design reached maximum performance, i.e. saturation. Still, there could be an interaction effect, that gradually reduces the positive effect of large font in a high-contrast design. We run two regression models, one with both main effects and one that adds an interaction term. We extract the coefficients from both models and view them side-by-side:
+We see immediately, that both design choices have an impact: more contrast, as well as larger letters lead to improved reading performance. But, do they add up? Or do both factors behave like headache pills, where more is more, but less than the sum. Clearly, the 12pt-black group could read fastest on average. Neither with large font, nor with optimal contrast alone has the design reached maximum performance, i.e. saturation. Still, there could be an interaction effect, that gradually reduces the positive effect of large font in a high-contrast design. We run two regression models, one with both main effects and one that adds an interaction term. We extract the coefficients from both models and view them side-by-side:
 
 ```{r fit:reading_1, opts.label = "mcmc"}
 M_1 <-
@@ -2103,7 +2103,7 @@ $$
 `r sum(C_read_fixef)`
 $$
 
-In this research scenario, that was not strictly the question, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`) Still, including the  interaction term is the right choice for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clarity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation.   This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthetic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially the effects of the two manipulations get considerably under-estimated. 
+In this research scenario, that was not strictly the question, as we were primarily interested in comparing the effects of font size and contrast. Also, if we see the credibility interval of the interaction effect it is not highly certain (`r frm_coef(fixef(Reading$M_2), row = 4)`). Still, including the  interaction term is the right choice for two reasons: first, both manipulations influence the same cognitive processing, as they both improve visual clarity, with the effect of better visual letter recognition. From a theoretical perspective, we would thus expect saturation. This is simply the application of prior knowledge and in a perfect world one would  use a prior distribution for the interaction term, creating a more certain estimate. That being said, the data set is synthetic, and the simulation definitely included the interaction effect.  Second, in Table [XY], all other coefficients change considerably with introduction of the interaction effect. Especially the effects of the two manipulations get considerably under-estimated. 
 
 Why are the main effects under-estimated, if the interaction term is not included? The pure main-effects model has three parameters. This allows it to represent the same number of independent group means. Formally, the number of groups in the study is four, however, the three-parameter model assumes that the fourth group (black, 12pt) can sufficiently be specified by the existing three parameters. If saturation occurs, the group of participants in the 12pt group is not homogeneous: in the grey group, they experience a stronger improvement than in the black group. The three parameter model is forced to make the best out of situation and adjusts the net effect of font size to be slightly lower than it actually is. The same occurs for the font colour effect.
 
@@ -2129,7 +2129,7 @@ fixef(M_3)
 ```
 
 
-With some basic data transformation on the coefficient table, we create a data frame that encodes the two factors separately. Note how `separate` is used to split the coefficient names into group identifiers. Using `mutate` and `str_replace`, the group labels are stripped the factor names. The resulting coefficient table serves as input to ggplot, creating an interaction plot with overlayed credibility intervals, using `geom_errorbar`.
+With some basic data transformation on the coefficient table, we create a data frame that encodes the two factors separately. Note how `separate` is used to split the coefficient names into group identifiers. Using `mutate` and `str_replace`, the group labels are stripped of the factor names. The resulting coefficient table serves as input to ggplot, creating an interaction plot with overlayed credibility intervals, using `geom_errorbar`.
 
 ```{r reading, opts.label = "rtut"}
 T_2x2_mu <-
@@ -2157,8 +2157,7 @@ detach(Reading)
 
 In Figure XY, we can easily spot the two main effects, and how they go together. The researcher would conclude that with the desired grey font, increasing font size partly compensates for the lack of contrast. At the same time, we see that some saturation occurs, but from a purely ergonomic perspective, large font and high contrast still is the preferred design.
 
-We have seen in the Headache example that interaction effects occur 
-as non-linearity. The more a participant approaches the natural boundary of zero headache, the less benefit is created by additional effort. This we call  *saturation*. Saturation is likely to occur when multiple factors influence the same cognitive or physical system or functioning. In quantitative comparative design studies, we gain a more detailed picture on the co-impact of design interventions and can come to more sophisticated decisions.
+We have seen in the Headache example that interaction effects occur as non-linearity. The more a participant approaches the natural boundary of zero headache, the less benefit is created by additional effort. This we call  *saturation*. Saturation is likely to occur when multiple factors influence the same cognitive or physical system or functioning. In quantitative comparative design studies, we gain a more detailed picture on the co-impact of design interventions and can come to more sophisticated decisions.
 
 In the Reading case, overall utility is a compound of ergonomic quality and aesthetic appeal. It was assumed that a grey-on-white colour scheme is more appealing. The researcher would choose the grey-12pt design: higher contrast would increase ergonomic value, but too much at the expense of appeal. Of course, in a perfect world, one would add emotional appeal as a second measure to the study.
 
@@ -2177,7 +2176,7 @@ Saturation effects occur, when multiple impact factors act on the same system an
 
 In their study, they asked a larger set of participants to rate their technophily and sociophily. They were then given a description of the planned game and were asked how much they intended to participate in the game.
 
-While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effect between metric predictors. Although this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors, we have used box plots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wire-frame plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatter-plot with the predictors on the axes and encode the outcome variable by shades or size of dots <!-- #71 -->. These options may suffice to see any present main effects, but are too coarse to discover subtle non-linearity. The closest we can get to a good illustration is to create groups and continue as usual. Note, that turning metric predictors into factors is just a hack to create exploratory graphs. By no means do I intend to corroborate the use of group-mean models on metric data.
+While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with interaction effects between metric predictors. Although this is not very different to interaction effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors, we have used box plots, but these do not apply for metric variables. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wire-frame plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatter-plot with the predictors on the axes and encode the outcome variable by shades or size of dots <!-- #71 -->. These options may suffice to see any present main effects, but are too coarse to discover subtle non-linearity. The closest we can get to a good illustration is to create groups and continue as usual. Note, that turning metric predictors into factors is just a hack to create exploratory graphs. By no means do I intend to corroborate the use of group-mean models on metric data.
 
 ```{r}
 attach(AR_game)
@@ -2272,7 +2271,7 @@ The Boolean OR is an extreme case of saturation. Once one of the factors is pres
 
 Explaining or predicting complex behaviour with psychological theory is a corner stone of design research. Unfortunately, it is not that easy. While design is definitely multifactorial, with a variety of cognitive processes, individual differences and behavioural strategies, few psychological theories cover more than three associations between external or individual conditions and behaviour. The design researcher is often forced to enter a rather narrow perspective or knit a patchwork model from multiple theories. Such a model can either be loose, making few assumptions on how the impact factors interact which others. A more tightened model frames multiple impact factors into a conditional network, where the impact of one factor can depend on the overall configuration. A classic study will now serve to show how interaction effects and theoretical reasoning go together. 
 
-Vigilance is the ability to remain attentive for rarely occurring events. Think of truck drivers on lonely night rides, where most of the time they spend keeping the truck on a straight 80km/h course. Only every now and then is the driver required to react to an event like braking lights flaring up ahead. Vigilance tasks are among the hardest thing to ask from a human operator, yet, they are safety relevant in a number of domains. Keeping up vigilance most people perceive as tiring, and vigilance deteriorates with tiredness.
+Vigilance is the ability to remain attentive for rarely occurring events. Think of truck drivers on lonely night rides, where most of the time they spend keeping the truck on a straight 80km/h course. Only every now and then is the driver required to react to an event like braking lights flaring up ahead. Vigilance tasks are among the hardest thing to ask from a human operator. Yet, they are safety relevant in a number of domains. Keeping up vigilance most people perceive as tiring, and vigilance deteriorates with tiredness.
 
 Several studies have shown that reaction time at simple tasks increases when people are tired. The disturbing effect of noise has been documented as well. A study by Corcoran (1961) <!-- #74 --> examined the simultaneous influence of sleep deprivation and noise on a rather simple reaction task. They asked:
 
@@ -2320,12 +2319,12 @@ T_fixef
 
 Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested (intercept). The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(T_fixef, ~fixef == "SleepSleepy")`. Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy")`. Note however, that we cannot conclude a null effect, as the credibility limits are wide. Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult. The irritating effect of noise may therefore be minimal. As suggested by Corcoran, the effect of sleepiness on performance is partly reduced in a noisy environment `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy:SleepSleepy")`. This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world. 
 
-The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law states that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we accept that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal  arousal level, noise could have pushed them right to the opposite point. 
+The finding also relates to the well known Yerkes-Dodson law in ergonomic science. The law states that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in Figure XY. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we accept that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal arousal level, noise could have pushed them right to the opposite point. 
 
 Central to the Yerkes-Dodson law is that arousal is a gradually increasing property, but the current experiment only features two levels. A straight line is the only way to unambiguously connect two group means; examining any curved relationships is impossible. We could think of varying noise levels over a wider range for better tracing the non-linear relationship between arousal and performance. The next section introduces polynomial regression for approximating non-linear associations between metric variables.
 
-
-```{r Yerkes_Dodson_1, opts.label = "invisible"} <!-- #76 -->
+<!-- #76 -->
+```{r Yerkes_Dodson_1, opts.label = "invisible"} 
 F_Yerkes <-
   function(range = c(-2, 2)){
     data_frame(arousal = seq(-2, 2, length.out = 200)) %>% 
@@ -2374,7 +2373,7 @@ detach(Sleep)
 
 ## Doing the rollercoaster: polynomial regression {#polynomial_regression}
 
-Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our elderly One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not the case. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in human-likeness, but only at the lower end. A feline <!-- #77 --> robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. Designs on the high end, that are very much but not exactly human-like face a sudden drop in emotional response, which is called the *uncanny valley*.
+Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as accompany children and care for our elderly. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not the case. [Mori] discovered a bizarre non-linearity in human response: people respond more positive to improvements in human-likeness, but only at the lower end. A feline <!-- #77 --> robot design with recognizable but stylized facial features will always beat a faceless robot with a strong mechanical appeal. For designs on the high end, with a very much but not exactly human-like face, there is a sudden drop in emotional response, which is called the *uncanny valley*.
 
 ```{r uncanny_valley}
 G_uncanny_illu <-
@@ -2468,7 +2467,7 @@ T_fixef_1
 ```
 
 
-We can extract the fixef effects table as usual. The four coefficients specify the polynomial to approximate the average likability responses. The polynomial parameters have little explanatory value. Neither of the parameter alone relates to a relevant property of the uncanny valley. One relevant property would be the location of the deepest point of the uncanny valley, its trough. The trough is a local minimum of the curve and we can find this point with polynomial techniques. 
+We can extract the fixef effects table as usual. The four coefficients specify the polynomial to approximate the average likability responses. The polynomial parameters have little explanatory value. Neither of the parameters alone relates to a relevant property of the uncanny valley. One relevant property would be the location of the deepest point of the uncanny valley, its trough. The trough is a local minimum of the curve and we can find this point with polynomial techniques. 
 
 Finding a local minimum is a two step procedure: first, we must find all *stationary points*, which includes local minima and maxima. Then, we determine which of the resulting points is the local minimum. Stationary points occur, where the curve bends from a rising to falling or vice versa. They are distinguishable by having a slope of zero, neither rising nor falling. Stationary points can be identified by the derivative of the third degree polynomial, which is a second degree polynomial:
 
@@ -2476,7 +2475,7 @@ $$f'(x) = \beta_1 + 2\beta_2x + 3\beta_2x^2$$
 
 The derivative $f'(x)$ of a function $f(x)$ gives the slope of $f(x)$ at any given point $x$. When $f'(x) > 0$, $f(x)$ is rising at $x$, with $f'(x) < 0$ it is falling. Stationary points are precisely those points, where $f'(x) = 0$ and can be found by solving the equation. The derivative of a third degree polynomial is of the second degree, which has a quadratic part. This can produce a parabolic form, which hits point zero twice, once rising and once falling. A rising encounter of point zero indicates that $f(x)$ has a local minimum at $x$, a falling one indicates a local maximum. In consequence, solving $f'(x) = 0$ can result in two solutions, one minimum and one maximum, which need to be distinguished further. 
 
-If the stationary point is a local minimum, as the trough, slope switches from negative to positive; $f'(x)$ crosses $x = 0$ in a rising manner, which is a positive slope of $f'(x)$. Therefore, a stationary point is a local minimum, when of $f''(x) > 0$.
+If the stationary point is a local minimum, as the trough, slope switches from negative to positive; $f'(x)$ crosses $x = 0$ in a rising manner, which is a positive slope of $f'(x)$. Therefore, a stationary point is a local minimum, if $f''(x) > 0$.
 
 Mathur et al. followed these analytic steps to arrive at an estimate for the position of the trough. The following code uses several high-level functions from package `polynom` to estimate the location of the trough, by drawing on the first and second derivative `d[d]poly` 
 
