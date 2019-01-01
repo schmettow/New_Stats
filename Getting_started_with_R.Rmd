@@ -629,7 +629,7 @@ Another set of commonly used operators are logical, they implement *Boolean alge
 | F 	| T 	| T 	| F 	| T 	| F     |
 | F 	| F 	| T 	| F 	| F 	| T     |
 
-Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child". <!-- #11 -->
+Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child".
 
 Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, "either A or B" can be written as: `(A | B) & !(A & B)`. This term only gets TRUE when A or B is TRUE, but not both. In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.
 
@@ -844,7 +844,7 @@ detach(Reading)
 ```
 Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.
 
-Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Saving all objects and retrieving them when returning from a break is as easy as:<!-- #13 -->
+Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: if you are working on multiple projects simultaneously, because at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Another way of dealing with this is saving all objects and retrieving them when returning from a break or switching projects, it is as easy as:<!-- #13 -->
 
 ```{r save_working_env, opts.label = "rtut.nr"}
 save(file = "my_data_analysis.Rda")
