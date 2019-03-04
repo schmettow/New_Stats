@@ -1,10 +1,9 @@
 ```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
 purp.mcmc = F
-purp.rtut = T
 
 source("RMDR.R")
 
-CE <- c("Uncanny", "BrowsingAB", "CUE8", "Hugme", "Stroop_comp", "IPump", "Sec99", "Stroop", "StroopMW", "Chapter_WM")
+CE <- c("Uncanny", "BrowsingAB", "CUE8", "Hugme", "StroopMW", "Chapter_WM")
 load_CE_(CE)
 
 
@@ -57,14 +56,19 @@ The first chapter of this book linked Bayesian statistics to rational decision m
 
 All modelling commands used so far, understand specification of prior knowledge. At the same time, these commands provide useful default priors. The defaults are *non-informative priors*. They are formally specified, but have negligible impact on the posterior distribution. Consider the case BrowsingAB. In [CLM], we estimated the linear slope between age and ToT.
 
-```{r prior_BAB_age}
+```{r}
 attach(BrowsingAB)
+
+```
+
+
+```{r prior_BAB_age, opts.label = "future"}
 fixef(M_2)
 ```
 
 The default prior specification can be found in the manuals of rstanarm (or brms). Or, you use the following command on the model object `M_2`:
 
-```{r}
+```{r opts.label = "future"}
 M_2$prior.info
 ```
 
@@ -135,28 +139,112 @@ Another way to put it is that $H_0$ is a special case of $H_1$, where the slope 
 All classic tests only work with nested models. The famous F-test estimates both models, calculates the residual sum of squares under both models and evaluates whether the more general model sufficiently reduces the residuals, relative to the nested model,  to be called statistically significant. As we will see in the remainder of this chapter, comparing models relative to each other has useful applications beyond classic hypothesis testing, in particular:
 
 1. Models that contain superfluous predictors have lower predictive power compared to a more parsimonious model.
-1. When the main purpose is predicting future observations with optimal accuracy, *model pruning* is a procedure for selecting a subset of parameters with the optimal forecasting accuracy.
+1. When the main purpose is predicting future observations with optimal accuracy, *model pruning* is a procedure for selecting a subset of parameters with the optimal predictive accuracy.
 1. In chapter [REF] we used graphical methods to choose an appropriate error distribution for reaction time measures. By comparison models, we can identify the optimal error distribution for the data at hand.
 
-As it will turn out, the forecasting accuracy of a model depends on two counteracting aspects: *model fit*, that is how neatly the model aligns with the data and *model parsimony*. Generally spoken, adding a parameter to a model gives you an advantage in fit, but potentially reduces parsimony, resulting in less-than-optimal forecasts. Even classic ANOVA contains both elements: the F-statistic represents model fit by the reduction in residuals and parsimony enters the F-test as degrees of freedom, i.e. the number of free parameters.
+As it will turn out, the predictive accuracy of a model depends on two counteracting aspects: *model fit*, that is how neatly the model aligns with the data and *model parsimony*. Generally spoken, adding a parameter to a model gives you an advantage in fit, but potentially reduces parsimony, resulting in less-than-optimal forecasts. Even classic ANOVA contains both elements: the F-statistic represents model fit by the reduction in residuals and parsimony enters the F-test as degrees of freedom, i.e. the number of free parameters.
 
-This chapter will not re-iterate on classic tests, but will approach model comparison from the perspective of forecasting accuracy. One very practical reason for that is, that classic tests *only* apply to nested models, whereas there are many situations, where  comparing non-nested models is very useful.
-
-
-The remainder of this chapter will first elaborate on model parsimony and demonstrate that parsimony is crucial for forecasting accuracy. Then, a generic procedure for measuring forecasting accuracy of models will be outlined, the *leave-one-out cross validation*. Then we introduce a very practical class of statistics for model comparison called *information criteria*. As we will see, information criteria apply to a much wider class of models, including non-nested models, MLM and GLM, but also non-linear models or psychometric models.
+This chapter will not re-iterate on classic tests, but will approach model comparison from the perspective of predictive accuracy. One very practical reason for that is, that classic tests *only* apply to nested models, whereas there are many situations, where  comparing non-nested models is very useful.
 
 
-### Forecasting accuracy
-
-At several occasions in this book, we used the `predict(model)` function to produce a plot for model criticism, where fitted lines are shown next to the original data. First, a note on terminology is in order: In common language, a prediction is an informed idea about future events, hence, observations we have not yet made. This is strictly not what the `predict` function does, as it produces the best guess for the observations we already have in the data set. This best guess is what the model "thinks" is the true underlying property, minus the error. For that reason, other authors have suggested to call predicted values *retrodictions*.
+The remainder of this chapter will first elaborate on model parsimony and demonstrate that parsimony is crucial for predictive accuracy. Then, a generic procedure for measuring predictive accuracy of models will be outlined, the *leave-one-out cross validation*. Then we introduce a very practical class of statistics for model comparison called *information criteria*. As we will see, information criteria apply to a much wider class of models, including non-nested models, MLM and GLM, but also non-linear models or psychometric models.
 
 
-### Goodness of fit
 
+### Goodness of fit {#GOF}
+
+The least one can expect from a good model is that its predicted values resemble the shape of observed data. That is commonly called *goodness-of-fit*
+
+```{r}
+attach(Uncanny)
+```
+
+```{r}
+
+UV_1 %>% 
+  #mutate(age = rnorm(200, age, .2)) %>% 
+  left_join(predict(M_0), by = "Obs") %>% 
+  rename(M_0 = center) %>% 
+  left_join(predict(M_1), by = "Obs") %>% 
+  rename(M_1 = center) %>% 
+  select(Obs, huMech, avg_like, M_0, M_1) %>% 
+  #sample_frac(.3) %>% 
+  gather(key = Model, value = fitted, starts_with("M_")) %>% 
+  ggplot(aes(x = huMech, y = avg_like)) +
+  facet_grid(Model ~ .) +
+  geom_text(aes(label = Obs), size = 3) +
+  geom_smooth(aes(y = fitted), se = F) +
+  geom_segment(aes(xend = huMech, yend = fitted), curvature = 0.1)
+```
+
+
+
+
+```{r}
+detach(Uncanny)
+```
+
+
+```{r}
+attach(BrowsingAB)
+```
+
+```{r}
+BAB1 %>% 
+  mutate(age = rnorm(200, age, .2)) %>% 
+  left_join(predict(M_0), by = "Obs") %>% 
+  rename(M_0 = center) %>% 
+  left_join(predict(M_ia1), by = "Obs") %>% 
+  rename(M_ia1 = center) %>% 
+  select(Obs, age, Design, ToT, M_0, M_ia1) %>% 
+  sample_frac(.3) %>% 
+  gather(key = Model, value = fitted, starts_with("M_")) %>% 
+  ggplot(aes(x = age, y = ToT, color = Design)) +
+  facet_grid(Model ~ .) +
+  geom_text(aes(label = Obs), size = 3) +
+  geom_smooth(aes(y = fitted), se = F, method = "lm") +
+  geom_segment(aes(x = age, xend = age, y = ToT, yend = fitted), curvature = 0.1)
+```
+
+Note:
+
++ how the variable age is "jittered" by `rnorm` to prevent overplotting
+
+
+
+
+```{r}
+detach(BrowsingAB)
+```
+
+
+
+#### Graphical Methods
+
++ Assessing likelihood versus error distribution
++ predicted
++ predictive distribution
++ residuals: qq-plots, histograms
+
+#### Goodness-of-Fit scores
+
++ residuals
 + RMSE
 + deviance
 + total deviance
 
+
+The problem with RMSE is that it is based on residuals. The problem with residuals is that they weigh negative and positive deviations the same, which only make sense with symmetric distributions, like the Gaussian. For the classes of models introduced in [REF GLM] a more general score for goodness-of-fit is needed. This is the *deviance* score.
+
+In \@ref(likelihood) we have learned how the *log-likelihood function* calculates the joint probability of all observations $y$, given a certain parameter value vector $\theta$:
+
+$$ LL = \log \sum_i p(y_i|\theta)$$
+
+Opposed to residuals, a likelihood function exists for all models in this book and beyond. Therefore, it is an attractive choice for a goodness of fit score. In classic maximum likelihood estimation, the *total deviance* $D$ is routinely being used for that purpose. It is merely double the negative $LL$:
+
+$D = -2 LL$
+
+In classic MLE, the fit of two models can be compared by computing the deviance of both models. Lower deviance indicates a better fit.
 
 
 
@@ -354,9 +442,12 @@ M_5 <-
 waic(M_5)$p_waic
 ```
 
-```{r opts.label = "mcsync}
-sync_CE(Chapter_WM, M_1, M_2, M_3, M_4, M_5)
+```{r}
 detach(Chapter_WM)
+```
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_WM, M_1, M_2, M_3, M_4, M_5)
+
 ```
 
 
@@ -367,7 +458,7 @@ To sum it up: this section introduced the effective number of parameters as a me
 <!--
 In the following case, the population-level variance is extreme to the point that it is indistinguishable from a uniform distribution. There is little to learn from the population (top-down) and participant-level coefficients get less constrained. This model has the same nominal number of parameters, as the one before, but is more opulent.
 
-```{r opts.label = "future}
+```{r opts.label = "future"}
 
 M_4 <- 
   sim_1(beta_0_sd = 1000) %>% 
@@ -380,12 +471,15 @@ waic(M_4)$p_waic
 -->
 
 
+### Predictive accuracy
+
+At several occasions in this book, we used the `predict(model)` function to produce a plot for model criticism, where fitted lines are shown next to the original data. First, a note on terminology is in order: In common language, a prediction is an informed idea about future events, hence, observations we have not yet made. This is strictly not what the `predict` function does, as it produces the best guess for the observations we already have in the data set. This best guess is what the model "thinks" is the true underlying property, minus the error. For that reason, other authors have suggested to call predicted values *retrodictions*.
 
 
 
-### Too opulent: over-fitting
+### Too complex: over-fitting
 
-Model fit and forecasting accuracy should never be confused because they have quite the opposite relation with parsimony. Forecasting future observations is a completely different business, as we will now see. In the following, we will use a small simulated data set and impose two models: a very parsimonious model that matches the data generating process and a very opulent model, that carries more parameters than there are observations, even. As it will turn out, the parsomonious model produces much tighter retrodicted values, but performs considerably worse in a forecasting.
+Model fit and predictive accuracy should never be confused because they have quite the opposite relation with parsimony. Forecasting future observations is a completely different business, as we will now see. In the following, we will use a small simulated data set and impose two models: a very parsimonious model that matches the data generating process and a very opulent model, that carries more parameters than there are observations, even. As it will turn out, the parsomonious model produces much tighter retrodicted values, but performs considerably worse in a forecasting.
 
 The following simulation draws two variables, $x_i$ and $y_i$ in such a way that they are completely unrelated. are totally unrelated to the predictor $x_i$ (with levels 1 to 4):
 
@@ -412,7 +506,7 @@ A naive observer (with some fancy theoretical expectations) may come to the idea
 + residual standard error
 
 
-```{r opts.label = "mcmc}
+```{r opts.label = "mcmc"}
 M_6 <- 
   D_4 %>% 
   stan_glm(y ~ poly(x, 3), data = .)
@@ -430,7 +524,7 @@ D_4 %>%
 
 The fit of the model is almost perfect. But, remember that these are retrodictions, not forecasts. A more critical observer would suggest to start with a parsimonious grand mean model, as it happens to be the true data simulation process:
 
-```{r opts.label = "mcmc}
+```{r opts.label = "mcmc"}
 M_7 <- 
   D_4 %>% 
   stan_glm(y ~ 1, data = .)
@@ -471,7 +565,7 @@ D_5 %>%
 
 ```
 
-For real data sets, differences in forecasting performance are more subtle and we will need formal methods, which will be developed in the coming sections. Here, we use the root mean square error (RMSE) once again.
+For real data sets, differences in predictive performance are more subtle and we will need formal methods, which will be developed in the coming sections. Here, we use the root mean square error (RMSE) once again.
 
 ```{r}
 RMSE <- 
@@ -486,6 +580,11 @@ D_5 %>%
 ```
 
 ```{r}
+detach(Chapter_WM)
+```
+
+
+```{r opts.label = "mcsync"}
 sync_CE(Chapter_WM, M_6, M_7)
 ```
 
@@ -494,21 +593,19 @@ The grand mean model has a much smaller RSME, which means that on average, its f
 
 The polynomial model can take any curved path around one local minimum and one local maximum, as well as all lower-degree shapes, such as paraboles, slopes and flat lines.  
 
-In conclusion, when forcasting matters, researchers should aim for parsimonous models. In the following section, we will see how forecasting performance can be assessed without the need to gather additional data, the leave-one-out (LOO) cross-validation method. This method can be seen as the gold standard, but is very computing intensive. The subsequent section will finally introduce information criteria as computationally more efficient method to compare forecasting accuracy of models.
-
-
+In conclusion, when forcasting matters, researchers should aim for parsimonous models. In the following section, we will see how forecasting performance can be assessed without the need to gather additional data, the leave-one-out (LOO) cross-validation method. This method can be seen as the gold standard, but is very computing intensive. The subsequent section will finally introduce information criteria as computationally more efficient method to compare predictive accuracy of models.
 
 
 ### Leave-one-out cross validation {#forecasting_LOO}
 
-In the previous section we evaluated the forecasting accuracy of models by comparing  retrodictions to new data. Waiting for new data before you can do model evaluation sounds awful, but this is what cross validation requires. The good news is that new data does not have to come from a new study. More precisely, cross validation only requires that the forecast data is not part of the sample you trained the model with. Psychometricians, for example, use the split half technique to assess the reliability of a test. The items of the test are split in half, one training set and one forecasting set. If the estimated participant scores correlate strongly, the test is called reliable.
+In the previous section we evaluated the predictive accuracy of models by comparing  retrodictions to new data. Waiting for new data before you can do model evaluation sounds awful, but this is what cross validation requires. The good news is that new data does not have to come from a new study. More precisely, cross validation only requires that the forecast data is not part of the sample you trained the model with. Psychometricians, for example, use the split half technique to assess the reliability of a test. The items of the test are split in half, one training set and one forecasting set. If the estimated participant scores correlate strongly, the test is called reliable.
 
 So, model evaluation can be done, by selecting on part of the data to train the model, i.e. estimate the coefficients, and try to forecast the other part of the data. However, data is precious and reserving half of it for forecasting will considerably be at the cost of certainty. Fortunately, nobody actually said it has to be half the data. Another method of splitting has become common, *leave-one-out (LOO) cross validation*. The idea is simple:
 
 1. Remove observation $i$ from the data set.
 1. Estimate the model $M_{/i}$.
 1. Predict observation $i$ with Model $M_{/i}$.
-1. Measure the forecasting accuracy for $i$.
+1. Measure the predictive accuracy for $i$.
 1. Repeat steps 1 to 4 until all observations have been left out and forecast once.
 
 The following code implements a generic function to run LOO.
@@ -530,8 +627,8 @@ do_loo <-
     left_out  <- function(obs) data %>% slice(obs)  # Quosure
     out <-   data_frame(Obs     = 1:nrow(data),
                         Model   = model_name,
-                        Sample  = obs %>% map(leave_out), # meta function
-                        OOS     = obs %>% map(left_out), ## out-of-sample obs
+                        Sample  = Obs %>% map(leave_out), # meta function
+                        OOS     = Obs %>% map(left_out), ## out-of-sample obs
                         Fitted  = Sample %>% map(f_fit)) %>% 
       mutate(forecast = unlist(map2(Fitted, OOS, f_predict)))
     return(out)
@@ -549,10 +646,15 @@ Before we put `do_loo` to use, some notes on the programming seem in order. Desp
 1. `map` is a meta function from package purrr. It takes a list of objects and applies an arbitrary function, provided as the second argument.
 1. `map2` takes two parallel input lists and applies a function. Here the forecast is created by matching observations with the model they had been excluded from.
 1. The function output is created as a *tibble*, which is the tidy re-implementation of data frames. Different to original `data.frame` objects, tibbles can also store complex objects. Here, the outcome of LOO stores every single sample and estimated model, neatly aligned with its forecast value.
-1. Other than one might expect, the function does not return a single score for forecasting accuracy, but a dataframe with inidividual forecasts. This is on purpose as there is more than one possible function to choose from for calculating a single accuracy score.
+1. Other than one might expect, the function does not return a single score for predictive accuracy, but a dataframe with inidividual forecasts. This is on purpose as there is more than one possible function to choose from for calculating a single accuracy score.
 1. The function also makes use of what is called non-standard evaluation. This is a very advanced programming concept in R. Suffice it to say that `substitute()` captures an expression, here this is the fitting function argument, without executing it, immediatly. Here the provided argument is converted to character and put as an identifier into the dataframe. That makes it very easy to use `do_loo` for multiple models, as we will see next.
 
 In the following illustration, we perform a LOO cross validation on a small data set `D_5`, with two predictors $x_1$ and $x_2$, where $x_1$ has a linear relationship with outcome $y$ and $x_2$ is competely unrelated. In the following, we apply LOO to estimate three models: a grand mean model, a linear regression model on $x_1$ and a double linear regression  with $x_1$ and $x_2$ as predictors. 
+
+
+```{r}
+attach(Chapter_WM)
+```
 
 
 ```{r}
@@ -595,7 +697,7 @@ Loo <- bind_rows(do_loo(D_6, fit_M_08),
 
 
 Note, how the output of the three runs of `do_loo` are simply merged into one dataframe.
-This allows us to create a model comparison summary based on the root mean square error:
+This allows us to easily create a combined summary based on the root mean square error:
 
 ```{r}
 Loo %>% 
@@ -604,12 +706,20 @@ Loo %>%
   summarize(RMSE = RMSE(forecast, y))
 ```
 
+##### HERE
 As expected, the three 
+
+```{r}
+detach(Chapter_WM)
+```
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_WM, Loo)
+```
 
 
 ### Information criteria
 
-So far, we have seen that the right level of parsimony is essential for good forecasting accuracy. While LOO can be considered gold standard for assessing forecasting accuracy, it has a severe downside. Estimating Bayesian models with MCMC is very computing intensive and for some models in this book, doing a single estimating is in the range of dozens of minutes to more than an hour. LOO estimates the model as many times as there are observations, which makes it a very inconvenient choice for more complex  models and larger data sets.
+So far, we have seen that the right level of parsimony is essential for good predictive accuracy. While LOO can be considered gold standard for assessing predictive accuracy, it has a severe downside. Estimating Bayesian models with MCMC is very computing intensive and for some models in this book, doing a single estimating is in the range of dozens of minutes to more than an hour. LOO estimates the model as many times as there are observations, which makes it a very inconvenient choice for more complex  models and larger data sets.
 
 Using highly oversaturated models is catastrophic for prediction. When the saturated model is asked to predict future observations, it will recover the full noise that was in the data, which is $mu_i + \epsilon_i$. Residuals represents the stochastical component, which by its very nature does not reproduce on the next occasion. Any more complex model reduces deviation from the observed data, but has less predictive value. The AIC accounts for the reduced predictive accuracy by penalizing the number of parameters. 
 
@@ -659,7 +769,7 @@ The uncanny valley observation suggests that participants likeablity judgements 
 attach(Uncanny)
 ```
 
-```{r}
+```{r opts.label = "mcmc"}
 M_2 <- 
   UV_1 %>% 
   mutate(huMech_0 = 1,
@@ -675,6 +785,9 @@ loo::waic(M_2)
 
 ```{r}
 detach(Uncanny)
+```
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, M_2)
 ```
 
 
@@ -755,24 +868,21 @@ M_0 <- stan_glm(avg_like ~ huMech,
                data = UV_1)
 ```
 
-```{r opts.label = "mcsync"}
-sync_CE()
-```
 
 
-```{r}
+```{r opts.label = "future"}
 T_pred <- 
   bind_rows(post_pred(M_0),
             post_pred(M_1)) %>% 
   group_by(Obs, model) %>% 
-  summarize(predicted = median(value))
+  summarize(predicted = median(value)) %>% 
+  left_join(Uncanny$UV_1, by = "Obs")
 
 
-UV_1 %>% 
+T_pred %>% 
   ggplot(aes(x = huMech, y = avg_like)) +
   geom_point() +
-  geom_line(aes(y = predicted, col = model),
-            data = T_pred)
+  geom_line(aes(y = predicted, col = model))
 
 ```
 
@@ -785,6 +895,10 @@ brms::waic(M_1)
 
 ```{r}
 detach(Uncanny)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny,M_0)
 ```
 
 
@@ -926,4 +1040,3 @@ Measurement methods are ordered by three criteria:
 + MacElreaths information criteria
 + W&L on Bayes factor and model selection
 + Stan Manual
-+ Stefan Raab entertained with the German life television show: quizz boxing. The opponents encountered in several rounds of boxing, each followed by a quizz contest. YD in action!
