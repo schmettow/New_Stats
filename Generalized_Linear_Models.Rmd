@@ -21,6 +21,36 @@ Another question is probably lurking in the minds of readers with some classic s
 
 The GLM framework rests on two extensions that bring us a huge step closer to the data. The first one is a minor mathematical trick to establish linearity, the *link function*. The second is the informed choice about the expected *pattern of randomness*. As we will see, most of the time it is more or less obvious what statistical distribution, other than the Gaussian, matches the data.
 
+
+**For the impatient:** The regression engines rstanarm and brms offer a huge variety of randomness distributions to possibly replace the Gaussian distribution. Having too many choices is not always an advantage, but here it is. In my opinion, most of the time it suffices to know just two or three properties of the outcome variable:
+
+1. Is the outcome varible discrete or continuous?
+1. What are the boundaries of measures?
+1. In case of discrete data: Can we expect cover-dispersion?
+
+The first two properties are obvious and we already know them when planning the study. And we also do not have to worry about what even is over-dispersion, because it practically always is the case.
+
+```{r echo = F}
+DiagrammeR::mermaid("
+graph TD
+S[Scale] -->|continuous| C[Boundaries]
+C -->|none| Gaussian[Gaussian]
+C -->|lower = zero| Gamma[Gamma]
+C -->|positive lower| ExGaussian[ExGaussian]
+C -->|lower and upper| Beta[Beta]
+
+S -->|discrete| D[Boundaries]
+D -->|lower = 0| OD1[Overdispersion]
+OD1 -->|No| Poisson[Poisson]
+OD1 -->|Yes| Negbinom[negative-binomial]
+
+D -->|upper limit| U[Overdispersion]
+U -->|No| Binomial[Binomial]
+U -->|Yes| Betabinom[Beta-binomial]
+")
+```
+
+
 In the following three sections I will explain the three core assumptions of linear models, for this recall the canonical model formulation:
 
 $$
