@@ -34,7 +34,7 @@ In the following the essential concepts of statistics and Bayesian analysis will
 
 
 
-## Descriptive statistics
+## Descriptive statistics {#descriptive_stats}
 
 In empirical research we systematically gather observations.  Observations of the same kind are usually subsumed as variables. A set of variables that have been gathered on the same sample are called a data set, which typically is a table with variables in columns. In the most general meaning, *a statistic* is a single number that somehow represents relevant features of a data set. Statistics fall into several broad classes that answer certain types of questions:
 
@@ -132,17 +132,6 @@ And here are some other ways to interpret the same slogan:
 
 "*50% (or more) of users* can rent a car in 99 seconds". This is called the *median*. The median is computed by bringing all measures into an order and collect the element right in the center, or the mean of the center pair of values when the number of observations is even.
 
-
-
-The median is a special case of so called *quantiles*. The court could decide that 50% of users is too lenient as a criterion and could demand that 75% percent of users must complete the task within 99 seconds for the slogan to be considered valid.
-
-```{r}
-quantile(Ver20$ToT, .75)
-```
-
-
-A common pattern in the distribution of measures is that a majority of observations densely accumulate in the center region. The point of highest density of a distribution is called the *mode*. In other words: the mode is the region (or point) that is most likely to occur. For continuous measures this once again poses the problem that every value is unique. Sophisticated procedures exist to smooth over this inconvenience, but by binning we can construct an approximation of the mode: just choose the center of the bin with highest frequency.
-
 ```{r opts.label = "rtut.nr"}
 median <- function(x){ 
   n <- length(x)
@@ -154,6 +143,16 @@ median <- function(x){
 ```
 
 
+Actually, the median is a special case of so called *quantiles*. The court could decide that 50% of users is too lenient as a criterion and could demand that 75% percent of users must complete the task within 99 seconds for the slogan to be considered valid.
+
+```{r}
+quantile(Ver20$ToT, .75)
+```
+
+A common pattern in distributions of measures is that a majority of observations accumulate in the center region. The point of highest density of a distribution is called the *mode*. In other words: the mode is the region (or point) that is most likely to occur. For continuous measures this once again poses the problem that every value is unique. Sophisticated procedures exist to smooth over this inconvenience, but by binning we can construct an approximation of the mode: just choose the center of the bin with highest frequency.
+
+
+
 
 ```{r}
 mode <- function(x, bin_width = 10) {
@@ -162,22 +161,6 @@ mode <- function(x, bin_width = 10) {
 }
 ```
 
-
-```{r}
-knit_print.tbl_obs <- function(x, ...) {
-  #data_set <- deparse(substitute(x))
-  n <- min(8, nrow(x))
-  tab <- dplyr::sample_n(x, n)
-  if("Obs" %in% colnames(tab)) tab <- dplyr::arrange(tab, Obs)
-  if("Part" %in% colnames(tab)) tab <- dplyr::arrange(tab, Part)
-  cap <- stringr::str_c("Data set",": showing ", n, " of ", nrow(x), " observations")
-
-  res = paste(c("", "", knitr::kable(tab, caption = cap, format = "markdown", ...)),
-              collapse = "\n")
-  knitr::asis_output(res)
-}
-
-```
 
 
 ```{r}
@@ -356,7 +339,7 @@ cov(D_agg$experience, D_agg$ToT)
 
 When at large the deviations go into the same direction from the respective mean, covariance becomes positive. When the deviations primarily move in opposite direction it is negative. When the picture is mixed, covariance will stay close to zero. The three plots below illustrate three covariances, a strongly positive, a weakly positive and a moderate negative one.
 
-```{r}
+```{r echo = F}
 
 cor2cov <- function(cor, sd) diag(sd) %*% cor %*% t(diag(sd))
 
@@ -374,7 +357,7 @@ D_psychomet <-
 ```
 
 
-```{r}
+```{r echo = F}
 deviation <- function(x) mean(x) -x
 direction <- function(x,y) if_else(sign(deviation(x)) == sign(deviation(y)), "same", "opposite")
 ggcov     <- function(D, x, y, legend.position = "none")   {
@@ -838,6 +821,105 @@ What are those events in design research and how do we assign them those numbers
 <!--To some confusion, but also underlining the emptiness of math, several types of measures are true probabilities themselves. Consider a validation study for a medical device. A sample of nurses is asked to complete a series of similar tasks. The performance measure of interest is the *relative frequency $\pi$* of failures. Generally, classifications of outcomes are probabilities, when the classification is unambiguous and exhaustive, such that every event falls into exactly one class. When the criterion for success is crisp enough, these requirements are fulfilled. They are also fulfilled by the relative frequencies by which you see green, yellow, red or dark when approaching a Dutch traffic light.
 
 Especially for readers with some theoretical grounding in frequentist statistics it may be helpful to see that also continuous variables can be probabilities, namely proportions. Imagine a novel behavioural screening test on alcohol influence. The client is asked to walk 10 meters on a curved path. Using a set of smart sensors, that continuously assess whether the clients center of gravity is inside or outside the path. The *proportions* of relative distances inside or outside the path are probabilities (without being countable events).-->
+
+
+### Likelihood of data {#likelihood}
+
+[...]
+
+Consider the following example: A standard dices is rolled twice. How likely is an outcome of two times Six? We use probability theory: It is the same dice and the results of the rolls are independent. The probability of rolling a Six on either attempt is 
+$p(y_1 = \textrm{Six}) = p(y_2 = \textrm{Six})  = {1 \over 6}$. Therefore the joint probability is just the product:
+
+$$
+\pi(y_1 = \textrm{Six} \textrm{ and } y_2 = \textrm{Six}) \\= 
+\pi(y_1 = \textrm{Six}) \times \pi(y_2 = \textrm{Six})= {1 \over 36}
+$$
+
+The joint probability of all data points is called the *Likelihood* and generalizes to situations where the probabilities of events are not the same, for example: What is the probability of the first dice being an Four, the second a  five and the third a Three or a Six?
+
+$$
+\pi(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \textrm{Three} \textrm{ or } \textrm{Six}\\
+=  {1 \over 6}
+\times {1 \over 6} \times {1 \over 3} = {1 \over 108}
+$$
+
+Notice how the likelihood gets smaller in the second example. In fact, likelihoods are products of numbers between zero and one end therefore always become smaller, when another observation is added. In most empirical studies, the number of observations is much larger than two or three and the likelihood becomes inexpressible small. Consider the following following results from 16 rolls:
+
+```{r}
+set.seed(42)
+Events <- c("One", "Two", "Three", "Four", "Five", "Six")
+Result <- sample(Events, 16, replace = T)
+prob = 1/6
+Likelihood <- prob^length(Result)
+```
+
+
+
+The likelihood of this result, given that it is a fair dice, is $6^{-16} = `r Likelihood`$. Usually, the *negative logarithm of the likelihood* is reported. This results in reasonably large positive numbers.
+
+```{r}
+(nlogLik <- -log(Likelihood))
+```
+
+The negative log likelihood is central concept in Bayesian and classic model estimation, as we will see. When estimating a model, a likelihood is computed a myriad of times. With a little mathematical trick, the negative log-likelihood can be calculated as sum of logarithms, instead of a logarithm of products.
+
+$$
+\log(a \times b) = \log(a) + log(b)
+$$
+
+
+```{r}
+-sum(rep(log(1/6), 16))
+```
+
+For the human mind, summing over numbers is much easier than products. And the same goes for computers. The following code measures the computing time (ms) for a likelihood of ten thousand dice rolls. On my computer, summing over logarithms almost cuts the computing time in half.
+
+
+```{r}
+bind_rows(
+  microbenchmark::microbenchmark(-prod(rep(1/6, 10000))),
+  microbenchmark::microbenchmark(-sum(rep(log(1/6), 10000)))
+)
+
+```
+
+The dice rolling example is a little odd. A visitor of a casino can expect that the probability of rolling a six is $1 \over 6$. A researcher would draw this into question: what is the most likely probability of rolling a Six? The following example is from a biased dice that has a probability of $1 \over 6$ to fall on One and a meager $1 \over 8$ for Six. Assume that the researcher knows that the dice *can* be biased, but not if and by how much.
+
+
+```{r}
+Events <- c("One", "One", "One", "Two", "Three", "Four", "Five", "Six")
+(Result <- sample(Events, 50, replace = T))
+```
+
+The classic method of *maximum likelihood estimation (MLE)* can be used to answer the question. It makes use of the likelihood, by feeding it with proposed values for the unknown parameter $\pi(y_i = Six)$ and tries to find the point where the likelihood is at its maximum, where the observed data is most likely. In the most simple form, MLE starts at the left boundary, zero in this case, and walks in small steps along a grid to the right boundary (one):
+
+```{r}
+
+nlogLik <- 
+  function(pi) -sum(if_else(Result == "Six", log(pi), log(1 - pi)))
+
+Lik <- 
+  data_frame(pi = seq(.01, .99, by = .01)) %>% 
+  mutate(nlogLik = map_dbl(pi, nlogLik),
+         rank = min_rank(nlogLik),
+         MLE = (rank == 1))
+Lik %>%          
+  ggplot(aes(x = pi, y = nlogLik)) +
+  geom_line() +
+  geom_point(data = MLE, color = "Red") +
+  geom_text( data = MLE, label = "MLE", color = "Red")
+
+```
+
+Because we use the *negative* log-liklihood, the value for $\pi$ with maximum likelihood is the minimum of the likelihood curve. Here, $pi = `r MLE[["pi]]` $ is considerably below the expected $1 \over 6$.
+
+```{r}
+(MLE <- filter(Lik, MLE))
+```
+
+In classic statistics MLE is one of the most common methods for estimating parameters from models. However, most of the time, data is more abundant and there is more than one parameter. It is possible tow extend the grid method to as many parameters as the model contains by just creating multi-dimensional grids. However, already a two-dimensional grid of rather coarse $100 \times 100$ would require the computation of 10.000 likelihoods. Classic statisticians have therefore developed several optimization methods to identify the MLE with as few runs as possible. Soon, we will turn our attention to Bayesian estimation, where the Likelihood plays a central role in estimation, too [REF]. Another appliction of the Likelihood is introduced in chapter \@ref(GOF), where it defines the deviance criterion for model goodness-of-fit.
+
+
 
 
 
