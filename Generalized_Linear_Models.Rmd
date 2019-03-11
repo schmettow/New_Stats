@@ -12,12 +12,12 @@ CE <- c("IPump", "BrowsingAB", "CUE8", "Chapter_GLM", "Egan", "Hugme")
 load_CE_(CE)
 ```
 
-In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between predictors and outcome variables. We saw how factors and covariates gracefully work together and how complex research designs can be captured by multiple random effects. It was all about specifying an appropriate (and often sophisticated) right-hand side of the regression formula, the predictors term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable.
+In the preceding chapters we got acquainted with the linear model as an extremely flexible tool to represent dependencies between predictors and outcome variables. We saw how factors and covariates gracefully work together and how complex research designs can be captured by multiple random effects. It was all about specifying an appropriate (and often sophisticated) right-hand side of the regression formula, the predictor term. Little space has been dedicated to the outcome variables. That is now going to change, and we will start by examining the assumptions that are associated with the outcome variable.
 
 
 Have you wondered about the abundance of simulated data sets up to this point? The reason for using simulated data is: the linear model, as introduced so far, makes assumptions that are *never* truly met by real data. The simulated data sets so far were meant to demonstrate some features found in real data sets, but generously wiped over some other frequent peculiarities.
 
-Another question is probably lurking in the minds of readers with some classic statistics training:  what has happened to the assumptions of ANOVA and the like and where are all the neat tests that check for normality, constant variance and such?  In the next section we will review these assumptions and lead them ad absurdum. Simply put, in the real world is no such thing as Normal distribution and linearity. Checking assumptions on a model that you know upfront is inappropriate, is a futile exercise, at least when better alternatives are available, and that is the case: with *Generalized Linear Models* (GLM) we extend the regression modelling framework once again.
+Another question is probably lurking in the minds of readers with some classic statistics training:  what has happened to the assumptions of ANOVA and the like, and where are all the neat tests that check for Normality, constant variance and such?  In the next section we will review these assumptions and lead them ad absurdum. Simply put, in the real world is no such thing as Normal distribution and linearity. Checking assumptions on a model that you know upfront is inappropriate, is a futile exercise, at least when better alternatives are available, and that is the case: with *Generalized Linear Models* (GLMs) we extend the regression modelling framework once again.
 
 The GLM framework rests on two extensions that bring us a huge step closer to the data. The first one is a minor mathematical trick to establish linearity, the *link function*. The second is the informed choice about the expected *pattern of randomness*. As we will see, most of the time it is more or less obvious what statistical distribution, other than the Gaussian, matches the data.
 
@@ -28,7 +28,7 @@ The GLM framework rests on two extensions that bring us a huge step closer to th
 1. What are the boundaries of measures?
 1. In case of discrete data: Can we expect cover-dispersion?
 
-The first two properties are obvious and we already know them when planning the study. And we also do not have to worry about what even is over-dispersion, because it practically always is the case.
+The first two properties are obvious and we already know them when planning the study. And we also do not have to worry about what over-dispersionis even, because it practically always is the case. <!-- #107 -->
 
 ```{r echo = F}
 DiagrammeR::mermaid("
@@ -58,20 +58,20 @@ $$
 y_i \sim \textrm{Norm}(\mu_i,\sigma)
 $$
 
-The first term, we call the likelihood and it represents the systematic quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is a frequently under-regarded assumption of linear models and it is doomed to fall. The second term defines the  pattern of randomness and it hosts two further assumptions: *Normal distribution*  and *constant error variance* of the random component.
+The first term, we call the likelihood and it represents the systematic quantitative relations we expect to find in the data. When it is a sum of products, like above, we call it linear. *Linearity* is a frequently under-regarded assumption of linear models and it is doomed to fail. The second term defines the  pattern of randomness and it hosts two further assumptions: *Normal distribution*  and *constant error variance* of the random component.
 
-Some classic textbooks tend to present these assumptions as preconditions for a successful ANOVA or linear regression. The very term *pre*condition suggest, that they need to be checked upfront and the classic statisticians are used to deploy a zoo of null hypothesis tests on the data. If one fails, let's say the Kolmogorov-Smirnoff test on Normality, researchers often turn to non-parametric tests. Many also just continue with ANOVA, but  add some shameful statements to the discussion of results or bravely cite some research paper that claims ANOVAs robustness to violations. 
+Some classic textbooks tend to present these assumptions as preconditions for a successful ANOVA or linear regression. The very term *pre*condition suggest, that they need to be checked upfront and the classic statisticians are used to deploy a zoo of null hypothesis tests on the data. If one fails, let's say the Kolmogorov-Smirnoff test on Normality, researchers often turn to non-parametric tests. Many also just continue with ANOVA and add some shameful statements to the discussion of results or bravely cite some research paper that claims ANOVAs robustness to violations. 
 
 I have met at least one seasoned researcher who divided the world of data into two categories: parametric data, that meets ANOVA assumptions, and non-parametric that does not. All models (or families) in the present chapter, he would have regarded as non-parametric. Let me get this straight:
 
-First of all, *data is neither parametric nor non-parametric*. Instead, data is distributed in some form and a good model aligns to this form. A *model is parametric*, when the statistics it produces have a useful interpretations, like the intercept is the group mean of the reference group and the intercept random effect represents the variation between individuals. The parameters of a polynomial model usually don't have a direct interpretation. However, we saw that useful parameters, such as the minimum of the curve, can be derived. Therefore, polynomial models are often called *semiparametric*.  [CROSSREF]. As an example for a *non-parametric* test, the Mann-Whitney *U* statistic is composed of the number of times observations in group A are larger than in group B. The resulting sum *U* usually bears no relation to any real world process or question. Strictly speaking, the label non-parametric has nothing to do with ANOVA assumptions. It refers to the usefulness of parameters. A research problem, where *U* as the sum of wins has a useful interpretation could be that in some dueling disciplines, such as Fencing, team competitions are constructed by letting every athlete from a team duel every member of the opponent team. We could call the *U*-test parametric, and perhaps, the group means turn out to be meaningless.
+First of all, *data is neither parametric nor non-parametric*. Instead, data is distributed in some form and a good model aligns to this form. A *model is parametric*, when the statistics it produces have a useful interpretations, like the intercept is the group mean of the reference group and the intercept random effect represents the variation between individuals. The parameters of a polynomial model usually don't have a direct interpretation. However, we saw that useful parameters, such as the minimum of the curve, can be derived. Therefore, polynomial models are often called *semiparametric*  [CROSSREF]. As an example for a *non-parametric* test, the Mann-Whitney *U* statistic is composed of the number of times observations in group A are larger than in group B. The resulting sum *U* usually bears no relation to any real world process or question. Strictly speaking, the label non-parametric has nothing to do with ANOVA assumptions. It refers to the usefulness of parameters. A research problem, where *U* as the sum of wins has a useful interpretation could be that in some dueling disciplines, such as Fencing, team competitions are constructed by letting every athlete from a team duel every member of the opponent team. We could call the *U*-test parametric, and perhaps, the group means turn out to be meaningless.
 
-Here, I will not present any tests on assumptions, other than exploratory plots. Non-parametric tests are completely at odds with the philosophy of this book, as they don't produce parameters that can be interpreted quantitatively. Instead, I will debunk all three assumptions for those type of measures design researchers are routinely dealing with right away. Every assumption that crumbles, rebounces from two new building blocks that add to our regression framework:
+Here, I will not present any tests on assumptions, other than exploratory plots. Non-parametric tests are completely at odds with the philosophy of this book, as they do not produce parameters that can be interpreted quantitatively. Instead, I will debunk all three assumptions for those type of measures design researchers are routinely dealing with right away. Every assumption that crumbles, rebounces from two new building blocks that add to our regression framework:
 
 1. *link functions* re-establish linearity
 2. *random distributions* cover the expected pattern of randomness and the relation of mean and variance
 
-By these two concepts, the *GLM* framework rises from the ashes of *LM*. It hosts a variety of models that leaves little reason for crude approximations, aka the *Gaussian LM*, let alone non-parametric procedures and data transformations. There almost always is a reasonable choice that largely depends on the properties of the response variable: the *Poisson LM* is the first choice for outcome variables that are counted (with no limit), like number of errors.  *Binomial (aka logistic) LM* covers the case of successful task completion, where counts have an upper boundary. These two GLM members have been around for more than half a century in statistics. The quest for a good model for reaction time and time-on-task was more difficult, as there does not seem to be a generally accepted default. Luckily, with recent developments in Bayesian regression engines the choice of random distributions has become much broader. For RT and ToT, I will suggest primarily the exponentially-modified Gaussian *(ExGauss) LM* and, to some extent, *Gamma LM*. Along the way, this very chapter introduces a basic way of choosing between response distributions based on model comparison. For binned rating scales, where response fall into a few ordered categories, *ordinal logistic regression* is a generally accepted approach. For (quasi)continuous rating scales will I make a novel suggestion, the *Beta LM*.
+By these two concepts, the *GLM* framework rises from the ashes of *LMs*. It hosts a variety of models that leaves little reason for crude approximations, like the *Gaussian LM*, let alone non-parametric procedures and data transformations. There almost always is a reasonable choice that largely depends on the properties of the response variable: the *Poisson LM* is the first choice for outcome variables that are counted (with no limit), like number of errors.  *Binomial (aka logistic) LM* covers the case of successful task completion, where counts have an upper boundary. These two GLM members have been around for more than half a century in statistics. The quest for a good model for reaction time and time-on-task was more difficult, as there does not seem to be a generally accepted default. Luckily, with recent developments in Bayesian regression engines the choice of random distributions has become much broader. For RT and ToT, I will suggest primarily the exponentially-modified Gaussian *(ExGauss) LM* and, to some extent, *Gamma LM*. Along the way, this very chapter introduces a basic way of choosing between response distributions based on model comparison. For binned rating scales, where responses fall into a few ordered categories, *ordinal logistic regression* is a generally accepted approach. For (quasi)continuous rating scales will I make a novel suggestion, the *Beta LM*.
 
 
 
@@ -106,7 +106,7 @@ data_frame(session = as.integer(1:5),
 
 ```
 
-See what happens when the linear model is naively applied to the deviation counts. In no time, negative values are produced, which are impossible. Similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
+See what happens when the linear model is naively applied to the deviation counts? In no time, negative values are produced, which are impossible. Similar to saturation effects, we would expect some asymptotic behaviour, rather than a straight line, when the outcome variable approaches its natural lower boundary. 
 
 Here is some real world data from the IPump study. We take a look at a small slice of it: the total number of deviations of one participant across the three sessions.
 
@@ -132,9 +132,9 @@ What really happens when a performance measure approaches its natural limit, is 
 
 Such a non-linearity happens to all outcome variables that have natural lower or upper boundaries, and that includes all outcome variables in the universe, except its very own spatial extension, perhaps. All outcome variables in design research suffer from the problem of impossible predictions as a consequence of their boundedness:
 
-* Errors and other countable incidences are bound at zero
-* ToT is bounded at zero and probably also bound above when users loose their patience
-* Rating scales are bound at the lower and upper extreme item
+* Errors and other countable incidences are bounded at zero
+* ToT is bounded at zero and probably also bounded above when users loose their patience
+* Rating scales are bounded at the lower and upper extreme item
 * Task completion has a lower bound of zero and upper bound is the number of tasks. Or the average task completion is in the range $[0,1]$
 
 
@@ -169,7 +169,7 @@ pumps_2 %>%
 
 The simulated predicted values ($\mu_i$) and errors are in a fairly realistic range. Still, we immediatly see, that simulation with Normal distributions is rather inappropriate: a substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution for the following two reasons. First, Normal distributions support the full range of real numbers. There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until `pumps` contains exclusively positive numbers (and zero), obviously is poor practice. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
 
-Recall how linearity is gradually bended when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit get squeezed like chewing gum into a corner, when approaching the boundaries. Review Binomial and Poisson distribution in chapter 1 for illustrations. As a matter of fact, a lot of real data in design research is skewed that way, whereas the Normal distribution eternally claims symmetry.
+Recall how linearity is gradually bent when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit get squeezed like chewing gum into a corner when approaching the boundaries. Review Binomial and Poisson distribution in chapter 1 for illustrations. As a matter of fact, a lot of real data in design research is skewed that way, whereas the Normal distribution eternally claims symmetry.
 
 A common misconception is that random distributions approach the Normal distribution with larger sample sizes. The only thing that happens is that  increasing the number of observations renders the true distribution more idle. Examine yourself, how the shape of Poisson distributions changes by mean count, as well as sample size. The following code simulates a Poisson distribution with a given $\lambda$ and $N$. With every new run of the code, `rpois` generates a new random set of counts. By repeatedly running this code and watching the output, you can get a good idea of how varied the shape of the distribution can be.
 
@@ -186,7 +186,7 @@ data_frame(count = rpois(n = 20,
 
 ### Assuming constant variance of randomness {#assume-constant-variance}
 
-The third assumption of linear models is rooted in the random component term, as well. Recall, that there is just one parameter $\sigma$ for the dispersion of randomness and that any Normal distribution's dispersion is exclusively determined by $\sigma$. That is less harmless than it may sound. In most real data, the dispersion of randomness depends on the expected value, as can be illustrated by the following example.
+The third assumption of linear models is rooted in the random component term as well. Recall, that there is just one parameter $\sigma$ for the dispersion of randomness and that any Normal distribution's dispersion is exclusively determined by $\sigma$. That is less harmless than it may sound. In most real data, the dispersion of randomness depends on the expected value, as can be illustrated by the following example.
 
 Imagine a simple survey where commuters are asked three questions about their daily way to work:
 
@@ -270,7 +270,7 @@ In conclusion, the Normal distribution assumption is flawed in two ways: real di
 
 GLM is a *framework for modelling* that produces a *family of models*. Every member of this family uses specific *link functions* to establish linearity and chooses a particular *random distribution*, that has an adequate shape and mean-variance relationship.
 
-Sometimes GLMs are mistaken as a way to relax assumptions of linear models, (or even called non-parametric).  They are definitely not! Every member makes precise assumptions on the level of measurement and the shape of randomness (see Table A). One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as they use only one parameter, with the consequence of a tight association between variance and mean. A few members of GLM are classic: Poisson, Binomial (aka logistic) and exponential regression have routinely been used before they were united  under the hood of GLM. These and a few others are called *canonical* GLMs, as they possess some convenient mathematical properties, that made efficient estimation possible, back in the days of expensive computer time.
+Sometimes GLMs are mistaken as a way to relax assumptions of linear models, (or even called non-parametric).  They are definitely not! Every member makes precise assumptions on the level of measurement and the shape of randomness (see Table A)<!-- #108 -->. One can even argue that Poisson, Binomial and exponential regression are stricter than Gaussian, as they use only one parameter, with the consequence of a tight association between variance and mean. A few members of GLM are classic: Poisson, Binomial (aka logistic) and exponential regression have routinely been used before they were united  under the hood of GLM. These and a few others are called *canonical* GLMs, as they possess some convenient mathematical properties, that made efficient estimation possible, back in the days of expensive computer time.
 
 
 
@@ -279,7 +279,7 @@ Sometimes GLMs are mistaken as a way to relax assumptions of linear models, (or 
 
 The strength of the linear term (the likelihood) is its endless versatility in specifying relations between predictor variables and outcome. Unfortunately, it represents all associations as straight lines. These lines extend from $-\infty$ to $\infty$ and will cross the lower or upper boundaries of every known outcome variable. All linear models predict events that cannot happen.
 
-Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values to the natural boundaries of the measures. In linear models, the linear term is mapped to expected values, directly, causing the before mentioned problems. In GLMs, a layer is drawn between the expected value $\mu$ and the linear term, *linear predictor $\theta$*. The *link function* transforms between $\mu$ and $\theta$. In order to transform back to the scale of measurement, the inverse of the link function, the *mean function* is used.
+Generalized linear models use a simple mathematical trick to keep the linear term, but confine the expected values to the natural boundaries of the measures. In linear models, the linear term is mapped to expected values, directly, causing the aforementioned problems. In GLMs, a layer is drawn between the expected value $\mu$ and the linear term, *linear predictor $\theta$*. The *link function* transforms between $\mu$ and $\theta$. In order to transform back to the scale of measurement, the inverse of the link function, the *mean function* is used.
 
 In arithmetics an abundance of functions exists for every possible purpose. However, link functions must fulfill two criteria, 
 
@@ -292,7 +292,7 @@ $$
 \mu_a > \mu_b \rightarrow \theta_a > \theta_b
 $$
 
-The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g., $\sqrt{x} = [2, -2]$) and therefore is not a function, strictly speaking.
+The primary reason for this requirement is that for a link function $\phi$ there must exist the inverse, that is the mean function ($\phi^{-1}$). A function that is *not* monotonically increasing, such as $x^2$ does not have an inverse function.  For example, $x^2$ is not a proper link function, because its inverse, $\sqrt{x}$ can take *two* values (e.g. $\sqrt{x} = [2, -2]$) and therefore is not a function, strictly speaking.
 
 An adequate link function for count variables would map the range of natural numbers to the *linear range* of $\eta$ that is $[-\infty; \infty]$. The logarithm is such a function and its inverse is the *exponential* function, which bends the linear range back into the boundary. Figure XY shows them side-by-side. Note that the logarithm is *not asymptotic* as it may seem. This function truly approaches infinity, albeit at a decelerating pace (which is mind-boggling). Other variables, like success rates or rating scales, have lower and upper boundaries. A suitable pair of functions is the *logit* link function and the *logistic* mean function.  
 
@@ -345,11 +345,11 @@ In GLMs, the researcher has a larger choice for modelling the random component a
 
 That is not to say that these five are the only possible choices. Many dozens of statistical distributions are known and these five are just making the least assumptions on the shape of randomness in their class (mathematicians call this *maximum entropy distributions*). In fact, we will soon discover that real data frequently violates principles of these distributions. For example, count measures in behavioural research typically show a variance that exceeds the mean, which speaks against the Poisson distributions. As we will see in  \@ref(overdispersion) and \@ref(zero-inflation), Poisson distribution can still be used in such cases with some additional tweaks.
 
-As we will see, response times in design research are particularly misbehaved, as they do not have their lower boundary at zero, but at the lowest human possible time. In contrast, most continuous distributions assume that measures near zero are at least possible. In case of response times,  we will take advantage of the fact, that modern Bayesian estimation engines support a large range of distributions, by far exceeding the available choices in asymptotic methods of frequentist statistics. The `stan_glm` regression engine has been designed with downwards compatibility in mind, which is why it only includes the classic distributions. Luckily, there is a sibling engine in the package `brms`, which is more progressive and gives many more choices.
+As we will see, response times in design research are particularly misbehaved, as they do not have their lower boundary at zero, but at the lowest human possible time. In contrast, most continuous distributions assume that measures near zero are at least possible. In case of response times,  we will take advantage of the fact, that modern Bayesian estimation engines support a large range of distributions, by far exceeding the available choices in asymptotic methods of frequentist statistics <!-- #109 -->. The `stan_glm` regression engine has been designed with downwards compatibility in mind, which is why it only includes the classic distributions. Luckily, there is a sibling engine in the package `brms`, which is more progressive and gives many more choices.
 
-Still, using distributions that are not Gaussian sometimes carries minor complications. Normal distributions have the convenient property that the amount of randomness is directly expressed as the parameter $\sigma$. That allowed us to compare the fit of two models A and B by comparing $\sigma_A$ and $\sigma_B$ (note, however that this is not a rigorous method for model selection). In random distributions with just one parameter, the random component is either determined by the location (e.g., Poisson $\lambda$ or Binomial $p$). For distributions with more than one parameter, dispersion of randomness typically is a function of two or more parameters. For example, Gamma distributions have two parameters,  but these do not pull location and dispersion neatly apart, as Normal distributions do. Instead, mean and variance Gamma distributions depend on both parameters.
+Still, using distributions that are not Gaussian sometimes carries minor complications. Normal distributions have the convenient property that the amount of randomness is directly expressed as the parameter $\sigma$. That allowed us to compare the fit of two models A and B by comparing $\sigma_A$ and $\sigma_B$ (note, however that this is not a rigorous method for model selection). In random distributions with just one parameter, the random component is either determined by the location (e.g. Poisson $\lambda$ or Binomial $p$). For distributions with more than one parameter, dispersion of randomness typically is a function of two or more parameters. For example, Gamma distributions have two parameters, but these do not pull location and dispersion neatly apart as Normal distributions do. Instead, mean and variance Gamma distributions depend on both parameters.
 
-Using distributions with entanglement of location and dispersion seems to be a step back, but frequently is necessary to render a realistic association between the expected value and amount of absolute randomness. Most distributions with a lower bound (e.g., Poisson, exponential and Gamma) increase variance with mean, whereas double bounded distributions (beta and binomial) typically have maximum variance when the distribution is centered.
+Using distributions with entanglement of location and dispersion seems to be a step back, but frequently is necessary to render a realistic association between the expected value and amount of absolute randomness. Most distributions with a lower bound (e.g. Poisson, exponential and Gamma) increase variance with mean, whereas double bounded distributions (beta and binomial) typically have maximum variance when the distribution is centered.
 
 
 
@@ -364,7 +364,7 @@ ddply()
 
 ## Case: user testing infusion pumps
 
-Medical infusion pumps are unsuspicious looking devices that  are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained staff, mostly anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
+Medical infusion pumps are unsuspicious looking devices that are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained staff, mostly anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
 
 * tiny 3-row LCD displays
 * flimsy foil buttons without haptic marking or feedback
@@ -396,7 +396,7 @@ As can be expected in the light of what has been said above, each one these meas
 
 ## Count data {#count_data}
 
-Normal distributions assume that the random variable under investigation is continuous. For measures, such as time, it is natural and it can be a reasonable approximation for measures with fine-grained steps, such as average scores of self-report scales with a larger number of items. Other frequently used measures are clearly, i.e. naturally, discrete, in particular everything that is counted. Examples are: number of errors, number of succesfully completed tasks or the number of users. Naturally, count measures have a lower bound and frequently this is zero. A distinction has to be made, though, for the upper bound. In some cases, there is no well defined upper bound, or it is very large (e.g. number of users) and Poisson regression applies. In other cases, the upper bound is given by the research design, for example the number of tasks given to a user. When there is an upper bound, logistic regression applies.
+Normal distributions assume that the random variable under investigation is continuous. For measures, such as time, it is natural and it can be a reasonable approximation for measures with fine-grained steps, such as average scores of self-report scales with a large number of items. Other frequently used measures are clearly, i.e. naturally, discrete, in particular everything that is counted. Examples are: number of errors, number of succesfully completed tasks or the number of users. Naturally, count measures have a lower bound and frequently this is zero. A distinction has to be made, though, for the upper bound. In some cases, there is no well defined upper bound, or it is very large (e.g. number of users) and Poisson regression applies. In other cases, the upper bound is given by the research design, for example the number of tasks given to a user. When there is an upper bound, logistic regression applies.
 
 
 
@@ -2122,7 +2122,7 @@ sync_CE(M_ord_3, Env = BrowsingAB)
 ```
 -->
 
-Before we build the model, there are two issues to regard: first, the boundaries are 0 and 1, which requires a rescaling of responses into this interval. The SUS scores are on a scale from 0 to 100 and a divisor of 100 would produce the desired interval. Not just so, because second, the responses must actually lie *strictly between 0 and 1*, excluding the boundaries. On (quasi)continuous scales, it seems not very likely to have 0 or 1 as response, but it can happen. Indeed, participants in the CUE8 study have responded with a satisfaction rating of 100 quite often.
+Before we build the model, there are two issues to regard: first, the boundaries are 0 and 1, which requires a rescaling of responses into this interval. The SUS scores are on a scale from 0 to 100 and a divisor of 100 would produce the desired interval. Second, the responses must actually lie *strictly between 0 and 1*, excluding the boundaries. On (quasi)continuous scales, it seems not very likely to have 0 or 1 as response, but it can happen. Indeed, participants in the CUE8 study have responded with a satisfaction rating of 100 quite often.
 
 
 ```{r include = F, eval = F}
@@ -2141,7 +2141,7 @@ detach(CUE8)
 A practical solution is to scale the responses in such a way as to avoid the two boundaries, which is what the following hack does.
 
 1. add a tiny value to all responses
-1. create a divisor by adding double that value to the maximum value the responses can take
+1. create a divisor by adding twice that value to the maximum value the responses can take
 1. divide all responses by that divisor
 
 You may find it inappropriate to mangle a response variable in such an arbitrary way. However, keep in mind that the levels of ordinal responses are highly arbitrary. In terms of measurement theory, all transformations that maintain the order are permitted for ordinal scales. For the following analysis, the data set was further reduced by averaging the scores across tasks and excluding probable cheaters with a ToT < 30s.
@@ -2199,19 +2199,19 @@ Is that a realistic model for the SUS responses? Another glance at the violin pl
 
 The framework of GLM, as flexible as it has proven to be up to this point, has one major limitation: it renders the relationship between predictors and the location of the response. We only think in terms of impact factors that improve (or damage) average response times, error rates, satisfaction ratings etc. one would think that multi-level models deal with variance to a good extent, and they do. But, they only give us the variance of a certain effect on a set of objects. That is absolutely not the same as asking: do teams in CUE8 differ in the variation of responses?
 
-That brings me to the final feature of modern regression modelling in the scope of this book: GLM greatly enhanced the scope of modelling by giving us the choice of response distributions and linearizing functions. Still, all models introduced so far establish an association between predictors and the expected value $\mu$, only. However, all but the one-parameter distributions come with additional parameters that capture a family of distributions in its whole variety of shapes. Strong variance can become a real problem, because this implies  that extremely poor performance becomes more likely. Under the perspectives of safety in hazardous environments and universal usability, variance  is a crucial parameter by itself. We should track carefully, that an improvement on average is not accompanied by more variance (other than the mean-variance relationship prescribed by the error distribution).
+That brings me to the final feature of modern regression modelling in the scope of this book: GLMs greatly enhanced the scope of modelling by giving us the choice of response distributions and linearizing functions. Still, all models introduced so far establish an association between predictors and the expected value $\mu$, only. However, all but the one-parameter distributions come with additional parameters that capture a family of distributions in its whole variety of shapes. Strong variance can become a real problem, because this implies  that extremely poor performance becomes more likely. Under the perspectives of safety in hazardous environments and universal usability, variance  is a crucial parameter by itself. We should track carefully, that an improvement on average is not accompanied by more variance (other than the mean-variance relationship prescribed by the error distribution).
 
 As a first illustration, imagine two versions of a continuous rating scale for visual beauty that differ in how their extreme levels are labelled:
 
-1. like the ugliest website I have ever seen: 0 ------- 1 like the most beautiful website
-2. distgusting as a screenshot from a splatter movie: 0 ------- 1 like the most beautiful sunset I have seen
+1. like the ugliest website I have ever seen: 0 -------- 1 like the most beautiful website
+1. distgusting as a screenshot from a splatter movie: 0 -------- 1 like the most beautiful sunset I have seen
 
 The second scale has the lower and upper anchors moved to more extremes. Two questions arise:
 
 1. Is the overall location of the scale untouched, that is, have both anchors been moved by the same distance outwards?
 1. What range do websites cover as compared to all thinkable visual impressions?
 
-For the sake of simplicity (not for a strong research design), let's assume that one participant has rated a randomized sample of 100 websites in two conditions: narrow anchoring and wide anchoring. The following simulates data as if there were just a minor positive shift of the wider condition, accompanied by an immense up-scaling.
+For the sake of simplicity (not for a strong research design), let us assume that one participant has rated a randomized sample of 100 websites in two conditions: narrow anchoring and wide anchoring. The following simulates data as if there were just a minor positive shift of the wider condition, accompanied by an immense up-scaling.
 
 ```{r}
 set.seed(42)
@@ -2240,7 +2240,7 @@ D_Anchor %>%
 
 The two conditions have about the same location, but a more narrow anchoring produces a wider dispersion of responses. How would we confirm this statistically?
 
-Models that contain predictors linked to any distribution parameter other than $\mu$ are called *distributional models* and have only recently been implemented in the brms engine. They have an immense potential as they relax another assumption of GLM, namely that all parameters, but $\mu$, are constant across observations or follow the mean-variance relationship. Here we aim to estimate the difference in variance  by experimental condition. 
+Models that contain predictors linked to any distribution parameter other than $\mu$ are called *distributional models* and have only recently been implemented in the brms engine. They have an immense potential as they relax another assumption of GLM, namely that all parameters but $\mu$ are constant across observations or follow the mean-variance relationship. Here we aim to estimate the difference in variance  by experimental condition. 
 
 The brms engine uses a parametrization of the beta distribution (other than the more common a, b parametrization), where $\mu$ is the location and $phi$ is a *scale* parameter. Take great care: "scale" does not refer to dispersion itself. Rather, it is comparable to the number of trials in a binomial process. The more trials there are, the tighter the distribution becomes, *relative* to the boundaries:
 
@@ -2257,9 +2257,9 @@ plot_rbinom(1000, 50, .5)
 
 ```
 
-In effect, increasing $\phi$ results in reduced dispersion and accordingly, when used in a distributional model, positive efefcts decrease variance and negative increase. This all works on top of to the mean-variance relationship of the beta distribution.
+In effect, increasing $\phi$ results in reduced dispersion and accordingly, when used in a distributional model, positive effects decrease variance and negative ones increase variance. This all works on top of to the mean-variance relationship of the beta distribution.
 
-When estimating dispersion or scale parameters, we have to regard that these are positive, strictly. When linking a linear term to such a parameter, predictions are generated for the variance and these should never become negative. The brms engine simply extends the principle of link functions to parameters other the $\mu$ and sets a default log link for $\phi$. In order to estimate the changes in $\mu$ and $\phi$ simultanously, the brm engine receives two regression formulas, which is done by the command `bf()`. 
+When estimating dispersion or scale parameters, we have to regard that these are positive, strictly. When linking a linear term to such a parameter, predictions are generated for the variance and these should never become negative. The brms engine simply extends the principle of link functions to parameters other than the $\mu$ and sets a default log link for $\phi$. In order to estimate the changes in $\mu$ and $\phi$ simultanously, the brms engine receives two regression formulas, which is done by the command `bf()`. 
 
 
 ```{r opts.label = "mcmc"}
@@ -2294,7 +2294,7 @@ detach(Chapter_GLM)
 ```
 
 
-Back to the CUE8 study. Do teams differ in how much variance arises, as the violin plot suggests? Before we test this by a distributional model, recall one again the principle of  mean-variance relation. Beta distributions have variance tied to the mean in much the same way as binomial distribution. When moving along the range between 0 and 1, variance is largest in the center and decreases towards the boundaries. That does not seem to be the case in CUE8. Compare the distributions of Teams B and K to H and L. They all are close to the upper boundary, but show inflated variance. It could be the case, that somehow some teams trigger more extreme responses, inflating variance. The following model tests the effect of testing condition and teams on the location and dispersion of responses simultaneously.
+Back to the CUE8 study. Do teams differ in how much variance arises, as the violin plot suggests? Before we test this by a distributional model, recall once again the principle of  mean-variance relation. Beta distributions have variance tied to the mean in much the same way as binomial distribution. When moving along the range between 0 and 1, variance is largest in the center and decreases towards the boundaries. That does not seem to be the case in CUE8. Compare the distributions of Teams B and K to H and L. They all are close to the upper boundary, but show inflated variance. It could be the case, that somehow some teams trigger more extreme responses, inflating variance. The following model tests the effect of testing condition and teams on the location and dispersion of responses simultaneously.
 
 
 
@@ -2398,7 +2398,7 @@ However, , is a member of the GLM framework, with some rather unusual properties
 
 ### Outlier removal
 
-Outliers are observations that were hit by one strong force, that is of no further interest. Outliers can be upper or downer. One often sees the advice to remove outliers that exceed x times the standard deviation of the outcome variable. That is clearly mistaken as we have pointed out in \@ref(residual_analysis). Outliers must be identified by their residuals, first of all. Another problem arises because the removal intervals are symmetric. Boxplots pull up the Tukey fence at $1.35 \sigma_\epsilon$ beyond or above the first and third interquartile range. No matter, whether you can easily imagie that rule, it assumes symmetry. A boxplot of the two conditions X and Y in the CUE8 study looks like this:
+Outliers are observations that were hit by one strong force, that is of no further interest. Outliers can be upper or lower. One often sees the advice to remove outliers that exceed x times the standard deviation of the outcome variable. That is clearly mistaken as we have pointed out in \@ref(residual_analysis). Outliers must be identified by their residuals, first of all. Another problem arises because the removal intervals are symmetric. Boxplots pull up the Tukey fence at $1.35 \sigma_\epsilon$ beyond or above the first and third interquartile range. No matter, whether you can easily imagine that rule, it assumes symmetry. A boxplot of the two conditions X and Y in the CUE8 study looks like this:
 -->
 
 ```{r opts.label = "future"}
@@ -2410,7 +2410,7 @@ CUE8$D_cue8 %>%
 ```
 
 <!--
-Boxplots routinely fail at non-symmetric pattens of randomness. Violin plots render a more accurate gestalt of the residual distribution. The distribution in the moderated condition almost resemble a ginko leaf, full of grace and substantial all the way up. The remote condition looks like a moth that fell prey to a spider (or an obese sword-billed hummingbird). The upper part is long but of thin substance. Seeing the condition on its own, one would perhaps pull up the outlier fence at 800 seconds. However, the tail of the moderated condition is substantial and there is no firm cue there being outliers at all. Since both conditions used comparable instructions and equal tasks, the maximum value of the moderated condition is a conservative upper fence.
+Boxplots routinely fail at non-symmetric pattens of randomness. Violin plots render a more accurate shape of the residual distribution. The distribution in the moderated condition almost resemble a ginko leaf, full of grace and substantial all the way up. The remote condition looks like a moth that fell prey to a spider (or an obese sword-billed hummingbird). The upper part is long but of thin substance. Seeing the condition on its own, one would perhaps pull up the outlier fence at 800 seconds. However, the tail of the moderated condition is substantial and there is no firm cue there being outliers at all. Since both conditions used comparable instructions and equal tasks, the maximum value of the moderated condition is a conservative upper fence.
 -->
 
 
@@ -2424,9 +2424,9 @@ CUE8$D_cue8 %>%
 
 <!--
 
-Again, the moderated condition is smooth as a leaf. There is no reason to believe that even the shortest observation is an outlier  at all and we pull this fence up in the remote condition. Here we observe a characteristic pattern, the lower socket of the distribution supported by a clear disruption in the cloud. One possoble story for this irregularity is that some remote-testing teams have not checked on task completion and the data set contains observations of cheaters (only if they were payed). Cheating is something that is untypical for the real use of the car rental website. When people enter such a site, they usually want to rent a car. Cheaters in remote studies tell us nothing about performance of real users. They are interuptive, but irrelevant. 
+Again, the moderated condition is smooth as a leaf. There is no reason to believe that even the shortest observation is an outlier  at all and we pull this fence up in the remote condition. Here we observe a characteristic pattern, the lower socket of the distribution supported by a clear disruption in the cloud. One possible story for this irregularity is that some remote-testing teams have not checked on task completion and the data set contains observations of cheaters (only if they were payed). Cheating is something that is untypical for the real use of the car rental website. When people enter such a site, they usually want to rent a car. Cheaters in remote studies tell us nothing about performance of real users. They are interuptive, but irrelevant. 
 
-Now, consider the famous *Stroop task*: participants are shown a word that is written to the screen in one of three ink colors (red, blue, green). They are asked to name the ink color as quick as possible, usually by pressing one of four assigned keys (e.g., Y = red, X = blue, N = green). The task has a twist: the presented words are themselves color words. It can happen that the word "RED" appears in red ink, which we call the *congruent condition*, but it can also happen that the word "BLUE" appears in green letters, which is *incongruent*. Hundreds of experiments have shown, that in the incongruent condition people respond noticably slower. This observation is called the *Stroop effect* and dozens of theories have spawned from this observation. Discussing them is beyond the scope, but to not let you completely dissatisfied: people seem to always read the words, although they were not asked to do so and we can conclude:
+Now, consider the famous *Stroop task*: participants are shown a word that is written to the screen in one of three ink colours (red, blue, green). They are asked to name the ink color as quick as possible, usually by pressing one of four assigned keys (e.g., Y = red, X = blue, N = green). The task has a twist: the presented words are themselves color words. It can happen that the word "RED" appears in red ink, which we call the *congruent condition*, but it can also happen that the word "BLUE" appears in red letters, which is *incongruent*. Hundreds of experiments have shown, that in the incongruent condition people respond noticably slower. This observation is called the *Stroop effect* and dozens of theories have spawned from this observation. Discussing them is beyond the scope, but to not let you completely dissatisfied: people seem to always read the words, although they were not asked to do so and we can conclude:
 
 1. Reading is overlearned. It is easier to catch a thrown stone than to resist a word.
 1. When people do not follow instructions, this is often a sign of *bottom-up processing*.
@@ -2445,7 +2445,7 @@ gun -> huntsman -> man who shot the wolf in little red riding hood
 
 
 
-What would be a legitimate way to catch outliers? The Stroop task has been replicated dozens-of-dozens times. For rough approximation, one takes a sample of ten papers reporting on variants of the Stroop task and derives a broadly typical range from it. As a rule of thumb, for an upper threshold adding 3 standard deviations to the highest 
+What would be a legitimate way to catch outliers? The Stroop task has been replicated dozens and dozens of times. For rough approximation, one takes a sample of ten papers reporting on variants of the Stroop task and derives a broadly typical range from it. As a rule of thumb, for an upper threshold adding 3 standard deviations to the highest 
 , say, between 500ms and 1500ms. 
 
 
