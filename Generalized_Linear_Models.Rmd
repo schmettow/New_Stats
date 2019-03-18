@@ -449,7 +449,7 @@ fixef(M_Pois)
 # bayr:::knit_print.tbl_coef(M_Pois)
 ```
 
-The Poisson parameter $\lambda$ (lambda) has a direct interpretation as it represents the expected mean (and variance) of the distribution. Instead, the regression coefficient is on a logarithmic scale, to ensure it has no boundaries. To scale it down to the scale of measurement, the exponential function is the canonical mean function in Poisson regression:
+The Poisson parameter $\lambda$ (lambda) has a direct interpretation as it represents the expected mean (and variance) of the distribution. On the contrary, the regression coefficient is on a logarithmic scale to ensure it has no boundaries. To scale it down to the scale of measurement, the exponential function is the canonical mean function in Poisson regression:
 
 ```{r}
 fixef(M_Pois, mean.func = exp)
@@ -514,7 +514,7 @@ $$
 
 Hence, the exponentiated coefficients have a *multiplicative interpretation*, like the following: 
 
-1. In the first session, the novel design  produces `r C_dev[1]` <!-- #100 --> *times* the deviations than with the legacy design.
+1. In the first session, the novel design  produces `r C_dev[1]` *times* the deviations than with the legacy design.
 1. For the legacy design, every new training session reduces the number of deviations *by factor* `r C_dev[3]`  
 1. The reduction rate per training session of the novel design is *`r C_dev[4] * 100`% as compared to the legacy design.
 
@@ -630,7 +630,7 @@ The most simple form of successes-in-trials measure is when there is only one tr
 
 Most dichotomous outcome variables have a more or less clear notion of success and failure (although not necessarily as in the last example). When the outcome casts a positive light on the design, by convention it is coded as 1, otherwise 0. 
 
-In computer science jargon, every dichotomous observation accounts to a *bit*, which  is the smallest amount of information ever possible. Since in inferential statistics the amount of information is tantamount with the reduction in uncertainty, with dichotomous data one usually needs an abundance of observations to reach reasonably certain conlusions. Because the information of a single observation is so sparse, large samples and repeated measures are important when dealing with dichtomous outcomes.
+In computer science jargon, every dichotomous observation accounts to a *bit*, which  is the smallest amount of information ever possible. Since in inferential statistics the amount of information is tantamount to the reduction in uncertainty, with dichotomous data one usually needs an abundance of observations to reach reasonably certain conclusions. Because the information of a single observation is so sparse, large samples and repeated measures are important when dealing with dichtomous outcomes.
 
 Let us consider an example: early research on foraging strategies of web users revealed that they are extremely impatient companions. They scan a page for visual features, rather than reading [REF: high school students information mall]. Visitors of websites build their first judgement in a time as short as 17ms [REF: Tuch presentation time]. For e-commerce that is a highly important fact to know about their customers and nowadays practically all commercial websites shine with a pleasing visual appearance. But, how would one measure the gratitude of a visitor who actually used the website and may have something to tell beyond visual appeal?
 
@@ -654,7 +654,7 @@ D_ret %>%
   geom_bar()
 ```
 
-In total, `r mean(D_ret$returned) * 100`% visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table. Note how the linear formula is completely common ground, but we explicitly pass the binomial `family` to the regression engine.
+In total, `r mean(D_ret$returned) * 100`% of the visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table. Note how the linear formula is completely common ground, but we explicitly pass the binomial `family` to the regression engine.
 
 ```{r opts.label = "mcmc"}
 M_ret <- D_ret %>% stan_glm(returned ~ 1, data = .,
@@ -705,7 +705,7 @@ The `fixef` command lets you pass on a mean function. However, this logistic mea
 fixef(M_ret, mean.func = inv_logit)
 ```
 
-The apt reader may have noticed that the returners data set has been simulated with an exact return rate of 40%. Despite the sample size of 100, the center estimate seems rather off and hampered by considerable uncertainty. That is precisely because of the low level of information  contained in dichotomous variables (one bit). For a reasonably certain estimate one would need many more observations. These can either be obtained by a larger sample or by repeated measures.
+The apt reader may have noticed that the returners data set has been simulated with an exact return rate of 40%. Despite the sample size of 100, the center estimate seems rather off and hampered by considerable uncertainty. That is precisely because of the low level of information  contained in dichotomous variables (one bit). For a reasonably certain estimate one would need many more observations. These can either be obtained through a larger sample or through repeated measures.
 
 Recall the fictional jump-and-run game  *smart smurfer* <!-- 99 --> in \@ref(poisson_dist): the goal of the game is that players collect items and for the user experience it is crucial that this is neither too difficult nor too easy. Imagine, that for adjusting the difficulty level, the developers conduct a quick evaluation study, where they place a number of items (trials) in the game and the success rate of a single player is observed in a series of 15 game sessions:
 
@@ -721,7 +721,7 @@ D_smrf <-
 D_smrf
 ```
 
-Per session the player has a number of opportunities for collecting an item, which is a repeated measures situation. One might expect that we need to include random effects into the model. Later we will see that this is necessary when the sessions were observed on a sample of players with different abilities. However, as long as one can reasonably assume the chance of catching an item to be constant across all sessions, plain logistic regression can deal with *successes in multiple trials*. In order to estimate a model with more than one trial per observation, it is necessary to add a variable for the number of failures and use a `cbind(successes, failures)` statement for the left-hand-side of the model formula. This may seem inconvenient, but it allows to have a different number of trials per observation.
+Per session the player has a number of opportunities for collecting an item, which makes it a repeated measures situation. One might expect that we need to include random effects into the model. Later we will see that this is necessary when the sessions were observed on a sample of players with different abilities. However, as long as one can reasonably assume the chance of catching an item to be constant across all sessions, plain logistic regression can deal with *successes in multiple trials*. In order to estimate a model with more than one trial per observation, it is necessary to add a variable for the number of failures and use a `cbind(successes, failures)` statement for the left-hand-side of the model formula. This may seem inconvenient, but it allows to have a different number of trials per observation.
 
 ```{r opts.label = "mcmc"}
 M_smrf <- stan_glm(cbind(successes, failures) ~ 1,# <--
@@ -749,7 +749,7 @@ We turn now to a real case study, the comparison of two medical infusion pumps (
 
     completion ~ Design*Session + (Design*Session|Part) + (Design*Session|Task)
 
-Such a model is practically impossible to estimate, because dichtomous variables are so scarce in information. Two populations encounter each other in the model: participants and tasks, with 6 observations per combination (6 bit). We should not expect to get reasonably certain estimates on that level and, in fact, the chains will not even mix well. The situation is a little better on the population level: every one of the six coefficients is estimated on 400 bit of raw information. We take a compromise here: estimate the full model on group level and do only intercept random effects, to account for gross differences between participants and tasks.
+Such a model is practically impossible to estimate, because dichtomous variables are so scarce in information. Two populations encounter each other in the model: participants and tasks, with 6 observations per combination (6 bit). We should not expect to get reasonably certain estimates on that level and, in fact, the chains will not even mix well. The situation is a little better on the population level: every one of the six coefficients is estimated on 400 bit of raw information. We compromise here: we estimate the full model on group level and do only intercept random effects to account for gross differences between participants and tasks.
 
 
 ```{r}
@@ -828,7 +828,7 @@ Above we have used the mean logistic mean function to elevate the absolute group
 
 However, there is another transformation, that does the trick. For a better understanding, we have to first inspect, what the logit actually is. The logit is also called a *log-odds*: $\textrm{logit}(p) := \log(p(1-p))$. The inner part of the function, the *odds*, are the chance of success divided by the chance of failure. Odds are a rather common way to express ones chances in a game, say:
 
-+ odds are 1 against one that the coin flip produces Head. If you place €1 on Head, I put €1 on tail.
++ odds are 1 against 1 that the coin flip produces Head. If you place €1 on Head, I put €1 on tail.
 + odds are 1 against 12 that Santa wins the dog race. If you place 1€ on Santa, I place €12 against.
 
 If the coefficients are log-odds, than we can extract the odds by the inverse of the logarithm, the exponential function, like in the following call of `fixef`:
@@ -866,7 +866,7 @@ detach(IPump)
 
 
 
-<!-- \@ref(gross_task_completion) is chilling. Successful completion is the exception rather than the rule. Besides that, there is little difference between designs and session. For the mere sake of illustration we run a first logistic regression:
+<!-- \@ref(gross_task_completion) is chilling. Successful completion is the exception rather than the rule. Besides that, there is little difference between designs and sessions. For the mere sake of illustration we run a first logistic regression:
 
 ```{r opts.label = "future"}
 #M_1 <-
@@ -885,7 +885,7 @@ The Design factor is centered at zero and is highly uncertain. There simply is n
 
 <!-- here: Infusion pump -->
 
-<!-- For the two logistic GMMs, it seems one can short-circuit $\eta$ and state $\mu = \textrm{logist}(\eta)$ right away. This is not so, but a mere consequence of them only being the intercept $\mu = \beta_0$. It is also legitimate for absolute group mean models (AGMs), but not for any other coefficients with contrast settings. In order to find a specific predicted value, the mean function is applied to the linear combination of coefficient. For example, the 
+<!-- For the two logistic GMMs, it seems one can short-circuit $\eta$ and state $\mu = \textrm{logist}(\eta)$ right away. This is not so, but a mere consequence of them only being the intercept $\mu = \beta_0$. It is also legitimate for absolute group mean models (AGMs), but not for any other coefficients with contrast settings. In order to find a specific predicted value, the mean function is applied to the linear combination of coefficients. For example, the 
 
 However, in the final example of logistic regression we will see an alternative way to speak of logistic coefficients, *odds*, which allows transformation of individual coefficients.
 
@@ -937,7 +937,7 @@ Note that values of \mu from the Gaussian data set above, are in the range of 30
 
 from the experiment on Visual EDA:
 
-Logistic regression coefficients are on a logit scale. For the interpretation, we want to back-transform to the original scale, which is: probability the assumption to be rejected. In order to make statements on the probability scale, we backtransform using the inverse function of the logit, the logistic function:
+Logistic regression coefficients are on a logit scale. For the interpretation, we want to back-transform to the original scale, which is: probability of the assumption to be rejected. In order to make statements on the probability scale, we backtransform using the inverse function of the logit, the logistic function:
 mu_x = exp(eta_x)/(1 + exp(eta_x))
 eta in the above formula is called the "linear predictor". The linear predictor is the value you get when you do operations on the coefficients. The most simple application is computing the overall probability for a rejection. This is represented by the Intercept parameter. In the table below, this parameter accounts to practically zero, on the logit scale. Back-transforming to the probability scale gives exactly a chance of 50%:
 exp(0)/(1 + exp(0)) = 1/2
@@ -953,14 +953,14 @@ Watch out! It is a severe mistake to transform coefficients individually, then d
 eta = logist(Skew * 0.5) + logist(Sampel size * 50)
 In any case, it is much preferred to report the estimates on the probability scale, as this is right-away interpretable. Credibility limits can be reported on the linear predictor scale. 
 
-Group effects indicate how homogeneous the overall pattern (Table 1) is on individual units in the data set. Relevant units here are the participant and stimuli. For exanple, the relatively large coefficient Skew means that people differ a lot in how much their response is influenced by skew (which is desireable): The strong effect on stimuli means that (after taking skew and N into account) stimuli differ a lot in which response they provoke. It sounds a bit paradox, but that means that stimuli differ systematically: there exist properties other then Skew and N, that trigger a response.
+Group effects indicate how homogeneous the overall pattern (Table 1) is on individual units in the data set. Relevant units here are the participant and stimuli. For exanple, the relatively large coefficient skew means that people differ a lot in how much their response is influenced by skew (which is desireable): The strong effect on stimuli means that (after taking skew and N into account) stimuli differ a lot in which response they provoke. It sounds a bit paradox, but that means that stimuli differ systematically: there exist properties other then skew and N, that trigger a response.
 
 -->
 
 
 ### Modelling overdispersion
 
-If you are in a hurry: real data is always overdispersed. If your data is real, prefer the negative binomial family over Poisson and beta-binomial over logistic regression. Or do observation-level random effects.
+<!-- #110 -->If you are in a hurry: real data is always overdispersed. If your data is real, prefer the negative binomial family over Poisson and beta-binomial over logistic regression. Or do observation-level random effects.
 
 Poisson and binomial distributions are one-parameter distributions. As there is only one parameter, it is impossible to set location and dispersion separately. In effect, both properties are tightly entangled. For Poisson distributions they are even the same.
 
@@ -985,8 +985,7 @@ For all three one-parameter distributions, there exists a two-parameter distribu
 readxl::read_excel("Illustrations/GLM_distributions.xlsx", sheet = "plugin")
 ```
 
-Using Poisson regression for overdispersed  count data results in too favourable certainty of estimates, which is a mistake, of course. One solution to the problem is to switch to yet another response distribution that has a second parameter, thereby allowing the variance to vary (almost) freely. For the Poisson case (i.e. counts without an upper limit) that typically is the negative binomial distribution (never mind its name!), for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the original distribution is not constant, but allowed to vary, typically according
-to some other distribution. Under this perspective, negative binomial distribution is equivalent to a Poisson distribution, when we let parameter $\lambda$ follows a certain gamma distribution:
+Using Poisson regression for overdispersed  count data results in too narrow certainty of estimates, which is a mistake, of course, because of overfitting. One solution to the problem is to switch to yet another response distribution that has a second parameter, thereby allowing the variance to vary (almost) freely. For the Poisson case (i.e. counts without an upper limit) that typically is the negative binomial distribution (never mind its name!), for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the original distribution is not constant, but allowed to vary, typically according to some other distribution. Under this perspective, negative binomial distribution is equivalent to a Poisson distribution, if we let parameter $\lambda$ follow a certain gamma distribution:
 
 ```{r}
 rnegbinom <- function(n, mu, size){
@@ -1153,7 +1152,7 @@ Random effect variation is accurately recovered from the simulated data. The fol
 grpef(M_ovdsp)
 ```
 
-Frequently, I reminded the reader to interpret parameters quantitatively by translating their magnitude to statements of practical relevance. For random effects variance this is not always straight forward. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With GLMMs, the marriage of LMM and GLM this claim is testable.
+Frequently, I reminded the reader to interpret parameters quantitatively by translating their magnitude to statements of practical relevance. For random effects variance this is not always straight forward. One possible way is to make comparative statements on the sources of variance *"the variance due to individual differences exceeds all other sources of variation taken together"*. OLREs are on the same scale as all other random effects in the model, which makes it a good default reference. A non-default comparison of sources of variance is the one of Dennis Egan, that people cause more variance than designs do. With <!-- #111 -->GLMMs, the marriage of LMM and GLM this claim is testable.
 
 ```{r opts.label = "future"}
 D_ovdsp %>% 
@@ -1173,7 +1172,7 @@ D_ovdsp %>%
 
 
 
-From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we will not need one of those twisted two parameter random distributions to account for overdispersion. With OLRE models we get an estimate that is very similar to *residuals*, which have proven very useful in model criticism.
+From LMM we borrow a surprisingly simple and general solution, observation-level random effects. So, most of the time we will not need one of those twisted two parameter random distributions to account for overdispersion. With OLRE models we get an estimate that is very similar to *residuals*, which has proven very useful in model criticism.
 
 
 ```{r opts.label = "invisible"}
@@ -1268,7 +1267,7 @@ sync_CE(Chapter_GLM, D_exp, M_exp)
 
 ### Gamma regression
 
-Exponential regression has a single parameter and therefore has the same problem as seen with Poisson and binomial regression before. Only if all events have the same probability to occur, will an exponential distribution arise, which for behavioural research means: never. Again, one could solve this by introducing an observation-level random effect. Instead, here we will tackle the problem by using a continuous, zero-bounded distribution with two parameters, the gamma family of distributions. While the two parameters rate and shape do not directly translate into location and dispersion as with Gaussian, it provides the extra degree of freedom to set them almost independently. The only limitation is that variance rises with the mean, but as we have argued in \@ref(assume-constant-variance), this is rather a desired feature than a problem. In the following, we simulate gamma distributed observations. 
+Exponential regression has a single parameter and therefore has the same problem as seen with Poisson and binomial regression before. Only if all events have the same probability to occur, will an exponential distribution arise, which means for behavioural research: never. Again, one could solve this by introducing an observation-level random effect. Instead, here we will tackle the problem by using a continuous, zero-bounded distribution with two parameters, the gamma family of distributions. While the two parameters rate and shape do not directly translate into location and dispersion as with Gaussian, it provides the extra degree of freedom to set them almost independently. The only limitation is that variance rises with the mean, but as we have argued in \@ref(assume-constant-variance), this is rather a desired feature than a problem. In the following, we simulate gamma distributed observations. 
 
 
 
@@ -1312,13 +1311,13 @@ sync_CE(Chapter_GLM, D_gam, M_gam)
 detach(Chapter_GLM)
 ```
 
-Both, the exponential and the gamma distributions support the range of real numbers, including zero. The weak point of both models is that they have zero as their natural starting point. For the exponential distribution that even goes to the extreme, that zero always is the point of highest density, i.e. the most likely outcome. As we will see in the following section, that assumption is usually violated with RT and ToT data, therefore exponential and gamma regression should be avoided. So, what are they good for, after all? These two models are routinely used for the *time intervals (TI)* between events that are triggered independently. In nuclear physics the individual triggers are atoms, each one *deciding on their own* when to emit a neutron. If you measure the interval between two emissions the time interval is exponentially distributed. (And if you count the neutrons per time interval, the result is a Poisson distribution). An analogue situation arises for customer support systems. Customers are like atoms in that their decision to file a request is independent from each other, usually. By chance it can happen that the whole center is idle for 20 minutes, but it is equally possible that 20 customers call within a minute and some of them practically at the same moment. Overwhelmed hotline queues does not make people nhappy, when they have technical problems. When planning a support system, the risk of angry customers  has to be weighed against the costs of over-staffing. A good design would hit a certain sweet spot and in the ideal case there would be a predictive model of inflow rate of customers. Whatever predictors such a model would have, the response distribution would probably be very much a gamma distribution. In contrast, when the events are the moments of completion in successive tasks performed by one user, the triggers are not independent and the measure cannot be arbitrarily small (unless, perhaps, you kill seven flies with a single strike).
+Both, the exponential and the gamma distribution support the range of real numbers including zero. The weak point of both models is that they have zero as their natural starting point. For the exponential distribution that even goes to the extreme, that zero always is the point of highest density, i.e. the most likely outcome. As we will see in the following section, this assumption is usually violated with RT and ToT data, therefore exponential and gamma regression should be avoided. So, what are they good for, after all? These two models are routinely used for the *time intervals (TI)* between events that are triggered independently. In nuclear physics the individual triggers are atoms, each one *deciding on their own* when to emit a neutron. If you measure the interval between two emissions the time interval is exponentially distributed. (And if you count the neutrons per time interval, the result is a Poisson distribution). An analogue situation arises for customer support systems. Customers are like atoms in that their decision to file a request is usually independent from each other. By chance it can happen that the whole center is idle for 20 minutes, but it is equally possible that 20 customers call within a minute and some of them practically at the same moment. Overwhelmed hotline queues do not make people happy, if they have technical problems. When planning a support system, the risk of angry customers  has to be weighed against the costs of over-staffing. A good design would hit a certain sweet spot and in the ideal case there would be a predictive model of inflow rate of customers. Whatever predictors such a model would have, the response distribution would probably be very much a gamma distribution. In contrast, when the events are the moments of completion in successive tasks performed by one user, the triggers are not independent and the measure cannot be arbitrarily small (unless, perhaps, you kill seven flies with a single strike).
 
 
 
 ### ExGaussian regression
 
-The problem with the two temporal models discussed so far is that they assume a RT or ToT of zero to be possible. In the case of exponential regression, this even is the most likely region. This assumption is not realistic in most cases, as any task uses up a minimum time to complete. For example, the table below shows the minimum reaction times for finding the academic calendar on ten university websites (case Egan). This varies a lot between designs, but is never close to zero. The last column puts the minimum observed ToT in relation to the observed range. On two of the websites, the offset was even larger than the obvserved range itself, hence the problem of positive lower boundaries is real in user studies.
+The problem with the two temporal models discussed so far is that they assume a RT or ToT of zero to be possible. In the case of exponential regression, this is even the most likely region. This assumption is not realistic in most cases, as any task uses up a minimum time to complete. For example, the table below shows the minimum reaction times for finding the academic calendar on ten university websites (case Egan). This varies a lot between designs, but is never close to zero. The last column puts the minimum observed ToT in relation to the observed range. On two of the websites, the offset was even larger than the obvserved range itself, hence the problem of positive lower boundaries is real in user studies.
 
 ```{r}
 attach(Egan)
@@ -1452,13 +1451,13 @@ sync_CE(Egan, M_tot_exg)
 
 #### Modelling reaction times
 
-In experimental studies, the *inertia of the nervous system* sets a limit larger than zero for reaction times. This is due to some hard electrochemical and biomechanical facts of the peripheral systems. Nerve cells and muscle fibers are slow working horses. The same goes for our minds. Arguably, they are blazingly fast at complex tasks, such as recognizing written words in the faintest colors and the bizarrest advertisements. Still, there is a minimum time to retrieve an idea from the memories and activate the surrounding nodes, too.
+In experimental studies, the *inertia of the nervous system* sets a limit larger than zero for reaction times. This is due to some hard electrochemical and biomechanical facts of the peripheral systems. Nerve cells and muscle fibers are slow working horses. The same goes for our minds. Arguably, they are blazingly fast at complex tasks, such as recognizing written words in the faintest colours and the bizarrest advertisements. Still, there is a minimum time to retrieve an idea from the memories and activate the surrounding nodes.
 
 <!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
 
-<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using color words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
+<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
 
-As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people don't need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geek. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media it delivers. A geek person seeing a computer is more likely to have certain memories or associations, for example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. As a response we had chosen the Stroop task, and in order to make this more likely, participants were primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geekish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we theorized that the least one can say is that geeks like to think hard and therefore used the need-for-cognition scale as a predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek.
+As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media it delivers. A geek person seeing a computer is more likely to have certain memories or associations. For example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. As a response we had chosen the Stroop task, and in order to make this more likely, participants were primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geekish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we theorized that the least one can say is that geeks like to think hard and therefore used the need-for-cognition scale as a predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek.
 
 What would be a suitable response distribution for reaction times in the semantic Stroop task? In the following, we run three models with the same predictor term, but with exgaussian, gamma or Gaussian random components.
 
@@ -1549,7 +1548,7 @@ D_hugme %>%
 #### Modelling Time-on-task
 
 
-Although experimental psychologists call the Stroop task a complex one, the minimal processing time is rather short in comparison to tasks usually administered in usability studies, such as finding information on websites or renting cars online. We compare the three patterns of randomness on the CUE8 data set, which contains ToT measures on five tasks on a car rental website. In this study 14 professional teams took part with two conditions: remote and moderated sessions. As we will see in a later section, the remote condition is contaminated with cheaters. Therefore, we only use the moderated sessions. In addition, it is interesting to compare the impact of the chosen distribution on effects estimates. For this reason only, we include the factor Task as a fixed effect (with treatment contrasts), despite this not being very meaningful.
+Although experimental psychologists call the Stroop task a complex one, the minimal processing time is rather short in comparison to usual tasks in usability studies, such as finding information on websites or renting cars online. We compare the three patterns of randomness on the CUE8 data set, which contains ToT measures on five tasks on a car rental website. In this study 14 professional teams took part with two conditions: remote and moderated sessions. As we will see in a later section, the remote condition is contaminated with cheaters. Therefore, we only use the moderated sessions. In addition, it is interesting to compare the impact of the chosen distribution on effects estimates. For this reason only, we include the factor Task as a fixed effect (with treatment contrasts), despite this not being very meaningful.
 
 The comparison draws upon the effects, as well as residual distributions. For the latter, the predictive posterior distribution is required. With several hundred observations, this results in a very large object. To prevent running into the memory limit, we crank it up (`memory.limit`) and thin out the number of posterior predictive samples by factor 5. Finally, we combine the three posterior predictive distributions and examine the differences.
 
@@ -1748,7 +1747,7 @@ For our RT data, impossible predictions is not a big issue with any of the model
 
 In the scientific literature, the coverage on what random pattern to use for RT and ToT data is meager at this moment. Probably, that is due to the lack of user-friendly engines supporting the more exotic GLM family members, gamma or exgaussian regression. The brms engine covers a much broader set of distributions than any other implementation before and researchers have the choice. This chapter attempted to provide theoretical arguments as well as empirical indications that the exgaussian regression is a better choice than Gaussian and gamma. First of all, it accomodates the strong left skew of RT and ToT much better than the gamma, which takes a too symmetric form when far from the left boundary. Second, it is reasonably robust to impossible predictions, even when using the convenient identity link function. Third, and that is almost too good to be true, it massively improves certainty in predictors. Possibly, exgaussian models are more efficient for carving out delicate cognitive effects in comparison to Gaussian models (not to mention non-parametric tests).
 
-However, as the discussion has not even fully started,  to declare it settled would be premature. In contrast, the aim of this chapter was to illustrate a semi-formal  approach that reseachers can follow to choose among the candidate models for their specific RT and ToT data. Data from other RT paradigms might take different shapes. For example, when measuring RT by events in EEG signals (rather than actual key presses), motor time plays a much smaller role, pushing RTs closer to the left boundary. Then, the exgaussian model might produce higher rates of impossible predictions and the gamma model could sufficiently accomodate the left skewness. Note that even using a log link on the exgaussian model can produce  visits to the negative range. When both accomodate the left skew equally well, the gamma model is to be preferred as it never produces impossible predictions and is more parsimomous.
+However, as the discussion has not even fully started, to declare it settled would be premature. In contrast, the aim of this chapter was to illustrate a semi-formal approach that reseachers can follow to choose among the candidate models for their specific RT and ToT data. Data from other RT paradigms might take different shapes. For example, when measuring RT by events in EEG signals (rather than actual key presses), motor time plays a much smaller role, pushing RTs closer to the left boundary. Then, the exgaussian model might produce higher rates of impossible predictions and the gamma model could sufficiently accomodate the left skewness. Note that even using a log link on the exgaussian model can produce  visits to the negative range. When both accomodate the left skew equally well, the gamma model is to be preferred as it never produces impossible predictions and is more parsimomous.
 
 That being said, the brms engine offers even more opportunities. First, it supports two more distributions with an offset component: the shifted log-normal and the Wiener distribution. Interestingly, the latter grounds on one of the few formally specified cognitive process models, the diffusion model for simple choice tasks. All four parameters of the Wiener distribution are directly linked to individual elements of the cognitive process. This  brings us to the second relevant extension of brms, which I will not fully cover, but is worth mentioning: *distributional models*. The vast majority of statistical analysis capitalizes on the location parameters. We ask whether an increase in a continuous predictor causes an increase in the outcome or if one group has a higher average than the other. 
 
