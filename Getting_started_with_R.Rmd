@@ -4,14 +4,10 @@
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
-thisdir = getwd()
 purp.mcmc = F
-#library(printr)
 source("RMDR.R")
-
-CE <-  c("BrowsingAB","Reading", "Chapter_GSR")
-
-load_CE_(CE)
+CE <-  c(BrowsingAB,Reading, Chapter_GSR)
+load_CE(CE)
 ```
 
 
@@ -284,8 +280,6 @@ R mainly serves three purposes, from easy to advanced:
 2. creating data analysis reports 
 3. developing new statistical routines. 
 
-It turns out that creating multimedia reports in R has become very easy by the knitr/markdown framework that is neatly integrated into the Rstudio environment. I 
-
 With R one typically *works interactively through a data analysis*. The analysis often is a rather routine series of steps, like: 
 
 1. load the data 
@@ -349,13 +343,13 @@ At the same time, functions are first-class citizens in R and can be called ever
 make_binary_matrix <- 
   function(size) as.matrix(rbernoulli(size^2, p = 1/4))
 
-LoM <- llply(c(5:7), make_binary_matrix)
+LoM <- plyr::llply(c(5:7), make_binary_matrix)
 
 llply(LoM, rowSums)
 ```
 
 
-What we have seen is a routine application of higher level functions: apply a transformation to a sequence of data sets. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is: 
+What we have seen is a routine application of *higher level functions*, `llply` applies a transformation `rowSums` to a list of objects `LoM` and returns a list of modified objects. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is: 
 
 >> Whenever you think you need a loop, you don't.
 
@@ -365,13 +359,9 @@ If you come from relational data bases you you have something in common with the
 
 For object orientation folks, R is a good choice, but you have to get used to it. First, it gives you the choice of several object orientation systems, which sometimes requires to install a package. The so-called *S3 system* is the original. It is rather limited and some even call it informal. The approach is as simple as it is unusal. S3 mainly is a raw method dispatcher that can handles overloading of functions.  S3 puts methods first, then objects, whereas in traditional object orientation, the method belongs to the class, making the object "knows" its methods. In S3, the object and the method both know their class. When calling an S3 method, you actually  call a generic method that finds the matching method and applies it. 
 
-Beginners are at peace with all of this. You can count like you do. Functional programming is intuitive for working on research data. And because of S3 the function `summary` always does something useful.
-
-
+Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
 ### Objects
-
-Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
 *Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name chosen by the programmer. By its name, a stored object can be found back at any time. Two basic operations apply for all objects: an object is stored by *assigning* it a name and it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
@@ -410,12 +400,19 @@ tracemem(N_Obs/N_Part)
 tracemem(N_Obs/N_Part)
 ```
 
-<!--This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls these containers *objects*.-->
+Again: programming beginners can be at peace with all of this. You can count like you do. And the function `summary` always does something useful with an object. And last, but not least, tidy R is a highly user-friendly programming approach for data analysis workflows.
+
+This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls these containers *objects*.
 
 
 ### Vectors
 
-Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming languages, all basic data types are *vectors* in R. Vectors are containers for storing many values *of the same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
+```{r}
+42
+```
+
+
+Notice the `[1]` that R puts in front of the single value when printing it? This is called the *index*. Different to most other programming languages, all basic data types are *vectors* in R. Vectors are containers for storing many values *of the same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
 For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:
 
@@ -553,7 +550,7 @@ max(X)
 median(X)
 ```
 
-These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about 66% of the mass is within the range of $\mu-\sigma$ and $\mu+\sigma$ <!-- #9 -->. That means in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes an (optional) vector of quantiles as second argument:
+These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about two thirds of the mass accumulates between $\mu-\sigma$ and $\mu+\sigma$. That means in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes an (optional) vector of quantiles as second argument:
 
 ```{r quantiles}
 quantile(X, c(.17, .83))
@@ -569,9 +566,9 @@ mean(B, na.rm = TRUE)
 ```
 
 
-Most  complex routines in R have an abundance of arguments, most of which have reasonable defaults. To give a more complex example, the following call of `stan_glm` performs a Bayesian estimation of a grand mean model. The required arguments of `stan_glm` are the model and the data. The model is given as a formula and data is expected to be a dataframe. By default this will run the model on the data, with a Normal random component, with three chains and with 1000 iterations per chain.
+Most  complex routines in R have an abundance of arguments to control how precisely they work, most of which got reasonable defaults. To give a more complex example, the following call of `stan_glm` performs a Bayesian estimation of a grand mean model [REF]. The *required arguments* of `stan_glm` are the model formula and the data. The model is given as a formula and data is expected to be a data frame. In the first run, all other arguments are left to their defaults, for example, the number of iterations (1000) and the response distribution family of the model ("gaussian").
 
-The second invocation of `stan_glm` changes the defaults of two arguments. The same model is estimated, but with a Poisson random component and only 500 iterations are done per chain. (What that precisely means will be explained in Part 2.) <!-- #10 -->
+The second invocation of `stan_glm` changes the defaults of these two arguments. The same model is estimated, but with a Poisson distribution and only 500 iterations. <!-- #10 -->
 
 ```{r gmm, opts.label = "rtut.nr"}
 D_1 = data_frame(X = rnorm(n = 20, mean = 2, sd = 1))
@@ -751,7 +748,12 @@ The careful reader may also have noted another oddity in the above example. With
 rnorm(20, mean = c(1,2), sd = 1)
 ```
 
-The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions.
+The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions. Especially, one should not ignore the kind warning that R gives, when the longer vector is not a multiple of the shorter one.
+
+```{r warning=TRUE}
+c(1, 2, 3) + c(3, 4)
+```
+
 
 ### Import, export and archiving
 
@@ -807,14 +809,14 @@ Once you have loaded, prepared and started to analyze a data frame in R, there i
 
 This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: `BrowsingAB_M_1`, `AUP_M_1`, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.
 
-For these reasons, all cases are enclosed in *case environments* and provided with this book. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:
+For these reasons, all cases are enclosed in *case environments* and provided with this book. Case environments are provided as R data files (`.Rda`). For getting a case environment to work in your session, it has to be loaded from the data file first:
 
 ```{r load_CE, opts.label = "rtut.nr"}
 load("BrowsingAB.Rda")
 ```
 
 
-In R, *environments* are containers for collections of objects. If an object `BAB1` is placed in an environment `BrowsingAB`, it can be called as `BrowsingAB$BAB1`. This way, no brevity is gained. Another way to assess objects in an environment is to *attach the environment first* as:
+Formally, R *environments* are means to organize objects into so called namespaces. If an object `BAB1` is placed in an environment `BrowsingAB`, it can be called as `BrowsingAB$BAB1`. This way, no brevity is gained. For assessing objects without the environmemt prefix, one can *attach* the environment as:
 
 ```{r environ_1 }
 attach(BrowsingAB)
@@ -823,36 +825,61 @@ detach(BrowsingAB)
 
 attach(Reading)
 D_1 %>% as_tbl_obs()
+detach(Reading)
 ```
 
-Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The `detach` command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.
+Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. When working with case environments in this book it is recommended to only have them attached one at a time. Removing an environment from the namespace is done by `detach`
 
-All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called `simulate`, is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
-Generally, calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.
+
+All case environments provided with this book contain one or more data sets. One part of these cases contain data from real studies. Other cases provide synthetic data which has been generated by a simulation function. This function, always called `simulate`, is provided with the case environment, too. Calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.
 
 ```{r CE_simulate_1 }
+attach(Reading)
 simulate()  %>% as_tbl_obs() ## reproduces the data frame D_1
-simulate(N = 6)  %>% as_tbl_obs() ## simulates first 6 participants only
+```
+
+To a varying degree, the simulation functions take arguments to produce new data sets with the same structure, but different effects. The following produces the first six participants, with a standard error of 10.
+
+```{r}
+simulate(N = 6, 
+         sigma = 10)  %>% 
+  as_tbl_obs()
+```
+
+The default values can be inspected by using the command `formals`:
+
+```{r}
+formals(simulate)
 ```
 
 
-Furthermore, once you delve deeper into R, you can critically inspect the simulation function's code for its behavioral and psychological assumptions (working through the later chapters on data management and simulation will help).
+The other option is to inspect the code of the function, which is printed, when the function is called without parentheses:
 
 ```{r CE_simulate_2 }
 simulate ## calling a function without parantheses prints its code
+```
+
+```{r}
 detach(Reading)
 ```
+
+
+By the  latter method, you retrieve the full code of the simulation function, which should help to understand its behavioral and psychological assumptions. All simulation functions follow the principles laid out in [REF Simulation].
+
 Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.
 
-Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: if you are working on multiple projects simultaneously, because at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Another way of dealing with this is saving all objects and retrieving them when returning from a break or switching projects, it is as easy as:<!-- #13 -->
+When working on one data set at a time, environments are overkill. Still, it is very useful to save R data frames and objects that hold the result of your analysis. That is easily done by saving all relevant objects to an Rdata files, directly. <!-- #13 -->
 
 ```{r save_working_env, opts.label = "rtut.nr"}
-save(file = "my_data_analysis.Rda")
+save(myData, my_model_1, my_model_2, 
+     file = "my_data_analysis.Rda")
 ## have a break
 load("my_data_analysis.Rda")
 ```
 
 Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.
+
+
 
 ### Structuring data
 
