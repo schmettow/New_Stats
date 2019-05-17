@@ -174,8 +174,7 @@ Ver20 %>%
   summarize(
     mean_ToT   = mean(ToT),
     median_ToT = median(ToT),
-    mode_ToT = mode(ToT)) %>% 
-  knit_print.tbl_obs()
+    mode_ToT = mode(ToT))
 ```
 
 
@@ -279,7 +278,7 @@ A majority of research deals with associations between variables and the present
 |-----------|----------|------|
 |categorial |frequency cross tables|differences in mean|
 |-|-|-|
-|metric     ||covariance, correlation|
+|metric     |classification|covariance, correlation|
 |-|-|-|
 
 All forms of associations derive directly from statistics we have already encountered. That is obvious for when one variable is categorial and a little more subtle for two metric variables. 
@@ -427,7 +426,7 @@ Another situation where covariances and correlations fail is when there simply i
 
 
 ```{r}
-data_frame(x =  (0:100)/10,
+tibble(x =  (0:100)/10,
            y_1 = rnorm(101, exp(x)/100, x * 2),
            y_2 = rnorm(101, (x - 5)^2, 3)) %>% 
   ggpairs(lower=list(continuous="smooth"))
@@ -458,82 +457,28 @@ Most commonly used statistics fall in three classes: cardinality, central tenden
 Reporting the calculated mean of time-on-task in two designs is descriptive. It summarizes the data set in a reasonable way. It is informative in so far as one learns which design to prefer, but coarsely. Consider a case where two designs were just slight variations, come at precisely the same costs, and the researcher has collected performance measures on five subjects per group, without the option of inviting more participants.
 -->
 
-## Bayesian Inferential statistics
-
-Bayesian statistics can be reduced to three elements:
-
-1. the *prior belief* is what you believe before (little rain in summer)
-2. the *likelihood* is what you learn by observation (the cloudy sky)
-3. the *posterior belief* is your adjusted believe after seeing the data
-
-Bayesian statistics formalizes the transition from prior belief to  posterior belief in a remarkably simple formula:
-
-$$\text{posterior}\ \propto \text{prior}\times\text{likelihood}$$
-
-<!-- #24 -->
-
-Note that $\propto$ here means *proportional to*. In very plain words this is:
-
-> what you believe now is a combination of what you knew before and what you have just seen in the data.
-
-The data is usually the present observation or study. But, that does not exclude that prior knowledge grounds on data, too. In experimental Psychology researchers entertain themselves repetitions of the very same experimental paradigm, with slight variations maybe. For example, in the famous Stroop effect, participants have to name the ink color of a word. When the word is itself a color word and refers to a different color, response times typically increase. This effect has been replicated in many dozens of published studies and, probably, thousands of student experiments. Cumulative evidence is so strong that, would repeat the experiment another time and find the reverse effect, no one would seriously take this as a debunk. This extreme example illustrates another principle that follows from Bayes rule:
-
-> Today's posterior is tomorrow's prior.
-
-There is no principled difference between prior and posterior. They are just levels of belief (credences) at different points in time. Both differ in strength: prior knowledge can be firm when it rests on an abundance of past evidence. The same holds for the likelihood in the present data: the more observations, the stronger the evidence. This is why larger sample sizes are usually preferred. Prior belief and likelihood can be congruent or contradict each other. When they are congruent, prior belief is strengthened by the data. When they are contradicting each other, prior belief is weakened.
-
-<!--#25-->
-
-Whatever happens in the individual case, it is generally accepted that scientific progress is incremental over large periods of time. Under this perspective the idea of updating one's belief is even trivial. It is common sense, that if you are too uncertain about a situation you better gather more information. Once you have reached a satisfactory level of certainty, you proceed to act (or publish). 
-
-Readers with a firm background in classic statistics may (or my not) recall that once you have settled down on a sample size (and a level of significance), you absolutely must test precisely this number of participants. Stopping early (because you have reached the desired p-value) or adding to the sample is strictly forbidden. Doesn't that bother you under the perspective of accumulative evidence? It should bother you that incremental collection of evidence is impossible when doing frequentist statistics. On the other hand, in Bayesian statistics, accumulation of evidence is a core feature.
-
-
-Neither is there a way to express one's prior belief when doing a t-test, nor can you just continue your data collection until satisfactory certainty is reached. In the fictional example of the Stroop task, the classic data analysis pretends as if no one has ever done such an experiment before. At the same time, it is strictly forbidden to invite further participants to the lab, when the test results point into the right direction, but evidence is still to weak. If you planned the study with, say, $N = 20$, this is what you have to do, no less no more. If you reach your goal with less participants, you must continue testing. If you are unsatisfied with the level of certainty (e.g., $p = .52$), the only permissable action is dump your data and start over from zero. There are many other ways that frequentist statistics is flawed, including some deeply philosophical ones. For a common person  the denial of incremental progress is deeply counter-intuitive and for a common researcher it is a millstone around the neck.
-
-
-
-Reconsider Jane and Andrew. What did they know about the current state of affairs when running a particular session. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
-
-$$\hat M_{ToT} = 1 \over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
-
-But how about the updated slogan: "rent a car in 111 seconds".  Can we be sure it holds, when someone repeats the study? We can only to a degree. It could still happen, that the belligerent  competitor comes to a different result, just because they have a different sample of participants. Even if they would test a fully matching sample of participants, the measures will differ, simply because an array of smaller and larger impact factors is continuously  hitting the central and peripheral nervous systems of your participants. The result is randomness in the data. Fortunately, randomness is often found to be well-behaved in that recurrent patterns emerge. These patterns are called distributions of randomness and I will introduce a whole bunch of them later in this chapter @\ref(). 
-
-
-#### [HERE]
-
-<!--
-
-
-So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, what happens the field of statistics strongest contribution is that the level of uncertainty can also be quantified. 
-
-
-Inferential statistics is required, whenever there is imperfect evidence and when there is skin-in-the-game.
-
-
-This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate is imperfect.
-
-A consequence of imperfection is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
-
-> How certain can you be that in the population of users $M_{ToT} <= 99$?
-
-For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
-
-
--->
-
 
 
 ## Bayesian probability theory
 
-Probability is an elusive concept and a source of mental suffering and heated debates, especially when people use intuition. The reason is that in the human mind, probability can be rooted in two different ways: in frequentist thinking, probability is represented by relative frequencies, whereas in Bayesian school of thought it is the level of certainty for some event to happen.
+<!--Probability is an elusive concept and a source of mental suffering and heated debates, especially when people use intuition. The reason is that in the human mind, probability can be rooted in two different ways: in frequentist thinking, probability is represented by relative frequencies, whereas in Bayesian school of thought it is the level of certainty for some event to happen.-->
 
-This is a Bayesian book and the following considerations are meant to convince the reader that the Bayesian use of probability has a wider domain of application than the frequentist. I also see this as one of the more rare situations where introducing some formalism is supportive in that it dissolves the subtle preoccupations that often accompany intuitive (or, I'd rather say: exemplified) understanding. In addition, the mathematical definition is bare of any real world notions, like observed frequencies or experienced certainties and  (figuratively speaking) makes the different perspectives converge. The algebraic definition of probability is given by the three Kolmogorov axioms. Before we come to that, let me undertake two intermediate steps: a deep bow to the discipline of mathematics, and introducing some set-theoretic concepts.
+<!-- This is a Bayesian book and the following considerations are meant to convince the reader that the Bayesian use of probability has a wider domain of application than the frequentist. I also see this as one of the more rare situations where introducing some formalism is supportive in that it dissolves the subtle preoccupations that often accompany intuitive (or, I'd rather say: exemplified) understanding. In addition, the mathematical definition is bare of any real world notions, like observed frequencies or experienced certainties and  (figuratively speaking) makes the different perspectives converge. The algebraic definition of probability is given by the three Kolmogorov axioms. Before we come to that, let me undertake one intermediate step: introducing some set-theoretic concepts, which at the same time is meant as a deep bow to the discipline of thought that is so awe inspiring on the one hand a source of mental suffering for many on the other hand. -->
 
-First, be reminded that mathematical systems of belief are empty. It often helps, to associate a mathematical system of statements to with some more tangible ideas. For example, I remember how my primary school teacher introduced the sum of two numbers as moving elements from one stack onto another, piece by piece. Later, I found this to be an exact embodidment of how the sum follows from the Peano axioms, that define the set of natural numbers. Second, we need to set the stage with a few set-theoretic concepts. 
+First, be reminded mathematics is empty. In its purest form, it does not require or have any link to the real world.  It often helps, to associate a mathematical system with some more real world ideas or illustrations, for example, I remember how my primary school teacher introduced the sum of two numbers as removing elements from one stack and place it on another, until the first stack is empty, piece by piece. Later, I found this to be an exact embodidment of how the sum follows from the Peano axioms, that define the set of natural numbers. Sometimes, a mathematical theory just describes trivial real world intuitions in just more complicated ways, like the Peano axioms. Sometimes a mathematical theory describe real world phenomena that we have no intuition about at all. A classic example is Einstein's General Relativity Theory, which assumes a curved, rather than straight space. Earlier, Isaac Newton has introduced his Mechanics, grounding on the idea of a Euclidian space, where three dimensions form rectangular cubes, just as we know them. In order to formalize his theory, Einstein used the mathematical theory of Rieman spaces, which were discovered in the 19th century, but initially made no sense to anyone outside mathematics.
+
+Fortunately, the math of probability is more on the intuitive side of things. The most tangible interpretation is that the probability of an event to happen, say throwing a Six with a dice, coincides with the relative frequency of a Six in a (very long) sequence of throws. This is called the *frequentist interpretation* of probability and this is how probability will be introduced in the following. While thinking in terms of relative frequency in long running sequences is rather intuitive, it has limitations. Not all events we want to assign a probability can be imagined as a long running sequence, among those are:
+
++ the probability that a space ship will safely reach Mars (there's only this one attempt)
++ the probability that a theory is more true than another (there's only this pair)
++ the probability that your house burns down (you only have this one)
+
+Therefore, I will finally introduce the *Bayesian interpretation* of probability, which is the certainty in one's belief. While this might be less tangible, it is compatible with the mathematical notion of probability and it is immensly useful in scientific thinking, as progress in science can be described as updating our beliefs about the world. 
 
 
 ### Some set theory
+
+The mathematical concept of probability can most intuitively be approached by thinking in terms od relative frequency in long-running sequences. Actually, it is not even required to think of a sequence (where events have an order). It suffices to assume a set of events.  
 
 A mathematical *set* is a collection of elements taken from a domain (or universe, more dramatically). These can either be defined by stating all the elements, like $S = \{\textrm{red}, \textrm{yellow}, \textrm{green}, \textrm{off}\}$ or by a characterizing statement, like:
 
@@ -541,8 +486,8 @@ $S := \textrm{possible states of a Dutch traffic light}$
 
 The elements should be clearly identified, but need not have a particular order. (If they do, this is called an *ordered set*, the set of natural numbers is an example). Sets can have all possible sizes, which is called the *cardinality* of a set:
 
-+ empty like all opponents who can defeat Chuck Norris, $\{\}$ or $\oslash$
-+ finite like the possible states of a traffic light
++ empty like "all opponents who can defeat Chuck Norris", $\{\}$ or $\oslash$
++ finite (and countable) like the states of a traffic light
 + infinite, but countable, like the natural numbers $N$
 + infinite, uncountable, like the real numbers $R$
 
@@ -656,7 +601,7 @@ A simple example of that is operations on rods of different lengths. Putting the
 ```{r opts.label = "invisible"}
 # package sets interferes in strange ways with dplyr
 detach("package:sets", unload=TRUE)
-rm(Harm, Success, Timely)
+rm(Success, Failure, Harmful, Harmless, Timely, Delayed)
 
 ```
 
@@ -777,7 +722,7 @@ P(\textrm{Timely})
 This sitation is called *independence of events* and it means that knowing about one variable does not help in guessing the other. In statistics, *conditional probability* is an important concept. In particular, it will carry us away from the set theoretic interpretation towards the Bayesian interpretation of probability as states of knowledge.
 
 
-<!-- 39 elaborate the role of independence -->
+<!-- #39 elaborate the role of independence -->
 
 
 
@@ -823,109 +768,189 @@ What are those events in design research and how do we assign them those numbers
 Especially for readers with some theoretical grounding in frequentist statistics it may be helpful to see that also continuous variables can be probabilities, namely proportions. Imagine a novel behavioural screening test on alcohol influence. The client is asked to walk 10 meters on a curved path. Using a set of smart sensors, that continuously assess whether the clients center of gravity is inside or outside the path. The *proportions* of relative distances inside or outside the path are probabilities (without being countable events).-->
 
 
-### Likelihood of data {#likelihood}
+### Likelihood {#likelihood}
 
 [...]
 
-Consider the following example: A standard dices is rolled twice. How likely is an outcome of two times Six? We use probability theory: It is the same dice and the results of the rolls are independent. The probability of rolling a Six on either attempt is 
+Consider the following example: A standard dice is rolled twice. How likely is an outcome of two times Six? We use probability theory: It is the same dice and the results of the rolls are independent. The probability of rolling a Six on either attempt is 
 $p(y_1 = \textrm{Six}) = p(y_2 = \textrm{Six})  = {1 \over 6}$. Therefore the joint probability is just the product:
 
 $$
-\pi(y_1 = \textrm{Six} \textrm{ and } y_2 = \textrm{Six}) \\= 
-\pi(y_1 = \textrm{Six}) \times \pi(y_2 = \textrm{Six})= {1 \over 36}
+P(y_1 = \textrm{Six} \textrm{ and } y_2 = \textrm{Six}) \\= 
+P(y_1 = \textrm{Six}) \times P(y_2 = \textrm{Six})= {1 \over 36}
 $$
 
 The joint probability of all data points is called the *Likelihood* and generalizes to situations where the probabilities of events are not the same, for example: What is the probability of the first dice being an Four, the second a  five and the third a Three or a Six?
 
 $$
-\pi(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \textrm{Three} \textrm{ or } \textrm{Six}\\
+P(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \textrm{Three} \textrm{ or } \textrm{Six}\\
 =  {1 \over 6}
-\times {1 \over 6} \times {1 \over 3} = {1 \over 108}
+\times \frac 1 6 \times \frac 1 3 = \frac 1 {108}
 $$
 
-Notice how the likelihood gets smaller in the second example. In fact, likelihoods are products of numbers between zero and one end therefore always become smaller, when another observation is added. In most empirical studies, the number of observations is much larger than two or three and the likelihood becomes inexpressible small. Consider the following following results from 16 rolls:
+Notice how the likelihood gets smaller in the second example. In fact, likelihoods are products of numbers between zero and one and therefore become smaller with every observation that is added. In most empirical studies, the number of observations is much larger than two or three and the likelihood becomes inexpressibly small. Consider the  following results from 16 rolls. In order to distinguish the base probability for any side from derived probabilities, we call it $\pi = \frac 1 6$
 
 ```{r}
 set.seed(42)
 Events <- c("One", "Two", "Three", "Four", "Five", "Six")
 Result <- sample(Events, 16, replace = T)
-prob = 1/6
-Likelihood <- prob^length(Result)
+pi = 1/6
+Likelihood <- pi^length(Result)
 ```
 
 
-
-The likelihood of this result, given that it is a fair dice, is $6^{-16} = `r Likelihood`$. Usually, the *negative logarithm of the likelihood* is reported. This results in reasonably large positive numbers.
+The likelihood of this result, given that it is a fair dice, is $\frac 1 6^{16} = `r Likelihood`$. Therefore, one usually reports the *logarithm of the likelihood (log-likelihood)*. This results in "reasonable" negative numbers. Why negative? Because all Likelihoods are fractions of One (the identity element of multiplication), which results in a negative logarithm.
 
 ```{r}
-(nlogLik <- -log(Likelihood))
+(logLik <- log(Likelihood))
 ```
 
-The negative log likelihood is central concept in Bayesian and classic model estimation, as we will see. When estimating a model, a likelihood is computed a myriad of times. With a little mathematical trick, the negative log-likelihood can be calculated as sum of logarithms, instead of a logarithm of products.
+<!-- The negative log likelihood is central concept in Bayesian and classic model estimation, as we will see. When estimating a model, a likelihood is computed a myriad of times. With a little mathematical trick, the negative log-likelihood can be calculated as sum of logarithms, instead of a logarithm of products. -->
+
+<!-- $$ -->
+<!-- \log(a \times b) = \log(a) + log(b) -->
+<!-- $$ -->
+
+
+<!-- ```{r} -->
+<!-- -sum(rep(log(1/6), 16)) -->
+<!-- ``` -->
+
+<!-- For the human mind, summing over numbers is much easier than products. And the same goes for computers. The following code measures the computing time (ms) for a likelihood of ten thousand dice rolls. On my computer, summing over logarithms almost cuts the computing time in half. -->
+
+
+<!-- ```{r} -->
+<!-- Rolls <- rep(1/6, 10000) -->
+
+<!-- bind_rows( -->
+<!--   microbenchmark::microbenchmark(-prod(Rolls)), -->
+<!--   microbenchmark::microbenchmark(-sum(log(Rolls))) -->
+<!-- ) -->
+
+<!-- ``` -->
+
+The dice rolling example above has a twist. assumed that we may enter $\pi = {1 \over 6}$, because we *believe* that it is a fair dice, without further notice. In other words, we needed no data, because of overwhelming prior knowledge (or theory, if you will). Imagine we have been called in to uncover fraud with biased dices in a casino. There is suspicion, that the chance of rolling a Six is lower than $1 \over 6$. So, what is the (most likely) chance of rolling a Six? With the help of a dice rolling robot, the following 6000 rolls have been  recorded.
+
+
+```{r}
+n_Rolls <- 6000
+
+Biased_dice <- 
+  tibble(Side = as_factor(Events),
+         pi = c(1/6 + .02, rep(1/6, 4), 1/6 - .02))
+  
+  
+  
+set.seed(41)
+Rolls <- tibble(Roll = 1:n_Rolls,
+                   Result = sample(Biased_dice$Side, 
+                                   prob    = Biased_dice$pi, 
+                                   size    = n_Rolls, 
+                                   replace = T))
+
+head(Rolls)
+```
+
+
+```{r}
+Rolls %>% 
+  ggplot(aes(x = Result)) +
+  geom_bar()
+```
+
+The result is shown in the figure above. For simplicity we just focus on rolling Six. If we have no prior assumptions about the dice, the estimated probability is simply the relative frequency of Six.
+
+```{r}
+Rolls %>% 
+  group_by(Result) %>% 
+  summarize(pi = n()/n_Rolls)
+```
+
+In this case, we can simply note down that the *most likely value* is $\pi_{Six} =.147$, which is lower than the fair `r round(1/6, 3)`. But, note the slight ruggedness of the bar chart. Not a single bar is read as exactly $1 \over 6$, so the deviation of Six could have happened by chance. One way to approach this question is comparing the likelihoods $P(\text{Result = Six}|\pi = {1 \over 6})$ and $P(\text{Result = Six}|\pi = {.147})$.
+For that purpose, we create a new event variable `Six`, that indicates whether a roll is a Six (`TRUE`) or not (`FALSE`). Further, a *distribution function* is required that assigns these events their probabilities. Distribution functions can take very complicated forms [REF statistical models], but in the case here it is the rather simple *Bernoulli distribution*.
 
 $$
-\log(a \times b) = \log(a) + log(b)
+d_\text{Bern}(\text{Six}|p) = 
+  \begin{cases}
+    \text{Six} ,& p\\
+    \text{not Six},& 1 - p
+  \end{cases}
 $$
 
+The log-likelihood function of the Bernoulli distribution is just the sum of log-probabilities across all Rolls $y_i$.
+
+$$
+LL_\text{Bern}(\pi) = \sum_i{\log(d_\text{Bern}(\text{Six},\pi))}
+$$
+
+Now, we can determine the ratio of likelihoods, conditional on $\pi$. Recall that with logarithmic transformations, what was a ratio becomes a difference.
+
+
+$$
+LR = \exp(LL_\text{Bern}(.147) - LL_\text{Bern}(\frac 1 6)
+$$
 
 ```{r}
--sum(rep(log(1/6), 16))
+Rolls <-  Rolls %>%
+  mutate(Six = (Result == "Six"))
+
+dbern <- function(y, pi) if_else(y, pi, 1 - pi)
+LL_bern <- function(pi) sum(log(dbern(Rolls$Six, pi)))
+
+pi_fair = 1/6
+pi_est  = .147
+
+exp(LL_bern(pi_est) - LL_bern(pi_fair))
 ```
 
-For the human mind, summing over numbers is much easier than products. And the same goes for computers. The following code measures the computing time (ms) for a likelihood of ten thousand dice rolls. On my computer, summing over logarithms almost cuts the computing time in half.
 
+Now, recall what a likelihood is: the probability of the observed data, under a certain model. Here, the data is almost 5000 times more likely with $p = .147$. In classic statistics, such likelihood ratios are routinely been used for comparison of models.
 
-```{r}
-bind_rows(
-  microbenchmark::microbenchmark(-prod(rep(1/6, 10000))),
-  microbenchmark::microbenchmark(-sum(rep(log(1/6), 10000)))
-)
+Previously, I have indicated that the relative frequency gives us the most likely value for parameter $\pi$ (the case of a Bernoulli distributed variable), the *maximum likelihood estimate (MLE)*. The MLE is that point in the parameter range (here $[0;1]$), with the maximum likelihood. It is the point, where the data is most likely. In a similar way, the mean of Normal distributed measures is the maximum likelihood estimate for the distribution parameter $\mu$. But, more advanced models do not have such a closed form, i.e., a formula that you can solve. Therefore, parameter estimation in classic statistics heavily grounds on numerical procedures to find maximum likelihood estimates, which I will now outline for illustrative purposes:
 
-```
-
-The dice rolling example is a little odd. A visitor of a casino can expect that the probability of rolling a six is $1 \over 6$. A researcher would draw this into question: what is the most likely probability of rolling a Six? The following example is from a biased dice that has a probability of $1 \over 6$ to fall on One and a meager $1 \over 8$ for Six. Assume that the researcher knows that the dice *can* be biased, but not if and by how much.
-
-
-```{r}
-Events <- c("One", "One", "One", "Two", "Three", "Four", "Five", "Six")
-(Result <- sample(Events, 50, replace = T))
-```
-
-The classic method of *maximum likelihood estimation (MLE)* can be used to answer the question. It makes use of the likelihood, by feeding it with proposed values for the unknown parameter $\pi(y_i = Six)$ and tries to find the point where the likelihood is at its maximum, where the observed data is most likely. In the most simple form, MLE starts at the left boundary, zero in this case, and walks in small steps along a grid to the right boundary (one):
+Notice that the probability function $d_\text{Bern}(y_i, \pi)$ has two parameters, the result of a roll and the base probability. The likelihood function, in contrast, only has the parameter $\pi$, whereas the data is "buried" inside. This is by convention in order indicate that the likelihood function takes the data as fixed and is meant to explore the range of values for the parameter. By varying the parameter and reading the resulting likelihood of data, we can numerically interpolate the MLE. The most basic numerical interpolation method is a grid search, which starts at the left boundary of parameter range, zero in this case, and walks in small steps along a grid to the right boundary (one). By convention, maximum likelihood estimation is performed by *minimizing the negative log-likelihood*. For the convenience, the following likelihood function has been vectorized, to make it work smoothly in a tidy processing chain.
 
 ```{r}
 
-nlogLik <- 
-  function(pi) -sum(if_else(Result == "Six", log(pi), log(1 - pi)))
+LL_bern <- function(pi) map_dbl(pi, function(x) sum(log(dbern(Rolls$Six, x))))
 
-Lik <- 
-  data_frame(pi = seq(.01, .99, by = .01)) %>% 
-  mutate(nlogLik = map_dbl(pi, nlogLik),
+LL_bern(c(.1, .2))
+
+LL_grid <- 
+  tibble(pi = seq(.01, .99, by = .01)) %>% ## the grid
+  mutate(nlogLik = -LL_bern(pi),
          rank = min_rank(nlogLik),
          MLE = (rank == 1))
-Lik %>%          
+
+LL_grid  %>%          
   ggplot(aes(x = pi, y = nlogLik)) +
   geom_line() +
-  geom_point(data = MLE, color = "Red") +
-  geom_text( data = MLE, label = "MLE", color = "Red")
+  geom_point(data = filter(LL_grid, MLE), color = "Red") +
+  geom_text(data = filter(LL_grid, MLE), label = "MLE", color = "Red", nudge_y = -500)
 
 ```
 
-Because we use the *negative* log-liklihood, the value for $\pi$ with maximum likelihood is the minimum of the likelihood curve. Here, $pi = `r MLE[["pi]]` $ is considerably below the expected $1 \over 6$.
+Because we use the *negative* log-liklihood, the value for $\pi$ with maximum likelihood is the minimum of the likelihood curve. Here, $pi_\text{MLE} = `r filter(LL_grid, MLE)[["pi"]]`$, which is very close to the relative frequency estimate. It is always possible to get even more accurate by using a finer grid.
 
 ```{r}
-(MLE <- filter(Lik, MLE))
+(MLE <- filter(LL_grid, MLE))
 ```
 
-In classic statistics MLE is one of the most common methods for estimating parameters from models. However, most of the time, data is more abundant and there is more than one parameter. It is possible tow extend the grid method to as many parameters as the model contains by just creating multi-dimensional grids. However, already a two-dimensional grid of rather coarse $100 \times 100$ would require the computation of 10.000 likelihoods. Classic statisticians have therefore developed several optimization methods to identify the MLE with as few runs as possible. Soon, we will turn our attention to Bayesian estimation, where the Likelihood plays a central role in estimation, too [REF]. Another appliction of the Likelihood is introduced in chapter \@ref(GOF), where it defines the deviance criterion for model goodness-of-fit.
-
-
+In classic statistics MLE is one of the most common methods for estimating parameters from models. However, most of the time, data is more abundant and there is more than one parameter. It is possible tow extend the grid method to as many parameters as the model contains by just creating multi-dimensional grids. However, already a two-dimensional grid of rather coarse $100 \times 100$ would require the computation of 10.000 likelihoods. Classic statisticians have therefore developed optimization methods to identify the MLE with as few runs as possible. Soon, we will turn our attention to Bayesian estimation, where the Likelihood plays a central role in estimation, too [REF]. Another appliction of the Likelihood is introduced in chapter \@ref(GOF), where it defines the deviance criterion for model goodness-of-fit.
 
 
 
 ### Certainty as probability
 
-Inferential statistics serves rational decision making under uncertainty by attaching information on the *level of certainty* to a parameter of interest. A central difference between frequentist and Bayesian statistical theory is how the elusive concept of *certainty* emerges. Frequentists just stick to the notion of relative frequencies to express a level of certainty. A common way to express ones level of certainty about a parameter (say, the population mean) is a *confidence interval*, which is expressed as two endpoints:
+Inferential statistics serves rational decision making under uncertainty by attaching information on the *level of certainty* to a parameter of interest. A central difference between frequentist and Bayesian statistical theory is how the elusive concept of *certainty* emerges.
+
+Let us for a moment return to how probability was axiomatically defined by Kolmogorov's axioms. The axioms themselves only speak of relations between sets and ptobability. At no point do these axioms operate on frequencies (such as the cardinality of sets). The axioms are not constructive in the way that they show you how to calculate a probability in the real world. They just define the requirements for any number to be called a probability. It is our intuition that makes it almost inevitable to think of probability of a set $A$ as relative frequencies, i.e. the ratio of the cardinality of A divided by the cardinality of the universal set $\Omega$. Relative frequency precisely is the frequentist defintion of probability:
+
+$$
+P(A) = {|A| \over |\Omega|}
+$$
+
+In frequentist statistics, a common way to express ones level of certainty about a parameter (say, the population mean) is the *confidence interval*, which is expressed as two endpoints:
 
 ```{r}
 attach(Sec99)
@@ -940,18 +965,216 @@ Ver20 %>%
 
 
 
-It is by convention that the 95% confidence interval is given and its definition is rooted in relative frequencies: *The 95% confidence interval is constructed in such a way that, if the same experiment were repeated an infinite number of times, in 95% of these repetitions the true value is contained.*
+The 95% confidence interval is defined by assuming an (infinite) set of replications of the very same experiment and using relative frequencies: *The 95% confidence interval is constructed in such a way that, if the same experiment were repeated an infinite number of times, in 95% of these repetitions the true value is contained in the interval.*
 
-As much as I embrace parsimony, you are not alone when you lack intuition of what the definition says and when you feel at unease about where all these experiments are supposed to come from. (They are all imagined.) When we turn to Bayesian statistics, we find that it generously elevates certainty to be a basic quantity, rather than a derived.
-A Bayesian 95% *credibility interval* represents the level of certainty as: *With a probability of 95%, the true value is contained.* Since there seems to be no external criterion (such as a series of experiments, imagined or not), Bayesian statistics often faced the criticism of being subjective. In fact, if we imagine a certainty of 95% as some number in the researchers mind, that might be true. But, it is quite easy to grasp certainty as an objective quantity, when we assume that there is something at stake for the researcher and that she aims for a rational decision. In the previous chapter I have illustrated this idea by the example of carrying an umbrella with you (or not) and the 99 seconds claim. Generally, it helps to imagine any such situation as a gamble: if you bet 1 EURO that the true population mean is outside the 95% credibility interval, as a rational person I would put 19 EUR against. 
+And similar it goes for the infamous p-value: *A result is called statistically significant on level $\alpha = .05$, if drawing from the null distribution (an infinite number of times) will produce the observed result or a larger result in no more than 5% of cases.*
 
+You are not alone when you lack intuition of what the definition says and when you feel at unease about where all these experiments are supposed to come from. (Most of the time they are just imaginations.) As much as I usually embrace parsimony, it must not kill intuition. Also, the Kolmogorov axioms can be satisfied by other interpretations of probability. In Bayesian statistics, the level of certainty is expressed as a *proposition about one's state of knowledge*, like : *Based on my data I am 95% sure that there is a difference*. Equating level of certainty with probability directly, without taking the detour via relative frequencies, may be a little lax, but it leads to remarkably intuitive statements on uncertainty. In Bayesian statistics the *credibility interval* is defined as: *With a probability of 95%, the true value is contained.* Since there seems to be no external criterion (such as a series of experiments, imagined or not), Bayesian statistics often faced the criticism of being subjective. In fact, if we imagine a certainty of 95% as some number in the researchers mind, that might be true. But, it is quite easy to grasp certainty as an objective quantity, when we assume that there is something at stake for the researcher and that she aims for a rational decision. In the previous chapter I have illustrated this idea by the example of carrying an umbrella with you (or not) and the 99 seconds claim. Generally, it helps to imagine any such situation as a gamble: if you bet 1 EUR that the true population mean is outside the 95% credibility interval, as a rational person I would put 19 EUR against.
 
-
-In effect, the Bayesian concept of certainty is a probability in mathematical terms, which liberates our reasoning from the requirement to think of long-running series of the same experiment. Let's face the truth: much of the time, we have only this one shot. In the next section we will see how probability theory is used to operate on certainties using Bayes famous theorem.
-
+In effect, the Bayesian certainty is a probability in mathematical terms, without the necessity to implement it as a relative frequency. That liberates our reasoning from the requirement to think of long-running series, when this makes little sense to us. Much of the time, we have only this one shot. In the next section we will see how probability theory is used to operate on certainties using Bayes famous theorem.
 
 
-### Bayes theorem
+### Bayes theorem (and the dynamics of belief)
+
+In Bayesian statistics, certainty (or strength of belief, state of knowledge, credibility) is assumed to follow all rules of probability theory. We may still think of it in terms of frequencies or illustrate it as a gamble, whatever fits the context better. What  sets Bayesian statistics apart is how it emphasizes the *dynamics of certainty*, like in the real world:
+
++ Someone sceptical of climate change may change their view after one very hot summer.
++ Everyone believed strongly in Newton's Mechanics, but some people got curious when it turned out that light speed is constant.
+
+Note how these examples all have the same dynamics: a prior belief is updated when new data arrives. These are precisely the three elements of Bayesian statistics:
+
+1. the *prior belief* is what you believe before (climate change is a myth)
+2. the *likelihood* is what you learn by observation (hot summer)
+3. the *posterior belief* is your adjusted believe after seeing the data (maybe not such a myth)
+
+Before we get to a more formal definition of the dynamics of knowledge, Bayes theorem, let us explore this idea a little. First of all, it seems that updating knowledge is the primary purpose of any central nervous system, including its sensors (which provide the data). 
+
+
+The data is usually the present observation or study. But, that does not exclude that prior knowledge grounds on data, too. In experimental Psychology researchers entertain themselves repetitions of the very same experimental paradigm, with slight variations maybe. For example, in the famous Stroop effect, participants have to name the ink color of a word. When the word is itself a color word and refers to a different color, response times typically increase. This effect has been replicated in many dozens of published studies and, probably, thousands of student experiments. Cumulative evidence is so strong that, would repeat the experiment another time and find the reverse effect, no one would seriously take this as a debunk. This extreme example illustrates another principle that follows from Bayes rule:
+
+> Today's posterior is tomorrow's prior.
+
+There is no principled difference between prior and posterior. They are just levels of belief (credences) at different points in time. Both differ in strength: prior knowledge can be firm when it rests on an abundance of past evidence. The same holds for the likelihood in the present data: the more observations, the stronger the evidence. This is why larger sample sizes are usually preferred. Prior belief and likelihood can be congruent or contradict each other. When they are congruent, prior belief is just strengthened by the data. When they are contradicting each other, prior belief is over-ruled to some degree. That degree depends on how much data there is.
+
+<!--#25-->
+
+Whatever happens in the individual case, it is generally accepted that scientific progress is incremental over large periods of time. Under this perspective the idea of updating one's belief is even trivial. It is common sense, that if you are too uncertain about a situation you better gather more information. Once you have reached a satisfactory level of certainty, you proceed to act (or publish). However, as readers with a very firm background in classic statistics may know, once you have settled down on a sample size (and a level of significance), you absolutely must test precisely this number of participants. Stopping early (because you have reached the desired p-value) or adding to the sample is strictly forbidden. Doesn't that bother you under the perspective of accumulative evidence? It should bother you that incremental collection of evidence is impossible when doing frequentist statistics. On the other hand, in Bayesian statistics, accumulation of evidence is a core feature.
+
+
+Neither is there a way to express one's prior belief when doing a t-test, nor may you  continuously adjust your sample size until satisfactory certainty is reached. In the fictional example of the Stroop task, the classic data analysis pretends as if no one has ever done such an experiment before. At the same time, it is strictly forbidden to invite further participants to the lab, when the test results point into the right direction, but evidence is still to weak. If you planned the study with, say, $N = 20$, this is what you must do, no less no more. If you reach your goal with less participants, you must continue testing. If you are unsatisfied with the level of certainty, the only permissable action is dump your data and start over from zero. The denial incremental knowledge is commonly counter-intuitive and for a researcher it is a millstone around the neck.
+
+
+
+Reconsider Jane and Andrew. What did they know about the current state of affairs when running a particular session. Using some time-on-task measures they disproved the claim "rent a car in 99 seconds". Recall how precisely the question was phrased: on average, users had to be able to complete the transaction in 99 seconds. The statistic of interest is the mean. This was debunked with almost no effort, by calculating:
+
+$$\hat M_{ToT} = 1 \over n * \sum{ToT} = `r mean(Sec99$Ver20$ToT, na.rm = T)`$$
+
+But how about the updated slogan: "rent a car in 111 seconds".  Can we be sure it holds, when someone repeats the study? We can only to a degree. It could still happen, that the belligerent  competitor comes to a different result, just because they have a different sample of participants. Even if they would test a fully matching sample of participants, the measures will differ, simply because an array of smaller and larger impact factors is continuously  hitting the central and peripheral nervous systems of your participants. The result is randomness in the data. Fortunately, randomness is often found to be well-behaved in that recurrent patterns emerge. These patterns are called distributions of randomness and I will introduce a whole bunch of them later in this chapter @\ref(). 
+
+Let us finally see how Bayesian statistics formalizes the transition from prior belief to  posterior belief. Although it may not seem obvious at first, but everything rests on one rather simple result from probability theory, *Bayes' theorem*: 
+
+$$
+P(A|B) = { P(A)P(B|A) \over P(B)}
+$$
+
+This theorem emerges from formal probability theory (and therefore is neither Bayesian nor frequentist). As so often with math, the theorem is easiest understood when put into context. Standing on the shoulder of giants, let me explain it by the example of a medical  screening test:
+
+In the 1980, the human immunodeficiency virus (HIV) was discovered and since then has become a scourge for humanity. Given that the first outbursts of the desease raged among homosexual men, it is not really surprising that a few conservative politicians quickly called for action an proposed a mandatory test for everyonefor the results to be registered in a central data base. With some stretch it may just be justifiable to store (and use) the information that someone is carrying such a dangerous desease. The problem is with those people who do not carry it, but could be mis-diagnosed. These are called *false-positives*. The power of a screening test has been assessed by examining samples of participants where it is fully known whether someone is a carrier of the virus $C+$ or not $C-$. The result is a *specificity* of 95%, meaning that 95% of $C-$ are diagnosed correctly ($P(T-|C-)$), and a *sensitivity* of 99%, meaning that 99% with $C+$ are diagnosed correctly ($P(T+|C+)$). The question that Bayes' theorem can answer in such a situation is *How many citizens would be registered as HIV carrying, although they are not?*. For this to work, we must also know the probability that someone randomly chosen from the population is a carrier ($P(C+)$) and the proportion of positive test results $P(T+)$.
+
+<!-- # Explain marginal probability p(A) = p(B)p(A|B) + p(-B)p(A|-B), weighted average of probabilities -->
+
+$$
+\begin{align}
+P(C+) &&= .0001\\
+P(C-) &= 1 - P(C+) &= .9999\\
+P(T+|C+) &&= .99\\
+P(T-|C+) &= 1 - P(T-|C+) 
+&= .01\\
+P(T-|C-) &&= .95\\
+P(T+|C-) &= 1 - P(T-|C-) 
+&= .05\\
+P(T+) &= P(C+)P(T+|C+) + P(C-)P(T+|C-)
+&\approx .05\\
+P(T-) &= 1 - P(T+) &\approx .95 
+\end{align}
+$$
+
+
+Once again, how do these numbers arise? The first, $P(C+)$) is the proportions of HIV carriers in the whole population. If you have no test at all, that is your best guess for whether someone random has the virus, *your prior knowledge*. Then, the validation study of the test provides us with more *data*. The study examined the outcome of the test ($T+$ or $T-$) in two groups of participants, those that were knowingly carriers $C+$ and those that were not $C-$. This is where all the conditional probabilities come from. Finally, we need the expected proportion of positive test results $P(T+)$, which we compute as, sort of, a weighted average over the two conditions. Because $C-$ dominates the population, this is approximately the same as $P(T+|C-)$. What matters in the present, that is when the test is put to use on random people.
+
++ collateral damage: which proportion of the population will be registered, with all possible consequences, although they are non-carriers? That is: $P(C-|T+)$
++ intercourse risk: if a random sexual candidate shows you a negative test results, what is the remaining risk that they are carriers? That is: $P(C+|T-)$
+
+These two questions can be answered by using Bayes' theorem. By combining prior knowledge and data in the prescribed form, we obtain for collateral damage:
+ 
+$$
+P(C-|T+) &= {P(C-)P(T+|C-) \over P(T+)}\\
+&\approx {.9999 \times .05} \over .05\\
+&\approx .9999
+$$
+
+This would be a disaster. The data base would be filled mostly with non-carriers. Let us see whether the test is  safe in practice? The probability that somehone has the virus despite a negative test result is:
+
+$$
+P(C+|T-) &= {P(C+)P(T-|C+) \over P(T-)}\\
+&\approx {.0001 \times .01 \over .95}\\
+&\approx .000001
+$$
+We see a strong asymmetry in how useful the test is in the two situations. Specificity of the test is rather low and stands no chance against the over-whelming prevalence of non-carriers. In the second use case, prevalence and high test sensitivity work in the same direction, which results in a fantastic low risk to err.
+
+Again, you probably are not alone, if you lack intuition, here: As Gerd Gigerenzer argues from an evolutionary perspective, our brain is capable of understanding Bayes' theorem if it sees it in terms of *frequencies*. Isn't that ironic? Gigerenzer argues that our brains might even be Bayesian machines that operate on frequencies in our personal history with encounters of this and that type. In fact, there were frequencies in the first place, when the evaluation study was conducted. Specificity and sensitivity are statistics, i.e. summaries of *2x2 frequency tables*. 
+
+We simulate the situation with a population of 100.000.000:
+
+```{r}
+n_HIV <- 100000000
+
+set.seed(42)
+D_HIV_pop  <- 
+  tibble(Carrier = as.logical(rbinom(n_HIV, size = 1, prob = .0001))) %>% 
+  mutate(prob = if_else(Carrier, .99, .05),
+         Test = as.logical(rbinom(n_HIV, size = 1, prob = prob))) %>% 
+  group_by(Carrier, Test) %>% 
+  summarize(N = n()) %>% 
+  print()
+
+```
+
+#### [HERE]
+
+The table below comes in long format and computes the posterior probability in just two steps. First, it takes the frequencies of all positive and negative tests. These are the *margin sums* of Test.
+
+```{r}
+D_HIV_pop %>% 
+  group_by(Test) %>% 
+  mutate(margin_Test = sum(N)) %>% 
+  ungroup() %>% 
+  mutate(posterior_prob = N /margin_Test,
+         log_posterior_prob = log(posterior_prob)) %>% 
+  print()
+
+```
+
+
+<!-- # correct numbers in formulas -->
+
+Now, we clearly see how it happens: In this massive evaluation study, only 100 persons were carriers, due to the low prevalence of the virus. Only 1 in 949906 is a carrier with a negative test result. At the same time, almost everybody who has a positive test is not a carrier, just because almost everybody is a non-carrier. To be fair, part of the magic is an assumption we made: the evaluation study is fully representative as it reflects the true distribution of carriers in the full population. Probably, a real study would be conducted with a biased sample, say 100 carriers and 100 non-carriers. That is not a problem, if we first adjust for prevalence and then carry out the same procedure:
+
+
+```{r}
+TestEval <- 
+  tribble(~Carrier,   ~Test,  ~prevalence, ~N,
+          T,          T,      .0001,       99,      
+          T,          F,      .0001,        1,
+          F,          T,      .9999,        5,
+          F,          F,      .9999,       95) %>% 
+  group_by(Test) %>% 
+  mutate(margin_Test = sum(N)) %>% 
+  ungroup() %>% 
+  mutate(prob = (N /margin_Test)) %>% 
+  print()
+
+
+,
+         log_posterior_prob = log(posterior_prob)) %>% 
+  print()
+```
+
+
+
+
+
+
+```{r}
+M_TestEval <-
+  stan_glm(cbind(freq,sum_Test) ~ 0 + Carrier : Test, 
+           family = "binomial",
+           data = TestEval)
+```
+
+```{r}
+M_TestEval
+```
+
+
+
+<!-- find correct term for testAbundnc -->
+
+
+
+
+
+$$\text{posterior}\ \propto \text{prior}\times\text{likelihood}$$
+
+<!-- #24 -->
+
+Note that $\propto$ here means *proportional to*. In very plain words this is:
+
+> what you believe now is a combination of what you knew before and what you have just seen in the data.
+
+
+
+
+
+<!--
+
+
+So, if everybody would just do descriptive statistics, we were done, here: Identify the quantitative summary that suits your situation and compute it. However, what happens the field of statistics strongest contribution is that the level of uncertainty can also be quantified. 
+
+
+Inferential statistics is required, whenever there is imperfect evidence and when there is skin-in-the-game.
+
+
+This uncertainty arises from incomplete knowledge: only a small fraction of potential users have been tested, whereas the claim is about the whole population. Notice that I have not written the sample mean as $M$, but put a "hat" on it. That is to denote that the sample mean is an *estimate* for the population mean. The term estimate usually denotes that it is reasonable (intuitive, as well strictly mathematical) to assume that the statistic obtained from the sample is useful for making claims about the whole population. At the same time, every sample of users carries only partial information on the whole population, such that the estimate is imperfect.
+
+A consequence of imperfection is that when another sample is drawn, one usually does not obtain the precise same estimate. The fluctuation of samples from an unknown population is what classic frequentist statistics draws upon. In the case of Jane and Andrew, a frequentist statistician would ask the question:
+
+> How certain can you be that in the population of users $M_{ToT} <= 99$?
+
+For frequentist thinkers the idea of the sample is central and the mathematical underpinning rests on an experiment of thought: how would all other possible samples look like? Here, following the Bayesian approach, and the fluctuation in sample statistics we consider a consequence of uncertainty. All of them carrying incomplete information, and inferential Bayesian statistics centers around full quantification of uncertainty. As we have seen, uncertainty about a future ivent to occur, is crucial for decision making on rational grounds.
+
+
+-->
 
 
 
@@ -1042,7 +1265,7 @@ Probability distributions are mathematical functions that assign probabilities t
 
 ```{r opts.label = "fig.small"}
 D_three_tasks <- 
-  data_frame(y = 0:4,
+  tibble(y = 0:4,
              outcome = as.character(y),
              probability = dbinom(y, size = 3, prob = 0.3),
              cumul_prob     = pbinom(y, size = 3, prob = 0.3))
@@ -1076,7 +1299,7 @@ D_three_tasks %>%
 In the three-tasks example, reading and recombining probabilities is like counting blocks and stacking them upon each other. This is how most children learn basic arithmetics. when the outcome measure is *continuous*, rather than discrete, some high school math is required. The most common continuous measure is probably durations. As we will see, durations take quite tricky random patterns, so for the sake of simplicity, consider the distribution of intelligence quotients (IQ). Strictly spoken, the IQ is *not* continuous, as one usually only measures and reports whole number scores. Still, for instructional purposes, assume that the IQ is given in arbitrary precision, be it $114.9$, $100.0001$ or $\pi * 20$.
 
 ```{r}
-D_IQ <- data_frame(IQ = 0:200,
+D_IQ <- tibble(IQ = 0:200,
                    density = dnorm(IQ, 100, 15),
                    cdf = pnorm(IQ, 100, 15),
                    SE = (IQ > 85) * (IQ < 115) * density,
@@ -1146,7 +1369,7 @@ In most cases where the binomial distribution applies, base probability $p$ is t
 *Location* and *dispersion* are two immediate properties of plotted distributions that have intuitive interpretations. Location of a distribution usually reflects where the most typical values come to lie (100 in the IQ example). When an experimenter asks for the difference of  two designs in ToT, this is purely about location. Dispersion can either represent *uncertainty* or *variation* in a population, depending on the research design and statistical model. The most common interpretation is uncertainty. The basic problem with dispersion is that spreading out a distribution influences *how typical* the most typical values are. The fake IQ data basically is a perfect Gaussian distribution with a mean of 100 and a standard deviation of 15. The density of this distribution at an IQ of 100 is `r dnorm(100, 100, 15)`. If IQs had a standard deviation of 30, the density at 100 would fall to `r dnorm(100, 100, 30)`. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when dispersion is low.
 
 ```{r}
-data_frame(IQ = 0:200,
+tibble(IQ = 0:200,
            density = dnorm(IQ, 100, 30)) %>% 
   ggplot(aes(x = IQ, y = density)) +
   geom_area()
@@ -1204,7 +1427,7 @@ A very basic performance variable in design research is task success. Think of d
 ```{r}
 set.seed(1)
 
-data_frame(succs = rbinom(30, 10, .9)) %>% 
+tibble(succs = rbinom(30, 10, .9)) %>% 
   ggplot(aes(x = succs)) +
   geom_histogram(binwidth = 1) +
   scale_x_continuous(breaks = 0:10, limits = c(0,11))
@@ -1272,7 +1495,7 @@ Subsmurf$simulate_exp <-
            N = 100,
            seed = 4)  {
     set.seed(seed)
-    data_frame(Obs = 1:N,
+    tibble(Obs = 1:N,
                rate = exp(log(rate) + rnorm(N, 0, sd)),
                duration = rexp(N, rate)
                )
@@ -1285,7 +1508,7 @@ Subsmurf$simulate_pois <-
            N = 100,
            seed = 4)  {
     set.seed(seed)
-    data_frame(Obs = 1:N,
+    tibble(Obs = 1:N,
                lambda = exp(log(rate) + rnorm(N, 0, sd)),
                duration = rexp(N, rate)
                )
@@ -1303,7 +1526,7 @@ Subsmurf$simulate_pois <-
 
 
 
-data_frame(lambda = 20,
+tibble(lambda = 20,
            ci = rpois(100, log(lambda)),
            ci_ovdsp = rpois(100, log(lambda + rnorm(100, 0, 100)))
            ) %>% 
@@ -1432,7 +1655,7 @@ IPump$D_successes %>%
 
 ## Bayesian estimation
 
-Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
+Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradually increase in certainty. Why has it not been adopted earlier? The reason is that it was unfeasible. The innocent multiplication of prior and likelihood is a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember that the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time. And that is precisely how statistical computations has been performed before the advent of electronic computing machinery. In the frequentist statistical framework (some call it a zoo), ingenious mathematicians have developed procedures that were rather easy to compute. That made statistical data analysis possible in those times. It came at costs, though: 
 
 1. procedures make more or less strong assumptions, limiting their applicability. Procedures become islands.
 2. procedures are asymptotically accurate with inference being accurate at large sample sizes only
@@ -1499,6 +1722,10 @@ Coming back to MCMC: how is this distribution actually produced. In plain words,
 
 
 ## What is wrong with classic statistics? [TBC]
+
+The short version of the story is this: in face of typically noisy data, there is always the risk that  experimental data supports a certain hypothesis, seemingly. If the researcher calls the results supportive, although they were just due to randomness, this is called a *false alarm*. Many scientific disciplines have therefore commited to keep the overall number of false alarms under a threshold, for example 5%. 
+
+Thze even shorter version is that voluntary commitment failed. The true rate of false alarms is about a magnitude higher.
 
 The p-value [...] Imagine giant replication study that showed that 35% of published psychology studies are not replicable. In fact, such a study exists and it has far-reaching consequences. [...]  [REF] shows that rejection bias is one reason: studies that have not reached the *magic .05 level* of significance, have a lower chance of publication. [REF] sees as a reason that author's implicitly trick the system by *the garden of forking paths*  strategy. The research project collects an array of variables, followed by a fishing expediture. Theory is conventiently considered last, but written up in  a pseudo-a prior way.
 
