@@ -36,7 +36,7 @@ Finally, R comes with a very rudimentary programming environment that carries th
 
 ## Setting up the R environment
 
-First, we <!-- #4 --> make sure that you have R and Rstudio downloaded and installed on your computer. The two programs can be retrieved from the addresses below. Make sure to select the version fit for your operating system. 
+First, you will have to download and install R and Rstudio on your computer. The two programs can be retrieved from the URLs below. Make sure to select the version fit for your operating system. 
 
 + [R](http://www.r-project.org)
 + [Rstudio](http://www.rstudio.com)
