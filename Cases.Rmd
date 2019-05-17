@@ -215,7 +215,10 @@ Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
 
 (Sec99$Ver20 <- Sec99$simulate())
 
-qplot(Sec99$Ver20$age)
+# issue #16
+Sec99$D_1 <- Sec99$Ver20
+
+  qplot(Sec99$Ver20$age)
 
 Sec99$Ver20 %>% ggplot(aes(x = age, y = ToT)) + geom_point()
 

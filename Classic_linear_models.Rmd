@@ -21,24 +21,72 @@ load_CE_(CE)
 
 ## Quantification at work: grand mean models
 
-Reconsider Andrew and Jane. They were faced with the problem that potential competitors could challenge the claim "rent a car in 99 seconds" and drag them to court. More precisely, the question was: "will users on average be able ...", which is not about individual users, but the *population mean*. A statistical model estimating just that, we call a *grand mean model* (GMM). The GMM is the most simple of all models, so in a way, we can think of it as the "grandmother of all models". Although its is the simplest of all, it is of useful application in design research; here are a few more  examples:
+Reconsider Andrew and Jane. They were faced with the problem that potential competitors could challenge the claim "rent a car in 99 seconds" and drag them to court. More precisely, the question was: "will users on average be able ...", which is not about individual users, but the *population mean*. A statistical model estimating just that, we call a *grand mean model* (GMM). The GMM is the most simple of all models, so in a way, we can think of it as the "grandmother of all models". Although its is the simplest of all, it is of useful application in design research; here are a few examples:
 
 
 + with medical infusion pump the frequency of decimal input error (giving the tenfold or the tenth of the prescribed dose) must be below a bearable level
 + the checkout process of an e-commerce website must have a a cancel rate not higher than ...
-+ the brake lights of a car must be designed to let the following driver react in a certain time frame
++ the timing of a traffic light must be designed to give drivers enough time to hit the brakes. 
+
 <!-- #15 -->
 
-The GMM predicts the expected level of performance when the only thing you know is the population someone is from. Prediction here means that the estimated grand mean we take as a best guess for the population average, that is all realizations we have *not* observed together with those we did observe. So, it is a generalization regarding all people we have and have not invited to the lab, taking into account potential performance differences depening on their situation, for example due to the daily shape people are in or their current level of motivation. Just consider the many ways people differ in abilities, experience, strategies, preferences, situations, wishes, etc. All these differences may also vary for the same person from day to day and influence performance. All these aspects have not been recorded in the Sec99 study and are therefore not taken into account for prediction. All linear models capture the unpredicted variation in a separate parameter $\sigma$, the *residual standard deviation*.  $\sigma$ measures the amount of variance that is left after subtracting all explanatory variables. Formally, the likelihood and random formulas of the grand mean model are written with the following likelihood and random term:
+A GMM predicts the *average* expected level of performance in the population ($\beta_0$). When you want to  predict the achievable IQ score of a totally random and anonymous individual (from this population), the population average (100) is your best guess. However, this best guess is imperfect and chances are low that 100 is the correct guess.
+
+```{r}
+# random IQ sample, rounded to whole numbers
+set.seed(42)
+N <- 1000
+D_IQ <-   tibble(score = rnorm(N, mean = 100, sd = 15),
+                 IQ = round(score, 0))
+
+# proportion of correct guesses
+pi_100 <- sum(D_IQ$IQ == 100)/N
+str_c("Proportion of correct guesses: ", pi_100)
+```
+
+
+This best guess is imperfect, for a variety reasons:
+
+1. People differ a lot in intelligence.
+2. The IQ measure itself is uncertain. A person could have had a bad day, when doing the test, whereas another person just had more experience with being tested.
+3. If test items are sampled from a larger set, tests may still differ a tiny bit.
+4. The person is the slum dog millionaire, who by pure coincidence encountered precisely those questions, he could answer.
+
+In a later chapters we will investigate on the sources of randomness [REF MLM]. But, like all other models in this chapter, the GMM is a *Gaussian single-level linear model*. This single level is the *population-level* and as a Gaussian model all unexplained sources of variation are collected in $\sigma$, the *standard error*.  
+Formally, a GMM is written as follows, where $\mu_i$ is the *predicted value* of person $i$ and $\beta$ is the grand mean $\beta_0$, which in linear models is referred to as *Intercept*.
 
 $$
-\mu = \beta_0\\
-y_i \sim \textrm{Norm}(\mu_i, \sigma_\epsilon)
+\mu_i = \beta_0\\
+y_i \sim \textrm{Norm}(\mu_i, \sigma)
 $$
 
-<!-- #49 -->The larger $\sigma$ is,  the more questionnable it is that the grand mean is truly *representative* for the population. From the GM we will depart in two directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a design condition. These models will still make statements on population averages in a more detailed way. In the following chapter on mixed-effects models, individuals will get into the spot light. Still, what all the advanced models have in common is that they move variance in the outcome variable from the error variance to predictors. An optimist would say: today's error is tomorrow's predictor.
+R provides its own formula language to specify regression models. This formula language is not very complex, at the same time provides a surprisingly high flexibility for specification of models. The only really odd feature of this formula language is that it represents the intercept $\beta_0$ with `1`.
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard deviation of the Gaussian (also called normal) distributed error term $\sigma_\epsilon$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = Ver20`. <!-- #16 --> As the `stan_glm` command applies to a huge variety of regression models, the desired model needs further specification. For that purpose, R has its own formula language. The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the deterministic part. The 1 here has nothing to do with the natural number neighboured by 0 and 2. In R's formula language it represents the *intercept*. 
+```{r opts.label = "invisible"}
+attach(Chapter_LM)
+```
+
+
+```{r opts.label = "mcmc"}
+M_IQ <- stan_glm(IQ ~ 1,
+                 data = D_IQ)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_LM, D_IQ, M_IQ)
+```
+
+
+```{r}
+coef(M_IQ)
+```
+
+```{r opts.label = "invisible"}
+detach(Chapter_LM)
+```
+
+
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard error $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = D_1`. <!-- #16 --> The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. The right hand side specifies the *deterministic part*. The 1 here has nothing to do with the natural number neighboured by 0 and 2. In R's formula language it represents the *intercept*. 
 
 
 ```{r opts.label = "rtut"}
@@ -47,7 +95,7 @@ attach(Sec99)
 
 
 ```{r fit:99_seconds_1, opts.label = "mcmc"}
-M_1 <- stan_glm(ToT ~ 1, data = Ver20)
+M_1 <- stan_glm(ToT ~ 1, data = D_1)
 
 ```
 
@@ -82,6 +130,8 @@ detach(Sec99)
 ```
 
 
+<!-- #49 --> A GMM is the simplest linear model and as such makes absolute minimal use of knowledge when doing its predictions. The only thing one knows is that test persons come from one and the same population (humans, users, psychology students). Accordingly, predictions are very inaccurate. From the GM we will depart in two directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a experimental conditions. These models will improve our predictive accuracy by using additional knowledge about participants and conditions of testing. In the following chapter on mixed-effects models  [REF MLM], the error term is partitioned into its sources.
+
 
 ### Reading coefficient tables
 
@@ -106,7 +156,7 @@ attach(Sec99)
 <!-- FIXME bayr: dispersion parameter gets no name -->
 
 ```{r }
-coef(P_1, estimate = modeest::shorth) 
+coef(P_1, estimate = mascutils::mode) 
 ```
 <!-- #49 -->
 
