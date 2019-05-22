@@ -131,8 +131,10 @@ rstanarm::fixef(M_1)
 In order to always use the convenient commands from package bayr, it is necessary to load bayr after package rstanarm.
 
 ```{r opts.label = "tut.nr}
-library
+library(rstanarm)
+library(bayr)
 ```
+
 
 
 ```{r}
