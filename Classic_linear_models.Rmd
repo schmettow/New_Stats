@@ -86,7 +86,7 @@ detach(Chapter_LM)
 ```
 
 
-So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard error $\sigma$. In R, the analysis of the 99 seconds problem unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = D_1`. <!-- #16 --> The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. In design research, this often is a performance measure, such as time-on-task, number-of-errors or self-reported cognitive workload. The right hand side specifies the *deterministic part*, containing all measures that are used to predict performance.
+So, when estimating the grand mean model, we estimate the intercept $\beta_0$ and the standard error $\sigma$. In R, the analysis of the 99 seconds problem [REF Design Research] unfolds as follows: completion times (ToT) are stored in a data frame, with one observation per row. This data frame is send to the R command `stan_glm` for estimation, using `data = D_1`. <!-- #16 --> The formula of the grand mean model is `ToT ~ 1`. Left of the `~` (*tilde*) operator is the outcome variable. In design research, this often is a performance measure, such as time-on-task, number-of-errors or self-reported cognitive workload. The right hand side specifies the *deterministic part*, containing all measures that are used to predict performance.
 
 
 ```{r opts.label = "rtut"}
@@ -122,13 +122,17 @@ The `coef` command being used in this book is from the accompanying R package `b
 coef(P_1)
 ```
 
-Note that regression engines, such as rstanarm, bring their own version of `fixef`, but these often report the center estimates, only. 
+Note that regression engines, such as rstanarm, bring their own version of `fixef`, but these often report the center estimates, only.
 
 ```{r}
 rstanarm::fixef(M_1)
 ```
 
 In order to always use the convenient commands from package bayr, it is necessary to load bayr after package rstanarm.
+
+```{r opts.label = "tut.nr}
+library
+```
 
 
 ```{r}
@@ -243,7 +247,41 @@ coef(M_1)
 
 #### Center and interval estimates
 
-The authors of Bayesian books and the various regression engines have different opinions on  what to report as center estimate and credibility limits in a coefficient table. Most seem to prefer the posterior mode or the median, only some use the mean. 
+The authors of Bayesian books and the various regression engines have different opinions on what to use as center statistic and credibility limits in a coefficient table. The best known option are: the mean, the median and the mode.
+
+```{r}
+T_1 <- 
+  P_1 %>% 
+  group_by(parameter) %>% 
+  summarize(mean   = mean(value),
+            median = median(value),
+            mode   = mascutils::mode(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+T_1
+```
+
+We observe that they for the Intercept it does not matter, but there are some differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
+
+```{r}
+T_1_long <- 
+  T_1 %>% 
+  gather(key = center, value = value, -parameter) %>% 
+T_1_long
+
+
+G_1 <- P_1 %>% 
+  ggplot(aes(x = value)) +
+  facet_wrap(~parameter, scales = "free_x") +
+  geom_density(fill = 1)  + 
+  geom_vline(aes(xintercept = value, col = center), data  = T_1_long)
+
+G_1
+```
+
+This example demonstrates how the long format posterior works together with the Ggplot graphics engine. A density plot very accurately renders how certainty is distributed over the range of a parameter. In order to produce vertical lines for point estimate and limits, we first make the summary table long, with one value per row. This is not how we would usually like to read it, but it is very efficient for adding  to the plot.
+
+When inspecting the two distributions, it appears that the distribution of Intercept is completely symmetric. For the standard error, in contrast, we note a slight left skewness. This is rather typical for dispersion parameters, as these have a lower boundary. The closer the distribution sits to the boundary, the steeper becomes the left tail.
 
 A disadvantage of the *mean* is that it may change under monotonic transformations. A monotonic transformations is a recoding of a variable $x_1$ into a new variable $x_2$ by a transformation function $\phi$ ($phi$) such that the order of values stays untouched. Examples of monotonic functions are the logarithm ($x_2 = \log(x_1)$), the exponential function ($x_2 = \exp(x_1)$), or simply $x_2 = x_1 + 1$. A counter example is the quadratic function $x_2 = x_1^2$. In data analysis monotonous transformations are used a lot. Especially Generalized Linear Models make use of monotonous link functions to establish linearity \@ref(re-linking-linearity). Furthermore, the mean can also be highly influenced by outliers.
 
