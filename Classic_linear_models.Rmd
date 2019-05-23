@@ -394,13 +394,14 @@ P_1 %>%
   spread(parameter, value) %>% 
   ggplot(aes(x = Intercept, y = sigma_resid, fill = ..level..)) +
   stat_density_2d(geom = "polygon") +
-  xlim(95, 115) + ylim(25, 40)
+  xlim(95, 115) + ylim(25, 40) +
+  scale_fill_continuous(name="relative frequency")
 ```
 
 
-Let's see how this PD "landscape" actually emerged from the random walk. In the current case, the *parameter space* is two-dimensional, as we have  $\mu$ and $\sigma$. The MCMC procedure starts at a deliberate point in parameter space. At every iteration, the MCMC algorithm attempts a probabilistic jump to another location in parameter space and stores the coordinates. This jump is called probabilistic, because it is either carried out, or not, and that depends on a bet. If the new target is in a highly likely region, it is carried out with a higher chance. This sounds circular, but it works and, of course, it has been proven mathematically that it works. 
+Let's see how this PD "landscape" actually emerged from the random walk. In the current case, the *parameter space* is two-dimensional, as we have  $\mu$ and $\sigma$. The MCMC procedure starts at a deliberate point in parameter space. At every iteration, the MCMC algorithm attempts a probabilistic jump to another location in parameter space and stores the coordinates. This jump is called probabilistic for two reasons: first, the new coordinates are selected by a random number generator and second, it is either carried out, or not, and that depends on a bet. If the new target is in a highly likely region, it is carried out with a higher chance. This sounds circular, but it provenly works. More specifically, the MCMC sampling approach rests on a general proof, that the emerging frequency distribution converges towards the true posterior distribution. That is called *ergodicity* and it means we can take the *relative frequencies* of jumps into a certain area of parameter space as an approximation for our posterior belief, that the true parameter values fall within this region.
 
-The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 5000 steps of the MCMC random walk are shown in \@ref(99_seconds_random_walk)`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
+The regression object stores the MCMC results as a long series of positions in parameter space. For any range of interest, it is the relative frequency of visits that represents its certainty. The first 50 jumps of the MCMC random walk are shown in \@ref(99_seconds_random_walk)`. Apparently, the random walk is not fully random, as the point cloud is more dense in the center area. This is where the more probable parameter values lie. One can clearly see how the MCMC algorithm jumps to more likely areas more frequently. These areas become more dense and, finally, the cloud  of visits will approach the contour density plot above. 
 
 
 
@@ -421,13 +422,12 @@ G_random_walk
 ```
 
 
-The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting MPDs is the violin plot, which packs a bunch of densities and therefore can be used for models of higher dimension. Still, for simple models histograms do the job:
+The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting many MPDs is the violin plot, which packs a bunch of densities and therefore can be used for models of higher dimension.
 
 ```{r 99_seconds_post, opts.label = "fig.small"}
 P_1 %>% 
-  ggplot(aes(x = value)) +
-  geom_histogram() +
-  facet_grid(. ~ parameter, scales = "free")
+  ggplot(aes(x = parameter, y = value)) +
+  geom_violin()
 
 ```
 
@@ -520,13 +520,13 @@ The second parameter, $\beta_1$ is called the *slope*. The slope determines the 
 $$f(x_1 + 1) = \beta_0 + \beta_1x_{1i} + \beta_1$$
 
 There is also the possibility that the slope is zero. In such a case, the predictor has no effect and can be left out. 
-Setting $\beta_1 = 0$ produces a horizontal line, with $y$  being constant over the whole range. This shows that The linear regression model (LRM) can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
+Setting $\beta_1 = 0$ produces a horizontal line, with $y_i$  being constant over the whole range. This shows that The linear regression model (LRM) can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
 
-
-Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this synthetic experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower when using the internet? Or: is there a linear relationship between age and ToT? The likelihood and random terms of the LRM are: <!-- #49 -->
+Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this hypothetical experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower when using the internet? Or: is there a linear relationship between age and ToT? The structural and random terms of the LRM are: <!-- #49 -->
 
 $$\mu_i = \beta_0 + \beta_1x_{1i}$$
-$$Y_i = N(\mu_i, \sigma)$$
+$$y_i \sim N(\mu_i, \sigma)$$
+
 
 This literally means: with every year of age, ToT increases by $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we visually explore the association between age and ToT using a scatter plot. The blue line in the graph is a so called a *smoother*, more specifically a LOESS. A smoother is an estimated line, just as linear function. But, it is way more flexible. Where the linear function is a lever fixed at a pivotal point, LOESS is a pipe cleaner. LOESS shows a more detailed picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. Actually, that does not look like a straight line, but at least there is steady upwards trend. 
 
@@ -546,7 +546,7 @@ G_eda_1 <-
 G_eda_1
 ```
 
-In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we currently make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric in this case. Therefore, it is treated as a metric predictor or *covariate* <!-- #51-->.
+In fact, the BrowsingAB data contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we currently make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric in this case. Therefore, it is treated as a *continuous predictor* (sometimes also called covariate) <!-- #51-->.
 
 ```{r age_lm1, opts.label = "mcmc"}
 M_age <-
@@ -1143,7 +1143,7 @@ Contrasts are classic in aligning regression estimates with research questions t
 
 ## Putting it all together: multi predictor models
 
-Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer products, enterprise information systems and cars can be extremely diverse. At the same time, Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we have recorded. First, we will see, how to use models with two or more metric covariates. Subsequently, we address the case of multi-factorial designs. Finally, we will see examples of models, where covariates and factors peacefully co-reside.
+Design researchers are often forced to obtain their data under rather wild conditions. Users of municipal websites, consumer products, enterprise information systems and cars can be extremely diverse. At the same time, Designs vary in many attributes, affecting the user in many different ways. There are many variables in the game, and even more possible relations. With *multi predictor models* we can examine the simultaneous influence of everything we have recorded. First, we will see, how to use models with two or more continuous predictors. Subsequently, we address the case of multi-factorial designs. Finally, we will see examples of models, where continuous predictors and factors peacefully co-reside.
  
  
 
@@ -1347,7 +1347,7 @@ The other two fixed effects are, once again, differences to the reference. It is
 
 ### Line-by-line: regression in groups  [TBC] {#line-by-line}
 
-Recall, that dummy variables make factors compatible with linear regression. Thus, no barriers are left for combining factors and covariates in one model. For example, we can estimate the effects age and design simultaneously:
+Recall, that dummy variables make factors compatible with linear regression. Thus, no barriers are left for combining factors and continuous predictors in one model. For example, we can estimate the effects age and design simultaneously:
 
 ```{r fit:mpm_2, opts.label = "mcmc"}
 
@@ -1371,7 +1371,7 @@ detach(BrowsingAB)
 ```
 
 
-Once again, we get an intercept first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In the GCM it was the mean of the reference group. When *marrying factors with covariates, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same for both designs, which is not true, as we will see later. 
+Once again, we get an intercept first. Recall, that in LRM the intercept is the the performance of a 20-year old (age shifted). In the GCM it was the mean of the reference group. When *marrying factors with continuous predictors, the intercept is point zero in the reference group*. The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`. The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower. The *factorial effect* B is a *vertical shift of the intercept*. A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster. In fact, this holds for all ages, as can be seen in the following figure. The model implies that the age affect is the same for both designs, which is not true, as we will see later. 
 
 [likelihood]
 [interaction plot]
@@ -1959,7 +1959,7 @@ The intercept still is the performance of an average twenty-year-old using desig
 ```
 
 
-If we can do it with covariates, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level?
+If we can do it with continuous predictors, like age, we can do it with factors, too. For example, does the overall improvement from design A to B depend on education level?
 
 ```{r BAB_ia2, opts.label = "fig"}
 BAB1 %>% 
