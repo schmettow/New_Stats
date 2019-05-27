@@ -130,7 +130,7 @@ rstanarm::fixef(M_1)
 
 In order to always use the convenient commands from package bayr, it is necessary to load bayr after package rstanarm.
 
-```{r opts.label = "tut.nr}
+```{r opts.label = "rtut.nr"}
 library(rstanarm)
 library(bayr)
 ```
@@ -145,109 +145,34 @@ detach(Sec99)
 <!-- #49 --> A GMM is the simplest linear model and as such makes absolute minimal use of knowledge when doing its predictions. The only thing one knows is that test persons come from one and the same population (humans, users, psychology students). Accordingly, predictions are very inaccurate. From the GM we will depart in two directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a experimental conditions. These models will improve our predictive accuracy by using additional knowledge about participants and conditions of testing. In the following chapter on mixed-effects models  [REF MLM], the error term is partitioned into its sources.
 
 
-### Coefficient tables
+### Talking coefficient tables
 
 Reporting a model estimate together with its level of certainty is what makes a statistic *inferential* (rather than merely descriptive). In Bayesian statistics, the posterior distribution is estimated (usually by means of MCMC sampling) and this distribution carries the full information on certainty. If the posterior is widely spread, an estimate is rather uncertain. You may still bet on values close to the center estimate, but you should keep your bid low. Some authors (or regression engines) express the level of certainty by means of the standard error. However, the standard deviation is a single value and has the disadvantage that a single value does not represent non-symmetric distributions well. A better way is to express certainty as limits, a lower and an upper. The most simple method resembles that of the median by using quantiles.
 
 <!-- #19 -->
 
-#### Creating coefficient tables
+It is common practice to explain and interpret coefficient tables for the audience. My suggestion of how to *report regression results* is to simply walk through the table row-by-row and for every parameter make *two statements*: 
 
-Coefficient tables are the standard way to report regression models. They contain all parameters (or a selection of interest) in rows. For every parameter, the central tendency (center, magnitude, location) is given, and a statement of uncertainty, by convention 95% credibility intervals (CI).
+1. a quantitative statement based on the central tendency
+2. an uncertainty statement based on the CIs
 
-```{r}
-attach(Sec99)
-```
+ In the present case that would be:
 
-The object `M_1`  is the model object created by `stan_glm`. When you call `summary` you get complex listings that represent different aspects of the estimated model. These aspects and more are saved inside the object in a hierarchy of lists. The central result of the estimation is the *posterior distribution (HPD)*. With package Rstanarm, the posterior distribution is extracted as follows:
+The *intercept*  $\beta_0$ is in the region of 106 seconds, which is pretty off the target of 99 seconds. The certainty is pretty good. At least we can say that the chance of the true mean being 99 seconds or smaller is pretty marginal, as it is not even contained in the 95% CI.
 
-```{r}
-P_1_wide <- as_tibble(M_1)
-str(P_1_wide)
-```
+And for $\sigma$: 
 
-The resulting dataframe is a matrix, where each of the 4000 rows is one coordinate  the MCMC walk has visited in a two-dimensional parameter space [REF MCMC]. For the purpose of reporting parameter estimates, we create a *coefficient table*, that 
+The population mean is rather not representative for the observations as the standard error is almost one third of it. We can be pretty certain that this is so.
 
 ```{r}
-P_1_wide %>% 
-  summarize(center_Intercept = median(`(Intercept)`),
-            center_sigma = median(sigma),
-            lower_Intercept = quantile(`(Intercept)`, .025),
-            lower_sigma = quantile(sigma, .025),
-            upper_Intercept = quantile(`(Intercept)`, .975),
-            upper_sigma = quantile(sigma, .975))
-```
-
-Creating coefficient tables from wide posterior object is awful and repeating, even when there are just two parameters (some models contain hundreds of parameters). Additional effort would be needed to get a well structured table. The package Bayr can extract posterior distributions, too, but produces a long format. This works approximately like can be seen in the following code, which employs `tidyr::gather` to make the wide Rstanarm posterior long.
-
-```{r}
-P_1_long <- P_1_stan %>%
-  tidyr::gather(key = parameter)
-
-P_1_long %>%
-  sample_n(10) %>% 
-  arrange(parameter)
-```
-
-With long posterior objects, summarizing over the parameters is efficient and straight-forward, in other words: it is tidy.
-
-```{r}
-P_1_long %>% 
-  group_by(parameter) %>% 
-  summarize(center = median(value),
-            lower = quantile(value, .025),
-            upper = quantile(value, .975))
-  
-```
-
-With the Bayr package, the `posterior` command produces such a long posterior object:
-
-
-```{r fit:99_seconds_2, opts.label = "rtut"}
-P_1 <- bayr::posterior(M_1)
-```
-
-```{r}
-P_1 %>% 
-  as_tibble() %>% 
-  filter(!as.logical(iter %% 500)) ## <-- modulo division selects every 500th iteration
-```
-
-When called, the posterior object identifies itself by telling the number of MCMC samples, and the variables contained in the model. In the case here, there is just the intercept (representing the grand mean) and the standard deviation of errors. 
-
-```{r}
-P_1
-```
-
-Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: Effects and Dispersion. That is the other added value of `bayr::posterior`. Model parameters are automatically classified by their type plus some other annotations, which we will encounter and use in later chapters. In the present case, we can produce a coefficient table with just the Intercept by:
-
-```{r}
-summarize.tbl_post <- function(tbl_post){
-  tbl_post %>% 
-  group_by(parameter) %>% 
-  summarize(center = median(value),
-            lower = quantile(value, .025),
-            upper = quantile(value, .975))
-}
-```
-
-<!-- #120 -->
-
-```{r}
-P_1 %>% 
-  filter(type == "fixef") %>% 
-  summarize.tbl_post()
-```
-
-That is about how the `bayr::fixef` command is implemented. Note that `coef` and `fixef` can be called on the rstanarm model object, directly, which produces the long posterior in the background. 
-
-```{r}
-coef(M_1)
+detach(Sec99)
 ```
 
 
+<
 
-#### Center and interval estimates
+
+### Center and interval estimates
 
 The authors of Bayesian books and the various regression engines have different opinions on what to use as center statistic and credibility limits in a coefficient table. The best known option are: the mean, the median and the mode.
 
@@ -263,12 +188,12 @@ T_1 <-
 T_1
 ```
 
-We observe that they for the Intercept it does not matter, but there are some differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
+We observe that for the Intercept it barely matters which center statistic we use, but there are differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
 
 ```{r}
 T_1_long <- 
   T_1 %>% 
-  gather(key = center, value = value, -parameter) %>% 
+  gather(key = center, value = value, -parameter)
 T_1_long
 
 
@@ -291,7 +216,7 @@ The *mode* of a distribution is its point of highest density. It is invariant un
 
 The *median* of a distribution marks the point where half the values are below and the other half are equal or above. Technically, the median is just the 50% quantile of the distribution. The median is extremely easy and reliable to compute, and it shares the invariance of monotonous transformations. This is easy to conceive: The median is computed by ordering all values in a row and then picking the value that is exactly in the middle. Obviously, this value only changes if the order changes, i.e. a non-monotonous function was applied.
 
-For center estimates I use the posterior median by default, for its simplicity. Researchers who desire downward compatibility with classic regression engines, can easily switch to the mode by using the $estimate$ argument. The following uses the `mode` as a center estimate. <!-- #81 -->
+For center estimates I use the posterior median by default, for its simplicity. Researchers who desire downward compatibility with classic regression engines, can easily switch to the mode by using the $estimate$ argument. The following uses the `mode` as a center estimate. <!-- c#81 -->
 
 
 In this book, *2.5% and 97.5% certainty quantiles* are routinely used to form *95% credibility intervals (CI)*.  Again, another method exists to obtain CIs. Some authors prefer to report the *highest posterior interval (HPD)*, which is the narrowest interval that contains 95% of the probability mass. While this is intriguing to some extent, HPDs are not invariant to monotonic transformations, either.
@@ -315,28 +240,108 @@ Note that we get CIs for the dispersion parameter $\sigma$, too. Many classic an
 
 
 
-#### Talking coefficient tables
 
-It is common practice to not just drop coefficient tables, but explain and interpret them in written form. My suggestion of how to *report regression results* is to simply walk through the table row-by-row and for every parameter make *two statements*: 
 
-1. a quantitative statement based on the central tendency
-2. an uncertainty statement based on the CIs
 
- In the present case that would be:
+### Working with the posterior distribution
 
-The *intercept*  $\beta_0$ is in the region of 106 seconds, which is pretty off the target of 99 seconds. The certainty is pretty good. At least we can say that the chance of the true mean being 99 seconds or smaller is pretty marginal, as it is not even contained in the 95% CI.
+Coefficient tables are the standard way to report regression models. They contain all parameters (or a selection of interest) in rows. For every parameter, the central tendency (center, magnitude, location) is given, and a statement of uncertainty, by convention 95% credibility intervals (CI).
 
-And for $\sigma$: 
 
-The population mean is rather not representative for the observations as the standard error is almost one third of it. We can be pretty certain that this is so.
+
+
 
 ```{r}
-detach(Sec99)
+attach(Sec99)
+```
+
+The object `M_1`  is the model object created by `stan_glm`. When you call `summary` you get complex listings that represent different aspects of the estimated model. These aspects and more are saved inside the object in a hierarchy of lists. The central result of the estimation is the *posterior distribution (HPD)*. With package Rstanarm, the posterior distribution is extracted as follows:
+
+```{r}
+P_1_wide <- 
+  as_tibble(M_1) %>% 
+  rename(Intercept = `(Intercept)`)
+
+str(P_1_wide)
+```
+
+The resulting dataframe is a matrix, where each of the 4000 rows is one coordinate  the MCMC walk has visited in a two-dimensional parameter space [REF MCMC]. For the purpose of reporting parameter estimates, we create a *coefficient table*, that 
+
+```{r}
+P_1_wide %>% 
+  summarize(center_Intercept = median(Intercept),
+            center_sigma = median(sigma),
+            lower_Intercept = quantile(Intercept, .025),
+            lower_sigma = quantile(sigma, .025),
+            upper_Intercept = quantile(Intercept, .975),
+            upper_sigma = quantile(sigma, .975))
+```
+
+Creating coefficient tables from wide posterior objects is awful and repetitive, even when there are just two parameters (some models contain hundreds of parameters). Additional effort would be needed to get a well structured table. The package Bayr can extract posterior distributions, too, but produces a long format. This works approximately like can be seen in the following code, which employs `tidyr::gather` to make the wide Rstanarm posterior long.
+
+```{r}
+P_1_long <- P_1_wide %>%
+  tidyr::gather(key = parameter)
+  
+
+P_1_long %>%
+  sample_n(10) %>% 
+  arrange(parameter)
+```
+
+With long posterior objects, summarizing over the parameters is efficient and straight-forward, in other words: it is tidy.
+
+```{r}
+P_1_long %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+  
+```
+
+With the Bayr package, the `posterior` command produces such a long posterior object:
+
+
+```{r fit:99_seconds_2, opts.label = "rtut"}
+P_1 <- bayr::posterior(M_1)
+P_1
+```
+
+When called, the posterior object identifies itself by telling the number of MCMC samples, and the variables contained in the model. In the case here, there is just the intercept (representing the grand mean) and the standard deviation of errors. The following gives a glance on the real structure of the long posterior object. Most essential are the identification of the iteration (and chain), the parameter name and the value. However, there is a lot more information stored along side, much of which we will only use in later chapters.
+
+```{r}
+P_1 %>% 
+  as_tibble() %>% 
+  filter(!as.logical(iter %% 500)) ## <-- modulo division selects every 500th iteration
 ```
 
 
+Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: Effects and Dispersion. That is a generally useful classification made by the command `bayr::posterior`. It allows us to easily produce a coefficient table with just the effects:
 
+```{r}
+par_tab.tbl_post <- function(tbl_post){
+  tbl_post %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+}
+```
 
+<!-- #120 -->
+
+```{r}
+P_1 %>% 
+  filter(type == "fixef") %>% 
+  par_tab.tbl_post()
+```
+
+That is precisely how the `bayr::fixef` command is implemented. Note that `coef` and `fixef` can be called on the rstanarm model object, directly, which produces the long posterior in the background.
+
+```{r}
+fixef(M_1)
+```
 
 
 
@@ -422,14 +427,16 @@ G_random_walk
 ```
 
 
-The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting many MPDs is the violin plot, which packs a bunch of densities and therefore can be used for models of higher dimension.
+The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting many MPDs is the violin plot, which packs a bunch of densities and therefore can be used when models of many more dimensions.
 
 ```{r 99_seconds_post, opts.label = "fig.small"}
 P_1 %>% 
   ggplot(aes(x = parameter, y = value)) +
-  geom_violin()
+  geom_violin() +
+  ylim(0, NA)
 
 ```
+
 
 
 In our example, in \@ref(99_seconds_post) we can spot that the most likely value for average time-on-task is  `r frm_coef(fixef(Sec99$P_1), row = 1, interval = F)`. Both distributions have a certain spread. With a wider PD, far-off values have been visited by the MCMC chain more frequently. The probability mass is more evenly distributed and there is less certainty for the parameter to fall in the central region. In the current case, a risk averse decision maker would maybe take the credibility interval as "reasonably certain".
@@ -568,11 +575,13 @@ T_age
 Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(T_age, ~fixef == "age",  interval = F)` seconds slower, which is considerable. It also tells us that the predicted performance at age = 0 is `r frm_coef(T_age, ~fixef == "Intercept", interval = F)`.
 
 
-### Transforming variables
+### Transforming measures
 
-The intercept parameter refers to the predicted ToT of a newborn. That is a bizarre prediction and we would never seriously put that forward in a stakeholder presentation, or in the conclusion of a scientific paper, would we? Besides that, the intercept estimate is rather uncertain, with a wide 95% interval, `r frm_coef(T_age, ~fixef == "Intercept")`.
+In the above model, the intercept represents the predicted ToT at `age == 0`, of a newborn. We would never seriously put that forward in a stakeholder presentation, trying to prove  that babies benefit from the redesign of a public website, would we? The prediction is bizarre because we intuitively understand that there is a discontinuity up the road, which is the moment where a teenager starts using public websites. We also realize that over the whole life span of a typical web user, say 12 years to 90 years, age actually is a proxy variable for two distinct processes: the rapid build-up of intellectual skills from childhood to young adulthood and the slow decline of cognitive performance, which starts approximately, when the first of us get age-related far-sightedness. Generally, with linear models, one should avoid making statements about a range that has not been observed. Linearity, as we will see in [REF: debunking], always is an approximation for a process that truly is non-linear.
 
-Both, implausibility and high uncertainty are rooted in the same problem: the model puts a parameter, where there is no data. The broad region of the intercept is as empty as the Khali desert, because observations are either  impossible or have not been recorded. Fortunately, there is a pragmatic solution to the problem: *shifting the predictor*. "Shifting" literally means that the age predictor is moved to the right or the left, such that the zero point is in a region populated with observations. Here in this case, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. Figure XY shows a shift of -20 and a centering shift on the original variable age
+Placing the intercept where there is no data has another consequence: the estimate is rather uncertain, with a wide 95% CI, `r frm_coef(T_age, ~fixef == "Intercept")`. As a metaphor, think of the data as a hand that holds the a stick, the regression line and tries to push a light switch. The longer the stick, the more difficult is becomes to hit the target.
+
+*Shifting the predictor* is a pragmatic solution to the problem: "Shifting" means that the age predictor is moved to the right or the left, such that point zero is in a region populated with observations. In this case, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. The following code produces a shift of -20 and a centering on the original variable age:
 
 ```{r}
 BAB1 <-
@@ -625,56 +634,113 @@ C_age <- fixef(M_age_shft)$center
 ```
 
 
-When comparing the regression results the shifted intercepts have moved to higher values, as expected. Surprisingly, the simple shift is not exactly 20 years.  This is due to the high uncertainty of the first model, as well as the relation not being exactly linear (see Figure XY). The shifted age predictor has a slightly better uncertainty, but not by much. This is, because the region around the lowest age is scarcely populated with data. Centering, on the other hand, results in a highly certain estimate, not surprisingly, as the region is densely populated. The slope parameter, however, practically does not change, neither in magnitude nor in certainty.
+When comparing the regression results the shifted intercepts have moved to higher values, as expected. Surprisingly, the simple shift is not exactly 20 years.  This is due to the high uncertainty of the first model, as well as the relation not being exactly linear (see Figure XY). The shifted age predictor has a slightly better uncertainty, but not by much. This is, because the region around the lowest age is only scarcely populated with data. Centering, on the other hand, results in a highly certain estimate, due to the dence data. The slope parameter, however, practically does not change, neither in magnitude nor in certainty.
 
-An even stronger standardization is *z-transformation*, where the predictor is centered at zero and all values are divided by the standard deviation, which results in a change of spread:
+Shift (and centering) move the scale of measurement and make sure that the intercept falls close (or within) the cluster of observations. Shifting does not change the unit size, which is still years. For most metric predictors that would also not be desireable, as the unit of measurement is natural and intuitive.
+
+Most rating scales are not natural units of measure. Most of the time it is not  meaningful to say: "the average user experience rating improved by one". The problem has two roots, as I will illustrate by the following four rating scale items:
+
+This product is ...
+
+1. difficult to use `|1 ... X ... 3 ... 4 ... 5 ... 6 ... 7|` easy to use
+1. from hell `|-----X----------------------| (10cm)` heavenly
+1. neutral `|1 ... X ... 3 ... 4|` uncanny
+
+If you would employ these three scales to assess one and the same product, the data could look like this:
 
 ```{r}
-BAB1 <-
-  BAB1 %>% 
-  mutate(age_z = (age - mean(age))/sd(age),
-         age_cntr = age - mean(age))
+set.seed(42)
+D_ratings <-
+  tibble(Part = 1:100,
+         difficult_easy  = mascutils::rrating_scale(100, 0, .5, 
+                                                    ends = c(1,7)),
+         hell_heavenly   = mascutils::rrating_scale(100, 0, .2, 
+                                                    ends = c(0,10), bin = F),
+         neutral_uncanny = mascutils::rrating_scale(100, -.5, .5, 
+                                                    ends = c(1,5)))
 
-BAB1 %>% 
-  tidyr::gather("predictor", "age", age, age_z) %>% 
-  ggplot(aes(x = age, y = ToT)) +
-  facet_grid(predictor~.) +
-  geom_point() +
-  geom_smooth(se = F, method = "lm", fullrange = T)
+D_ratings %>%
+  gather(key = Item, value = rating, -Part) %>% 
+  ggplot(aes(x = rating)) +
+  facet_grid(Item ~ .) +
+  geom_histogram() + xlim(0, 10)
+```
+
+The first problem is that rating scales have been designed with different end points. The first step when using different rating scales is to adjusted for that by shifting the left-end point to zero and downscaling by the (new) right-end point:
+
+```{r}
+D_ratings <-  D_ratings %>%
+  mutate(difficult_easy  = (difficult_easy - 1) /(7 - 1),
+         hell_heavenly   = hell_heavenly/10,
+         neutral_uncanny = (neutral_uncanny - 1)/(5 - 1))
+
+D_ratings %>% 
+  gather(key = Item, value = rating, -Part) %>% 
+  ggplot(aes(x = rating)) +
+  facet_grid(Item ~ .) +
+  geom_histogram(bins = 100) +
+  xlim(0,1)
+```
+
+This partly corrects the horizontal shift between scales. However, the ratings on the third item still are shifted relative to the other two. The reason is that the first two items have the neutral zone right in the center, whereas the third item is netraul at its left-end point. The second inconsistency is that the second item uses rather extreme anchors (end point labels), which produces a tight accumulation in the center of the range (with a lot of polite people in the sample, at least).
+
+These two issues can be harmonized by using *z-transformation*. A set of measures is z-transformed by centering it (see above) and scaling it by its own standard deviation.
+
+```{r}
+D_ratings %>% 
+  mutate(zdifficult_easy = (difficult_easy - mean(difficult_easy))/sd(difficult_easy)) %>% 
+  mascutils::z_score(hell_heavenly:neutral_uncanny) %>% 
+  gather(key = Item, value = rating, -Part) %>% 
+  filter(str_detect(Item, "^z")) %>% 
+  ggplot(aes(x = rating)) +
+  facet_grid(Item ~ .) +
+  geom_histogram(bins = 100)
+```
+
+By z-transformation, the three scales now exhibit the same mean location and the same dispersion. This could be used to combine them into one general score. Note however, that information is lost by this process, namely the differences in location or dispersion. If the research questions are highly detailed, such as "Is the design consistently rated low on uncanniness?", this can no longer be answered from the z-transformed variable.
+
+Finally, sometimes researchers use *logarithmic transformation* of outcome measures to reduce what they perecive as pathologies of tha data. In particular, many outcome variables do not follow a Normal distribution, as the random term of linear models assumes, but are left-skewed. Log-transformation often mitigates such problems. However, as we will see in chapter [REF GLM], linear models can be estimated gracefully with a random component that precisely matches the data as it comes. The following time-on-task data is from the IPump study, where nurses have tested two infusion pump interfaces:
+
+```{r}
+load_CE(IPump)
+attach(IPump)
+```
+
+```{r}
+D_pumps %>% 
+  mutate(logToT = log(ToT)) %>% 
+  select(Design, ToT, logToT) %>% 
+  gather(key = Measure, value = value, -Design) %>% 
+  ggplot(aes(x = value, color = Design)) +
+  facet_wrap(Measure~., scale = "free") +
+  geom_density()
 ```
 
 
-A z-transformed variable is centered on zero and has a standard deviation of one. As can be seen, z-transformation has a considerable effect on the slope; Pulling the data cloud together pulls up the slope. Again, we run an LRM and compare against the original model:
-
-```{r opts.label = "mcmc"}
-M_age_z <- 
-  stan_glm(ToT ~ 1 + age_z, data = BAB1)
-
+```{r}
+detach(IPump)
 ```
 
-```{r opts.label = "mcsync"}
-sync_CE(BrowsingAB, M_age_z)
-```
+Frequently, it is count measures and temporal measures to exhibit non-symmetric error distributions. The log transformation results in distributions that reasonably  Normal distributed. A the logarithm is a monotonically increasing transformation, the difference between the two conditions is  maintained. However, the natural unit of seconds gets lost by the transformation, making it very difficult to report the results in a quantitative manner.
 
 
-```{r }
-P_age <-  bind_rows(P_age, posterior(M_age_z))
-T_age <- fixef(P_age)
-T_age
-```
 
-As expected, the intercept matches that of the centered variable. The small deviations are due to the [random walk] (#random_walk) and disappear when running longer MCMC chains. The slope parameter has inflated dramatically. That, of course, is not a magic trick to obtain more impressive numbers, it is simply the effect of dividing the original variable by its standard deviation. A step of one on `age` is exactly one year, whereas in `age_z` it is *one standard deviation*. 
 
-Z-transformation adjusts a variable by its observed dispersion, measured as standard deviations. In the case of age, this is not very desirable. Years of age is a natural and commonly understood unit and my advice would be to use centering, leaving the unit size untouched. When dealing with variables that are pseudo-metric, rating scales in particular, z-transformation makes sense. Imagine you were stranded on a tropical island. While putting together a shelter, you realize how useful a yardstick is. The *ur meter* <!-- #52 --> is thousands of kilometers away. Obviously, you can bootstrap yourself by picking up a reasonable straight stick and mark 10 (or eight) equally spaced sections. With z-transformation you are picking your unit of measurement on what you find, too. Still, "one standard deviation" is hard to swallow for anyone untrained. If we can assume the measurement to be normally distributed, which is frequently a good approximation for rating scale data, we can derive relative statements. As it happens, the central two standard deviations cover around two thirds of the full area, leaving one sixth to each tail. That allows us to make quantile statements, such as: within the central two thirds regarding age, ToT moves up by $2 \beta_1 = `r bayr::md_coef(T_age, ~fixef == "age_z")`$ <!-- #53 --> seconds, if age is truly Normal, of course.
 
-A general useful application of z-scores is to bootstrap a common unit for a diverse set of measures. Think of a battery of Likert scales, that all have their own ranges. With z-scores we can compare the relative impact of several predictors in a population. In fact, that even makes sense for the age model. As it happens, the random variation parameter $\sigma$ is given in standard deviation units, too. We can conclude that the age effect causes just a moderate fraction of all the variation observed. More research is needed.
+
+
+<!-- #122 -->
+
+
+<!-- #53 -->
+
 
 
 
 ### Correlations {#correlations}
 
 
-LRM render the relationship between two metric variables. A commonly known statistic that seems to do the same is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
+LRM render the quantitative relationship between two metric variables. Another commonly known statistic that seems to do something similar is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
 
 ```{r}
 D_cor <-
@@ -691,7 +757,7 @@ D_cor %>%
 ```
 
 
-Recall, that $r$ is covariance standardized for dispersion and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
+Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation [REF transformations] and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
 
 $$
 r = \beta_1 \frac{sd_X}{sd_Y}
