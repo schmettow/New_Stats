@@ -169,80 +169,6 @@ detach(Sec99)
 ```
 
 
-<
-
-
-### Center and interval estimates
-
-The authors of Bayesian books and the various regression engines have different opinions on what to use as center statistic and credibility limits in a coefficient table. The best known option are: the mean, the median and the mode.
-
-```{r}
-T_1 <- 
-  P_1 %>% 
-  group_by(parameter) %>% 
-  summarize(mean   = mean(value),
-            median = median(value),
-            mode   = mascutils::mode(value),
-            lower = quantile(value, .025),
-            upper = quantile(value, .975))
-T_1
-```
-
-We observe that for the Intercept it barely matters which center statistic we use, but there are differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
-
-```{r}
-T_1_long <- 
-  T_1 %>% 
-  gather(key = center, value = value, -parameter)
-T_1_long
-
-
-G_1 <- P_1 %>% 
-  ggplot(aes(x = value)) +
-  facet_wrap(~parameter, scales = "free_x") +
-  geom_density(fill = 1)  + 
-  geom_vline(aes(xintercept = value, col = center), data  = T_1_long)
-
-G_1
-```
-
-This example demonstrates how the long format posterior works together with the Ggplot graphics engine. A density plot very accurately renders how certainty is distributed over the range of a parameter. In order to produce vertical lines for point estimate and limits, we first make the summary table long, with one value per row. This is not how we would usually like to read it, but it is very efficient for adding  to the plot.
-
-When inspecting the two distributions, it appears that the distribution of Intercept is completely symmetric. For the standard error, in contrast, we note a slight left skewness. This is rather typical for dispersion parameters, as these have a lower boundary. The closer the distribution sits to the boundary, the steeper becomes the left tail.
-
-A disadvantage of the *mean* is that it may change under monotonic transformations. A monotonic transformations is a recoding of a variable $x_1$ into a new variable $x_2$ by a transformation function $\phi$ ($phi$) such that the order of values stays untouched. Examples of monotonic functions are the logarithm ($x_2 = \log(x_1)$), the exponential function ($x_2 = \exp(x_1)$), or simply $x_2 = x_1 + 1$. A counter example is the quadratic function $x_2 = x_1^2$. In data analysis monotonous transformations are used a lot. Especially Generalized Linear Models make use of monotonous link functions to establish linearity \@ref(re-linking-linearity). Furthermore, the mean can also be highly influenced by outliers.
-
-The *mode* of a distribution is its point of highest density. It is invariant under monotonic transformations. It also has a rather intuitive meaning as the most likely value for the true parameter. Next to that, the mode is compatible with classic maximum likelihood estimation. When a Bayesian takes a pass on any prior information, the posterior mode should precisely match the results of a classic regression engine (e.g. `glm`). The main disadvantage of the mode  is that it has to be estimated by one of several heuristic algorithms. These add some computing time and may fail when  the posterior distribution is bi-modal. However, when that happens, you probably have a more deeply rooted problem, than just deciding on a suitable summary statistic.
-
-The *median* of a distribution marks the point where half the values are below and the other half are equal or above. Technically, the median is just the 50% quantile of the distribution. The median is extremely easy and reliable to compute, and it shares the invariance of monotonous transformations. This is easy to conceive: The median is computed by ordering all values in a row and then picking the value that is exactly in the middle. Obviously, this value only changes if the order changes, i.e. a non-monotonous function was applied.
-
-For center estimates I use the posterior median by default, for its simplicity. Researchers who desire downward compatibility with classic regression engines, can easily switch to the mode by using the $estimate$ argument. The following uses the `mode` as a center estimate. <!-- c#81 -->
-
-
-In this book, *2.5% and 97.5% certainty quantiles* are routinely used to form *95% credibility intervals (CI)*.  Again, another method exists to obtain CIs. Some authors prefer to report the *highest posterior interval (HPD)*, which is the narrowest interval that contains 95% of the probability mass. While this is intriguing to some extent, HPDs are not invariant to monotonic transformations, either.
-
-<!-- #49 -->
-
-
-The `coef` command by default gives the median and the 2.5% and 97.5% limits. The three parameters have in common that they are quantiles, which are handled by Rs `quantile` command. To demystify the `coef`, here is how you can make a basic coefficient table yourself:
-
-```{r }
-P_1 %>%
-  group_by(parameter) %>% 
-  summarize(center = quantile(value, 0.5),
-         lower  = quantile(value, 0.025),
-         upper  = quantile(value, 0.975)) %>% 
-  kable()
-```
-
-
-Note that we get CIs for the dispersion parameter $\sigma$, too. Many classic analyses call $\sigma$ are nuisance parameter and ignore it, or they blame high variation between observations for not reaching "significant" certainty for the parameter of interest. Furthermore, classic regression engines don't yield any measures of certainty on dispersion parameters. I believe that understanding the amount of variation is often crucial for design research and several of the examples that follow try to build this case. This is why we should be glad that Bayesian engines report uncertainty on all parameters involved.
-
-
-
-
-
-
 ### Working with the posterior distribution
 
 Coefficient tables are the standard way to report regression models. They contain all parameters (or a selection of interest) in rows. For every parameter, the central tendency (center, magnitude, location) is given, and a statement of uncertainty, by convention 95% credibility intervals (CI).
@@ -342,6 +268,80 @@ That is precisely how the `bayr::fixef` command is implemented. Note that `coef`
 ```{r}
 fixef(M_1)
 ```
+
+
+
+
+
+### Center and interval estimates
+
+The authors of Bayesian books and the various regression engines have different opinions on what to use as center statistic and credibility limits in a coefficient table. The best known option are: the mean, the median and the mode.
+
+```{r}
+T_1 <- 
+  P_1 %>% 
+  group_by(parameter) %>% 
+  summarize(mean   = mean(value),
+            median = median(value),
+            mode   = mascutils::mode(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+T_1
+```
+
+We observe that for the Intercept it barely matters which center statistic we use, but there are differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
+
+```{r}
+T_1_long <- 
+  T_1 %>% 
+  gather(key = center, value = value, -parameter)
+T_1_long
+
+
+G_1 <- P_1 %>% 
+  ggplot(aes(x = value)) +
+  facet_wrap(~parameter, scales = "free_x") +
+  geom_density(fill = 1)  + 
+  geom_vline(aes(xintercept = value, col = center), data  = T_1_long)
+
+G_1
+```
+
+This example demonstrates how the long format posterior works together with the Ggplot graphics engine. A density plot very accurately renders how certainty is distributed over the range of a parameter. In order to produce vertical lines for point estimate and limits, we first make the summary table long, with one value per row. This is not how we would usually like to read it, but it is very efficient for adding  to the plot.
+
+When inspecting the two distributions, it appears that the distribution of Intercept is completely symmetric. For the standard error, in contrast, we note a slight left skewness. This is rather typical for dispersion parameters, as these have a lower boundary. The closer the distribution sits to the boundary, the steeper becomes the left tail.
+
+A disadvantage of the *mean* is that it may change under monotonic transformations. A monotonic transformations is a recoding of a variable $x_1$ into a new variable $x_2$ by a transformation function $\phi$ ($phi$) such that the order of values stays untouched. Examples of monotonic functions are the logarithm ($x_2 = \log(x_1)$), the exponential function ($x_2 = \exp(x_1)$), or simply $x_2 = x_1 + 1$. A counter example is the quadratic function $x_2 = x_1^2$. In data analysis monotonous transformations are used a lot. Especially Generalized Linear Models make use of monotonous link functions to establish linearity \@ref(re-linking-linearity). Furthermore, the mean can also be highly influenced by outliers.
+
+The *mode* of a distribution is its point of highest density. It is invariant under monotonic transformations. It also has a rather intuitive meaning as the most likely value for the true parameter. Next to that, the mode is compatible with classic maximum likelihood estimation. When a Bayesian takes a pass on any prior information, the posterior mode should precisely match the results of a classic regression engine (e.g. `glm`). The main disadvantage of the mode  is that it has to be estimated by one of several heuristic algorithms. These add some computing time and may fail when  the posterior distribution is bi-modal. However, when that happens, you probably have a more deeply rooted problem, than just deciding on a suitable summary statistic.
+
+The *median* of a distribution marks the point where half the values are below and the other half are equal or above. Technically, the median is just the 50% quantile of the distribution. The median is extremely easy and reliable to compute, and it shares the invariance of monotonous transformations. This is easy to conceive: The median is computed by ordering all values in a row and then picking the value that is exactly in the middle. Obviously, this value only changes if the order changes, i.e. a non-monotonous function was applied.
+
+For center estimates I use the posterior median by default, for its simplicity. Researchers who desire downward compatibility with classic regression engines, can easily switch to the mode by using the $estimate$ argument. The following uses the `mode` as a center estimate. <!-- c#81 -->
+
+
+In this book, *2.5% and 97.5% certainty quantiles* are routinely used to form *95% credibility intervals (CI)*.  Again, another method exists to obtain CIs. Some authors prefer to report the *highest posterior interval (HPD)*, which is the narrowest interval that contains 95% of the probability mass. While this is intriguing to some extent, HPDs are not invariant to monotonic transformations, either.
+
+<!-- #49 -->
+
+
+The `coef` command by default gives the median and the 2.5% and 97.5% limits. The three parameters have in common that they are quantiles, which are handled by Rs `quantile` command. To demystify the `coef`, here is how you can make a basic coefficient table yourself:
+
+```{r }
+P_1 %>%
+  group_by(parameter) %>% 
+  summarize(center = quantile(value, 0.5),
+         lower  = quantile(value, 0.025),
+         upper  = quantile(value, 0.975)) %>% 
+  kable()
+```
+
+
+Note that we get CIs for the dispersion parameter $\sigma$, too. Many classic analyses call $\sigma$ are nuisance parameter and ignore it, or they blame high variation between observations for not reaching "significant" certainty for the parameter of interest. Furthermore, classic regression engines don't yield any measures of certainty on dispersion parameters. I believe that understanding the amount of variation is often crucial for design research and several of the examples that follow try to build this case. This is why we should be glad that Bayesian engines report uncertainty on all parameters involved.
+
+
+
+
 
 
 
@@ -526,8 +526,7 @@ The second parameter, $\beta_1$ is called the *slope*. The slope determines the 
 
 $$f(x_1 + 1) = \beta_0 + \beta_1x_{1i} + \beta_1$$
 
-There is also the possibility that the slope is zero. In such a case, the predictor has no effect and can be left out. 
-Setting $\beta_1 = 0$ produces a horizontal line, with $y_i$  being constant over the whole range. This shows that The linear regression model (LRM) can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
+There is also the possibility that the slope is zero. In such a case, the predictor has no effect and can be left out. Setting $\beta_1 = 0$ produces a horizontal line, with $y_i$  being constant over the whole range. This shows that The linear regression model (LRM) can be conceived a generalization of the GM model: $\mu_i = \beta_0$.
 
 Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this hypothetical experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower when using the internet? Or: is there a linear relationship between age and ToT? The structural and random terms of the LRM are: <!-- #49 -->
 
@@ -580,6 +579,8 @@ Is age associated with ToT? The coefficient table tells us that with every year 
 In the above model, the intercept represents the predicted ToT at `age == 0`, of a newborn. We would never seriously put that forward in a stakeholder presentation, trying to prove  that babies benefit from the redesign of a public website, would we? The prediction is bizarre because we intuitively understand that there is a discontinuity up the road, which is the moment where a teenager starts using public websites. We also realize that over the whole life span of a typical web user, say 12 years to 90 years, age actually is a proxy variable for two distinct processes: the rapid build-up of intellectual skills from childhood to young adulthood and the slow decline of cognitive performance, which starts approximately, when the first of us get age-related far-sightedness. Generally, with linear models, one should avoid making statements about a range that has not been observed. Linearity, as we will see in [REF: debunking], always is an approximation for a process that truly is non-linear.
 
 Placing the intercept where there is no data has another consequence: the estimate is rather uncertain, with a wide 95% CI, `r frm_coef(T_age, ~fixef == "Intercept")`. As a metaphor, think of the data as a hand that holds the a stick, the regression line and tries to push a light switch. The longer the stick, the more difficult is becomes to hit the target.
+
+#### Shifting an centering
 
 *Shifting the predictor* is a pragmatic solution to the problem: "Shifting" means that the age predictor is moved to the right or the left, such that point zero is in a region populated with observations. In this case, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. The following code produces a shift of -20 and a centering on the original variable age:
 
@@ -638,7 +639,10 @@ When comparing the regression results the shifted intercepts have moved to highe
 
 Shift (and centering) move the scale of measurement and make sure that the intercept falls close (or within) the cluster of observations. Shifting does not change the unit size, which is still years. For most metric predictors that would also not be desireable, as the unit of measurement is natural and intuitive.
 
-Most rating scales are not natural units of measure. Most of the time it is not  meaningful to say: "the average user experience rating improved by one". The problem has two roots, as I will illustrate by the following four rating scale items:
+
+#### Rescaling
+
+Most rating scales are not natural units of measure. Most of the time it is not  meaningful to say: "the user experience rating improved by one". The problem has two roots, as I will illustrate by the following four rating scale items:
 
 This product is ...
 
@@ -650,41 +654,63 @@ If you would employ these three scales to assess one and the same product, the d
 
 ```{r}
 set.seed(42)
-D_ratings <-
+D_ratings <- 
   tibble(Part = 1:100,
          difficult_easy  = mascutils::rrating_scale(100, 0, .5, 
                                                     ends = c(1,7)),
-         hell_heavenly   = mascutils::rrating_scale(100, 0, .2, 
+         heavenly_hell   = mascutils::rrating_scale(100, 0, .2, 
                                                     ends = c(0,10), bin = F),
          neutral_uncanny = mascutils::rrating_scale(100, -.5, .5, 
-                                                    ends = c(1,5)))
+                                                    ends = c(1,5))) %>% 
+  mascutils::as_tbl_obs()
 
-D_ratings %>%
-  gather(key = Item, value = rating, -Part) %>% 
+D_ratings
+```
+
+In the following, we are comparing the results of these three items. However, they came in the wide format, as you would use to create a correlation table. For a tidy analysis, we first make the data set long. Ratings are now classified by the item they came from. We can produce a grid histogram. 
+
+```{r}
+D_ratings <- 
+  D_ratings %>%
+  gather(key = Item, value = rating, difficult_easy:neutral_uncanny, ) %>% 
+  mascutils:::as_tbl_obs.tbl_df()
+
+D_ratings
+```
+
+```{r}
+D_ratings %>% 
   ggplot(aes(x = rating)) +
   facet_grid(Item ~ .) +
   geom_histogram() + xlim(0, 10)
 ```
 
-The first problem is that rating scales have been designed with different end points. The first step when using different rating scales is to adjusted for that by shifting the left-end point to zero and downscaling by the (new) right-end point:
+The first problem is that rating scales have been designed with different end points. The first step when using different rating scales is shifting the left-end point to zero and dividing by the range of the measure (`upper - lower` boundary). That brings all items down to the range between zero and one. Note how the following tidy code joins in a table that holds the properties of our items. 
+
+
 
 ```{r}
-D_ratings <-  D_ratings %>%
-  mutate(difficult_easy  = (difficult_easy - 1) /(7 - 1),
-         hell_heavenly   = hell_heavenly/10,
-         neutral_uncanny = (neutral_uncanny - 1)/(5 - 1))
+D_Items <- tribble(~Item,            ~lower, ~upper,
+                   "difficult_easy",  1,      7,
+                   "heavenly_hell",   0,     10,
+                   "neutral_uncanny", 1,      5)
 
+
+D_ratings <-
+  D_ratings %>% 
+  left_join(D_Items, by = "Item") %>% 
+  mutate(scaled = (rating - lower)/(upper - lower))
+  
 D_ratings %>% 
-  gather(key = Item, value = rating, -Part) %>% 
-  ggplot(aes(x = rating)) +
+  ggplot(aes(x = scaled)) +
   facet_grid(Item ~ .) +
   geom_histogram(bins = 100) +
   xlim(0,1)
 ```
 
-This partly corrects the horizontal shift between scales. However, the ratings on the third item still are shifted relative to the other two. The reason is that the first two items have the neutral zone right in the center, whereas the third item is netraul at its left-end point. The second inconsistency is that the second item uses rather extreme anchors (end point labels), which produces a tight accumulation in the center of the range (with a lot of polite people in the sample, at least).
+This partly corrects the horizontal shift between scales. However, the ratings on the third item still are shifted relative to the other two. The reason is that the first two items have the neutral zone right in the center, whereas the third item is neutraul at its left-end point. The second inconsistency is that the second item uses rather extreme anchors (end point labels), which produces a tight accumulation in the center of the range (with a lot of polite people in the sample, at least). The three scales have been rescaled by their *nominal range*, but they differ in their observed variance. 
 
-These two issues can be harmonized by using *z-transformation*. A set of measures is z-transformed by centering it (see above) and scaling it by its own standard deviation.
+*z-transformation* rescales a measure by its  *observed variance*. A set of measures is z-transformed by centering it and scaling it by its own standard deviation.
 
 ```{r}
 D_ratings %>% 
@@ -697,9 +723,9 @@ D_ratings %>%
   geom_histogram(bins = 100)
 ```
 
-By z-transformation, the three scales now exhibit the same mean location and the same dispersion. This could be used to combine them into one general score. Note however, that information is lost by this process, namely the differences in location or dispersion. If the research questions are highly detailed, such as "Is the design consistently rated low on uncanniness?", this can no longer be answered from the z-transformed variable.
+By z-transformation, the three scales now exhibit the same mean location and the same dispersion. This could be used to combine them into one general score. Note however, that information is lost by this process, namely the differences in location or dispersion. If the research question is highly detailed, such as "Is the design consistently rated low on uncanniness?", this can no longer be answered from the z-transformed variable.
 
-Finally, sometimes researchers use *logarithmic transformation* of outcome measures to reduce what they perecive as pathologies of tha data. In particular, many outcome variables do not follow a Normal distribution, as the random term of linear models assumes, but are left-skewed. Log-transformation often mitigates such problems. However, as we will see in chapter [REF GLM], linear models can be estimated gracefully with a random component that precisely matches the data as it comes. The following time-on-task data is from the IPump study, where nurses have tested two infusion pump interfaces:
+Finally, sometimes researchers use *logarithmic transformation* of outcome measures to reduce what they perceive as pathologies of tha data. In particular, many outcome variables do not follow a Normal distribution, as the random term of linear models assumes, but are left-skewed. Log-transformation often mitigates such problems. However, as we will see in chapter [REF GLM], linear models can be estimated gracefully with a random component that precisely matches the data as it comes. The following time-on-task data is from the IPump study, where nurses have tested two infusion pump interfaces:
 
 ```{r}
 load_CE(IPump)
@@ -721,18 +747,16 @@ D_pumps %>%
 detach(IPump)
 ```
 
-Frequently, it is count measures and temporal measures to exhibit non-symmetric error distributions. The log transformation results in distributions that reasonably  Normal distributed. A the logarithm is a monotonically increasing transformation, the difference between the two conditions is  maintained. However, the natural unit of seconds gets lost by the transformation, making it very difficult to report the results in a quantitative manner.
+Frequently, it is count measures and temporal measures to exhibit non-symmetric error distributions. By log transformation one often arrives at a reasonably  Normal distributed error. However, the natural unit of te measure (seconds) gets lost by the transformation, making it very difficult to report the results in a quantitative manner.
 
 
 
+<!-- #53 -->
 
 
 
 
 <!-- #122 -->
-
-
-<!-- #53 -->
 
 
 
