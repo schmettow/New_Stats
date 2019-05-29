@@ -124,7 +124,8 @@ opts_chunk$set(echo = purp.rtut,
                message = purp.debg,
                eval = purp.book, 
                results = "markup",
-               cache = 0)
+               cache = 0,
+               out.width = "66%")
 
 options(digits=3)
 
