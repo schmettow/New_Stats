@@ -11,7 +11,7 @@ source("RMDR.R")
 
 CE <- 
   c("BrowsingAB", "Sec99", "AUP", "MMN", "Headache", "Reading", 
-    "AR_game", "Sleep", "Uncanny", "Chapter_LM")
+    "AR_game", "Sleep", "Uncanny", "Chapter_LM", "IPump")
 load_CE_(CE)
 
 #formals(stan_glm)$iter <- 200
@@ -167,6 +167,33 @@ The population mean is rather not representative for the observations as the sta
 ```{r}
 detach(Sec99)
 ```
+
+ <!-- #123 -->
+### Likelihood and random term
+
+
+In formal language, regression models are usually specified by *likelihood functions* and one or more *random terms* (exactly one in linear models). The likelihood represents the common, predictable pattern in the data. Formally, the likelihood establishes a link between *predicted values* $\mu_i$ and predictors. It is common to call predictors with the Greek letter $\beta$ (beta). If there is more than one predictor, these are marked with subscripts, starting at zero. The "best guess" is called the *expected value* and is denoted with $\mu_i$ (mu_i). If you just know that the average ToT is 106 seconds and you are asked to guess the performance of the next user arriving in the lab, the reasonable guess is just that, 106 seconds. 
+
+$$\mu_i = \beta_0$$
+
+Of course, we would never expect this person to use 106 second, exactly. All observed and imagined observations are more or less clumped around the expected value. The *random term* specifies our assumptions on the pattern of randomness. It is given as distributions (note the plural), denoted by the $\sim$ (tilde) operator, which reads as: "is distributed". In the case of linear models, the assumed distribution is always the Normal or *Gaussian distribution*. Gaussian distributions have a characteristic bell curve and depend on two parameters: the mean $\mu$ as the central measure and the standard deviation $\sigma$ giving the spread.
+
+
+$$y_i \sim N(\mu_i, \sigma_{\epsilon})$$
+
+The random term specifies how all unknown sources of variation take effect on the measures, and these are manifold. Randomness can arise due to all kinds of individual differences, situational conditions, and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness and linear models are routinely used in research. In several classic statistics books, the following  formula is used to describe the GMM (and likewise more complex linear models):
+
+$$
+y_i = \mu_i + \epsilon_i\\
+\mu_i = \beta_0\\
+\epsilon_i \sim \textrm{Norm}(0, \sigma_\epsilon)
+$$
+
+First, it is to say, that these two formulas are mathematically equivalent. The primary difference to our formula is that the *residuals $\epsilon_i$*, are given separately. The pattern of residuals is then specified as a single Normal distribution. Residual distributions are a highly useful concept in modelling as they can be used to check a given model. If residuals are such a highly useful concept, the classic formula is more intuitive. The reason for separating the model into likelihood and random term is that it works in more cases. When turning to Generalized Linear Models (GLM) in chapter \@ref(generalized-linear-models), we will use other patterns of randomness, that are no longer additive, like in $\mu_i + \epsilon_i$. As I consider the use of GLMs an element of professional statistical practice, I use the general formula right from the start.
+
+
+
+
 
 
 ### Working with the posterior distribution
@@ -345,29 +372,6 @@ Note that we get CIs for the dispersion parameter $\sigma$, too. Many classic an
 
 
 
-
-
-### Likelihood and random term
-
-
-In formal language, regression models are usually specified by *likelihood functions* and one or more *random terms* (exactly one in linear models). The likelihood represents the common, predictable pattern in the data. Formally, the likelihood establishes a link between *predicted values* $\mu_i$ and predictors. It is common to call predictors with the Greek letter $\beta$ (beta). If there is more than one predictor, these are marked with subscripts, starting at zero. The "best guess" is called the *expected value* and is denoted with $\mu_i$ (mu_i). If you just know that the average ToT is 106 seconds and you are asked to guess the performance of the next user arriving in the lab, the reasonable guess is just that, 106 seconds. 
-
-$$\mu_i = \beta_0$$
-
-Of course, we would never expect this person to use 106 second, exactly. All observed and imagined observations are more or less clumped around the expected value. The *random term* specifies our assumptions on the pattern of randomness. It is given as distributions (note the plural), denoted by the $\sim$ (tilde) operator, which reads as: "is distributed". In the case of linear models, the assumed distribution is always the Normal or *Gaussian distribution*. Gaussian distributions have a characteristic bell curve and depend on two parameters: the mean $\mu$ as the central measure and the standard deviation $\sigma$ giving the spread.
-
-
-$$y_i \sim N(\mu_i, \sigma_{\epsilon})$$
-
-The random term specifies how all unknown sources of variation take effect on the measures, and these are manifold. Randomness can arise due to all kinds of individual differences, situational conditions, and, last but not least, measurement errors. The Gaussian distribution often is a good approximation for randomness and linear models are routinely used in research. In several classic statistics books, the following  formula is used to describe the GMM (and likewise more complex linear models):
-
-$$
-y_i = \mu_i + \epsilon_i\\
-\mu_i = \beta_0\\
-\epsilon_i \sim \textrm{Norm}(0, \sigma_\epsilon)
-$$
-
-First, it is to say, that these two formulas are mathematically equivalent. The primary difference to our formula is that the *residuals $\epsilon_i$*, are given separately. The pattern of residuals is then specified as a single Normal distribution. Residual distributions are a highly useful concept in modelling as they can be used to check a given model. If residuals are such a highly useful concept, the classic formula is more intuitive. The reason for separating the model into likelihood and random term is that it works in more cases. When turning to Generalized Linear Models (GLM) in chapter \@ref(generalized-linear-models), we will use other patterns of randomness, that are no longer additive, like in $\mu_i + \epsilon_i$. As I consider the use of GLMs an element of professional statistical practice, I use the general formula right from the start.
 
 
 
@@ -573,6 +577,11 @@ T_age
 
 Is age associated with ToT? The coefficient table tells us that with every year of age, users get `r frm_coef(T_age, ~fixef == "age",  interval = F)` seconds slower, which is considerable. It also tells us that the predicted performance at age = 0 is `r frm_coef(T_age, ~fixef == "Intercept", interval = F)`.
 
+<!-- #123 -->
+
+
+
+
 
 ### Transforming measures
 
@@ -764,7 +773,7 @@ Frequently, it is count measures and temporal measures to exhibit non-symmetric 
 ### Correlations {#correlations}
 
 
-LRM render the quantitative relationship between two metric variables. Another commonly known statistic that seems to do something similar is Pearson's  correlation coefficient $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
+LRM render the quantitative relationship between two metric variables. Another commonly known statistic that seems to do something similar is Pearson's  correlation statistic $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
 
 ```{r}
 D_cor <-
@@ -781,7 +790,7 @@ D_cor %>%
 ```
 
 
-Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation [REF transformations] and that a covariance is the mean squared deviance from the population mean. This is how the correlation coefficient is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
+Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation [REF transformations] and that a covariance is the mean squared deviance from the population mean. This is how the correlation is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
 
 $$
 r = \beta_1 \frac{sd_X}{sd_Y}
@@ -797,7 +806,7 @@ r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
 r
 ```
 
-The clue with Pearson's $r$ is that it normalized the slope coefficient by the variation found in the sample. This resembles z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$ exactely:
+The clue with Pearson's $r$ is that it normalized the slope coefficient by the variation found in the sample. This resembles z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$ exactly:
 
 ```{r results = "markup"}
 M_z <-
@@ -827,11 +836,42 @@ str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
 To sum it up, Pearson $r$ and $r^2$ are useful statistics to express the strength of an association, when the scale of measurement does not matter or when one desires to compare across scales. Furthermore, correlations can be part of advanced multilevel models which we will treat in 
 -->
 
-In regression modelling the use of <!-- #54 --> coefficients prevails because they allow for predictions. However, correlation coefficients play a major role in two situations: in exploratory data analysis and in multilevel models. With the latter we will deal in @\ref(re_correlations). For exploratory data analysis it is recommended to inspect pairwise correlations for the following reasons:
+In regression modelling the use of <!-- #54 --> coefficients allows for predictions made in the original units of measurement. Correlations, in contrast, are unit-less. Still, correlation coefficients play an imortant role  in exploratory data analysis (but also in multilevel models, see @\ref(re_correlations) for the following reasons:
 
 1. Correlations between predictors and responses are a quick and dirty assessment of the expected associations.
 2. Correlations between multiple response modalities  (e.g., ToT and number of errors) indicate to what extent these responses can be considered exchangeable.
-3. Correlations between predictors should be checked upfront to avoid problems arising from so-called collinearity.
+3. Correlations between predictors should be checked upfront to avoid problems arising from so-called collinearity [REF colinearity].
+
+The following table shows the correlations between measures in the MMN study, where we tested the association between verbal and spatial working memory capacity (Ospan and Corsi tests and performance in a search task on a website (clicks and time).
+
+
+```{r}
+attach(MMN)
+
+MMN_2 %>% 
+  select(Corsi, Ospan.A, Ospan.B, time, clicks) %>% 
+  corrr::correlate()
+
+detach(MMN)
+```
+
+These correlations give an approximate picture of associations in the data: 
+
+1. Working memory capacity is barely related to performance.
+1. There is a strong correlations between the performance measures.
+1. There is a strong correlation between the two predictors Ospan.A and Ospan.B.
+
+<!--30-->
+
+Linear coefficients and correlations both represent associations between measures.  Coefficients preserve units of measuremnent, allowing us to make meaningful quantitative statements. Correlations are re-scaled by the observed dispersion of measures in the sample, making them unit-less. The advantage is that  larger sets of associations can be screened at once and compared easily.
+
+```{r}
+attach(MMN)
+
+str(MMN_1)
+```
+
+
 
 <!-- #30 
 Linear models link multiple predictors to an outcome variable. In the MMN case we observed that, by adding another predictor to a model, the strength of the original predictor only changes marginally. That is *not* the general rule as we will see now!
@@ -859,95 +899,6 @@ As has been said, theorists may desire a more detailed picture and see disruptio
 
 1. the pattern is monotonically increasing
 1. any predictions stay in the observed range and avoid the boundary regions, or beyond.
-
-
-### Posterior predictions 
-
-In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In yet another perspective they are  *idealized responses* and as such address both, present and future. Posterior predictions are routinely compared to *observed values* $y_i$, which are known beforehand but still contain a random component. Fitting a linear model basically means separating the idealized effect from the randomness.  When the model is somewhat well-specified, this succeeds but comes at the costs of uncertainty: the *predicted value is a random variable, too*. 
-
-In the BrowsingAB case, we have repeatedly recorded age of participant. LRM found the repeating pattern, that with every unit of age, ToT increased by  `r C_age[2]` seconds. This pattern is what the model predicts, now and forever. If we ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
-
-$$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45\\ 
-= `r C_age[1] + C_age[2] * 45`$$
-
-The predicted value is our best guess under the LRM model. Like coefficients, it is uncertain to some degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . A primitive procedure to get a (best) guess for someone of age 45 is to find one matching case in the data and take this as face value. The data set contains a few of those participants, but the situation is rather scattered and the prediction is not clear. 
-
-```{r just_a_guess, results = "markup"}
-BAB1 %>% 
-  select(Part, age, ToT) %>% 
-  filter(age == 45) %>% 
-  kable()
-```
-
-A more disciplined way to obtain predicted values is to use the standard command `predict` on the model object:
-
-```{r best_guess}
-T_pred_age <-
-  BAB1 %>% 
-  select(Part, age, ToT) %>% 
-  mutate(mu = predict(M_age_shft)$center)
-
-T_pred_age %>%  
-  filter(age == 45) %>% 
-  kable()
-
-```
-
-<!-- FIXME: They don't get the same predictions -->
-
-We see that all participants of age 45 get the same prediction. What differs is the observed value, as this contains the influence of all random sources at the time of measuring. We will return to residuals in the next section. 
-
-What if we wanted to get a best guess for an age that did not occur in our data set, say 43.5? Using the LR likelihood function above, we can estimate the expectation for any value we want. By entering the  intercept and age estimates (`C_age`), we obtain:
-
-```{r best_guess_unobserved, opts.label = "rtut"}
-C_age <- fixef(M_age_shft)$center
-C_age[1] + 43.5 * C_age[2]
-```
-
-With the same procedure, it is possible to plot observed and expected values next to each other:
-
-```{r expected_values, opts.label = "fig"}
-G_pred_age <-
-  BAB1 %>% 
-  ggplot(aes(x = age, y = ToT)) + 
-  geom_point() +
-  geom_abline(intercept = C_age[1], 
-              slope = C_age[2],
-              col = "red")
-
-G_pred_age
-```
-
-```{r}
-detach(BrowsingAB)
-```
-
-This figure does not look too convincing. The regression line is rather flat, indicating a small effect of age. In addition, it looks like a lonely highway in a vast forest area. Just visually, a completely flat line or a slight negative slope would be equally credible.
-
-```{r lin_reg_modelplot, opts.label = "future"}
-# betaplot::iiaplot_2(list(as.numeric(Tclm[["Browsing_AB_3"]][1,2]),
-#                          as.numeric(Tclm[["Browsing_AB_3"]][2,2])),
-#                     range = c(0,80)) + geom_point(data = Dclm[["Browsing_AB"]], aes(x = age, y = ToT))
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-+ resid-predict plots as a general form to discover trends
-+ qq plots
-
 
 
 
@@ -1430,8 +1381,16 @@ T_fixef_mpm_1
 By adding gender to the model, both effects are estimated simultaneously. In a *factorial multiple predictor model (MPM)* the intercept is a reference group, too. Consider that both factors have two levels, forming a $2x 2$ design with groups: A-F, A-M, B-F, B-M. The first one, A-F, has been set as reference group. Women in condition A have an average ToT of `r frm_coef(T_fixef_mpm_1, ~fixef == "Intercept")` seconds.
 The other two fixed effects are, once again, differences to the reference. It is neither the case that gender effects performance much, nor does the design effect really change, compared to the CGM.
 
+<!-- #124 -->
 [likelihood]
 [interaction plot]
+
+
+
+
+
+
+
 
 
 
@@ -1467,68 +1426,149 @@ Once again, we get an intercept first. Recall, that in LRM the intercept is the 
 [interaction plot]
 
 
-### Residual analysis
 
 
+### Posterior predictions [TBC]
 
-#### Assessing predictive power {#resid_predictive_power}
+Up to this point, we have solely interpreted coefficient tables. Very often, the research question  is how strong the response variable is associated with a certain condition (i.e., the "independent" variable). This strength of an effect is what the coefficient table tells.
+
+Another way to look at the model is how well it fits the observations. In Bayesian regression models, *posterior predictions* are a simple, yet powerful concept to compare the fitted model with the original data. As [McElreath] points out, one should rather call them *retrodictions*, because they regard the real data one has, not the future. In yet another perspective they are  *idealized responses* and as such address both, present and future. 
+
+A more formal understanding of predicted values can be gained by 
+
+Remember that all statistical model assume that an observed value is somehow composed of a systematic (or structural) component and the error. All linear models assume that any observed value is a sum of a structural term and the error. That becomes most apparent, when writing a linear model in a slightly different form:
+
+$$
+y_i = \mu_i + \epsilon_i\\
+\mu_i = \beta_0 + \beta_1 x_i\\
+\epsilon_i \sim N(0, \sigma) 
+$$
+The first line of the formula does the separation: by estimation, $\mu_i$ will become what the model thinks is the structural part, the one that is associated with the predictor $x_i$, which is stated in teh second line. $\epsilon_i$ is the error, the part that does not repeat. The error is not assumed to run completely wild, but should take the form of a zero-centered Normal distribution, as is given in the third line. This is also called the *residual distribution* and, in contrast to the response distribution, it has a fixed location at zero.
 
 ```{r}
 attach(BrowsingAB)
 ```
 
 
-When residuals are pronounced, predictions are inaccurate, which is undesirable. A model that reduces the residuals, may provide better predictions. In the current case, we may wonder: does the age predictor effectively reduce the residual standard error $\sigma_\epsilon$ as compared to the GMM? We fit the GMM for comparison purposes and compare the standard error. This does not look convincing, as the reduction is marginal.
+In the BrowsingAB case, we have repeatedly recorded age of participant. The LRM `M_age_shft` found that with every unit of age, average ToT increased by  `r C_age[2]` seconds. If we now ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
 
-```{r fit:age_resid_reduction, opts.label = "mcmc"}
-M_0 <-
-  BAB1 %>% 
-  stan_glm(ToT ~ 1, data = .)
+$$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45\\ 
+= `r C_age[1] + C_age[2] * 45`$$
+
+
+This predicted value is our best guess of how a person of age 45 would perform. But, the separation of an observation into predicted value and error remains just that: a guess under a certain amount of information. Like coefficients, predicted values are uncertain to some degree, but we are setting this aside for the moment. What we know for sure is the *observed value* . 
+
+At any moment can we compute predicted values from coefficients using the full model formula, as seen above. A more convenient way is to use the standard command `predict` on the model object (the shifted model from chapter [REF LRM]). The package `bayr` provides a tidy version of `predict()` that provides the best guess for all observations, as well as 95% credibility intervals.
+
+
+
+```{r best_guess}
+T_pred_age_shft <- predict(M_age_shft)
+T_pred_age_shft
 ```
 
-```{r opts.label = "mcsync"}
-sync_CE(BrowsingAB, M_0)
+For most analysis based on predicted values, it is useful to just add the predictions of a model to the original data.
+(Of course, it is crucial at this step, that the order of data has not been altered.)
+
+```{r}
+BAB1 <- BAB1 %>% 
+  mutate(M_age_shft = T_pred_age_shft$center)
 ```
 
+Now we can extract predicted values for certain conditions, say all participants of age 45. What differs is the observed value, as this contains the influence of all random sources at the time of measuring. We will return to residuals in the next section. 
 
-```{r }
-bind_rows(
-  posterior(M_0),
-  posterior(M_age_cntr)) %>% 
-  coef(type = "disp")
-  
+```{r}
+BAB1 %>% 
+  select(age, ToT, M_age_shft) %>% 
+  filter(age == 45)
 ```
 
-Does the age variable really have that little predictive value? The following graph shows the individual residuals for both models as a column plot. The two caterpillars have about the same overall width and there is no noticable reduction in residual magnitude by adding the age predictor.
+Apparently, the model is strongly biased. It predicts too long ToT for all the 45 year olds (In chapter [REF Interaction effects]) we will find out why this is so. Interestingly, the four cases also do not get the same predictions. On closer examination we observe that the lower the observation, the lower the predicted value. What happens here is related to the third term of the model specification. The error $\epsilon_i$ is not completely unconstrained, but follows the Normal distribution shape. This shape implies that extreme errors are less likely to occur. That is what the model is adjusting for. Most noticable on the third case in the table above, the estimation rather takes a slightly lower predicted value, than a too extreme error. We will return to this mechanism in chapter [REF shrinkage]. 
 
-```{r BAB1_resid_age_1}
-T_resid <-
-  BAB1 %>% 
-  select(Obs, age) %>% 
-  mutate(
-    M_0 = residuals(M_0),
-    M_age = residuals(M_age))
+Routinely, models are assessed by looking at how well the predicted pattern fits the observed response distribution. Note how the line geometry alters initial aesthetic mapping of the y axis (`y = ToT`). Here the second geometry maps the y axis to the predicted values. In this context, mapping an aesthetic to constant strings produces the legend (`color = "observed"`).  
 
-G_resid_age_1 <-
-  T_resid %>%
-  mutate(Obs_ordered = min_rank(age)) %>% 
-  gather(model, error, -Obs, -Obs_ordered, -age) %>%
-  ggplot(aes(x = Obs, y = error)) +
-  facet_grid(~model) +
-  geom_col(position = "dodge") +
-  geom_quantile()
-G_resid_age_1
 
+```{r}
+BAB1 %>% 
+  ggplot(aes(x = age, y = ToT)) +
+  geom_point(aes(col = "observed")) +
+  geom_smooth(aes(y = M_age_shft, col = "M_age_shft"))
 ```
 
-When adding a predictor to a model, the least one would expect is a noticable reduction in error and \@ref(BAB1_resid_age_1) confirms that the age predictor is pretty useless.
+The prediction line is rather flat, indicating a small total effect of age. Observations are scattered wildly around the prediction line, which brings us to the next topic: residual analysis.
+
+
+<!-- What if we wanted to get a best guess for an age that did not occur in our data set, say 43.5? Using the LR likelihood function above, we can estimate the expectation for any value we want. By entering the  intercept and age estimates (`C_age`), we obtain: -->
+
+<!-- ```{r best_guess_unobserved, opts.label = "deprecated"} -->
+<!-- C_age <- fixef(M_age_shft)$center -->
+<!-- C_age[1] + 43.5 * C_age[2] -->
+<!-- ``` -->
+
+<!-- With the same procedure, it is possible to plot observed and expected values next to each other: -->
+
+<!-- ```{r expected_values, opts.label = "deprecated"} -->
+<!-- G_pred_age <- -->
+<!--   BAB1 %>%  -->
+<!--   ggplot(aes(x = age, y = ToT)) +  -->
+<!--   geom_point() + -->
+<!--   geom_abline(intercept = C_age[1],  -->
+<!--               slope = C_age[2], -->
+<!--               col = "red") -->
+
+<!-- G_pred_age -->
+<!-- ``` -->
+
 
 
 ```{r}
 detach(BrowsingAB)
 ```
 
+<!-- #125 -->
 
+<!-- .-->
+
+```{r lin_reg_modelplot, opts.label = "future"}
+# betaplot::iiaplot_2(list(as.numeric(Tclm[["Browsing_AB_3"]][1,2]),
+#                          as.numeric(Tclm[["Browsing_AB_3"]][2,2])),
+#                     range = c(0,80)) + geom_point(data = Dclm[["Browsing_AB"]], aes(x = age, y = ToT))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
++ resid-predict plots as a general form to discover trends
++ qq plots
+-->
+
+
+
+
+
+
+
+### Residual analysis
+
+Recall the first and third line of the LRM model formula above. The residuals $\epsilon_i$ is what you get $y_i - \mu_i$. 
+The assumptions of linear models regarding these residuals are 
+
++ to take the shape of a zero-centered Normal distribution
++ with a constant variance
+
+The main purpose of residual analysis is to examine these two assumptions. 
 
 
 
@@ -1872,6 +1912,65 @@ Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 7
 
 
 -->
+
+
+
+#### Assessing predictive power {#resid_predictive_power}
+
+```{r}
+attach(BrowsingAB)
+```
+
+
+When residuals are pronounced, predictions are inaccurate, which is undesirable. A model that reduces the residuals, may provide better predictions. In the current case, we may wonder: does the age predictor effectively reduce the residual standard error $\sigma_\epsilon$ as compared to the GMM? We fit the GMM for comparison purposes and compare the standard error. This does not look convincing, as the reduction is marginal.
+
+```{r fit:age_resid_reduction, opts.label = "mcmc"}
+M_0 <-
+  BAB1 %>% 
+  stan_glm(ToT ~ 1, data = .)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(BrowsingAB, M_0)
+```
+
+
+```{r }
+bind_rows(
+  posterior(M_0),
+  posterior(M_age_cntr)) %>% 
+  coef(type = "disp")
+  
+```
+
+Does the age variable really have that little predictive value? The following graph shows the individual residuals for both models as a column plot. The two caterpillars have about the same overall width and there is no noticable reduction in residual magnitude by adding the age predictor.
+
+```{r BAB1_resid_age_1}
+T_resid <-
+  BAB1 %>% 
+  select(Obs, age) %>% 
+  mutate(
+    M_0 = residuals(M_0),
+    M_age = residuals(M_age))
+
+G_resid_age_1 <-
+  T_resid %>%
+  mutate(Obs_ordered = min_rank(age)) %>% 
+  gather(model, error, -Obs, -Obs_ordered, -age) %>%
+  ggplot(aes(x = Obs, y = error)) +
+  facet_grid(~model) +
+  geom_col(position = "dodge") +
+  geom_quantile()
+G_resid_age_1
+
+```
+
+When adding a predictor to a model, the least one would expect is a noticable reduction in error and \@ref(BAB1_resid_age_1) confirms that the age predictor is pretty useless.
+
+
+```{r}
+detach(BrowsingAB)
+```
 
 
 
