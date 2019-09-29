@@ -31,9 +31,8 @@ So, prediction models are usually theory-driven. This is not to be confused by m
 ## Model building
 
 
-<!--
 ### Including predictors
-
+<!--
 + iterative
 + liberal theory-driven inclusion of predictors
 + model driven removal of predictors (pruning)
@@ -47,31 +46,19 @@ What the researcher probably had in mind is to develop a *prediction model* for 
 
 -->
 
-
-
-### Choosing priors
-
+### Choosing a response distribution
 
 
 
-<!-- start with an obvious -->
+### Setting priors
 
+The first chapter of this book linked Bayesian statistics to rational decision making. You recall there was much a do about incorporating prior knowledge. In Bayes' formula, prior knowledge is a central component and was expressed as a probability. If this is so awsome as it sounds, why, you may ask, wasn't there any mentioning of priors in the following chapters. I made a difficult choice, here.
 
-The first chapter of this book linked Bayesian statistics to rational decision making. You recall there was much a do about incorporating prior knowledge. In Bayes' formula, prior knowledge is a central component and was expressed as a probability. 
-
-So, how are priors specified? In chapter 
-
-
-
-
-<!-- #104 explain Bayes formula once again. -->
-
-If this is so awesome as it sounds, why haven't we used any priors, so far? In fact, both Bayesian regression engines we used, implicitely add default priors to our models. The defaults are too weak to have unbearable effects on the posterior distribution. Still, they help to tame the MCMC algorithm, when complex models encounter sparse data.
-
- Consider the case BrowsingAB. In [CLM], we estimated the linear slope between age and ToT.
+All modelling commands used so far, understand specification of prior knowledge. At the same time, these commands provide useful default priors. The defaults are *non-informative priors*. They are formally specified, but have negligible impact on the posterior distribution. Consider the case BrowsingAB. In [CLM], we estimated the linear slope between age and ToT.
 
 ```{r}
 attach(BrowsingAB)
+
 ```
 
 
@@ -102,7 +89,7 @@ People had been using the data to come to conclusions, but they also relied on t
 
 
 
-### Monitoring model convergence
+### Model convergence
 
 Throughout this book I have fooled you into thinking that the regression engine is something where you put your data and model in and you get some tidy MCMC chains as output, like putting gras into a coow produces milk. MCMC chains are random walks and they are not at all as cows. MCMC chains are like a bulk of young kitten, everyone on their own route, bumping into things or getting stuck in corners. Stan is very good with kitten and safely guides their path through the unknowns of a multidimensional parameter space. Most of the time.
 
@@ -136,53 +123,45 @@ Gelman, a, Gelman, a, Meng, X.-L., Meng, X.-L., Stern, H., & Stern, H. (1996). P
 
 
 
-## Model criticism
+## Model evaluation
 
-Parameter estimation can be understood as a model being *trained by data*. 
+The tenor of this book on new statistics is quantification and up to this point all interpretation focussed on the model coefficients: under uncertainty, the center estimate serves as a best guess for effect size and by the credibility limits we express how good our best guess is. Researchers trained in classic statistics often completely ignore coefficient tables. Their perspective merely is whether an effect stands out from the noise (i.e., uncertainty) enough to be called statistically significant. This practice has been criticized for decades and good reasons. One fundamental criticism being that the concept of statistical significance artificially divides the world in significant and non-significant results. That stands in stark contrast to the intuitions that reality is continuous and research is incremental.
 
-It is not too much of a stretch to expect that after estimation, the model is *trained to data*. Recall that every statistical model (presented in this book) assumes that the shape of data composed of
+What many classic researchers seem to be unaware of, in addition, is that the approach of statistical significance, typically employing p-values, is a special case of a much broader class of statistical procedures called model selection. More specifically, an analysis of variance for the purpose of rendering the difference between two groups of observations is a basic comparison of two models: the alternative model is associated with the hypothesis the researcher has in mind and carries a coefficient to represent the effect. The null model assumes that there is no effect and is the alternative model reduced by the respective coefficient.
 
-1. the fixed term (likelihood), that describes the associations between measured variables
-1. the random term, that collects the noise, i.e. all fluctuations by unmeasured impact factors 
+$$
+H_1: y_i = \beta_0 + \beta_1x_{1i}\\
+H_0: y_i = \beta_0
+$$
 
-From a good model we expect that its predictions resemble the associations in and shape of the training data. That is the idea of assessing the *model fit*. The first section introduces graphical methods to examine how well the model accomodates features of the data. The second section 
+Another way to put it is that $H_0$ is a special case of $H_1$, where the slope coefficient is fixed to zero, $\beta_1 = 0$. If one model is a special case of another, these models are called *nested models*.
 
+All classic tests only work with nested models. The famous F-test estimates both models, calculates the residual sum of squares under both models and evaluates whether the more general model sufficiently reduces the residuals, relative to the nested model,  to be called statistically significant. As we will see in the remainder of this chapter, comparing models relative to each other has useful applications beyond classic hypothesis testing, in particular:
 
+1. Models that contain superfluous predictors have lower predictive power compared to a more parsimonious model.
+1. When the main purpose is predicting future observations with optimal accuracy, *model pruning* is a procedure for selecting a subset of parameters with the optimal predictive accuracy.
+1. In chapter [REF] we used graphical methods to choose an appropriate error distribution for reaction time measures. By comparison models, we can identify the optimal error distribution for the data at hand.
 
+As it will turn out, the predictive accuracy of a model depends on two counteracting aspects: *model fit*, that is how neatly the model aligns with the data and *model parsimony*. Generally spoken, adding a parameter to a model gives you an advantage in fit, but potentially reduces parsimony, resulting in less-than-optimal forecasts. Even classic ANOVA contains both elements: the F-statistic represents model fit by the reduction in residuals and parsimony enters the F-test as degrees of freedom, i.e. the number of free parameters.
 
-The first section introduces 
-
-That is commonly called *goodness-of-fit*.
-
-
-
-
-
-
-
-### Graphical model criticism
-
-In our childhood, the first objects we learn to recognize are faces and stay fascinated by faces for our whole life; just imagine, how desperate everyone must have at the early performances of The Doors, where lead singer Jim Morrison used to turn the audience his back. Even cars are designed to have a face (or make one, sometimes). The prevalence for seeing faces could lead to the crude theory that th more something looks like a face, the more we like it. Not so fast! (says professor Mori) Objects that  *almost* liken real faces fall into the Uncanny Valley.
-
-We estimated both models, $M_0$ (linear regression) and $M_1$ (third degree polynomial) in chapter [REF]. In the following, we will see three methods for eye-balling how well the model accomodates the data, ordered by sophistication:
-
-1. point predictions
-1. predictive density
-1. simulation
+This chapter will not re-iterate on classic tests, but will approach model comparison from the perspective of predictive accuracy. One very practical reason for that is, that classic tests *only* apply to nested models, whereas there are many situations, where  comparing non-nested models is very useful.
 
 
-#### Point predictions
+The remainder of this chapter will first elaborate on model parsimony and demonstrate that parsimony is crucial for predictive accuracy. Then, a generic procedure for measuring predictive accuracy of models will be outlined, the *leave-one-out cross validation*. Then we introduce a very practical class of statistics for model comparison called *information criteria*. As we will see, information criteria apply to a much wider class of models, including non-nested models, MLM and GLM, but also non-linear models or psychometric models.
 
-The classic (and easiest) method is to use the point estimates that are produced by the command `predict`. For creating the first set of diagnostic plots, we first join the predictions of both models with the original data.
 
+
+### Goodness of fit {#GOF}
+
+The least one can expect from a good model is that its predicted values resemble the shape of observed data. That is commonly called *goodness-of-fit*
 
 ```{r}
 attach(Uncanny)
 ```
 
 ```{r}
-UV_1_point <-
-  UV_1 %>% 
+
+UV_1 %>% 
   #mutate(age = rnorm(200, age, .2)) %>% 
   left_join(predict(M_0), by = "Obs") %>% 
   rename(M_0 = center) %>% 
@@ -190,63 +169,20 @@ UV_1_point <-
   rename(M_1 = center) %>% 
   select(Obs, huMech, avg_like, M_0, M_1) %>% 
   #sample_frac(.3) %>% 
-  gather(key = Model, value = predicted, starts_with("M_"))
-
-UV_1_point %>% sample_n(8)
-```
-
-The following graph shows the observed values against model predictions. With the bare eye, we can discern two  features in the data: a shoulder on the left edge and an upwards trend at the right edge. Ironically, the middle section, where the emotional breakdown actually happens, the data is sparse and rather undecisive. Still, there is a lot of noise  in the data and I would not place a large bet on the polynomial model, at this stage.
-
-```{r}
-UV_1_point %>% 
+  gather(key = Model, value = fitted, starts_with("M_")) %>% 
   ggplot(aes(x = huMech, y = avg_like)) +
   facet_grid(Model ~ .) +
   geom_text(aes(label = Obs), size = 3) +
-  geom_smooth(aes(y = predicted, color = "predictions"), se = F) +
-  geom_segment(aes(xend = huMech, yend = predicted))
+  geom_smooth(aes(y = fitted), se = F) +
+  geom_segment(aes(xend = huMech, yend = fitted), curvature = 0.1)
 ```
 
-Especially for noisy data, it helps to add a LOESS line to the plot. Simply spoken, a LOESS smoother is like an unbreakable pipe cleaner, highly flexible, with a certain stiffness that lets it always retain smoothness. i.e. it never breaks. The default stiffness of the LOESS wire in `geom_smooth` is comparable to a 8mm pipe cleaner wire. It would go smoothly through a slightly bended 50mm pipeline, but it takes some force to push it through a siphon. As you can see on the plot below, LOESS and the polynomial model agree accurately. But, the stiffness of the LOESS is arbitrary, so just to be sure, I added more pipe cleaners of various strengths. Here is what we observe: 
-
-+ They all three agree with the model, that there is a valley and also on where it is.
-+ Only the stiffest LOESS seems less impressed with the depth of the valley. 
-+ It also does not agree, that there is an initial rise in emotional response.
-+ The default stiffness of `geom_smooth`, as you almost cannot see, is so close to the polynomial model $M_1$, one could think the developers have used the Uncanny Valley for calibration. 
-+ The weak smoother is getting a little excited in the sparsely populated horizontal center area, resulting in some wiggliness. But, who knows what it may be up to?
-
-
-
-
-```{r opts.label = "future"}
-UV_1_point %>% 
-  ggplot(aes(x = huMech, y = avg_like)) +
-  facet_grid(Model ~ .) +
-  geom_text(aes(label = Obs), size = 3) +
-  geom_smooth(aes(y = predicted, color = "predictions"), se = F) +
-  geom_smooth(aes(color = "LOESS stiff"), se = F, span = 1.6) +
-  geom_smooth(aes(color = "LOESS default"), se = F) + # span = 0.8
-  geom_smooth(aes(color = "LOESS weak"), se = F, span = 0.5) 
-```
 
 
 
 ```{r}
 detach(Uncanny)
 ```
-
-
-
-+ predicted
-+ predictive distribution
-+ observed versus 
-+ residuals: qq-plots, histograms
-
-
-#### Shape of randomness
-
-
-### Goodness-of-Fit scores {#GOF}
-
 
 
 ```{r}
@@ -281,13 +217,21 @@ Note:
 detach(BrowsingAB)
 ```
 
-+ pointwise likelihood and deviance
+
+
+#### Graphical Methods
+
 + Assessing likelihood versus error distribution
++ predicted
++ predictive distribution
++ residuals: qq-plots, histograms
+
+#### Goodness-of-Fit scores
+
 + residuals
 + RMSE
 + deviance
 + total deviance
-
 
 
 The problem with RMSE is that it is based on residuals. The problem with residuals is that they weigh negative and positive deviations the same, which only make sense with symmetric distributions, like the Gaussian. For the classes of models introduced in [REF GLM] a more general score for goodness-of-fit is needed. This is the *deviance* score.
@@ -301,43 +245,6 @@ Opposed to residuals, a likelihood function exists for all models in this book a
 $D = -2 LL$
 
 In classic MLE, the fit of two models can be compared by computing the deviance of both models. Lower deviance indicates a better fit.
-
-
-
-
-
-
-## Model Comparison
-
-
-The tenor of this book on new statistics is quantification and up to this point all interpretation focussed on the model coefficients: under uncertainty, the center estimate serves as a best guess for effect size and by the credibility limits we express how good our best guess is. Researchers trained in classic statistics often completely ignore coefficient tables. Their perspective merely is whether an effect stands out from the noise (i.e., uncertainty) enough to be called statistically significant. This practice has been criticized for decades and good reasons. One fundamental criticism being that the concept of statistical significance artificially divides the world in significant and non-significant results. That stands in stark contrast to the intuitions that reality is continuous and research is incremental.
-
-With the models, this is such a thing on the one hand, the model would fit well with a data set and on the other hand, the rule of parsimony applies. The difficulty is that a model does not knows exactly the border between signal and error. And unfortunately, models often tend to take advantage of the available flexibility and cut off a fair amount of error. As we will see, this means that more complex models may have less prediction accuracy.
-
-And that is the criterion with which models can be compared. However, predicting the accuracy of a model can be very expensive. The gold standard is cross validation and that means you have to collect data again. This can be avoided with the relatively simple methods of leave-one-out Crossvalidation, but the computational effort can be unbearable. Most statistics practitioners will therefore be well aware of the informational criteria that can effectively approximate the relative predictive power of a model.
-
-What many classic researchers seem to be unaware of, in addition, is that the approach of statistical significance, typically employing p-values, is a special case of a much broader class of statistical procedures called model selection. More specifically, an analysis of variance for the purpose of rendering the difference between two groups of observations is a basic comparison of two models: the alternative model is associated with the hypothesis the researcher has in mind and carries a coefficient to represent the effect. The null model assumes that there is no effect and is the alternative model reduced by the respective coefficient.
-
-$$
-H_1: y_i = \beta_0 + \beta_1x_{1i}\\
-H_0: y_i = \beta_0
-$$
-
-Another way to put it is that $H_0$ is a special case of $H_1$, where the slope coefficient is fixed to zero, $\beta_1 = 0$. If one model is a special case of another, these models are called *nested models*.
-
-All classic tests only work with nested models. The famous F-test estimates both models, calculates the residual sum of squares under both models and evaluates whether the more general model sufficiently reduces the residuals, relative to the nested model,  to be called statistically significant. As we will see in the remainder of this chapter, comparing models relative to each other has useful applications beyond classic hypothesis testing, in particular:
-
-1. Models that contain superfluous predictors have lower predictive power compared to a more parsimonious model.
-1. When the main purpose is predicting future observations with optimal accuracy, *model pruning* is a procedure for selecting a subset of parameters with the optimal predictive accuracy.
-1. In chapter [REF] we used graphical methods to choose an appropriate error distribution for reaction time measures. By comparison models, we can identify the optimal error distribution for the data at hand.
-
-As it will turn out, the predictive accuracy of a model depends on two counteracting aspects: *model fit*, that is how neatly the model aligns with the data and *model parsimony*. Generally spoken, adding a parameter to a model gives you an advantage in fit, but potentially reduces parsimony, resulting in less-than-optimal forecasts. Even classic ANOVA contains both elements: the F-statistic represents model fit by the reduction in residuals and parsimony enters the F-test as degrees of freedom, i.e. the number of free parameters.
-
-This chapter will not re-iterate on classic tests, but will approach model comparison from the perspective of predictive accuracy. One very practical reason for that is, that classic tests *only* apply to nested models, whereas there are many situations, where  comparing non-nested models is very useful.
-
-
-The remainder of this chapter will first elaborate on model parsimony and demonstrate that parsimony is crucial for predictive accuracy. Then, a generic procedure for measuring predictive accuracy of models will be outlined, the *leave-one-out cross validation*. Then we introduce a very practical class of statistics for model comparison called *information criteria*. As we will see, information criteria apply to a much wider class of models, including non-nested models, MLM and GLM, but also non-linear models or psychometric models.
-
 
 
 
@@ -417,7 +324,7 @@ Comparing two theories by their parsimony is not easy, as it requires a good dea
 <!-- #97 -->
 
 
-### Model complexity {#model_complexity}
+### Model opulence
 
 In single-level linear models all parameters are independent and counting the nominal parameters is a valid estimate for model opulence. In multi-level models there can be cross speak between levels and parameters influence each other. It is no longer adequate to count all parameters for model opulence.
 
@@ -689,14 +596,6 @@ The polynomial model can take any curved path around one local minimum and one l
 In conclusion, when forcasting matters, researchers should aim for parsimonous models. In the following section, we will see how forecasting performance can be assessed without the need to gather additional data, the leave-one-out (LOO) cross-validation method. This method can be seen as the gold standard, but is very computing intensive. The subsequent section will finally introduce information criteria as computationally more efficient method to compare predictive accuracy of models.
 
 
-### Cross validation
-
-The gold standard for assessing predictive accuracy is to measure how well new data is predicted. In its undisputed pure form, one predicts how a new data set would look like , gathers a new data set and assesses how accurate these predictions were. 
-
-
-
-
-
 ### Leave-one-out cross validation {#forecasting_LOO}
 
 In the previous section we evaluated the predictive accuracy of models by comparing  retrodictions to new data. Waiting for new data before you can do model evaluation sounds awful, but this is what cross validation requires. The good news is that new data does not have to come from a new study. More precisely, cross validation only requires that the forecast data is not part of the sample you trained the model with. Psychometricians, for example, use the split half technique to assess the reliability of a test. The items of the test are split in half, one training set and one forecasting set. If the estimated participant scores correlate strongly, the test is called reliable.
@@ -764,7 +663,7 @@ sim_3 <- function(n) data_frame(Obs = 1:n,
                                 x_2 = runif(n), 
                                 y = rnorm(n, x_1))
 set.seed(42)
-D_6 <- sim_3(20)
+D_6 <- sim_3(10)
 
 D_6 %>% 
   gather("predictor", "value", x_1:x_2) %>% 
@@ -773,7 +672,7 @@ D_6 %>%
   geom_smooth(method = "lm", se = F)
 ```
 
-Next, we define the three estimation functions and apply LOO. Given the data generation process (`sim_3`), M_08 underfits the data, M_10 overfits and M_09 is right on spot.
+Next, we define the three estimation functions and apply LOO.
 
 ```{r opts.label = "mcmc"}
 niter = 400
@@ -796,24 +695,26 @@ Loo <- bind_rows(do_loo(D_6, fit_M_08),
                  do_loo(D_6, fit_M_10))
 ```
 
-Notice how the output of the three runs of `do_loo` stacked to become one dataframe, from which we can create a combined summary based on the predictive root mean square error (\@ref(GOF)). As expected, model M_09 outperforms M_8 and M_10 in predictive accuracy:
+
+Note, how the output of the three runs of `do_loo` are simply merged into one dataframe.
+This allows us to easily create a combined summary based on the root mean square error:
 
 ```{r}
 Loo %>% 
   left_join(D_6, by = "Obs") %>% 
   group_by(Model) %>% 
-  summarize(predRMSE = RMSE(forecast, y))
+  summarize(RMSE = RMSE(forecast, y))
 ```
 
+##### HERE
+As expected, the three 
 
 ```{r}
 detach(Chapter_WM)
 ```
 ```{r opts.label = "mcsync"}
-sync_CE(D_6, Chapter_WM, Loo)
+sync_CE(Chapter_WM, Loo)
 ```
-
-
 
 
 ### Information criteria
@@ -822,140 +723,24 @@ So far, we have seen that the right level of parsimony is essential for good pre
 
 Using highly oversaturated models is catastrophic for prediction. When the saturated model is asked to predict future observations, it will recover the full noise that was in the data, which is $mu_i + \epsilon_i$. Residuals represents the stochastical component, which by its very nature does not reproduce on the next occasion. Any more complex model reduces deviation from the observed data, but has less predictive value. The AIC accounts for the reduced predictive accuracy by penalizing the number of parameters. 
 
-The oldest of all IC is the *Akaike Information Criterion (AIC)*. Compared to its younger siblings, it is less broad, but its formula will be instructive to point out how  goodness-of-fit and complexy are balanced. To represent goodness-of-fit, the AIC employs the deviance, which makes it applicable for all classes of models that are suited for maximum likelihood estimation (\@ref(likelihood)). Model complexity is given by just two times the numner of parameters, as implausibly simple this may sound.
+The oldest of all IC is the *Akaike Information Criterion (AIC)*. Under a Bayesian perspective, it has limited value, but its formula will be instructive to point out how the trade-off between cling and parsimony is solved. The AIC carries one term that increases when the model moves away from the observed data points. Another term increases with the number of parameters. 
 
-$$
-D = -2 \log(p(y|\hat\theta)).\\ 
-AIC = D + 2k
-$$
+$$AIC = log(p(D|\hat\Theta)) + k$$
 
-By these two simple terms the AIC brings model fit and complexity into balance. Note that lower deviance is better and so is lower complexity. In effect, with information criteria *the lower score wins*. As it grounds on the likelihood, it is routinely been used to compare models estimated by classic maximum likelihood estimation. The AIC formula is ridiculously simple and still has a solid foundation in mathematical information theory. It is easily computed, as model deviance is a byproduct of parameter estimation. And if that was not enough, the *AIC is an approximation of LOO cross-validation*, beating it in computational efficiency. The following runs our three models using the lightning-fast frequentist implementation that comes with R:
-
-```{r}
-M_08_frq <- glm(y ~ 1, data = D_6)
-M_09_frq <- glm(y ~ 1 + x_1, data = D_6)
-M_10_frq <- glm(y ~ 1 + x_1 + x_2, data = D_6)
-
-AIC(M_08_frq, M_09_frq, M_10_frq)
-```
-
-We get what we expected: the true model $M_09$ wins with the lowest AIC score. But, it seems one has to take a very close look to see the differences, as they are so small. That, indeed, is one of the most common misconceptions about information criteria. In theory, these information criteria contain a large constant, which is unknown. Also, IC scores grow with sample size. In practice, the only thing one know about this unkown constant is that it is smaller than the smallest score observed among the tested models. Therefore, when comparing models *the lowest IC score is the point of reference*. It is the differences that are important, as small they may be. It is common even, to report the difference of a model $i$ to the known model with the smallest score. $\Delta_i = \textrm{AIC}_i - \textrm{AIC}_\textrm{min}$. That is equivalent to setting the model with the lowest score to zero.
-
-```{r}
-AIC(M_08_frq, M_09_frq, M_10_frq) %>% 
-  as_tibble(rownames = "Model") %>% 
-  mutate(Delta = AIC - min(AIC))
-```
+The AIC contains the well known likelihood, which combines the probability of all individual observations into one probability score. While Bayesians are used to think of many likelihoods, every MCMC run has their own, this likelihood is the one in our parameter space that does best, it is therefore called the *maximum likelihood estimate (MLE)* It is intuitively clear that this term decreases, when the observed values are close to the best prediction of a model.
 
 
+$AIC$
 
-Still, the AIC has limitations. While it covers the full Generalized Linear Model, it is not suited for multi-level models with random effects. A random effect, we recall, is a factor, where the individual means $mu_i$ are assumed to come from a population-level distribution $mu_i ~ N(\mu, \sigma)$. Fixed effects, say the two group means in a comparison of two designs, are allowed to vary freely. In random effects parameters are more or less closely tied to each other, which causes shrinkage (\@ref(shrinkage)). The smaller the dispersion, the stronger the pull and the less independent are these parameters. As section \@ref{model_complexity} has demonstrated, with random effects, the term $2k$  over-estimates model complexity *and* depends on the data.
+By two simple counter-acting terms the AIC brings model fit and complexity into balance. As it purely draws principles of maximum likelihood estimation, it turns out both terms are limited to a certain class of models: the likelihood part by definition depends on the data, but prior knowledge does not occur. Under a Bayesian perspective one has to always use flat priors. The likelihood part also contains just the point estimates for parameters. Arguably, these are the maximum likelihood estimates, but this is still much less than the full posterior distribution. The likelihood term forbids to make full use of the Bayesian paradigm; the penality term limits the AIC to a certain class of models, namely those where all parameters are independent of each other. In particular, this is not the case with random effects. A random effect, we recall, is a factor, where the individual means $mu_i$ are assumed to come from a shared distribution $mu_i ~ N(\mu, \sigma)$. In a classic ANOVA, the group means of, say the ToT in two design conditions are allowed to vary  freely. For a random factor, the individual $\mu_i$ determine $\mu and \sigma$, but there is feedback: if most observations happen to be in a close range, hence small $\sigma$,  extreme observations gravitate towards the group mean. The smaller the dispersion, the stronger this pull and the less independent are these  parameters and the less meaningless they get. As this is a process that happens gradually to every parameter, it cannot be solved by removing individual parameters (by model selection).
 
-The *Deviance Information Criterion (DIC)* was the first generalization of the AIC that solves the problem of model complexity. The DIC estimates the effective complexity of a model from the MCMC samples. It is considered the first Bayesian information criterion, as it operates on the posterior mean rather than the likelihood. In addition, it takes researcher-defined priors into account. These ideas have more recently been carried on and further refined by the *Widely Applicable Information Criterion (WAIC)*. 
-
-WAIC estimates the *expected* log pointwise predictive density using the log-likelihood, which in the respective literature is referred to as *log pointwise predictive density* as goodness-of-fit term. For model complexity, WAIC brings a refined estimate for effective model complexity:
-
-$$
-\textrm{elpd}_\textrm{WAIC} = \textrm{lpd} - p_\textrm{WAIC}
-$$
-
-The following simple transformation brings $\textrm{elpd}_\textrm{WAIC}$ to the scale of deviance, as do all information criteria by convention:
-
-$$
-\textrm{WAIC} = -{1 \over 2}\textrm{elpd}_\textrm{WAIC}
-$$
-
-
-The standard implementation of WAIC, provided by the package loo, and works with rstanarm and brms models. It returns all three estimates:
-
-```{r}
-attach(Chapter_WM)
-```
-
-```{r opts.label = "mcmc"}
-M_08 <- fit_M_08(D_6)
-M_09 <- fit_M_09(D_6)
-M_10 <- fit_M_10(D_6)
-```
-
-```{r}
-loo::waic(M_09)
-```
-
-
-While following the original logic as AIC, the WAIC output reveals another extension of the concept. In maximum likelihood estimation, there is only one (maximum) likelihood and, hence, one deviance. In effect, AIC becomes a point estimate. In Bayesian statistics, the likelihood is computed at every single draw of the MCMC procedure, resulting in a distribution of the likelihood. The WAIC even goes one step further and uses the log likelihood of every single observation in the data at every draw. For model $M_09$, this results in a log likelihood matrix with number of draws times number of observations. We extract the matrix and bring it into a tidy form:
-
-```{r}
-LL_09 <- 
-  log_lik(M_09) %>% 
-  as_tibble() %>% 
-  mutate(Draw = row_number()) %>% 
-  gather(key = "Obs", value = logLik, -Draw) %>% 
-  mutate(Obs = as.integer(Obs)) %>% 
-  mascutils::go_arrange(Obs, Draw)
-
-LL_09 %>% sample_n(8)
-```
-
-The next step computes the Bayesian deviance per observation. Because we are on a logarithmic scale, division by the number of samples becomes a subtraction term. The result is a vector of deviances. The model complexity term $p_{WAIC}$ is the variance of log-likelihoods, per observation. Finally, deviance and complexity are combined into a single score per observation:
-
-
-```{r}
-n_draws <- max(LL_09$Draw)
-
-LPPD_09 <- 
-  LL_09 %>% 
-  group_by(Obs) %>% 
-  summarize(llpd = log(sum(exp(logLik))) - log(n_draws),
-            p_WAIC = var(logLik),
-            WAIC = -2 * (llpd - p_WAIC))
-
-LPPD_09 %>% sample_n(8)
-
-LPPD_09 %>% 
-  gather(key = "Score", value = "value", llpd:WAIC) %>% 
-  group_by(Score) %>% 
-  summarize(Estimate = sum(value))
-```
-
-
-```{r}
-detach(Chapter_WM)
-```
-
-
-```{r opts.label = "mcsync"}
-sync_CE(Chapter_WM, D_6, Loo, M_08, M_09, M_10)
-```
-
-
-
-```{r}
-data(cars)
-
-cars
-
-m <- stan_glm(dist ~ speed, data = cars, iter = 1000)
-ll <- log_lik(m)
-
-n_cases <- ncol(ll)
-n_draws <- nrow(ll)
-
-lppd <- sapply(1:n_cases, function(i) rethinking::log_sum_exp(ll[,i]) - log(n_draws))
-p_WAIC <- sapply(1:n_cases, function(i) var(ll[,i]))
-
-sum(lppd)
-sum(p_WAIC)
-
-
-```
-
-
+The *Deviance Information Criterion (DIC)* is a generalization of the *AIC* that solves two of the above issues. With the DIC, priors can be specified [check if there are limitations, for example only normal priors], and the penalty term is adjusted for dependence between parameters. In conequence, the DIC can be used in a Bayesian analysis and covers the important class of (G)LMM. The only remaining issue is that it still draws upon point estimates, the posterior modes.
 
 
 ### Model pruning
 
-If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formally there exist four potential linear models to choose from:
+
+If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formally there exist four potential classic linear models to choose from:
 
 + `y ~ 1` (grand mean)
 + `y ~ x_1` (main effect 1)
@@ -963,11 +748,7 @@ If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formal
 + `y ~ x_1 + x_2` (both main effects)
 + `y ~ x_1 * x_2` (both main effects and interaction)
 
-For a data set with three predictors, the set of possible models is already 18. 
-
-
-
-<!--Some models can be discarded by more or less informal reasoning. For example, even though most studies routinely gather the variable gender,  there is often little reason to assume that it makes a difference. -->
+For a data set with three predictors, the set of possible models is already 18. Some models can be discarded by more or less informal reasoning. For example, even though most studies routinely gather the variable gender,  there is often little reason to assume that it makes a difference. 
 
 For a number of reasons, it can be appealing to have more formalized criteria for which model to prefer (and by how much):
 
@@ -981,19 +762,6 @@ For a number of reasons, it can be appealing to have more formalized criteria fo
 <!--Testing hypothesis is the prevalent statistical paradigm in academic research. Typically, a researcher formulates (or re-iterates) on a more or less profound theory on human behaviour and derives predictions that are observable. Two contradicting hypotheses are formulated on these claims. Both hypothesis are formalized as two separate statistical models and these models are ultimately compared to select the better one.
 
 The most basic case is that one hypothesis states a variable to have an influence on the outcome, the alternative hypothesis says, it has not. In order to make a case, we re-iterate on the XY case study. Recall that a classic linear model was used for estimation, and flat priors were applied. In other words: no prior knowledge was applied and the estimation should neatly match any maximum likelihood estimates. In such a simple case, the oldest of all information criteria may be applied, the *Akaike Information Criterion (AIC)*. -->
-
-Workflow:
-
-1. Building the theoretically plausible model $M_\textrm{theo}$.
-  1. Add variables that are essential for your research question as *primary predictors*. This may already include interaction effects.
-  1. Review possible *secondary predictors*. For every candidate try to conceive a plausible story, why it would have an effect on the response variable. If you succeed, add the predictor.
-  1. Review possible interaction effects. For every pair (or triple, quadrupel) of primary and secondary predictors try to conceive a story of how they could produce conditional effects. If you succeed, add the interaction term.
-
-2. Prune the model. In a stepwise procedure, the currently most complex plausible model $M_\textrm{compl}$ competes against a more parsimonious candidate model $M_\textrm{pars}$. Start with $M_\textrm{theo}$ as your first $M_\textrm{compl}$.
-  1. Start with interaction effects (that are *not* primary predictors). Build $M_\text{pars}$ by leaving out one interaction term. Use WAIC or LOO to compare against $M_\textrm{compl}$. If $M_\text{pars}$ wins in terms of predictive accuracy, make it the new $M_{compl}$.  Start with the highest order effects, and remove one term at a time.
-  1. Follow the same procedure with all secondary predictors.
-
-
 
 The uncanny valley observation suggests that participants likeablity judgements follow a third-degree polynomial, as this is the smallest polynomial to allow for the trough and the shoulder left of it. Previously, we have already confirmed that the 3-deg polynomial predicts more accurately than a straight linear regression model. However, it could still be the case that a 2-deg polynomial is sufficient, as it allows for the valley. The cubic term just adds some more flexibility in the curvature. But, is that really required?
 
@@ -1065,100 +833,18 @@ detach(Hugme)
 
 
 
+### Testing hypothesis
 
-
-### Towards a new regime
-
-Let me introduce an analogy: In the past decades it has been recognized that car brands make their profit at costs of the environment. Every sold over-sized, over-powered car that hits the road pollutes the environment. Public policy in most countries has reacted to that in a number of ways, mostly putting extra costs on actual usage of the car by the customer. The policy in Germany went one step closer to the root of the problem and pushed the national car brands to reduce the total energy consumption of their fleet.
-
-When a researcher genuinely aims for predictive accuracy, this basically means this person has a stake, often an economic one. If you put the envisioned advantages of your design to a test, let's say, users can more efficiently rent a car online, by cheating on the test you harm yourself, when  after rolling out the system it turns out, these claims were false. Using information criteria will reduce this personal risk. 
-
-The regime of p-value does actually not bother with individual faith, but with the faith of a discipline as a whole. Namely, the vision associated with the p-value is to keep the proportion of unreplicable results in a discipline under a certain threshold, i.e. 5% in  social sciences. In contrast to predictive accuracy, this regime of the p-value does not bother with the faith of a single researcher, but aims at a scientific discipline as a whole. However, this evidently has not worked out well. In modern Psychology, the real proportion of unreplicable results is situated more in the region of 50%. The vision of a 95% clean science has been missed by roughly a magnitude. The reasons for this phenomenal failure are manifold, but some are at least indirectly tied to the p-value:
-
-1. People tend to care for their own faith more than for the faith of the system. As long as scientific careers require $p \le .05%$ (but not much else), people will continue to hack the system for getting their work published.
-1. People tend to ignore rules they do not fully understand. The mathematical foundations of the p-value are arcane. High school level math suffices to calculate the RMSE from LOO and the quantity makes immediate sense. I know very few people, who understand how  the ratio of sum-of-squares follows an F distribution.
-1. People tend to misapply rules they do not understand, especially when that is inconvenient. In my experience, only few researchers are fully aware that within the p-value paradigm, you must *never*:
-  + stop data collection early, when you see that $p \le .05$ has been reached at that point
-  + continue data collection beyond the planned sample size, when $p \le .05$ has not been reached, yet.
-  + try more than one statistical test or model
-
-However, as of current, the debate on the replication crisis has not settled and no new regime has been established to keep science clean of bogus. My fear is that it will take a long while to get to a new consensus on statistical rigor, mostly because there are too many gray backs that have build their careers on publishing "significant" papers, and these are afraid that their life work are getting depreciated, or, if statistical education would move away from p-values, that future students will no longer be able to read their precious papers.
-
-The other problem with establishing a new regime is that, different to the tight organizational structure of an automotive enterprise, with straight command lines and a well defined communication channel with national governments, a scientific discipline is more like a horde of monkeys in the jungle, everyone primarily interested in jumping on the tallest tree and babbling the loudest. In terms of Nassim N. Taleb, author of the Black Swan, contemporary academic researchers trade short-term personal benefits (getting a paper published in a prestigious journal) for long-term desastrous risks for the discipline. Why should a government invest tax payers' money into such a messy discipline, whose reputation has been diminished in public newspapers? For a discipline such as Psychology, that would be the end, because it almost solely draws on its reputation, and lacks  more tangible assets, like building and selling cars.
-
-p-values operate on science as a whole and encompass a long term perspective. Scientific progress is usually slow, because it moves by trial and error. The collective endeavour to arrive at good theories is (or should be) dominated by time spent on discarding the bad ones, and they probably are a vast majority. With the paradigm of model choice by predictive accuracy, it could be possible to put individual reseachers skin back into the game. 
-
-
-1. *There is always a next experiment*. Even an individual line of research usually is a sequence of similar experimental studies. Often these experiments are of a very similar kind. For example, I have conducted a sequence of experiments on the Uncanny Valley phenomenon, that replicate and extend the original [REF M&R], using mostly the same set of stimuli. When I read their paper for the first time, I was impressed by how they were able to trace the full UV landscape and I was even so delighted that they shared the data, publicly. In the process of deciding on whether to jump on their experimental paradigm or not, my first move was to estimate my own polynomial models of various degrees and compare them by an information criterion. Why? Because, if it had turned out that a polynomial model with a degree lower than three has the best predictive accuracy on the M&R data, that would have been my best guess for my own future data. A more simple form, parabolic or linear, would have been detrimental for any further reaching conclusions I desire to draw from the data. By identifying a better fitting model by predictive accuracy, a reseacher reduces the risk of running fruitless future experiment. That is a personal incentive rather than a collective.
-
-1. The present debate encompasses a variety of positions:
-  + It's all not so bad (and I'll retire soon).
-  + p-values must continue to exist, but the convention be lowered to, say $\alpha \le .0001$
-  + p-values are not recommended, but tolerated next to other criteria
-  + p-values must strictly be replaced by Bayes Factors
-  + model selection should be banned, as there is nothing such as a null effect
+New statistics, as understood in this book, ground on quantification of effects with accompanying levels of uncertainty. 
 
 
 
-<!--A governmental agent who requests a car brand to reduce its CO2 footprint, just has to utter a plausible threat to the boss of the company and can rest assured that this will make it all the way down to engine engineering. A scientific discipline has no one -->
+The prevalent perspective in this book is the quantification of influence factors in the human-design encounter. In applied domains, where stakes and trade-offs are plenty, the most logical question to asked is on effect size, or: would it be worth to act on it? Applied research aims at practice by telling the impact. 
 
-
-
-The p-value regime operates on the level of a scientific 
-
-I Model selection with information criteria and hypothesis testing with p-values aim at  
-
-
-### Testing of hypotheses
-
-For everyone who, for once in their lives, have to publish  in an academic fashion, this book has so far left one question unanswered: How can I use Bayesian regression models to test hypotheses? Information criteria, maybe?
-
-If practice-oriented research is the right hand in applied sciences, the left hand is the body of theories that *explain* phenomena in the human-design encounter. In common practice, hypothesis tests are not quantitative, they are categorial, to be more precise: they decide whether a predictor is statistically significant. Every effect undergoing an hypothesis test can either be accepted or be rejected by a set threshold, say $\alpha < .05$. Then, either the data jumps over it, or it does not.
+If practice-oriented research is the right hand in applied sciences, the left hand is the body of theories that *explain* phenomena 
+in the human-design encounter. And this is what most classical statistics thinking circles around: the idea of evaluating theories by testing hypothesis. Hypothesis tests are not quantitative, they are categorial. Every effect undergoing an hypothesis test can either be accepted as "significant" or be rejected. We may speak of magnitudes and uncertainties to continuous degrees, but testing a hypothesis means to define a hurdle upfront (such as the infamous $\alpha < .05$). Then, either the data jumps over it, or it does not.
 
 Formally, all such hypothesis tests are comparisons of two models, one contains the parameter in question (the alternative model), the other one does not (the null model). The test itself estimates both models and compares them. If the null model wins, the hypothesis is rejected, if the alternative model wins, the hypothesis is accepted and indirectly, its source, the theory, gains credibility.
-
-From this perspective, replacing p-values with information criteria seems like an obvious improvement, as it allows the researcher to choose from a much wider range of models, and if that does not suffice, one can always resort to LOO cross validation. So, should you do that and if so, how?
-
-For everyone doing applied or practical reseach the answer should be short: If your research implies or even targets real costs, benefits and risks, what you really do is exploring impact factors,  not testing hypotheses. Use the methods based on estimates, as well as the language presented in PART II  of this book. Also, it will be easy to re-formulate the hypothesis into a quantitative research question. And, if you can, imply the potential costs  of the design, system, organization, training or intervention, you are testing. When you are in an early stage of your study design, it can be liberating to forget about the strictly experimental idea of comparing conditions. Perhaps, you do not even need another design.
-
-<!-- # example. Ipump? -->
-
-```{r}
-attach(IPump)
-
-D_agg %>% 
-  ggplot(aes(x = Design, y = ToT)) +
-  geom_boxplot() +
-  ggtitle("H_1: The novel design N is more efficient to use than legacy Design L.")
-```
-
-
-
-```{r}
-D_agg %>% 
-  filter(Design == "Novel") %>% 
-  ggplot(aes(x = Session, y = deviations)) +
-  geom_boxplot() +
-  ggtitle("RQ_1: Can everyone safely use the novel design after minimal training?")
-  
-```
-
-
-```{r}
-detach(IPump)
-```
-
-
-If you are comparing two conditions derived from theory (or if your supervisor or editor "convinces" you to do hypothesis testing), information criteria definitely are an option, if you under4stand, what you are doing.
-
-The p-value, although itself a quantity, reigns a dichotomy. The null model, which is accepted when the results is "not significant" truly assumes that there is absolutely no effect. In reality though, a fly leaves a dent on the anvil; there almost always is an effect, be it a miniscule one. A frequent mistake in reporting statistical analysis with p-values is to conclude that there is no effect, when the p-value is not "significant". The same holds for predictive accuracy scores: If a predictor is removed during model pruning, that does not mean the underlying impact factor has a zero effect. When demonstrating the detrimental effects of over-fitting, we have seen how a model gets very excited about "features" in the noise, especially when data is sparse. This tendency is not exclusive to null effects, but all effects are contaminated, even the strong ones. Therefore, to discard a predictor during model selection strictly means that the gain in model fit is out-weighed by the detrimental effect of over-fitting. We reject the null model not because it is untrue, but because it performs worse at predicting the future.
-
-
-
-
-
-
-### Model selection
 
 Recall the uncanny valley phenomenon: over a long range the emotional response to artificial faces gets more positive when faces get more humanlike. But, when the appearance of faces are getting really close to real, it drops -- so the theory.
 
@@ -1313,11 +999,11 @@ if we just set \beta_1 = \beta_2 = \beta_3 = 0. As lower degree polynomials are 
 
 
 
-<!-- ### Model selection
+### Model selection
 
 The broadest application of model comparison arises, when a researcher just seeks to identify the one model with optimal predictive accuracy. In contrast to hypothesis testing and model pruning, this can take a fully optimistic route, without being hampered by prior expectations. 
 
-A carefully pruned model results in optimal prediction using as many variables as is needed. In some cases, though, the researcher wants to select just one exclusive measure from a set of possibilities. Using the same model fit criteria one again, this results in the comparison of two non-nested models.
+<!-- A carefully pruned model results in optimal prediction using as many variables as is needed. In some cases, though, the researcher wants to select just one exclusive measure from a set of possibilities. Using the same model fit criteria one again, this results in the comparison of two non-nested models.
 
 This situation is routine in research on measurement methods. A measure is an way to quantify a certain property of interest, be it perceived user experience, the general processing speed of a user or how extrovert a person is. In theoretical design research, measures operationalize the quantitative elements of theories. In applied design research, measures are used to evaluate and compare designs and examine differential design effects. Some measures are trivial to assess, such as age. Others require time anf advanced material, such as validated questionnaires or usability tests. Some require expensive equipment. For example, automotive designers use dedicated interfaces to capture measures of driving performance in high fidelity car simulators.
 
@@ -1349,7 +1035,6 @@ Measurement methods are ordered by three criteria:
 
 ## Literature
 
-+ Gelman's paper on information criteria
 + MacElreaths statistical distributions
 + XY chapter on prior specification
 + MacElreaths information criteria

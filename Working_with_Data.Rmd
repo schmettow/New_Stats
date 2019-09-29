@@ -11,55 +11,195 @@ figr <- function(x) x
 ```
 
 
-# Working with data
+# Data management
 
-## relational data modelling: a primer
+## Populations and Entities
 
-### Populations as tables
-### Variables as attributes
-### Observations as relations
+## Reshaping data
 
+It will be very convenient to have  a set of clean entity tables at the beginning of the data analysis. Unfortunately, data often arrives in such a tidy form. In particular,  questionnaire responses notoriously arrives in a wide form and psychometricians tend to think in terms of response matrices.
 
-
-
-
-## Data simulation
-
-Designing a study is often considered an art. By using data simulation, you can turn it into an engineering process, almost. Where the data model is the blue print for your future data, simulated data is a functional prototype, that
-
-+ makes you think about the data generating process
-+ lets you design your statistical model upfront
-+ helps you in planning sample size and repeated measures
-
-But, first of all, data simulation lets us implement the data model, directly, which makes it a great illustration.
-
-<!-- 1. Identify the classes of objects in your research, such as participants, designs, tasks, situations asf. In the most general case, these are considered *units* sampled from a population
-2. For every class create a *unit table*
-
-* start with the identifier variables, which unambiguously mark every row.
-* add fixed effects properties to unit tables, for example, age and gender of participants
-* add random effects to the unit tables, like $\theta_T0$ for a task-level ramdom effect, or $\theta_S1$ for a subject-level slope ramdom effect. 
-
-3. Create an *observation  table* for your observations. Start with a grid of unit identifiers. For complete designs, this is easiest done using *expand.grid()*. 
-4. *Join* the observations table with all unit tables using unit identifiers as key. This is done either through *merge()* from the base package or *inner_join()* from dplyr. This you will gather all predictors in one table.
-6. Compute the linear predictor $\eta$ (eta), by a linear term, e.g. add the treatment effect and participant random effects. In case of Gaussian distributed residuals, the link function is *identity()* and this step can be omitted.
-7. Compute the expected value $\mu$ (mu), by using the link function
-8. Compute the observed value $y$ (or any more expressive name) by adding the error term to $mu$, typically by using a random number function such as *rnorm()*. -->
-
-
-### Simulating entities
-
-### Simulating encounters
-
-### Simulating measures
+<!-- ... -->
 
 
 
-## Experimental data
 
-### Simulating measures
+## Encounters and joins
 
-Experimental data is an encounter between participants and experimental stimuli. Consequently, the complete data model will comprise two entity tables, participants and stimuli, and one relationship table for the experiment.  However, depending on the design of the experiment and the nature of stimuli, we can distinguish several variations. These variations regard
+
+
+## Rating scale responses
+
+When participants fill out a rating scale, a human sample encounters a set of items. Therefore, we wish two entity tables and a long encounter table. When responses are collected on paper, the best strategy is to create both entity tables, expand them to an empty encounter table and let a student fill it in.
+
+```{r}
+attach(Hugme)
+```
+
+
+```{r}
+D_resp_input <-
+  expand_grid(Part = D_Part$Part, Item = D_Items$Item) %>% 
+  mutate(response = "") %>% 
+  as_tbl_obs() %>% 
+  print()
+```
+
+```{r}
+detach(Hugme)
+```
+
+However, ever more often, researchers use web-based survey software to admininster questionnaires and often demographic variables are gathered along the way. These systems typically output responses in wide format not unsimilar to the following:
+
+```{r}
+colnames(R_quest)
+```
+
+For the demographic data, there is no repeated measures and we can extract the participant entity table in a straight-forward manner:
+
+```{r}
+D_Part <- 
+  R_quest %>% 
+  select(Part = UserID, Gender, age = Age) %>% 
+  as_tbl_obs() %>% 
+  print()
+```
+
+Notice that there is a reason for the wide format, as the variable Gender has a non-numerical data type. In the long form it is required that all measures are of the same type.
+
+Items are stored wide and reshaping is required, but not sufficient, as item attributes are encoded in the variable names. In this case, two attributes are stored: first, the scale (Geek or NCS). Second, the Geekism scale has been presented a second time (GeekR), in order to assess test-retest reliability. While one could first extract the entity table, it is more practical to start with reshaping and processing the observations table.
+
+The moment of assessment is extracted and put into a separate variable *session* and the GeekR items are renamed. That is a task for *regular expression* pattern matching.
+
+```{r}
+D_quest <- 
+  R_quest %>% 
+  select(Part = UserID, Geek01:Geek34, GeekR01:GeekR34, NCS01:NCS18) %>% 
+  gather(Item_raw, response, -Part) %>% 
+  mutate(Scale = str_extract(Item_raw, "Geek|NCS"),
+         Item_no = str_extract(Item_raw, "\\d{2}"),
+         Item = str_c(Scale, Item_no),
+         session = if_else(str_detect(Item_raw, "GeekR"), 2, 1 )) %>% 
+  select(Part, Item, session, response) %>% 
+  as_tbl_obs() %>% 
+  print()
+  
+```
+
+Now, we can extract an entity table `D_Item` that assigns items to their scale:
+
+```{r}
+D_Item <- 
+  D_quest %>% 
+  distinct(Item) %>%
+  mutate(Scale = str_extract(Item, "Geek|NCS"))
+
+sample_n(D_Item, 5)
+```
+
+
+The three resulting tables are minimal in that they provide completely distinct information: `D_Part` only contains elementary information on participants, `D_Item` links items to their respective scale and `D_quest` only deals with the encounter of participants and items. It would have been possible to leave the variable Scale in `D_quest` and not even create the entity table. However, this table can be used to store additional information, such as sub-scales or whether an item is reversed.
+
+For the data analysis these tables can be shaped joined together in various ways, depending on the relationships the researcher wants to examine. In the following example,  the researcher wants to examine the test-retest reliability of the geekism scales and the association between Geek and NCS. That is accomplished by joining with `D_Item`, computing the mean score per participant and session and make it wide:
+
+```{r}
+D_scores <-
+  D_quest %>% 
+  left_join(D_Item) %>%
+  #filter(Scale == "Geek") %>% 
+  group_by(Part, Scale, session) %>% 
+  summarize(score = mean(response, na.rm = T)) %>% 
+  ungroup() %>% 
+  mutate(Scale = str_c(Scale, session)) %>% 
+  select(Part, Scale, score) %>% 
+  tidyr::spread(Scale, score) 
+
+D_scores %>% 
+  select(-Part) %>% 
+  cor(use = "complete.obs")
+
+  
+```
+
+Another way to put `D_scores` to use is to examine the association between personality scores and demographic variables that are in `D_Part`. For example, are boys really more geeky than girls?
+
+```{r}
+D_Part %>% 
+  join(D_scores, by = "Part") %>% 
+  ggplot(aes(x = Gender, y = Geek1)) +
+  geom_boxplot()
+```
+
+It seems a little overdone to create a separate entity table for items as the only property is the scale it belongs to. In fact, there is more you can do with it. For example:
+
++ some scales use reversed  items to prevent automatisms. For the data analysis they have to be aligned and `D_Item` is a good place to keep book of it.
++ Many scales have sub-scales. If that matters, `D_Item` just gains another grouping variable.
+
+There even is a case for going one more level up in abstraction and use an entity table for scales. It frequently  happens that rating scales differ in range (of ordinal response categories). Sometimes ordinal response are coded from 1 to 5, sometimes 1 to 7 and an analogue scales could range from 0 to 1. It is practical, though, to normalize rating scale responses  during the data cleaning process. So, where to store the range? In `D_scales`:
+
+```{r}
+D_scales <-
+  tribble(~Scale, ~min, ~max,
+          "NCS" ,    1,    5,
+          "Geek",    1,    7)
+```
+
+
+
+
+
+
+
+
+Returning to the original problem of a hybrid experimental/survey study, what are the entities? Clearly, participants are entities. The second set of entities are the items of personality questionnaires, and the data we can conceive as the *encounter of items and participants* that results in participants-by-items responses.
+
+```{r fig_questionnaire_entity, opts.label = "fig.wide"}
+attach(Hugme)
+
+T_some_items <-
+  HUG3_resp %>% 
+  select(Item, Scale) %>% 
+  distinct() %>% 
+  filter(Item %in% c("Geek01", "Geek02", "NCS01"))
+
+T_some_part <-
+  HUG_part %>% 
+  slice(1:3)
+
+T_some_resp <-
+  expand.grid(Part = T_some_part$Part,
+              Item = T_some_items$Item) %>% 
+  left_join(T_some_part) %>% 
+  left_join(T_some_items) %>% 
+  mutate(rating = round(runif(9, 1,7), 0)) %>% 
+  select(Part, Item, Scale, rating)
+
+grid.arrange(
+  T_some_part %>% gtable(plot = F),
+  T_some_items %>% gtable(plot = F),
+  T_some_resp %>% gtable(plot = F),
+  layout_matrix = rbind(c(1,3), c(2,3))
+)
+
+
+```
+
+
+So, according to the ERM framework, we are going to have two separate entity tables, at least. The *participants table* has one row per participant, identified by a unique participant ID, and all singular attributes of participants, like gender, age etc. The *items table* carries the questionnaires. Items are uniquely identified by an ID. When several scales are used, it is recommended to add a separate factor variable assigning an item to a scale. This can creates some redundancy as the item name might already identify the scale. As we will later see, this Scale variable is very useful for calculating the aggregated scores. `r figr("fig_questionnaire_entity")`  gives the smallest possible item table, but further useful information about items can be added as variables, such as: 
+
++ item text in all used language
++ item labels
++ if an item is reversed or not 
++ the position of an item in the questionnaire
++ any sub scale (or sub sub scale) the item belongs to
+
+Finally, the *questionnaire table* stores the "encounter" between participants and items in the study. In ERM speak it is a *relationship table*, as it borrows entities and their keys from participants and items. The so-called *foreign key* is the combination of participants and items. Like with the entity tables, it is important that every observation (that is a response of one participant to one item) is uniquely identified by the foreign key.
+
+In more complicated cases, the combination of participant and item might not identify every observation uniquely. For example, a preferred method to assess a questionnaires reliability is to repeat the measurement in a second session. If we would use the item table as in `r figr("fig_questionnaire_entity")`, the observations were no longer uniquely identified, as all participants encounter every item twice. As a solution one would simply extend the key of the table by a variable called `session`.
+
+## Modelling experimental responses
+
+Storing experimental data follows the same principles as for questionnaire data. In terms of ERM an experiment is a relationship, the encounter, between participants and experimental stimuli. Consequently, the complete data model will comprise two entity tables, participants and stimuli, and one relationship table for the experiment.  However, depending on the design of the experiment and the nature of stimuli, we can distinguish several variations. These variations regard
 
 1. the identity versus exchangeability of stimuli
 2. the research design
@@ -87,11 +227,6 @@ grid.arrange(T_exchangeable_between_subj_part %>% gtable(plot = F),
 detach(Hugme)
 ```
 
-
-
-### Cleaning data
-
-### Join
 
 The model gets just slightly more complex when the experiment comprises a condition. Assume an experiment that examines the difference in vigilance between gamers and non-gamers. As this is a between-subject design, the condition is assigned to the participant table, as is shown in `r figr("fig_experiment_exchangeable_data_model")`. Note that the experiment table only contains the absolute necessary attributes, namely all information that characterizes the encounter itself. Of course, for the data analysis we need a table that contains information on participants as well. A later section will show how to combine and manipulate data from separate tables.
 
@@ -181,228 +316,13 @@ grid.arrange(
 
 Both, prime pictures and target words were collected upfront and classified. As shown in `r figr("fig_HUG3_experiment_data_model")`, the data model for this experiment consists of three entity tables (participants, pictures and words), one intermediate relationship table for stimuli and finaqlly the experiment table. As color only plays a minor role (the classic Stroop conditions no longer apply), it is not recorded in the target word table, but is generated during the experiment and could be recorded in the experiment table. Still, we could think of other properties of words to be added, such as word length an familiarity (as potential control variables), or as shown,  translations for another languages.
 
-
-
-## Questionaire data
-
-### Simulate
-
-When participants fill out a rating scale, a human sample encounters a set of items. Therefore, we wish two entity tables and a long encounter table. When responses are collected on paper, the best strategy is to create both entity tables, expand them to an empty encounter table and fill this one in.
-
-```{r}
-attach(Hugme)
-```
-
-
-```{r}
-D_resp_input <-
-  expand_grid(Part = D_Part$Part, Item = D_Items$Item) %>% 
-  mutate(response = "") %>% 
-  as_tbl_obs() %>% 
-  print()
-```
-
-```{r}
-detach(Hugme)
-```
-
-
-### Reshaping data
-
-However, ever more often, researchers use web-based survey software to administer questionnaires and demographic variables are gathered along the way. These systems typically output responses in wide format not unsimilar to the following:
-
-```{r}
-colnames(R_quest)
-```
-
-The demographic data, such as gender, age and household income are single-valued properties of participants and can be represented by the entity tabler Part. Extracting the entity table from the raw data is straight-forward:
-
-```{r}
-D_Part <- 
-  R_quest %>% 
-  select(Part = UserID, Gender, age = Age) %>% 
-  as_tbl_obs() %>% 
-  print()
-```
-
-Notice that there is a reason for the wide format, as the variable Gender has a non-numerical data type. In the long form it is required that all measures are of the same type.
-
-Items are stored wide and reshaping is required, but not sufficient, as item attributes are encoded in the variable names. In this case, two attributes are stored: first, the scale (Geek or NCS). Second, the Geekism scale has been presented a second time (GeekR), in order to assess test-retest reliability. While one could first extract the entity table, it is more practical to start with reshaping and processing the observations table.
-
-The moment of assessment is extracted and put into a separate variable *session* and the GeekR items are renamed. That is a task for *regular expression* pattern matching.
-
-```{r}
-D_quest <- 
-  R_quest %>% 
-  select(Part = UserID, Geek01:Geek34, GeekR01:GeekR34, NCS01:NCS18) %>% 
-  gather(Item_raw, response, -Part) %>% 
-  mutate(Scale = str_extract(Item_raw, "Geek|NCS"),
-         Item_no = str_extract(Item_raw, "\\d{2}"),
-         Item = str_c(Scale, Item_no),
-         session = if_else(str_detect(Item_raw, "GeekR"), 2, 1 )) %>% 
-  select(Part, Item, session, response) %>% 
-#  as_tbl_obs() %>% 
-  print()
-  
-```
-
-Now, we can extract an entity table `D_Item` that assigns items to their scale:
-
-```{r}
-D_Items <- 
-  D_quest %>% 
-  distinct(Item) %>%
-  mutate(Scale = str_extract(Item, "Geek|NCS"))
-
-sample_n(D_Items, 5)
-```
-
-
-The three resulting tables are minimal in that they provide completely distinct information: `D_Part` only contains elementary information on participants, `D_Items` links items to their respective scale and `D_quest` only deals with the encounter of participants and items. It would have been possible to leave the variable Scale in `D_quest` and not even create the entity table. However, this table can be used to store additional information, such as sub-scales or whether an item is reversed.
-
-
-### Join
-
-For the data analysis these tables can be shaped joined together in various ways, depending on the relationships the researcher wants to examine. In the following example,  the researcher wants to examine the test-retest reliability of the geekism scales and the association between Geek and NCS. That is accomplished by joining with `D_Item`, computing the mean score per participant and session and make it wide:
-
-```{r}
-D_scores <-
-  D_quest %>% 
-  left_join(D_Items) %>%
-  #filter(Scale == "Geek") %>% 
-  group_by(Part, Scale, session) %>% 
-  summarize(score = mean(response, na.rm = T)) %>% 
-  ungroup() %>% 
-  mutate(Scale = str_c(Scale, session)) %>% 
-  select(Part, Scale, score) %>% 
-  tidyr::spread(Scale, score) 
-
-D_scores %>% 
-  select(-Part) %>% 
-  cor(use = "complete.obs")
-
-  
-```
-
-Another way to put `D_scores` to use is to examine the association between personality scores and demographic variables that are in `D_Part`. For example, are boys really more geeky than girls?
-
-```{r}
-D_Part %>% 
-  join(D_scores, by = "Part") %>% 
-  ggplot(aes(x = Gender, y = Geek1)) +
-  geom_boxplot()
-```
-
-It seems a little overdone to create a separate entity table for items as the only property is the scale it belongs to. In fact, there is more you can do with it. For example:
-
-+ some scales use reversed  items to prevent automatisms. For the data analysis they have to be aligned and `D_Item` is a good place to keep book of it.
-+ Many scales have sub-scales. If that matters, `D_Item` just gains another grouping variable.
-
-There even is a case for going one more level up in abstraction and use an entity table for scales. It frequently  happens that rating scales differ in range (of ordinal response categories). In the Hugme study, NCS responses have been gathered on a seven-bin scale (-3 to 3) and Geek on a five-bin scale (-2 to 2). Sometimes ordinal response are coded from 1 to 5, sometimes 1 to 7 and an analogue scales could range from 0 to 1. It is practical, though, to normalize rating scale responses  during the data cleaning process. So, where to store the range? In `D_scales`:
-
-```{r}
-D_Scales <-
-  tribble(~Scale, ~min, ~max, ~nbins, 
-          "NCS" ,    -3,    3,     7,
-          "Geek",    -2,    2,     5)
-```
-
-Now, all scale responses can be converted to the interval $[0;1]$ by first joining with `D_Items` and then joining with `D_Scales`. As a result it becomes more convenient to plot the distribution of responses per scale side-by-side:
-
-```{r}
-D_quest %>%
-  join(D_Items, by = "Item") %>%
-  join(D_Scales, by = "Scale") %>%
-  filter(abs(response) <=3) %>% 
-  mutate(response = (response - min)/(nbins - 1)) %>% 
-  ggplot(aes(x = Item, y = response, color = Scale)) +
-  geom_violin()
-  
-
-```
-
-
-
-
-
-
-
-Returning to the original problem of a hybrid experimental/survey study, what are the entities? Clearly, participants are entities. The second set of entities are the items of personality questionnaires, and the data we can conceive as the *encounter of items and participants* that results in participants-by-items responses.
-
-```{r fig_questionnaire_entity, opts.label = "fig.wide"}
-attach(Hugme)
-
-T_some_items <-
-  HUG3_resp %>% 
-  select(Item, Scale) %>% 
-  distinct() %>% 
-  filter(Item %in% c("Geek01", "Geek02", "NCS01"))
-
-T_some_part <-
-  HUG_part %>% 
-  slice(1:3)
-
-T_some_resp <-
-  expand.grid(Part = T_some_part$Part,
-              Item = T_some_items$Item) %>% 
-  left_join(T_some_part) %>% 
-  left_join(T_some_items) %>% 
-  mutate(rating = round(runif(9, 1,7), 0)) %>% 
-  select(Part, Item, Scale, rating)
-
-grid.arrange(
-  T_some_part %>% gtable(plot = F),
-  T_some_items %>% gtable(plot = F),
-  T_some_resp %>% gtable(plot = F),
-  layout_matrix = rbind(c(1,3), c(2,3))
-)
-
-
-```
-
-
-So, according to the ERM framework, we are going to have two separate entity tables, at least. The *participants table* has one row per participant, identified by a unique participant ID, and all singular attributes of participants, like gender, age etc. The *items table* carries the questionnaires. Items are uniquely identified by an ID. When several scales are used, it is recommended to add a separate factor variable assigning an item to a scale. This can creates some redundancy as the item name might already identify the scale. As we will later see, this Scale variable is very useful for calculating the aggregated scores. `r figr("fig_questionnaire_entity")`  gives the smallest possible item table, but further useful information about items can be added as variables, such as: 
-
-+ item text in all used language
-+ item labels
-+ if an item is reversed or not 
-+ the position of an item in the questionnaire
-+ any sub scale (or sub sub scale) the item belongs to
-
-Finally, the *questionnaire table* stores the "encounter" between participants and items in the study. In ERM speak it is a *relationship table*, as it borrows entities and their keys from participants and items. The so-called *foreign key* is the combination of participants and items. Like with the entity tables, it is important that every observation (that is a response of one participant to one item) is uniquely identified by the foreign key.
-
-In more complicated cases, the combination of participant and item might not identify every observation uniquely. For example, a preferred method to assess a questionnaires reliability is to repeat the measurement in a second session. If we would use the item table as in `r figr("fig_questionnaire_entity")`, the observations were no longer uniquely identified, as all participants encounter every item twice. As a solution one would simply extend the key of the table by a variable called `session`.
-
-
-
-
 ## Modelling design studies (tbd)
-
-### Simulate
-
-### Reshape
-
-### Join
 
 Design studies assess how users respond to designs. Typically, in such a test, users encounter a set of tasks. The situation is similar to that of questionnaires: a participant encounters several tasks, which  may differ in relevant respects, like difficulty, length or how much it triggers frustration.
 
 ## Modelling organizational structures (tbd)
 
-### Simulate
-
-### Reshape
-
-### Join
-
-
-
 ## Modelling longitudinal data (tbd)
-
-### Simulate
-
-### Reshape
-
-### Join
 
 
 

@@ -79,18 +79,6 @@ save_CE(Chapter_LCM)
 
 ```
 
-```{r}
-new_syncenv("Chapter_WM")
-save_CE(Chapter_WM)
-
-```
-
-```{r}
-new_syncenv("Chapter_WD")
-save_CE(Chapter_WD)
-
-```
-
 
 
 ## Case Rainfall
@@ -215,10 +203,7 @@ Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
 
 (Sec99$Ver20 <- Sec99$simulate())
 
-# issue #16
-Sec99$D_1 <- Sec99$Ver20
-
-  qplot(Sec99$Ver20$age)
+qplot(Sec99$Ver20$age)
 
 Sec99$Ver20 %>% ggplot(aes(x = age, y = ToT)) + geom_point()
 
@@ -811,53 +796,11 @@ new_syncenv("Uncanny")
 
 ```
 
-```{r}
-RK_1
-```
-
-
 
 ```{r Uncanny_load_data, opts.label = "sim"}
-
 load("external_Data/MathurRepl.Rda")
-load("external_Data/UV_PS.Rda")
-load("external_Data/UV_RK.Rda")
-
-MathurRepl <- 
-  MathurRepl %>% 
-  mutate(Part = as.character(Part), 
-         Stimulus = str_remove(Stimulus, "^c"),
-         Experiment = if_else(Experiment == "Keeris", "DK", "MR"))
-  
-
-PS_1 <- 
-  PS_1 %>% 
-  mutate(Experiment = "PS",
-         Collection = "PS",
-         Part = as.character(Part)) %>%
-  group_by(Part) %>%
-  mutate(trial = row_number()) %>% 
-  ungroup() %>% 
-  select_(.dots = names(MathurRepl)) 
-
-RK_1 <-
-  RK_1 %>% 
-  mutate(Experiment = "RK",
-         Collection = "RK",
-         Condition = "long") %>%
-  group_by(Part) %>%
-  mutate(trial = row_number()) %>% 
-  ungroup() %>% 
-  select_(.dots = names(MathurRepl))
-
-Uncanny$D_all <-
-  MathurRepl %>% 
-  bind_rows(PS_1) %>% 
-  bind_rows(RK_1) %>% 
-  as_tbl_obs()
-
-
-rm(MathurRepl, PS_1, RK_1)
+Uncanny$Data <- MathurRepl
+rm(MathurRepl)
 
 
 ## splicing out 
@@ -876,7 +819,7 @@ names(Uncanny)
 ```
 
 
-```{r Uncanny_functions, eval = F}
+```{r Uncanny_functions}
 Uncanny$trough <- function (coef, ...) {
    UseMethod("trough", coef)
  }
@@ -931,7 +874,7 @@ new_syncenv("Stroop")
 
 ## simulating the data set
 Stroop$simulate <-
-  function(b_int = 500,
+  function(b_int = 300,
            b_incon = 100,
            b_neutr = 30,
            b_trial = 5,
@@ -941,7 +884,7 @@ Stroop$simulate <-
            sd_treat = 10,
            min_age = 18,
            max_age = 60,
-           sd_resid = 50,
+           sd_resid = 200,
            n_Part = 30,
            outlier_rate = .02,
            correct_rate = .9){
@@ -957,8 +900,7 @@ Stroop$simulate <-
                  t_neutr = rnorm(n_Part, 0, sd_treat))
     
     Colors <- 
-      data_frame(Color = c("red", "green", "blue", "yellow"),
-                 Key = c("red", "green", "blue", "yellow"))
+      data_frame(Color = c("red", "green", "blue", "yellow"))
     
     Words <-  
       data_frame(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
@@ -998,15 +940,10 @@ Stroop$simulate <-
   }
 
 Stroop$Strp_1 <- 
-  Stroop$simulate() %>% 
-  select(Obs, Part, trial, Color, Word, Condition, RT)
-
-Stroop$R_Strp_1 <- 
-  Stroop$Strp_1 %>% 
-  select(Obs, Part, trial, Color, Word, RT)
+  Stroop$simulate()
 
 Stroop$Strp_1_avg <-
-  Stroop$simulate() %>% 
+  Stroop$Strp_1 %>% 
   group_by(Part, Condition, Incongruent, age) %>% 
   summarize(RT = mean(RT)) %>% 
   ungroup()  %>% 
@@ -1617,35 +1554,7 @@ write_csv(LapTrain$D_laptrain, "Data/LapTrain.csv")
 ```
 
 
-## Case Hugme 1 (alt.chi)
-
-```{r opts.label = "simulate"}
-new_syncenv("Hugme_1")
-```
-
-```{r}
-Hugme_1$D_hugme <- 
-  read_csv("external_data/HUG1/lGEEK.csv") %>% 
-  select(Part = Subj,
-         Field = Study,
-         NCS,
-         Word = item,
-         WordCat = HUG,
-         trial = order,
-         RT = time) %>% 
-  print()
-  
-```
-
-```{r}
-save(Hugme_1, file = "Cases/Hugme_1.Rda")
-write_sav(Hugme_1$D_hugme, "Data/Hugme_1.sav")
-write_csv(Hugme_1$D_hugme, "Data/Hugme_1.csv")
-
-```
-
-
-## Case: Hugme 3
+## Case: Hug me
 
 ```{r Hugme_create, opts.label = "simulate"}
 new_syncenv("Hugme")
@@ -1663,103 +1572,81 @@ new_syncenv("Hugme")
 load("external_data/HUG3/HUG3.Rda")
 load("external_data/HUG3/Q3.Rda")
 
-Hugme$E_Words <- 
-  readxl::read_excel("Data/Hugme/Trials.xlsx") %>% 
-  distinct(text_EN, text_DE, text_NL, HUGword) %>% 
-  mutate(WordCat = case_when(
-    HUGword  == "h" ~ "hedo",
-    HUGword  == "u" ~ "util",
-    HUGword  == "g" ~ "geek")) %>% 
-  select(Word = text_EN, Word_DE = text_DE, Word_NL = text_NL, WordCat)
-
 Hugme$D_hugme <- 
   HUG3 %>% 
-  left_join(Hugme$E_Words, by = c("Target" = "Word_DE")) %>% 
-  filter(!is.na(Word)) %>% 
   rename(Part = Subj) %>% 
   mutate(RT = RT/1000,
+         WordCat = case_when(
+           HUG  == "h" ~ "hedo",
+           HUG  == "u" ~ "util",
+           HUG  == "g" ~ "geek"
+         ),
          WordGeek = WordCat == "geek",
          PrimeGeek = primeCat == "geek") %>% 
   select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
-         Word, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
-  mascutils:::as_tbl_obs()
+         Word = Target, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
+  mascutils:::as_tbl_obs.tbl_df()
 
+## For chapter data modelling
 
-# Hugme$D_quest <- 
-#   Hugme$R_quest %>% 
-#   select(Part = UserID, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
-#   gather(Item, rating, -Part) %>% 
-#   mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
-#   mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
-#   mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>% 
-#   arrange(Part, Scale, Item) %>% 
-#   mascutils:::as_tbl_obs.tbl_df()
-
-```
-
-```{r}
-Hugme$R_exp <- 
-  Hugme$D_hugme %>% 
-  select(Part, Word, Prime, correct, RT)
+## Raw data
 
 Hugme$R_quest <- 
-  Q3 %>%
+  Hugme$Q3 %>%
   select(UserID = Subj,
-         Gender, Age, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
+         Gender, Age, Geek01:GeekR34, NCS01:NCS18) %>% 
   as.tibble()
 
-```
+## Entities
 
-
-
-
-```{r}
-## Extracting remaining entities
-
-Hugme$E_Part <- 
-  Hugme$R_quest %>% 
+Hugme$D_Part <- 
+  Hugme$Q3 %>% 
   as.tibble() %>% 
-  select(Part = UserID, gender = Gender, age = Age) %>% 
-  mutate(Part = as.integer(Part),
+  select(Part = Subj, gender = Gender, age = Age) %>% 
+  mutate(Part = as.factor(Part),
          age = as.integer(age))
 
-Hugme$E_Items <- readxl::read_excel("Data/Hugme/Items.xlsx")
+Hugme$D_Items <- 
+  Hugme$Q3 %>% 
+  select(Geek01:Geek34, NCS01:NCS18) %>% 
+  gather(Item, response) %>% 
+  mutate(Scale = str_extract(Item, "Geek|NCS"))
 
-Hugme$E_Primes <- 
-  Hugme$D_hugme %>% 
-  distinct(Prime, PrimeCat)
+## Observations
 
-openxlsx::write.xlsx(Hugme$E_Words, file = "Data/Hugme/Words.xlsx")
-openxlsx::write.xlsx(Hugme$E_Part, file = "Data/Hugme/Parts.xlsx")
-openxlsx::write.xlsx(Hugme$E_Primes, file = "Data/Hugme/Primes.xlsx")
+Hugme$D_exp <- Hugme$D_hugme
 
-```
+## Scores
 
 
 
-```{r}
-## reverse creating raw data files
+## Relationships
 
-Hugme$R_exp %>% 
-  group_by(Part) %>% 
-  nest() %>% 
-  purrr::pmap(~write_csv(..2, path = paste0("Data/Hugme/P_",..1,".csv")))
+## questionnaires
+
+Hugme$HUG_resp <- 
+  Q3 %>% 
+  select(Part = Subj, Geek01:GeekR34, NCS01:NCS18) %>% 
+  gather(Item, rating, -Part) %>% 
+  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
+  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
+  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>% 
+  arrange(Part, Scale, Item) %>% 
+  mascutils:::as_tbl_obs.tbl_df()
 
 ```
 
   
 
 ```{r hugme_export}
-save(Hugme, file = "Cases/Hugme.Rda")
-write_sav(Hugme$D_hugme, "Data/Hugme.sav")
-write_csv(Hugme$D_hugme, "Data/Hugme.csv")
+save(Hugme, file = "Cases/hugme.Rda")
+write_sav(Hugme$D_hugme, "Data/hugme.sav")
+write_csv(Hugme$D_hugme, "Data/hugme.csv")
 write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
 write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
 write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
 write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
 ```
-
-
 
 
 ## Case Stroop Mind Wandering
@@ -1787,10 +1674,6 @@ StroopMW$D_stroopmw <-
   select(Obs, Part = subj, Condition = condition, Color = color, 
          Key = response, correct, RT) %>%
   as_tbl_obs()
-
-StroopMW$D_Words <- 
-  tribble(~Key, ~Word,
-          "f",  "green")
 
 ```
 
@@ -1827,8 +1710,8 @@ Joystick$simulate <-
       data_frame(
         Part = 1:N_Part,
         age = round(runif(N_Part, 20, 60), 0),
-        experience = (age - 18) * rbeta(N_Part, 45, 5)) %>% 
-      mutate(part_asym = rbeta(N_Part, 45, 5), ## scales, not additive
+        experience = age * rbeta(N_Part, 45, 5)) %>% 
+      mutate(part_asym = rbeta(N_Part, 45, 5) - 18, ## scales, not additive
              part_rate = rbeta(N_Part, 20, experience),
              part_ampl = rbeta(N_Part, 45, 5))
     
@@ -1839,26 +1722,25 @@ Joystick$simulate <-
     
     Exp <- expand_grid(Part = Parts$Part, 
                        Control = Conditions$Control, 
-                       round = as.integer(0:(N_round - 1))) %>% 
+                       round = as.integer(1:N_round)) %>% 
       left_join(Parts) %>% 
       left_join(Conditions) %>% 
       mutate(
-        Round = as.factor(round + 1),
+        Round = as.factor(round),
         ampl = ampl * part_ampl,
         rate = rate / part_rate,
         asym = asym * part_asym,
         mu = asymptote::ary(ampl, rate, asym, round),
-        SCR =rpois(N_Obs, mu)) %>% 
-      as_tbl_obs()
+        SCR = brms::rexgaussian(N_Obs, mu, 5, 10))
   }
 
-Joystick$D_joy <- 
-  Joystick$simulate() %>% 
-  select(Obs, Part, age, experience, Control, round, Round, SCR)
+Joystick$D_joy <- Joystick$simulate()
 
-Joystick$D_joy
+Joystick$D_joy$SCR[c(5, 12, 56)] <- Joystick$D_joy$SCR[c(5, 12, 56)]*10
 
-Joystick$D_joy$SCR[c(5, 12, 56)] <- 0
+Joystick$D_joy %>% 
+  ggplot(aes(x = age, y = experience)) +
+  geom_point()
 
 Joystick$D_joy %>% 
   ggplot(aes(x = Round, y = SCR, color = Control)) +
@@ -1870,12 +1752,10 @@ Joystick$D_joy %>%
   geom_line(aes(group = Control)) +
   facet_wrap(~Part)
 
-M_1 <- stan_glm(SCR ~ Control*experience + Control * Round,
-                data = Joystick$D_joy, iter = 500, family = "poisson")
+M_1 <- stan_glm(SCR ~ Control*experience + Control * Round, 
+                data = Joystick$D_joy)
 
 fixef(M_1)
-
-
 ```
 
 
@@ -1886,42 +1766,7 @@ write_csv(Joystick$D_joy, "Data/joystick.csv")
 
 ```
 
-## Case Websites on the Internet
 
-Data scraped from https://www.softwarefindr.com/how-many-websites-are-there/
-
-
-```{r Websites_create, opts.label = "simulate"}
-new_syncenv("Websites")
-```
-
-
-
-```{r Websites_load_data, opts.label = "sim"}
-Websites$D_Websites <-
-  readxl::read_excel("external_data/Websites.xlsx") %>% 
-  mutate(year = Year - min(Year) + 1) %>% 
-  select(Year, year, websites)
-  
-
-```
-
-
-```{r}
-Websites$D_Websites %>% 
-  ggplot(aes(x = Year, y = websites)) +
-  geom_point() +
-  geom_smooth()
-```
-  
-
-
-```{r Websites_export}
-save(Websites, file = "Cases/Websites.Rda")
-write_sav(Websites$D_Websites, "Data/Websites.sav")
-write_csv(Websites$D_Websites, "Data/Websites.csv")
-
-```
 
 
 
