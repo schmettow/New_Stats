@@ -349,7 +349,7 @@ As we will see, response times in design research are particularly misbehaved, a
 
 Still, using distributions that are not Gaussian sometimes carries minor complications. Normal distributions have the convenient property that the amount of randomness is directly expressed as the parameter $\sigma$. That allowed us to compare the fit of two models A and B by comparing $\sigma_A$ and $\sigma_B$ (note, however that this is not a rigorous method for model selection). In random distributions with just one parameter, the random component is either determined by the location (e.g. Poisson $\lambda$ or Binomial $p$). For distributions with more than one parameter, dispersion of randomness typically is a function of two or more parameters. For example, Gamma distributions have two parameters, but these do not pull location and dispersion neatly apart as Normal distributions do. Instead, mean and variance Gamma distributions depend on both parameters.
 
-Using distributions with entanglement of location and dispersion seems to be a step back, but frequently is necessary to render a realistic association between the expected value and amount of absolute randomness. Most distributions with a lower bound (e.g. Poisson, exponential and Gamma) increase variance with mean, whereas double bounded distributions (beta and binomial) typically have maximum variance when the distribution is centered.
+Using distributions with entanglement of location and dispersion seems to be a step back, but frequently it is necessary to render a realistic association between the expected value and amount of absolute randomness. Most distributions with a lower bound (e.g. Poisson, exponential and Gamma) increase variance with mean, whereas double bounded distributions (beta and binomial) typically have maximum variance when the distribution is centered and symmetric.
 
 
 
@@ -1011,6 +1011,7 @@ data_frame(x = 0:15,
 
 ```
 
+<!-- COMPLETE ME -->
 
 #### Beta-binomial regression for successes in trials
 
@@ -2457,6 +2458,24 @@ What would be a legitimate way to catch outliers? The Stroop task has been repli
 ```
 
 
+## Robust Models
+
+```{r}
+attach(Egan)
+
+M_1
+
+insight::find_formula(M_1)
+
+M_1_t <- 
+  D_egan %>% 
+  mutate(logToT = log(ToT)) %>% 
+  brm(formula(M_1), family = "student", data = .)
+
+
+ls(Egan)
+
+```
 
 
 

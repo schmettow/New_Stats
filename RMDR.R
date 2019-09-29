@@ -53,7 +53,7 @@ library(gridExtra)
 library(GGally)
 library(DiagrammeR)
 
-## Data management (go last to prevent overwriting dplyr/tidyr namespace)
+## Data management
 library(foreign)
 library(plyr)
 library(pipeR)
@@ -124,7 +124,8 @@ opts_chunk$set(echo = purp.rtut,
                message = purp.debg,
                eval = purp.book, 
                results = "markup",
-               cache = 0)
+               cache = 0,
+               out.width = "66%")
 
 options(digits=3)
 
@@ -186,25 +187,6 @@ options(mc.cores = parallel::detectCores())
 # formals(stan_glm)$iter <- 3000
 # formals(MCMCglmm)$verbose <- F
 
-
-
-
-## setting defaults for MCMCglmm runs (switch off debugging)
-# formals(MCMCglmm)$verbose <- F
-# formals(MCMCglmm)$nitt <- 5000
-# formals(MCMCglmm)$burnin <- 1000
-# formals(MCMCglmm)$thin <- 1
-## downward compatibility
-# MG = function(...) MCMCglmm(...)
-
-## extending MCMCglmm
-
-
-## p-values don't work
-# pMCMC = function(object) 2 * pmax(0.5/dim(object$Sol)[1], 
-#                                   pmin(colSums(object$Sol[,1:object$Fixed$nfl, drop = FALSE] > 0)/dim(object$Sol)[1], 
-#                                        1 - colSums(object$Sol[, object$Fixed$nfl, drop = FALSE] > 
-#                                                      0)/dim(object$Sol)[1]))
 
 
 ## extending ggplot2

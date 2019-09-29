@@ -278,19 +278,6 @@ Maybe, you have recorded the coincidences of clouds and rainfall over a period, 
 Rain %>% as_tbl_obs()
 ```
 
-
-
-| Obs|cloudy |rain  |
-|---:|:------|:-----|
-|   1|TRUE   |FALSE |
-|   2|TRUE   |TRUE  |
-|   3|TRUE   |FALSE |
-|   9|FALSE  |TRUE  |
-|  11|TRUE   |TRUE  |
-|  15|FALSE  |TRUE  |
-|  18|FALSE  |FALSE |
-|  20|FALSE  |FALSE |
-
 Intuitively, you would use the average to estimate the probability of rain under every condition.
 
 
@@ -309,7 +296,7 @@ T_desc <-
 detach(Rainfall)
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 63.745$%. 
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few obervations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 60.078$%. 
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with a certain statement. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -367,7 +354,8 @@ RD  %>%
   geom_boxplot()
 ```
 
-![](Design_Research_files/figure-latex/rational_design_1-1.pdf)<!-- --> 
+
+\includegraphics[width=0.66\linewidth]{Design_Research_files/figure-latex/rational_design_1-1} 
 
 There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? And how certain can Violet be? A formal regression analysis gives the answer [^gamma_reg].
 
@@ -425,7 +413,8 @@ P_1 %>%
   geom_histogram(binwidth = .002)
 ```
 
-![](Design_Research_files/figure-latex/rational_design_risk_of_failure-1.pdf)<!-- --> 
+
+\includegraphics[width=0.66\linewidth]{Design_Research_files/figure-latex/rational_design_risk_of_failure-1} 
 
 
 ```r
@@ -473,7 +462,8 @@ Ver20 %>%
   geom_histogram()
 ```
 
-![](Design_Research_files/figure-latex/seconds_99_1-1.pdf)<!-- --> 
+
+\includegraphics[width=0.66\linewidth]{Design_Research_files/figure-latex/seconds_99_1-1} 
 
 
 
@@ -583,7 +573,8 @@ P_prior %>%
   geom_density()
 ```
 
-![](Design_Research_files/figure-latex/previous_belief_in_revenue-1.pdf)<!-- --> 
+
+\includegraphics[width=0.66\linewidth]{Design_Research_files/figure-latex/previous_belief_in_revenue-1} 
 
 On average, revenues have increased by factor 1.211 by past design improvements. Of course, with only five points of measurement there is uncertainty as well. The mount of uncertainty is the spread of prior distribution. Using this prior information, the development manager runs another regression model on her experimental data, this time using both sources of information, her optimistic prior and the experimental data.
 
@@ -639,7 +630,8 @@ N_risk_of_failure_2 <-
   geom_histogram(binwidth = .002)
 ```
 
-![](Design_Research_files/figure-latex/rational_design_risk_of_failure_2-1.pdf)<!-- --> 
+
+\includegraphics[width=0.66\linewidth]{Design_Research_files/figure-latex/rational_design_risk_of_failure_2-1} 
 
 
 ```r
