@@ -2,16 +2,23 @@
 #source("~/.cran/MYLIBDIR.R")
 ## various output purposes, is primarily used for chunk options
 
-if(!exists("purp.book")) # Book
-  purp.book = T
-if(!exists("purp.mcmc")) # updating MCMC models
-  purp.mcmc = F
-if(!exists("purp.debg")) # debugging, show hidden code
-  purp.debg = F
-if(!exists("purp.prnt")) # print (for ioslides, todo)
-  purp.prnt = T
-if(!exists("purp.rtut")) # show R tutorial code
-  purp.rtut = T
+purp.book <- T
+purp.mcmc <- F
+purp.debg <- F
+purp.prnt <- T
+purp.rtut <- F
+# if(!exists("purp.book")) # Book
+#   purp.book = T
+# if(!exists("purp.mcmc")) # updating MCMC models
+#   purp.mcmc = F
+# if(!exists("purp.debg")) # debugging, show hidden code
+#   purp.debg = F
+# if(!exists("purp.prnt")) # print (for ioslides, todo)
+#   purp.prnt = T
+# if(!exists("purp.rtut")) # show R tutorial code
+#   purp.rtut = T
+
+
 
 # if(!exists("thisdir")) thisdir = getwd()
 # #setwd("/..") # manually
@@ -33,7 +40,7 @@ if(!exists("purp.rtut")) # show R tutorial code
 # }
 
 ## Regression models
-# library(lme4)
+library(lme4)
 # library(MCMCglmm)
 library(brms)
 library(rstanarm)
@@ -56,7 +63,7 @@ library(DiagrammeR)
 ## Data management
 library(foreign)
 library(plyr)
-library(pipeR)
+#library(pipeR)
 library(tidyverse)
 library(stringr)
 library(haven)

@@ -14,15 +14,15 @@ TODO:
 
 
 
-1. Identify the classes of objects in your research, such as participants, designs, tasks, situations asf. In the most general case, these are considered *units* sampled from a population
-2. For every class create a *unit table*
+1. Identify the classes of objects in your research, such as participants, designs, tasks, situations asf. In the most general case, these are considered *entities* sampled from a population
+2. For every class create a *entity table*
 
-* start with the identifier variables, which unambiguously mark every row.
-* add fixed effects properties to unit tables, for example, age and gender of participants
-* add random effects to the unit tables, like $\theta_T0$ for a task-level ramdom effect, or $\theta_S1$ for a subject-level slope ramdom effect. 
+* start with the identifier variables for entities
+* add fixed effects properties to entity tables, for example, age and gender of participants
+* add random effects to the entity tables, like $\theta_T0$ for a task-level ramdom effect, or $\theta_S1$ for a subject-level slope ramdom effect. 
 
-3. Create an *observation  table* for your observations. Start with a grid of unit identifiers. For complete designs, this is easiest done using *expand.grid()*. 
-4. *Join* the observations table with all unit tables using unit identifiers as key. This is done either through *merge()* from the base package or *inner_join()* from dplyr. This you will gather all predictors in one table.
+3. Create an *observation  table* for your observations. Start with a grid of entity identifiers. For complete designs, this is easiest done using *expand.grid()*. 
+4. *Join* the observations table with all entity tables using entity identifiers as key. This is done either through *merge()* from the base package or *inner_join()* from dplyr. This you will gather all predictors in one table.
 6. Compute the linear predictor $\eta$ (eta), by a linear term, e.g. add the treatment effect and participant random effects. In case of Gaussian distributed residuals, the link function is *identity()* and this step can be omitted.
 7. Compute the expected value $\mu$ (mu), by using the link function
 8. Compute the observed value $y$ (or any more expressive name) by adding the error term to $\mu$, typically by using a random number function such as *rnorm()*.
@@ -114,7 +114,7 @@ Rainfall$simulate <-
     
     if (!is.na(set.seed)) set.seed(set.seed)
     ## number of observations
-    data_frame(cloudy = rbinom(n_Days, 1, .6)) %>%
+    tibble(cloudy = rbinom(n_Days, 1, .6)) %>%
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
       mutate(cloudy = as.logical(cloudy),
              rain = as.logical(rain)) %>% 
@@ -197,11 +197,13 @@ Sec99$simulate <-
     n_Obs = n_Part
     
     ## OUT
-    Sec99 = data_frame(Obs = 1:n_Part,
+    Sec99 = tibble(Obs = 1:n_Part,
                        Part = 1:n_Part,
                        ToT = rnorm(n_Obs, mu_ToT, sigma_ToT)) %>% 
       ## dirty hack to create correlated age
-      mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT/8, 2)))
+      mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT/8, 2))) %>% 
+      mutate(Gender = if_else(rbinom(n_Part, 1, .4) == 1,
+                             "male", "female"))
     Sec99 %>% as_tbl_obs()
   }    
 
@@ -210,8 +212,8 @@ Sec99$simulate <-
 Sec99$Ver20$age[c(6, 19, 73)] <- NA
 
 ## Gender
-Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
-                             "male", "female")
+# Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
+#                              "male", "female")
 
 (Sec99$Ver20 <- Sec99$simulate())
 
@@ -255,7 +257,7 @@ Rational$simulate <-
     if (!is.na(set.seed)) set.seed(set.seed)
     
     RD    <- 
-      data_frame(Part = 1:n_Part,
+      tibble(Part = 1:n_Part,
                  Design = rep(c("current", "proto"), n_Part/2),
                  mu = mu_legacy * ifelse(Design == "proto", eta_proto, 1),
                  shape = mu/scale,
@@ -291,7 +293,7 @@ write_csv(Rational$RD, "Data/Rational.csv")
 try(detach(BrowsingAB))
 try(rm(BrowsingAB))
 new_syncenv("BrowsingAB")
-BrowsingAB
+#BrowsingAB
 ```
 
 
@@ -347,11 +349,11 @@ BrowsingAB$simulate <-
     n_Obs = n_Part * n_Design * n_Task
     
     ## Subject frame
-    Part = data_frame(
+    Part = tibble(
       Part = as.factor(1:n_Part),
       Gender = sample(c("F", "M"), 
                       size = n_Part, replace = T),
-      Education = sample(forcats::fct_inorder(c("Low", "Middle", "High")), 
+      Education = sample(c("Low", "Middle", "High"), 
                          size = n_Part, replace = T),
       theta_S0 = rnorm(n_Part, 0, sd_S0),
       theta_S1 = rnorm(n_Part, 0, sd_S1),
@@ -366,11 +368,11 @@ BrowsingAB$simulate <-
     
     
     Task = 
-      data_frame(Task = as.factor(1:n_Task),
+      tibble(Task = as.factor(1:n_Task),
                       theta_T0 = rnorm(n_Task, 0, sd_T0))
     
     Design = 
-      data_frame(Design = factor(c("A", "B"))) %>% ## LVs
+      tibble(Design = factor(c("A", "B"))) %>% ## LVs
       mutate(Small_font = (Design == "B"))
     
     
@@ -494,13 +496,13 @@ CUE8$simulate <-
   ){
     n_Obs = n_Part * n_Task
     Teams = 
-      data_frame(Team = as.factor(1:n_Team),
+      tibble(Team = as.factor(1:n_Team),
                  Moderated = rbinom(n_Team, 1, .5)) %>% 
       mutate(alpha = runif(n_Team,.9, .95) + Moderated * -.05,
              prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
     
     Participants = 
-      data_frame(Participant = as.factor(1:n_Part)) %>% 
+      tibble(Participant = as.factor(1:n_Part)) %>% 
       mutate(Team = factor(x = colSums(rmultinom(n_Part, 
                                                  1, prob = Teams$prevalence)  * 1:n_Team),
                            levels = c(1:n_Team))) %>% 
@@ -508,7 +510,7 @@ CUE8$simulate <-
       mutate(mu_Part = rgamma(n_Part, 160 + Moderated * 20, 200) * 20) ## gaussian part
     
     Tasks =
-      data_frame(Task = factor(1:n_Task)) %>% 
+      tibble(Task = factor(1:n_Task)) %>% 
       mutate(mu_Task = rgamma(n_Task, 100, 100) * 100) ## gaussian part
     
     Obs =
@@ -529,7 +531,7 @@ CUE8$D_sim_1 <-
 
 CUE8$D_cue8 <- 
   foreign::read.spss("external_Data/CUE8 long.sav") %>% 
-  as_data_frame() %>% 
+  as_tibble() %>% 
   # haven::read_sav("external_Data/CUE8 long.sav") %>% 
   mutate(Obs = row_number()) %>% 
   select(Obs, Team, Part = Participant, Condition = moderated, SUS, Task, ToT) %>% 
@@ -574,7 +576,7 @@ Headache$simulate <-
   function(N = 16, 
            seed = 42){
     set.seed(seed)
-    data_frame(before = round(rbeta(N, 3, 2) * 4 + 3),
+    tibble(before = round(rbeta(N, 3, 2) * 4 + 3),
                PillA = rep(c(TRUE, FALSE), N/2),
                PillB = c(rep(TRUE, N/2), rep(FALSE, N/2))) %>%
       mutate(reduction = rnorm(N, 
@@ -621,7 +623,7 @@ Reading$simulate <-
     {
     set.seed(seed)
     out <-
-      data_frame(Part = 1:N,
+      tibble(Part = 1:N,
                  font_size = factor(rep(c(1, 2), N/2), 
                                     levels = c(1,2), 
                                     labels = c("10pt", "12pt")),
@@ -691,7 +693,7 @@ AR_game$simulate <-
     {
     set.seed(seed)
     out <-
-      data_frame(Part = 1:N,
+      tibble(Part = 1:N,
                  technophile = rbeta(N, 2, 3) * 2 - 1,
                  sociophile = rbeta(N, 2, 2) * 2 - 1) %>%
       mutate( eta = beta[1] + 
@@ -763,8 +765,8 @@ Sleep$simulate <-
                beta[2] * (Environment == "Noisy") +
                beta[3] * (Sleep == "Sleepy") +
                beta[4] * (Environment == "Noisy") * (Sleep == "Sleepy"),
-             gaps = rnorm(N,mu,sigma)) %>% 
-      mutate(gaps = ifelse(gaps > 0, gaps, NA)) %>% 
+             RT = rnorm(N,mu,sigma)) %>% 
+      mutate(RT = ifelse(RT > 0, RT, NA)) %>% 
       select(3,1,2,4,5)  %>% 
       as_tbl_obs()
   }
@@ -776,7 +778,7 @@ names(Sleep$D_1)
 Sleep$D_1 %>% 
   ggplot(aes(x = Environment,
              color = Sleep,
-             y = gaps)) +
+             y = RT)) +
   geom_boxplot()
   
 ```
@@ -786,7 +788,7 @@ Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal i
 ```{r Sleep_sim_YD}
 Sleep$simulate_YD <- 
     function(arousal, offset = 1, scale = 1.8){
-    data_frame(arousal = arousal) %>% 
+    tibble(arousal = arousal) %>% 
       mutate(energy = plogis(arousal + offset, scale = .5),
              focus =  (1 - plogis(arousal, scale = .5))) %>% 
       mutate(performance = energy * focus * scale) %>% 
@@ -811,9 +813,6 @@ new_syncenv("Uncanny")
 
 ```
 
-```{r}
-RK_1
-```
 
 
 
@@ -821,16 +820,17 @@ RK_1
 
 load("external_Data/MathurRepl.Rda")
 load("external_Data/UV_PS.Rda")
+
 load("external_Data/UV_RK.Rda")
 
-MathurRepl <- 
-  MathurRepl %>% 
-  mutate(Part = as.character(Part), 
-         Stimulus = str_remove(Stimulus, "^c"),
-         Experiment = if_else(Experiment == "Keeris", "DK", "MR"))
+# MathurRepl <- 
+#   MathurRepl %>% 
+#   mutate(Part = as.character(Part), 
+#          Stimulus = str_remove(Stimulus, "^c"),
+#          Experiment = if_else(Experiment == "Keeris", "DK", "MR"))
   
 
-PS_1 <- 
+Uncanny$PS_1 <- 
   PS_1 %>% 
   mutate(Experiment = "PS",
          Collection = "PS",
@@ -838,33 +838,32 @@ PS_1 <-
   group_by(Part) %>%
   mutate(trial = row_number()) %>% 
   ungroup() %>% 
-  select_(.dots = names(MathurRepl)) 
+  select(Part, Item, Stimulus, )
 
-RK_1 <-
+Uncanny$RK_1 <-
   RK_1 %>% 
   mutate(Experiment = "RK",
          Collection = "RK",
-         Condition = "long") %>%
+         Condition = "long",
+         Session = as.character(repetition + 1)) %>%
   group_by(Part) %>%
   mutate(trial = row_number()) %>% 
-  ungroup() %>% 
-  select_(.dots = names(MathurRepl))
+  ungroup()
 
-Uncanny$D_all <-
-  MathurRepl %>% 
-  bind_rows(PS_1) %>% 
-  bind_rows(RK_1) %>% 
-  as_tbl_obs()
+# Uncanny$D_all <-
+#   MathurRepl %>% 
+#   bind_rows(Uncanny$PS_1 %>% select_(.dots = names(PS_))) %>% 
+#   bind_rows(Uncanny$RK_1 %>% select_(.dots = names(MathurRepl))) %>% 
+#   as_tbl_obs()
 
 
-rm(MathurRepl, PS_1, RK_1)
+# rm(MathurRepl)
 
 
 ## splicing out 
 Uncanny$UV_1 <- 
-  Uncanny$Data %>% 
-  filter(Collection == "Mathur",
-         Experiment == "Mathur") %>% 
+  Uncanny$RK_1 %>% 
+  filter(Set == "MR") %>% 
   select(Part, Stimulus, huMech, response) %>% 
   group_by(Stimulus, huMech) %>% 
   summarize(avg_like = mean(response, na.rm = T)) %>% 
@@ -873,6 +872,16 @@ Uncanny$UV_1 <-
 
 names(Uncanny)
 
+```
+```{r}
+Uncanny$RK_1 %>% 
+  ggplot(aes(x = huMech)) +
+  geom_smooth(aes(y = response, col = "response")) +
+  geom_smooth(aes(y = eeriness, col = "eeriness"))
+
+Uncanny$UV_1 %>% 
+  ggplot(aes(x = huMech, y = avg_like)) +
+  geom_smooth()
 ```
 
 
@@ -911,7 +920,7 @@ Uncanny$trough.data.frame <-
 ```{r Uncanny_export}
 save(Uncanny, file = "Cases/Uncanny.Rda")
 
-write_sav(Uncanny$UV_1, "Data/UV_1.sav")
+#write_sav(Uncanny$UV_1, "Data/UV_1.sav")
 write_csv(Uncanny$UV_1, "Data/UV_1.csv")
 
 ```
@@ -931,10 +940,10 @@ new_syncenv("Stroop")
 
 ## simulating the data set
 Stroop$simulate <-
-  function(b_int = 500,
-           b_incon = 100,
-           b_neutr = 30,
-           b_trial = 5,
+  function(b_int = 500,   ## congruent (Intercept)
+           b_incon = 100, ## incongruent
+           b_neutr = 30,  ## neural
+           b_trial = 5,   ## 
            b_age = 2,
            sd_int = 50,
            sd_trial = .5,
@@ -949,7 +958,7 @@ Stroop$simulate <-
     n_Stim = 32
     
     Part <-
-      data_frame(Part = 1:n_Part,
+      tibble(Part = 1:n_Part,
                  t_int = rnorm(n_Part, 0, sd_int),
                  age = round(runif(n_Part, min_age, max_age)),
                  t_trial = rnorm(n_Part, 0, sd_trial),
@@ -957,11 +966,11 @@ Stroop$simulate <-
                  t_neutr = rnorm(n_Part, 0, sd_treat))
     
     Colors <- 
-      data_frame(Color = c("red", "green", "blue", "yellow"),
+      tibble(Color = c("red", "green", "blue", "yellow"),
                  Key = c("red", "green", "blue", "yellow"))
     
     Words <-  
-      data_frame(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
+      tibble(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
       mutate(Word_type = ifelse(Word %in% Colors$Color, "color", "neutral"))
     
     Stimuli <- 
@@ -1051,7 +1060,7 @@ new_syncenv("YD")
 ## simulating the data set
 YD$simulate_nonstoch <- 
     function(arousal, offset = 1, scale = 1.8){
-    data_frame(arousal = arousal) %>% 
+    tibble(arousal = arousal) %>% 
       mutate(energy = plogis(arousal + offset, scale = .5),
              focus =  (1 - plogis(arousal, scale = .5))) %>% 
       mutate(performance = energy * focus * scale) %>% 
@@ -1101,7 +1110,42 @@ write_csv(YD$D_1, "Data/YD_1.csv")
 ```
 
 
-## Case: Infusion Pump 
+## IPump: Comparing performance over time between two infusion pump designs 
+
+<!-- Consider the following research situation: Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules. Just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted as well and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users". -->
+
+<!-- That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it then already? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there yet [see LMM]. -->
+
+
+## Case: IPump, user testing infusion pumps
+
+Medical infusion pumps are unsuspicious looking devices that are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained staff, mostly anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
+
+* tiny 3-row LCD displays
+* flimsy foil buttons without haptic marking or feedback
+* modes
+* information hidden in menus
+
+For fixing these issues no additional research is needed, as the problems are pretty obvious to experienced user interface designers. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
+
+* is the interface safe to use?
+* is it efficient to learn?
+* is a novel interface better than a legacy design? And by how much?
+
+<!-- #98 -->We conducted such a study. A novel interface was developed after an extensive study of user requirements and design guidelines. As even the newest national standards  for medical devices do not spell precise quantitative user requirements (such as, a nurse must be able to complete a standard task in *t* seconds and no more than *e* errors may occur), the novel interface was compared to a device with a legacy design. The participants were nurses and they were asked to complete a set of eight standard tasks with the devices. In order to capture learnability of the devices, every nurse completed the sequence of tasks in three consecutive sessions. A number of performance measures were recorded to reflect safety and efficiency of operation:
+
+1. *task completion*: for every task it was assessed whether the nurse had completed it successfully.
+1. *deviations from optimal path*: using the device manual for every task the shortest sequence was identified that would successfully complete the task. The sequence was then broken down into individual operations that were compared to the observed sequence of operations. An algorithm called *Levenshtein distance* was used to count the number of deviations.
+1. *time on task* was recorded as a measure for efficiency.
+1. *mental workload* was recorded using a one-item rating scale.
+
+As can be expected in the light of what has been said above, each one these measures violate one or more assumptions of the Gaussian linear model. In the following chapters, proper models from the GLM family are introduced for commonly occuring measures:
+
+1. *count data*, such as the number of completed tasks and path deviations
+1. *temporal data*, such as time-on-task
+1. *rating scales*
+
+
 
 
 ```{r IPump_create, opts.label = "simulate"}
@@ -1172,7 +1216,7 @@ IPump$D_pumps <-
          Group = ifelse(Group == "VA", "GC", "IC"),
          Session = as.factor(session),
          session = as.integer(session) - 1,
-         Obs = as.factor(row_number())) %>% 
+         logToT = log(ToT),) %>% 
   as_tbl_obs()
 
 IPump$D_agg <-
@@ -1184,7 +1228,11 @@ IPump$D_agg <-
             workload = mean(workload, na.rm = T),
             completion = all(completion)) %>% 
   ungroup() %>% 
+  mutate(logToT = log(ToT)) %>% 
   as_tbl_obs()
+
+IPump$D_Novel <- filter(IPump$D_pumps, Design == "Novel")
+
 
 rm(P, envir = IPump)
 
@@ -1216,7 +1264,9 @@ write_csv(IPump$D_agg, "Data/Pumps_agg.csv")
 
 ```{r MMN_raw_data}
 load("external_data/MMN.Rdata")
-MMN_raw <- MMN
+
+MMN_raw <- as_tibble(MMN, .name_repair = "minimal")
+
 rm(MMN)
 ```
 
@@ -1287,7 +1337,7 @@ new_syncenv("AUP")
 ```{r AUP_load_data, opts.label = "sim"}
 AUP$AUP_1 <- 
   AUP_raw  %>% 
-  as_data_frame() %>% 
+  as_tibble() %>% 
   select(Part = Participant, age = Age, gender = Gender, 
          gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
          challenge = AUP_challenge, exploration = AUP_explore) %>% 
@@ -1349,12 +1399,12 @@ Schools$simulate <-
            seed = 2){
     set.seed(seed)
     Schools <-
-      data_frame(School = 1:n_Schools,
+      tibble(School = 1:n_Schools,
                   Type = sample(c("A", "B"), n_Schools, replace = T),  
       theta_0_School = rnorm(n_Schools, 0, sd_Schools))  ## intercept RE
     
     Studs <-
-      data_frame(Stud = 1:n_Studs,
+      tibble(Stud = 1:n_Studs,
                  School = sample(x = unique(Schools$School), n_Studs, replace = T)) %>% 
       mutate(income = rnorm(n(), 0, 1),
              theta_0_Stud = rnorm(n(), 0, sd_Studs))
@@ -1436,33 +1486,33 @@ library(retimes)
 
 ## simulating the data set
 Stroop_comp$simulate <-
-  function(){
-    n_Part = 25 ## total
-           n_Stim = 120 ## total
-           beta_0 = 400
-           beta_1 = 100 
-           beta_2 = 5 ## not used
-           sd_0   = 50
-           sd_1   = 10
-           sd_2   = 2 ## not used
-           sigma = 20
-           tau_0 = 50
-           tau_1 = 100
-           sd_tau_1 = 20
-           rate_delay = .03
-           seed = 2
+  function(n_Part = 25, ## sample size 
+           n_Stim = 120, ## number of trials
+           beta_0 = 400, ## pop-level RT congrent 
+           beta_1 = 100, ## pop-level RT incongr
+           beta_2 = 5,   ## not used (neutral)
+           sd_0   = 50,
+           sd_1   = 10,
+           sd_2   = 2, ## not used
+           sigma = 20,
+           tau_0 = 50,
+           tau_1 = 100,
+           sd_tau_1 = 20,
+           rate_delay = .03,
+           seed = 2){
+    
 
     set.seed(seed)
     n_Obs = n_Part * n_Stim
     
     Part <-
-      data_frame(Part = 1:n_Part,
+      tibble(Part = 1:n_Part,
                  theta_0 = rnorm(n_Part, 0, sd_0),
                  theta_1 = rnorm(n_Part, 0, sd_1),
                  theta_2 = rnorm(n_Part, 0, sd_2),
                  theta_3 = rnorm(n_Part, 0, sd_tau_1))
     Stim <- 
-      data_frame(Stim = 1:n_Stim,
+      tibble(Stim = 1:n_Stim,
                  Cond = rep(c("C", "I"), n_Stim/2))
     
     Obs <- 
@@ -1541,7 +1591,7 @@ new_syncenv("Egan")
 ```{r Egan_load_data, opts.label = "sim"}
 Egan$D_egan <- 
   read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
-  as_data_frame() %>% 
+  as_tibble() %>% 
   mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
   select(Part = ParticipantID,
          Gender = ParticipantGender,
@@ -1648,6 +1698,13 @@ write_csv(Hugme_1$D_hugme, "Data/Hugme_1.csv")
 
 
 ## Case: Hugme 3
+
+<!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
+
+<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
+
+
+As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media it delivers. A geek person seeing a computer is more likely to have certain memories or associations. For example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. As a response we had chosen the Stroop task, and in order to make this more likely, participants were primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geekish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we presumed that geeks like to think hard and used the need-for-cognition scale as a second predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek. 
 
 ```{r Hugme_create, opts.label = "simulate"}
 new_syncenv("Hugme")
@@ -1826,7 +1883,7 @@ Joystick$simulate <-
     N_Obs <- N_Part * N_round * 2
     
     Parts <- 
-      data_frame(
+      tibble(
         Part = 1:N_Part,
         age = round(runif(N_Part, 20, 60), 0),
         experience = (age - 18) * rbeta(N_Part, 45, 5)) %>% 
@@ -1922,6 +1979,38 @@ Websites$D_Websites %>%
 save(Websites, file = "Cases/Websites.Rda")
 write_sav(Websites$D_Websites, "Data/Websites.sav")
 write_csv(Websites$D_Websites, "Data/Websites.csv")
+
+```
+
+
+## Case Sleepstudy (lme4)
+
+
+```{r Sleepstudy_load_data, opts.label = "sim"}
+Sleepstudy$D_slpstd <-
+  lme4::sleepstudy %>% 
+  select(Part = Subject, days = Days, RT = Reaction) %>%
+  mutate(days = as.integer(days))
+
+```
+
+
+```{r}
+Sleepstudy$D_slpstd %>% 
+  ggplot(aes(x = days, y = RT)) +
+  facet_wrap(~Part) +
+  geom_point() +
+  geom_smooth(se = F, aes(color = "LOESS")) +
+  geom_smooth(se = F, method = "lm", aes(color = "lm")) +
+  labs(color = "Smoothing function")
+```
+  
+
+
+```{r Sleepstudy_export}
+save(Sleepstudy, file = "Cases/Sleepstudy.Rda")
+#write_sav(Sleepstudy$D_slpstd, "Data/Sleepstudy.sav")
+write_csv(Sleepstudy$D_slpstd, "Data/Sleepstudy.csv")
 
 ```
 

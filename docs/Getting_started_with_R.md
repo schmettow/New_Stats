@@ -27,7 +27,7 @@ Finally, R comes with a very rudimentary programming environment that carries th
 
 ## Setting up the R environment
 
-First, you will have to download and install R and Rstudio on your computer. The two programs can be retrieved from the URLs below. Make sure to select the version fit for your operating system. 
+First, we <!-- #4 --> have to make sure that you have the two essential applications R and Rstudio downloaded and installed on your computer. The two programs can be retrieved from the addresses below. Make sure to select the version fit for your operating system. 
 
 + [R](http://www.r-project.org)
 + [Rstudio](http://www.rstudio.com)
@@ -49,21 +49,6 @@ If your home directory (i.e. `My Documents`) is located on a network drive, this
 7. open the menu and go to `Tools -> Global options -> General -> Default working directory`. Select `D:/Users/YourName/R/`.
 
 
-```r
-## .Rprofile
-
-options(stringsAsFactors = FALSE)
-
-.First <- function(){
-  RHOME <<- getwd()
-	cat("\nLoading .Rprofile in", getwd(), "\n")
-  .libPaths(c(paste0(RHOME,"Rlibrary"), .libPaths()))
-}
-
-.Last <- function(){ 
-  cat("\nGoodbye at ", date(), "\n")
-}
-```
 
 
 With the above steps you have created a customized start-up profile for R. The profile primarily sets the library path to point to a directory on the computers drive. As you are owning this directory, R can install the packages without admin rights. In the second part, you configure Rstudio's default path, which is where R, invoked from Rstudio, searches for the .Rprofile.  
@@ -75,9 +60,6 @@ After closing and reopening Rstudio, you should see a message in the console win
 That means that R has found the `.Rprofile` file and loaded it at start-up. The `.Rprofile` file primarily sets the path of the *library*, which is the collection of packages you install yourself. Whether this was successful can be checked by entering the `console` window in Rstudio, type the command below and hit Enter.
 
 
-```r
-.libPaths()
-```
 
 If your installation went fine, you should see an output like the following. If the output lacks the first entry, your installation was not successful and you need to check all the above steps.
 
@@ -104,27 +86,6 @@ In this book we will use a number of additional packages from CRAN. The listed p
 
 
 
-```r
-## tidyverse
-library(tidyverse)
-
-## data manipulation
-library(openxlsx)
-
-## plotting
-library(gridExtra)
-
-## regression models
-library(rstanarm)
-
-## other
-library(devtools) ## only needed for installing from Github
-library(knitr)
-
-## non-CRAN packages
-library(mascutils)
-library(bayr)
-```
 
 We start by *checking the packages*:
 
@@ -136,16 +97,10 @@ We start by *checking the packages*:
 This means that the respective package is not yet present in your R library. Before you can use the package _tidyverse_ you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab _Packages_. At the first time, you may have to select a repository and  refresh the package list, before you can find and install packages. Then click `Install`, enter the names of the missing package(s) and install. On the R console the following command downloads and installs the package _tidyverse_.
 
 
-```r
-install.packages("tidyverse")
-```
 
 CRAN is like a giant stream of software pebbles, shaped over time in a growing tide. Typically, a package gets better with every version, be it in reliability or versatility, so you want to be up-to-date. Rstudio has a nice dialogue to update packages and there is the R command:
 
 
-```r
-update.packages("tidyverse")
-```
 
 Finally, run the complete code block at once by selecting it and `Ctrl-Enter`. You will see some output to the console, which you should check once again. Unless the output contains any error messages (like above), you have successfully installed and loaded all packages.
 
@@ -156,11 +111,6 @@ Finally, run the complete code block at once by selecting it and `Ctrl-Enter`. Y
 Two packages, *mascutils* and *bayr* are written by the author of this book. They have not yet been committed to CRAN, but they are available on *Github* which is a general purpose versioning system for software developers and few authors. Fortunately, with the help of the *devtools* package it is rather easy to install these packages, too. Just enter the Rstudio console and type:
 
 
-```r
-library(devtools)
-install_github("schmettow/mascutils")
-install_github("schmettow/bayr")
-```
 
 Again, you have to do that only once after installing R and you can afterwards load the packages with the `library` command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again.
 
@@ -179,90 +129,31 @@ After you have set up your R environment, you are ready to run your first R prog
 
 
 
-```r
-## Simulation of a data set with 100 participants 
-## in two between-subject conditions
-N <- 100
-levels <- c("control","experimental")
-Group <- rep(levels, N/2)
-age <- round(runif(N, 18, 35),0)
-outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
-Experiment <- data_frame(Group, age, outcome)
-
-Experiment %>% sample_n(8)
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Group & age & outcome\\
-\hline
-experimental & 27 & 243\\
-\hline
-control & 22 & 194\\
-\hline
-control & 28 & 225\\
-\hline
-control & 28 & 209\\
-\hline
-experimental & 27 & 247\\
-\hline
-control & 29 & 221\\
-\hline
-control & 20 & 203\\
-\hline
-experimental & 28 & 241\\
-\hline
-\end{tabular}
-
-```r
-## Plotting the distribution of outcome
-Experiment %>% 
-  ggplot( aes(x = outcome) ) + 
-  geom_density(fill = 1)
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/first_simulation_1-1} 
-
-```r
-## ... outcome by group
-Experiment %>% 
-  ggplot( aes(fill = Group, x = outcome) ) + 
-  geom_density()
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/first_simulation_1-2} 
+Group           age   outcome
+-------------  ----  --------
+control          32       215
+experimental     23       236
+control          34       193
+control          33       219
+experimental     23       267
+experimental     24       242
+experimental     31       253
+experimental     33       245<img src="Getting_started_with_R_files/figure-html/first_simulation_1-1.png" width="66%" /><img src="Getting_started_with_R_files/figure-html/first_simulation_1-2.png" width="66%" />
 
 
 
 
 
 
-```r
-## ... statistical model comparing the groups
-
-model <- stan_glm(formula = outcome ~ Group, 
-            data = Experiment) 
-```
 
 
-
-
-
-```r
-fixef(model)
-```
 
 
 
 |fixef             | center| lower| upper|
 |:-----------------|------:|-----:|-----:|
-|Intercept         |  211.9| 209.1| 214.7|
-|Groupexperimental |   38.5|  34.6|  42.3|
+|Intercept         |  209.9|   207| 213.0|
+|Groupexperimental |   41.4|    37|  45.6|
 
 
 
@@ -315,6 +206,8 @@ R mainly serves three purposes, from easy to advanced:
 2. creating data analysis reports 
 3. developing new statistical routines. 
 
+It turns out that creating multimedia reports in R has become very easy by the knitr/markdown framework that is neatly integrated into the Rstudio environment. I 
+
 With R one typically *works interactively through a data analysis*. The analysis often is a rather routine series of steps, like: 
 
 1. load the data 
@@ -350,34 +243,15 @@ We just applied our own rule of outlier removal to the data. Others may consider
 
 
 
-```r
-D <- data_frame(score = c(1, 2, 4, 3, 5, 6, 50, 800))
-
-D %>% filter(score < mean(score)) 
-```
-
-
-
-
-\begin{tabular}{r}
-\hline
-score\\
-\hline
-1\\
-\hline
-2\\
-\hline
-4\\
-\hline
-3\\
-\hline
-5\\
-\hline
-6\\
-\hline
-50\\
-\hline
-\end{tabular}
+| score|
+|-----:|
+|     1|
+|     2|
+|     4|
+|     3|
+|     5|
+|     6|
+|    50|
 
 Finally, R is a way to *develop and share statistical programs*. Thousands of packages in the R ecosystem cover almost all statistical problems you can imagine. As a programming language, R has been designed for that particular purpose. Under the hood of R, a bunch of generic, yet powerful, principles purr to make it a convenient language for typical problems in statistical computation. Readers with programming experience can fly over the R basics that follow. But, as a specific purpose language  R has a few idiosyncracies you should know about:
 
@@ -387,10 +261,6 @@ Almost all programming languages the first element of a list has the index zero.
 
 And so does R:
 
-
-```r
-c(1:3)[1:3]
-```
 
 ```
 ## [1] 1 2 3
@@ -404,30 +274,20 @@ The first thing one has to know about R is that it is a *functional programming*
 At the same time, functions are first-class citizens in R and can be called everywhere, even as an *argument to another function*. The _plyr_ package is famous for functions that call functions, also called high-level functions. The following three liner makes heavy use of high level functions. First, a list of binary matrices is generated by repeatedly calling a random number generator, then the row sum of all matrices is computed and returned as a (new) list.
 
 
-```r
-make_binary_matrix <- 
-  function(size) as.matrix(rbernoulli(size^2, p = 1/4))
-
-LoM <- plyr::llply(c(5:7), make_binary_matrix)
-
-llply(LoM, rowSums)
-```
-
 ```
 ## [[1]]
-##  [1] 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 1 0 0
+##  [1] 1 0 0 0 0 0 0 1 0 0 1 0 0 1 1 0 0 1 0 0 1 0 0 0 0
 ## 
 ## [[2]]
-##  [1] 0 0 0 0 0 0 1 0 0 1 0 0 1 0 0 1 1 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0
-## [36] 0
+##  [1] 1 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 1 0
 ## 
 ## [[3]]
-##  [1] 0 1 1 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0 1 1 0 1 0 1 0 1
-## [36] 0 0 0 0 1 0 0 0 1 0 1 1 1 0
+##  [1] 0 0 1 0 0 1 0 1 0 1 1 0 0 0 0 1 1 1 1 0 0 1 0 0 0 0 1 1 1 0 0 0 0 0 1 0 1 0
+## [39] 1 0 0 1 0 0 0 1 0 0 0
 ```
 
 
-What we have seen is a routine application of *higher level functions*, `llply` applies a transformation `rowSums` to a list of objects `LoM` and returns a list of modified objects. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is: 
+What we have seen is a routine application of higher level functions: apply a transformation to a sequence of data sets. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is: 
 
 >> Whenever you think you need a loop, you don't.
 
@@ -437,23 +297,20 @@ If you come from relational data bases you you have something in common with the
 
 For object orientation folks, R is a good choice, but you have to get used to it. First, it gives you the choice of several object orientation systems, which sometimes requires to install a package. The so-called *S3 system* is the original. It is rather limited and some even call it informal. The approach is as simple as it is unusal. S3 mainly is a raw method dispatcher that can handles overloading of functions.  S3 puts methods first, then objects, whereas in traditional object orientation, the method belongs to the class, making the object "knows" its methods. In S3, the object and the method both know their class. When calling an S3 method, you actually  call a generic method that finds the matching method and applies it. 
 
-Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
+Beginners are at peace with all of this. You can count like you do. Functional programming is intuitive for working on research data. And because of S3 the function `summary` always does something useful.
 
-### Objects
+
+
+### Assigning and calling Objects
+
+Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
 *Objects* are a basic feature of R. They are temporary storage places in the computer's memory. Objects always have a name chosen by the programmer. By its name, a stored object can be found back at any time. Two basic operations apply for all objects: an object is stored by *assigning* it a name and it is retrieved by *calling* its name. If you wanted to store the number of observations in your data set under the name `N_obs`, you use the assignment operator `<-`. The name of the variable is left of the operator, the assigned value is right of it.
 
 
-```r
-N_obs <- 100
-```
 
 Now, that the value is stored, you can call it any time by simply calling its name:
 
-
-```r
-N_obs
-```
 
 ```
 ## [1] 100
@@ -464,13 +321,6 @@ Just calling the name prints the value to Console. In typical interactive progra
 Often, what you want is to do calculations with the value. For example, you have a repeated measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of `<-`) and stores it in another object `avg_N_Obs`
 
 
-```r
-N_Obs <- 100
-N_Part <- 25
-avg_N_Obs <- N_Obs/N_Part
-avg_N_Obs
-```
-
 ```
 ## [1] 4
 ```
@@ -478,16 +328,8 @@ avg_N_Obs
 Objects can exist without a name, but are volatile, then. They cannot be used any further. The following arithmetic operation does create an object, a single number. For a moment or so this number exists somewhere in your computers memory, but once it is printed to the screen, it is gone. Of course, the same expression can be called again, resulting in the same number. But, strictly, it is a different object.
 
 
-```r
-N_Obs/N_Part ## gone after printing
-```
-
 ```
 ## [1] 4
-```
-
-```r
-N_Obs/N_Part ## same value, different object
 ```
 
 ```
@@ -497,79 +339,40 @@ N_Obs/N_Part ## same value, different object
 There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the purpose of demonstration and you will rarely use it in everyday programming tasks:
 
 
-```r
-tracemem(N_Obs/N_Part)
+```
+## [1] "<0000000038ABE4B8>"
 ```
 
 ```
-## [1] "<000000003AB80FF8>"
+## [1] "<0000000038A765C0>"
 ```
 
-```r
-tracemem(N_Obs/N_Part)
-```
-
-```
-## [1] "<000000003ABDD030>"
-```
-
-Again: programming beginners can be at peace with all of this. You can count like you do. And the function `summary` always does something useful with an object. And last, but not least, tidy R is a highly user-friendly programming approach for data analysis workflows.
-
-This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls these containers *objects*.
 
 
 ### Vectors
 
-
-```r
-42
-```
-
-```
-## [1] 42
-```
-
-
-Notice the `[1]` that R puts in front of the single value when printing it? This is called the *index*. Different to most other programming languages, all basic data types are *vectors* in R. Vectors are containers for storing many values *of the same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
+Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming languages, all basic data types are *vectors* in R. Vectors are containers for storing many values *of the same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
 For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:
 
 
-```r
-X <- rnorm(100, 2, 1)
-mean(X)
 ```
-
-```
-## [1] 2.06
+## [1] 2
 ```
 
 The `rnorm` command *produces* a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
 
 
-### Classes
 
+### Basic object types
 
-Objects can be of various *classes*. In R the basic classes are: logical, factor, character, integer and numeric. Advanced  programmers can create their own  classes, for example, to store the results of an estimation into an object.
-
-In most programming languages, basic objects contain one number or one character string. If you have a line of object to handle, you have to store them in lists. In statistical computing it is the common case 
+Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.
 
 Objects of type *logical* store the two levels `TRUE`, `FALSE`, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example
 
 
-```r
-Apple <- TRUE
-Pear  <- FALSE
-
-Apple & Pear ## and
-```
-
 ```
 ## [1] FALSE
-```
-
-```r
-Apple | Pear ## or
 ```
 
 ```
@@ -579,30 +382,14 @@ Apple | Pear ## or
 More generally, logical values can be used for categorization, when their are only two categories, which is called a *dichotomous variable*. For example, gender is usually coded as a vector of characters (`"m", "f", "f"`), but one can always do:
 
 
-```r
-is_female <- c(FALSE, TRUE, TRUE)
-is_male   <- c(T, F, F)
-```
 
 Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate `TRUE` and `FALSE` as shown above. As a consequence, one should never assign objects the name reserved for logical values, so don't do one of the following:
 
 
-```r
-## never do this
-TRUE <- "All philosophers have beards" ## a character object, see below
-F    <- "All gods existed before the big bang"
-42 * F
-```
 
 
 The class `numeric` stores real numbers and is therefore abundant in statistical programming. All the usual arithmetic operations apply: 
 
-
-```r
-a <- 1.0
-b <- a + 1
-sqrt(b)
-```
 
 ```
 ## [1] 1.41
@@ -612,13 +399,6 @@ sqrt(b)
 Objects of class `integer` are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices. 
 
 
-```r
-friends <- c(anton = 1, 
-             berta = 3, 
-             carlo = 2)
-order(friends)
-```
-
 ```
 ## [1] 1 3 2
 ```
@@ -626,19 +406,8 @@ order(friends)
 The usual arithmetic operations apply, although the result of operation may no longer be `integer`, but `numeric`
 
 
-```r
-N <- 3
-sum_of_scores <- 32
-mean_score <- 32/3
-mean_score
-```
-
 ```
 ## [1] 10.7
-```
-
-```r
-class(mean_score)
 ```
 
 ```
@@ -648,26 +417,12 @@ class(mean_score)
 Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value `TRUE` in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will use in [LM: dummy variables].
 
 
-```r
-TRUE + TRUE
-```
-
 ```
 ## [1] 2
 ```
 
-```r
-sqrt(3 + TRUE)
-```
-
 ```
 ## [1] 2
-```
-
-```r
-is_car <- c(TRUE, TRUE, FALSE) ## bicycle otherwise
-wheels <- 2 + is_car * 2
-wheels
 ```
 
 ```
@@ -685,18 +440,8 @@ Data sets usually contain variables that are not numeric, but partition the data
 Two object types apply for grouping observations: *factor* and *character*. While factors specialize on grouping observations, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of designs A and B. Note how the factor identifies its *levels* when called to the screen:
 
 
-```r
-design_char <- c("A", "B", "B", "A")
-design_char
-```
-
 ```
 ## [1] "A" "B" "B" "A"
-```
-
-```r
-design_fact <- factor(c("A", "B", "B", "A"))
-design_fact
 ```
 
 ```
@@ -707,139 +452,60 @@ design_fact
 
 Statistical analyses deal with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work properly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as `-999` and then declared this a missing value. In R *missing values are first-class citizens*. Every vector of a certain class can contain missing values, which are identified as `NA`. 
 
-Most basic statistics functions, like `mean()`, `sd()`  or `median()` act very strict if the data contains missing values. If there is a single `NA` in the variable to be summarized, the result is `NA`. While it is importamt to be aware of missing values, much of the time what the researcher wants is to have the summary statistic with `NA` values being removed, first. 
+Most basic statistics functions, like `mean()`, `sd()`  or `median()` are act conservatively when the data contains missing values. If there is a single `NA` in the variable to be summarized, the result is `NA`. While this is good in the sense of transparency, much of the time what the researcher wants is to have the summary statistic with `NA` values being removed, first. 
 
-
-```r
-clicks <- c(3, NA, 2)
-mean(clicks)
-```
 
 ```
 ## [1] NA
-```
-
-```r
-mean(clicks, na.rm = T)
 ```
 
 ```
 ## [1] 2.5
 ```
 
+This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a "variable". In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In general programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls *objects* what is usually called a programming variable.
 
-### Functions
+
+
+### Operators and functions
 
 R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterize a vector. The following functions do that with to the vector `X`, every in their own way:
 
 
-```r
-length(X)
-sum(X)
-mean(X)
-var(X)
-sd(X)
-min(X)
-max(X)
-median(X)
-```
 
-These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about two thirds of the mass accumulates between $\mu-\sigma$ and $\mu+\sigma$. That means in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes an (optional) vector of quantiles as second argument:
+These functions are a transformation of data. The input to these transformations is `X` and is given as an *argument* to the function. Other functions require more than one argument. The `quantile` function is routinely used to summarize a variable. Recall that `X` has been drawn from a Normal distribution of $\mu=2$ and standard deviation $\sigma = 1$. All Normal distributions have the property that about 66% of the mass is within the range of $\mu-\sigma$ and $\mu+\sigma$ <!-- #9 -->. That means in turn: 17% are below $\mu-\sigma$ and 66 + 17 = 83% are *below* $\mu+\sigma$. The number of observations in a certain range of values is called a *quantile*. The `quantile` function operates on X, but takes an (optional) vector of quantiles as second argument:
 
-
-```r
-quantile(X, c(.17, .83))
-```
 
 ```
-##  17%  83% 
-## 1.15 2.97
+##   17%   83% 
+## 0.924 3.014
 ```
 
 Most functions in R have *optional arguments* that let you change how the function performs. The basic mathematical  functions all have the optional argument `na.rm`. This is a switch that determines how the function deals with missing values `NA`. Many optional arguments have *defaults*. The default of `na.rm` is `FALSE` ("return NA in case of NAs in the vector"). By setting it to `TRUE`, they are removed before operation.
 
 
-```r
-B <- c(1, 2, NA, 3)
-mean(B)
-```
-
 ```
 ## [1] NA
 ```
 
-```r
-mean(B, na.rm = TRUE)
-```
-
 ```
 ## [1] 2
 ```
+Most more complex routines in R have an abundance of parameters, most of which have reasonable defaults, fortunately. To give a more complex example, the first call of `stan_glm` performs a Bayesian estimation of the grand mean model. The second does a 
+Poisson grand mean model with 5000 iterations per MCMC chain. As `seed` has been fixed, every subsequent run will produce the exact same chains. My apologies for the jargon! <!-- #10 -->
 
 
-Most  complex routines in R have an abundance of arguments to control how precisely they work, most of which got reasonable defaults. To give a more complex example, the following call of `stan_glm` performs a Bayesian estimation of a grand mean model [REF]. The *required arguments* of `stan_glm` are the model formula and the data. The model is given as a formula and data is expected to be a data frame. In the first run, all other arguments are left to their defaults, for example, the number of iterations (1000) and the response distribution family of the model ("gaussian").
-
-The second invocation of `stan_glm` changes the defaults of these two arguments. The same model is estimated, but with a Poisson distribution and only 500 iterations. <!-- #10 -->
-
-
-```r
-D_1 = data_frame(X = rnorm(n = 20, mean = 2, sd = 1))
-M_1 = stan_glm(formula = X ~ 1, 
-               data = D_1)
-
-D_2 = data_frame(X = rpois(20, 2))
-M_2 = stan_glm(X ~ 1,
-               family = poisson,
-               iter = 500,
-               data = D_1)
-```
-
-Finally, it sometimes is convenient or necessary to program own functions. A full coverage of developing functions is beyond the scope of this introduction, so I show just one simple example. If one desires a more convenient function to compute the mean that ignore missing values by default, this can be constructed as follows:
-
-
-```r
-mean_conv <- function(x) {
-  mean(x = B, na.rm = TRUE)
-}
-
-mean_conv(B)
-```
-
-```
-## [1] 2
-```
-
-Notice that:
-
-+ the `function()` function creates a new function that gets a name assigned.
-+ the argument `x` given to `function()` is passed on to become the arguments of the  `mean_conv(x)`.
-+ code enclosed by `{...}` are called a *code block*. 
-
-More examples of creating basic functions can be found in section \@ref(descriptive_stats). As R is a functional programming language, it offers very elaborate ways of programming functions, way beyond what is found in common languages, such as Python or Java. An advanced example of functional programming is given in section \@ref(forecasting_LOO).
-
-
-### Operators
 
 R brings the usual set of arithmetic operators, like `+`, `-`, `*`, `/` and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in these two ways:
 
 
-```r
-1 + 2
+```
+## [1] 3
 ```
 
 ```
 ## [1] 3
 ```
-
-```r
-`+`(1,2)
-```
-
-```
-## [1] 3
-```
-
-
 
 The second term is a function that takes two numbers as input and returns a third. It is just a different syntax, and this one is called the *polish notation*. I will never use it throughout the rest of this book.
 
@@ -854,10 +520,24 @@ Another set of commonly used operators are logical, they implement *Boolean alge
 | F 	| T 	| T 	| F 	| T 	| F     |
 | F 	| F 	| T 	| F 	| F 	| T     |
 
-Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child".
+Be careful not to confuse Boolean "and" and "or" with their common natural language use. If you ask: "Can you buy apples *or* pears on the market?", the natural answer would be: "both". The Boolean answer is: TRUE. In a requirements document you could state "This app is for children and adults". In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: "The envisioned users can be adult or child". <!-- #11 -->
 
 Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, "either A or B" can be written as: `(A | B) & !(A & B)`. This term only gets TRUE when A or B is TRUE, but not both. In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.
 
+Finally, it sometimes is convenient or necessary to program own functions. A full coverage of developing functions is beyond the scope of this introduction, so I show just one simple example. If one desires a more convenient function to compute the mean that ignore missing values by default, this can be constructed as follows:
+
+
+```
+## [1] 2
+```
+
+Notice that:
+
++ the `function()` function creates new functions
++ the arguments given to `function(x)` will be the arguments expected by the function `mean_conv(x)`.
++ code enclosed by 
+
+More examples of creating basic functions can be found in section \@ref(descriptive_stats). As R is a functional programming language, it offers very elaborate ways of programming functions, way beyond what is found in common languages, such as Python or Java. An advanced example is given in section \@ref(forecasting_LOO).
 
 
 
@@ -872,225 +552,112 @@ Data frames are objects. By just calling a data frame it gets printed to the scr
 R is primarily used interactively, which has the immense advantage that the programmer can incrementally build the data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call `Experiment`:
 
 
-```r
-Experiment
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Group & age & outcome\\
-\hline
-control & 30 & 219\\
-\hline
-experimental & 27 & 247\\
-\hline
-control & 22 & 194\\
-\hline
-experimental & 23 & 243\\
-\hline
-control & 32 & 187\\
-\hline
-experimental & 34 & 261\\
-\hline
-control & 33 & 200\\
-\hline
-experimental & 26 & 246\\
-\hline
-control & 26 & 205\\
-\hline
-experimental & 23 & 262\\
-\hline
-control & 32 & 215\\
-\hline
-experimental & 26 & 239\\
-\hline
-control & 34 & 202\\
-\hline
-experimental & 32 & 250\\
-\hline
-control & 32 & 223\\
-\hline
-experimental & 19 & 259\\
-\hline
-control & 22 & 206\\
-\hline
-experimental & 26 & 257\\
-\hline
-control & 29 & 207\\
-\hline
-experimental & 24 & 240\\
-\hline
-control & 32 & 208\\
-\hline
-experimental & 28 & 241\\
-\hline
-control & 26 & 204\\
-\hline
-experimental & 21 & 248\\
-\hline
-control & 22 & 197\\
-\hline
-experimental & 21 & 244\\
-\hline
-control & 24 & 208\\
-\hline
-experimental & 20 & 243\\
-\hline
-control & 20 & 203\\
-\hline
-experimental & 29 & 253\\
-\hline
-control & 22 & 205\\
-\hline
-experimental & 33 & 246\\
-\hline
-control & 27 & 213\\
-\hline
-experimental & 30 & 252\\
-\hline
-control & 28 & 217\\
-\hline
-experimental & 28 & 243\\
-\hline
-control & 24 & 228\\
-\hline
-experimental & 23 & 264\\
-\hline
-control & 27 & 199\\
-\hline
-experimental & 32 & 254\\
-\hline
-control & 27 & 211\\
-\hline
-experimental & 18 & 252\\
-\hline
-control & 29 & 221\\
-\hline
-experimental & 35 & 257\\
-\hline
-control & 22 & 203\\
-\hline
-experimental & 24 & 259\\
-\hline
-control & 25 & 214\\
-\hline
-experimental & 21 & 241\\
-\hline
-control & 27 & 213\\
-\hline
-experimental & 21 & 249\\
-\hline
-control & 28 & 211\\
-\hline
-experimental & 25 & 262\\
-\hline
-control & 25 & 227\\
-\hline
-experimental & 21 & 247\\
-\hline
-control & 19 & 214\\
-\hline
-experimental & 28 & 248\\
-\hline
-control & 25 & 211\\
-\hline
-experimental & 23 & 241\\
-\hline
-control & 28 & 230\\
-\hline
-experimental & 33 & 236\\
-\hline
-control & 31 & 199\\
-\hline
-experimental & 23 & 257\\
-\hline
-control & 26 & 200\\
-\hline
-experimental & 22 & 250\\
-\hline
-control & 28 & 201\\
-\hline
-experimental & 33 & 230\\
-\hline
-control & 22 & 202\\
-\hline
-experimental & 34 & 255\\
-\hline
-control & 26 & 205\\
-\hline
-experimental & 23 & 257\\
-\hline
-control & 21 & 205\\
-\hline
-experimental & 27 & 243\\
-\hline
-control & 27 & 213\\
-\hline
-experimental & 19 & 257\\
-\hline
-control & 30 & 205\\
-\hline
-experimental & 26 & 246\\
-\hline
-control & 21 & 217\\
-\hline
-experimental & 31 & 237\\
-\hline
-control & 30 & 212\\
-\hline
-experimental & 24 & 243\\
-\hline
-control & 24 & 189\\
-\hline
-experimental & 24 & 247\\
-\hline
-control & 24 & 207\\
-\hline
-experimental & 19 & 249\\
-\hline
-control & 28 & 225\\
-\hline
-experimental & 27 & 251\\
-\hline
-control & 34 & 187\\
-\hline
-experimental & 25 & 251\\
-\hline
-control & 24 & 209\\
-\hline
-experimental & 22 & 244\\
-\hline
-control & 29 & 215\\
-\hline
-experimental & 32 & 247\\
-\hline
-control & 25 & 232\\
-\hline
-experimental & 33 & 229\\
-\hline
-control & 25 & 194\\
-\hline
-experimental & 19 & 260\\
-\hline
-control & 24 & 206\\
-\hline
-experimental & 26 & 252\\
-\hline
-control & 28 & 209\\
-\hline
-experimental & 29 & 250\\
-\hline
-\end{tabular}
+Group           age   outcome
+-------------  ----  --------
+control          18       193
+experimental     24       264
+control          26       218
+experimental     32       251
+control          32       206
+experimental     22       246
+control          34       193
+experimental     30       268
+control          21       216
+experimental     19       258
+control          25       205
+experimental     20       261
+control          31       212
+experimental     23       267
+control          20       209
+experimental     19       241
+control          34       205
+experimental     30       254
+control          21       209
+experimental     26       274
+control          20       213
+experimental     19       269
+control          26       216
+experimental     31       276
+control          30       206
+experimental     35       238
+control          19       201
+experimental     27       250
+control          28       215
+experimental     31       265
+control          25       202
+experimental     22       256
+control          23       216
+experimental     31       258
+control          27       214
+experimental     21       261
+control          32       207
+experimental     27       248
+control          24       201
+experimental     35       256
+control          31       218
+experimental     27       268
+control          19       207
+experimental     26       250
+control          30       222
+experimental     22       251
+control          25       229
+experimental     23       261
+control          25       202
+experimental     26       244
+control          34       205
+experimental     27       236
+control          24       209
+experimental     32       238
+control          26       201
+experimental     24       269
+control          32       208
+experimental     29       256
+control          28       214
+experimental     25       246
+control          33       203
+experimental     25       252
+control          23       220
+experimental     19       255
+control          32       215
+experimental     33       245
+control          23       211
+experimental     24       250
+control          35       208
+experimental     23       236
+control          22       219
+experimental     20       257
+control          27       220
+experimental     33       245
+control          22       215
+experimental     31       253
+control          31       212
+experimental     31       260
+control          23       202
+experimental     23       255
+control          24       191
+experimental     29       252
+control          31       225
+experimental     25       248
+control          29       221
+experimental     19       245
+control          30       201
+experimental     33       215
+control          25       216
+experimental     28       243
+control          18       208
+experimental     32       258
+control          33       209
+experimental     27       253
+control          33       219
+experimental     18       248
+control          34       207
+experimental     24       242
+control          19       218
+experimental     19       258
 
 This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above.
 
 
-```r
-print(Experiment)
-```
 
 Such `print` functions exist for dozens of classes of objects. They represent what the developers thought would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand. 
 
@@ -1101,33 +668,25 @@ The dedicated print function does what way back a developer thought would be the
 Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
 
 
-```r
-print(summary(Experiment))
-```
-
 ```
 ##     Group                age          outcome   
-##  Length:100         Min.   :18.0   Min.   :187  
-##  Class :character   1st Qu.:23.0   1st Qu.:208  
-##  Mode  :character   Median :26.0   Median :230  
-##                     Mean   :26.2   Mean   :229  
-##                     3rd Qu.:29.0   3rd Qu.:248  
-##                     Max.   :35.0   Max.   :264
+##  Length:100         Min.   :18.0   Min.   :191  
+##  Class :character   1st Qu.:23.0   1st Qu.:209  
+##  Mode  :character   Median :26.0   Median :227  
+##                     Mean   :26.4   Mean   :232  
+##                     3rd Qu.:31.0   3rd Qu.:253  
+##                     Max.   :35.0   Max.   :276
 ```
 
 
 The `str` (structure) command works on any R object and displays the hierarchical structure (if there is one):
 
 
-```r
-str(Experiment)
-```
-
 ```
 ## Classes 'tbl_df', 'tbl' and 'data.frame':	100 obs. of  3 variables:
 ##  $ Group  : chr  "control" "experimental" "control" "experimental" ...
-##  $ age    : num  30 27 22 23 32 34 33 26 26 23 ...
-##  $ outcome: num  219 247 194 243 187 ...
+##  $ age    : num  18 24 26 32 32 22 34 30 21 19 ...
+##  $ outcome: num  193 264 218 251 206 ...
 ```
 
 
@@ -1136,12 +695,8 @@ Data frames store variables, but statistical procedures operate on variables. We
 Internally, data frames are a collection of "vertical" vectors that are equally long. Being a collection of vectors, the variables of a data frame can be of different classes, like `character`, `factor` or `numeric`. In the most basic case, you want to calculate a statistic for a single variable out of a data frame. The `$` operator pulls the variable out as a vector:
 
 
-```r
-mean(Experiment$outcome)
 ```
-
-```
-## [1] 229
+## [1] 232
 ```
 
 As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call 
@@ -1151,54 +706,19 @@ As data frames are rectangular structures, you can also access individual values
 + the complete first row
 
 
-```r
-Experiment[  1, 3]
-```
+| outcome|
+|-------:|
+|     193|
 
+| age|
+|---:|
+|  18|
+|  24|
+|  26|
 
-
-
-\begin{tabular}{r}
-\hline
-outcome\\
-\hline
-219\\
-\hline
-\end{tabular}
-
-```r
-Experiment[1:3, 2]
-```
-
-
-
-
-\begin{tabular}{r}
-\hline
-age\\
-\hline
-30\\
-\hline
-27\\
-\hline
-22\\
-\hline
-\end{tabular}
-
-```r
-Experiment[  1,  ]
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Group & age & outcome\\
-\hline
-control & 30 & 219\\
-\hline
-\end{tabular}
+Group      age   outcome
+--------  ----  --------
+control     18       193
 
 Addressing one or more elements in square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression `Experiment[,]` is fully valid and will just the return the whole data frame.
 
@@ -1206,127 +726,57 @@ There is an important difference, however, when using R's classic `data.frame` a
 `Experiment[, 1:2]`, the result will be a `data.frame` object, too. However, when slicing a single column, the result is a vector:
 
 
-```r
-Exp_classic <- as.data.frame(Experiment)
-Exp_classic[1:2,1:2]  ## data.frame
-```
+Group           age
+-------------  ----
+control          18
+experimental     24
 
-
-
-
-\begin{tabular}{l|r}
-\hline
-Group & age\\
-\hline
-control & 30\\
-\hline
-experimental & 27\\
-\hline
-\end{tabular}
-
-```r
-Exp_classic[1,]       ## data.frame
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Group & age & outcome\\
-\hline
-control & 30 & 219\\
-\hline
-\end{tabular}
-
-```r
-Exp_classic[,1]       ## vector
-```
+Group      age   outcome
+--------  ----  --------
+control     18       193
 
 ```
-##   [1] "control"      "experimental" "control"      "experimental"
-##   [5] "control"      "experimental" "control"      "experimental"
-##   [9] "control"      "experimental" "control"      "experimental"
-##  [13] "control"      "experimental" "control"      "experimental"
-##  [17] "control"      "experimental" "control"      "experimental"
-##  [21] "control"      "experimental" "control"      "experimental"
-##  [25] "control"      "experimental" "control"      "experimental"
-##  [29] "control"      "experimental" "control"      "experimental"
-##  [33] "control"      "experimental" "control"      "experimental"
-##  [37] "control"      "experimental" "control"      "experimental"
-##  [41] "control"      "experimental" "control"      "experimental"
-##  [45] "control"      "experimental" "control"      "experimental"
-##  [49] "control"      "experimental" "control"      "experimental"
-##  [53] "control"      "experimental" "control"      "experimental"
-##  [57] "control"      "experimental" "control"      "experimental"
-##  [61] "control"      "experimental" "control"      "experimental"
-##  [65] "control"      "experimental" "control"      "experimental"
-##  [69] "control"      "experimental" "control"      "experimental"
-##  [73] "control"      "experimental" "control"      "experimental"
-##  [77] "control"      "experimental" "control"      "experimental"
-##  [81] "control"      "experimental" "control"      "experimental"
-##  [85] "control"      "experimental" "control"      "experimental"
-##  [89] "control"      "experimental" "control"      "experimental"
-##  [93] "control"      "experimental" "control"      "experimental"
-##  [97] "control"      "experimental" "control"      "experimental"
+##   [1] "control"      "experimental" "control"      "experimental" "control"     
+##   [6] "experimental" "control"      "experimental" "control"      "experimental"
+##  [11] "control"      "experimental" "control"      "experimental" "control"     
+##  [16] "experimental" "control"      "experimental" "control"      "experimental"
+##  [21] "control"      "experimental" "control"      "experimental" "control"     
+##  [26] "experimental" "control"      "experimental" "control"      "experimental"
+##  [31] "control"      "experimental" "control"      "experimental" "control"     
+##  [36] "experimental" "control"      "experimental" "control"      "experimental"
+##  [41] "control"      "experimental" "control"      "experimental" "control"     
+##  [46] "experimental" "control"      "experimental" "control"      "experimental"
+##  [51] "control"      "experimental" "control"      "experimental" "control"     
+##  [56] "experimental" "control"      "experimental" "control"      "experimental"
+##  [61] "control"      "experimental" "control"      "experimental" "control"     
+##  [66] "experimental" "control"      "experimental" "control"      "experimental"
+##  [71] "control"      "experimental" "control"      "experimental" "control"     
+##  [76] "experimental" "control"      "experimental" "control"      "experimental"
+##  [81] "control"      "experimental" "control"      "experimental" "control"     
+##  [86] "experimental" "control"      "experimental" "control"      "experimental"
+##  [91] "control"      "experimental" "control"      "experimental" "control"     
+##  [96] "experimental" "control"      "experimental" "control"      "experimental"
 ```
 
 Predictability and a few other useful tweaks made me prefer `data_frame` over `data.frame`. But, many third-party packages continue to produce classic `data.frame` objects. For example, there is an alternative to package ``readxl`, `openxlsx`, which reads (and writes) Excel files. It returns classic data.frames, which can easily be converted as follows:
 
 
-```r
-D_foo <- 
-  read.xlsx("foo.xlsx") %>% 
-  as_data_frame()
-```
 
 While `data_frame[]` behaves perfectly predictable, in that it always returns a data frame, even when this is just a single column or cell. Sometimes, one wants to truly extract a vector. With a `data_frame` a single column can be extracted as a vector, using double square brackets, or using the `$` operator.
 
 
-```r
-Experiment[[1]]       ## vector
-Experiment$Group      ## the same
-```
 
 Sometimes, it may be necessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values.  The syntax for indexing elements in a data frame can be used in conjunction with the assignment operator `<-`. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to `NA`.
 
 
-```r
-## injecting
-Experiment[2,      "outcome"] <- 660
-Experiment[6,      "outcome"] <- 987
-Experiment[c(1,3), "age"]     <- -99
-
-## printing first few observations
-head(Experiment)
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Group & age & outcome\\
-\hline
-control & -99 & 219\\
-\hline
-experimental & 27 & 660\\
-\hline
-control & -99 & 194\\
-\hline
-experimental & 23 & 243\\
-\hline
-control & 32 & 187\\
-\hline
-experimental & 34 & 987\\
-\hline
-\end{tabular}
-
-```r
-## setting to NA
-Experiment[c(2, 6),"outcome"] <- NA
-Experiment[c(1, 3),"age"]     <- NA
-```
+Group           age   outcome
+-------------  ----  --------
+control         -99       193
+experimental     24       660
+control         -99       218
+experimental     32       251
+control          32       206
+experimental     22       987
 
 
 Besides the injection, note two more features of addressing data frame elements. The first is, that vectors can be used to address multiple rows, e.g. 2 and 6. In fact, the range operator `1:3` we used above is just a convenient way of creating a vector `c(1,2,3)`. Although not shown in the example, this works for columns alike.
@@ -1334,26 +784,8 @@ Besides the injection, note two more features of addressing data frame elements.
 The careful reader may also have noted another oddity in the above example. With `Experiment[c(2, 6),"outcome"]` we addressed two elements, but right-hand side of `<-` is only one value. That is a basic mechanism of R, called *reuse*. When the left-hand side is longer than the right-hand side, the right-hand side is reused as many times as needed. Many basic functions in R work like this, and it can be quite useful. <!-- #12 --> For example, you may want to create a vector of 20 random numbers, where one half has a different mean as the second half of observations.
 
 
-```r
-rnorm(20, mean = c(1,2), sd = 1)
-```
 
-The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions. Especially, one should not ignore the kind warning that R gives, when the longer vector is not a multiple of the shorter one.
-
-
-```r
-c(1, 2, 3) + c(3, 4)
-```
-
-```
-## Warning in c(1, 2, 3) + c(3, 4): longer object length is not a multiple of
-## shorter object length
-```
-
-```
-## [1] 4 6 6
-```
-
+The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions.
 
 ### Import, export and archiving
 
@@ -1365,23 +797,6 @@ Few people create their data tables directly in R, but have legacy data sets in 
 
 
 
-```r
-## Text files
-Experiment <- 
-  read_csv("Data/Experiment.csv")
-
-## Excel
-Experiment <- 
-  read_excel("Data/Experiment.xlsx", sheet = 1)
-
-## SPSS (haven)
-Experiment <- 
-  read_sav("Data/Experiment.sav")
-
-## SPSS (foreign)
-Experiment <-
-  read.spss("Data/Experiment.sav", to.data.frame = TRUE)
-```
 
 
 
@@ -1390,10 +805,6 @@ Note that I gave two options for reading SPSS files. The first (with an undersco
 Remember, data frames are objects and volatile as such. If you leave your session, they are gone. Once you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to have a complete R-based workflow, you can conveniently use R's own format for storing data, `Rdata` files. For storing a data frame and then reading it back in (in your next session), simply do:
 
 
-```r
-save(Experiment, file = "Data/Experiment.Rda")
-load(file = "Data/Experiment.Rda")
-```
 
 Note that with `save` and `load` all objects are restored by their original names, without using any assignments. Take care, as this will not overwrite any object with the same name. Another issue is that for the `save` command you have to explicitly refer to the `file` argument and provide the file path as a character object. In Rstudio, begin typing  `file=""`, put the cursor between the quotation marks and hit `Tab`, which opens a small dialogue for navigation to the desired directory.
 
@@ -1405,75 +816,25 @@ Once you have loaded, prepared and started to analyze a data frame in R, there i
 
 This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: `BrowsingAB_M_1`, `AUP_M_1`, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.
 
-For these reasons, all cases are enclosed in *case environments* and provided with this book. Case environments are provided as R data files (`.Rda`). For getting a case environment to work in your session, it has to be loaded from the data file first:
+For these reasons, all cases are enclosed in *case environments* and provided with this book. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:
 
 
-```r
-load("BrowsingAB.Rda")
-```
 
 
-Formally, R *environments* are means to organize objects into so called namespaces. If an object `BAB1` is placed in an environment `BrowsingAB`, it can be called as `BrowsingAB$BAB1`. This way, no brevity is gained. For assessing objects without the environmemt prefix, one can *attach* the environment as:
+In R, *environments* are containers for collections of objects. If an object `BAB1` is placed in an environment `BrowsingAB`, it can be called as `BrowsingAB$BAB1`. This way, no brevity is gained. Another way to assess objects in an environment is to *attach the environment first* as:
 
 
-```r
-attach(BrowsingAB)
-BAB1 %>% as_tbl_obs()
-detach(BrowsingAB)
 
-attach(Reading)
-D_1 %>% as_tbl_obs()
-detach(Reading)
-```
+Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The `detach` command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.
 
-Calling `attach` gets you into the *namespace* of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. When working with case environments in this book it is recommended to only have them attached one at a time. Removing an environment from the namespace is done by `detach`
+All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called `simulate`, is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
+Generally, calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.
 
 
-All case environments provided with this book contain one or more data sets. One part of these cases contain data from real studies. Other cases provide synthetic data which has been generated by a simulation function. This function, always called `simulate`, is provided with the case environment, too. Calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.
 
 
-```r
-attach(Reading)
-simulate()  %>% as_tbl_obs() ## reproduces the data frame D_1
-```
+Furthermore, once you delve deeper into R, you can critically inspect the simulation function's code for its behavioral and psychological assumptions (working through the later chapters on data management and simulation will help).
 
-To a varying degree, the simulation functions take arguments to produce new data sets with the same structure, but different effects. The following produces the first six participants, with a standard error of 10.
-
-
-```r
-simulate(N = 6, 
-         sigma = 10)  %>% 
-  as_tbl_obs()
-```
-
-The default values can be inspected by using the command `formals`:
-
-
-```r
-formals(simulate)
-```
-
-```
-## $N
-## [1] 40
-## 
-## $beta
-## c(Intercpt = 60, fnt_size_12 = -12, fnt_color_blk = -10, ia_blk_12 = 8)
-## 
-## $sigma
-## [1] 5
-## 
-## $seed
-## [1] 42
-```
-
-
-The other option is to inspect the code of the function, which is printed, when the function is called without parentheses:
-
-
-```r
-simulate ## calling a function without parantheses prints its code
-```
 
 ```
 ## function(N = 40,
@@ -1486,7 +847,7 @@ simulate ## calling a function without parantheses prints its code
 ##     {
 ##     set.seed(seed)
 ##     out <-
-##       data_frame(Part = 1:N,
+##       tibble(Part = 1:N,
 ##                  font_size = factor(rep(c(1, 2), N/2), 
 ##                                     levels = c(1,2), 
 ##                                     labels = c("10pt", "12pt")),
@@ -1507,32 +868,15 @@ simulate ## calling a function without parantheses prints its code
 ##     
 ##     out %>% as_tbl_obs()
 ##     }
-## <bytecode: 0x00000000319fc290>
+## <bytecode: 0x000000002e566250>
 ```
-
-
-```r
-detach(Reading)
-```
-
-
-By the  latter method, you retrieve the full code of the simulation function, which should help to understand its behavioral and psychological assumptions. All simulation functions follow the principles laid out in [REF Simulation].
-
 Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.
 
-When working on one data set at a time, environments are overkill. Still, it is very useful to save R data frames and objects that hold the result of your analysis. That is easily done by saving all relevant objects to an Rdata files, directly. <!-- #13 -->
+Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do *not* recommend using environments in everday data analysis, with one exception: at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call `ls()` for a listing). Saving all objects and retrieving them when returning from a break is as easy as:<!-- #13 -->
 
 
-```r
-save(myData, my_model_1, my_model_2, 
-     file = "my_data_analysis.Rda")
-## have a break
-load("my_data_analysis.Rda")
-```
 
 Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.
-
-
 
 ### Structuring data
 
@@ -1543,43 +887,18 @@ Next to that, Rstudio can be configured to save the current workspace on exit an
 In the whole book, data sets are structured according to the rule *one-row-per-observation of the dependent variable* (the ORPO rule). Many researchers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models. Consider a study where two designs were evaluated by three participants using a self-report item, like "how easy to use is the interface?" Then, the *wrong way* of structuring the data would be:
 
 
-```r
-ORPO %>% 
-  filter(Task == 1, Item == 1) %>% 
-  mascutils::discard_redundant() %>% 
-  spread(Design, response) %>% 
-  as_tbl_obs()
-```
 
 The correct way of setting up the data frame is:
 
 
-```r
-ORPO %>% 
-  filter(Task == 1, Item == 1) %>% 
-  mascutils::discard_redundant()
-```
-
-
-
-
-\begin{tabular}{r|l|r}
-\hline
-Part & Design & response\\
-\hline
-1 & A & 4\\
-\hline
-2 & A & 4\\
-\hline
-3 & A & 6\\
-\hline
-1 & B & 1\\
-\hline
-2 & B & 4\\
-\hline
-3 & B & 3\\
-\hline
-\end{tabular}
+ Part  Design    response
+-----  -------  ---------
+    1  A                4
+    2  A                4
+    3  A                6
+    1  B                1
+    2  B                4
+    3  B                3
 
 The ORPO rule dictates another principle: every row should have a unique identifier, which can be a combination of values. In the example above, every observation is uniquely identified by the participant identifier and the design condition. If we extend the example slightly, it is immediatly apparent, why the ORPO rule is justified. Imagine, the study actually asked three partcipants to rate two different tasks on two different designs by three self-report items. By the ORPO rule, we can easily extend the data frame as below (showing a random selection of rows). I leave it up to the reader to figure out how to press such a data set in the wide legacy format.
 
@@ -1593,32 +912,14 @@ Using identifiers is good practice for several reasons. First, it reduces proble
 Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.
 
 
-```r
-ORPO %>% 
-  sample_n(6) %>% 
-  arrange(Part, Task, Design, Item)
-```
-
-
-
-
-\begin{tabular}{r|r|l|r|r}
-\hline
-Part & Task & Design & Item & response\\
-\hline
-1 & 1 & B & 1 & 1\\
-\hline
-1 & 2 & B & 1 & 6\\
-\hline
-2 & 1 & B & 3 & 5\\
-\hline
-2 & 2 & B & 2 & 3\\
-\hline
-3 & 2 & A & 2 & 6\\
-\hline
-3 & 2 & B & 2 & 4\\
-\hline
-\end{tabular}
+ Part   Task  Design    Item   response
+-----  -----  -------  -----  ---------
+    1      1  B            1          1
+    1      2  B            1          6
+    2      1  B            3          5
+    2      2  B            2          3
+    3      2  A            2          6
+    3      2  B            2          4
 
 
 
@@ -1631,58 +932,23 @@ The so-called magritte operator `%>%` is part of the *dplyr/tidyr* framework for
 Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to *select* or *rename* variables in the data frame. Say, you want the variable _Group_ to be called _Condition_, omit the variable _age_ and store the new data frame as _Exp_. The `select` command does all this. In the following code the data frame `Experiment` is piped into `select`. The variable _Condition_ is renamed to _Group_, and the variable _outcome_ is taken as-is. All other variables are discarded.
 
 
-```r
-Exp <-  Experiment %>% 
-  select(Condition = Group, outcome) %>% as_tbl_obs()
-```
 
 Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first "inject" a few missing values for age (which were coded as -99) and outliers (>500) in the outcome variable. Note that I am using some R commands that you don't need to understand by now. Then we reuse the above code for renaming (this time keeping _age_ on board) and add some filtering steps:
 
 
-```r
-## rename, then filtering
-Exp <-  
-  Experiment %>% 
-  select(Condition = Group, age, outcome) %>% 
-  filter(outcome < 500) %>% 
-  filter(age != -99)
-
-Exp %>% as_tbl_obs()
-```
 
 During data preparation and analysis, new variables are created routinely. For example, the covariate is often shifted to the center before using linear regression:
 
 
-```r
-mean_age = mean(Exp$age)
-Exp <- Exp %>% 
-  mutate(age_cntrd = age - mean_age)
-Exp %>% as_tbl_obs()
-```
 
 
 Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the data frame, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.
 
 
-```r
-Exp %>% 
-  group_by(Condition) %>% 
-  summarize(mean = mean(outcome),
-           sd = sd(outcome) )
-```
-
-
-
-
-\begin{tabular}{l|r|r}
-\hline
-Condition & mean & sd\\
-\hline
-control & 209 & 10.38\\
-\hline
-experimental & 249 & 8.02\\
-\hline
-\end{tabular}
+Condition       mean      sd
+-------------  -----  ------
+control          210    7.95
+experimental     253   11.22
 
 
 
@@ -1703,58 +969,28 @@ The ggplot2 plotting system knows a full set of geometries, like:
 For a brief demonstration of ggplots basic functionality, we use the `BAB1` data set of the BrowsingAB case. We attach the case environment and use the `str` command to take a first look at the data:
 
 
-```r
-attach(BrowsingAB)
-BAB1 %>% as_tbl_obs()
-```
 
 The BrowsingAB case is a virtual series of studies, where two websites were compared by how long it takes users to complete a given task, time-on-task (ToT). Besides the design factor, a number of additional variables exist, that could possibly play a role for ToT, too. We explore the data set with ggplot:
 
 We begin with a plot that shows the association between age of the participant and ToT. Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a *scatter plot*. 
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = age,  y = ToT)) +
-  geom_point()
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/build_ggpl_2-1} 
+<img src="Getting_started_with_R_files/figure-html/build_ggpl_2-1.png" width="66%" />
 
 Let's take a look at the elements of the command chain: The first two lines pipe the data frame into the ggplot engine.
 
 
-```r
-BAB1 %>% 
-  ggplot(...)
-```
 
 At that moment, the ggplot engine "knows" which variables the data frame contains and hence are available for the plot. It does not yet know, which variables are being used, and how. The next step is, usually, to consider a basic (there exist more than 30) *geometry* and put it on a *layer*. The scatter plot geometry of ggplot is `geom_point`:
 
 
-```r
-BAB1 %>% 
-  ggplot(...) +
-  geom_point()
-```
 
 
 The last step is the *aesthetic mapping*, which tells ggplot the variables to use and how to map them to *aesthetic* properties of the geometry. The basic properties of points in a coordinate system are the x and y-positions:
 
 
-```r
-BAB1 %>% 
-  ggplot(aes(x = age, y = ToT)) +
-  geom_point()
-```
 
 The function `aes` creates a mapping where the aesthetics per variable are given. When call `aes` directly, we see that it is just a table.
 
-
-```r
-aes(x = age, y = ToT)
-```
 
 ```
 ## Aesthetic mapping: 
@@ -1766,72 +1002,27 @@ One tiny detail in the above chain has not yet been explained: the `+`. When cho
 
 Let's move on with a slightly different situation that will result in a different geometry. Say, we are interested in the distribution of the time-on-task measures under the two designs. We need a geometry, that visualizes the distribution of quantitative variables split by a grouping variable, factor. The box plot does the job:
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = Design,  y = ToT)) +
-  geom_boxplot()
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/unnamed-chunk-37-1} 
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-32-1.png" width="66%" />
 
 The box plot maps ToT to y (again). The factor Design is represented as a split on the x-axis. Interestingly, the box plot does not represent the data as raw as in the scatter plot example. The geometry actually performs an analysis on ToT, which produces five statistics: min, first quartile, median, third quartile and max. These statistics define the vertical positions of bars and end points.
 
 Now, we combine all three variables in one plot: how does the association between ToT and age differ by design? As we have two quantitative variables, we stay with the scatter plot for now. As we intend to separate the groups, we need a property of points to distinguish them. Points offer several additional aesthetics, such as color, size and shape. We choose color, and add it to the aesthetic mapping by `aes`. Note, that it does not matter whether you use the British or American way of writing (colour vs. color).
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = age,  y = ToT, color = Design)) +
-  geom_point()
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/unnamed-chunk-38-1} 
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-33-1.png" width="66%" />
 
 Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the box plot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For scatter plots, a geometry that does the job of summarizing the trend is `geom_smooth`. This geometry summarizes a cloud of points by drawing a LOESS-smooth line through it. Note how the color mapping is applied to all geometry layers. 
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = age,  y = ToT, color = Design)) +
-  geom_point() +
-  geom_smooth()
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/unnamed-chunk-39-1} 
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-34-1.png" width="66%" />
 
 We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored  sigmoid curves. 
 
-Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *faceting*. A facet splits the data by a grouping variable and creates one single plot for every group:
+Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use *facetting*. A facet splits the data by a grouping variable and creates one single plot for every group:
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = age,  y = ToT, color = Design)) +
-  geom_point() +
-  geom_smooth() +
-  facet_grid(Education ~ .)
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/unnamed-chunk-40-1} 
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-35-1.png" width="66%" />
 
 See, how the `facet_grid` command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:
 
-
-```r
-BAB1 %>% 
-  ggplot(aes(x = age,  y = ToT)) +
-  geom_point() +
-  geom_smooth() +
-  facet_grid(Education ~ Design)
-```
-
-
-\includegraphics[width=0.66\linewidth]{Getting_started_with_R_files/figure-latex/unnamed-chunk-41-1} 
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-36-1.png" width="66%" />
 
 Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable, but not vice versa.
 
@@ -1846,17 +1037,6 @@ In the following, we will use another simulated data frame `Exp` to demonstrate 
 
 
 
-```r
-N_Obs <- 20
-set.seed(42)
-Exp <-
-  data_frame(Obs = 1:N_Obs,
-             Condition = rep(c("Experimental", "Control"),
-                             N_Obs/2),
-             age = runif(N_Obs, 18, 35),
-             mu = 200 + (Condition == "Control") * 50 + age * 1,
-             outcome = rnorm(N_Obs, mu, 10))
-```
 
 
 The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in [LM], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does *not* contain is F-statistics and p-values;  and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The `fixef` command extracts the parameter estimates from the model to answer the question.
@@ -1864,68 +1044,35 @@ The experiment involves two groups, which in classic statistics would clearly po
 
 
 
-```r
-M_1 <- 
-  stan_glm(outcome ~ Condition, 
-     data = Exp)
-```
-
-
-```r
-fixef(M_1)
-```
-
 
 
 |fixef                 | center| lower| upper|
 |:---------------------|------:|-----:|-----:|
-|Intercept             |  274.0|   266| 282.4|
-|ConditionExperimental |  -46.1|   -58| -34.5|
+|Intercept             |  275.4| 264.0| 286.2|
+|ConditionExperimental |  -47.5| -62.6| -31.9|
 
 
 Another classic model is *linear regression*, where outcome is predicted by a metric variable, say `age`. The `stan_glm` regression engine is truly multi-purpose and does the job with grace:
 
 
-```r
-M_2 <- 
-  stan_glm(outcome ~ age, 
-     data = Exp)
-```
 
 
-```r
-fixef(M_2)
-```
-
-
-
-|fixef     | center| lower|  upper|
-|:---------|------:|-----:|------:|
-|Intercept | 206.60| 126.1| 285.79|
-|age       |   1.58|  -1.2|   4.46|
+|fixef     | center|  lower|  upper|
+|:---------|------:|------:|------:|
+|Intercept | 219.02| 133.51| 308.60|
+|age       |   1.16|  -1.98|   4.18|
 
 
 If you are interested in both at the same time, you can combine that in one model by the following formula:
 
 
-```r
-M_3 <- 
-  stan_glm(outcome ~ Condition + age, 
-     data = Exp)
-```
-
-
-```r
-fixef(M_3)
-```
-
 
 
 |fixef                 | center|   lower|  upper|
 |:---------------------|------:|-------:|------:|
-|Intercept             | 231.69| 199.310| 265.46|
-|ConditionExperimental | -46.21| -56.362| -36.43|
-|age                   |   1.51|   0.344|   2.66|
+|Intercept             | 219.72| 177.280| 261.59|
+|ConditionExperimental | -50.35| -63.763| -36.38|
+|age                   |   2.01|   0.557|   3.52|
 
 
 
@@ -1984,7 +1131,7 @@ The minimal workflow for statistical reporting with knitr is as follows:
 1. Use markdown right away, covering all steps of your data analysis, i.e. a scrutable report. You may even start writing when only one part of your data gathering is completed, because due to the dynamic chunks, updating the report when new data arrives is just a button click away.
 1. When the data analysis is complete, compile the scrutable report to Word format
 1. Extract the passages, figures and tables for a minimal statistical report. This is your results section.
-1. Provide the scrutable report as appendix or supplementary material
+1. provide the scrutable report as appendix or supplementary material
 
 In the notion of this chapter, this is just to get you started and knitr is so tightly integrated with the Rstudio environment that I don't even bother to explain the commands for knitting a document. Once acquainted with the basics, markdown provides a few additional markup tokens, like footnotes, hyperlinks or including images. The customization options and addons for knitr are almost endless and various interesting addons are available, just to mention two:
 

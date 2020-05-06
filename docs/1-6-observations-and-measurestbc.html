@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1.6 Observations and measures[TBC] | New statistics for the design researcher" />
+<meta property="og:type" content="book" />
+
+
+<meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+<meta name="github-repo" content="schmettow/New_Stats" />
+
+<meta name="author" content="Martin Schmettow" />
+
+<meta name="date" content="2020-05-06" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place.">
+
+<title>1.6 Observations and measures[TBC] | New statistics for the design researcher</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="has-sub"><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
+<li class="has-sub"><a href="1-1-whom-this-book-is-for.html#whom-this-book-is-for"><span class="toc-section-number">1.1</span> Whom this book is for</a><ul>
+<li><a href="1-1-whom-this-book-is-for.html#the-empirical-design-researcher"><span class="toc-section-number">1.1.1</span> The empirical design researcher</a></li>
+<li><a href="1-1-whom-this-book-is-for.html#the-experimentalist"><span class="toc-section-number">1.1.2</span> The experimentalist</a></li>
+<li><a href="1-1-whom-this-book-is-for.html#the-applied-researcher"><span class="toc-section-number">1.1.3</span> The applied researcher</a></li>
+</ul></li>
+<li><a href="1-2-assumptions.html#assumptions"><span class="toc-section-number">1.2</span> Assumptions</a></li>
+<li><a href="1-3-how-to-read-this-book.html#how-to-read-this-book"><span class="toc-section-number">1.3</span> How to read this book</a></li>
+<li><a href="1-4-quantitative-design-research.html#quantitative-design-research"><span class="toc-section-number">1.4</span> Quantitative design research</a></li>
+<li><a href="1-5-studies.html#studies"><span class="toc-section-number">1.5</span> Studies</a></li>
+<li class="has-sub"><a href="1-6-observations-and-measurestbc.html#observations-and-measurestbc"><span class="toc-section-number">1.6</span> Observations and measures[TBC]</a><ul>
+<li><a href="1-6-observations-and-measurestbc.html#interaction-sequences"><span class="toc-section-number">1.6.1</span> Interaction sequences</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#performance-measures"><span class="toc-section-number">1.6.2</span> performance measures</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#experience-tbd"><span class="toc-section-number">1.6.3</span> experience [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#design-features-tbd"><span class="toc-section-number">1.6.4</span> design features [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#the-human-factor-tbd"><span class="toc-section-number">1.6.5</span> the human factor [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#situations-tbd"><span class="toc-section-number">1.6.6</span> situations [TBD]</a></li>
+</ul></li>
+</ul></li>
+<li><a href="2-elements-of-bayesian-statistics.html#elements-of-bayesian-statistics"><span class="toc-section-number">2</span> Elements of Bayesian Statistics</a></li>
+<li class="has-sub"><a href="3-getting-started-r.html#getting_started_r"><span class="toc-section-number">3</span> Getting started with R</a><ul>
+<li class="has-sub"><a href="3-1-setting-up-the-r-environment.html#setting-up-the-r-environment"><span class="toc-section-number">3.1</span> Setting up the R environment</a><ul>
+<li><a href="3-1-setting-up-the-r-environment.html#installing-cran-packages"><span class="toc-section-number">3.1.1</span> Installing CRAN packages</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#installing-packages-from-github"><span class="toc-section-number">3.1.2</span> Installing packages from Github</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#first_program"><span class="toc-section-number">3.1.3</span> A first statistical program</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#bibliographic-notes"><span class="toc-section-number">3.1.4</span> Bibliographic notes</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-2-learning-r-a-primer.html#learning-r-a-primer"><span class="toc-section-number">3.2</span> Learning R: a primer</a><ul>
+<li><a href="3-2-learning-r-a-primer.html#assigning-and-calling-objects"><span class="toc-section-number">3.2.1</span> Assigning and calling Objects</a></li>
+<li><a href="3-2-learning-r-a-primer.html#vectors"><span class="toc-section-number">3.2.2</span> Vectors</a></li>
+<li><a href="3-2-learning-r-a-primer.html#basic-object-types"><span class="toc-section-number">3.2.3</span> Basic object types</a></li>
+<li><a href="3-2-learning-r-a-primer.html#operators-and-functions"><span class="toc-section-number">3.2.4</span> Operators and functions</a></li>
+<li><a href="3-2-learning-r-a-primer.html#storing-data-in-data-frames"><span class="toc-section-number">3.2.5</span> Storing data in data frames</a></li>
+<li><a href="3-2-learning-r-a-primer.html#import-export-and-archiving"><span class="toc-section-number">3.2.6</span> Import, export and archiving</a></li>
+<li><a href="3-2-learning-r-a-primer.html#case-environments"><span class="toc-section-number">3.2.7</span> Case environments</a></li>
+<li><a href="3-2-learning-r-a-primer.html#structuring-data"><span class="toc-section-number">3.2.8</span> Structuring data</a></li>
+<li><a href="3-2-learning-r-a-primer.html#data-transformation"><span class="toc-section-number">3.2.9</span> Data transformation</a></li>
+<li><a href="3-2-learning-r-a-primer.html#plotting-data"><span class="toc-section-number">3.2.10</span> Plotting data</a></li>
+<li><a href="3-2-learning-r-a-primer.html#fitting-regression-models"><span class="toc-section-number">3.2.11</span> Fitting regression models</a></li>
+<li><a href="3-2-learning-r-a-primer.html#knitting-statistical-reports"><span class="toc-section-number">3.2.12</span> Knitting statistical reports</a></li>
+<li><a href="3-2-learning-r-a-primer.html#exercises"><span class="toc-section-number">3.2.13</span> Exercises</a></li>
+<li><a href="3-2-learning-r-a-primer.html#bibliographic-notes-1"><span class="toc-section-number">3.2.14</span> Bibliographic notes</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="observations-and-measurestbc" class="section level2">
+<h2><span class="header-section-number">1.6</span> Observations and measures[TBC]</h2>
+<div id="interaction-sequences" class="section level3">
+<h3><span class="header-section-number">1.6.1</span> Interaction sequences</h3>
+<p>Behavioural records not necessarily require one-way mirrors and the nights of video coding. Log files of web servers provide sequences of how users navigate a web site. Plugin software is available that records keystrokes and mouse actions on computers. The difficult part is the following: When observing 50 users while doing a non-trivial task, no two interaction sequences are exactly the same (if i had to bet on it). By itself, there is little value without further means of interpretation and this can go two ways up:</p>
+<p>The diligent and skilled <em>qualitative</em> researchers are able to extract meaningful patterns from such sequences. For example, in usability tests, the following patterns are frequently observed and interpreted.</p>
+<ul>
+<li>a user jumping back to the main screen possibly went into a wrong direction</li>
+<li>users randomly probing around either have no clue or no motivation</li>
+<li>users in a longitudinal study who only interact at the begin and the end of the period, have no use for the system, really.</li>
+</ul>
+<p>The <em>quantitative</em> researcher will aim at deriving measures from the interaction sequence. Formally, <em>to measure</em> means assigning numbers to observed sequences, so that these can be brought into an <em>order</em>, at least. Obviously, we need some sort of transformation that gives us a single <em>performance score</em>. This we call here the <em>performance function</em> and we have many choices, for example:</p>
+<ul>
+<li>the number of all exploratory events</li>
+<li>their relative frequency</li>
+<li>their longest uninterrupted sequence</li>
+<li>total time spent in exploration</li>
+</ul>
+<p>Sometimes, you have to go a long way up the qualitative route, before you can derive useful measures. In [Schnittker, Schmettow &amp; Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, <em>Levensthein distance</em> counts the number of edits to transform one sequence into the other and we used it as the performance score: <em>deviation from optimal path</em>. Even more interpreting was another study we did on the active user paradox. We recorded interaction sequences of users doing some repetitive tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. First, events were classified on a low level (e.g. “reading the handbook”, “first time trying a function”) and later aggregated to broader classes (e.g. “exploratory behavior”). The number of events in a given time frame that were classified as such were finally taken as a measure, representing the exploratory tendencies.</p>
+</div>
+<div id="performance-measures" class="section level3">
+<h3><span class="header-section-number">1.6.2</span> performance measures</h3>
+<p>A good point to start with is the classic concept of “usability”, which the ISO 9142-11 defines by the following three high-level criteria:</p>
+<ul>
+<li>effectiveness: can users accomplish their tasks?</li>
+<li>efficiency: what resources have to be spend for a task, e.g. time.</li>
+<li>satisfaction: how did the user like it?</li>
+</ul>
+<p>While these criteria originated in the field of Human-Computer Interaction, they can easily be adapted to compare everything that people do their work with. Even within the field, it has been adapted to hundreds of studies and a hundred ways are reported of assessing these criteria.</p>
+<p><em>Effectiveness</em> is often measured by <em>completion rate (CR)</em>. A classic waterfall approach would be to consult the user requirements documents and identify the, let’s say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with <em>distinct tasks</em>. Strictly, the set of tasks also had to be <em>complete</em>, covering the whole system. When completion rate is taken from in series of <em>repetitive tasks</em>, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or medical errors. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on <em>why</em> users failed? Effectiveness, in the sense of task completion, is primarily a qualitative issue and we shall rarely encounter it in this book.</p>
+<p>A more subtle notion of effectiveness is the <em>quality of outcome</em>, and despite the very term, is a measure. Perhaps, it should better be called <em>task perfection</em>. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.</p>
+<p><em>Efficiency</em> is where it really gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving.</p>
+<p>Counting the <em>number of clicks</em> before someone has found the desired piece of informnation is a coarse, but easy to acquire and intuitive measure of efficiency, and so is <em>time-on-task (ToT)</em>, which is just the sum . Still, these It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, <em>error rate</em> can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.</p>
+<p>ToT and other performance measures can be very noisy, and RT even more so. In order to arrive at sufficiently certain estimates, it is recommended to always plan for <em>repetition</em>. In [LMM] we will make heavy use of repeated measures on users, tasks and designs.</p>
+<p>Above, I did not mean to say that design research always requires the sometimes painful recording of interaction sequences. The majority of studies jumps over them and proceed to performance measures, directly, by counting attempts or pressing stop watches.</p>
+<p>In many situations, such <em>direct measures</em> are right spot-on: When controlling a car in dense city traffic, a few hundred milliseconds is what makes huge a difference and therefore <em>reaction time</em> is a valid performance measure. In experimental cognitive research reaction times are a dominant tool to reveal the structure of the mind. The Stroop tasks is a golden evergreen cognitive psychology and serves as an example. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it.
+In [Schmettow, Noordzij, Mundt] we employ the Stroop task to read the minds of participants. We showed them pictures with computers on them, followed by a printed word (e.g., “explore”) on which to perform the Stroop task. It was conceived that reaction time is increased when a participant experiences a strong association, like:</p>
+<p>black tower PC + “explore” –&gt; “can someone hand me a screwdriver”</p>
+<p>CONDITION WORD : Ink
+congruent [GREEN ]: green
+incongr [YELLOW]: green
+neutral [CHAIR ]: green</p>
+<div id="complete-me" class="section level4">
+<h4><span class="header-section-number">1.6.2.1</span> COMPLETE ME</h4>
+</div>
+<div id="satisfaction" class="section level4">
+<h4><span class="header-section-number">1.6.2.2</span> –&gt;<em>Satisfaction</em></h4>
+</div>
+</div>
+<div id="experience-tbd" class="section level3">
+<h3><span class="header-section-number">1.6.3</span> experience [TBD]</h3>
+</div>
+<div id="design-features-tbd" class="section level3">
+<h3><span class="header-section-number">1.6.4</span> design features [TBD]</h3>
+</div>
+<div id="the-human-factor-tbd" class="section level3">
+<h3><span class="header-section-number">1.6.5</span> the human factor [TBD]</h3>
+</div>
+<div id="situations-tbd" class="section level3">
+<h3><span class="header-section-number">1.6.6</span> situations [TBD]</h3>
+</div>
+</div>
+<!-- </div> -->
+<p style="text-align: center;">
+<a href="1-5-studies.html"><button class="btn btn-default">Previous</button></a>
+<a href="2-elements-of-bayesian-statistics.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

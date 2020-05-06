@@ -1,4 +1,4 @@
-# Multilevel models {#multilevel-models}
+# Multilevel models {#MLM}
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
@@ -6,204 +6,130 @@ purp.mcmc = F
 
 source("RMDR.R")
 
-CE <- c("BrowsingAB", "Typing", "CUE8", "Egan", "IPump")
+CE <- c("CUE8", "Egan", "IPump", "Hugme", "Uncanny", "Sleepstudy")
 load_CE_(CE)
 ```
-
-
-
-In the previous chapters we have seen several examples of differential design effects: groups of users responding differently to design conditions, such as font size, noise and emerging technology. Dealing with differential design effects seems straight forward: identify the relevant property, record it and add an interaction effect to the model. Identifying the relevant property is, in fact, a catch-22: how would you know what is relevant before you actually conducted the research. Researchers routinely record basic demographic properties such as age and gender, but these frequently show little effects, or the effects are obvious, i.e. not interesting. In addition, such predictors are rarely more than approximations of the properties that make the real difference. Older people have weaker vision *by tendency*, but the individual differences in any age group are immense. Boys tend to be more technophile, but there are some real geeky girls, too.
+In the previous chapters we have seen several examples of conditional effects: groups of users responding differently to design conditions, such as font size, noise and emerging technology. Dealing with differential design effects seems straight forward: identify the relevant property, record it and add an conditional effect to the model. Identifying the relevant property is, in fact, a catch-22: how would you know what is relevant before you actually conducted the research. Researchers routinely record basic demographic properties such as age and gender, but these frequently show little effects, or the effects are obvious, i.e. not interesting. In addition, such predictors are rarely more than approximations of the properties that make the real difference. Older people have weaker vision *by tendency*, but the individual differences in any age group are immense. Boys tend to be more technophile, but there are some real geeky girls, too.
 
 Identifying properties that matter upfront requires careful review of past research or deep theorizing, and even then it remains guesswork. Presumably, hundreds of studies attempted to explain differences in usage patterns or performance by all sorts of psychological predictors, with often limited results. That is a big problem in design research, as variation in performance can be huge and good predictors are urgently needed. Identifying the mental origins of being fast versus slow, or motivated versus bored, is extremely useful to improve the design of systems to be more inclusive or engaging.
 
-As we will see in this chapter, individual differences can be accounted for and measured accurately without any theoretically derived predictors. For researchers trained in experimental social sciences it may require a bit of Zen to let go of theory-driven reasoning, as it is always tempting to ask for the *why*. But in applied evaluation  studies, what we often really need to know is by *how much* users vary. The key to measuring variation in a population is to create models that operate on the level of participants, in addition to the population level, for example
+As we will see in this chapter, individual differences can be accounted for and measured accurately without any theory of individual differences. For researchers trained in experimental social sciences it may require a bit of getting used to theory-free reasoning about effects, as it is always tempting to ask for the *why*. But in applied evaluation  studies, what we often really need to know is by *how much* users vary. The key to measuring variation in a population is to create models that operate on the level of participants, in addition to the population level, for example
 
 + on population level, users prefer design B over A on average ($\beta_1 = 20$)
-+ on the participant-level, participant $i$ preferred B over A ($\beta_{1i} = 20$), $j$ preferred A over B ($\beta_{1j} = -5$), ...
++ on the participant-level, participant $i$ preferred B over A ($\beta_{1i} = 20$), $j$ preferred A over B ($\beta_{1j} = -5$), +
 
-See how on the participant level, everyone gets their own estimate for preference ($\beta_{1\cdot}$). The key to estimating individual parameters is simply to regard participant (`Part`) a grouping variable on its own, and introduce it as a factor to the linear model. As we will see, it is *almost* that easy. The additional idea is that the levels of the factor, hence the individuals, are part of a *population*. While researchers in fundamental social sciences typically ignore individual variation, there is an independent  branch in Psychology called *psychometrics* that deals with precisely that: constructing tests to measuring the individual. Think of IQ tests, which are constructed to have an average of 100, with 67% humans falling in the range 85 - 115. More extreme values become increasingly infrequent. From this perspective, it becomes clear what a population is: a set of entities that do vary but clump around a typical value. These two simple ideas, participants are factors, too, and are part of a population, form what is commonly called *random factors*: a factor where levels are drawn from an overarching distribution, usually the Gaussian. This distribution is estimated simultaneously to the individual parameters ($\beta_{1\cdot}$), which has some interesting consequences, as we will see when discussing shrinkage.
+When adding a participant-level effects, we still operate with coefficients, but in contrast to single-level linear models, every participant gets their own estimate  ($\beta_{1\cdot}$). The key to estimating individual parameters is simply to regard participant (`Part`) a grouping variable on its own, and introduce it as a factor. Multi-level analysis is not limited to estimating models, and  in [#thinking_ml] we will use the participant factor for producing multi-level exploratory plots. That should get you started.
 
-Typically, fixed and random effects appear together in a linear mixed-effects model. As we will see, it depends on the research question whether the researcher capitalizes on the participant-level effects, the average outcome or the variation in the population. As we will also see, the idea of random effects transfers with grace to *non-human populations*, such as designs or questionnaire items. But, first, let me give you an illustration, why caring for individual differences is not just an added value, that you may take or leave, but a necessary perspective to avoid severely wrong conclusions.
+The subsequent two sections introduce the basics of estimating multi-level linear models, first introducing intercept-only participant-level effects [#intercept_re] and then slope (or group difference) effects [#slope_re]. Typically, fixed and random effects appear together in a linear mixed-effects model. It depends on the research question whether the researcher capitalizes on the average outcome, the variation in the population or participant-level effects. In section [#reporting_re] we will see how to report multi-level results depending on the type of research question. 
 
-
-
-## Average? Neverage!
-
-Many studies in design research pretend that all users are alike. This idea is borrowed from experimental social science research. Seminal studies in cognitive psychology and social psychology claim mental structures or processes that hold for all humans. That is the very paradigm of fundamental psychology and many researchers ground their theorizing and experimentation on it. And indeed, several properties of human information processing have been replicated under such diverse conditions that one can assume that they are general. For example, the Stroop observation has been observed a hundred times in various population subgroups [REF], situations [REF] and variations.
-
-The treatments in such experiments can be simplistic to an extreme. Often, participants are asked to respond to colored geometric shapes that light up on a black background by simple key presses. This is called *reductionism* and it has led to at least some insights into how the human mind works. As much as  design researchers should draw upon psychological theory, as little useful is the reductionist paradigm. Designs must work in real world situations and often in many different ones, highly controlled lab experiments just bear too little resemblance to the real world. In particular, by no means can we expect all users to respond alike to one or more designs. Their minds are complex, obscure and unpredictable besides.
-
-> Our minds are not run as top - down dictatorships; they are rambunctious parliaments, populated by squabbling factions and caucuses, with much more going on beneath the surface than our conscious awareness ever accesses.
-(Carroll, Sean. The Big Picture (Kindle Locations 5029-5031). Oneworld Publications. Kindle Edition.)
-
-
-Let me get it straight: People differ! If you plan to move from design A to B, or any other design choice, it is a good idea to also regard how much people vary. If your research question refers to any mental process or its change, the only solid way is to observe how one-and-the-same individuals behave on all conditions. That means within-subject designs should be the rule, not the exception. In contrast, doing a between-subject design is a potential mistake and requires good justification. The following case illustrates how things can go terribly wrong, when within-subject processes are examined in a between-subject manner:
-
-Imagine you set out to determine the association between typing speed and errors. It is common sense that quality decreases with speed, so a positive correlation is expected. During the experiment, participants get a number of texts to type. With the first trial they are instructed to type at a relaxed speed. With every further trial they were asked to type slightly faster than at the trial before. The expectation is that
-
-> The faster a person types, the more errors occur
-
-In terms of statistical skills, the researcher is familiar with linear models, and is aware of the fact, that these may not be applied for repeated measures. Therefore our researcher first averages the scores across participants and receives a data set with a neat 30 data points, one per trial. <!-- #90 -->A first exploratory plot reveals a bizarre relation: it seems that the faster participants type, the less errors they make. That is completely against expectations, as there almost always is a trade-off between speed and accuracy.
-
-```{r Typing_average, opts.label = "fig.small"}
-attach(Typing)
-
-Type_1_avg %>% 
-  ggplot(aes(x = speed,
-             y = error)) +
-  geom_point() +
-  geom_smooth(se = F)
-
-```
-
-Could it be true that the faster a person types, the less errors happen? Of course not. The problem is how precisely we ask the question. When averaging over persons, we actually answer a different question, which is on a *population-level*: Do persons who can type faster make fewer errors? This question sees every person as one data point with two performance measures, speed and errors, both representing the ability to type. Now, the above results make more sense: people, who are trained in typing are at the same time fast and more accurate. But, what the experiment was out for is the trade-off between speed and accuracy *within a person*. The experiment provokes this trade-off by asking the same person to accelerate in typing. And, when we visualize the results on an individual level, the speed-accuracy trade-off becomes immediately visible:
-
-```{r Typing_individual, ops.label = "fig.small"}
-Type_1 %>% 
-  ggplot(aes(x = speed,
-             y = error,
-             group = Part)) +
-  geom_point() +
-  geom_smooth(se = F, method = "lm", aes(col = "within participant")) +
-  geom_smooth(data = Type_1_avg, 
-              aes(col = "between participant", x = speed, y = error, group = NA), 
-              se = F, method = "lm")
-
-detach(Typing)
-```
-
-
-The example here is constructed to be extreme: the population-level effect has the opposite direction of individual level effects. However, the situation is fully plausible and points us to an important principle: Whenever a research question capitalizes on a change in mental state or behaviour, the only solid way to investigate is a within-subject design. Therefore again: treating averaged data as if it represents within-persons changes is a severe mistake. In the A/B case, for example, one must always be clear about the level. Is it true that 
-
-+ on average, users prefer B over A?
-+ or all users individually prefer B over A?
-
-The bizzare situation with the Typing study will have to wait, because we will need all elements of multilevel modelling to resolve it. However, the figure above features the core elements of mutlilevel models:
-
-+ persons have different levels for errors at relaxed typing (varying intercepts)
-+ persons differ in how much the error frequency goes up with speed (varying slopes)
-+ the better a person performs at relaxed typing, the less the number of errors goes up when the person types faster (correlated random effects)
+The participant-level is really just the factor and once it is regarded alongside the population level, a model is multi-level.  However, in multi-level linear modelling we usually  use a different type of factor, for the particpant level. The additional idea is that the levels of the factor, hence the individuals, are part of a *population*. The consequences of this perspective, will be discussed in [#re_shrinkage]: a population is a set of entities that do vary to some extent but also clump around a typical value. And that is precisely what *random effects* do: levels are drawn from an overarching distribution, usually the Gaussian. This distribution is estimated simultaneously to the individual parameters ($\beta_{1\cdot}$), with some interesting consequences. Once the concept of random effects is clear, we will see that it transfers with grace to *non-human populations*, such as designs, teams or questionnaire items. Three sections introduce multi-population multi-level models: In [#crossed_re] we will use a random effects model with four populations and compare their relative contribution to overall variance in performance. Section [#re_nested] will show how multiple levels can form a  hierarchy and in [#re_psychometrics] we will see that multi-level models apply with grace for the development of tests, which is called *psychometrics*, when people are tested and which I call *designometrics* when a sample of designs is evaluated. Finally, we return to a more fundamental research case, the Uncanny Valley, and examine the *universality* of this strange effect [#universality]. 
 
 
 
 
+## The Human Factor: Intercept random effects {#the-human-factor}
 
-## The Human Factor: Intercept random effects
+#### REWORK
 
-Design science fundamentally deals with interaction between  systems and humans. Every measure we take in a design study is an encounter of an individual with a system. As people differ in almost every aspect, it is likely that people differ in how they use a system. In the previous chapter we have already dealt with differences between users: in the BrowsingAB case, we compared two designs in how inclusive they are with respect to elderly users. The data set included further variables, education and gender, that may help to predict performance.
+Design science fundamentally deals with interaction between  systems and humans. Every measure we take in a design study is an encounter of an individual with a system. As people differ in many aspects, it is likely that people differ in how they use a system. In the previous chapter we have already dealt with differences between users: in the BrowsingAB case, we compared two designs in how inclusive they are with respect to elderly users. Such a research question seeks for a definitive answer on what truly causes variation in performance. Years of age is a standard demographic variable and in experimental studies can be collected without hassle. If we start from deeper theoretical considerations than that, for example, we suspect a certain personality trait to play a significant role, it becomes more tricky. Perhaps, you need a 24-item scale to measure the construct, perhaps you first have to translate this particular questionnaire into three different languages, and perhaps you have to first invent and evaluate a scale.
+While seeking good explanatory variables  is essential for testing theories, for applied research it is sometimes fully sufficient to simply quantify the amount of variation.
 
-Imagine, you had gathered no predictors at all and observed a massive amount of variation in performance. It is reasonable to assume that much of this variation stems from individual differences. That, in turn would mean that a fraction of users perform extremely well, whereas many users fail miserably.  If that were true,  you would give the advice to invest into redesign that is more inclusive, ironing out the differences, would you not? To make your point, you had to prove that individual differences are the main source of variation. 
 
-At first, one might think that the grand mean model would do, take $\beta_0$ as the population mean and $\sigma$ as a measure for individual variation. Unfortunately, it is not valid to take the residual variance as variance between individuals, the reason being that random variation captured by $\sigma$ is composed of multiple sources, in particular:
+<!-- That is already quite fancy, as it is seeks to explain variation. In applied design research, we often observe massive variation in performance betwee. based on idea that age may be related to performance in such a convoluted way Imagine, you had a different look at the BrowsingAB data, but had gathered no predictors at all and observed a massive amount of variation in performance. It is reasonable to assume that much of this variation stems from individual differences. That, in turn would mean that a fraction of users perform extremely well, whereas others fail miserably.  If that were true,  you would give the advice to invest into redesign that is more inclusive, ironing out the differences, would you not? But, to really drive it home, you have to prove that individual differences are the main source of variation. -->
+
+At first, one might think that the grand mean model would do, take $\beta_0$ as the population mean and $\sigma_\epsilon$ as a measure for individual variation. Unfortunately, it is not valid to take the residual variance as variance between individuals, because the error is composed of multiple sources, in particular:
 
 + inter-individual variation
 + intra-individual variation, e.g. by different levels of energy over the day
 + variations in situations, e.g. responsiveness of the website
-+ inaccuracy of measures
++ inaccuracy of measures, e.g. misunderstanding a questionnaire item
 
-What is needed, is a way to separate the variation of participants from the rest. Reconsider the principles of model formulations: the likelihood captures what is repeatable, what does not repeat goes to the random term. For the problem of identifying individual differences, we simply apply this principle: to pull out a factor from the random term, repetition is needed. For estimating users' individual performance level, all that is needed is repeated measures.
+<!-- What is needed, is a way to separate the variation of participants from the rest. Reconsider the principles of model formulations: the likelihood captures what is repeatable, what does not repeat goes to the random term. For the problem of identifying individual differences, we simply apply this principle: to pull out a factor from the random term, repetition is needed. For estimating users' individual performance level, all that is needed is repeated measures. -->
 
-Imagine, a pre-study to BrowsingAB was done on the existing design A. Data was gathered during operation of the website. Real users were tracked on eight tasks. It was possible to identify the task a user was on and identity of users could be tracked, too. However, as a consequence of privacy protection not a single demographic variable could be gathered. With the simulation function of the BrowsingAB case environment, we generate a new data set `SOV` (sources of variance), reduce it to design A and remove all predictors.
-
-```{r}
-attach(BrowsingAB)
-```
-```{r sim:sources_of_var}
-n_Part = 25
-n_Task = 8
-n_Obs = n_Part * n_Task
-
-
-SOV <-
-simulate(n_Part, n_Task) %>% 
-filter(Design == "A") %>% 
-select(Obs, Part, Task, ToT) %>% 
-  as_tbl_obs()
-
-
-```
-
-We start with some data exploration. The first question we can ask is:
+In the IPump study we have collected performance data of 25 nurses, operating a novel interface for a  syringe infusion pump. Altogether, every nurse completed a set of eight tasks three times. Medical devices are high-risk systems where a single fault can cost a life. It is required that user performance is on an *uniformly* high level. We start the investigation with the global question:
 
 > What is the average ToT in the population?
 
-```{r pop_mean}
-SOV %>% 
-summarize(mean_Pop = mean(ToT)) %>% 
-  kable()
+```{r}
+attach(IPump)
 ```
 
-This question is rather global and does not refer to any individuals in the population. The following question does:
+
+
+```{r pop_mean}
+D_Novel %>% 
+summarize(mean_Pop = mean(ToT))
+```
+
+The answer is just one number and does not refer to any individuals in the population. This is called the population-level estimate or fixed effect estimate. The following question is similar, but is grouped by  the participant level:
 
 > What is the average ToT of individual participants?
 
-```{r random_effects}
-SOV %>% 
+```{r}
+D_Novel %>% 
 group_by(Part) %>% 
 summarize(mean_Part = mean(ToT)) %>% 
-  sample_n(5) %>% 
-  kable()
+  sample_n(5)
 ```
 
-This question differs in that it is *grouped* by participant. Now, that we have the individual means, we can plot the variation in task performance. For comparison, the overall variation is added to the plot. It is apparent that individual differences make only part of the overall variance.
+Such a grouped summary can be useful for situations where we want  to directly compare individuals, like in performance tests. In experimental research, individual participants are of lesser interest, as they are exchangeable entities (a sample). The total effect on the population is usually of greater The amount of differences can be summarized by the standard deviation of participant-level estimates:
 
-```{r re_variation}
-G_sources_variation <-
-  SOV %>% 
+```{r}
+D_Novel %>% 
   group_by(Part) %>% 
   summarize(mean_Part = mean(ToT)) %>% 
   ungroup() %>% 
-  ggplot(aes(x = mean_Part)) +
-  geom_density(data = SOV, aes(x = ToT, y=..scaled.., 
-                               fill = "total"),alpha = 1/2) +
-  geom_density(aes(fill = "user", y=..scaled..),alpha = 1/2) +
-  labs(fill = "Variation")
-G_sources_variation
-
-detach(BrowsingAB)
+  summarize(sd_Part   = var(mean_Part))
 ```
 
 
-<!-- #83 --> Above, we have claimed that our data set is bare of predictors. Is it? The variable `Part` groups observations by participant identity and therefore is a plain factor. If we can compute user means like above, what keeps us from adding a factor, like the following?
+Generally, these are the three types of parameters in multi-level models: the population-level estimate (commonly called *fixed effects*), the participant-level estimates (*random effects*) and the participant-level *standard deviation*.
 
-`SOV ~ 1 + Part`
+<!-- Now, that we have the individual means, we can plot the variation in task performance. For comparison, the overall variation is added to the plot. It is apparent that individual differences make only part of the overall variance. -->
 
-While formally, a participant is just a group of observations, there is one apparent, one practical and one subtle difference compared to factors as we know them so far. The apparent difference is that before we had just very few levels and many observations. With participants we would have to estimate dozens or hundreds of coefficients with just very few observations per level. In consequence, the posterior distribution will become spread out like butter on a toast and certainty will be abysmal. The practical difference is that, while we are interested in the overall variation, the ability of individual users is rather uninteresting. We actually have no use for dozens of user ability scores. The subtle difference is that users form a population. That sounds rather obviuous than subtle, but is key for the solution once we understand what being *member of a population* means, statistically. I will give a brief account here and return to the topic in a later section.
+<!-- #### IMPROVE FIG -->
 
-Imagine the following situation: you are seated in a university bistro and you get the task to guess the intelligence quotient of every person entering the bistro. After every trial you are disclosed  the real IQ of the person. You know that the average IQ is 100 and you give a bonus of 5 owing to the fact it is at a university. The first five persons have the IQs:
+<!-- ```{r re_variation} -->
+<!-- D_Novel %>%  -->
+<!--   group_by(Part) %>%  -->
+<!--   summarize(mean_Part = mean(ToT)) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   ggplot(aes(x = mean_Part)) + -->
+<!--   geom_density(data = D_Novel, aes(x = ToT, y=..scaled..,  -->
+<!--                                fill = "total"),alpha = 1/2) + -->
+<!--   geom_density(aes(fill = "user", y=..scaled..),alpha = 1/2) + -->
+<!--   labs(fill = "Variation") -->
+<!-- ``` -->
 
 ```{r}
-IQ <- c(106, 108, 103, 115, 110)
+detach(IPump)
 ```
 
-It seems the bonus of five is an understatement and the average is closer to 110. You adjust your best guess accordingly. That sounds trivial, but for the specification of a regression model it is not. The crucial point is that any guess $k$ depends on the information you received on trials $1...(k-1)$. Review the model formulation for comparison of means models. There is nothing in the linear term  that transfers information between levels of factors. The group means are estimated in complete independence.  
 
-The key is is that participants are *members of a population*. In a reasonably large population, extremes such as an IQ of 160 will eventually happen, but they are very unlikely. By far most people, roughly two thirds, are clumped together in the range 85 to 115. Imagine you are travelling to an African country you have never heard of before. Africa  has the richest gene pool of all and ethnicies differ a lot in tallness and skin tone. Once you have left the plane and saw a few people, you get an impression of how tall and dark people are in this place. The same principle holds for human attributes or capabilities in design research. Having seen a bunch of participants completing a task between two and five minutes gives a best guess for the next particiant. It is not excluded that this person will need 25 minutes or 20 seconds  for the task, but it is less likely.
+Obviously, the variable `Part` is key to build such a model. This variable  groups observations by participant identity and, formally, is a plain factor. A naive approach to multi-level modelling would be to estimate an AGM, like `ToT ~ 0 + Part`, grab the center estimates and compute the standard deviation. Different to the descriptive analysis above and the naive approaczh, a multi-level model estimates fixed effects, random effects and random standard deviation *simultaneously*. 
 
-Factors where the individual levels vary, but are more or less clumped around a population mean are best modelled as *random factors* and the individual levels are called *random effects*. Random effects enter the likelihood of the linear model specification in a similar additive way as fixed effects. The difference is that the levels are assumed to stem from a normal distribution, which represents the clumping. The mean of this distribution is zero, similar to the distribution of residuals, but the standard deviation of this distribution, representing the amount of variation in the population, is *estimated alongside* the individual levels. 
-
-For the pre-study we have simulated above we can formulate a GM model with participant-level random effect $\beta_{p0}$ as follows:
+For the IPump study we can formulate a GMM model with participant-level random effect $\beta_{p0}$ as follows:
 <!-- #84 -->
 $$
 \mu_i = \beta_0 + x_p\beta_{p0}\\
-\beta_{p0} \sim N(0, \sigma_{p0})\\
-y_i \sim N(\mu_i, \sigma_\epsilon)
+\beta_{p0} \sim \textrm{Gaus}(0, \sigma_{p0})\\
+y_i \sim \textrm{Gaus}(\mu_i, \sigma_\epsilon)
 $$
 
 There will be as many parameters $\beta_{p0}$, as there were users in the sample, and they have all become part of the likelihood. The second term describes the distribution of the levels. And finally, there is the usual random term. Before we examine further features of the model, let's run it. In the package `rstanarm`, the command `stan_glmer()` is dedicated to estimate mixed-effects models with the extended formula syntax. 
 
 ```{r}
-attach(BrowsingAB)
+attach(IPump)
 ```
 
 
-```{r mcmc:M_1_SOV, opts.label = "mcmc"}
-M_1_SOV <- stan_glmer(ToT ~ 1 + (1|Part), data = SOV)
-P_1_SOV <- posterior(M_1_SOV)
+```{r mcmc:M_hf, opts.label = "mcmc"}
+M_hf <- stan_glmer(ToT ~ 1 + (1|Part), data = D_Novel)
+P_hf <- posterior(M_hf)
 ```
 
 ```{r opts.label = "mcsync"}
-sync_CE(BrowsingAB,M_1_SOV, P_1_SOV)
+sync_CE(IPump,M_hf, P_hf)
 ```
 
 
@@ -215,13 +141,12 @@ The posterior of the mixed-effects  model contains four types of variables:
 1. the residual standard deviation captures the amount of noise
 
 
-
 With the `bayr` package these parameters can be extracted using the respective commands:
 
 ```{r}
-fixef(P_1_SOV)
-# ranef(P_1_SOV) # a long list
-grpef(P_1_SOV)
+fixef(P_hf)
+ranef(P_hf) %>% sample_n(5)
+grpef(P_hf)
 ```
 
 
@@ -238,8 +163,8 @@ Speaking of factors: so far, we have used *treatment contrasts* most of the time
 The solution is to use a different contrast coding for random factors: *deviation contrasts* represent the individual effects as *difference ($\delta$) towards the population mean*. As the  population mean is represented by the respective fixed effect, we can compute the absolute individual predictions by adding the fixef effect to the random effect:
 
 ```{r }
-data_frame(mu_i = ranef(P_1_SOV)$center + 
-             fixef(P_1_SOV)$center) %>% 
+data_frame(mu_i = ranef(P_hf)$center + 
+             fixef(P_hf)$center) %>% 
   ggplot(aes(x = mu_i)) +
   geom_histogram()
 ```
@@ -247,28 +172,673 @@ data_frame(mu_i = ranef(P_1_SOV)$center +
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. One heuristic is to compare it against the residual variance, which is:
 
 ```{r}
-T_sov_vc <- coef(P_1_SOV, type = c("grpef", "disp"))
+T_sov_vc <- coef(P_hf, type = c("grpef", "disp"))
 T_sov_vc
 ```
 ```{r}
-detach(BrowsingAB)
+detach(IPump)
 ```
 
 The variation due to individual differences is half of the noise, which is considerable. It seems in order to further investigate why and how users vary in performance, as this is the key to improving the design for all users.
 
-__Exercises__:
+<!-- #### EATME -->
+
+<!-- The variable `Part` is central for the model aboveA participant is just a group of observations, and fomrally, they there is one apparent, one practical and one subtle difference compared to factors as we know them so far. The apparent difference is that before we had just very few levels and many observations. With participants we would have to estimate dozens or hundreds of coefficients. In consequence, the posterior distribution will become spread out like butter on a toast and certainty would become will be abysmal. The practical difference is that, while we are interested in the overall variation, the ability of individual users is rather uninteresting. We actually have no use for dozens of user ability scores. The subtle difference is that users form a population. That sounds rather obviuous than subtle, but is key for the solution once we understand what being *member of a population* means. I will give a brief account here and return to the topic in section [#random_effects]. -->
+
+<!-- Imagine the following situation: you are seated in a university bistro and you get the task to guess the intelligence quotient of every person entering the bistro. After every trial you are disclosed  the real IQ of the person. You know that the average IQ is 100 and you give a bonus of 5 owing to the fact it is at a university. The first five persons have the IQs: -->
+
+<!-- ```{r} -->
+<!-- IQ <- c(106, 108, 103, 115, 110) -->
+<!-- ``` -->
+
+<!-- It seems the bonus of five is an understatement and the average is closer to 110. You adjust your best guess accordingly. That sounds trivial, but for the specification of a regression model it is not. The crucial point is that any guess $k$ depends on the information you received on trials $1...(k-1)$. Review the model formulation for comparison of means models. There is nothing in the linear term  that transfers information between levels of factors. The group means are estimated in complete independence.   -->
+
+<!-- The key is is that participants are *members of a population*. In a reasonably large population, extremes such as an IQ of 160 will eventually happen, but they are very unlikely. By far most people, roughly two thirds, are clumped together in the range 85 to 115. Imagine you are travelling to an African country you have never heard of before. Africa  has the richest gene pool of all and ethnicies differ a lot in tallness and skin tone. But, after you have seen a few people, you get an impression of how tall and dark people are in this place, and there is no more surprise. The same principle holds for human attributes or capabilities in design research. Having seen a bunch of participants completing a task between two and five minutes gives a best guess for the next particiant. It is not excluded that this person will need 25 minutes or 20 seconds  for the task, but it is less likely. -->
+
+<!-- Factors where the individual levels vary, but are more or less clumped around a population mean are best modelled as *random factors* and the individual levels are called *random effects*. Random effects enter the likelihood of the linear model specification in a similar additive way as population-level linear effects. The difference is that the levels are assumed to stem from a normal distribution, which represents the clumping. The mean of this distribution is zero, similar to the distribution of residuals, but the standard deviation of this distribution, representing the amount of variation in the population, is *estimated alongside* the individual levels.  -->
 
 
 
-## Designs and other non-human populations
+## Slope random effects: variance in change {#slope-random-effects}
 
-With the introduction of random effects design researchers can make more precise statements about how a design affects the population of users. The population-level average effect gets amended by a measure of variation. Only when this variation is small can one conclude that the effect is homogenous for the whole population. In the  BrowsingAB case, this gives valuable information on how well this particular design serves the population of users and whether one should be satisfied with it or not. This is a typical research question in applied design research where one seeks to choose one from a small set of designs. Generally, A/B studies seek to answer the question: *is one design better for the user population?*. This question has two entities: the user and the design. However, it is not symmetric, as users are provided as a sample from which one wishes to generalize, whereas the two designs are exhaustive. There is the choice between the two and they are both present.
+So far, we have dealt with Intercept random effects that capture the gross differences between participants of a sample. We introduced these random effects as conditional effects like: "the overall performance depends on what person you are looking at". However, most research questions rather regard differences between conditions. 
 
-But, that is not all there is in design research. Many studies in, what one could call *fundamental design research* seek to uncover general laws of design that may guide future system development. Fundamental design research is not concerned with choosing between individual designs, whether they are good enough or not, but with seperating the population of possible designs into good ones and bad ones. A/B studies, as we know them, are not adequate to answer such questions, simply because there is no reasonable way to generalize from a sample of two to all possible designs. This would only be possible under one strict constraint: the design property in question, let's say font size, must be the only property where A and B differ. Under this constraint,  the population of designs is exactly all designs that are constant except for font size. It is left to the reader to contemplate why that is of little value.
+*Slope random effects*, we can examine, how much individuals differ in their response to a new design. Consider case BrowsingAB, where the population averages of the designs were not that far apart. That can mean they are truly not that different. But it can also mean that some users do a lot better with A, and others with B. Which design is preferred could largely depend on the person.
 
-If the research question is fundamental, aiming at general conclusions on design, it is almost inevitable to test it on a larger sample of designs. Once we start speaking about samples of designs, there must be a *population of designs*, too. The term population suggests a larger set of entities, and in fact many application domains have an abundance of existing designs and a universe of possible designs. Just to name a few: there exist dozens of note taking apps for mobile devices and hundreds of different jump'n'run games. Several classes of websites count thousands of members, such as webshops and municipal websites. 
+For an illustration od slope ramdom effects, we take a look at a data set that ships with package Lme4 (which mainly provides is a non-Bayesian engine for multi-level models). 18 participants underwent sleep deprivation on ten successive days and the average reaction time on a set of testshas been recorded per day and participant. The research question is: what is the effect of sleep deprivation on reaction time and, again, this question can be asked on population level and participant level.
 
-Even in highly standardized domains such as automotive cockpits the differences between generations, manufacturers and models are noticable to be called individuals from a population. That is precisely the idea of a random effect: entities vary around a clump of commonalities. In consequence, when testing a fundamental design rule, like *large fonts are better to read*, the proposed research strategy is to sample from the population of websites, classify sample members by font size, and test every design with a sample of users. Given our definition of random effects it is easy to see that the regression model will contain two random effects (at least), one across users, the other across websites. More on that later.
+The participant-level plot below shows the individual relationships between days of deprivation and reaction time. For most participants a increasing straight line seems to be a good approximation, so we can go with a parsimonous  linear regression model, rather than an ordered factor model. One noticeable exception is participant 352, which is fairly linear, but reaction times get shorter with sleep deprivation. (What would be the most likely explanation? Perhaps 352 is a cheater, who slept well every night and only gained experience in doing the tests).
+
+```{r}
+D_slpstd <-
+  lme4::sleepstudy %>% 
+  select(Part = Subject, days = Days, RT = Reaction) %>%
+  mutate(days = as.integer(days))
+
+D_slpstd %>% 
+  ggplot(aes(x = days, y = RT)) +
+  facet_wrap(~Part) +
+  geom_point() +
+  geom_smooth(se = F, aes(color = "LOESS")) +
+  geom_smooth(se = F, method = "lm", aes(color = "lm")) +
+  labs(color = "Smoothing function")
+```
+
+A more compact way of plotting multi-level slopes is the spaghetti plot below. By superimposing the population level effect, we can clearly see that participants vary in how sleep deprivation delays the reactions.
+
+```{r}
+D_slpstd %>% 
+  ggplot(aes(x = days,
+             y = RT,
+             group = Part)) +
+  geom_smooth(aes(color = "participant effects"), size = .5, se = F, method = "lm")+
+  geom_smooth(aes(group = 1, color = "population effect"), size = 2, se = F, method = "lm") +
+  labs(color = NULL)
+```
+
+For a single level model, the formula would be `RT ~ 1 + days`, with the intercept being RT at day Zero and the coefficient `days` representing the change per day of sleep deprivation. The multi-level formula retains the population level and adds the participant-level term as a conditional statement: the effect depends on whom you are looking at.
+
+`RT ~ 1 + days + (1 + days|Part)`
+
+Remember to always put complex random effects into brackets, because the `+` operator has higher precedence than `|`. We estimate the multi-level model using the rstanarm engine. 
+
+```{r opts.label = "invisible"}
+attach(Sleepstudy)
+```
+
+
+```{r fit:BAB5, opts.label = "mcmc"}
+M_slpsty_1 <- stan_glmer(RT ~ 1 + days + (1 + days|Part),
+                       data = D_slpstd,
+                       iter = 2000)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Sleepstudy, M_slpsty_1)
+```
+
+
+
+```{r opts.label = "invisible"}
+T_fixef <- fixef(M_slpsty_1)
+T_ranef <- ranef(M_slpsty_1)
+T_grpef <- grpef(M_slpsty_1)
+
+```
+
+The Bayr package provides a specialized command for multi-level tables. `fixef_ml` extracts the population-level estimates in CLU form and adds the participant-level standard deviation. The overall penalty for sleep deprivation is around ten milliseconds per day, with a 95% CI ranging from 7ms to 14ms. At the same time, the participant-level standard deviation is around 6.5ms, which is considerable. Based on the assumption that the central two standard deviations of a Gaussian distribution contain two-thirds of the total mass, we can expect that roughly one third of the population has a penalty of smaller than 4ms *or* larger than 17ms.
+
+
+```{r}
+fixef_ml(M_slpsty_1)
+```
+
+The following plot shows the slope random effects, ordered by the center estimate.
+
+```{r}
+ranef(M_slpsty_1) %>% 
+  filter(fixef == "days") %>% 
+  mutate(Part_ord = rank(center)) %>% 
+  ggplot(aes(x = Part_ord, ymin = lower, y = center, ymax = upper)) +
+  geom_crossbar()
+```
+
+The multi-level regression model is mathematically specified as follows. Note how random coefficients $\beta_{.(Part)}$ are drawn from a Gaussian distribution with their own standard deviation, very similar to the errors $\epsilon_i$.
+
+
+$$
+y_i = \mu_i + \epsilon_i\\
+\mu_i = \beta_0 + \beta_{0(Part)} + x_1 \beta_1 + x_{1}\beta_{1(Part)}\\
+\beta_{0(Part))} \sim \textrm{Gaus}(0,\sigma_{0(Part)})\\
+\beta_{1(Part))} \sim \textrm{Gaus}(0,\sigma_{1(Part)})\\
+\epsilon_i = \textrm{Gaus}(0, \sigma_\epsilon)
+$$
+
+ The second line can also be written as:
+ 
+ $$
+ \mu_i = \beta_0 + \beta_{0(Part)} + x_1 (\beta_1 + x_{1}\beta_{1(Part)})\\
+ $$
+which underlines that random coefficients are additive correction terms to the population-level effect. Whereas the `ranef` command reports only these corrections, it is sometimes useful to look at the total scores per participant. In package Bayr, the command `re_scores` computes total scores on the level of the posterior distribution. The following plot uses this command and plots the distribution.
+
+```{r}
+posterior(M_slpsty_1) %>% 
+  re_scores() %>% 
+  clu() %>% 
+  ggplot(aes(x = center)) +
+  facet_grid(~fixef, scales = "free") +
+  geom_density()
+```
+
+
+
+```{r opts.label = "invisible"}
+detach(Sleepstudy)
+```
+
+
+## Thinking multi-level {#thinking-multi-level}
+
+There is a lot of confusion about the type of models that we deal with in this chapter. They have also been called hierarchical models or mixed effects models. The "mixed" stands for a mixture of so called fixed effects and random effects. The problem is: if you start by understanding what fixed effects and random effects are, confusion is programmed, not only because there exist several very different definitions. In fact, it does not matter so much whether an estimate is a fixed effect or random effect. As we will see, you can construct a multi-level model by using just plain descriptive summaries. What matters is that a model contains estimates on population level and on participant level. The benefit is, that a multi-level model can answer the same question for the population  as a whole and for every single participant.
+
+For enetering the world of multi-level modelling, we do not need fancy tools. More important is to start thinking multi-level on a familiar example: the IPump case. A novel syringe infusion pump design has been tested against a legacy design by letting trained nurses complete a series of eight tasks. Every nurse repeated the series three times on both designs. Time-on-task was measured  and the primary research question is:
+
+>> Does the novel design lead to faster execution of tasks?
+
+
+```{r}
+attach(IPump)
+```
+
+To answer this question, we can compare the two group means using a basic CGM:
+
+
+```{r opts.label = "mcmc"}
+M_cgm <-
+  D_pumps %>% 
+  stan_glm(ToT ~ 1 + Design, data = .)
+```
+```{r opts.label = "mcsync"}
+sync_CE(IPump, M_cgm)
+```
+
+
+```{r}
+fixef(M_cgm)
+```
+
+
+This model is a single-level model. It takes all observations as "from the population" and estimates the means in both groups. It further predicts that with this population of users, the novel design is faster *on average*, that means taking the whole population into account, (and forgetting about individuals).
+
+An average benefit  sounds promising, but we should be clear what it precisely means, or better what it does not mean: That there is a benefit for the population does not imply, that every individual user has precisely that benefit. It does not even imply that every user has a benefit at all. In extreme case,  a small subgroup could be negatively affected by the novel design, but this could still result in a positive result on  average. In the evaluation of high-risk devices like infusion pumps concerns about individual performance are real and this is why we designed the study with within-subject conditions, which allows to estimate the same model on population level and participant level. The following code produces a *multi-level descriptive model*. First, a summary on participant level is calculated, then it is summarized to obtain the population level. By putting  both summaries into one figure, we are doing a multi-level analysis. 
+
+
+```{r}
+T_Part <-
+  D_pumps %>% 
+  group_by(Part, Design) %>% 
+  summarize(mean_Part = mean(ToT))
+
+T_Pop  <-
+  T_Part %>% 
+  group_by(Design) %>% 
+  summarize(mean_Pop = mean(mean_Part))
+```
+
+
+```{r}
+
+
+gridExtra::grid.arrange(nrow = 1,
+             T_Pop %>% 
+  ggplot(aes(x = Design, group = NA,
+             y = mean_Pop)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Population-level model (average benefits)") +
+  ylim(0, 60),
+ T_Part %>% 
+  ggplot(aes(x = Design,
+             y = mean_Part,
+             group = Part, label = Part)) +
+  geom_line() +
+  ggrepel::geom_label_repel(size = 3, alpha = .5) +
+  ggtitle("Participant-level model (individual benefits)") +
+  ylim(0, 60))
+```
+
+Note
+
+* how with `gridExtra::grid.arrange()` we can multiple plots into a grid, which is more flexible than using facetting
+* that `ggrepel::geom_label_repel` produces non-overlapping labels in plots
+
+
+This is a full multi-level analysis, as it shows the same effect on two different levels *alongside*. In this case, the participant-level part removes all worries about the novel design. With the one small exception of participant 3, all users had net benefit from using the novel design and we can call the novel design  universally better. In addition, some users (4, 8 and 9) seem to have experienced catastrophes with the legacy design, but their difficulties disappear when they switch to the novel design.
+
+If you look again at the participant-level *spaghetti plot* and find it similar to what you have seen before, you are right: This is an design-by-participant *conditional plot*. Recall, that conditional effects represent the change of outcome, depending on another factor. In this multi-level model, this second factor simply Part(icipant). That suggests that it is  well within reach of plain linear models to estimate design-by-participant conditional effects. Just for the purpose of demonstration, we can estimate a population level model, conditioning the design effect on participants. Ideally, we would use a parametrization giving us separate Intercept and DesignNovel effects per participant, but the formula interface is not flexible enough and we would have to work with dummy variable expansion. Since this is just a demonstration before we move on to the multi-level formula extensions, I use an AMM instead. A plain linear model can only hold one level at a time, which is why we have to estimate the two separate models for population and participant levels. Then we merge the posterior objects, produce a combined CLU table for plotting.
+
+
+
+```{r opts.label = "mcmc"}
+M_amm_pop <-
+  D_pumps %>% 
+  stan_glm(ToT ~ 0 + Design, data = ., iter = 50, chains = 2)
+
+M_amm_part <-
+  D_pumps %>% 
+  stan_glm(ToT ~ (0 + Design):Part, data = ., iter = 50, chains = 2)
+```
+
+
+```{r}
+T_amm <-
+  bind_rows(posterior(M_amm_pop),
+            posterior(M_amm_part)) %>% 
+  fixef() %>% 
+  separate(fixef, into = c("Design", "Part"))
+
+
+T_amm %>% 
+  ggplot(aes(x = Design, y = center, group = Part, color = model)) +
+  geom_line()
+```
+
+In the first place, the convenience of (true) multi-level models is that  both (or more) levels are specified and estimated as one model. For the multi-level models that follow, we will use a specialized engine, `stan_glmer()` (generalized mixed-effects regression) that estimates both levels simultaneously and produce multi-level coefficients. The multi-level CGM we desire is written like this:
+
+```{r opts.label = "mcmc"}
+M_mlcgm <-
+  D_pumps %>% 
+  stan_glmer(ToT ~ 1 + Design + (1 + Design|Part), data = ., iter = 100)
+```
+
+In the formula of this multi-level CGM the predictor term (`1 + Design`) is just copied. The first instance is the usual population-level averages, but the second is on participant-level. The `|` operator in probability theory means "conditional upon" and here this can be read as *effect of Design conditional on participant*.
+
+For linear models we have been using the `coef()` command to extract all coefficients. Here it would extract all coefficients on both levels. With multi-level models, two specialized command exist to separate the levels:  we can extract population-level effects using the `fixef()` command (for "fixef effects"). All lower level effects can be accessed with the `ranef` command, which stands for *random effects*. Here, the population level coefficients are absolute means, whereas random effects are *not*. Usually, random effects are *differences towards the population-level*. This is why random effects are always *centered at zero*. In the following histogram, the distribution of the DesignNovel random effects are shown. This is how much users deviate from the average effect in the population.
+
+```{r}
+fixef(M_mlcgm)
+
+ranef(M_mlcgm) %>%
+  rename(Part = re_entity, `deviation` = center) %>% 
+  ggplot(aes(x = deviation)) +
+  facet_grid(~fixef) +
+  geom_histogram()
+  
+```
+
+The distribution of random effects should resemble a *Gaussian distribution*. It is usually hard to tell with such small sample sizes, but it seems that the Intercept effects have a left skew. As we will see in chapter [#GLM], this problem is not surprisung and can be resolved. The distributions are also centered at zero, which is not a coincidence, but the way random effects are designed: deviations from the population mean. That opens up two interesting perspectives: first, random effects look a lot like residuals [#residuals], and like those we can summarize a random effects vector by its *standard deviation*, using the `grpef`  command from package Bayr.
+
+```{r}
+bayr::fixef_ml(M_mlcgm)
+```
+
+Most design research is located on the population level. We want to know how a design works, broadly. Sometimes, stratified samples are used to look for conditional effects in  (still broad) subgroups. Reporting individual differences makes little sense in such situations. The standard deviation summarizes individual differences and can be interpreted the *degree of diversity*. The command `bayr::fixef_ml` is implementing this by simply attaching the standard deviation center estimates to the respective population-level effect. As coefficients and standard deviations are on the same scale, they can be compared. Roughly speaking, a two-thirds of the population is contained in an interval *twice as large* as the SD.
+
+```{r}
+fixef_ml(M_mlcgm)
+```
+
+
+That having said, I believe that more researchers should watch their participant levels more closely.  Later, e will look at two specific situations: psychometric models have the purpose of measuring individuals [#psychometrics] and those who propose universal theories (i.e., about people *per se*) must also show that their predictions hold for each and everyone [#universality].
+
+
+
+
+```{r}
+detach(IPump)
+```
+
+
+```{r opts.label = "mcsync"}
+sync_CE(Env = IPump, M_mlcgm, M_amm_pop, M_amm_part)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- The population-level coefficients represent the  -->
+
+
+
+<!-- The random factor variation is extracted from the posterior distribution using the `grpef` command. The coefficients are standard deviations of the two random factors, Intercept and DesignB. The results confirm the earlier fixed effects analysis on the data set: the benefits of Design B varies a lot between users. When comparing the standard deviation with the the population-level effect, it seems that some users are experiencing a disadvantage, even. That matches the earlier results, where design B caused problems for elderly users. In fact, we can phrase the slope random effect in much the same way as conditional effect `age:Design` in \@ref(differential_design_effects), namely as a conditional statement of the form: -->
+
+<!-- > the effect of Design depends on the participant.  -->
+
+
+<!-- ```{r results = "tab"} -->
+
+<!-- attach(BrowsingAB) -->
+
+<!-- P_slope_1 %>%  -->
+<!--   filter(fixef %in% c("Intercept", "DesignB"), -->
+<!--          type %in% c("grpef", "fixef")) %>%  -->
+<!--   group_by(re_factor, fixef) %>%  -->
+<!--   clu() -->
+
+
+<!-- detach(BrowsingAB) -->
+
+<!-- ``` -->
+
+
+<!-- Intercept random effects capture gross variations between users. Independent of designs, tasks or situation, some users can be assumed to always be faster, more accurate or pleased. That is certainly better than sticking with the image of the average user, but it remains static. With slope random effects can we render *individual differences in the process*. How differently do individual users react when proceeding from design A to B? That is a completely different question than the average difference between designs. Review the spaghetti plot \@ref(fig:BAB_RE_age) once again. Adding a slope random effect to the model really means that the effect is estimated as many times as there are participants in the sample (run `ranef(M_slope_1)` to see it). And these coefficients tell a story of *universality*. The more the random effects are dispersed, the less typical is the average (the fixed effect). Whether you are doing practical design research or  experimental design studies, universality matters.  -->
+
+<!-- Assume an A/B study tested five participants with one task each.   -->
+
+<!-- #### MAKE Sleep_study -->
+
+<!-- #### REWORK ALL FORMULAS -->
+
+<!-- The following simulation function creates a multi-level data set by sampling the Intercept effect and the Design effect from a Gaussian distribution. Per default arguments, participants differ a lot ($\sigma_{0P}$) The figure below illustrates the model on a sample of five participants. As the effect is the same, we see five parallel lines. While the height where a line starts differs between users, they all benefit to the precisely same amount from design B.Is that realistic? If we expect that differential design effects exist, it is not. There can be plenty of reasons why two users differ in how much the benefit from a certain design. For example, the BrowsingAB case features a strong conditional effect on age. When thinking of random effects, it helps to imagine the situation where an influencing factor exists, but was not recorded. The inter-individual variance will remain, and the participant identifier is the only predictor at hand. -->
+
+<!-- ```{r} -->
+<!-- sim <- function(n_Part = 5, -->
+<!--                 beta_0P = rnorm(n_Part,0, sigma_0P), -->
+<!--                 sigma_0P = 20, -->
+<!--                 beta_1P = rnorm(n_Part,0, sigma_1P), -->
+<!--                 sigma_1P = 0, -->
+<!--                 sigma_eps = 0) { -->
+<!--   Part = data_frame(Part = 1:n_Part,  -->
+<!--                      beta_0P = beta_0P,  -->
+<!--                      beta_1P = beta_1P) -->
+<!--   Design = data_frame(Design = c("A", "B"), -->
+<!--                        beta_0 = 120, -->
+<!--                        beta_1 = -30) -->
+<!--   mascutils::expand_grid(Part = Part$Part, Design = Design$Design) %>%  -->
+<!--     left_join(Part) %>%  -->
+<!--     left_join(Design) %>%  -->
+<!--     mutate(mu = beta_0 + beta_0P + (beta_1 + beta_1P) * (Design == "B"), -->
+<!--            ToT = rnorm(nrow(.), mu, 0)) %>%  -->
+<!--     as_tbl_obs() -->
+<!-- } -->
+
+<!-- sim() %>%  -->
+<!--   ggplot(aes(x = Design,  -->
+<!--              y = ToT, -->
+<!--              group = Part)) + -->
+<!--   geom_line() -->
+
+
+<!-- ``` -->
+
+
+
+<!-- A more realistic figure of the effects is the spaghetti plot below. All but one of the participants improve with design B, but to rather different degrees. The lines have different starting points, and they differ in slopes. This is called a *slope random effect*. Similar to intercept random effects, slope random effects are factors that represent individual deviations from the population-level effect.  -->
+
+<!-- ```{r} -->
+<!-- sim(sigma_1P = 15) %>%  -->
+<!--   ggplot(aes(x = Design,  -->
+<!--              y = ToT, -->
+<!--              group = Part)) + -->
+<!--   geom_line() -->
+
+<!-- ``` -->
+
+<!-- For the design effect in BrowsingAB, a model with intercept and slope random effects is formally specified as: -->
+
+<!-- $$ -->
+<!-- \mu_i = \beta_0 + \beta_{1P} + x_1\beta_1 + x_{1}\beta_{1p}\\ -->
+<!-- \beta_{1P} \sim \textrm{Gaus}(0,\sigma_{1P})\\ -->
+<!-- \beta_{1p} \sim \textrm{Gaus}(0,\sigma_{1P}) -->
+<!-- $$ -->
+
+<!-- Previously, we have seen that repeated measures are the key to pull a random effect out of the residual term. The same holds for slope random effects. For estimating individual slopes, the same participant (or any non-human entity) must encounter multiple conditions. For demonstration of slope random effects, we examine another instantiation of the BrowsingAB data set `BAB5`, which differs from `BAB1` in two aspects: all participants encounter both designs (within-entity design) and ToT was measured on five given tasks (repeated measures). We use the simulation function as provided by the BrowsingAB case environment. As always, we start with some exploratory analysis.  -->
+
+
+<!-- ```{r} -->
+<!-- attach(BrowsingAB) -->
+<!-- ``` -->
+
+
+<!-- The spaghetti plot (the pasta is dry, not cooked) is excellent for visualizing participant-level effects. For the BAB5 data set the following figure shows the individual design effects. While on average design B is favoured, there is a wild bunch of slopes. That should not surprise us, as in the previous chapter we discovered a strong conditional effect by age. Here we ignore this predictor (or pretend not to have recorded it) and exclusively work with the participant factor. -->
+
+<!-- ```{r BAB_RE_age, opts.label = "fig.wide"} -->
+<!-- G_slope_RE_1 <- -->
+<!--   BAB5 %>%  -->
+<!--   group_by(Part, Design) %>%  -->
+<!--   summarize(ToT = mean(ToT)) %>%  -->
+<!--   ggplot(aes(x = Design,  -->
+<!--               y = ToT)) + -->
+<!--   geom_line(aes(color = "participant effects", group = Part), alpha = .7) + -->
+<!--   geom_line(data = group_by(BAB5, Design) %>% summarize(ToT = mean(ToT)),  -->
+<!--             aes(X = Design, y = ToT, group = 1, color = "population effect"), size = 1) + -->
+<!--   labs(color = NULL) -->
+
+<!-- G_slope_RE_1 -->
+
+<!-- ``` -->
+
+
+
+#### COMPILES TO THIS POINT
+
+## Testing universality of theories
+
+Often, the applied researcher is primarily interested in a population-level effect, as this shows the *average* expected benefit. If you run a webshop, your returns are exchangeable. One customer lost can be compensated by gaining a new one. In such cases, it suffices to report the random effects standard deviation. If user performance varies strongly, this can readily be seen in this one number. 
+
+In at least two research situations, going for the average is just not enough: when testing hazardous equipment and when testing theories. In safety critical research, such as a medical infusion pump, the rules are different than for a webshop. The rules are non-compensatory, as the benefit of extreme high performance on one patient cannot compensate the costs associated with a single fatal error on another patient. For this asymmetry, the design of such a system must enforce a *robust* performance, with  no catastrophes. The multi-level analysis of the infusion pumps in [#thinking-multi-level] is an example. It demonstrated that practically all nurses will have a benefit from the novel design.
+
+The other area where on-average is not enough, is theory-driven experimental research. Fundamental behavioural researchers are routinely putting together theories on The Human Mind and try to challenge these theories. For example the Uncanny Valley effect [#rollercoaster]: one social psychologist's theory could be that the Uncanny Valley effect is caused by religious belief, whereas a cognitive psychologist could suggest that the effect is caused by a category confusion on a fundamental processing level (seeing faces). Both theories make universal statements, about all human beings. *Universal statements* can never be proven, but can be is tested by finding counter-evidence. If there is one participant who is provenly non-religious, but falls into the  Uncanny Valley, our social psychologist would be proven wrong. If there is a single participant at all, who does not fall for the Uncanny Valley, the cognitive psychologist was wrong.
+
+Obviously, this counter-evidence can only be found on participant level. In some way, the situation is analog to robustness. The logic of universal statements is that they are false if there is one participant who breaks the pattern, and there is no compensation possible. Unfortunately, the majority of fundamental behavioural researchers, have ignored this simple logic and still report population-level estimates when testing universal theories. In my opinion, all these studies should not be trusted, before a multi-level analysis shows that that the pattern exists on participant level.
+
+In [#rollercoaster], the Uncanny Valley effect has been demonstrated on population level. This is good enough, if we just want to confirm the Uncanny Valley effect as an observation, something that frequently 
+happens, but not necessarily for everyone. The sample in our consisted of mainly students and their closer social network. It is almost certain, that many of the tested persons were religious and others were atheists. If the religious-attitude theory is correct, we would expect to see the Uncanny Valley in several participants, but not in all. If the category confusion theory is correct, we would expect all participants to fall into the valley. The following model performs the polynomial analysis as before [#rollercoaster], but multi-level:
+
+```{r}
+attach(Uncanny)
+
+```
+
+
+```{r opts.label = "mcmc"}
+M_poly_3_ml <-
+  RK_1 %>% 
+  stan_glmer(response ~ 1 + huMech1 + huMech2 + huMech3 + 
+               (1 + huMech1 + huMech2 + huMech3|Part),
+             data = ., iter = 2500)
+
+P_poly_3_ml <- posterior(M_poly_3_ml)
+
+PP_poly_3_ml <- post_pred(M_poly_3_ml, thin = 5)
+
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, M_poly_3_ml, P_poly_3_ml, PP_poly_3_ml)
+```
+One method for testing universality is to extract the fitted responses (`predict`)  and perform a visual examination: can we see a valley for every participant? 
+
+
+
+```{r}
+T_pred <- 
+  RK_1 %>% 
+  mutate(M_poly_3_ml = predict(PP_poly_3_ml)$center)
+
+T_pred %>% 
+  ggplot(aes(x = huMech, y = M_poly_3_ml, group = Part)) +
+  geom_smooth(se = F)
+  
+```
+
+This spaghetti plot broadly confirms, that all participants experience the Uncanny Valley. For a more detailedanalysis, a facetted plot would be better suited, allowing to inspect the curves case-by-case. We proceed directly to a more formal method of testing universality: In [#test_statistic] we have seen how the posterior distributions of shoulder and trough can be first derived and then used to give a more definitive answer on the shape of the polynomial. It was argued that the unique pattern of the Uncanny Valley is to have a shoulder left of a trough. These two properties can be checked by identifying the stationary points. The proportion of MCMC iterations that fulfill these properties can is evidence that the effect exists. For testing universality of the effect, we just have to run the same analysis on participant-level. Since the participant-level effects are deviations from the population-level effect, we first have to add the population level effect to the random effects (using the Bayr command `re_scores`), which creates absolute polynomial coefficients. The two command `trough` and `shoulder` from package Uncanny ((github.com/schmettow/uncanny)[http://github.com/schmettow/uncanny]) require a matrix of coefficients, which is done by spreading out the posterior distribution table.
+
+
+
+```{r opts.label = "mcmc"}
+T_univ_uncanny <- 
+  P_poly_3_ml %>% 
+  re_scores() %>% 
+  select(iter, Part = re_entity, fixef, value) %>% 
+  tidyr::spread(key = "fixef", value = "value") %>% 
+  select(iter, Part, huMech0 = Intercept, huMech1:huMech3) %>% 
+  mutate(trough = uncanny::trough(select(.,huMech0:huMech3)),
+         shoulder = uncanny::shoulder(select(.,huMech0:huMech3)),
+         has_trough = !is.na(trough),
+         has_shoulder = !is.na(shoulder), 
+         shoulder_left = trough > shoulder,
+         is_uncanny = has_trough & has_shoulder & shoulder_left)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, T_univ_uncanny)
+```
+
+
+```{r fig.height = 2, fig.width = 8}
+T_univ_uncanny %>% 
+  group_by(Part) %>% 
+  summarize(prob_uncanny = mean(is_uncanny),
+            prob_trough = mean(has_trough),
+            prob_shoulder = mean(has_shoulder)) %>% 
+  ggplot(aes(x = Part, y = prob_uncanny)) +
+  geom_col() +
+  geom_label(aes(label = prob_uncanny)) +
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+The above plot shows the probability that a participant experiences the Uncanny Valley, as defined by polynomial stationary points. Everyone in our sample experienced the Uncanny Valley effect. Every single MCMC step (remember, every step is a complete polynomial) is positive. This complete absence of counter-evidence may raise suspicions. If this is all based on a random walk, we should at least see a few deviations. The reason for that is simply that the number of MCMC runs puts a limit on the resolution. If we increase the number of iterations enough, we would eventually see few deviant sample drop and measure the tiny chance that a participant does not fall for the Uncanny Valley.
+
+
+```{r}
+detach(Uncanny)
+```
+
+
+While this is great news for all scientists who think that the Uncanny Valley effect is innate (rather than cultural), it does not demonstrate the actual identification of deviant participants. Therefore, we briefly re-visit case Sleepstudy, for which we have estimated a multi-level linear regression model to render individual detoriation of reaction time as result of sleep deprivation. By visual inspection, we identified a single deviant participant who showed an improvement over time. However, the fitted lines a based on point estimates, only (the median of the posterior). Using the same technique as above, it is possible to calculate the participant-level probabilities for the slope being positive, as expected.
+
+```{r}
+attach(Sleepstudy)
+```
+
+
+```{r fig.height = 2, fig.width = 8}
+P_scores <- 
+  M_slpsty_1 %>% 
+  posterior() %>% 
+  re_scores() %>% 
+  mutate(Part = re_entity)
+
+P_scores %>% 
+  filter(fixef == "days") %>% 
+  group_by(Part) %>% 
+  summarize(prob_positive = mean(value >= 0)) %>% 
+  mutate(label = str_c(100 * round(prob_positive, 4), "%")) %>% 
+  ggplot(aes(x = Part, y = prob_positive)) +
+  geom_col() +
+  geom_label(aes(label = label), vjust = 1) +
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+All, but participants 309 and 335 almost certainly have positive slopes, experiencing a detoriation of reaction time. Participant 335 we had identified earlier by visual inspection. Now, that we account for the full posterior distribution, it seems a little less suspicious. Basically, the model is almost completely undecisive whether this is a positive and negative effect. The following plot shows  all the possible slopes the MCMC random walk has explored. While participant 335 clearly is an outlier, there is no reason to get too excited and call  him or her a true counter-example from the rule that sleep deprivation reduced performance.
+
+```{r}
+P_scores %>%
+  as_tibble() %>% 
+  filter(Part == 335) %>% 
+  ggplot() +
+  xlim(0.5, 9) +
+  ylim(-50, 50) +
+  geom_abline(aes(intercept = 0, slope = value), alpha = .01)
+```
+
+```{r}
+detach(Sleepstudy)
+```
+
+
+That being said, the method of posterior-based test statistics can also be used for *analysis of existence*. In the Sleepstudy case a hypothetical question of existence would be that there exist persons who are completelyunsensitive to sleep deprivation. Why not? Recently, I saw a documentary about a guy who could touch charged electric wires, because due to a rare genetic deviation, his skin had no sweat glants. Universal statements can only be falsified by a counter-example. Statements of existence can be proven by just a single case. For example, in the 1980  dyslexia became more widely recognized as a defined condition. Many parents finally got an explanation for the problems their kids experienced in school. Many teachers complained that many parents would just seek cheap excuses for their lesser gifted offsprings. And some people argued that dyslexia does not exist and that the disability to read is just a manifestation of lower intelligence. According to the logic of existence, a single person with otherwise good functioning, but slow in learning how to read suffices to proof dyslexia. These have been found in the meantime.
+
+
+
+
+<!-- Robustness and universality can be examined by looking at participant-level estimates. In [#thinking-multilevel] we compared two infusion pump designs using a multi-level model. The participant-level results showed that  -->
+
+
+<!-- #### HERE -->
+
+<!-- The question of universality is also relevant for safety-critical systems, because they have a non-linear loss function:  In  section [thinking-multi-level] we already encountered such a case: a novel infusion pump interface was compared with a legacy design. In this study, all participants encountered both designs, so we can estimate all effects on participant level and check universality of direction. Is the novel design better for everyone? -->
+
+<!-- At the same time, we studied learnability in this experiment by tracking performance across three sessions with the same set of tasks. For learnability, it makes not so much sense to examine unversality. Learning by repetition is so common, that no one would be surprised in learning that every single participant got better with practice. -->
+
+<!-- The following model specifies the effects of design and practice on cognitive workload. This is simultaneously estimated on population and participant level. In order to make the interpretation of coefficients and their variance easier to interpret, we are estimating a multi-level model with absolute group means for the first session per design and . The factor Session, we leave as successive difference coding [contrasts]. -->
+
+<!-- #### HERE -->
+
+
+<!-- ```{r} -->
+<!-- attach(IPump) -->
+<!-- ``` -->
+
+<!-- ```{r opts.label = "mcmc"} -->
+<!-- M_wkld <-    -->
+<!--   D_pumps %>%   -->
+<!--   stan_glmer(workload ~  -->
+<!--                 0 + Design:Session + Design +  -->
+<!--                (0 + Design:Session + Design|Part), -->
+<!--              data = ., -->
+<!--              iter = 200) -->
+<!-- ``` -->
+
+<!-- ```{r opts.label = "mcsync"} -->
+<!-- sync_CE(IPump,M_wkld) -->
+<!-- ``` -->
+
+<!-- In  order to help the reader interpreting the magnitude of effects and inspect variation of that effect, a useful form of presenting multi-level results is to attach the random factor standard deviations to the coefficient table. The following function creates such a table. It first extracts the SD center estimates and puts them into as many columns as there are factor levels (Part, Task). The result is joint with the population-level coefficients. -->
+
+
+<!-- ```{r} -->
+<!-- fixef_ml <- function(model, ...){ -->
+<!--   T_grpef <-  -->
+<!--     grpef(model, ...) %>%  -->
+<!--     select(fixef, re_factor, SD = center) %>%  -->
+<!--     mutate(re_factor = str_c("SD_", re_factor)) %>%  -->
+<!--     spread(re_factor, SD) -->
+
+<!--   fixef(model, ...)  %>% -->
+<!--     left_join(T_grpef, by = "fixef") %>%  -->
+<!--     discard_redundant() -->
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- T_fixef_ml <- fixef_ml(M_wkld) -->
+<!-- T_fixef_ml -->
+
+<!-- T_fixef_ml %>%  -->
+<!--   ggplot(aes(x = Session, -->
+<!--              y = center, -->
+<!--              color = Design)) -->
+<!-- ``` -->
+
+<!-- This shows that participants vary strongly in the levels of mental workload they reported. The Part-level SD for the Intercept is   -->
+
+
+
+<!-- ```{r} -->
+<!-- detach(IPump) -->
+<!-- ``` -->
+
+
+
+<!-- #### Exercises -->
+
+<!-- 1. Review the scientific literature in your field. Find examples of design experiments where general conclusions were drawn from between-subject predictors. If that was easy, visit one of the leading social psychology journals and repeat. -->
+
+
+
+## Non-human populations and cross-overs {#non-human-populations}
+
+With multi-level models design researchers can examine how a design affects the population of users as a whole, as well as on individual level. If there is little variation between users, it can be concluded that the effect is uniform in the population of users. In this section we will generalize the term *population* and extend the application of multi-level modelling to other types of research entities, such as designs, questionnaire items and tasks.
+
+<!-- In the  BrowsingAB case, this gives valuable information on how well this particular design serves the population of users and whether one should be satisfied with it or not. This is a typical research question in applied design research where one seeks to choose one from a small set of designs. Generally, A/B studies seek to answer the question: *is one design better for the user population?*. This question has two entities: the user and the design. However, it is not symmetric, as users are provided as a sample from which one wishes to generalize, whereas the two designs are exhaustive. There is the choice between the two and they are both present. -->
+
+Many studies in, what one could call *fundamental design research* seek to uncover general laws of design that may guide future system development. Fundamental design research is not concerned with choosing between individual designs, whether they are good enough or not, but with seperating the population of possible designs into good ones and bad ones by universal statements, such as "For informational websites, broad navigation structures are better than deep ones".  Note how this statement speaks of designs (not users) in an unspecified plural. It is framed as a universal law for designs.
+
+Comparative evaluation studies, such as the IPump case, are not adequate to answer such questions, simply because you cannot generalize from a sample of two to all possible designs. This is only possible under strict constraints, namely that the two designs under investigation only differ in one design property. For example two versions of a website present the same web content in a deep versus a wide hierarchy, but layout, functionality are held constant. And even then, we should be very careful with conclusions, because there can be interaction effects. For example, the rules could be different for a website used by expert users.
+
+If the research question is universal, i.e. aiming at general conclusions on all designs (of a class), it is inevitable to see designs as a population from which we collect a sample. The term population suggests a larger set of entities, and in fact many application domains have an abundance of existing designs and a universe of possible designs. Just to name a few: there exist dozens of note taking apps for mobile devices and hundreds of different jump'n'run games. Several classes of websites count in the ten thousands, such as webshops and municipal websites.
+
+Whereas we can define classes in any way and for everything we want, the term population, in a statistical not biological sense, has a stronger implication. A population contains individuals and these individuals vary only to some extent. At the same time, it is implied that we can identify some sort of typical value for a population, such that most individuals are clumped around this typical value. Essentially, if it looks similar to one of the basic statistical distributions [#stat_dist], we can call it a population. To illustrate the difference between a class and a population. *Vehicles* are a class of objects that transport people or goods. This broad definition covers many types of vehicles, including bicycles, rikshas, cars, buses, trucks and container vessels. If the attribut under question is the weight,  we will see a distribution spreading from a 10 kilograms up to 100 tons. That is a a scale of 1:10.000 and the distribution would spread out like butter on a warm toast. Formally, we can calculate the average weight of a vehicle, but that would in no way be a typical value.
+
+
+
+<!-- Even in highly standardized domains such as automotive cockpits the differences between generations, manufacturers and models are noticable to be called individuals from a population. That is precisely the idea of a random effect: entities vary around a clump of commonalities. In consequence, when testing a fundamental design rule, like *large fonts are better to read*, the proposed research strategy is to sample from the population of websites, classify sample members by font size, and test every design with a sample of users. Given our definition of random effects it is easy to see that the regression model will contain two random effects (at least), one across users, the other across websites. More on that later. -->
 
 It does not stop here. While design research is clearly about the user-design encounter, other research entities exist that we could call a population. The most routinely used *non-human populations* in design research besides *designs* are *tasks*, *situations* and *questionnaire items*. We briefly characterize the latter three and proceed to a case study that employs three populations at once.
 
@@ -276,7 +846,7 @@ It does not stop here. While design research is clearly about the user-design en
 
 *Situations:* With the emerge of the web, practically everyone started using computers to find information. With the more recent breakthrough in mobile computing, everyone is doing everything using a computer in almost every situation. People chat, listen to music and play games during meals, classes and while watching television. They let themselves being lulled into sleep, which is tracked and interrupted by smart alarms. Smartphones are being used on trains, while driving cars and bikes, however dangerous that might be, and not even the most private situations are spared. Does the usability of messaging, navigation and e-commerce apps generalize across situations? Again, a study to examine performance across situations would best sample from a population of situations.
 
-*Questionnaire items:* Most design researchers cannot refrain from using questionnaires to evaluate certain aspects of their designs. I do not refrain from being very critical about that, however: a well constructed scale (which unfortunately is rather rule than exception in design research <!-- #92 -->) consists of a set of items that trigger similar responses. At the same time, it is desireable that items are unsimilar to a degree, as that establishes good discrimination across a wide range. In ability tests, for example to assess people's intelligence or math skills, test items are constructed to vary in difficulty. The more ability a person has, the more likely will a very difficult item be solved correctly. In design research, rating scales cover concepts such as perceived mental workload, perceived usability, beauty or trustworthiness. Items of such scales differ in how extreme the proposition is, like the following three items that could belong to a scale for aesthetic perception:
+*Questionnaire items:* Most design researchers cannot refrain from using questionnaires to evaluate certain elucive aspects of their designs. A well constructed rating scale consists of a set of items that trigger similar responses. At the same time, it is desireable that items are unsimilar to a degree, as that establishes good discrimination across a wide range. In ability tests, for example to assess people's intelligence or math skills, test items are constructed to vary in difficulty. The more ability a person has, the more likely will a very difficult item be solved correctly. In design research, rating scales cover concepts such as perceived mental workload, perceived usability, beauty or trustworthiness. Items of such scales differ in how extreme the proposition is, like the following three items that could belong to a scale for aesthetic perception:
 
 1. The design is not particularly ugly.
 2. The design is pretty.
@@ -346,36 +916,34 @@ simulate(theta_i = c(2, 2.5)) %>%
 
 If we look beyond design research, an abundance of non-human populations can be found in other research disciplines, such as:
 
-* phonemes in psycholinguistics
-* test items in psychometrics
-* pictures of faces in face recognition research
-* products in consumer research
-* patches of land in agricultural studies
-* flowers in biology
++ products in consumer research
++ phonemes in psycholinguistics
++ test items in psychometrics
++ pictures of faces in face recognition research
++ patches of land in agricultural studies
 
-However, most of the time one or two of these populations are involved at once, whereas in design research the encounter of three is rather typical, and not even the limit, as we will see in the following case study.
+In all these cases it is useful (if not inevitable) to ask multi-level questions not just on the human population, but on the encounter of multiple populations. In research on a single or few designs, such as in A/B testing, designs are usually thought of (and modelled) as common fixed-effects factors. However, when the research question is more fundamental, such that it regards a whole class of designs, it is more useful to think of designs as a population and draw a sample. In the next secion we will see an example, where a sample of users encounters a sample of designs and tasks.
 
+In experimental design research, the reserach question often regards a whole class of designs and it inevitable (although often done wrong) to view designs as a population. As we usually want to generalize across users, that is another sample. A basic experimental setup would be to have every user rate (or do a task) on every design, which is called a complete (experimental) design, but I prefer to think of it as a complete *encounter*. 
 
+Every measure is an encounter of one participant and one design. If a multi-item rating scale is used,  measures are an encounter between three populations. Every measure combines the impact from three members from these populations. With a single measure, the impact factors are inseparable. But if we have many measures, we can apply a *cross-classified multi-level model* (CRMM). An intercept-only CRMM just adds intercept random effects for every population. 
 
-
-
-
-## Crossover: Testing Egans assumption {#crossover}
-
-In design research, the encounter of users and designs is almost inevitable. All sampling schemes with an encounter of otherwise independent populations produce so called *cross-classified random effects* (CRE). Random effects, that is the individual entities in the sample, are usually of lesser interest, but the group-level variation is a natural measure of diversity in the sample. When performance is diverse, we gain little faith that the situation serves all users well. 
-
-But, is variance in performance necessarily due to diversity of users? At least this is what Dennis Egan claimed almost three decades ago:
+As we will see in [#designometrix], the individual random coefficients of a CRMM can be used for psychometric evaluation of rating scales. In the following example, the question is a comparison of diversity across populations. Three decades ago, Dennis Egan published one of the first papers on individual differences in computer systems design and made the following claim:
 
 > ‘differences among people usually account for much more variability in performance than differences in system designs’ [^1]
 
 [^1]: Egan, D. Individual differences in human-computer
 interaction. In M. Helander, ed., Handbook of Human Computer interaction. Elsevier Science Publishers, Amsterdam, The Netherlands, 1988, 543–568.
 
-This claim has been cited in many papers that regarded individual differences. We were wondering how it would turn out in the third millenium, with the probably most abundant of all application domains: informational websites. For the convenience, we chose the very accessible user population of student users. The design population consisted of ten unversity websites, and ten representative tasks on those were selected. During the experiment, every one of 41 participants completed 10 information search items, being of the folling form:
+What is interesting about this research question is that it does not speak about effects, but about *variability of effects* and seeks to compare variability of two totally different populations. In the following we will see how this claim can be tested by measuring multiple encounters between designs and users, apply an intercept-only CRMM and compare the random factor standard deviations.
 
-> On website [utwente.nl] find the program schedule [Biology].
+Egan's claim has been cited in many papers that regarded individual differences and we were wondering how it would turn out in the third millenium, with the probably most abundant of all application domains: informational websites. For the convenience, we chose the user population of student users, with ten unversity websites as our design sample. Furthermore, ten representative tasks on such websites were selected, which is another population. During the experiment, all 41 participants completed 10 information search items such as:
 
-As this is a real study, there is some inconvenience ahead. Most synthetic case studies so far have outcome measures that are too good to be true. Recall that the distribution of residuals is assumed to be Gaussian in linear regression models. Unfortunately, that is not how the noise of time-on-task measures and other "temporal" variables is frequently shaped. The cheap trick of *log transformation* often serves the purpose when not much is at stake. A more disciplined approach to work with time variables is given in [GLM - Time variables].
+> On website [utwente.nl] find the [program schedule Biology].
+
+<!-- #### REDUCE -->
+
+<!-- As this is a real study, there is some inconvenience ahead. Most synthetic case studies so far have outcome measures that are too good to be true. Recall that the distribution of residuals is assumed to be Gaussian in linear regression models. Unfortunately, that is not how the noise of time-on-task measures and other "temporal" variables is frequently shaped. The cheap trick of *log transformation* often serves the purpose when not much is at stake. A more disciplined approach to work with time variables is given in [GLM - Temporal outcome measures]. -->
 
 
 ```{r}
@@ -388,8 +956,9 @@ D_egan <- D_egan %>% mutate(logToT = log(ToT))
 D_egan %>% as_tbl_obs()
 ```
 
+*Note* that ToT has been log-transformed for compliance with the assumptions of Linear Models. Generally, the advice is to use a Generalized Linear Model instead [#GLM, #exgaussian].
 
-The study originally gathered demographic data and even design features, but for the question of which population varies the most, they are of no further interest. The basic factors in the study were exclusively from human and non-human populations. The latter consisted of designs and tasks in the first place. However, a fourth non-human population has been added: after all, participants get items, which are pairs of tasks and websites. Only seemingly redundant, items will enter the model as a separate random effect. Similar to interaction effects, it may not hold that a task has the same difficulty on every website, and a particular website may present one task in an accessible way, but hide another. The following grid of histogram shows a graphical approximation of the  distribution of human and non-human populations. The individual plots were created using the following code:
+Egan's claim is a two-way encounter to which we added the tasks as a third population. However, our data seemed to require a fourth random effect, which essentially is an interaction effect between tasks and websites: how easy a task is, largely depends on the webite where it is carried out. For example, one university website could present the library  on the homepage, whereas another websites hides it deep in its navigation structure. The following grid of histogram shows the marginal distributions of human and non-human populations. The individual plots were created using the following code template:
 
 ```{r opts.label = "rtut.nr"}
   D_egan %>% 
@@ -404,7 +973,7 @@ The study originally gathered demographic data and even design features, but for
 
 
 
-```{r echo = F}
+```{r echo = F, fig.width=12}
 
 grid.arrange(grobs = list(
   
@@ -446,20 +1015,23 @@ grid.arrange(grobs = list(
 
 There seems to be substantial variation between participants, tasks and items, but very little variation in designs. We build a GMM for the encounter of the four populations.
 
-$$
-\mu_i = \beta_0 + x_{Pi}\beta_{P} + x_{Di}\beta_{D} + x_{Ti}\beta_{T} + x_{D:Ti}\beta_{D:T}\\
-\beta_{P} \sim N(0, \sigma_{P}) \\
-\beta_{D} \sim N(0, \sigma_{D}) \\
-\beta_{T} \sim N(0, \sigma_{T}) \\
-\beta_{DxT} \sim N(0, \sigma_{DxT})\\
-y_i \sim N(\mu, \sigma_\epsilon)
-$$
+<!-- #### FORMULAS -->
+
+
+<!-- $$ -->
+<!-- \mu_i = \beta_0 + x_{Pi}\beta_{P} + x_{Di}\beta_{D} + x_{Ti}\beta_{T} + x_{D:Ti}\beta_{D:T}\\ -->
+<!-- \beta_{P} \sim \textrm{Gaus}(0, \sigma_{P}) \\ -->
+<!-- \beta_{D} \sim \textrm{Gaus}(0, \sigma_{D}) \\ -->
+<!-- \beta_{T} \sim \textrm{Gaus}(0, \sigma_{T}) \\ -->
+<!-- \beta_{DxT} \sim \textrm{Gaus}(0, \sigma_{DxT})\\ -->
+<!-- y_i \sim \textrm{Gaus}(\mu, \sigma_\epsilon) -->
+<!-- $$ -->
 
 
 
 ```{r egan_3, opts.label = "mcmc"}
 M_1 <- D_egan %>% 
-  stan_glmer(logToT ~ 1 + (1|Part) + (1|Design) + (1|Task) + (1|Design:Task),data = .)
+  stan_glmer(logToT ~ 1 + (1|Part) + (1|Design) + (1|Task) + (1|Design:Task),data = ., iter = 100)
 
 P_1 <-  posterior(M_1)
 ```
@@ -469,26 +1041,36 @@ sync_CE(Egan,M_1, P_1)
 ```
 
 
-The group-level variations are recorded as standard deviations and in the Bayesian estimation framework such variance parameters have their posterior distributions like any other. While the `grpef` command would conveniently extract a summary of the posteriors, here we choose to get in full contact with the posteriors. In contrast to the linear coefficients, variance parameters are bounded at zero. For this reason, it usually makes little sense to ask whether there is possibly zero variance in a random effect. But, to answer our question, we should rather compare the posterior distributions of all $\sigma_.$, including the error term (Obs).
+A Bayesian multi-level model estimates the standard deviation alongside with  coefficients, such that we can compare magnitude and certainty of variability. In addition, we can always compare a random factor standard deviation to the standard error.
+
 
 ```{r}
 P_1 %>% 
   filter(type == "grpef"  | type == "disp") %>% 
-  mutate(re_factor = if_else(type == "disp", "Obs", re_factor)) %>% 
-  arrange(order) %>% 
-  mutate(re_factor = forcats::fct_inorder(re_factor)) %>% 
+  mutate(re_factor = if_else(type == "disp", "Obs", re_factor),
+         # re_factor = factor(re_factor, 
+         #                    levels = c("Obs", "Part", "Design", "Task", "Design:Task")),
+         re_factor = mascutils::reorder_levels(re_factor, c(4, 2, 5, 3, 1))) %>% 
   ggplot(aes(x = value)) +
   geom_density() +
-  labs(x = "group-level standard deviation") +
+  labs(x = "random effect standard deviation") +
   facet_grid(re_factor~.)
   
 ```
 
-Before we formally evaluate Egan's claim, there are a few noteworthy remarks on how to read the posteriors, when the parameter is a group-level standard deviation. First, standard deviation is on the same scale as the measured variable. Usually, this makes standard deviations  rather intuitive to interpret. This is, *unless* you have obscured your variable by log transformation, which is the major disadvantage of this procedure. Second, the posterior graph is too easily misinterpreted by confusing the posterior distribution for the group-level distribution. Instead, the amount of variation in a random factor is reflected by the location on the x-axis, while the spread is uncertainty. The population of designs seems to have the lowest variation of all, with users being close second. The observation-level variation (Obs) is nothing but the standard error, $\sigma_\epsilon$. The observation-level variation sometimes serves well as a reference point to make quantitative statements on variation. For example, there is little confirmation for an overwhelming "users differ!" in this particular study, as there is much more variation from one situation to the other than between participants <!-- #93 -->. A third observation on the posterior plot is that some posteriors are rather certain, e.g. Obs, whereas others are extremely uncertain, especially task-level variation. There is a pattern to explain this: uncertainty of group-level variation estimates heavily depends on sample size from the respective population. Design and Task have a meager $N = 10$, which is why there is so much uncertainty. At the other extreme, every single one of the 410 observations contributes to estimation of $\sigma_\textrm{Obs}$, resulting in a rather certain estimate.
+<!-- Before we formally evaluate Egan's claim, there are a few noteworthy remarks on how to read the posteriors, when the parameter is a group-level standard deviation. First, standard deviation is on the same scale as the measured variable. Usually, this makes standard deviations  rather intuitive to interpret. This is, *unless* you have obscured your variable by log transformation, which is the major disadvantage of this procedure.  -->
 
-All interaction effects are potential assaults on generalizability and so are items (`Design:Task`). Without this interaction effect, the model would assume that all ten tasks had the same relative difficulty regardless of the website. And the same goes for website. Given the countless possibilities to structure information on a website, this is a bold assumption. It were as if all ten information architects had previously agreed on how well to support any of the tasks. And, as the results show, there is substantial conditional variation, information architects do not fully agree. Regarding the interpretation, the question is: are we willing to add the *conditional* design effects under what Egan called "designs", or can only complete websites be called designs, with everything underneath being singular forces that amplify or erase each other? This depends on whether you are an optimist or realist designer. The realist thinks that design is a wicked problem science, where a good design is a bunch of reasonable compromises, but it is never the maximum. You may use large fonts to improve reading speed, but that comes at more scrolling time. You may choose to place an awesome video presentation of your university on its homepage, but you are using costly space you could use for other frequently used information. In such a view, a design is a set of carefully calibrated trade-offs and must therefore be taken as a whole. 
+<!-- Second, the posterior graph is too easily misinterpreted by confusing the posterior distribution for the group-level distribution. Instead, the amount of variation in a random factor is reflected by the location on the x-axis, while the spread is uncertainty. The population of designs seems to have the lowest variation of all, with users being close second. The observation-level variation (Obs) is nothing but the standard error, $\sigma_\epsilon$. The observation-level variation sometimes serves well as a reference point to make quantitative statements on variation.  -->
 
-We proceed with a formal check of Egans claim. It can be stated as: is the random effect variation of users larger than variation of designs, $\sigma_ \textrm{Part} > \sigma_ \textrm{Design}$? One might be tempted to somehow refer to the figure above and evaluate how much the two posterior distributions overlap. It is much easier than that. Recall, that the joint posterior distribution covers all parameters simultaneously at every MCMC draw. Usually, we evaluate the marginal posterior of one parameter at a time for inference. But, it is equally valid to derive further quantities at every MCMC draw and make inference. In the present case, this quantity is a variable with two states: either Egan's claim holds, or it does not. The marginal posterior of such a logical variable is of type Bernoulli, capturing the proportion of MCMC draws, where $\sigma_ \textrm{Part} > \sigma_ \textrm{Design}$ holds.
+
+The outcomes of our study are indecisive regarding  Egan's claim. Variance of participants is stronger thnan variance of designs, but not by much. Both factors also produce much less variability in measures than does the noise, which we here regard a observation-level random effect. Tasks seem to have the overall strongest effect, but this comes with huge uncertainty. The strongest variability is found in the sample of Design-Task pairs, which is interesting 
+
+A secondary observation on the posterior plot is that some effects are rather certain, such as Obs and Design:Task, whereas others are extremely uncertain, especially Task. There is a partial explaination for this: the variation is estimated from the "heads" in thehuman or non-human population. It therefore strongly depends on respective sample size. Design and Task have a meager $N = 10$, which is why the estimate are so uncertain. With $N = 41$ the participant level estimate has more data and reaches better certainty, same for the pairs ($N = 100$). The observations level can employ to all 410 observations, resulting in a highly certain estimate.
+
+
+<!-- All conditional effects are potential assaults on generalizability and so are items (`Design:Task`). Without this conditional effect, the model would assume that all ten tasks had the same relative difficulty regardless of the website. And the same goes for website. Given the countless possibilities to structure information on a website, this is a bold assumption. It were as if all ten information architects had previously agreed on how well to support any of the tasks. And, as the results show, there is substantial conditional variation, information architects do not fully agree. Regarding the interpretation, the question is: are we willing to add the *conditional* design effects under what Egan called "designs", or can only complete websites be called designs, with everything underneath being singular forces that amplify or erase each other? This depends on whether you are an optimist or realist designer. The realist thinks that design is a wicked problem science, where a good design is a bunch of reasonable compromises, but it is never the maximum. You may use large fonts to improve reading speed, but that comes at more scrolling time. You may choose to place an awesome video presentation of your university on its homepage, but you are using costly space you could use for other frequently used information. In such a view, a design is a set of carefully calibrated trade-offs and must therefore be taken as a whole.  -->
+
+We proceed with a formal check of Egans claim, using the same technique as in [#test_stat, #universlity]. What is the probability, that Egan is right? We create a Boolean variable and summarize the proportion of MCMC draws, where $\sigma_ \textrm{Part} > \sigma_ \textrm{Design}$ holds.
 
 ```{r}
 C_Egan_is_right <-
@@ -502,13 +1084,11 @@ C_Egan_is_right <-
 C_Egan_is_right
 ```
 
-A chance of $`r C_Egan_is_right`$ can count as good evidence in favour of Egan's claim, although it is outshined by other factors, as we have discussed above. 
 
-In this case study we have illustrated a number of useful concepts in design research:
+A chance of $`r C_Egan_is_right`$ can count as good evidence in favour of Egan's claim, although it certainly does not match the "much more" in the original quote. However, if we take the strong and certain Design:Task effect into account, the claim could even be reversed. Apparently, the difficulty of a task depends on the design, that means, it depends on where this particular designer has placed an item in the navigation structure. That clearly is a design feature and therefore counts as strong counter-evidence. 
 
-1. Design research deals with samples of several human and non-human populations at once. Cross-classified random effects models capture these structures.
-1. Group-level standard deviations are captured by the posterior in much the same manner as linear coefficients. The only difference being that they are bounded to zero, which makes null hypotheses useless and can lead to strongly skewed marginal posteriors. 
-1. When testing Egan's claim, we saw how an exotic hypothesis can easily be answered through deriving further quantities from the joint posterior. The same technique we have previously employed to find the troughs in te uncanny valley polynomials.
+
+<!-- In this section we have seen how design research deals with samples of several human and non-human populations at once. Cross-classified random effects models capture these structures. When testing Egan's claim, we saw how an exotic hypothesis can easily be answered through deriving further quantities from the joint posterior. In this case, the quantity is a logical value that indicates which of two sources of variance is larger (per MCMC iteration). A similar technique was employed to find the troughs in the uncanny valley polynomials. [#polynomial-regression] -->
 
 
 
@@ -516,67 +1096,23 @@ In this case study we have illustrated a number of useful concepts in design res
 detach(Egan)
 ```
 
-## Measuring entities: psychometric applications [TBC]
-
-Traditionally, psychometrics deals with the valid and reliable measurement of personal characteristics, such as individual levels of performance, motivation, socio-cognitive attitude and the like. Advanced statistical models have been devised, such as confirmatory factor analysis or item response models. Formally, these applications establish an order among population entities, from low to high. The least one is aiming for is that for any pair of entities $A$ and $B$, we can tell which entity has the more pronounced property. This is called an *ordering structure*. Few applications even go beyond mere ranking and establish metric interpretations. For example, in an *interval-scaled* test, the researcher may compare differences between participants.
-
-A psychometric test usually contains several items. For example, a test to measure a child's arithmetic skills would contain a set of arithmetic problems and a simple test score would be the number of correctly answered items. In design research, self-report questionnaires are routinely used for one of two purposes: first, research questions sometimes involve traits or abilities of users. For example, one could ask how a persons visual-spatial abilities are related to navigation performance, be it in a complex hypertext environment, body cavities during surgical procedures or the scattered displays in air traffic control centers. The researcher would then administer two tests: an innate ability test, such as a mental rotation task and a performance test on, let's say, the surgical procedure. This is just twice the standard psychometric procedure. Second, in design research one frequently assesses properties of a design by using standardized questionnaires. One example would be the comparison of user experience among a set of e-commerce homepages using scales such as the AttrakDiff (the hedonic dimension). Another example would be to map the uncanny valley effect by letting participants judge a set of artificial faces with a scale to measure eeriness.
-
-We begin with the first case, standard psychometrics to assess user characteristics. A well designed test always employs a set of items. The primary reason for multiple items is a familiar one. In classical test theory, the observed test score $y_i$ for participant $i$ is assumed to be composed of the the true score $\mu_i$ and the measurement error  $\epsilon_i$ as:
-
-$$y_i = \mu_i + \epsilon_i$$
-The same principle holds as for linear models: the researchers aim is to separate $\mu_i$ from $\epsilon_i$ and that is only possible if there are repeated measures.
-
-In our terminology, psychometric models are the encounter of persons and test items. With only two populations involved, the standard psychometric model is a crossover of person and item random effects, a simplification of the quadruple crossover encountered in the Egan study. What sets psychometric models apart is how random effects are being used. While in the Egan study inference was based on the population-level distribution, i.e. $\sigma_\cdot$, in psychometrics interesting applications are the individual scores. If we wanted to compare two individuals, e.g. which of the two is more likely to become the better surgeon based on some ability test,  we need individual scores and that is precisely what random effects are on their lowest level. 
-
-[semantic Stroop]
-
-
-Measuring participant performance is a useful application in some design research fields, such as human performance in  critical systems, e.g. identify persons with the best talent for being an airspace controller. However, in design research, it is frequently designs that are to be compared. For example, in the Egan case, one might be interested to select the best of the ten website designs, in order to use it as a blueprint. Such a research question is no longer psychometric, literally, but formally the only difference is that participants can be considered test items, rather than test objects. At least, when using ramdom effects for psychometric purposes, there is nothing special about the participant random effects compared to design random effects. Let's pretend we had conducted the study in order to identify a good template for university websites. The following code extracts design random effects posteriors, summarizes them in the usual way and makes a plot.
-
-```{r}
-attach(Egan)
-
-ranef(P_1) %>% 
-  filter(re_factor == "Design") %>%
-  rename(Design = re_entity) %>% 
-  ggplot(aes(x = Design, y = center, ymax = upper, ymin = lower)) +
-  geom_point(size = 1) +
-  geom_crossbar() +
-  ylab("log ToT") +
-  theme(axis.text.x = element_text(angle = 45))
-
-```
-
-
-The most simple form is the Rasch model in item response theory (IRT), where participants respond to a set of items and the response is either correct or incorrect. The outcome variable response is usually coded as 0 = incorrect and 1 = correct. Apparently, such a variable does nowhere near satisfy the assumption of linear models. It turns out that the Rasch model can be interpreted as cross-classified random effects in a *logistic regression* \@ref(logistic_regression). Logistic regression is a member of the General*ized* Linear family of models, which will be introduced in the next chapter.
-
-As innocent as the Egan study seems, there is some psychometrics involved.  First, cognitive workload was measured using the NASA TLX questionnaire which has four items. With four items, we would hardly want to speak of a population. The trick is to view the four items as instantiations from all a virtual set of possible questions (on that matter). A typical question in psychometric research is that of *item consistency*, which for a small set of items can be measured by the correlation between items. High inter-item correlations indicate that a scale is reliable, which basically means it predicts well. Item correlations are mainly used during scale development, as a criterion to sort out renegade items, those that do not move in accordance with the others.
-
-```{r opts.label = "future"}
-M_2 <- stan_glmer(logToT ~ 1 + (1|Part) + (1|Design) + (1|Task) + (1|Design:Task) + (1|Item),
-                  data = D_egan)
-```
-
-
-```{r}
-detach(Egan)
-```
 
 ## Nested random effects
 
-*Nested random effects* (NREs) represent nested sampling schemes. A classic example from educational research is: a sample of schools is drawn and inside every school a sample of students is selected. Like cross-classified models, nested models consist of multiple levels. The difference is that if one knows the lowest (or: a lower) level of an observation, the next higher level is unambiguous, like:
+#### INTRO
+
+*Nested random effects* (NREs) represent nested sampling schemes. A classic example is from educational research: a sample of schools is drawn and inside every school a sample of students is selected. Like cross-classified models, nested models consist of multiple levels. The difference is that if one knows the lowest (or: a lower) level of an observation, the next higher level is unambiguous, like:
 
 + every student is in exactly one class
 + every participant is from exactly one professional group
 
-As we have seen above, cross-classified models play a primary role in design research, due to the user/task/design encounter. NREs are more common in research disciplines where organisation structures or geography plays a role, such as education science (think of the international school comparison studies PISA and TIMMS), organisational psychology or political science.
+As we have seen above, cross-classified models play a primary role in design research, due to the user/task/design encounter. NREs are more common in research disciplines where organisation structures or geography plays a role, such as education science (think of the international school comparison studies PISA and TIMMS), organisational psychology or political science. One examples of a nested sampling structure in design research is the CUE8 study, which is the eighth instance of  Comparative Usability Evaluation (CUE) studies, pioneered by Rolf Molich [CUE8]. Different to what the name might suggest, not designs are under investigation in CUE, but usability professionals. The over-arching question in the CUE series is the performance and reliability of usability professionals when evaluating designs. Earlier studies sometimes came to devastating results regarding consistency across professional groups when it comes to identifying and reporting usability problems. We always knew, qualitative analysis is much harder to do in an objective way, did we not? The CUE8 study lowered the bar, by asking whether several professional groups will arrive at consistent measures for time-on-task.
 
-Examples of nested sampling structures are some of the Comparative Usability Evaluation (CUE) studies, pioneered by Rolf Molich [CUE8]. Different to what the name might suggest, not designs are under investigation in CUE, but usability professionals. The over-arching question in the CUE series is the performance and reliability of usability professionals. Earlier studies sometimes came to devastating results regarding consistency across professional groups when it comes to identifying and reporting usability problems. We always knew, qualitative analysis is much harder to do in an objective way, did we not? The CUE8 study lowered the bar, by asking whether several professional groups are able to arrive at consistent measures for time-on-task.
+The CUE8 study measured time-on-task in usability tests, which had been conducted by 14 different teams. The original research question was: How reliable are time-on-task measures across teams? All teams used the same website (a car rental company) and the same set of tasks. All teams did moderated or remote testing (or both) and recruited their own sample of participants. So, the analysis can performed on three levels: the population level would tell us the overall performance on this website. That could be interesting for the company running it. Below that are the teams and asking how they vary is the primary research question. At the same time, participants  make another level of analysis, but every participant encounters only a single team. This is why it is called nested. 
 
-The CUE8 study measured time-on-task in usability tests, which had been conducted by 14 different teams. The original research question was: how reliable are time-on-task measures across teams? All teams were responsible for recruiting their own sample of participants. The nested sampling scheme is therefore: every participant is assigned to exactly one team. The original analysis [CUE8] focussed on the consistency across teams. Using hierarchical random effects, we can extend the analysis. Consider the research question: <!-- #85 -->strong systematic variation between teams is considered a sign of low reliability in the field. But, how strong is strong? It is difficult to come up with an absolute standard for inter-team reliability. Again, we can resort to a relative standard: how does the variation between teams compare to variation between individual participants?
+If the original research question is on the consistency across teams, we can readily take the random effect variance as a measure for the opposite: when variance is high, consietsncy is low. But, how low is low? It is difficult to come up with an absolute standard for inter-team reliability. Because we also have the participant-level, we can resort to a relative standard: how does the variation between teams compare to variation between individual participants?
 
-Under this perspective, we examine the data. This time, we have real time-on-task data and as so often, it is highly skewed. Again, we use the cheap trick of logarithmic transformation to obtain a more symmetric distribution of residuals. The downside is that the outcome variable may not be zero. For time-on-task data this is not an issue. In fact, the original CUE8 data set contains several observations with unrealistically low times. Before proceeding to the model, exploring the original variable `ToT` on the two levels is in order. The mean ToT is computed for the two random effect levels, participants and teams, and plotted in that order.
+Under this perspective, we examine the data. This time, we have real time-on-task data and as so often, it is highly skewed. Again, we use the trick of logarithmic transformation to obtain a more symmetric distribution of residuals. The downside is that the outcome variable may not be zero. For time-on-task data this is not an issue. In fact, the original CUE8 data set contains several observations with unrealistically low times. Before proceeding to the model, we explore the original variable `ToT` on the two levels (Participant and Team): In the following code the mean ToT is computed for the two levels of analysis, participants and teams and shown in ascending order.
 
 
 ```{r CUE8_eda, opts.label = "fig.small"}
@@ -628,24 +1164,31 @@ bind_rows(D_team_mean,
 detach(CUE8)
 ```
 
-It seems there is ample variation in ToT for participants, with mean ToT ranging from below 100 to almost 500 seconds. There is variation in team-wise ToT, too, although less pronounced. This observation is congruent with the *law of small numbers*, which will be discussed in the following section.
+#### EDIT
+#### ALIGN
 
-The model is easily specified with the familiar syntax. In fact, it is not even necessary to specify that participants are nested within teams. The only requirement is that participant identifiers are unique across the whole study (not just within a team unit). The model below contains another feature of ths CUE8 study. Participants were tested in one of two conditions: moderated and remote testing sessions. Mixing fixed and random effects, we examine all influences simultaneously.
+It seems there is ample variation in ToT for participants, with mean ToT ranging from below 100 to almost 500 seconds. There is considerable variation in on team level, too, only the range is less. This observation is congruent with the *law of small numbers*, which will be discussed in the following section.
+
+The right model is easily specified with the familiar syntax. In fact, it is not even necessary to specify that participants are nested within teams. The only requirement is that participant identifiers are unique across the whole study (not just within a team unit). The model below contains another feature of ths CUE8 study. Participants were tested in one of two conditions: moderated and remote testing sessions. Mixing fixed and random effects, we examine all influences simultaneously.
 
 Note that this treatment is between-subject for participants. There is also just one team that did both conditions. For specifying hierarchical random effects we can use the same syntax as before, *if* all participants have a unique identifier. If the participant identifier is only unique within a team, it is either to be recoded, e.g. `mutate(Part = str_c(Team, Part))`, or one uses the nesting operator `Part/Team`.
 
 
-```{r CUE8_hierarchical_model, opts.label = "mcmc"}
+```{r}
 attach(CUE8)
 
+```
+
+
+```{r CUE8_hierarchical_model, opts.label = "mcmc"}
 M_1 <- 
   D_cue8 %>% 
   stan_lmer(logToT ~ Condition + (1|Part) + (1|Team),
        data = .)
+# logToT ~ Condition + 1|Part/Team
 
 P_1 <- posterior(M_1)
 
-detach(CUE8)
 ```
 
 ```{r opts.label = "mcsync"}
@@ -654,14 +1197,14 @@ sync_CE(CUE8, M_1, P_1)
 
 
 
-After running the model, we compare the sources of variation. Recall, that LRMs assume that the ramdom effects are drawn from a Normal distribution and the amount of systematic variation is represented by $\sigma$. As this is precisely the way, Normal distributed errors are represented, we can actually distinguish three levels of variation: participants, team and observations (residuals). The table below tells that the strongest variation is still on observation-level. Almost the same amount of variation is due to teams. And, surprisingly, the variation due to teams is considerably smaller than participant-level variation. <!-- #86 -->
+After running the model, we compare the sources of variation. Recall, that LRMs assume that the ramdom effects are drawn from a Gaussian distribution and the amount of systematic variation is represented by $\sigma$. As this is precisely the way, Gaussian distributed errors are represented, we can actually distinguish three levels of variation: participants, team and residuals, which is nothing else, but an *observation-level random effect (OLRE)* . Here, the remaining noise can serve as a baseline for quantifying the diversity. In conjunction with Generalized Linear Models, we will re-encounter this idea and use it to model over-dispersion.
 
+The table below tells that the strongest variation is still on observation-level, i.e. noise. Almost the same amount of variation is due to teams. And, in contrast to what the exploratory analysis suggested, the variation due to teams is considerably smaller than participant-level variation. <!-- #86 -->
 
 ```{r tab:CUE8_sov}
-attach(CUE8)
-T_sov <- coef(P_1, type = c("grpef", "disp"))
-T_sov
+clu(P_1, type = c("grpef", "disp"))
 ```
+
 
 It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. However, the discordance between professional teams is also concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is `r frm_coef(fixef(CUE8$P_1), ~fixef == "Conditionmoderated")`. The fixed effect is rather weak and highly uncertain.
 
@@ -672,13 +1215,19 @@ detach(CUE8)
 ```
 
 
+
+
+
+
+
+
 ## What are random effects? On pooling and shrinkage
 
 At least half a dozen of defintions exist for the term random effect. This is so confusing that some authors refrain to use the term altogether. Here, the definition is conceptually based on the idea of a population. Technically, it is compatible with the implementation found in `rstanarm` and other engines. Unfortunately, the very terms *random effect* and *random factor* are highly misleading, as there is nothing more or less random in a random factors as compared to fixed factors. The opposite is the case: as we have seen above, a random effects model pulls a variance component from the random term and explains it by assigning coefficients to entities (teams or users). The best advice is  to not contemplate over what makes a factor random. It is just a name and because random factors are so amazingly useful, they should be called fonzy <!-- #87 -->factors, instead.
 
 When a data set contains a factor that we may wish to add to the model, the question is: fixed effect or random effect? Above, I have introduced the heuristic of populations. If one can conceive tasks, designs, or whatever set of items as a population, there is clumping to some degree, but also  variation. The more clumping there is, the better is the guess for unobserved members by observing some members. In such a case, the predictor is introduced as a fonzy factor. Now it is time to more formally conceive when a set of things is a population.
 
-Obviously, we would never speak of a population, when the objects of interest are from different classes. Entities gathering on super market parking lots, like persons, cars, baskets and and dropped brochures, we would never see as a population. People, we would generally see as a population, as long as what we want to observe is somewhat homogenous. When the question is, how fast persons can do a 2000 meter run at the olympic games, we would certainly want one population per discipline (swimming, running, etc). Why is that so? It is because we expect members of a population to have some similarity, in other words: if you have observed how some members of the population behave, you get an idea about the unobserved.
+Obviously, we would never speak of a population, when the objects of interest are from different classes. Entities gathering on super market parking lots, like persons, cars, baskets and and dropped brochures, we would never see as a population. People, we would generally see as a population, as long as what we want to observe is somewhat homogenous. When the question is, how fast persons can do a 2000 meter run at the olympic games, we would certainly want one population per discipline (swimming, running, etc). Why is that so? It is because we expect members of a population to have some similarity, with the consequence that, if you already have observed some members of the population, this tells you something about any unobserved members.
 
 Reconsider the Bayesian principle of prior knowledge by an experiment of thought: Consider, a UX expert with experience in e-commerce is asked to estimate how long it takes users to do the checkout, *without being shown the system*. The expert will probably hesitate briefly, and then come up with an estimate of, let's say, 45 seconds. Without any data, the expert made some reasonable assumptions, e.g. that a  disciplined design process has been followed, and then relies on experience. The experts personal experience has formed prior to the study by observing many other cases. Now, we confront the expert with an even more bizzare situation: guess the time-on-task for an unknown task with an unseen system of unknown type! The expert will probably refuse to give an answer, arguing that some systems have tasks in the millisecond range (e.g. starting a stopwatch), whereas other processes easily run for hours or days (e.g. doing data exploration). This is agreeable, and we provide the expert with average ToT of four other tasks within the same system:
 
@@ -686,13 +1235,13 @@ $ToT_{1-4} = {23, 45, 66, 54}$
 
 Now, the expert is confident that ToT be around 50 seconds and that is probably a good guess. What has happened is that prior belief about the unkown task parameter has been formed not externally, but *by data* as it arrived. The likely value of one unit has been learned from the other units and this appears pretty reasonable. The same principle applies when removing outliers. When staring at a boxplot or scatterplot the mind of the observer forms a gestalt that covers the salient features of data, for example: almost all points are located in the range 100 - 500. Once this pattern has formed, deviant points stand out.
 
-However, the salience of the gestalt may vary. Consider a situation where ToT has been measured by the same procedure, but using five different stop watches. Stop watches are so incredibly accurate that if you know one measure, you basically know them all. What many researchers do with repeated measures data, is average over the repetitions. This is the one extreme called *total pooling*.  In the stopwatch case the average across the five measures would be so highly representative, that total pooling is a reasonable thing to do.
+However, the salience of the gestalt may vary. Consider a situation where ToT has been measured by the same procedure, but using five different stop watches. Stop watches are so incredibly accurate that if you know one measure, you basically know them all. What many researchers do with repeated measures data, is take the average. This is the one extreme called *total pooling*.  In the stopwatch case the average of the five measures would be so highly representative, that total pooling is a reasonable thing to do.
 
 In other cases, the levels of a factor are more or less independent, for example tasks in a complex system, where procedure duration ranges from seconds to hours. Guessing the duration of one task from a set of others is highly susceptible and the average duration across tasks is not representative at all. The best choice then is to see tasks as factor levels, that are independent. This extreme of *no pooling* is exactly represented by fixed effect factors as they have been introduced in \@ref(linear_models).
 
 Random effects sit right between these two extremes of no and total pooling and implement *partial pooling*: the more the group mean is representative for the units of the group, the more it is taken into account. The best thing about partial pooling is that, unlike real priors, there is not even the need to determine the amount of pooling in advance. The variation of entities has been observed. The stronger the enities vary, the less can be learned from the group level. The variation is precisely the group-level standard deviation of the random effect. So, we can think of random factors as factors where there is a certain amount of cross-talk between levels. The random effect estimate then draws on two sources of evidence: all data from the overarching population and data that belongs just to this one entity. As that is the case, the exploratory analysis of individual performance in SOV does not resemble a true random effect, as group means were calculated independently. 
 
-How are random effects implemented to draw on both sources? Obviously, the procedure must be more refined than just putting dummy variables in a likelihood formula. In the Bayesian framework a remarkably simple trick suffices, and it is even a familiar one. By the concept of prior distributions, we already know a way to restrict the range of an effect based on prior knowledge. For example, intelligence test results have the prior distribution $IQ ~ N(100, 15)$, just because they have been empirically calibrated this way. In most other cases, we do have rough ideas about the expected magnitude and range in the population, say: healthy human adults will finish a 2000m run in the range of 5-12 minutes. 
+How are random effects implemented to draw on both sources? Obviously, the procedure must be more refined than just putting dummy variables in a likelihood formula. In the Bayesian framework a remarkably simple trick suffices, and it is even a familiar one. By the concept of prior distributions, we already know a way to restrict the range of an effect based on prior knowledge. For example, intelligence test results have the prior distribution $IQ ~ \textrm{Gaus}(100, 15)$, just because they have been empirically calibrated this way. In most other cases, we do have rough ideas about the expected magnitude and range in the population, say: healthy human adults will finish a 2000m run in the range of 5-12 minutes. 
 
 As prior knowledge is external to the data, it often lacks systematic evidence, with the exception of a meta analyses. This is why we tend to use weak informative priors. Like priors, random effects take into account knowledge external to the entity under question. But, they draw this knowledge from the data, which is more convincing after all. The basic trick to establish the cross-talk between random factor levels, is to *simultaneously estimate factor levels and random factor variation*. This has several consequences:
 
@@ -706,9 +1255,9 @@ Under the perspective of populations as a more or less similar set of entities, 
 
 > a fixed effect is a factor where levels are regarded so unsimilar, that the factor-level distribution can be practically considered infinite.
 
-We routinely approximate such a situation when using non-informative prior distributions, like $\beta_0 ~ N(0, 10000)$. In the extreme case, a uniform distribution with an infinite upper boundary truly has an infinite variance: $\beta_0 ~ U(0, \infty)$. A finite population mean doesn't even exist with such a distribution.
+We routinely approximate such a situation when using non-informative prior distributions, like $\beta_0 ~ \textrm{Gaus}(0, 10000)$. In the extreme case, a uniform distribution with an infinite upper boundary truly has an infinite variance: $\beta_0 ~ U(0, \infty)$. A finite population mean doesn't even exist with such a distribution.
 
-So, when a design researcher has observed that with design A, ToT is approximately distributed as $ToT_A ~ N(120, 40)$, is it realistic to assume that design B has ToT in the range of several hours? Would a cognitive psychologist see it equally likely that the difference in reaction time on two primitive tasks is 200ms or 2h? Probably not. Still, using fixed effects for factors with very few levels is a justifyable approximation. First of all, priors can be used at any time to factor in reasonable assumptions about the range. Second, with very few estimates, the random factor variation cannot be estimated with any useful certainty. Very small shrinkage would occur and the results would practically not differ.
+So, when a design researcher has observed that with design A, ToT is approximately distributed as $ToT_A ~ \textrm{Gaus}(120, 40)$, is it realistic to assume that design B has ToT in the range of several hours? Would a cognitive psychologist see it equally likely that the difference in reaction time on two primitive tasks is 200ms or 2h? Probably not. Still, using fixed effects for factors with very few levels is a justifyable approximation. First of all, priors can be used at any time to factor in reasonable assumptions about the range. Second, with very few estimates, the random factor variation cannot be estimated with any useful certainty. Very small shrinkage would occur and the results would practically not differ.
 
 The CUE8 study makes a case for seeing shrinkage in action: Teams of researchers were asked to conduct a performance evaluation on a website. Tasks and website were the same, but the teams followed their own routines. Some teams tested a few handful of participants, whereas others tested dozens remotely. Teams, as another non-human population (sic!) differ vastly in the number of observations they collected. We can expect differences in shrinkage. To see the effect, we compare the team-level group means as fixed factor versus random factor. All teams have enough participants tested to estimate their mean with some certainty. At the same time, the group sizes vary so dramatically that we should see clear differences in tendency towards the mean.
 
@@ -726,7 +1275,7 @@ M_2 <-
 
 M_3 <- 
   D_cue8 %>% 
-  stan_glmer(logToT ~ 1 + (1|Team), data = .)
+  stan_glmer(logToT ~ 1 + (1|Team), data = ., iter = 100)
 
 ```
 
@@ -891,7 +1440,12 @@ Team H is far off the population average, but almost no shrinkage occurs due to 
 
 At the same time, shrinkage adjusts the estimates for variation, with $sd_{RE} = `r sd_ranef` < sd_{FE} = `r sd_fixef`$. The random effects estimate is an unbiased estimate for the population variance, whereas fixed effects variation would be overestimating. [REF]
 
-Now that random effects have been de-mystified as effects with partial pooling, where the amount of pooling is a consequence of observed data, we can move on to applications. The variance in the population is an indicator for heterogeneity of participants (or any non-human population) and random effects variation is an accurate estimator for that. For designers, it is vital to understand how varied performance with a system is. Furthermore, as we will see in the next section, with slope random effects we can even estimate the variation of how users respond to different design conditions. When comparing two designs A and B, that enables the researcher to assess in how much a design is uniformly better, a desirable property of universal designs. There are also useful applications for the random effects, i.e. the individual levels. In some applications the crucial issue is to get good estimates of individual performance, which falls into the domain of psychometrics.
+So, random effects are factors with the additional assumption of Gaussian distribution. When a multi-level model is estimated, the population level effect, the random effects levels and the variance of the distribution are estimated simultaneously. This creates two particular advantages of multi-level models with random effects: 
+
+1. In unbalanced research designs (with unequal number of observations per subject) small groups are corrected towards the population mean.
+2. Strong outliers are corrected towards the population mean.
+
+In conclusion, whereas classical techniques for repeated measures often require additional tweaks to work well with unbalanced designs and outliers, multi-level models with random effects handle those situations gracefully.
 
 
 
@@ -900,240 +1454,467 @@ Now that random effects have been de-mystified as effects with partial pooling, 
 
 
 
+## Psychometrics and designometric models
 
+Up to to this point, we have characterized random factors mainly by their variance. However, a random effect is just like a factor, where the levels are typically entities in a sample. In a multi-level model, these levels are represented as coefficients. Every entity gets their own estimate which represents the level of functioning of the entity. These values can either be compared against an external benchmark, or they are compared to each other. When human individuals are being compared this is called *psychometrics*. 
 
-## Variance in variation: slope random effects [TBC] {#slope_RE}
+Traditionally, psychometrics deals with the valid and reliable measurement of personal characteristics, such as individual levels of performance, motivation, socio-cognitive attitude and the like. Advanced statistical models have been devised, such as confirmatory factor analysis or item response models. Formally, these applications establish an order among population entities, from low to high. The least one is aiming for is that for any pair of entities $A$ and $B$, we can tell which entity has the more pronounced property. This is called an *ordering structure*. Fewer applications go beyond mere ranking and establish metric interpretations. For example, in an *interval-scaled* test, the researcher may compare differences between participants.
 
-So far, we have dealt with random effects that capture the gross differences of entities: individuals differ in how quick they work, tasks differ in length and test items in difficulty. We introduced these random effects as conditional effects like: "the intercept depends on what person you are looking at". Whereas in the beginning of the chapter I emphasized the necessity to examine within-person processes in within-subject designs, we never went beyond conditional statements regarding the intercept effect. In contrast consider the A/B testing case. Being more efficient with design B compared to A is the primary question and that we can straight-forwardly put into a conditional statement: "by how much B is more efficient than A depends on the person".
+In design research, multi-item validated scales are routinely used for one of two purposes:
 
-Let's first exlore graphically what this means. Assume that we had tested only five participants with one task each. The CGM model with participant-level random effect takes the following form:
+1. A design-related research questions involve traits or abilities of users. For example: Do social network users with high Openness have more connections? A six-item test for Openness is used on every individual in the sample and the scores are compared the number of connections. This is the basic *psychometric situation*, which is an *encounter of persons and items*.
+2. In design research one frequently assesses properties of a design by using multi-item questionnaires. One example would be the comparison of user experience among a set of e-commerce homepages using scales such as the AttrakDiff (the hedonic dimension). Another example would be to map the uncanny valley effect by letting participants judge a set of artificial faces with a multi-item scale to measure eeriness. Apparently, when the aim is to measure a design, the situation is an encounter of users, items and designs. We call this the psychometric situation.
 
-$$
-\mu_i = \beta_0 + \beta_{0p} + x_1\beta_1\\
-\beta_{0p} \sim N(0,\sigma_{0p})
-$$
-The figure below illustrates the model on a sample of five participants. As the effect is the same, we see five parallel lines. While the height where a line starts differs between users, they all benefit to the precisely same amount from design B.Is that realistic? If we expect that differential design effects exist, it is not. There can be plenty of reasons why two users differ in how much the benefit from a certain design. For example, the BrowsingAB case features a strong interaction effect on age. When thinking of random effects, it helps to imagine the situation where an influencing factor exists, but was not recorded. The inter-individual variance will remain, and the participant identifier is the only predictor at hand.
+We begin with the first case, standard psychometrics to assess user characteristics. For example, one could ask how a persons visual-spatial abilities are related to performance in navigating a complex hypertext environment, exploring body cavities during surgical procedures or monitoring the scattered displays in air traffic control centers. 
 
-```{r}
-sim <- function(n_Part = 5,
-                beta_0P = rnorm(n_Part,0, sigma_0P),
-                sigma_0P = 20,
-                beta_1P = rnorm(n_Part,0, sigma_1P),
-                sigma_1P = 0,
-                sigma_eps = 0) {
-  Part = data_frame(Part = 1:n_Part, 
-                     beta_0P = beta_0P, 
-                     beta_1P = beta_1P)
-  Design = data_frame(Design = c("A", "B"),
-                       beta_0 = 120,
-                       beta_1 = -30)
-  mascutils::expand_grid(Part = Part$Part, Design = Design$Design) %>% 
-    left_join(Part) %>% 
-    left_join(Design) %>% 
-    mutate(mu = beta_0 + beta_0P + (beta_1 + beta_1P) * (Design == "B"),
-           ToT = rnorm(nrow(.), mu, 0)) %>% 
-    as_tbl_obs()
-}
-
-sim() %>% 
-  ggplot(aes(x = Design, 
-             y = ToT,
-             group = Part)) +
-  geom_line()
-
-
-```
-
-A more realistic figure of the effects is the spaghetti plot below. All but one of the participants improve with design B, but to rather different degrees. The lines have different starting points, and they differ in slopes. This is called a *slope random effect*. Similar to intercept random effects, slope random effects are factors that represent individual deviations from the population-level effect. 
+In the case of visual-spatial ability, the researcher could administer a test for visual-spatial abilities: for example, participants solve a set of mental rotation tasks and reaction times are collected as a score for spatial processing speed; this would later be compared to performance in a real (or simulated) task, let's say the number of times an obstacle is hit in a driving simulator. The straight-forward approach would be to  take the average measure per person as a score for mental rotation speed. 
 
 ```{r}
-sim(sigma_1P = 15) %>% 
-  ggplot(aes(x = Design, 
-             y = ToT,
-             group = Part)) +
-  geom_line()
+n_Part <- 20
+n_Trial <- 10
+n_Obs <- n_Part * n_Trial
 
+D_Part <- tibble(Part = 1:n_Part,
+                 true_score = rnorm(n_Part, 900, 80))
+
+D_Trial <- tibble(Trial = 1:n_Trial)
+
+D_CTT <- 
+  mascutils::expand_grid(Part = D_Part$Part,
+                                Trial = D_Trial$Trial) %>% 
+  left_join(D_Part) %>% 
+  mutate(RT = rnorm(n_Obs, 
+                    mean = true_score,
+                    sd = 50)) %>% 
+  mascutils::as_tbl_obs()
+
+D_CTT %>% 
+  group_by(Part) %>% 
+  summarize(score = mean(RT))
 ```
 
-For the design effect in BrowsingAB, a model with intercept and slope random effects is formally specified as:
+Note how the table only contains the identifiers, but no additional information. The trials in the mental rotation task are assumed to be exchangeable. This is how the so-called *classical test theory* approach works. In classical test theory, the observed test score $y_i$ for participant $i$ is composed of the the true score of participant $i$, $\mu_i$, and a Gaussian measurement error $\epsilon_{ij}$.
 
-$$
-\mu_i = \beta_0 + \beta_{0p} + x_1\beta_1 + x_{1}\beta_{1p}\\
-\beta_{0p} \sim N(0,\sigma_{0p})\\
-\beta_{1p} \sim N(0,\sigma_{1P})
-$$
+$$y_{ij} = \mu_i + \epsilon_{ij}$$
 
-Previously, we have seen that repeated measures are the key to pull a random effect out of the residual term. The same holds for slope random effects. For estimating individual slopes, the same participant (or any non-human entity) must encounter multiple conditions. For demonstration of slope random effects, we examine another instantiation of the BrowsingAB data set `BAB5`, which differs from `BAB1` in two aspects: all participants encounter both designs (within-entity design) and ToT was measured on five given tasks (repeated measures). We use the simulation function as provided by the BrowsingAB case environment. As always, we start with some exploratory analysis. 
+The following model implements CTT as an absolute group means model [AGM, REF], with the only difference that the person factor is a random effect, i.e. it assumes a Gaussian distribution of person scores.
 
-
-```{r}
-attach(BrowsingAB)
+```{r opts.label = "future"}
+M_CTT <- stan_glmer(RT ~ 1 + (1|Part), data = D_CTT, iter = 100)
+ranef(M_CTT)
 ```
 
 
-The spaghetti plot (the pasta is dry, not cooked) is excellent for visualizing participant-level effects. For the BAB5 data set the following figure shows the individual design effects. While on average design B is favoured, there is a wild bunch of slopes. That should not surprise us, as in the previous chapter we discovered a strong interaction effect by age. Here we ignore this predictor (or pretend not to have recorded it) and exclusively work with the participant factor.
+CTT assumes that all items function precisely the same way and can therefore be ignored, which is a bold claim. For a set of experimental trials it may (or may not) be true that they are all equally hard. In most other situations item equality is highly questionnable. Two items from the same scale can differ in several aspects, one of which is how hard (or strong) an item is. Consider the following two items from a fictional user experience scale; most likely, the second item would get lower ratings on average, because it is stronger:
 
-```{r BAB_RE_age, opts.label = "fig.wide"}
-G_slope_RE_1 <-
-  BAB5 %>% 
-  group_by(Part, Design) %>% 
-  summarize(ToT = mean(ToT)) %>% 
-  ggplot(aes(x = Design, 
-              y = ToT)) +
-  geom_line(aes(color = "participant effects", group = Part), alpha = .7) +
-  geom_line(data = group_by(BAB5, Design) %>% summarize(ToT = mean(ToT)), 
-            aes(X = Design, y = ToT, group = 1, color = "population effect"), size = 1) +
-  labs(color = NULL)
+1. The interface is nice.
+1. The interface is really cool.
 
-G_slope_RE_1
+One problem with CTT is that by averaging scores, the CTT swallows any information on item functioning. In contrast, the families of *Item response models (IRM)*, as well as *factor analysis models (FAM)*, do not take for granted that all items act the same. As diverse and elaborated these models are today, they all have in common, that items are modelled explicitly and get their own estimates. Discussing these models in more depth would require a separate book. Still, a simple item response model is nothing but an encounter of persons and test items. With only two populations involved, the standard psychometric model simply is a crossover of person and item random effects.
 
-```
-The R formula for slope random effects follows the same principles as before. For the present case it reads as "the intercept and design effect are *conditional* on participants": `(1 + Design|Part)`. We estimate the model using the rstanarm engine and use the usual commands to extract population-level estimates and random effect variation. 
-
-```{r fit:BAB5, opts.label = "mcmc"}
-M_Des_ME <- stan_glmer(ToT ~ 1 + Design + (1 + Design|Part),
-                       data = BAB5)
-```
-
-```{r opts.label = "mcsync"}
-sync_CE(BrowsingAB, M_Des_ME)
-```
+Some years ago, I proposed a novel personality construct *geekism*, which states that users differ in how enthusiastic they are about tinkering with technology. The hope was that we could explain differences in user behaviour, such as how they react when having to learn a new software application. A qualitative study with self-proclaimed geeks and several psychometric studies resulted in rating scale with 32 items. The Hugme case is one of the quantitative follow-up studies, where the Geekism scale was used together with the Need for Cognition scale (NCS), which assesses the tendency to enjoy intellectual puzzles in general. We were interested in (1) how the items function, (2) how reliable the scale is and (3) how Geekism correlates with Need-for-cognition.
 
 
 ```{r}
-P_Des_ME <- posterior(M_Des_ME)
+attach(Hugme)
+
+D_quest <- D_quest %>% mutate(Session = as.factor(session))
 ```
 
-
-
+One important thing to note at this point is that psychometricians like to put things in matrices. An item response matrix is squared, whereas we need the long format for the regression engine. As is shown below, the long form can be transformed into a matrix and vice versa.
 
 ```{r}
-detach(BrowsingAB)
+D_long <- expand_grid(Part = 1:8, 
+                      Item = 1:5) %>% 
+  mutate(rating = rnorm(40)) %>% 
+  mascutils::as_tbl_obs()
+D_long
+
+D_long %>%  
+  select(Part, Item, rating) %>% 
+  spread(key = Item, value = rating)
 
 ```
 
-Remember to always put complex random effects into brackets, as the `+` operator binds very strongly.
-
-
-```{r fit:BAB_slope_1, opts.label = "mcmc"}
-attach(BrowsingAB)
-
-M_slope_1 <-
-  stan_glmer(ToT ~ 1 + Design + (1 + Design|Part),
-             data = BAB5)
-
-P_slope_1 <- posterior(M_slope_1)
-
-detach(BrowsingAB)
-```
-
-```{r opts.label = "mcsync"}
-sync_CE(BrowsingAB,M_slope_1, P_slope_1)
-```
-
-
-The random factor variation is extracted from the posterior distribution using the `grpef` command. The coefficients are standard deviations of the two random factors, Intercept and DesignB. The results confirm the earlier fixed effects analysis on the data set: users experience very different advantages of Design B. The variation of the difference is almost as pronounced as the variation on Design A (Intercept), alone. The standard deviation has the same magnitude as the group level effect, hence some users are likely to experience a disadvantage, even. That matches the earlier results, where design B caused problems for elderly users. In fact, we can phrase the slope random effect in much the same way as interaction effect `age:Design` in \@ref(differential_design_effects), namely as a conditional statement of the form:
-
-> the effect of Design depends on the participant. 
-
-
-```{r results = "tab"}
-attach(BrowsingAB)
-
-P_slope_1 %>% 
-  filter(fixef %in% c("Intercept", "DesignB"),
-         type %in% c("grpef", "fixef")) %>% 
-  group_by(re_factor, fixef) %>% 
-  summarize(center = median(value, na.rm = T),
-            lower = quantile(value, .05, na.rm = T),
-            upper = quantile(value, .95, na.rm = T)) %>% 
-  kable()
-
-
-detach(BrowsingAB)
-
-```
-
-
-
-
-Intercept random effects capture gross variations between users. Independent of designs, tasks or situation, some users are assumed to always be faster, more accurate or pleased. That is certainly better than sticking with the image of the average user, but it remains static. With slope random effects can we render *individual differences in the process*. How differently do individual users react when proceeding from design A to B? That is a completely different question than the average difference between designs. Review the spaghetti plot \@ref(fig:BAB_RE_age) once again. Adding a slope random effect to the model really means that the effect is estimated as many times as there are participants in the sample (run `ranef(M_slope_1)` to see it). And these coefficients tell a story about *generalizeability*. The more the random effects are dispersed, the less typical is the average (the fixed effect). When you are doing a user study for an e-commerce company, it may be sufficient to just tell the average figure (this may even be a good idea as to not overwhelm the mind of your manager). However, when doing design experiments for the purpose of finding more generally applicable rules for good design, generalizability matters. In fact, with a CGM model that compares two independent groups, you cannot prove that the hypothesized process (e.g. larger fonts are better to read) holds for everyone.
-
-Proving that an effect is practically universal across participants is possible with slope random effects, but requires rendering individual trajectories. That is only possible, if the study assesses the conditions in question for every participant. This is called a within-subject design. Anyone who has trustingly made generalizing conclusions on the basis of between-subject manipulations, should feel deeply troubled. Can we actually be sure that:
-
-+ everyone experiences the uncanny valley effect, when viewing robot faces?
-+ everyone's alertness when sleepy  benefits from noise?
-+ every nurse makes fewer errors with a third millenium infusion pump design?
-
-Even researchers doing plain user studies cannot refrain from the issue completely. When the system is  safety critical, it matters that a particular design is a universal improvement over the other. Whoever operates it, errors must occur less frequently. In the next chapter, we will encounter such a study, where a novel infusion pump interface was compared with a legacy design. Furthermore, we examined how performance with both devices changed with practice. As the experiment was fully within-subject it is open to investigate generalizeability on both issues:
-
-+ do all participants benefit from the modern design?
-+ do all participants learn over the course of the experiment?
-
-As we will see in \@ref(GLM), most of the recorded performance measures do not comply with the assumptions of linear models and only the measure of perceived workload seems amenable. We construct a model that captures the two main factors (design and session) with a possible interaction effect. Intercept and slope random effects are added for participants and tasks:
-
-```{r}
-attach(IPump)
-```
+Psychometric programs often require matrix data, but for a multi-level models we need the long format. IRM models regard items as  populations, too, and the basic IRT model is a cross-classified intercept-only model [#crossover].
 
 ```{r opts.label = "mcmc"}
-M_wkld <-   
-  D_pumps %>%  
-  stan_glmer(workload ~ Design*Session + (Design*Session|Part) + (Design*Session|Task),
-                     data = .)
+D_psymx_1 <- 
+  D_quest %>%   
+  filter(Scale == "Geek", Session == 1)
+  
+
+M_psymx_1 <- 
+  D_psymx_1 %>% 
+  stan_glmer(rating ~ 1 + (1|Part) + (1|Item), data = .)
+```
+
+With such an IRT model, we can extract the person scores, if we want to compare persons. Psychometric evaluation of a rating scale also draws upon items scores. In the following I will demonstrate two psychometric evaluations, using multi-level models: 
+
+1. *Test coverage* of a scale can be assessed by comparing the distribution of item scores with the distribution of person scores
+2. *Test reliability* can be estimated by comparing scores across two sessions of testing.
+3. *Test validity* can be estimated as person score correlations between scales.
+
+### Coverage
+
+Geekism was assumed to vary widely in the population of users and we wanted to be able to cover the whole range with good precision. In IRT psychometrics, items and persons are actually scored on the same scale. The person-level coefficients represent the persons' level of geekism. The item-level effects can best be called item sensitivity. A rule in IRT psychometrics is that for accuracy in a certain range, this range has to be covered by items with a matching sensitivity.  An item with consistently high ratings gets a high score, and is able to distinguish low levels of geekism. But, that makes it barely useful for discriminating between geeks on high levels. Just think of how poorly a very simple arithmetic question, like "Which of the following numbers is divisible by 3? [2, 3, 5, 7, 9]"  would be able to diagnose the math skills of you, the readers of this book. The inverse is also true: an item with a very strong proposition, like
+
+>> I always build my own computers
+
+may be great to distinguish between amateur and pro level geekism, but the majority of persons will just say No. So, item sensitivity and a person tendency are inverse. In order to derive a picture on test coverage, it is useful to take the inverse effects and call this *strength*.
+
+We have a linear model, where the rating is weighted sums of person tendency and item sensitivity. A high rating can mean two things (or both): coming from a very geek person, indeed, or it was a very sensitive item. For a good test coverage we need sensitive items for levels of low geekism and strong, i.e. *less* sensitive, items for the pros. Because  random effects are centered at zero, we can simply reverse the scale with *item strength* being the negative sensitivity. Now we can compare the distributions of person and item scores side-by-side and check how the person tendencies are covered by item strength. *Note* that for obtaining the absolute scores, we can use the Bayr function `re_scores`, but for psychometric analysis, the deviation from the population average is sufficient, hence `ranef`.
+
+
+```{r}
+P_psymx_1 <- posterior(M_psymx_1)
+
+T_ranef <- 
+  ranef(P_psymx_1) %>% 
+  rename(geekism = center) %>% 
+  mutate(geekism = if_else(re_factor == "Item", -geekism, geekism)) # reversing
+  
+
+T_ranef %>% 
+  ggplot(aes(x = re_factor,
+             y = geekism,
+             label = re_entity)) +
+  geom_violin() +
+  geom_jitter(width = .2) +
+  ylim(-2, 2)
+```
+It turns out that the 32 items of the test cover the range of very low to moderately high geekism quite well. The upper 20 percent are not represented so well, as it seems. If we were to use the scale to discriminate between geeks and totally geeks, more strong item had to be added.
+
+### Reliability 
+
+Next, we examine the reliability of the Geekism scale. Reliability is originally a CTT concept and means that the measurement error is small. For example, a reliable personality scale produces almost exactly the same score when applied to a person on different occasions. Is the Geekism score reliable? In our study we asked participants to fill out the questionnaire twice, with an experimental session in-between. If reliability of Geekism is good, the correlation of scores between sessions should be very strong.
+
+In order to obtain the scores per session, we add an effect to the model. For reliability we are interested in correlation between person scores, so it suffices to add the Session random effect to the participant level, only.  However, the same model can be used to do assess stability of item scores, too. This is rarely practiced, but as we will see, there is an interesting pattern.
+
+```{r opts.label = "mcmc"}
+
+
+D_psymx_2 <- 
+  D_quest %>% filter(Scale == "Geek")
+
+M_psymx_2 <- 
+  D_psymx_2 %>% 
+  brm(rating ~ 0 + Session + (0 + Session|Part) + (0 + Session|Item),
+      data = .)
+
 ```
 
 ```{r opts.label = "mcsync"}
-sync_CE(IPump,M_wkld)
+sync_CE(Hugme, D_psymx_1, M_psymx_1, D_psymx_2, M_psymx_2)
 ```
+
+We extract the random effects and plot test-retest scores for participants and items. The red line in the plots indicates perfect stability for comparison.
 
 
 ```{r}
-fixef(M_wkld)
-#grpef(M_wkld) FIXME bayr
-```
+T_ranef <- 
+  ranef(M_psymx_2) %>% 
+  select(re_factor, re_entity, Session = fixef, score = center) %>% 
+  spread(key = Session, value = score)
 
-```{r results = "tab"}
-posterior(M_wkld) %>% 
-  filter(type == "grpef") %>% 
-  group_by(parameter) %>% 
-  summarize(median = median(value)) %>% 
-  filter(!is.na(median)) %>% 
-  kable()
+sample_n(T_ranef, 5)
 ```
 
 
 
 ```{r}
-detach(IPump)
+plot_stability <- 
+  function(T_ranef) T_ranef %>% 
+                    ggplot(aes(x = Session1, y = Session2)) +
+                    facet_grid(.~re_factor) +
+                    geom_point() +
+                    geom_smooth(aes(color = "observed stability"), se = F) +
+                    geom_abline(aes(intercept = 0, slope = 1, 
+                                    color = "perfect stability"))
+
+T_ranef %>% plot_stability()
+  
+```
+
+The participant scores are highly reliable. If you measure the score of a person, you almost precisely know the result of another measure a few hours later. At least in short terms, the Geekism construct - whatever it may truly be - can be measured with almost no error. Only ever so slightly is there a trend that lower scores get higher the second time and higher get lower, which could be called a trend towards the average. Something during the experiment has led participants to report a more mediocre image of themselves.
+
+The psychometric model further contains intercept and slope random effects for items, and we can examine test-retest patterns in the same way. We see the same trend towards the average, but much stronger. In psychometric analysis it is common to assess participant-level test-retest reliability, but rarely is that done on items. In the present case, we see that this can be a mistake. Here it seems that the trend towards mediocracy does not produce a bias on the population mean, because it is bi-directional and the item and participant scores are nicely symmetric around the center of the scale. Not every test may have these properties and any asymmetric wear-off effect of items would produce more serious biases.
+
+Another situation where item stability matters is when a person doing the test is actually learning from it. Usually, it is not desired that a test can be learned, because that means people can train for it. would be unfortunateis unlikely to occur in a regular math or intelligence test, but when the items are real-world tasks, like programming a medical infusion pump or driving a car, the participant get a lot of feedback and will learn.
+
+The example of test-retest stability shows one more time, how useful plots are for discovering patterns in data. More formally, test-retest stability is reported as a correlation. We can produce a correlation estimate by using the standard `cor` command on the participant-level random effects:
+
+```{r}
+T_ranef %>% 
+  group_by(re_factor) %>% 
+  summarize(cor = cor(Session1, Session2))
+```
+
+Unfortunately, this lacks information about the degree of certainty. The better way is to let the regression engine estimate all correlations between random factors that are on the same level (Part, Item). The rgression engine `brm` fromn package Brms package does that by default, and this is why it has been used, here. The following code extracts the posterior distributions of all correlations in the model, creates an estimates table and a plot of 95% certainties.
+
+```{r}
+clu_cor <- 
+  function(model){
+    model %>% 
+    posterior() %>% 
+    filter(type == "cor") %>% 
+    mutate(parameter = str_remove_all(parameter, "cor_")) %>% 
+    group_by(parameter) %>% 
+    summarize(center = median(value),
+              lower = quantile(value, .025),
+              upper = quantile(value, .975)) %>%
+    separate(parameter, into = c("re_factor", "between", "and"), sep = "__")
+}
+
+
+M_psymx_2 %>% 
+  clu_cor()
+```
+
+With random effects correlations assessing test-retest-stability is straight-forward. If test and retest ramdom effects correlate strongly, we can be sure that the error of measurement is low and we can call it a reliable scale. Good  reliability is necessary, but not sufficient to also call a scale valid. 
+
+
+### Validity
+
+Reliability doesn't say anything about what the scale actually measures. In psychometric studies, *validity* of a scale is routinely evaluated by comparing the scores to external measures. In a perfect world, it would be assessed how scores are related to relevant real-world behaviour, such as:
+
+1. Are high-Geek persons more enthusiastic to learn a programming language?
+1. Do high-Geek persons perform better in computer jobs?
+1. Are high-Geek persons more likely to buy robot toys for their offsprings?
+
+In the real world, researchers in the field of personality are usually content with relating their scales to other, validated personality scales. In the Hugme study, participants were also asked to rate themselves on the Need-for-Cognition scale (NCS). In very brief NCS measures how much a person enjoys intellectual puzzles. Since computers are intellectual puzzles, sometimes in a good way, often not, we thought that high-Geek persons must also score high on NCS. At the same time, a very strong correlation between Geek and NCS would indicate that the two scales render the same property, which would make one of them redundant, probably the newcomer. The following model estimates the person scores per scale and we can extract the correlation.
+
+
+```{r opts.label = "mcmc"}
+M_psymx_3 <- 
+  D_psymx_3 %>% 
+  brm(rating ~ 0 + Scale + (0 + Scale|Part),  data = .)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Hugme, D_psymx_3, M_psymx_3)
 ```
 
 
-####
+```{r}
+M_psymx_3 %>% clu_cor()
+```
 
+We observe a weakly positive  association between Geek and NCS, just as was hoped for.
 
-#### Exercises
-
-1. Review the scientific literature in your field. Find examples of design experiments where general conclusions were drawn from between-subject predictors. If that was easy, visit one of the leading social psychology journals and repeat.
-
-
-
-## Growing with random effects correlations [TBD] {#re_correlations}
-
-Here we finally resolve the typing paradox and encounter another immensely useful element in random effect modelling. Let's take another good look at the Figure X [Average? Neverage. Last one]. 
+```{r}
+detach(Hugme)
+```
 
 
 
 
-## Advanced tricks
 
-* non-compliant test users in CUE8
-* handling missing values by priors
+### Design-o-metrix
+
+Leaving the field of psychometrics, we revisit the Uncanny Valley data set [#polynomials]. The experiment used eight items from the Eeriness scale [#MacDorman] to  ask the judgment of participants on 82 stimuli showing robot faces. In one of our experiments (RK_1), participants simply rated all robots face in three separate session. 
+
+```{r}
+attach(Uncanny)
+```
+
+```{r}
+RK_1 %>%  
+  select(Part, Item, Session, response) %>% 
+  sample_n(5)
+```
+
+With this data we seem to be standing on familiar psychometric grounds: Items are used on persons and we have three measures over time. We can calculate test-retest stability of items and persons using a multi-level model. Voila! Here are your correlations, person and item stability - with credibility limits. Wait a second! What is being measured here? Persons? No, robot faces. The original question was, how human-likeness of robot faces is related to perceived eeriness of robot faces and the Eeriness scale intended purpose is the comparison of designs, not persons. For example, it could be used by robot designers to check that a design does not trigger undesireable emotional responses. Without knowing the humen-likeness scores, robot faces become just a naked *sample of designs* [#crossover]:
+
+```{r}
+UV_dsgmx <- 
+  RK_1 %>% 
+  rename(Design = Stimulus) %>% 
+  select(Part, Item, Design, Session, response) %>% 
+  as_tbl_obs()
+
+UV_dsgmx
+```
+
+Measures in the Uncanny experiment are an encounter of three samples: Part, Item and Design, and Design is the one of interest. That means we need a model that produces Design-level scores. For the user of multi-level models that just means to add a Design random effect to the psychometric model (Part, Item). Models, where a design random factor sits on top of a psychometric model, I call from here on a *designometric models*. The most basic designometric model is a three-way cross-classified intercept-only model, from which design scores can be extracted. By extending the test-retest psychometric model `M_psymx_2`, we can estimate test-retest stability.
+
+```{r opts.label = "mcmc"}
+M_dsgmx_1 <-
+  UV_dsgmx %>% 
+  brm(response ~ 0 + Session + 
+        (0 + Session|Design) + 
+        (1 + Item) + 
+        (0 + Session|Part), data = .)
+  
+```
 
 
-## Exercises
+Like in the psychometric situation, we extract the correlations.  Since we have three sessions, we get two stability scores per level.
 
-1. In the Egan study, cross-classified random effects capture the encounter of samples. Actually, we have not even taken this to an extreme, as the original study also measured mental workload with a scale of four items. Create and run a model that captures all samples, including the scale items. Interpret the results.
+```{r}
+
+M_dsgmx_1 %>% 
+  posterior() %>% 
+  clu_cor() %>% 
+  print() %>% 
+  ggplot(aes(x = re_factor,
+             y = center,
+             ymin = lower,
+             ymax = upper)) +
+  facet_grid(and  ~ between) +
+  geom_crossbar() +
+  ylim(0,1)
+
+```
+
+```{r}
+detach(Uncanny)
+```
+
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, UV_dsgmx, M_dsgmx_1)
+```
+
+The test-retest stability for designs is very reassuring. Ratings on the Eeriness scale are highly reproducable and the error will be very small. To a lesser, but still sufficient degree are person scores stable. 
+
+But, what does the person score (and its stability) actually mean? It describes the tendency of a person to give high ratings on Eeriness. Should a researcher want to assess how vulnerable a person is to the Uncanny Valley effect, the Eeriness scale is also reliable for measuring persons. Many scales in design research lend themselves to be looked at from a designometric and psychometric perspective. For example, a hypothetical scale to measure comfort of sitting can be used to evaluate seats, but can also be used to measure how comfortable a person is with sitting.
+
+No seat fits every person, or put differently: the comfort  of a seat depends  on the person sitting in it. This points us at one of many possible extensions to carry out deeper designometric analysis. If the difficulty of an item in a psychometric test depends on who is being tested, this is called *differential item functioning*. For example, the large international student evaluations PISA and TIMMS routinely check their test items for cultural differences. The aim is to formulate test questions in such a way that they are equally comprehensible with all cultural backgrounds. Most likely, this is a desireable property for designometric scales, too. In a multi-level designometric model, this could be incorporated as an interaction effect between cultural background and item-level coefficients.
+
+That all being said about designometric models, my observation is that practically all published rating scales in design research have been validated under a psychometric perspective, rather than a designometric. This is a mistake! If the purpose of the scale is to compare designs, the scale validation must be carried out on the design scores. In the worst case, a designometric scale is evaluated by a study, where a sample of participants and a sample of items do not encounter a sample of designs, but just one. I understand how this mistake happens in the first place. But, it worries me that practically all purportedly designometric scales out there have been validated under the wrong perspective. I call this the *psychometric fallacy in design research*.
+
+
+
+
+<!--[semantic Stroop]
+
+
+Measuring participant performance is a useful application in some design research fields, such as human performance in  critical systems, e.g. identify persons with the best talent for being an airspace controller. However, in design research, it is frequently designs that are to be compared. For example, in the Egan case, one might be interested to select the best of the ten website designs, in order to use it as a blueprint. Such a research question is no longer psychometric, literally, but formally the only difference is that participants can be considered test items, rather than test objects. At least, when using ramdom effects for psychometric purposes, there is nothing special about the participant random effects compared to design random effects. Let's pretend we had conducted the study in order to identify a good template for university websites. The following code extracts design random effects posteriors, summarizes them in the usual way and makes a plot.
+
+```{r}
+attach(Egan)
+
+ranef(P_1) %>%
+  filter(re_factor == "Design") %>%
+  rename(Design = re_entity) %>%
+  ggplot(aes(x = Design, y = center, ymax = upper, ymin = lower)) +
+  geom_point(size = 1) +
+  geom_crossbar() +
+  ylab("log ToT") +
+  theme(axis.text.x = element_text(angle = 45))
+
+```
+
+
+The most simple form is the Rasch model in item response theory (IRT), where participants respond to a set of items and the response is either correct or incorrect. The outcome variable response is usually coded as 0 = incorrect and 1 = correct. Apparently, such a variable does nowhere near satisfy the assumption of linear models. It turns out that the Rasch model can be interpreted as cross-classified random effects in a *logistic regression* \@ref(logistic_regression). Logistic regression is a member of the General*ized* Linear family of models, which will be introduced in the next chapter.
+
+As innocent as the Egan study seems, there is some psychometrics involved.  First, cognitive workload was measured using the NASA TLX questionnaire which has four items. With four items, we would hardly want to speak of a population. The trick is to view the four items as instantiations from all a virtual set of possible questions (on that matter). A typical question in psychometric research is that of *item consistency*, which for a small set of items can be measured by the correlation between items. High inter-item correlations indicate that a scale is reliable, which basically means it predicts well. Item correlations are mainly used during scale development, as a criterion to sort out renegade items, those that do not move in accordance with the others.
+
+```{r opts.label = "future"}
+M_2 <- stan_glmer(logToT ~ 1 + (1|Part) + (1|Design) + (1|Task) + (1|Design:Task) + (1|Item),
+                  data = D_egan)
+```
+
+
+```{r}
+detach(Egan)
+```
+-->
+
+
+
+
+
+
+
+
+<!-- ## Average? Neverage! A pledoyer for within-subject research -->
+
+<!-- Many studies in design research pretend that all users are alike. This idea is borrowed from experimental social science research. Seminal studies in cognitive psychology and social psychology claim mental structures or processes that hold for all humans. That is the very paradigm of fundamental psychology and many researchers ground their theorizing and experimentation on it. And indeed, several properties of human information processing have been replicated under such diverse conditions that one can assume that they are general. For example, the Stroop observation has been observed hundred of times in various populations subgroups [REF], situations [REF] and variations. -->
+
+<!-- The treatments in such experiments can be simplistic to an extreme. Often, participants are asked to respond to colored geometric shapes that light up on a black background by simple key presses. This is called *reductionism* and it has led to at least some insights into how the human mind works. As much as  design researchers should draw upon psychological theory, as useless is the reductionist paradigm in most applied research. Designs must work in real world situations and often in many different ones, highly controlled lab experiments just bear too little resemblance to the real world. In particular, by no means can we expect all users to respond alike to one or more designs. Their minds are complex, obscure and unpredictable besides. -->
+
+<!-- > Our minds are not run as top - down dictatorships; they are rambunctious parliaments, populated by squabbling factions and caucuses, with much more going on beneath the surface than our conscious awareness ever accesses. -->
+<!-- (Carroll, Sean. The Big Picture (Kindle Locations 5029-5031). Oneworld Publications. Kindle Edition.) -->
+
+
+<!-- Let me get it straight: People differ! If you plan to move from design A to B, or any other design choice, it is a good idea to also regard how much people vary. If your research question refers to any mental process or its change, the only solid way is to observe how one-and-the-same individuals behave on all conditions. That means within-subject designs should be the rule, not the exception. In some branches of experimental reseach it is still common to use between-subject designs, at the expense of statistical power and without the possibility to see "change of mind" actually happen. In contrast, between-subject experimental designs  is a potential mistake and requires good justification. The following case illustrates how things can go terribly wrong, when within-subject processes are examined in a between-subject manner: -->
+
+<!-- Imagine you set out to determine the association between typing speed (as number of ke) and errors. It is common sense that quality decreases with speed, so a positive correlation is expected. During the experiment, participants get a number of texts to type. With the first trial they are instructed to type at a relaxed speed. With every further trial they were asked to type slightly faster than at the trial before. The expectation is that -->
+
+<!-- > The faster a person types, the more errors occur -->
+
+<!-- In terms of statistical skills, the researcher is familiar with linear models, and is aware of the fact, that these may not be applied for repeated measures. Therefore our researcher first averages the scores across participants and receives a data set with a neat 30 data points, one per trial. A first exploratory plot reveals a bizarre relation: it seems that the faster participants type, the less errors they make. That is completely against expectations, as there almost always is a trade-off between speed and accuracy. -->
+
+<!-- ```{r Typing_average, opts.label = "fig.small"} -->
+<!-- attach(Typing) -->
+
+<!-- Type_1_avg %>%  -->
+<!--   ggplot(aes(x = speed, -->
+<!--              y = error)) + -->
+<!--   geom_point() + -->
+<!--   geom_smooth(se = F) -->
+
+<!-- ``` -->
+
+<!-- Could it be true that the faster a person types, the less errors happen? Of course not. The problem is how precisely we ask the question. When averaging over persons, we actually answer a different question, which is on a *population-level*: Do persons who can type faster make fewer errors? This question sees every person as one data point with two performance measures, speed and errors, both representing the ability to type. Now, the above results make more sense: people, who are trained in typing are at the same time fast and more accurate. But, what the experiment was out for is the trade-off between speed and accuracy *within a person*. The experiment provokes this trade-off by asking the same person to accelerate in typing. And, when we visualize the results on an individual level, the speed-accuracy trade-off becomes immediately visible. Now, every individual curve has an upward: with increased speed, the error goes up as well.  -->
+
+<!-- ```{r Typing_individual, ops.label = "fig.small"} -->
+<!-- Type_1 %>%  -->
+<!--   ggplot(aes(x = speed, -->
+<!--              y = error, -->
+<!--              group = Part)) + -->
+<!--   #geom_point() + -->
+<!--   geom_smooth(se = F, method = "lm", aes(col = "within participant")) + -->
+<!--   geom_smooth(data = Type_1_avg,  -->
+<!--               aes(col = "between participant", x = speed, y = error, group = NA),  -->
+<!--               se = F, method = "lm") -->
+
+<!-- ``` -->
+
+<!-- For the matter of simplicity let' us's ignore that the process is not linear, but takes a curved form. What is relevant is that there is a downwards trend on the population level (averaging over participants) that turns into a uniform upwards trend on participant level. Only a multi-level model will be able to uncover such a bizzare situation: -->
+
+<!-- ```{r} -->
+<!-- M_1 <- Type_1 %>%  -->
+<!--   stan_glmer(error ~ 1 + speed + (1 + speed|Part), data = .) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- M_1 -->
+<!-- ``` -->
+
+
+
+<!-- ```{r} -->
+<!-- detach(Typing) -->
+<!-- ``` -->
+
+
+<!-- ## Random effects correlations {#re_correlations} -->
+
+<!-- Another feature of the Typing data is discernable in the figure above: Participants with initial high error countstend to have much steeper curves  -->
+
+
+
+<!-- ###  -->
+
+<!-- The example here is constructed to be extreme: the population-level effect has the opposite direction of individual level effects. However, the situation is fully plausible and points us to an important principle: Whenever a research question capitalizes on a change in mental state or behaviour, the only solid way to investigate is a within-subject design. Therefore again: treating averaged data as if it represents within-persons changes is a severe mistake. In the A/B case, for example, one must always be clear about the level. Is it true that  -->
+
+<!-- + on average, users prefer B over A? -->
+<!-- + or all users individually prefer B over A? -->
+
+<!-- The bizzare situation with the Typing study will have to wait, because we will need all elements of multilevel modelling to resolve it. However, the figure above features the core elements of mutlilevel models: -->
+
+<!-- + persons have different levels for errors at relaxed typing (varying intercepts) -->
+<!-- + persons differ in how much the error frequency goes up with speed (varying slopes) -->
+<!-- + the better a person performs at relaxed typing, the less the number of errors goes up when the person types faster (correlated random effects) -->
+
+
+
+<!-- ## Exercises -->
+
+<!-- 1. In the Egan study, cross-classified random effects capture the encounter of samples. Actually, we have not even taken this to an extreme, as the original study also measured mental workload with a scale of four items. Create and run a model that captures all samples, including the scale items. Interpret the results. -->
 
 
 

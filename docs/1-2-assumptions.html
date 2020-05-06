@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1.2 Assumptions | New statistics for the design researcher" />
+<meta property="og:type" content="book" />
+
+
+<meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+<meta name="github-repo" content="schmettow/New_Stats" />
+
+<meta name="author" content="Martin Schmettow" />
+
+<meta name="date" content="2020-05-06" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place.">
+
+<title>1.2 Assumptions | New statistics for the design researcher</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="has-sub"><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
+<li class="has-sub"><a href="1-1-whom-this-book-is-for.html#whom-this-book-is-for"><span class="toc-section-number">1.1</span> Whom this book is for</a><ul>
+<li><a href="1-1-whom-this-book-is-for.html#the-empirical-design-researcher"><span class="toc-section-number">1.1.1</span> The empirical design researcher</a></li>
+<li><a href="1-1-whom-this-book-is-for.html#the-experimentalist"><span class="toc-section-number">1.1.2</span> The experimentalist</a></li>
+<li><a href="1-1-whom-this-book-is-for.html#the-applied-researcher"><span class="toc-section-number">1.1.3</span> The applied researcher</a></li>
+</ul></li>
+<li><a href="1-2-assumptions.html#assumptions"><span class="toc-section-number">1.2</span> Assumptions</a></li>
+<li><a href="1-3-how-to-read-this-book.html#how-to-read-this-book"><span class="toc-section-number">1.3</span> How to read this book</a></li>
+<li><a href="1-4-quantitative-design-research.html#quantitative-design-research"><span class="toc-section-number">1.4</span> Quantitative design research</a></li>
+<li><a href="1-5-studies.html#studies"><span class="toc-section-number">1.5</span> Studies</a></li>
+<li class="has-sub"><a href="1-6-observations-and-measurestbc.html#observations-and-measurestbc"><span class="toc-section-number">1.6</span> Observations and measures[TBC]</a><ul>
+<li><a href="1-6-observations-and-measurestbc.html#interaction-sequences"><span class="toc-section-number">1.6.1</span> Interaction sequences</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#performance-measures"><span class="toc-section-number">1.6.2</span> performance measures</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#experience-tbd"><span class="toc-section-number">1.6.3</span> experience [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#design-features-tbd"><span class="toc-section-number">1.6.4</span> design features [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#the-human-factor-tbd"><span class="toc-section-number">1.6.5</span> the human factor [TBD]</a></li>
+<li><a href="1-6-observations-and-measurestbc.html#situations-tbd"><span class="toc-section-number">1.6.6</span> situations [TBD]</a></li>
+</ul></li>
+</ul></li>
+<li><a href="2-elements-of-bayesian-statistics.html#elements-of-bayesian-statistics"><span class="toc-section-number">2</span> Elements of Bayesian Statistics</a></li>
+<li class="has-sub"><a href="3-getting-started-r.html#getting_started_r"><span class="toc-section-number">3</span> Getting started with R</a><ul>
+<li class="has-sub"><a href="3-1-setting-up-the-r-environment.html#setting-up-the-r-environment"><span class="toc-section-number">3.1</span> Setting up the R environment</a><ul>
+<li><a href="3-1-setting-up-the-r-environment.html#installing-cran-packages"><span class="toc-section-number">3.1.1</span> Installing CRAN packages</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#installing-packages-from-github"><span class="toc-section-number">3.1.2</span> Installing packages from Github</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#first_program"><span class="toc-section-number">3.1.3</span> A first statistical program</a></li>
+<li><a href="3-1-setting-up-the-r-environment.html#bibliographic-notes"><span class="toc-section-number">3.1.4</span> Bibliographic notes</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-2-learning-r-a-primer.html#learning-r-a-primer"><span class="toc-section-number">3.2</span> Learning R: a primer</a><ul>
+<li><a href="3-2-learning-r-a-primer.html#assigning-and-calling-objects"><span class="toc-section-number">3.2.1</span> Assigning and calling Objects</a></li>
+<li><a href="3-2-learning-r-a-primer.html#vectors"><span class="toc-section-number">3.2.2</span> Vectors</a></li>
+<li><a href="3-2-learning-r-a-primer.html#basic-object-types"><span class="toc-section-number">3.2.3</span> Basic object types</a></li>
+<li><a href="3-2-learning-r-a-primer.html#operators-and-functions"><span class="toc-section-number">3.2.4</span> Operators and functions</a></li>
+<li><a href="3-2-learning-r-a-primer.html#storing-data-in-data-frames"><span class="toc-section-number">3.2.5</span> Storing data in data frames</a></li>
+<li><a href="3-2-learning-r-a-primer.html#import-export-and-archiving"><span class="toc-section-number">3.2.6</span> Import, export and archiving</a></li>
+<li><a href="3-2-learning-r-a-primer.html#case-environments"><span class="toc-section-number">3.2.7</span> Case environments</a></li>
+<li><a href="3-2-learning-r-a-primer.html#structuring-data"><span class="toc-section-number">3.2.8</span> Structuring data</a></li>
+<li><a href="3-2-learning-r-a-primer.html#data-transformation"><span class="toc-section-number">3.2.9</span> Data transformation</a></li>
+<li><a href="3-2-learning-r-a-primer.html#plotting-data"><span class="toc-section-number">3.2.10</span> Plotting data</a></li>
+<li><a href="3-2-learning-r-a-primer.html#fitting-regression-models"><span class="toc-section-number">3.2.11</span> Fitting regression models</a></li>
+<li><a href="3-2-learning-r-a-primer.html#knitting-statistical-reports"><span class="toc-section-number">3.2.12</span> Knitting statistical reports</a></li>
+<li><a href="3-2-learning-r-a-primer.html#exercises"><span class="toc-section-number">3.2.13</span> Exercises</a></li>
+<li><a href="3-2-learning-r-a-primer.html#bibliographic-notes-1"><span class="toc-section-number">3.2.14</span> Bibliographic notes</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="assumptions" class="section level2">
+<h2><span class="header-section-number">1.2</span> Assumptions</h2>
+<p>This book makes the following assumptions:</p>
+<ol style="list-style-type: decimal">
+<li>Design research is for decision making, where one accounts for expected utility of design options. This requires</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>quantitative statements</li>
+<li>statements of (un)certainty</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li>Bayesian statistics is intuitive. Everybody has a good intuition about probability, value, decision making and gambling. It requires little effort to get to a more formal level of understanding.</li>
+<li>Data arrives through data generating processes. Premise of statistical modelling is to neatly align to the generating process’ anatomy.</li>
+<li>Applied research data is multivariate and correlated. There is nothing such as a nuisance variable. Everything that helps understanding advantages and drawbacks of a design matters.</li>
+<li>Average? Neverage! People differ, and diversity matters in design.</li>
+<li>The universe is endless, but everything in it is finite, which strictly is at odds with linearity assumptions.</li>
+<li>The human eye is a highly capable pattern evaluator. It would be a waste to not use visuals for exploring data and communicating results.</li>
+<li>The best way to anticipate and plan data analysis is to simulate data upfront.</li>
+<li>R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.</li>
+</ol>
+</div>
+<p style="text-align: center;">
+<a href="1-1-whom-this-book-is-for.html"><button class="btn btn-default">Previous</button></a>
+<a href="1-3-how-to-read-this-book.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
