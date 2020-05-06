@@ -196,14 +196,14 @@ Experiment %>% sample_n(8)
 
 Group           age   outcome
 -------------  ----  --------
-experimental     25       251
-control          28       226
-control          28       213
+control          28       217
+experimental     20       235
+experimental     33       263
+control          31       199
+control          31       217
+experimental     34       253
 control          20       204
-control          18       198
-control          33       211
-control          29       217
-control          31       222
+experimental     31       245
 
 ```r
 ## Plotting the distribution of outcome
@@ -212,7 +212,7 @@ Experiment %>%
   geom_density(fill = 1)
 ```
 
-<img src="Getting_started_with_R_files/figure-html/first_simulation_1-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/first_simulation_1-1.png" width="90%" />
 
 ```r
 ## ... outcome by group
@@ -221,7 +221,7 @@ Experiment %>%
   geom_density()
 ```
 
-<img src="Getting_started_with_R_files/figure-html/first_simulation_1-2.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/first_simulation_1-2.png" width="90%" />
 
 
 
@@ -392,14 +392,14 @@ llply(LoM, rowSums)
 
 ```
 ## [[1]]
-##  [1] 1 0 0 0 0 0 1 0 1 0 0 1 0 1 1 0 0 0 0 0 0 1 0 0 0
+##  [1] 0 0 1 1 1 0 0 1 0 0 1 0 1 0 0 1 0 1 0 1 1 0 0 1 0
 ## 
 ## [[2]]
-##  [1] 1 0 0 0 1 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+##  [1] 0 1 0 1 1 0 0 0 0 1 0 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1 1 1 0 0 0 1 0 1 1 0
 ## 
 ## [[3]]
-##  [1] 1 0 0 0 0 0 1 0 1 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1
-## [39] 0 0 0 0 0 0 0 0 0 0 1
+##  [1] 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0
+## [39] 1 0 0 0 0 1 1 1 1 0 0
 ```
 
 
@@ -482,7 +482,7 @@ tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<000000003422C488>"
+## [1] "<0000000038AE8C10>"
 ```
 
 ```r
@@ -490,7 +490,7 @@ tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<00000000341E2670>"
+## [1] "<0000000038A9EDF8>"
 ```
 
 
@@ -508,7 +508,7 @@ mean(X)
 ```
 
 ```
-## [1] 2.14
+## [1] 2.1
 ```
 
 The `rnorm` command *produces* a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
@@ -721,7 +721,7 @@ quantile(X, c(.17, .83))
 
 ```
 ##  17%  83% 
-## 1.17 3.27
+## 1.08 3.19
 ```
 
 Most functions in R have *optional arguments* that let you change how the function performs. The basic mathematical  functions all have the optional argument `na.rm`. This is a switch that determines how the function deals with missing values `NA`. Many optional arguments have *defaults*. The default of `na.rm` is `FALSE` ("return NA in case of NAs in the vector"). By setting it to `TRUE`, they are removed before operation.
@@ -840,106 +840,106 @@ Experiment
 
 Group           age   outcome
 -------------  ----  --------
-control          27       193
-experimental     31       255
-control          32       204
+control          27       208
+experimental     19       243
+control          30       213
+experimental     34       253
+control          26       211
+experimental     26       246
+control          18       215
+experimental     25       239
+control          21       209
+experimental     22       252
+control          29       209
+experimental     22       251
+control          34       212
+experimental     22       254
+control          26       199
+experimental     31       257
+control          19       216
+experimental     21       256
+control          24       204
+experimental     29       256
+control          30       223
+experimental     31       245
+control          25       213
+experimental     24       253
+control          27       219
+experimental     21       266
+control          29       213
+experimental     21       264
+control          31       212
+experimental     33       251
+control          34       193
+experimental     31       258
+control          30       199
+experimental     30       251
+control          27       209
+experimental     25       271
+control          33       224
+experimental     33       260
+control          30       207
+experimental     24       249
+control          31       199
+experimental     34       266
+control          23       201
+experimental     32       254
+control          31       217
+experimental     34       256
+control          24       213
 experimental     28       252
 control          31       223
-experimental     32       248
-control          21       221
-experimental     33       266
-control          31       222
-experimental     19       256
-control          28       213
-experimental     34       252
-control          29       198
-experimental     25       251
-control          18       204
-experimental     31       267
-control          28       226
-experimental     18       253
-control          34       195
-experimental     18       248
-control          29       217
-experimental     25       249
-control          29       210
-experimental     18       254
-control          21       202
-experimental     19       240
-control          19       204
-experimental     18       261
-control          33       198
-experimental     30       242
-control          18       198
+experimental     31       246
+control          31       202
+experimental     19       242
+control          27       194
 experimental     31       261
-control          19       197
-experimental     27       254
-control          22       210
-experimental     27       246
-control          35       185
-experimental     35       267
-control          33       209
-experimental     31       231
-control          34       213
-experimental     32       248
-control          20       204
-experimental     31       264
-control          32       209
-experimental     33       261
-control          24       205
-experimental     35       259
-control          28       204
-experimental     20       259
-control          30       214
-experimental     24       252
-control          33       211
-experimental     22       249
-control          25       209
-experimental     26       241
-control          24       200
-experimental     35       232
-control          23       204
-experimental     26       249
-control          23       199
-experimental     31       264
-control          22       208
-experimental     31       260
-control          29       219
-experimental     23       250
-control          29       202
-experimental     33       246
-control          29       202
-experimental     24       250
-control          33       208
-experimental     25       239
-control          34       209
-experimental     19       244
-control          20       214
-experimental     23       234
-control          29       203
-experimental     34       257
-control          32       213
-experimental     18       247
-control          24       209
-experimental     33       243
-control          27       213
-experimental     29       267
-control          18       209
-experimental     29       253
-control          20       218
-experimental     23       261
-control          25       200
-experimental     22       263
-control          33       207
-experimental     32       236
-control          27       233
-experimental     19       263
-control          34       201
-experimental     24       255
-control          28       220
-experimental     33       252
+control          25       212
+experimental     23       238
+control          28       217
+experimental     23       259
+control          34       208
+experimental     29       238
+control          34       204
+experimental     35       257
+control          34       223
+experimental     33       263
 control          25       217
-experimental     21       263
+experimental     20       235
+control          24       204
+experimental     30       251
+control          33       201
+experimental     18       280
+control          22       227
+experimental     26       257
+control          25       207
+experimental     24       260
+control          23       207
+experimental     25       254
+control          35       202
+experimental     22       254
+control          25       234
+experimental     19       253
+control          20       204
+experimental     33       261
+control          34       211
+experimental     28       243
+control          33       219
+experimental     22       240
+control          19       213
+experimental     31       270
+control          25       209
+experimental     22       254
+control          34       212
+experimental     32       242
+control          27       218
+experimental     28       253
+control          31       206
+experimental     23       267
+control          34       207
+experimental     28       263
+control          30       197
+experimental     35       261
 
 This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above.
 
@@ -963,12 +963,12 @@ print(summary(Experiment))
 
 ```
 ##     Group                age          outcome   
-##  Length:100         Min.   :18.0   Min.   :185  
-##  Class :character   1st Qu.:22.8   1st Qu.:208  
-##  Mode  :character   Median :28.0   Median :231  
-##                     Mean   :26.9   Mean   :230  
-##                     3rd Qu.:32.0   3rd Qu.:252  
-##                     Max.   :35.0   Max.   :267
+##  Length:100         Min.   :18.0   Min.   :193  
+##  Class :character   1st Qu.:23.8   1st Qu.:210  
+##  Mode  :character   Median :28.0   Median :235  
+##                     Mean   :27.4   Mean   :232  
+##                     3rd Qu.:31.0   3rd Qu.:254  
+##                     Max.   :35.0   Max.   :280
 ```
 
 
@@ -982,8 +982,8 @@ str(Experiment)
 ```
 ## Classes 'tbl_df', 'tbl' and 'data.frame':	100 obs. of  3 variables:
 ##  $ Group  : chr  "control" "experimental" "control" "experimental" ...
-##  $ age    : num  27 31 32 28 31 32 21 33 31 19 ...
-##  $ outcome: num  193 255 204 252 223 ...
+##  $ age    : num  27 19 30 34 26 26 18 25 21 22 ...
+##  $ outcome: num  208 243 213 253 211 ...
 ```
 
 
@@ -997,7 +997,7 @@ mean(Experiment$outcome)
 ```
 
 ```
-## [1] 230
+## [1] 232
 ```
 
 As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call 
@@ -1015,7 +1015,7 @@ Experiment[  1, 3]
 
 | outcome|
 |-------:|
-|     193|
+|     208|
 
 ```r
 Experiment[1:3, 2]
@@ -1026,8 +1026,8 @@ Experiment[1:3, 2]
 | age|
 |---:|
 |  27|
-|  31|
-|  32|
+|  19|
+|  30|
 
 ```r
 Experiment[  1,  ]
@@ -1037,7 +1037,7 @@ Experiment[  1,  ]
 
 Group      age   outcome
 --------  ----  --------
-control     27       193
+control     27       208
 
 Addressing one or more elements in square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression `Experiment[,]` is fully valid and will just the return the whole data frame.
 
@@ -1055,7 +1055,7 @@ Exp_classic[1:2,1:2]  ## data.frame
 Group           age
 -------------  ----
 control          27
-experimental     31
+experimental     19
 
 ```r
 Exp_classic[1,]       ## data.frame
@@ -1065,7 +1065,7 @@ Exp_classic[1,]       ## data.frame
 
 Group      age   outcome
 --------  ----  --------
-control     27       193
+control     27       208
 
 ```r
 Exp_classic[,1]       ## vector
@@ -1128,12 +1128,12 @@ head(Experiment)
 
 Group           age   outcome
 -------------  ----  --------
-control         -99       193
-experimental     31       660
-control         -99       204
-experimental     28       252
-control          31       223
-experimental     32       987
+control         -99       208
+experimental     19       660
+control         -99       213
+experimental     34       253
+control          26       211
+experimental     26       987
 
 ```r
 ## setting to NA
@@ -1274,7 +1274,7 @@ simulate ## calling a function without parantheses prints its code
 ##     
 ##     out %>% as_tbl_obs()
 ##     }
-## <bytecode: 0x000000002c4a9748>
+## <bytecode: 0x000000002c4a9ae0>
 ```
 
 ```r
@@ -1414,8 +1414,8 @@ Exp %>%
 
 Condition       mean     sd
 -------------  -----  -----
-control          208   9.00
-experimental     252   9.59
+control          210   8.76
+experimental     255   9.29
 
 
 
@@ -1452,7 +1452,7 @@ BAB1 %>%
   geom_point()
 ```
 
-<img src="Getting_started_with_R_files/figure-html/build_ggpl_2-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/build_ggpl_2-1.png" width="90%" />
 
 Let's take a look at the elements of the command chain: The first two lines pipe the data frame into the ggplot engine.
 
@@ -1505,7 +1505,7 @@ BAB1 %>%
   geom_boxplot()
 ```
 
-<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-32-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-32-1.png" width="90%" />
 
 The box plot maps ToT to y (again). The factor Design is represented as a split on the x-axis. Interestingly, the box plot does not represent the data as raw as in the scatter plot example. The geometry actually performs an analysis on ToT, which produces five statistics: min, first quartile, median, third quartile and max. These statistics define the vertical positions of bars and end points.
 
@@ -1518,7 +1518,7 @@ BAB1 %>%
   geom_point()
 ```
 
-<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-33-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-33-1.png" width="90%" />
 
 Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the box plot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For scatter plots, a geometry that does the job of summarizing the trend is `geom_smooth`. This geometry summarizes a cloud of points by drawing a LOESS-smooth line through it. Note how the color mapping is applied to all geometry layers. 
 
@@ -1530,7 +1530,7 @@ BAB1 %>%
   geom_smooth()
 ```
 
-<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-34-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-34-1.png" width="90%" />
 
 We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored  sigmoid curves. 
 
@@ -1545,7 +1545,7 @@ BAB1 %>%
   facet_grid(Education ~ .)
 ```
 
-<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-35-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-35-1.png" width="90%" />
 
 See, how the `facet_grid` command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:
 
@@ -1558,7 +1558,7 @@ BAB1 %>%
   facet_grid(Education ~ Design)
 ```
 
-<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-36-1.png" width="66%" />
+<img src="Getting_started_with_R_files/figure-html/unnamed-chunk-36-1.png" width="90%" />
 
 Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable, but not vice versa.
 

@@ -536,7 +536,7 @@ G_1 <- P_1 %>%
 G_1
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-24-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-24-1.png" width="90%" />
 
 This example demonstrates how the long format posterior works together with the GGplot graphics engine. A density plot very accurately renders how certainty is distributed over the range of a parameter. In order to produce vertical lines for point estimate and limits, we first make the summary table long, with one value per row. This is not how we would usually like to read it, but it is very efficient for adding  to the plot.
 
@@ -620,7 +620,7 @@ P_1 %>%
   scale_fill_continuous(name="relative frequency")
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-26-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-26-1.png" width="90%" />
 
 
 Let's see how this PD "landscape" actually emerged from the random walk. In the current case, the *parameter space* is two-dimensional, as we have  $\mu$ and $\sigma$. The MCMC procedure starts at a deliberate point in parameter space. At every iteration, the MCMC algorithm attempts a probabilistic jump to another location in parameter space and stores the coordinates. This jump is called probabilistic for two reasons: first, the new coordinates are selected by a random number generator and second, it is either carried out, or not, and that is probabilistic, too. If the new target is in a highly likely region, it is carried out with a higher chance. This sounds circular, but it provenly works. More specifically, the MCMC sampling approach rests on a general proof, that the emerging frequency distribution converges towards the true posterior distribution. That is called *ergodicity* and it means we can take the *relative frequencies* of jumps into a certain area of parameter space as an approximation for our degree of belief that the true parameter value is within this region.
@@ -646,7 +646,7 @@ G_random_walk <-
 G_random_walk
 ```
 
-<img src="Classic_linear_models_files/figure-html/99_seconds_random_walk-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/99_seconds_random_walk-1.png" width="90%" />
 
 
 The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models [#MLM] have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting many MPDs is the violin plot, which packs a bunch of densities and therefore can be used when models of many more dimensions.
@@ -659,7 +659,7 @@ P_1 %>%
   ylim(0, NA)
 ```
 
-<img src="Classic_linear_models_files/figure-html/99_seconds_post-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/99_seconds_post-1.png" width="90%" />
 
 
 
@@ -729,7 +729,7 @@ mascutils::expand_grid(intercept = c(0, 1, 2),
   facet_grid(~intercept)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-28-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-28-1.png" width="90%" />
 
 
 
@@ -770,7 +770,7 @@ BAB1 %>%
   geom_smooth(se = F, fullrange = F)
 ```
 
-<img src="Classic_linear_models_files/figure-html/BAB_G_eda_1-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/BAB_G_eda_1-1.png" width="90%" />
 
 In fact, the BrowsingAB simulation contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we  make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric in this case. Therefore, it is treated as a *metric predictor* (sometimes also called covariate) <!-- #51-->.
 
@@ -831,7 +831,7 @@ BAB1 %>%
   geom_smooth(se = F, method = "lm", fullrange = T)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-31-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-31-1.png" width="90%" />
 
 By shifting the age variable, the whole data cloud is moved to the left. To see what happens on the inferential level, we repeat the LRM estimation with the two shifted variables:
 
@@ -950,7 +950,7 @@ D_ratings %>%
   geom_histogram() + xlim(0, 10)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-39-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-39-1.png" width="90%" />
 
 The first problem is that rating scales have been designed with different end points. The first step when using different rating scales is shifting the left-end point to zero and dividing by the range of the measure (`upper - lower` boundary). That brings all items down to the range between zero and one. Note how the following tidy code joins in a table that holds the properties of our items. 
 
@@ -976,7 +976,7 @@ D_ratings %>%
   xlim(0,1)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-40-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-40-1.png" width="90%" />
 
 This partly corrects the horizontal shift between scales. However, the ratings on the third item still are shifted relative to the other two. The reason is that the first two items have the neutral zone right in the center, whereas the third item is neutraul at its left-end point. The second inconsistency is that the second item uses rather extreme anchors (end point labels), which produces a tight accumulation in the center of the range (with a lot of polite people in the sample, at least). The three scales have been rescaled by their *nominal range*, but they differ in their observed variance. 
 
@@ -994,7 +994,7 @@ D_ratings %>%
    geom_histogram(bins = 100)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-41-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-41-1.png" width="90%" />
 
 By z-transformation, the three scales now exhibit the same mean location and the same dispersion. This could be used to combine them into one general score. Note however, that information is lost by this process, namely the differences in location or dispersion. If the research question is highly detailed, such as "Is the design consistently rated low on uncanniness?", this can no longer be answered from the z-transformed variable.
 
@@ -1016,7 +1016,7 @@ D_pumps %>%
   geom_density()
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-43-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-43-1.png" width="90%" />
 
 
 
@@ -1058,7 +1058,7 @@ D_cor %>%
   geom_smooth(method = "lm", se = F)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-46-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-46-1.png" width="90%" />
 
 
 Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation [REF transformations] and that a covariance is the mean squared deviance from the population mean. This is how the correlation is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
@@ -1270,7 +1270,7 @@ BAB1 %>%
 	facet_grid(Design~.)
 ```
 
-<img src="Classic_linear_models_files/figure-html/eda_anova-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/eda_anova-1.png" width="90%" />
 
 This doesn't look too striking. We might consider a slight advantage for design B, but the overlap is immense. We perform the CGM. Again, this is a two-step procedure:
 
@@ -1535,7 +1535,7 @@ coef(M_AMM_1) %>%
   geom_errorbar()
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-66-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-66-1.png" width="90%" />
 
 The plot shows the absolute means and we can easily discover that Task 2 is by far the longest and that tasks differ a lot, indeed. None of these relations can easily be seen in the CGM plot. Note that the AMM is not a different model than the treatment effects model. It is just a *different parametrization*, which makes interpretation easier. Both models produce the exact same predictions.
 
@@ -1596,7 +1596,7 @@ BAB1 %>%
   geom_boxplot()
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-71-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-71-1.png" width="90%" />
 
 The following changes the order of levels of GGplot engine is respecting that, and so is the regression engine, putting the intercept on level Low.
 
@@ -1613,7 +1613,7 @@ BAB1 %>%
   scale_x_continuous(breaks=1:3)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-72-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-72-1.png" width="90%" />
 
 Note that R also knows a separate variable type called ordered factors. This only seemingly is useful. In fact, if we run a linear model with an ordered factor as predictor, the estimated model will be so unintelligible that I will not attempt to explain it here.
 
@@ -1663,7 +1663,7 @@ tibble(session = as.integer(1:12)) %>%
   scale_x_continuous(breaks=1:12)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-77-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-77-1.png" width="90%" />
 
 
 
@@ -1682,7 +1682,7 @@ D_Novel %>%
   scale_x_continuous(breaks=1:3)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-78-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-78-1.png" width="90%" />
 
 This is what a factorial model with *stairway dummy coding* does. The first coefficient $\beta_0$ is the starting point, for example the first session, and all other coefficients ( $\beta_1, \beta_2$) are a sequence of step sizes. The expected value $\mu_i$ for session $K$, using stairways dummies $K_0, K_1, K_2$ is:
 
@@ -2060,7 +2060,7 @@ G_eda_4 <-
 G_eda_4
 ```
 
-<img src="Classic_linear_models_files/figure-html/AUP_corr_predictors-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/AUP_corr_predictors-1.png" width="90%" />
 
 ```r
 detach(AUP)
@@ -2201,7 +2201,7 @@ coef(M_amfm_1) %>%
   geom_line(aes(group = Gender))
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-98-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-98-1.png" width="90%" />
 
 If the two effects were truly independent, these two lines had to be parallel, because the effect of Gender had to be constant. What this graph now suggests is that there is an interaction between the two effects. There is a tiny advantage for female users with design A, whereas men are faster with B with about the same difference. Because these two effects cancel each other out, the combined effect of Gender in model `M_mpm_1` was so close to zero. 
 
@@ -2303,7 +2303,7 @@ coef(M_ampm_1) %>%
 ## 2 B           157. 1.05
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-106-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-106-1.png" width="90%" />
 
 
 
@@ -2405,7 +2405,7 @@ BAB1 %>%
   geom_smooth(se = F, aes(col = "combined"))
 ```
 
-<img src="Classic_linear_models_files/figure-html/glm_EDA_3-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/glm_EDA_3-1.png" width="90%" />
 
 The graph suggests that designs A and B differ in the effect of age. Design B appears to perform much better with younger users. At the same time, it seems as if A could be nmore favorable for users at a high age. By adding the conditional effect `Design:age_shft` the following model estimates the linear relationship for the designs separately. This is essentially the same model as the absolute mixed-predictor model M_ampm_1 [#MPM], which also had four coefficients, the intercepts and slopes of two straight lines. We have already seen how the GRM and the AMPM produce different fitted responses. Predictions are independent of contrast coding, but coefficients are not. The following conditional model uses treatment contrasts, like the GRM, and we can compare the coefficients side-by-side.
 
@@ -2477,7 +2477,7 @@ BAB1 %>%
   geom_boxplot()
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-113-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-113-1.png" width="90%" />
 
 
 In a first exploratory plot it looks like the ratings are pretty consistent across gender, but with a sensitive topic like that, we better run a model, or rather two, a plain MFM and a conditional MFM:
@@ -2517,7 +2517,7 @@ T_ratings %>%
   geom_point(size = 2)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-115-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-115-1.png" width="90%" />
 
 The CLU plots above show both models in comparison. Both models use treatment effects and put the intercept on female users with design A. We observe that there is barely a difference in the estimated intercepts. The coefficient DesignB means something different in the models: in the MFM it represents *the* difference between Designs. In the CMFM, it is the difference by design *with female users*. The same is true for  GenderM, which is a general effect in MFM and a local effect in the CMFM, the gender difference with design A. For that reason, it is *not useful* to speak of these coefficients as *main effects*. They are main effects in a plain MFM, but once the effects become conditional, there is nothing such as a main effect any more. At least, this is the case for treatment effect coding and stairways coding (as we will see next).
 
@@ -2541,7 +2541,7 @@ tribble(~Design,     ~Gender, ~mean_rating,
   geom_line(aes(group = Gender))
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-116-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-116-1.png" width="90%" />
 
 If something like this happens in a real design study, it may be a good idea to find out, why this difference appears and whether there is a way to make everyone equally happy.  These are questions a model cannot answer. But a CMFM can show, when effects are conditional and when they are not. Much of the time, gender effects is what you rather don't want to have, as it can become a political problem. If conditional adjustment effects are close to zero, that is proof (under uncertainty) that an effect is unconditional. If that is the case, modelling it as a true main effect in a plain MFM is justified, and one is out of the trouble.
 
@@ -2564,7 +2564,7 @@ D_agg %>%
   ylim(0,350)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-118-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-118-1.png" width="90%" />
 
 We note that the learning curves do not cross, but are not parallel either, which means the stairway coefficients will be different. We need a conditional model.
 
@@ -2721,7 +2721,7 @@ In this and the next section, we will use conditional effects to account for non
 		facet_grid(.~effect)
 ```
 
-<img src="Classic_linear_models_files/figure-html/interaction_effects-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/interaction_effects-1.png" width="90%" />
 
 ```r
 Interactions <- expand.grid(effect = c("saturation", "amplification"), 
@@ -2745,7 +2745,7 @@ grid.arrange(
 )
 ```
 
-<img src="Classic_linear_models_files/figure-html/interaction_effects-2.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/interaction_effects-2.png" width="90%" />
  
 
 A major flaw with the linear model is that it presumes the regression line to rise or fall infinitely. However, *in an endless universe everything has boundaries*. Just think about your performance in reading this text. Several things could be donme to improve reading performance, such as larger font size, simpler sentence structure or translation into your native language.  Still, there is a hard lower limit for time to read, just by the fact, that reading involves saccades (eye movements) and these cannot be accelerated any further. The time someone needs to read a text is limited by fundamental cognitive processing speed. We may be able to reduce the inconvenience of deciphering small text, but once an optimum is reached, there is no further improvement. Such boundaries of performance inevitably lead to non-linear relationships between predictors and outcome. 
@@ -2770,7 +2770,7 @@ T_means %>%
   ylim(0,2.5)
 ```
 
-<img src="Classic_linear_models_files/figure-html/eda_headache-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/eda_headache-1.png" width="90%" />
 
 
 When neither pill is given a slight spontaneous reduction seems to occur, which is the placebo-effect. Both pills alone are much stronger than te placebo and giving them both has the most beneficial effect. However, the combined effect is just a tad stronger than the effect of A and stays far from being the sum. One could also say, that the net effect of B is weaker when A has been given first. When the effect of one predictor depends on the level of another, this is just a conditional effect.
@@ -2886,7 +2886,7 @@ D_1 %>%
   geom_boxplot()
 ```
 
-<img src="Classic_linear_models_files/figure-html/reading_expl_1-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/reading_expl_1-1.png" width="90%" />
 
 We see immediately, that both design choices have an impact: black letters, as well as larger letters are faster to read. But, do they add up? Or do both factors behave like headache pills, where more is more, but less than the sum. Clearly, the 12pt-black group could read fastest on average. Neither with large font, nor with optimal contrast alone has the design reached a boundary, i.e. saturation. We run two regression models, a plain MFM and a conditional MFM, that adds an interaction term. We extract the coefficients from both models and view them side-by-side:
 
@@ -3001,7 +3001,7 @@ Since the coefficient table also contains the 95% certainty limits, we can produ
 G_amm + geom_errorbar(aes(ymin = lower, ymax = upper), width = .2)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-131-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-131-1.png" width="90%" />
 
 Still, it gives the observer some sense of the overall level of certainty. And, when two 95% CIs do not overlap, that means that the difference is different from zero with 95% credibility, at least. Another useful Ggplot geometry is violin plots, as these make the overlap between CIs visible and reduce visual clutter caused by all these vertical error bars. 
 
@@ -3027,7 +3027,7 @@ G_amm +
               width = .2)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-132-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-132-1.png" width="90%" />
 
 
 
@@ -3072,7 +3072,7 @@ D_1 %>%
   ylim(0, 0.5)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-135-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-135-1.png" width="90%" />
 
 From the boxplot it seems that both predictors have a positive effect on intention to play. However, it remains unclear whether there is a conditional effect. In absence of a better visualization, we have to rely fully on the numerical estimates of a conditional linear regression model (CMRM).
 
@@ -3199,7 +3199,7 @@ D_1 %>%
   geom_boxplot()
 ```
 
-<img src="Classic_linear_models_files/figure-html/Sleep_expl-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/Sleep_expl-1.png" width="90%" />
 
 Using a 2x2 model including a conditional effect, we examine the conditional association between noise and sleepiness.
 
@@ -3232,7 +3232,7 @@ Recall, that treatment contrasts were used, where all effects are given relative
 These findings reverb with a well known in Psychology of Human Factors, the Yerkes-Dodson law. The law states that human performance at cognitive tasks is influenced by arousal. The influence is not linear, but better approximated with a curve as shown in the figure below. Performance is highest at a moderate level of arousal. If we assume that sleepy participants in Corcona's study showed low performance due to under-arousal, the noise perhaps has increased the arousal level, resulting in better performance. If we accept that noise has an arousing effect, the null effect of noise on rested participants stands in opposition to the Yerkes-Dodson law: if rested participants were on an optimal arousal level, additional arousal would usually have a negative effect on performance. There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal arousal level, noise could have pushed them right to the opposite point.
 
 <!-- #76 -->
-<img src="Classic_linear_models_files/figure-html/Yerkes_Dodson_1-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/Yerkes_Dodson_1-1.png" width="90%" />
 
 
 
@@ -3272,7 +3272,7 @@ tibble(hl = seq(-1, 1, length.out = 100),
   geom_line()
 ```
 
-<img src="Classic_linear_models_files/figure-html/uncanny_valley-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/uncanny_valley-1.png" width="90%" />
 
 
 [Mathur et al.] study aimed at rendering the association between human-likeness and liking at full range. They collected 60 pictures of robots and attached a score for human likeness to them. Then they asked participants how much they liked the faces. Fort the data analysis they calculated an average score of likability per robot picture.  Owing to the curved shape of the uncanny valley, linear regression is not applicable to the problem. Instead, Mathur et al. applied a third degree polynomial term.
@@ -3302,7 +3302,7 @@ D_poly %>%
   facet_wrap(~polynomial)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-145-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-145-1.png" width="90%" />
 
 
 Mathur et al. argue that the Uncanny Valley curve possesses two stationary points, with a slope of zero:  the valley is a local minimum and represents the deepest point in the valley,  the other is a local maximum and marks the shoulder left of the valley. Such a curvature can be approximated with a polynomial of (at least) third degree, which has a constant term $\beta_0$, a linear slope $x\beta_1$, quadratic component $x^2\beta_2$ and a cubic component $x^3\beta_3$.
@@ -3459,7 +3459,7 @@ gridExtra::grid.arrange(
 )
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-151-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-151-1.png" width="90%" />
 
 With reasonable certainty, we can say that the trough is at approximately two-thirds of the huMech score range. <!-- #80 --> In contrast, the illustration of the uncanny valley as they used to be perpetuated from the original source, place the trough at about four quarters of the scale. The Uncanny Valley effect seems to set in "earlier" than we thought.
 
@@ -3508,7 +3508,7 @@ post_pred(M_poly_3, thin = 10) %>%
   stat_smooth(geom='line', alpha=0.2, se=FALSE)
 ```
 
-<img src="Classic_linear_models_files/figure-html/unnamed-chunk-155-1.png" width="66%" />
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-155-1.png" width="90%" />
 
 <!-- Note that -->
 

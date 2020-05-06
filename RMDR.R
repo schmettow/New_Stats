@@ -126,13 +126,13 @@ library(syncenv)
 
 #opts_knit$set(kfigr.prefix = T)
 
-opts_chunk$set(echo = purp.rtut, 
+opts_chunk$set(echo = T, 
                warning = purp.debg, 
                message = purp.debg,
                eval = purp.book, 
                results = "markup",
                cache = 0,
-               out.width = "66%")
+               out.width = "90%")
 
 options(digits=3)
 

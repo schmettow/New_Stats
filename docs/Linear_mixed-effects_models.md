@@ -78,11 +78,11 @@ summarize(mean_Part = mean(ToT)) %>%
 
 Part    mean_Part
 -----  ----------
-14           15.5
+11           14.8
 5            16.0
-25           15.7
-23           12.0
 20           19.1
+22           12.7
+25           15.7
 
 Such a grouped summary can be useful for situations where we want  to directly compare individuals, like in performance tests. In experimental research, individual participants are of lesser interest, as they are exchangeable entities (a sample). The total effect on the population is usually of greater The amount of differences can be summarized by the standard deviation of participant-level estimates:
 
@@ -182,11 +182,11 @@ ranef(P_hf) %>% sample_n(5)
 
 |re_entity | center| lower| upper|
 |:---------|------:|-----:|-----:|
-|16        | -0.012| -3.42|  3.04|
-|17        | -0.254| -4.33|  2.22|
-|24        | -0.496| -5.04|  1.89|
-|7         | -0.868| -6.21|  1.44|
-|4         |  0.867| -1.27|  5.87|
+|12        |  0.268| -2.28|  4.39|
+|25        | -0.023| -3.41|  3.23|
+|23        | -0.458| -4.88|  1.90|
+|9         |  0.353| -2.09|  4.57|
+|11        | -0.079| -3.64|  2.76|
 
 ```r
 grpef(P_hf)
@@ -219,7 +219,7 @@ data_frame(mu_i = ranef(P_hf)$center +
   geom_histogram()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-8-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-8-1.png" width="90%" />
 
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. One heuristic is to compare it against the residual variance, which is:
 
@@ -286,7 +286,7 @@ D_slpstd %>%
   labs(color = "Smoothing function")
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-11-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-11-1.png" width="90%" />
 
 A more compact way of plotting multi-level slopes is the spaghetti plot below. By superimposing the population level effect, we can clearly see that participants vary in how sleep deprivation delays the reactions.
 
@@ -301,7 +301,7 @@ D_slpstd %>%
   labs(color = NULL)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-12-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-12-1.png" width="90%" />
 
 For a single level model, the formula would be `RT ~ 1 + days`, with the intercept being RT at day Zero and the coefficient `days` representing the change per day of sleep deprivation. The multi-level formula retains the population level and adds the participant-level term as a conditional statement: the effect depends on whom you are looking at.
 
@@ -351,7 +351,7 @@ ranef(M_slpsty_1) %>%
   geom_crossbar()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-17-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-17-1.png" width="90%" />
 
 The multi-level regression model is mathematically specified as follows. Note how random coefficients $\beta_{.(Part)}$ are drawn from a Gaussian distribution with their own standard deviation, very similar to the errors $\epsilon_i$.
 
@@ -381,7 +381,7 @@ posterior(M_slpsty_1) %>%
   geom_density()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-18-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-18-1.png" width="90%" />
 
 
 
@@ -466,7 +466,7 @@ gridExtra::grid.arrange(nrow = 1,
   ylim(0, 60))
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-25-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-25-1.png" width="90%" />
 
 Note
 
@@ -506,7 +506,7 @@ T_amm %>%
   geom_line()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-27-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-27-1.png" width="90%" />
 
 In the first place, the convenience of (true) multi-level models is that  both (or more) levels are specified and estimated as one model. For the multi-level models that follow, we will use a specialized engine, `stan_glmer()` (generalized mixed-effects regression) that estimates both levels simultaneously and produce multi-level coefficients. The multi-level CGM we desire is written like this:
 
@@ -541,7 +541,7 @@ ranef(M_mlcgm) %>%
   geom_histogram()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-29-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-29-1.png" width="90%" />
 
 The distribution of random effects should resemble a *Gaussian distribution*. It is usually hard to tell with such small sample sizes, but it seems that the Intercept effects have a left skew. As we will see in chapter [#GLM], this problem is not surprisung and can be resolved. The distributions are also centered at zero, which is not a coincidence, but the way random effects are designed: deviations from the population mean. That opens up two interesting perspectives: first, random effects look a lot like residuals [#residuals], and like those we can summarize a random effects vector by its *standard deviation*, using the `grpef`  command from package Bayr.
 
@@ -764,7 +764,7 @@ T_pred %>%
   geom_smooth(se = F)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-37-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-37-1.png" width="90%" />
 
 This spaghetti plot broadly confirms, that all participants experience the Uncanny Valley. For a more detailedanalysis, a facetted plot would be better suited, allowing to inspect the curves case-by-case. We proceed directly to a more formal method of testing universality: In [#test_statistic] we have seen how the posterior distributions of shoulder and trough can be first derived and then used to give a more definitive answer on the shape of the polynomial. It was argued that the unique pattern of the Uncanny Valley is to have a shoulder left of a trough. These two properties can be checked by identifying the stationary points. The proportion of MCMC iterations that fulfill these properties can is evidence that the effect exists. For testing universality of the effect, we just have to run the same analysis on participant-level. Since the participant-level effects are deviations from the population-level effect, we first have to add the population level effect to the random effects (using the Bayr command `re_scores`), which creates absolute polynomial coefficients. The two command `trough` and `shoulder` from package Uncanny ((github.com/schmettow/uncanny)[http://github.com/schmettow/uncanny]) require a matrix of coefficients, which is done by spreading out the posterior distribution table.
 
@@ -802,7 +802,7 @@ T_univ_uncanny %>%
   theme(axis.text.x = element_text(angle = 45))
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-40-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-40-1.png" width="90%" />
 
 The above plot shows the probability that a participant experiences the Uncanny Valley, as defined by polynomial stationary points. Everyone in our sample experienced the Uncanny Valley effect. Every single MCMC step (remember, every step is a complete polynomial) is positive. This complete absence of counter-evidence may raise suspicions. If this is all based on a random walk, we should at least see a few deviations. The reason for that is simply that the number of MCMC runs puts a limit on the resolution. If we increase the number of iterations enough, we would eventually see few deviant sample drop and measure the tiny chance that a participant does not fall for the Uncanny Valley.
 
@@ -840,7 +840,7 @@ P_scores %>%
   theme(axis.text.x = element_text(angle = 45))
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-43-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-43-1.png" width="90%" />
 
 All, but participants 309 and 335 almost certainly have positive slopes, experiencing a detoriation of reaction time. Participant 335 we had identified earlier by visual inspection. Now, that we account for the full posterior distribution, it seems a little less suspicious. Basically, the model is almost completely undecisive whether this is a positive and negative effect. The following plot shows  all the possible slopes the MCMC random walk has explored. While participant 335 clearly is an outlier, there is no reason to get too excited and call  him or her a true counter-example from the rule that sleep deprivation reduced performance.
 
@@ -855,7 +855,7 @@ P_scores %>%
   geom_abline(aes(intercept = 0, slope = value), alpha = .01)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-44-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-44-1.png" width="90%" />
 
 
 ```r
@@ -1041,7 +1041,7 @@ Egan's claim is a two-way encounter to which we added the tasks as a third popul
 
 
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-50-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-50-1.png" width="90%" />
 
 
 There seems to be substantial variation between participants, tasks and items, but very little variation in designs. We build a GMM for the encounter of the four populations.
@@ -1088,7 +1088,7 @@ P_1 %>%
   facet_grid(re_factor~.)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-52-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-52-1.png" width="90%" />
 
 <!-- Before we formally evaluate Egan's claim, there are a few noteworthy remarks on how to read the posteriors, when the parameter is a group-level standard deviation. First, standard deviation is on the same scale as the measured variable. Usually, this makes standard deviations  rather intuitive to interpret. This is, *unless* you have obscured your variable by log transformation, which is the major disadvantage of this procedure.  -->
 
@@ -1201,7 +1201,7 @@ bind_rows(D_team_mean,
   geom_point()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/CUE8_eda-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/CUE8_eda-1.png" width="90%" />
 
 ```r
 detach(CUE8)
@@ -1380,7 +1380,7 @@ T_shrinkage %>%
   geom_point(aes(y = ranef, col = "ranef"), alpha = .5)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/CUE8_fe_vs_re-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/CUE8_fe_vs_re-1.png" width="90%" />
 
 ```r
 detach(CUE8)
@@ -1449,26 +1449,26 @@ D_CTT %>%
 
  Part   score
 -----  ------
-    1     912
-    2     989
-    3     882
-    4     827
-    5     956
-    6     844
-    7     941
-    8     882
-    9     917
-   10    1077
-   11     877
-   12     930
-   13     912
-   14     906
-   15    1015
-   16     971
-   17     875
-   18     812
-   19    1059
-   20     731
+    1     830
+    2     943
+    3     887
+    4     893
+    5    1019
+    6    1063
+    7     956
+    8     868
+    9     900
+   10    1036
+   11     929
+   12     889
+   13     934
+   14     969
+   15     904
+   16     794
+   17     951
+   18     899
+   19     877
+   20     716
 
 Note how the table only contains the identifiers, but no additional information. The trials in the mental rotation task are assumed to be exchangeable. This is how the so-called *classical test theory* approach works. In classical test theory, the observed test score $y_i$ for participant $i$ is composed of the the true score of participant $i$, $\mu_i$, and a Gaussian measurement error $\epsilon_{ij}$.
 
@@ -1515,14 +1515,14 @@ D_long %>%
 
  Part        1        2        3        4        5
 -----  -------  -------  -------  -------  -------
-    1    0.161    0.774    1.837   -0.724   -0.432
-    2   -0.270    0.599   -0.367   -0.522    0.340
-    3    2.170    0.878    1.515    1.210   -0.933
-    4   -0.173    0.321    1.305    1.026   -0.069
-    5    1.167    0.186   -2.575    2.254   -2.356
-    6   -0.099   -0.155    2.849    0.352   -0.071
-    7   -3.100   -1.431   -0.940    1.619   -1.930
-    8   -0.442   -0.807    1.872   -0.361   -1.433
+    1   -2.251   -0.640    0.521   -0.153    0.002
+    2   -0.702   -0.103   -0.900    0.019   -1.399
+    3    2.098   -0.551   -0.843    0.869   -0.218
+    4    1.684    0.440   -2.936   -0.105   -0.856
+    5   -0.460    0.208   -0.156   -0.064    0.322
+    6   -1.212    0.191   -0.183   -0.516   -1.866
+    7    0.598    0.906   -0.106    0.176   -0.065
+    8    0.783    0.668    0.827   -0.973   -0.430
 
 Psychometric programs often require matrix data, but for a multi-level models we need the long format. IRM models regard items as  populations, too, and the basic IRT model is a cross-classified intercept-only model [#crossover].
 
@@ -1574,7 +1574,7 @@ T_ranef %>%
   ylim(-2, 2)
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-66-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-66-1.png" width="90%" />
 It turns out that the 32 items of the test cover the range of very low to moderately high geekism quite well. The upper 20 percent are not represented so well, as it seems. If we were to use the scale to discriminate between geeks and totally geeks, more strong item had to be added.
 
 ### Reliability 
@@ -1613,11 +1613,11 @@ sample_n(T_ranef, 5)
 
 re_factor   re_entity    Session1   Session2
 ----------  ----------  ---------  ---------
-Item        Geek14          0.432      0.334
-Item        Geek25          0.634      0.515
-Item        Geek21          1.235      0.937
-Part        66             -0.962     -0.841
-Part        5              -1.129     -1.024
+Part        30             -0.497     -0.453
+Item        Geek02          0.663      0.553
+Part        10             -0.100     -0.095
+Item        Geek06          0.548      0.431
+Part        32              1.511      1.387
 
 
 
@@ -1635,7 +1635,7 @@ plot_stability <-
 T_ranef %>% plot_stability()
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-70-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-70-1.png" width="90%" />
 
 The participant scores are highly reliable. If you measure the score of a person, you almost precisely know the result of another measure a few hours later. At least in short terms, the Geekism construct - whatever it may truly be - can be measured with almost no error. Only ever so slightly is there a trend that lower scores get higher the second time and higher get lower, which could be called a trend towards the average. Something during the experiment has led participants to report a more mediocre image of themselves.
 
@@ -1754,11 +1754,11 @@ RK_1 %>%
 
 Part    Item   Session    response
 ------  -----  --------  ---------
-p1_10   nE8    3            -0.943
-p2_04   nE5    3            -0.432
-p2_03   nE7    1            -0.333
-p1_07   nE8    1            -0.428
-p2_10   nE8    1            -0.040
+p2_03   nE7    2            -0.572
+p2_01   nE7    2            -0.828
+2       nE6    3            -0.412
+p1_07   nE5    3            -0.245
+p1_04   nE3    2            -0.747
 
 With this data we seem to be standing on familiar psychometric grounds: Items are used on persons and we have three measures over time. We can calculate test-retest stability of items and persons using a multi-level model. Voila! Here are your correlations, person and item stability - with credibility limits. Wait a second! What is being measured here? Persons? No, robot faces. The original question was, how human-likeness of robot faces is related to perceived eeriness of robot faces and the Eeriness scale intended purpose is the comparison of designs, not persons. For example, it could be used by robot designers to check that a design does not trigger undesireable emotional responses. Without knowing the humen-likeness scores, robot faces become just a naked *sample of designs* [#crossover]:
 
@@ -1815,7 +1815,7 @@ M_dsgmx_1 %>%
 ## 6 Part      Session2 Session3  0.815 0.567 0.933
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-81-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-81-1.png" width="90%" />
 
 
 ```r
@@ -1855,7 +1855,7 @@ ranef(P_1) %>%
   theme(axis.text.x = element_text(angle = 45))
 ```
 
-<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-84-1.png" width="66%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-84-1.png" width="90%" />
 
 
 The most simple form is the Rasch model in item response theory (IRT), where participants respond to a set of items and the response is either correct or incorrect. The outcome variable response is usually coded as 0 = incorrect and 1 = correct. Apparently, such a variable does nowhere near satisfy the assumption of linear models. It turns out that the Rasch model can be interpreted as cross-classified random effects in a *logistic regression* \@ref(logistic_regression). Logistic regression is a member of the General*ized* Linear family of models, which will be introduced in the next chapter.

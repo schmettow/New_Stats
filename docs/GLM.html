@@ -315,7 +315,7 @@ y_i \sim \textrm{Norm}(\mu_i,\sigma)
 <a class="sourceLine" id="cb393-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span> session, <span class="dt">y =</span> deviations)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb393-5" title="5"><span class="co">#  geom_jitter() +</span></a>
 <a class="sourceLine" id="cb393-6" title="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-2-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
 <p>We used an OFM with stairways coding to account for this non-linearity, but that has one disadvantage. From a practical perspective it would interesting to know, how performance improves when practice continues. What would be performance in (hypothetical) sessions 4, 5 and 10. Because the OFM just makes up one estimate for every level, there is no way to get predictions beyond the observed range.</p>
 <p>With an LRM, the slope parameter applies to all steps, which gives us the possibility of deriving predictions beyond the observed range. To demonstrate this on the deviations from optimal path, the following code estimates a plain LRM and then injects some new (virtual) data to get predictions beyond the observed range:</p>
 <div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb394-1" title="1">M_LRM_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(deviations <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>session, <span class="dt">data =</span> D_Novel)</a></code></pre></div>
@@ -333,13 +333,13 @@ y_i \sim \textrm{Norm}(\mu_i,\sigma)
 <a class="sourceLine" id="cb395-12" title="12"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb395-13" title="13"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
 <pre><code>## **  10 predictions (scale: resp) with 95% credibility limits (five shown below) 
-##   Obs center lower upper
-## 1   3  0.429 -1.63  2.62
-## 2   4  0.313 -1.85  2.56
-## 3   5  0.112 -2.02  2.32
-## 4   8 -0.284 -2.67  1.99
-## 5   9 -0.511 -2.78  1.84</code></pre>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="66%" /></p>
+##   Obs  center lower upper
+## 1   4  0.2951 -1.83  2.44
+## 2   6 -0.0323 -2.25  2.19
+## 3   7 -0.1917 -2.42  2.06
+## 4   9 -0.5018 -2.78  1.78
+## 5  10 -0.6545 -3.01  1.73</code></pre>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" title="1"><span class="kw">detach</span>(IPump)</a></code></pre></div>
 <p>When we use a linear model when there truly is an asymptotic curve, negative values are produced, which are impossible. As the graph shows, this is most pronounced the further we move away from teh observed range. But, it also effects the observed levels, as the lower credibility limits are negative, too.</p>
 <p>Such a non-linearity happens to all outcome variables that have natural lower or upper boundaries, and that includes all outcome variables in the universe, except its very own spatial extension, perhaps. Speed of light can only be approached asymptotically (if you have some mass to carry around) and even the darkest intergalactic spaces are lit by cosmic background radiation and therefor have a temperature just slightly above absolute zero. It is an unescapable truth, that all our ephemeral measures in design research have boundaries and therefore suffer from wrong predictions:</p>
@@ -386,7 +386,7 @@ Generalized linear models use a simple mathematical trick that keeps linear term
 <a class="sourceLine" id="cb398-18" title="18">  <span class="kw">plot_glmfun</span>(<span class="dt">f =</span> exp, <span class="st">&quot;exponential mean function&quot;</span>,  <span class="fl">-3.5</span>, <span class="dv">1</span>, <span class="dt">dir =</span> <span class="st">&quot;mean&quot;</span>),</a>
 <a class="sourceLine" id="cb398-19" title="19">  <span class="kw">plot_glmfun</span>(<span class="dt">f =</span> logit, <span class="st">&quot;logit link function&quot;</span>, <span class="fl">0.01</span>, <span class="fl">.99</span>),</a>
 <a class="sourceLine" id="cb398-20" title="20">  <span class="kw">plot_glmfun</span>(<span class="dt">f =</span> inv_logit, <span class="st">&quot;logistic mean function&quot;</span>,  <span class="dv">-5</span>, <span class="dv">5</span>, <span class="dt">dir =</span> <span class="st">&quot;mean&quot;</span>))</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-7-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 <p>Using the link function comes at a cost: the linear coefficients <span class="math inline">\(\beta_i\)</span> is losing its interpretation as increment-per-unit and no longer has a natural interpretation. Later we will see that logarithmic and logit scales gain an intuitive interpretation when parameters are exponentiated, <span class="math inline">\(\textrm{exp}(\beta_i)\)</span> (<a href="GLM.html#poisson-regression">6.2.1</a> and <a href="#logistic-regression"><strong>??</strong></a></p>
 <!--
 Who needs a well-defined link between observations and fitted responses? Applied design researchers do when predictions are their business. Reconsider the Sec99 case study, where the population mean of ToT was predicted from a sample. This is a statement on the status quo, and therefore it is not a prediction, in a strict sense. Comparing designs A and B is status quo, too, as both designs do exist. Generally, we  classify all research questions as *status quo* that stay confined in the range of $y_i$. In the IPump study, however, it is compelling to ask: "how will the nurse perform in session 4?". "When will she reach error-free operation?". These are predictive questions, where the question reaches into the unknown and link functions become utterly important.
@@ -408,7 +408,7 @@ Who needs a well-defined link between observations and fitted responses? Applied
 <a class="sourceLine" id="cb400-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb400-5" title="5"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">xintercept =</span> <span class="dv">0</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb400-6" title="6"><span class="st">  </span><span class="kw">coord_flip</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-9-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 <p>We immediatly see, that simulation with Gaussian distributions is rather inappropriate: a substantial number of simulated observations is <em>negative</em>, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution as Gaussian distributions support the full range of real numbers, no matter how small the variance is (but not zero). There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until <code>pumps</code> contains exclusively positive numbers (and zero), would compromise the idea of random numbers itself. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.</p>
 <p>Recall how linearity is gradually bent when a magnitude approaches its natural limit. A similar effect occurs for distributions. Distributions that respect a lower or upper limit get squeezed like chewing gum into a corner when approaching the boundaries. Review Binomial and Poisson distribution in [#EBS] for illustrations. As a matter of fact, a lot of real data in design research is skewed that way, whereas the Gaussian distribution eternally claims symmetry.</p>
 <p>A common misconception is that random distributions approach the Gaussian distribution with larger sample sizes. But, what really happens only, is that increasing the number of observations renders the true distribution more clearly.</p>
@@ -460,7 +460,7 @@ Generalized Linear Models give the researcher a larger choice for modelling the 
 <a class="sourceLine" id="cb401-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> km, <span class="dt">y =</span> min)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb401-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb401-7" title="7"><span class="st">  </span><span class="kw">geom_quantile</span>(<span class="dt">quantiles =</span> <span class="kw">c</span>(.<span class="dv">25</span>, <span class="fl">.5</span>, <span class="fl">.75</span>))</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-11-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
 <p>Again, we get some impossible negative data points, but what is also unrealistic is that persons who live right around the corner experience the same range of possible travel times than people who drive dozens of kilometers. Most of the time, we intuit the dispersion of randomness to increase with the magnitude.</p>
 <p>Most other distributions do not have constant variance. For example, a Gamma distribution takes two parameters, shape <span class="math inline">\(\alpha\)</span> and scale <span class="math inline">\(\tau\)</span> and both of them influence mean and variance of the distribution, such that the variance increases by the mean by square:</p>
 <p><span class="math display">\[
@@ -475,7 +475,7 @@ E(X) = \alpha \theta\\
 <a class="sourceLine" id="cb402-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> km, <span class="dt">y =</span> min)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb402-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb402-6" title="6"><span class="st">  </span><span class="kw">geom_quantile</span>(<span class="dt">quantiles =</span> <span class="kw">c</span>(.<span class="dv">25</span>, <span class="fl">.5</span>, <span class="fl">.75</span>))</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-12-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
 <p>A similar situation arises for count data. When counting user errors, we would expect a larger variance for complex tasks and interfaces, e.g. writing an article in a word processor, as compared to the rather simple situation like operating a medical infusion pump. For count data, the Poisson distribution is often a starting point and for Poisson distributed variables, mean and variance are both exactly determined by the Poisson rate parameter <span class="math inline">\(\lambda\)</span>, and therefore linearly connected.</p>
 <p><span class="math display">\[
 X \sim \textrm{Poisson}(\lambda)\\
@@ -487,7 +487,7 @@ X \sim \textrm{Poisson}(\lambda)\\
 <a class="sourceLine" id="cb403-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Task, <span class="dt">y =</span> errors)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb403-5" title="5"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb403-6" title="6"><span class="st">  </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-13-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
 <p>Not by coincidence, practically all distributions with a lower boundary have variance increase with the mean. Distributions that have two boundaries, like binomial or beta distributions also have a mean-variance relationship, but a different one. For binomially distributed variables, mean and variance are determined as follows:</p>
 <p><span class="math display">\[
 X \sim \textrm{Binom}(p, k)\\
@@ -500,7 +500,7 @@ E(X) = p k\\
 <a class="sourceLine" id="cb404-2" title="2">           <span class="dt">successes =</span> <span class="kw">rbinom</span>(<span class="dv">1000</span>, <span class="dv">25</span>, expertise)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb404-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> expertise, <span class="dt">y =</span> successes)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb404-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-14-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
 <p>In conclusion, the Gaussian distribution assumption of constant variance is flawed in two aspects: real distributions are typically asymmetric and have mean and variance linked. Both phenomena are tightly linked to the presence of boundaries. Broadly, the deviation from symmetry gets worse when observations are close to the boundaries (e.g. low error rates), whereas differences in variance is more pronounced when the means are far apart from each other.</p>
 <p>Still, using distributions that are not Gaussian sometimes carries minor complications. Gaussian distributions have the convenient property that the amount of randomness is directly expressed as the parameter <span class="math inline">\(\sigma\)</span>. That allowed us to compare the fit of two models A and B by comparing <span class="math inline">\(\sigma_A\)</span> and <span class="math inline">\(\sigma_B\)</span>. In random distributions with just one parameter, the variance of randomness is fixed by the location (e.g. Poisson <span class="math inline">\(\lambda\)</span> or Binomial <span class="math inline">\(p\)</span>). For distributions with more than one parameter, dispersion of randomness typically is a function of two or more parameters, as can be seen in teh formulas above. For example, Gamma distributions have two parameters, but these do not pull location and dispersion as neatly apart as Gaussian distributions do. Instead, mean and variance depend on both parameters for Gamma distributions.</p>
 <p>Using distributions with entanglement of location and dispersion seems to be a step back, but frequently it is necessary to render a realistic association between location of fitted responses and amount of absolute randomness. Most distributions with a lower bound (e.g. Poisson, exponential and Gamma) increase variance with mean, whereas double bounded distributions (beta and binomial) typically have maximum variance when the distribution is centered and symmetric. For the researcher this all means that selecting a distribution class for a Generalized Linear Model, the choice determines the shape of randomness <em>and</em> the relation between location and variance.</p>
@@ -529,7 +529,7 @@ E(X) = p k\\
 <a class="sourceLine" id="cb405-6" title="6">D_Pois <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb405-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> items_found)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb405-8" title="8"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-16-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb406-1" title="1">M_Pois &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb406-2" title="2"><span class="st">  </span><span class="kw">stan_glm</span>(items_found <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb406-3" title="3">           <span class="dt">family =</span> poisson,</a>
@@ -715,7 +715,7 @@ y_i \sim \textrm{Pois}(\mu_i)
 <a class="sourceLine" id="cb414-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> mu, <span class="dt">col =</span> <span class="st">&quot;response scale&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb414-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> theta, <span class="dt">col =</span> <span class="st">&quot;linearized scale&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb414-14" title="14"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">0</span>,<span class="dv">20</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-28-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-28-1.png" width="90%" /></p>
 <p>While the linear predictior scale is a straight line, the response scale clearly is a curve-of-diminishing returns. That opens up the possibility that learning the novel pump design has a constant multiplier (or rate) on the response scale, which would result in a constant difference on the linearized scale. In the following, we estimate two Poisson models, one linearized OFM (OzFM) (with stairway dummies [#OFM]) and one LzRM. Then we will assess the model fit (using fitted responses). If the learning process is linear on the linearized scale, we can expect to see the following:</p>
 <ol style="list-style-type: decimal">
 <li>The two step coefficients of the OzFM become similar (they were wide apart for ToT).</li>
@@ -769,7 +769,7 @@ y_i \sim \textrm{Pois}(\mu_i)
 <a class="sourceLine" id="cb419-3" title="3"><span class="st">  </span><span class="co">#geom_point(size = 2) +</span></a>
 <a class="sourceLine" id="cb419-4" title="4"><span class="st">  </span><span class="kw">geom_crossbar</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="dt">width =</span> <span class="fl">.2</span>, <span class="dt">fill =</span> <span class="st">&quot;grey&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb419-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(Parameter_type <span class="op">~</span><span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-31-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-31-1.png" width="90%" /></p>
 <p>Note that two additional classifiers (Learning_unit, Parameter_type) are added to the table to produce a nicely grouped graph.</p>
 <p>Indeed, the coefficients Step_1 and Step_2 appear to be in a similar region for both designs, although Step_1 remains slightly stronger. As must be expected, the slope of the LzRM sits right in the middle. Both models estimate almost the same Intercepts, i.e. initial performance. Another observation exceeds our expectations on constancy of the learning rate: on the linearized scale, the performance increments are even very similar for the two designs. This opens the possibility for a LzRM that is unconditional on the learning rate (but with conditional intercepts):</p>
 <div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" title="1">M_pois_lzrm &lt;-</a>
@@ -864,7 +864,7 @@ y_i \sim \textrm{Pois}(\mu_i)
 <a class="sourceLine" id="cb422-14" title="14">T_pred <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb422-15" title="15"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Session, <span class="dt">col =</span> Design, <span class="dt">y =</span> mean_deviations)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb422-16" title="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> Design))</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-35-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-35-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1"><span class="kw">detach</span>(IPump)</a></code></pre></div>
 <p>Based on these forecasts, we can make an interesting comparison of the two devices. Notice that initial performance with Novel is around five deviations. With Legacy this level is reached at about the seventh session. As the learning rate is the same for both devices, we can say that the Novel design is always six sessions of training ahead of Legacy.</p>
 <p>The conclusion is that log-linearized scales can reduce or even entirely remove saturation effects, if the learning rate is approximately constant. Another requirement is that the lower bound is (practically) really zero. This may sound subtle at first, and for deviations and errors this assumption is legit, but other performance variables have no lower bound of zero. For example, the minimum number of steps to find something on the internet is One. In this case the lower bound is precisely known and the varable can be shifted such that it starts at zero, e.g. <code>mutate(addional_steps = steps + 1)</code>. In contrast, Time-on-Task always has a strictly positive lower bound, which is not fixed an probably varies between individuals. Learning curves that approach strictly positive asymptotes <span class="math inline">\(\omega\)</span> (omega) have the following mathematical form, and this one cannot be reduced to a linearized term. Such a model is non-linearizeable, and requires a truly non-linear model (which can be constructed with the Brm engine, but beyond the scope of this book.</p>
@@ -991,7 +991,7 @@ y_i \sim \textrm{Pois}(\mu_i)
 <div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1">D_ret <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb427-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> returned)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb427-3" title="3"><span class="st">  </span><span class="kw">geom_bar</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-39-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-39-1.png" width="90%" /></p>
 <p>In total, 46% of the visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table. Note how the linear formula is completely common ground, but we explicitly pass the binomial <code>family</code> to the regression engine.</p>
 <div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb428-1" title="1">M_ret &lt;-<span class="st"> </span>D_ret <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">stan_glm</span>(returned <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> .,</a>
 <a class="sourceLine" id="cb428-2" title="2">                            <span class="dt">family =</span> binomial, <span class="dt">iter =</span> iter) <span class="co"># &lt;--</span></a></code></pre></div>
@@ -1034,7 +1034,7 @@ y_i \sim \textrm{Pois}(\mu_i)
 <a class="sourceLine" id="cb430-8" title="8"><span class="st">    </span><span class="kw">xlab</span>(<span class="kw">expression</span>(mu)) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="kw">expression</span>(eta)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb430-9" title="9"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;logistic mean function&quot;</span>),</a>
 <a class="sourceLine" id="cb430-10" title="10">  <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/logit_logist-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/logit_logist-1.png" width="90%" /></p>
 <p>In order to obtain a statement on proportion <span class="math inline">\(\mu\)</span> (note that in a GMM, there is only one), we therefore have to perform the mean transformation:</p>
 <p><span class="math display">\[
 \eta = \beta_0\\
@@ -1418,7 +1418,7 @@ Group effects indicate how homogeneous the overall pattern (Table 1) is on indiv
 <a class="sourceLine" id="cb445-6" title="6">}</a>
 <a class="sourceLine" id="cb445-7" title="7"></a>
 <a class="sourceLine" id="cb445-8" title="8"><span class="kw">rnegbinom</span>(<span class="dv">1000</span>, <span class="dt">mu =</span> <span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">qplot</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-63-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-63-1.png" width="90%" /></p>
 <p>The figure below shows a negative binomial distribution and Poisson distribution with the same mean.</p>
 <div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb446-1" title="1"><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">15</span>,</a>
 <a class="sourceLine" id="cb446-2" title="2">           <span class="dt">nbinom =</span> <span class="kw">dnbinom</span>(x, <span class="dt">mu =</span> <span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>),</a>
@@ -1427,7 +1427,7 @@ Group effects indicate how homogeneous the overall pattern (Table 1) is on indiv
 <a class="sourceLine" id="cb446-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> prob)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb446-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(distribution <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span></a>
 <a class="sourceLine" id="cb446-7" title="7"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-64-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-64-1.png" width="90%" /></p>
 <p>In [#dissolving_saturation] we have seen how log-linearization can accomodate learning curves, using a Poisson model. It is very likely that this data is over-dispersed. To demonstrate overdispersion, we estimate the unconditional learning curve model one more time, with a negative-binomial pattern of randomness:</p>
 <div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb447-1" title="1"><span class="kw">attach</span>(IPump)</a></code></pre></div>
 <div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb448-1" title="1">M_negbin_lzrm &lt;-<span class="st"> </span></a>
@@ -1455,7 +1455,7 @@ Group effects indicate how homogeneous the overall pattern (Table 1) is on indiv
 ## M_pois_lzrm     b_DesignLegacy   fixef   DesignLegacy     3.267    3.196    3.334
 ## M_pois_lzrm     b_DesignNovel    fixef   DesignNovel      1.869    1.759    1.972
 ## M_pois_lzrm     b_session        fixef   session         -0.258   -0.314   -0.200</code></pre>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-68-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-68-1.png" width="90%" /></p>
 <p>We observe that the center estimates are precisely the same. The credibility limits are much wider with an underlying negative-binomial distribution. In the CLU table we also see that the neg-binomial model got the new parameter shape, which is not a coefficient. Shape (often called <span class="math inline">\(\phi\)</span> (phi)) controls over-dispersion relative to a Poisson distribution, but in a somewhat convoluted way:</p>
 <p><span class="math display">\[
 \textrm{Variance} := \mu + \mu^2/\phi
@@ -1519,7 +1519,7 @@ Phi is too convoluted to be useful as a practical measure for how much over-disp
 <p>A beta-binomial distribution is created by replacing binomial parameter <span class="math inline">\(p\)</span> by a <span class="math inline">\(beta distribution\)</span>, with parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>:</p>
 <div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb453-1" title="1">rbetabinom &lt;-<span class="st"> </span><span class="cf">function</span>(n, size, a, b) <span class="kw">rbinom</span>(n, size, <span class="kw">rbeta</span>(n, a, b))</a>
 <a class="sourceLine" id="cb453-2" title="2"><span class="kw">rbetabinom</span>(<span class="dv">1000</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">qplot</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-71-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-71-1.png" width="90%" /></p>
 <!-- Predictions and interpretation of coefficients of negative-binomial and beta-binomial models are just as with their counterparts, using the same link functions. There is just a tiny difference: a single parameter has been added to the model, which modifies the dispersion. In a standard analysis these parameters have very little meaning, even less than the standard error in a Gaussian model. No misunderstanding: these parameters are *not* the constant standard deviation of residuals. They act as scalers for the "natural" dispersion at any point. -->
 <p>The brms regression engine currently only implements the negative binomial, but not the beta-binomial family. That is a minor problem, because the brms regression engine can be extended. The following code is directly taken from the brms documentation and adds beta-binomial models. The built-in betabinomial distribution takes the parameters a and b from the inner beta distribution. However, for a GLM a parametrization is needed, such that one parameter is the mean (or fitted responses <span class="math inline">\(\mu_i\)</span>).
 Note, how the author of this code created a <code>beta_binomial2</code> distribution family, by transforming the parameters to <span class="math inline">\(\mu\)</span> and a dispersion parameter <span class="math inline">\(\phi\)</span>.</p>
@@ -1655,7 +1655,7 @@ y_{ij} \sim \textrm{Pois}(\mu_{ij})
 <a class="sourceLine" id="cb456-25" title="25">D_ovdsp <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb456-26" title="26"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y_i)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb456-27" title="27"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-77-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-77-1.png" width="90%" /></p>
 <pre><code>## [1] &quot;sim_ovdsp&quot; &quot;D_ovdsp&quot;</code></pre>
 <div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb458-1" title="1">M_ovdsp &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb458-2" title="2"><span class="st">  </span>D_ovdsp <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -1714,7 +1714,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb461-6" title="6">D_exp <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb461-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb461-8" title="8"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-85-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-85-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" title="1"><span class="kw">mean</span>(D_exp<span class="op">$</span>time)</a></code></pre></div>
 <pre><code>## [1] 3.29</code></pre>
 <div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" title="1"><span class="kw">var</span>(D_exp<span class="op">$</span>time)</a></code></pre></div>
@@ -1754,7 +1754,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb468-6" title="6">D_gam <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb468-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb468-8" title="8"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-89-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-89-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb469-1" title="1"><span class="kw">mean</span>(D_gam<span class="op">$</span>time)</a></code></pre></div>
 <pre><code>## [1] 7.61</code></pre>
 <p>In comparison to the exponential distribution above, a significant difference is that the mode of the gamma distribution (its peak) is not fixed at zero, but can move along the x-axis. That makes it appear a much more realistic choice for temporal data in behavioural research. We estimate a simple gamma GMM on the simulated data. For historical reasons, <code>brm</code> uses the inverse link function (<span class="math inline">\(\theta = 1/\mu\)</span>) for Gamma regression per default, but that does not actually serve the purpose of link functions to stretch <span class="math inline">\(\mu\)</span> into the range of real numbers. Instead, we explicitly demand a log link, which makes this a multiplicative model.</p>
@@ -1892,7 +1892,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb476-13" title="13"><span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dgamma, </a>
 <a class="sourceLine" id="cb476-14" title="14">                <span class="dt">args =</span> <span class="kw">list</span>(<span class="dt">rate =</span> rate[<span class="dv">1</span>], <span class="dt">shape =</span> shape[<span class="dv">3</span>])) <span class="op">+</span></a>
 <a class="sourceLine" id="cb476-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;ToT&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;density&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-97-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-97-1.png" width="90%" /></p>
 <p>We have seen so far, that distributions with one parameter (Poisson, binomial, exponential) have a fixed relationship between location and dispersion. In order to vary location and dispersion independently, a second parameter is needed (neg-binomial, beta-binomial, Gamma, Gaussian). Only three-parameter distributions can do the trick of setting skewness separately. So called <em>exponentially modified Gaussian</em> (Exgaussian) distributions are convolutions of a Gaussian distribution and exponential distribution and have three parameters, <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span> and rate <span class="math inline">\(\beta\)</span>. Very roughly, the Gaussian component controls location and dispersion whereas the exponential part adjusts the skew. When <span class="math inline">\(\beta\)</span> is large in comparison to <span class="math inline">\(\mu\)</span>, the distribution is more left skewed. With this additional degree of freedom we can simulate (and estimate) distributions that are far to the right, have strong dispersion <em>and</em> strong skewness. The following plot repeats the right-furthest Gamma distribution from above and adds a Gaussian and Exgaussian distributions with the exact same mean and variance.</p>
 <div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" title="1">M =<span class="st"> </span><span class="dv">400</span></a>
 <a class="sourceLine" id="cb477-2" title="2">V =<span class="st"> </span><span class="dv">8000</span></a>
@@ -1919,12 +1919,12 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb477-23" title="23">                            <span class="dt">beta =</span> beta), </a>
 <a class="sourceLine" id="cb477-24" title="24">                <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> <span class="st">&quot;Exgaussian&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb477-25" title="25"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">colour=</span><span class="st">&quot;Distribution&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;ToT&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;density&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-98-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-98-1.png" width="90%" /></p>
 <p>The Gamma distribution in this example starts approaching a the perfect bell curve of the Gaussian distribution. In contrast, the exgaussian distribution takes a steep left climb followed by a long right tail, which is caused by its pronounced exponential component. We do the usual exercise to simulate a grand mean model and recover the parameters with the help of the <code>brm</code> engine:</p>
 <div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb478-1" title="1"><span class="kw">attach</span>(Chapter_GLM)</a></code></pre></div>
 <div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" title="1">D_exg &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Y =</span> <span class="kw">rexgaussian</span>(<span class="dv">100</span>, <span class="dt">mu =</span> <span class="dv">100</span>, <span class="dt">sigma =</span> <span class="dv">20</span>, <span class="dt">beta =</span> <span class="dv">30</span>))</a>
 <a class="sourceLine" id="cb479-2" title="2"><span class="kw">qplot</span>(D_exg<span class="op">$</span>Y)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-100-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-100-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb480-1" title="1">M_exg &lt;-<span class="st"> </span><span class="kw">brm</span>(Y <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb480-2" title="2">             <span class="dt">family =</span> exgaussian,</a>
 <a class="sourceLine" id="cb480-3" title="3">             <span class="dt">data =</span> D_exg)</a></code></pre></div>
@@ -1966,7 +1966,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb484-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Part, <span class="dt">nrow =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb484-6" title="6"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">adjust =</span> <span class="dv">2</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb484-7" title="7"><span class="st">  </span><span class="kw">xlim</span>(<span class="dv">0</span>, <span class="fl">1.5</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-108-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-108-1.png" width="90%" /></p>
 <p>In the following, we run three CGM models with Exgaussian, Gamma or Gaussian response distributions. For the subsequent analysis, multi-model posterior distributions and posterior predictive distributions are extracted.</p>
 <div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb485-1" title="1"><span class="kw">memory.limit</span>(<span class="dv">16000</span>)</a>
 <a class="sourceLine" id="cb485-2" title="2"></a>
@@ -2008,7 +2008,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb486-4" title="4">             <span class="dt">color =</span> model)) <span class="op">+</span><span class="st">  </span></a>
 <a class="sourceLine" id="cb486-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>fixef, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb486-6" title="6"><span class="st">  </span><span class="kw">geom_crossbar</span>(<span class="dt">width =</span> <span class="fl">.2</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-111-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-111-1.png" width="90%" /></p>
 <p>The following residual plot give us a hint why this might be so: Apparently, the Exgaussian model takes a much steeper left climb, whereas</p>
 <p>In any case, if there is a reason to prefer the Exgaussian model, we should primarily see that in how the residuals are shaped. The Exgaussian distribution has one more degree of freedom, which can be used to set an arbitrary skew. The following reveals that the extra flexibility of the Exgaussian has been employed. Both, Gaussian and Gamma are almost symmetric, whereas the Exgausian takes a steeper left climb. The three distributions have almost the same right tail, but the left tail of the Exgaussian is smaller and the extra probability mass has moved to the center.</p>
 <div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb487-1" title="1">D_hugme &lt;-<span class="st"> </span>D_hugme <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2019,7 +2019,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb487-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> resid, <span class="dt">color =</span> model)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb487-7" title="7"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>PrimeGeek) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb487-8" title="8"><span class="st">  </span><span class="kw">geom_density</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-112-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-112-1.png" width="90%" /></p>
 <p>We can carefully conclude that the Exgaussian may be very useful for analyzing pychological experiments as it seems to better accomodate reaction times, resulting in a better level of certainty. Given the novelty of Exgaussian models, it is recommended that researchers carry out a careful multi-model analysis. In [#model_selection] we will come back to this case with a more formal approach and confirm that the Exgaussian has the better predictive accuracy.</p>
 <div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb488-1" title="1"><span class="kw">detach</span>(Hugme)</a></code></pre></div>
 </div>
@@ -2067,7 +2067,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb492-4" title="4">             <span class="dt">color =</span> model)) <span class="op">+</span><span class="st">  </span></a>
 <a class="sourceLine" id="cb492-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>fixef, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>, <span class="dt">nrow =</span> <span class="dv">1</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb492-6" title="6"><span class="st">  </span><span class="kw">geom_crossbar</span>(<span class="dt">width =</span> <span class="fl">.2</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-118-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-118-1.png" width="90%" /></p>
 <p>Different to the reaction times in the previous section, the three models produce rather different coefficients. These effects are multiplicative and for Task 3, the three models even disgree on whether this task takes longer than Task 1 (Intercept), which in turn is the only effect where the three models seem to agree.</p>
 <p>Inspecting the residual distributions yields a different pattern as with reaction times: generally, the left skewness is much less pronounced and Gaussian and gamma even tend to be right skewed. Strikingly, the residuals of the exgaussian models sit much tighter around the center, which corresponds with the narrower credibility intervals for the fixed effects.</p>
 <div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb493-1" title="1"><span class="kw">left_join</span>(T_<span class="dv">4</span>_predict, D_cue8_mod, <span class="dt">by =</span> <span class="st">&quot;Obs&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2075,7 +2075,7 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 <a class="sourceLine" id="cb493-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> resid, <span class="dt">color =</span> model)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb493-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Task, <span class="dt">nrow =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb493-5" title="5"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">adjust =</span> <span class="dv">2</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-119-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-119-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb494-1" title="1"><span class="kw">detach</span>(CUE8)</a></code></pre></div>
 </div>
 <div id="edit-move-rt-model-selection-up" class="section level4">
@@ -2295,7 +2295,7 @@ When observations are censored, the regression engine interpolates the missing p
 <a class="sourceLine" id="cb496-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Part_ord, <span class="dt">ymax =</span> max, <span class="dt">ymin =</span> min, <span class="dt">y =</span> median)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb496-10" title="10"><span class="st">  </span><span class="kw">geom_errorbar</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb496-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">3</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-129-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-129-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" title="1"><span class="kw">detach</span>(IPump)</a></code></pre></div>
 <p>Setting the idiosyncratic rating scale responses aside, how does a common rating scale appear in our framework of link functions and patterns of randomness? Rating scales are bounded on two sides and we already know what that means: a suitable model for rating scales will likely contain a logit link function and a distribution of randomness that is bounded on two sides.</p>
 <p>A real problem with rating scales is that they often are discrete. Most scales force participants to give their answer as a choice between five or seven ordered levels. When the response variable has just a few levels, <em>ordinal regression</em> is a good choice. Ordinal regression itself is a generalization of logistic regression.</p>
@@ -2324,7 +2324,7 @@ to the purpose. When testing a novel design of a commercial website against the 
 <a class="sourceLine" id="cb499-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(Design<span class="op">~</span>.) <span class="op">+</span></a>
 <a class="sourceLine" id="cb499-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb499-5" title="5"><span class="st">  </span><span class="kw">xlim</span>(<span class="dv">1</span>,<span class="dv">7</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-131-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-131-1.png" width="90%" /></p>
 <p>The brms regression engine implements ordinal regression by the family <code>cratio</code> (cumulative odds ratio <!-- #116 -->) with a default logit link function.</p>
 <div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb500-1" title="1">M_ord_<span class="dv">1</span> &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb500-2" title="2"><span class="st">  </span>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2450,7 +2450,7 @@ MOVE TO MODEL SELECTION
 <a class="sourceLine" id="cb503-15" title="15"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Team, <span class="dt">y =</span> SUS, <span class="dt">fill =</span> Condition)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb503-16" title="16"><span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb503-17" title="17"><span class="st">  </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-144-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-144-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb504-1" title="1">M_<span class="dv">5</span>_bet &lt;-</a>
 <a class="sourceLine" id="cb504-2" title="2"><span class="st">  </span>D_cue8_SUS <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb504-3" title="3"><span class="st">  </span><span class="kw">brm</span>(SUS <span class="op">~</span><span class="st"> </span>Condition <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Team),</a>
@@ -2573,7 +2573,7 @@ MOVE TO MODEL SELECTION
 <a class="sourceLine" id="cb509-19" title="19"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Anchoring, <span class="dt">y =</span> rating)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb509-20" title="20"><span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb509-21" title="21"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)</a></code></pre></div>
-<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-148-1.png" width="66%" /></p>
+<p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-148-1.png" width="90%" /></p>
 <p>The two response distributions have the same location, but the more narrow anchoring produces a wider dispersion of responses. How would we confirm this statistically? The Brms engine can link predictors to <em>any</em> other parameter of the response distribution, which teh author of the package calls <em>distributional models</em>. They have an immense potential as they relax another assumption of GLM, namely that all variance parameters must strictly follow the mean-variance relationship demanded by a distribution family. As we seen, one can easily create a case where this assumption is violated.</p>
 <p>The brms engine uses a parametrization of the beta distribution (other than the more common a, b parametrization), where <span class="math inline">\(\mu\)</span> is the location and <span class="math inline">\(phi\)</span> is a <em>scale</em> parameter. Different to what its name may suggest, a large scale is not an increase variance, but rather the opposite: It is comparable to the number of trials in a binomial process. The more trials there are, the tighter the distribution becomes.</p>
 <!-- ```{r} -->

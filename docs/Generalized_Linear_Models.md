@@ -77,7 +77,7 @@ D_Novel %>%
   geom_smooth(se = F)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-2-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-2-1.png" width="90%" />
 
 We used an OFM with stairways coding to account for this non-linearity, but that has one disadvantage. From a practical perspective it would interesting to know, how performance improves when practice continues. What would be performance in (hypothetical) sessions 4, 5 and 10. Because the OFM just makes up one estimate for every level, there is no way to get predictions beyond the observed range.
 
@@ -109,15 +109,15 @@ predict(M_LRM_1, newdata = D_new) %>%
 
 ```
 ## **  10 predictions (scale: resp) with 95% credibility limits (five shown below) 
-##   Obs center lower upper
-## 1   3  0.429 -1.63  2.62
-## 2   4  0.313 -1.85  2.56
-## 3   5  0.112 -2.02  2.32
-## 4   8 -0.284 -2.67  1.99
-## 5   9 -0.511 -2.78  1.84
+##   Obs  center lower upper
+## 1   4  0.2951 -1.83  2.44
+## 2   6 -0.0323 -2.25  2.19
+## 3   7 -0.1917 -2.42  2.06
+## 4   9 -0.5018 -2.78  1.78
+## 5  10 -0.6545 -3.01  1.73
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="90%" />
 
 
 ```r
@@ -183,7 +183,7 @@ gridExtra::grid.arrange(
   plot_glmfun(f = inv_logit, "logistic mean function",  -5, 5, dir = "mean"))
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-7-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-7-1.png" width="90%" />
 
 Using the link function comes at a cost: the linear coefficients $\beta_i$ is losing its interpretation as increment-per-unit and no longer has a natural interpretation. Later we will see that logarithmic and logit scales gain an intuitive interpretation when parameters are exponentiated, $\textrm{exp}(\beta_i)$ (\@ref(poisson-regression) and \@ref(logistic-regression)
 
@@ -219,7 +219,7 @@ D_pumps_sim %>%
   coord_flip()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-9-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-9-1.png" width="90%" />
 
 We immediatly see, that simulation with Gaussian distributions is rather inappropriate: a substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution as Gaussian distributions support the full range of real numbers, no matter how small the variance is (but not zero). There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until `pumps` contains exclusively positive numbers (and zero), would compromise the idea of random numbers itself. The second reason is that the simulations very purpose was to express and explore expectations from the linear model (CG). We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
 
@@ -266,7 +266,7 @@ tibble(Obs = as.factor(1:N),
   geom_quantile(quantiles = c(.25, .5, .75))
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-11-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-11-1.png" width="90%" />
 
 Again, we get some impossible negative data points, but what is also unrealistic is that persons who live right around the corner experience the same range of possible travel times than people who drive dozens of kilometers. Most of the time, we intuit the dispersion of randomness to increase with the magnitude. 
 
@@ -291,7 +291,7 @@ tibble(Obs = as.factor(1:100),
   geom_quantile(quantiles = c(.25, .5, .75))
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-12-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-12-1.png" width="90%" />
 
 A similar situation arises for count data. When counting user errors, we would expect a larger variance for complex tasks and interfaces, e.g. writing an article in a word processor,  as compared to the rather simple situation like operating a medical infusion pump. For count data, the Poisson distribution is often a starting point and for Poisson distributed variables, mean and variance are both exactly determined by the Poisson rate parameter $\lambda$, and therefore linearly connected.
 
@@ -310,7 +310,7 @@ tibble(Obs = as.factor(1:100),
   geom_jitter()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-13-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-13-1.png" width="90%" />
 
 Not by coincidence, practically all distributions with a lower boundary have variance increase with the mean. Distributions that have two boundaries, like binomial or beta distributions also have a mean-variance relationship, but a different one. For binomially distributed variables, mean and variance are determined as follows:
 
@@ -331,7 +331,7 @@ tibble(expertise  = runif(1000, 0, 1),
   geom_point()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-14-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-14-1.png" width="90%" />
 
 In conclusion, the Gaussian distribution assumption of constant variance is flawed in two aspects: real distributions are typically asymmetric and have mean and variance linked. Both phenomena are tightly linked to the presence of boundaries. Broadly, the deviation from symmetry gets worse when observations are close to the boundaries (e.g. low error rates), whereas differences in variance is more pronounced when the means are far apart from each other. 
 
@@ -382,7 +382,7 @@ D_Pois %>%
   geom_histogram()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-16-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-16-1.png" width="90%" />
 
 ```r
 M_Pois <- 
@@ -544,7 +544,7 @@ D_learn %>%
   ylim(0,20)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-28-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-28-1.png" width="90%" />
 
 While the linear predictior scale is a straight line, the response scale clearly is a curve-of-diminishing returns. That opens up the possibility that learning the novel pump design has a constant multiplier (or rate) on the response scale, which would result in a constant difference on the linearized scale. In the following, we estimate two Poisson models, one linearized OFM (OzFM) (with stairway dummies [#OFM]) and one LzRM. Then we will assess the model fit (using fitted responses). If the learning process is linear on the linearized scale, we can expect to see the following:
 
@@ -623,7 +623,7 @@ T_fixef %>%
   facet_wrap(Parameter_type ~ ., scales = "free")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-31-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-31-1.png" width="90%" />
 
 Note that two additional classifiers (Learning_unit, Parameter_type) are added to the table to produce a nicely grouped graph.
 
@@ -707,7 +707,7 @@ T_pred %>%
   geom_line(aes(group = Design))
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-35-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-35-1.png" width="90%" />
 
 
 ```r
@@ -867,7 +867,7 @@ D_ret %>%
   geom_bar()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-39-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-39-1.png" width="90%" />
 
 In total, 46% of the visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table. Note how the linear formula is completely common ground, but we explicitly pass the binomial `family` to the regression engine.
 
@@ -916,7 +916,7 @@ grid.arrange(
   nrow = 1)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/logit_logist-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/logit_logist-1.png" width="90%" />
 
 In order to obtain a statement on proportion $\mu$ (note that in a GMM, there is only one), we therefore have to perform the mean transformation:
 
@@ -1268,7 +1268,7 @@ rnegbinom <- function(n, mu, size){
 rnegbinom(1000, mu = 3, size = 2) %>%  qplot()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-63-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-63-1.png" width="90%" />
 
 The figure below shows a negative binomial distribution and Poisson distribution with the same mean.
 
@@ -1283,7 +1283,7 @@ tibble(x = 0:15,
   geom_col(position = "dodge")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-64-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-64-1.png" width="90%" />
 
 
 In [#dissolving_saturation] we have seen how log-linearization can accomodate learning curves, using a Poisson model. It is very likely that this data is over-dispersed. To demonstrate overdispersion, we estimate the unconditional learning curve model  one more time, with a negative-binomial pattern of randomness:
@@ -1333,7 +1333,7 @@ bind_rows(
 ## M_pois_lzrm     b_session        fixef   session         -0.258   -0.314   -0.200
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-68-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-68-1.png" width="90%" />
 
 We observe that the center estimates are precisely the same. The credibility limits are much wider with an underlying negative-binomial distribution. In the CLU table we also see that the neg-binomial model got the new parameter shape, which is not a coefficient. Shape (often called $\phi$ (phi)) controls over-dispersion relative to a Poisson distribution, but in a somewhat convoluted way:
 
@@ -1391,7 +1391,7 @@ rbetabinom <- function(n, size, a, b) rbinom(n, size, rbeta(n, a, b))
 rbetabinom(1000, 10, 1, 2) %>% qplot()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-71-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-71-1.png" width="90%" />
 
 
 <!-- Predictions and interpretation of coefficients of negative-binomial and beta-binomial models are just as with their counterparts, using the same link functions. There is just a tiny difference: a single parameter has been added to the model, which modifies the dispersion. In a standard analysis these parameters have very little meaning, even less than the standard error in a Gaussian model. No misunderstanding: these parameters are *not* the constant standard deviation of residuals. They act as scalers for the "natural" dispersion at any point. -->
@@ -1521,7 +1521,7 @@ D_ovdsp %>%
   geom_histogram()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-77-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-77-1.png" width="90%" />
 
 
 ```
@@ -1611,7 +1611,7 @@ D_exp %>%
   geom_histogram(bins = 10)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-85-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-85-1.png" width="90%" />
 
 ```r
 mean(D_exp$time)
@@ -1671,7 +1671,7 @@ D_gam %>%
   geom_histogram(bins = 10)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-89-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-89-1.png" width="90%" />
 
 ```r
 mean(D_gam$time)
@@ -1780,7 +1780,7 @@ ggplot(data.frame(x = c(0, 3000)), aes(x = x)) +
   labs(x = "ToT", y = "density")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-97-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-97-1.png" width="90%" />
 
 We have seen so far, that distributions with one parameter (Poisson, binomial, exponential) have a fixed relationship between location and dispersion. In order to vary location and dispersion independently, a second parameter is needed (neg-binomial, beta-binomial, Gamma, Gaussian). Only three-parameter distributions can do the trick of setting skewness separately. So called *exponentially modified Gaussian* (Exgaussian) distributions are convolutions of a Gaussian distribution and exponential distribution and have three parameters, $\mu$, $\sigma$ and rate $\beta$. Very roughly, the Gaussian component controls location and dispersion whereas the exponential part adjusts the skew.  When $\beta$ is large in comparison to $\mu$, the distribution is more left skewed. With this additional degree of freedom we can simulate (and estimate) distributions that are far to the right, have strong dispersion *and* strong skewness. The following plot repeats the right-furthest Gamma distribution from above and adds a Gaussian and Exgaussian distributions with the exact same mean and variance.
 
@@ -1813,7 +1813,7 @@ ggplot(data.frame(x = c(0, 800)), aes(x = x)) +
   labs(colour="Distribution", x = "ToT", y = "density")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-98-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-98-1.png" width="90%" />
 
 The Gamma distribution in this example starts approaching a the perfect bell curve of the Gaussian distribution. In contrast, the exgaussian distribution takes a steep left climb followed by a long right tail, which is caused by its pronounced exponential component. We do the usual exercise to simulate a grand mean model and recover the parameters with the help of the `brm` engine:
 
@@ -1828,7 +1828,7 @@ D_exg <- tibble(Y = rexgaussian(100, mu = 100, sigma = 20, beta = 30))
 qplot(D_exg$Y)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-100-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-100-1.png" width="90%" />
 
 
 
@@ -1901,7 +1901,7 @@ D_hugme %>%
   xlim(0, 1.5)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-108-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-108-1.png" width="90%" />
 
 In the following, we run three CGM models with Exgaussian, Gamma or Gaussian response distributions. For the subsequent analysis, multi-model posterior distributions and posterior predictive distributions  are extracted. 
 
@@ -1959,7 +1959,7 @@ fixef(P_1) %>%
   geom_crossbar(width = .2, position = "dodge")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-111-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-111-1.png" width="90%" />
 
 The following residual plot give us a hint why this might be so: Apparently, the Exgaussian model takes a much steeper left climb, whereas 
 
@@ -1978,7 +1978,7 @@ D_hugme %>%
   geom_density()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-112-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-112-1.png" width="90%" />
 
 We can carefully conclude that the Exgaussian may be very useful for analyzing pychological experiments as it seems to better accomodate reaction times, resulting in a better level of certainty. Given the novelty of Exgaussian models, it is recommended that researchers carry out a careful multi-model analysis. In [#model_selection] we will come back to this case with  a more formal approach and confirm that the Exgaussian has the better predictive accuracy.
 
@@ -2062,7 +2062,7 @@ fixef(P_4, mean.func = exp) %>%
   geom_crossbar(width = .2, position = "dodge")
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-118-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-118-1.png" width="90%" />
 
 Different to the reaction times in the previous section, the  three models produce rather different coefficients. These effects are multiplicative and for Task 3, the three models even disgree on whether this task takes longer than Task 1 (Intercept), which in turn is the only effect where the three models seem to agree. 
 
@@ -2078,7 +2078,7 @@ left_join(T_4_predict, D_cue8_mod, by = "Obs") %>%
   geom_density(adjust = 2)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-119-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-119-1.png" width="90%" />
 
 
 ```r
@@ -2366,7 +2366,7 @@ D_pumps %>%
   geom_point(size = 3)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-129-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-129-1.png" width="90%" />
 
 ```r
 detach(IPump)
@@ -2426,7 +2426,7 @@ BAB1 %>%
   xlim(1,7)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-131-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-131-1.png" width="90%" />
 
 The brms regression engine implements ordinal regression by the family `cratio` (cumulative odds ratio <!-- #116 -->) with a default logit link function.
 
@@ -2560,7 +2560,7 @@ D_cue8_SUS %>%
   geom_jitter()
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-144-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-144-1.png" width="90%" />
 
 
 
@@ -2684,7 +2684,7 @@ D_Anchor %>%
   ylim(0,1)
 ```
 
-<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-148-1.png" width="66%" />
+<img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-148-1.png" width="90%" />
 
 The two response distributions have the same location, but the more narrow anchoring produces a wider dispersion of responses. How would we confirm this statistically? The Brms engine can link predictors to *any* other parameter of the response distribution, which teh author of the package  calls *distributional models*. They have an immense potential as they relax another assumption of GLM, namely that all variance parameters must strictly follow the mean-variance relationship demanded by a distribution family. As we seen, one can easily create a case where this assumption is violated. 
 
