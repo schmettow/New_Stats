@@ -44,7 +44,17 @@ In the IPump study we have collected performance data of 25 nurses, operating a 
 > What is the average ToT in the population?
 
 
+```r
+attach(IPump)
+```
 
+
+
+
+```r
+D_Novel %>% 
+summarize(mean_Pop = mean(ToT))
+```
 
 
 
@@ -57,15 +67,34 @@ The answer is just one number and does not refer to any individuals in the popul
 > What is the average ToT of individual participants?
 
 
+```r
+D_Novel %>% 
+group_by(Part) %>% 
+summarize(mean_Part = mean(ToT)) %>% 
+  sample_n(5)
+```
+
+
+
 Part    mean_Part
 -----  ----------
-8            23.8
-3            14.1
-22           12.7
-5            16.0
 14           15.5
+5            16.0
+25           15.7
+23           12.0
+20           19.1
 
 Such a grouped summary can be useful for situations where we want  to directly compare individuals, like in performance tests. In experimental research, individual participants are of lesser interest, as they are exchangeable entities (a sample). The total effect on the population is usually of greater The amount of differences can be summarized by the standard deviation of participant-level estimates:
+
+
+```r
+D_Novel %>% 
+  group_by(Part) %>% 
+  summarize(mean_Part = mean(ToT)) %>% 
+  ungroup() %>% 
+  summarize(sd_Part   = var(mean_Part))
+```
+
 
 
 | sd_Part|
@@ -92,6 +121,9 @@ Generally, these are the three types of parameters in multi-level models: the po
 <!-- ``` -->
 
 
+```r
+detach(IPump)
+```
 
 
 Obviously, the variable `Part` is key to build such a model. This variable  groups observations by participant identity and, formally, is a plain factor. A naive approach to multi-level modelling would be to estimate an AGM, like `ToT ~ 0 + Part`, grab the center estimates and compute the standard deviation. Different to the descriptive analysis above and the naive approaczh, a multi-level model estimates fixed effects, random effects and random standard deviation *simultaneously*. 
@@ -107,9 +139,16 @@ $$
 There will be as many parameters $\beta_{p0}$, as there were users in the sample, and they have all become part of the likelihood. The second term describes the distribution of the levels. And finally, there is the usual random term. Before we examine further features of the model, let's run it. In the package `rstanarm`, the command `stan_glmer()` is dedicated to estimate mixed-effects models with the extended formula syntax. 
 
 
+```r
+attach(IPump)
+```
 
 
 
+```r
+M_hf <- stan_glmer(ToT ~ 1 + (1|Part), data = D_Novel)
+P_hf <- posterior(M_hf)
+```
 
 
 
@@ -125,21 +164,33 @@ The posterior of the mixed-effects  model contains four types of variables:
 With the `bayr` package these parameters can be extracted using the respective commands:
 
 
+```r
+fixef(P_hf)
+```
+
+
+
 |model |type  |fixef     | center| lower| upper|
 |:-----|:-----|:---------|------:|-----:|-----:|
 |M_hf  |fixef |Intercept |     16|  14.6|  17.5|
 
+```r
+ranef(P_hf) %>% sample_n(5)
+```
 
 
 
 |re_entity | center| lower| upper|
 |:---------|------:|-----:|-----:|
-|6         | -0.393| -4.51|  2.08|
-|24        | -0.496| -5.04|  1.89|
-|15        |  0.091| -2.90|  3.53|
-|13        |  0.210| -2.49|  4.40|
+|16        | -0.012| -3.42|  3.04|
 |17        | -0.254| -4.33|  2.22|
+|24        | -0.496| -5.04|  1.89|
+|7         | -0.868| -6.21|  1.44|
+|4         |  0.867| -1.27|  5.87|
 
+```r
+grpef(P_hf)
+```
 
 
 
@@ -160,9 +211,24 @@ Speaking of factors: so far, we have used *treatment contrasts* most of the time
 
 The solution is to use a different contrast coding for random factors: *deviation contrasts* represent the individual effects as *difference ($\delta$) towards the population mean*. As the  population mean is represented by the respective fixed effect, we can compute the absolute individual predictions by adding the fixef effect to the random effect:
 
+
+```r
+data_frame(mu_i = ranef(P_hf)$center + 
+             fixef(P_hf)$center) %>% 
+  ggplot(aes(x = mu_i)) +
+  geom_histogram()
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-8-1.png" width="66%" />
 
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. One heuristic is to compare it against the residual variance, which is:
+
+
+```r
+T_sov_vc <- coef(P_hf, type = c("grpef", "disp"))
+T_sov_vc
+```
+
 
 
 |parameter                         |type  |fixef     |re_factor | center|  lower| upper|
@@ -170,6 +236,9 @@ Finally, we can assess the initial question: are individual differences a signif
 |sigma_resid                       |disp  |NA        |NA        |   16.4| 15.489| 17.38|
 |Sigma[Part:Intercept,(Intercept)] |grpef |Intercept |Part      |    1.5|  0.077|  3.76|
 
+```r
+detach(IPump)
+```
 
 The variation due to individual differences is half of the noise, which is considerable. It seems in order to further investigate why and how users vary in performance, as this is the key to improving the design for all users.
 
@@ -201,9 +270,36 @@ For an illustration od slope ramdom effects, we take a look at a data set that s
 
 The participant-level plot below shows the individual relationships between days of deprivation and reaction time. For most participants a increasing straight line seems to be a good approximation, so we can go with a parsimonous  linear regression model, rather than an ordered factor model. One noticeable exception is participant 352, which is fairly linear, but reaction times get shorter with sleep deprivation. (What would be the most likely explanation? Perhaps 352 is a cheater, who slept well every night and only gained experience in doing the tests).
 
+
+```r
+D_slpstd <-
+  lme4::sleepstudy %>% 
+  select(Part = Subject, days = Days, RT = Reaction) %>%
+  mutate(days = as.integer(days))
+
+D_slpstd %>% 
+  ggplot(aes(x = days, y = RT)) +
+  facet_wrap(~Part) +
+  geom_point() +
+  geom_smooth(se = F, aes(color = "LOESS")) +
+  geom_smooth(se = F, method = "lm", aes(color = "lm")) +
+  labs(color = "Smoothing function")
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-11-1.png" width="66%" />
 
 A more compact way of plotting multi-level slopes is the spaghetti plot below. By superimposing the population level effect, we can clearly see that participants vary in how sleep deprivation delays the reactions.
+
+
+```r
+D_slpstd %>% 
+  ggplot(aes(x = days,
+             y = RT,
+             group = Part)) +
+  geom_smooth(aes(color = "participant effects"), size = .5, se = F, method = "lm")+
+  geom_smooth(aes(group = 1, color = "population effect"), size = 2, se = F, method = "lm") +
+  labs(color = NULL)
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-12-1.png" width="66%" />
 
@@ -217,6 +313,11 @@ Remember to always put complex random effects into brackets, because the `+` ope
 
 
 
+```r
+M_slpsty_1 <- stan_glmer(RT ~ 1 + days + (1 + days|Part),
+                       data = D_slpstd,
+                       iter = 2000)
+```
 
 
 
@@ -228,12 +329,27 @@ The Bayr package provides a specialized command for multi-level tables. `fixef_m
 
 
 
+```r
+fixef_ml(M_slpsty_1)
+```
+
+
+
 fixef        center    lower   upper   SD_Part
 ----------  -------  -------  ------  --------
 Intercept     251.4   237.72     265     23.11
 days           10.4     7.08      14      6.58
 
 The following plot shows the slope random effects, ordered by the center estimate.
+
+
+```r
+ranef(M_slpsty_1) %>% 
+  filter(fixef == "days") %>% 
+  mutate(Part_ord = rank(center)) %>% 
+  ggplot(aes(x = Part_ord, ymin = lower, y = center, ymax = upper)) +
+  geom_crossbar()
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-17-1.png" width="66%" />
 
@@ -255,6 +371,16 @@ $$
  $$
 which underlines that random coefficients are additive correction terms to the population-level effect. Whereas the `ranef` command reports only these corrections, it is sometimes useful to look at the total scores per participant. In package Bayr, the command `re_scores` computes total scores on the level of the posterior distribution. The following plot uses this command and plots the distribution.
 
+
+```r
+posterior(M_slpsty_1) %>% 
+  re_scores() %>% 
+  clu() %>% 
+  ggplot(aes(x = center)) +
+  facet_grid(~fixef, scales = "free") +
+  geom_density()
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-18-1.png" width="66%" />
 
 
@@ -272,12 +398,26 @@ For enetering the world of multi-level modelling, we do not need fancy tools. Mo
 
 
 
+```r
+attach(IPump)
+```
 
 To answer this question, we can compare the two group means using a basic CGM:
 
 
 
+```r
+M_cgm <-
+  D_pumps %>% 
+  stan_glm(ToT ~ 1 + Design, data = .)
+```
 
+
+
+
+```r
+fixef(M_cgm)
+```
 
 
 
@@ -293,7 +433,38 @@ An average benefit  sounds promising, but we should be clear what it precisely m
 
 
 
+```r
+T_Part <-
+  D_pumps %>% 
+  group_by(Part, Design) %>% 
+  summarize(mean_Part = mean(ToT))
 
+T_Pop  <-
+  T_Part %>% 
+  group_by(Design) %>% 
+  summarize(mean_Pop = mean(mean_Part))
+```
+
+
+
+```r
+gridExtra::grid.arrange(nrow = 1,
+             T_Pop %>% 
+  ggplot(aes(x = Design, group = NA,
+             y = mean_Pop)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Population-level model (average benefits)") +
+  ylim(0, 60),
+ T_Part %>% 
+  ggplot(aes(x = Design,
+             y = mean_Part,
+             group = Part, label = Part)) +
+  geom_line() +
+  ggrepel::geom_label_repel(size = 3, alpha = .5) +
+  ggtitle("Participant-level model (individual benefits)") +
+  ylim(0, 60))
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-25-1.png" width="66%" />
 
@@ -310,17 +481,51 @@ If you look again at the participant-level *spaghetti plot* and find it similar 
 
 
 
+```r
+M_amm_pop <-
+  D_pumps %>% 
+  stan_glm(ToT ~ 0 + Design, data = ., iter = 50, chains = 2)
 
+M_amm_part <-
+  D_pumps %>% 
+  stan_glm(ToT ~ (0 + Design):Part, data = ., iter = 50, chains = 2)
+```
+
+
+
+```r
+T_amm <-
+  bind_rows(posterior(M_amm_pop),
+            posterior(M_amm_part)) %>% 
+  fixef() %>% 
+  separate(fixef, into = c("Design", "Part"))
+
+
+T_amm %>% 
+  ggplot(aes(x = Design, y = center, group = Part, color = model)) +
+  geom_line()
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-27-1.png" width="66%" />
 
 In the first place, the convenience of (true) multi-level models is that  both (or more) levels are specified and estimated as one model. For the multi-level models that follow, we will use a specialized engine, `stan_glmer()` (generalized mixed-effects regression) that estimates both levels simultaneously and produce multi-level coefficients. The multi-level CGM we desire is written like this:
 
 
+```r
+M_mlcgm <-
+  D_pumps %>% 
+  stan_glmer(ToT ~ 1 + Design + (1 + Design|Part), data = ., iter = 100)
+```
 
 In the formula of this multi-level CGM the predictor term (`1 + Design`) is just copied. The first instance is the usual population-level averages, but the second is on participant-level. The `|` operator in probability theory means "conditional upon" and here this can be read as *effect of Design conditional on participant*.
 
 For linear models we have been using the `coef()` command to extract all coefficients. Here it would extract all coefficients on both levels. With multi-level models, two specialized command exist to separate the levels:  we can extract population-level effects using the `fixef()` command (for "fixef effects"). All lower level effects can be accessed with the `ranef` command, which stands for *random effects*. Here, the population level coefficients are absolute means, whereas random effects are *not*. Usually, random effects are *differences towards the population-level*. This is why random effects are always *centered at zero*. In the following histogram, the distribution of the DesignNovel random effects are shown. This is how much users deviate from the average effect in the population.
+
+
+```r
+fixef(M_mlcgm)
+```
+
 
 
 |fixef       | center| lower| upper|
@@ -328,10 +533,23 @@ For linear models we have been using the `coef()` command to extract all coeffic
 |Intercept   |   28.1|  24.4|  31.6|
 |DesignNovel |  -12.1| -15.0|  -8.3|
 
+```r
+ranef(M_mlcgm) %>%
+  rename(Part = re_entity, `deviation` = center) %>% 
+  ggplot(aes(x = deviation)) +
+  facet_grid(~fixef) +
+  geom_histogram()
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-29-1.png" width="66%" />
 
 The distribution of random effects should resemble a *Gaussian distribution*. It is usually hard to tell with such small sample sizes, but it seems that the Intercept effects have a left skew. As we will see in chapter [#GLM], this problem is not surprisung and can be resolved. The distributions are also centered at zero, which is not a coincidence, but the way random effects are designed: deviations from the population mean. That opens up two interesting perspectives: first, random effects look a lot like residuals [#residuals], and like those we can summarize a random effects vector by its *standard deviation*, using the `grpef`  command from package Bayr.
+
+
+```r
+bayr::fixef_ml(M_mlcgm)
+```
+
 
 
 fixef          center   lower   upper   SD_Part
@@ -340,6 +558,12 @@ Intercept        28.1    24.4    31.6      8.45
 DesignNovel     -12.1   -15.0    -8.3      6.07
 
 Most design research is located on the population level. We want to know how a design works, broadly. Sometimes, stratified samples are used to look for conditional effects in  (still broad) subgroups. Reporting individual differences makes little sense in such situations. The standard deviation summarizes individual differences and can be interpreted the *degree of diversity*. The command `bayr::fixef_ml` is implementing this by simply attaching the standard deviation center estimates to the respective population-level effect. As coefficients and standard deviations are on the same scale, they can be compared. Roughly speaking, a two-thirds of the population is contained in an interval *twice as large* as the SD.
+
+
+```r
+fixef_ml(M_mlcgm)
+```
+
 
 
 fixef          center   lower   upper   SD_Part
@@ -354,6 +578,9 @@ That having said, I believe that more researchers should watch their participant
 
 
 
+```r
+detach(IPump)
+```
 
 
 
@@ -503,14 +730,39 @@ In [#rollercoaster], the Uncanny Valley effect has been demonstrated on populati
 happens, but not necessarily for everyone. The sample in our consisted of mainly students and their closer social network. It is almost certain, that many of the tested persons were religious and others were atheists. If the religious-attitude theory is correct, we would expect to see the Uncanny Valley in several participants, but not in all. If the category confusion theory is correct, we would expect all participants to fall into the valley. The following model performs the polynomial analysis as before [#rollercoaster], but multi-level:
 
 
+```r
+attach(Uncanny)
+```
 
 
 
+```r
+M_poly_3_ml <-
+  RK_1 %>% 
+  stan_glmer(response ~ 1 + huMech1 + huMech2 + huMech3 + 
+               (1 + huMech1 + huMech2 + huMech3|Part),
+             data = ., iter = 2500)
+
+P_poly_3_ml <- posterior(M_poly_3_ml)
+
+PP_poly_3_ml <- post_pred(M_poly_3_ml, thin = 5)
+```
 
 
 One method for testing universality is to extract the fitted responses (`predict`)  and perform a visual examination: can we see a valley for every participant? 
 
 
+
+
+```r
+T_pred <- 
+  RK_1 %>% 
+  mutate(M_poly_3_ml = predict(PP_poly_3_ml)$center)
+
+T_pred %>% 
+  ggplot(aes(x = huMech, y = M_poly_3_ml, group = Part)) +
+  geom_smooth(se = F)
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-37-1.png" width="66%" />
 
@@ -519,9 +771,36 @@ This spaghetti plot broadly confirms, that all participants experience the Uncan
 
 
 
+```r
+T_univ_uncanny <- 
+  P_poly_3_ml %>% 
+  re_scores() %>% 
+  select(iter, Part = re_entity, fixef, value) %>% 
+  tidyr::spread(key = "fixef", value = "value") %>% 
+  select(iter, Part, huMech0 = Intercept, huMech1:huMech3) %>% 
+  mutate(trough = uncanny::trough(select(.,huMech0:huMech3)),
+         shoulder = uncanny::shoulder(select(.,huMech0:huMech3)),
+         has_trough = !is.na(trough),
+         has_shoulder = !is.na(shoulder), 
+         shoulder_left = trough > shoulder,
+         is_uncanny = has_trough & has_shoulder & shoulder_left)
+```
 
 
 
+
+
+```r
+T_univ_uncanny %>% 
+  group_by(Part) %>% 
+  summarize(prob_uncanny = mean(is_uncanny),
+            prob_trough = mean(has_trough),
+            prob_shoulder = mean(has_shoulder)) %>% 
+  ggplot(aes(x = Part, y = prob_uncanny)) +
+  geom_col() +
+  geom_label(aes(label = prob_uncanny)) +
+  theme(axis.text.x = element_text(angle = 45))
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-40-1.png" width="66%" />
 
@@ -529,20 +808,59 @@ The above plot shows the probability that a participant experiences the Uncanny 
 
 
 
+```r
+detach(Uncanny)
+```
 
 
 While this is great news for all scientists who think that the Uncanny Valley effect is innate (rather than cultural), it does not demonstrate the actual identification of deviant participants. Therefore, we briefly re-visit case Sleepstudy, for which we have estimated a multi-level linear regression model to render individual detoriation of reaction time as result of sleep deprivation. By visual inspection, we identified a single deviant participant who showed an improvement over time. However, the fitted lines a based on point estimates, only (the median of the posterior). Using the same technique as above, it is possible to calculate the participant-level probabilities for the slope being positive, as expected.
 
 
+```r
+attach(Sleepstudy)
+```
 
+
+
+```r
+P_scores <- 
+  M_slpsty_1 %>% 
+  posterior() %>% 
+  re_scores() %>% 
+  mutate(Part = re_entity)
+
+P_scores %>% 
+  filter(fixef == "days") %>% 
+  group_by(Part) %>% 
+  summarize(prob_positive = mean(value >= 0)) %>% 
+  mutate(label = str_c(100 * round(prob_positive, 4), "%")) %>% 
+  ggplot(aes(x = Part, y = prob_positive)) +
+  geom_col() +
+  geom_label(aes(label = label), vjust = 1) +
+  theme(axis.text.x = element_text(angle = 45))
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-43-1.png" width="66%" />
 
 All, but participants 309 and 335 almost certainly have positive slopes, experiencing a detoriation of reaction time. Participant 335 we had identified earlier by visual inspection. Now, that we account for the full posterior distribution, it seems a little less suspicious. Basically, the model is almost completely undecisive whether this is a positive and negative effect. The following plot shows  all the possible slopes the MCMC random walk has explored. While participant 335 clearly is an outlier, there is no reason to get too excited and call  him or her a true counter-example from the rule that sleep deprivation reduced performance.
 
+
+```r
+P_scores %>%
+  as_tibble() %>% 
+  filter(Part == 335) %>% 
+  ggplot() +
+  xlim(0.5, 9) +
+  ylim(-50, 50) +
+  geom_abline(aes(intercept = 0, slope = value), alpha = .01)
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-44-1.png" width="66%" />
 
 
+```r
+detach(Sleepstudy)
+```
 
 
 That being said, the method of posterior-based test statistics can also be used for *analysis of existence*. In the Sleepstudy case a hypothetical question of existence would be that there exist persons who are completelyunsensitive to sleep deprivation. Why not? Recently, I saw a documentary about a guy who could touch charged electric wires, because due to a rare genetic deviation, his skin had no sweat glants. Universal statements can only be falsified by a counter-example. Statements of existence can be proven by just a single case. For example, in the 1980  dyslexia became more widely recognized as a defined condition. Many parents finally got an explanation for the problems their kids experienced in school. Many teachers complained that many parents would just seek cheap excuses for their lesser gifted offsprings. And some people argued that dyslexia does not exist and that the disability to read is just a manifestation of lower intelligence. According to the logic of existence, a single person with otherwise good functioning, but slow in learning how to read suffices to proof dyslexia. These have been found in the meantime.
@@ -695,15 +1013,31 @@ Egan's claim has been cited in many papers that regarded individual differences 
 
 
 
+```r
+attach(Egan)
+```
 
 
 
+```r
+D_egan <- D_egan %>% mutate(logToT = log(ToT))
+D_egan %>% as_tbl_obs()
+```
 
 *Note* that ToT has been log-transformed for compliance with the assumptions of Linear Models. Generally, the advice is to use a Generalized Linear Model instead [#GLM, #exgaussian].
 
 Egan's claim is a two-way encounter to which we added the tasks as a third population. However, our data seemed to require a fourth random effect, which essentially is an interaction effect between tasks and websites: how easy a task is, largely depends on the webite where it is carried out. For example, one university website could present the library  on the homepage, whereas another websites hides it deep in its navigation structure. The following grid of histogram shows the marginal distributions of human and non-human populations. The individual plots were created using the following code template:
 
 
+```r
+  D_egan %>% 
+    group_by(Part) %>%
+    summarize(avg_logToT = mean(logToT)) %>% 
+    ggplot(aes(x = avg_logToT)) +
+    geom_histogram() +
+    labs(title = "distribution of participant average log-times") +
+    xlim(1.5,6.5)
+```
 
 
 
@@ -727,12 +1061,32 @@ There seems to be substantial variation between participants, tasks and items, b
 
 
 
+```r
+M_1 <- D_egan %>% 
+  stan_glmer(logToT ~ 1 + (1|Part) + (1|Design) + (1|Task) + (1|Design:Task),data = ., iter = 100)
+
+P_1 <-  posterior(M_1)
+```
 
 
 
 
 A Bayesian multi-level model estimates the standard deviation alongside with  coefficients, such that we can compare magnitude and certainty of variability. In addition, we can always compare a random factor standard deviation to the standard error.
 
+
+
+```r
+P_1 %>% 
+  filter(type == "grpef"  | type == "disp") %>% 
+  mutate(re_factor = if_else(type == "disp", "Obs", re_factor),
+         # re_factor = factor(re_factor, 
+         #                    levels = c("Obs", "Part", "Design", "Task", "Design:Task")),
+         re_factor = mascutils::reorder_levels(re_factor, c(4, 2, 5, 3, 1))) %>% 
+  ggplot(aes(x = value)) +
+  geom_density() +
+  labs(x = "random effect standard deviation") +
+  facet_grid(re_factor~.)
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-52-1.png" width="66%" />
 
@@ -751,6 +1105,18 @@ A secondary observation on the posterior plot is that some effects are rather ce
 We proceed with a formal check of Egans claim, using the same technique as in [#test_stat, #universlity]. What is the probability, that Egan is right? We create a Boolean variable and summarize the proportion of MCMC draws, where $\sigma_ \textrm{Part} > \sigma_ \textrm{Design}$ holds.
 
 
+```r
+C_Egan_is_right <-
+  P_1 %>% 
+  filter(type == "grpef", re_factor %in% c("Part", "Design")) %>% 
+  select(chain, iter, re_factor, value) %>% 
+  spread(re_factor, value) %>% 
+  summarize(Prop_Egan_is_right = mean(Part > Design)) %>%
+  c()
+
+C_Egan_is_right
+```
+
 ```
 ## $Prop_Egan_is_right
 ## [1] 0.944
@@ -765,6 +1131,9 @@ A chance of $0.944$ can count as good evidence in favour of Egan's claim, althou
 
 
 
+```r
+detach(Egan)
+```
 
 
 ## Nested random effects
@@ -785,7 +1154,58 @@ If the original research question is on the consistency across teams, we can rea
 Under this perspective, we examine the data. This time, we have real time-on-task data and as so often, it is highly skewed. Again, we use the trick of logarithmic transformation to obtain a more symmetric distribution of residuals. The downside is that the outcome variable may not be zero. For time-on-task data this is not an issue. In fact, the original CUE8 data set contains several observations with unrealistically low times. Before proceeding to the model, we explore the original variable `ToT` on the two levels (Participant and Team): In the following code the mean ToT is computed for the two levels of analysis, participants and teams and shown in ascending order.
 
 
+
+```r
+attach(CUE8)
+
+D_cue8
+
+D_part_mean <-
+  D_cue8 %>% 
+  group_by(Part, Condition) %>% 
+  summarize(mean_ToT = mean(ToT), na.rm = T,
+            n_Obs = n()) %>%   
+  ungroup() %>% 
+  rename(Unit = Part) %>% 
+  mutate(percentile = percent_rank(mean_ToT),
+         Level = "Part")
+
+D_team_mean <-
+  D_cue8 %>% 
+  group_by(Team, Condition) %>% 
+  summarize(mean_ToT = mean(ToT, na.rm = T),
+            n_Obs = n()) %>%
+  ungroup() %>% 
+  rename(Unit = Team) %>% 
+  mutate(percentile = percent_rank(mean_ToT),
+         Level = "Team")
+
+D_task_mean <-
+  D_cue8 %>% 
+  group_by(Task, Condition) %>% 
+  summarize(mean_ToT = mean(ToT, na.rm = T),
+            n_Obs = n()) %>%
+  ungroup() %>% 
+  rename(Unit = Task) %>% 
+  mutate(percentile = percent_rank(mean_ToT),
+         Level = "Task")
+
+
+bind_rows(D_team_mean,
+          D_part_mean) %>%
+  ggplot(aes(x = percentile, 
+             y = mean_ToT,
+             col = Level,
+             shape = Level,
+             size = Level)) + 
+  geom_point()
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/CUE8_eda-1.png" width="66%" />
+
+```r
+detach(CUE8)
+```
 
 #### EDIT
 #### ALIGN
@@ -798,9 +1218,21 @@ Note that this treatment is between-subject for participants. There is also just
 
 
 
+```r
+attach(CUE8)
+```
 
 
 
+```r
+M_1 <- 
+  D_cue8 %>% 
+  stan_lmer(logToT ~ Condition + (1|Part) + (1|Team),
+       data = .)
+# logToT ~ Condition + 1|Part/Team
+
+P_1 <- posterior(M_1)
+```
 
 
 
@@ -809,6 +1241,12 @@ Note that this treatment is between-subject for participants. There is also just
 After running the model, we compare the sources of variation. Recall, that LRMs assume that the ramdom effects are drawn from a Gaussian distribution and the amount of systematic variation is represented by $\sigma$. As this is precisely the way, Gaussian distributed errors are represented, we can actually distinguish three levels of variation: participants, team and residuals, which is nothing else, but an *observation-level random effect (OLRE)* . Here, the remaining noise can serve as a baseline for quantifying the diversity. In conjunction with Generalized Linear Models, we will re-encounter this idea and use it to model over-dispersion.
 
 The table below tells that the strongest variation is still on observation-level, i.e. noise. Almost the same amount of variation is due to teams. And, in contrast to what the exploratory analysis suggested, the variation due to teams is considerably smaller than participant-level variation. <!-- #86 -->
+
+
+```r
+clu(P_1, type = c("grpef", "disp"))
+```
+
 
 
 |parameter                         |type  |fixef     |re_factor | center| lower| upper|
@@ -821,10 +1259,21 @@ The table below tells that the strongest variation is still on observation-level
 It is hard to deny that, at least for consumer systems, people vary greatly in performance. That is the whole point about universal design. However, the discordance between professional teams is also concerning. And that arises after controlling for an experimental factor, remote or moderated. By the way, the difference between moderated and remote testing is $0.33 [-0.31, 1.05]_{CI95}$. The fixed effect is rather weak and highly uncertain.
 
 
+```r
+T_fixef <- fixef(P_1)
+T_fixef
+```
+
+
+
 |fixef              | center|  lower| upper|
 |:------------------|------:|------:|-----:|
 |Intercept          |  4.614|  4.093|  5.10|
 |Conditionmoderated |  0.331| -0.311|  1.05|
+
+```r
+detach(CUE8)
+```
 
 
 
@@ -876,6 +1325,21 @@ The CUE8 study makes a case for seeing shrinkage in action: Teams of researchers
 We estimate two models, a random effects (RE) model and a fixed effects (FE) model. For the RE model, the absolute group means are calculated on the posterior. Figure XY shows the comparison of FE and RE estimates. 
 
 
+```r
+attach(CUE8)
+```
+
+
+
+```r
+M_2 <- 
+  D_cue8 %>% 
+  stan_glm(logToT ~ Team - 1, data = .)
+
+M_3 <- 
+  D_cue8 %>% 
+  stan_glmer(logToT ~ 1 + (1|Team), data = ., iter = 100)
+```
 
 
 
@@ -883,10 +1347,44 @@ We estimate two models, a random effects (RE) model and a fixed effects (FE) mod
 
 
 
+```r
+P_2 <- posterior(M_2, type = "fixef")
+P_3_fixef <-  posterior(M_3, type = "fixef")
+P_3_ranef <-  posterior(M_3, type = "ranef")
 
+## Creating a derived posterior with absolute team-level random effects
+P_3_abs <-
+  left_join(P_3_ranef, P_3_fixef,
+    by = c("chain", "iter", "fixef"),
+    suffix = c("","_fixef"))
+
+P_3_abs$value <-  P_3_abs$value + P_3_abs$value_fixef
+
+
+T_shrinkage <- 
+  D_cue8 %>% 
+  group_by(Team) %>% 
+  summarize(N = n()) %>% 
+  mutate(fixef = fixef(P_2)$center,
+         ranef = ranef(P_3_abs)$center,
+         diff = fixef - ranef) 
+
+
+sd_fixef <- sd(T_shrinkage$fixef)
+sd_ranef <- sd(T_shrinkage$ranef)
+
+
+T_shrinkage %>% 
+  ggplot(aes(x = Team, y = fixef, size = N, col = "fixef")) +
+  geom_point() +
+  geom_point(aes(y = ranef, col = "ranef"), alpha = .5)
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/CUE8_fe_vs_re-1.png" width="66%" />
 
+```r
+detach(CUE8)
+```
 
 
 Team H is far off the population average, but almost no shrinkage occurs due to the large number of observations. Again, no shrinkage occurs for Team L, as it is close to the population mean, and has more than enough data to speak for itself. Team B with the fewest observation (a genereous $N = 45$, still), gets noticable  shrinkage, although it is quite close to the population mean. Overall, the pattern resembles the above properties of random effects: groups that are far off the population mean and have comparably small sample size get a shrinkage correction. In the case of CUE8, these correction are overall negligible, which is due to the fact that all teams gathered ample data. Recall the SOV simulation above, where the set of tasks every user did was beyond control of the researcher. In situations with quite heterogeneous amount of missing data per participant, shrinkage is more pronounced and more information is drawn from the population mean. <!-- #88 -->
@@ -923,28 +1421,54 @@ We begin with the first case, standard psychometrics to assess user characterist
 In the case of visual-spatial ability, the researcher could administer a test for visual-spatial abilities: for example, participants solve a set of mental rotation tasks and reaction times are collected as a score for spatial processing speed; this would later be compared to performance in a real (or simulated) task, let's say the number of times an obstacle is hit in a driving simulator. The straight-forward approach would be to  take the average measure per person as a score for mental rotation speed. 
 
 
+```r
+n_Part <- 20
+n_Trial <- 10
+n_Obs <- n_Part * n_Trial
+
+D_Part <- tibble(Part = 1:n_Part,
+                 true_score = rnorm(n_Part, 900, 80))
+
+D_Trial <- tibble(Trial = 1:n_Trial)
+
+D_CTT <- 
+  mascutils::expand_grid(Part = D_Part$Part,
+                                Trial = D_Trial$Trial) %>% 
+  left_join(D_Part) %>% 
+  mutate(RT = rnorm(n_Obs, 
+                    mean = true_score,
+                    sd = 50)) %>% 
+  mascutils::as_tbl_obs()
+
+D_CTT %>% 
+  group_by(Part) %>% 
+  summarize(score = mean(RT))
+```
+
+
+
  Part   score
 -----  ------
-    1     889
-    2     713
-    3     787
-    4     776
-    5     771
-    6     931
-    7     818
-    8     917
-    9     867
-   10     905
-   11     929
-   12    1040
-   13     870
-   14     999
-   15     946
-   16     861
-   17     994
-   18     855
-   19     986
-   20     824
+    1     912
+    2     989
+    3     882
+    4     827
+    5     956
+    6     844
+    7     941
+    8     882
+    9     917
+   10    1077
+   11     877
+   12     930
+   13     912
+   14     906
+   15    1015
+   16     971
+   17     875
+   18     812
+   19    1059
+   20     731
 
 Note how the table only contains the identifiers, but no additional information. The trials in the mental rotation task are assumed to be exchangeable. This is how the so-called *classical test theory* approach works. In classical test theory, the observed test score $y_i$ for participant $i$ is composed of the the true score of participant $i$, $\mu_i$, and a Gaussian measurement error $\epsilon_{ij}$.
 
@@ -966,24 +1490,53 @@ Some years ago, I proposed a novel personality construct *geekism*, which states
 
 
 
+```r
+attach(Hugme)
+
+D_quest <- D_quest %>% mutate(Session = as.factor(session))
+```
 
 One important thing to note at this point is that psychometricians like to put things in matrices. An item response matrix is squared, whereas we need the long format for the regression engine. As is shown below, the long form can be transformed into a matrix and vice versa.
 
 
+```r
+D_long <- expand_grid(Part = 1:8, 
+                      Item = 1:5) %>% 
+  mutate(rating = rnorm(40)) %>% 
+  mascutils::as_tbl_obs()
+D_long
+
+D_long %>%  
+  select(Part, Item, rating) %>% 
+  spread(key = Item, value = rating)
+```
+
+
+
  Part        1        2        3        4        5
 -----  -------  -------  -------  -------  -------
-    1   -0.165   -1.656    0.003    0.136   -0.193
-    2    0.450   -0.823    0.071   -0.518    1.125
-    3   -0.460   -1.802    0.113   -0.717   -0.626
-    4    1.146    0.556    0.243   -0.165    0.387
-    5    1.078   -0.646   -0.370    2.099   -0.177
-    6   -0.681   -0.470   -0.544    1.408   -0.081
-    7    2.054    0.875   -1.405   -1.818    0.192
-    8    2.281    0.644    0.045   -0.388   -0.570
+    1    0.161    0.774    1.837   -0.724   -0.432
+    2   -0.270    0.599   -0.367   -0.522    0.340
+    3    2.170    0.878    1.515    1.210   -0.933
+    4   -0.173    0.321    1.305    1.026   -0.069
+    5    1.167    0.186   -2.575    2.254   -2.356
+    6   -0.099   -0.155    2.849    0.352   -0.071
+    7   -3.100   -1.431   -0.940    1.619   -1.930
+    8   -0.442   -0.807    1.872   -0.361   -1.433
 
 Psychometric programs often require matrix data, but for a multi-level models we need the long format. IRM models regard items as  populations, too, and the basic IRT model is a cross-classified intercept-only model [#crossover].
 
 
+```r
+D_psymx_1 <- 
+  D_quest %>%   
+  filter(Scale == "Geek", Session == 1)
+  
+
+M_psymx_1 <- 
+  D_psymx_1 %>% 
+  stan_glmer(rating ~ 1 + (1|Part) + (1|Item), data = .)
+```
 
 With such an IRT model, we can extract the person scores, if we want to compare persons. Psychometric evaluation of a rating scale also draws upon items scores. In the following I will demonstrate two psychometric evaluations, using multi-level models: 
 
@@ -1002,6 +1555,25 @@ may be great to distinguish between amateur and pro level geekism, but the major
 We have a linear model, where the rating is weighted sums of person tendency and item sensitivity. A high rating can mean two things (or both): coming from a very geek person, indeed, or it was a very sensitive item. For a good test coverage we need sensitive items for levels of low geekism and strong, i.e. *less* sensitive, items for the pros. Because  random effects are centered at zero, we can simply reverse the scale with *item strength* being the negative sensitivity. Now we can compare the distributions of person and item scores side-by-side and check how the person tendencies are covered by item strength. *Note* that for obtaining the absolute scores, we can use the Bayr function `re_scores`, but for psychometric analysis, the deviation from the population average is sufficient, hence `ranef`.
 
 
+
+```r
+P_psymx_1 <- posterior(M_psymx_1)
+
+T_ranef <- 
+  ranef(P_psymx_1) %>% 
+  rename(geekism = center) %>% 
+  mutate(geekism = if_else(re_factor == "Item", -geekism, geekism)) # reversing
+  
+
+T_ranef %>% 
+  ggplot(aes(x = re_factor,
+             y = geekism,
+             label = re_entity)) +
+  geom_violin() +
+  geom_jitter(width = .2) +
+  ylim(-2, 2)
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-66-1.png" width="66%" />
 It turns out that the 32 items of the test cover the range of very low to moderately high geekism quite well. The upper 20 percent are not represented so well, as it seems. If we were to use the scale to discriminate between geeks and totally geeks, more strong item had to be added.
 
@@ -1012,6 +1584,15 @@ Next, we examine the reliability of the Geekism scale. Reliability is originally
 In order to obtain the scores per session, we add an effect to the model. For reliability we are interested in correlation between person scores, so it suffices to add the Session random effect to the participant level, only.  However, the same model can be used to do assess stability of item scores, too. This is rarely practiced, but as we will see, there is an interesting pattern.
 
 
+```r
+D_psymx_2 <- 
+  D_quest %>% filter(Scale == "Geek")
+
+M_psymx_2 <- 
+  D_psymx_2 %>% 
+  brm(rating ~ 0 + Session + (0 + Session|Part) + (0 + Session|Item),
+      data = .)
+```
 
 
 
@@ -1019,15 +1600,40 @@ We extract the random effects and plot test-retest scores for participants and i
 
 
 
+```r
+T_ranef <- 
+  ranef(M_psymx_2) %>% 
+  select(re_factor, re_entity, Session = fixef, score = center) %>% 
+  spread(key = Session, value = score)
+
+sample_n(T_ranef, 5)
+```
+
+
+
 re_factor   re_entity    Session1   Session2
 ----------  ----------  ---------  ---------
-Item        Geek04         -0.040     -0.068
-Part        23              0.340      0.299
-Part        63             -0.479     -0.429
-Part        54             -0.177     -0.171
-Part        32              1.511      1.387
+Item        Geek14          0.432      0.334
+Item        Geek25          0.634      0.515
+Item        Geek21          1.235      0.937
+Part        66             -0.962     -0.841
+Part        5              -1.129     -1.024
 
 
+
+
+```r
+plot_stability <- 
+  function(T_ranef) T_ranef %>% 
+                    ggplot(aes(x = Session1, y = Session2)) +
+                    facet_grid(.~re_factor) +
+                    geom_point() +
+                    geom_smooth(aes(color = "observed stability"), se = F) +
+                    geom_abline(aes(intercept = 0, slope = 1, 
+                                    color = "perfect stability"))
+
+T_ranef %>% plot_stability()
+```
 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-70-1.png" width="66%" />
 
@@ -1040,12 +1646,41 @@ Another situation where item stability matters is when a person doing the test i
 The example of test-retest stability shows one more time, how useful plots are for discovering patterns in data. More formally, test-retest stability is reported as a correlation. We can produce a correlation estimate by using the standard `cor` command on the participant-level random effects:
 
 
+```r
+T_ranef %>% 
+  group_by(re_factor) %>% 
+  summarize(cor = cor(Session1, Session2))
+```
+
+
+
 re_factor      cor
 ----------  ------
 Item         0.998
 Part         1.000
 
 Unfortunately, this lacks information about the degree of certainty. The better way is to let the regression engine estimate all correlations between random factors that are on the same level (Part, Item). The rgression engine `brm` fromn package Brms package does that by default, and this is why it has been used, here. The following code extracts the posterior distributions of all correlations in the model, creates an estimates table and a plot of 95% certainties.
+
+
+```r
+clu_cor <- 
+  function(model){
+    model %>% 
+    posterior() %>% 
+    filter(type == "cor") %>% 
+    mutate(parameter = str_remove_all(parameter, "cor_")) %>% 
+    group_by(parameter) %>% 
+    summarize(center = median(value),
+              lower = quantile(value, .025),
+              upper = quantile(value, .975)) %>%
+    separate(parameter, into = c("re_factor", "between", "and"), sep = "__")
+}
+
+
+M_psymx_2 %>% 
+  clu_cor()
+```
+
 
 
 re_factor   between    and         center   lower   upper
@@ -1068,8 +1703,19 @@ In the real world, researchers in the field of personality are usually content w
 
 
 
+```r
+M_psymx_3 <- 
+  D_psymx_3 %>% 
+  brm(rating ~ 0 + Scale + (0 + Scale|Part),  data = .)
+```
 
 
+
+
+
+```r
+M_psymx_3 %>% clu_cor()
+```
 
 
 
@@ -1080,6 +1726,9 @@ Part        Intercept   ScaleNCS    -0.524   -0.698    -0.3
 We observe a weakly positive  association between Geek and NCS, just as was hoped for.
 
 
+```r
+detach(Hugme)
+```
 
 
 
@@ -1090,27 +1739,69 @@ We observe a weakly positive  association between Geek and NCS, just as was hope
 Leaving the field of psychometrics, we revisit the Uncanny Valley data set [#polynomials]. The experiment used eight items from the Eeriness scale [#MacDorman] to  ask the judgment of participants on 82 stimuli showing robot faces. In one of our experiments (RK_1), participants simply rated all robots face in three separate session. 
 
 
+```r
+attach(Uncanny)
+```
+
+
+```r
+RK_1 %>%  
+  select(Part, Item, Session, response) %>% 
+  sample_n(5)
+```
+
 
 
 Part    Item   Session    response
 ------  -----  --------  ---------
-p2_01   nE7    2            -0.335
-p1_04   nE2    1            -0.165
-p2_04   nE5    3            -0.730
-p2_04   nE1    3            -0.212
-p1_11   nE7    2            -0.355
+p1_10   nE8    3            -0.943
+p2_04   nE5    3            -0.432
+p2_03   nE7    1            -0.333
+p1_07   nE8    1            -0.428
+p2_10   nE8    1            -0.040
 
 With this data we seem to be standing on familiar psychometric grounds: Items are used on persons and we have three measures over time. We can calculate test-retest stability of items and persons using a multi-level model. Voila! Here are your correlations, person and item stability - with credibility limits. Wait a second! What is being measured here? Persons? No, robot faces. The original question was, how human-likeness of robot faces is related to perceived eeriness of robot faces and the Eeriness scale intended purpose is the comparison of designs, not persons. For example, it could be used by robot designers to check that a design does not trigger undesireable emotional responses. Without knowing the humen-likeness scores, robot faces become just a naked *sample of designs* [#crossover]:
 
 
+```r
+UV_dsgmx <- 
+  RK_1 %>% 
+  rename(Design = Stimulus) %>% 
+  select(Part, Item, Design, Session, response) %>% 
+  as_tbl_obs()
+
+UV_dsgmx
+```
 
 Measures in the Uncanny experiment are an encounter of three samples: Part, Item and Design, and Design is the one of interest. That means we need a model that produces Design-level scores. For the user of multi-level models that just means to add a Design random effect to the psychometric model (Part, Item). Models, where a design random factor sits on top of a psychometric model, I call from here on a *designometric models*. The most basic designometric model is a three-way cross-classified intercept-only model, from which design scores can be extracted. By extending the test-retest psychometric model `M_psymx_2`, we can estimate test-retest stability.
 
 
+```r
+M_dsgmx_1 <-
+  UV_dsgmx %>% 
+  brm(response ~ 0 + Session + 
+        (0 + Session|Design) + 
+        (1 + Item) + 
+        (0 + Session|Part), data = .)
+```
 
 
 Like in the psychometric situation, we extract the correlations.  Since we have three sessions, we get two stability scores per level.
 
+
+```r
+M_dsgmx_1 %>% 
+  posterior() %>% 
+  clu_cor() %>% 
+  print() %>% 
+  ggplot(aes(x = re_factor,
+             y = center,
+             ymin = lower,
+             ymax = upper)) +
+  facet_grid(and  ~ between) +
+  geom_crossbar() +
+  ylim(0,1)
+```
 
 ```
 ## # A tibble: 6 x 6
@@ -1127,6 +1818,9 @@ Like in the psychometric situation, we extract the correlations.  Since we have 
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-81-1.png" width="66%" />
 
 
+```r
+detach(Uncanny)
+```
 
 
 
@@ -1147,6 +1841,20 @@ That all being said about designometric models, my observation is that practical
 
 Measuring participant performance is a useful application in some design research fields, such as human performance in  critical systems, e.g. identify persons with the best talent for being an airspace controller. However, in design research, it is frequently designs that are to be compared. For example, in the Egan case, one might be interested to select the best of the ten website designs, in order to use it as a blueprint. Such a research question is no longer psychometric, literally, but formally the only difference is that participants can be considered test items, rather than test objects. At least, when using ramdom effects for psychometric purposes, there is nothing special about the participant random effects compared to design random effects. Let's pretend we had conducted the study in order to identify a good template for university websites. The following code extracts design random effects posteriors, summarizes them in the usual way and makes a plot.
 
+
+```r
+attach(Egan)
+
+ranef(P_1) %>%
+  filter(re_factor == "Design") %>%
+  rename(Design = re_entity) %>%
+  ggplot(aes(x = Design, y = center, ymax = upper, ymin = lower)) +
+  geom_point(size = 1) +
+  geom_crossbar() +
+  ylab("log ToT") +
+  theme(axis.text.x = element_text(angle = 45))
+```
+
 <img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-84-1.png" width="66%" />
 
 
@@ -1158,6 +1866,9 @@ As innocent as the Egan study seems, there is some psychometrics involved.  Firs
 
 
 
+```r
+detach(Egan)
+```
 -->
 
 

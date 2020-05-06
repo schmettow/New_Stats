@@ -67,6 +67,16 @@ In the chapter on Linear Models, we encountered several situations where lineari
 
 The third case is special, in that the curvature itself is of theoretical interest (e.g. finding the "trough" of the UNcanny Valley efect). In contrast, learning curves and saturation effects have in common that in both situations performance has a limit and as much that limit is approached, training (or other treatments) takes less effect and the curve bends towards an asymptote.
 
+
+```r
+attach(IPump)
+
+D_Novel %>% 
+  ggplot(aes(x= session, y = deviations)) +
+#  geom_jitter() +
+  geom_smooth(se = F)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-2-1.png" width="66%" />
 
 We used an OFM with stairways coding to account for this non-linearity, but that has one disadvantage. From a practical perspective it would interesting to know, how performance improves when practice continues. What would be performance in (hypothetical) sessions 4, 5 and 10. Because the OFM just makes up one estimate for every level, there is no way to get predictions beyond the observed range.
@@ -74,23 +84,45 @@ We used an OFM with stairways coding to account for this non-linearity, but that
 With an LRM, the slope parameter applies to all steps, which gives us the possibility of deriving predictions beyond the observed range. To demonstrate this on the deviations from optimal path, the following code estimates a plain LRM and then injects some new (virtual) data to get predictions beyond the observed range:
 
 
+```r
+M_LRM_1 <- stan_glm(deviations ~ 1 + session, data = D_Novel)
+```
 
 
 
+
+```r
+D_new <- 
+  tibble(session = as.integer(c(0:9)),
+         range = if_else(session < 3, "observed", "beyond obs.")) %>% 
+  as_tbl_obs()
+
+predict(M_LRM_1, newdata = D_new) %>% 
+  print() %>% 
+  left_join(D_new) %>% 
+  ggplot(aes(x = session, y = center, ymin = lower, ymax = upper)) +
+  geom_ribbon(aes(fill = range), alpha = .2) +
+  geom_step() +
+  geom_hline(aes(yintercept = 0), color = "red", linetype = 2) +
+  scale_x_continuous(breaks = 0:10)
+```
 
 ```
 ## **  10 predictions (scale: resp) with 95% credibility limits (five shown below) 
 ##   Obs center lower upper
-## 1   4  0.335 -1.86  2.55
-## 2   5  0.160 -2.00  2.38
-## 3   7 -0.206 -2.43  2.07
-## 4   9 -0.473 -2.87  1.82
-## 5  10 -0.646 -3.03  1.58
+## 1   3  0.429 -1.63  2.62
+## 2   4  0.313 -1.85  2.56
+## 3   5  0.112 -2.02  2.32
+## 4   8 -0.284 -2.67  1.99
+## 5   9 -0.511 -2.78  1.84
 ```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="66%" />
 
 
+```r
+detach(IPump)
+```
 
 
 When we use a linear model when there truly is an asymptotic curve, negative values are produced, which are impossible. As the graph shows, this is most pronounced the further we move away from teh observed range. But, it also effects the observed levels, as the lower credibility limits are negative, too.
@@ -127,6 +159,30 @@ One reason for monotonicity is that for a link function $\phi$ there must exist 
 The most typical cases are that there is a lower boundary of zero, or there are two boundaries. An adequate link function for count variables would map the range of natural numbers (only lower bound) to the *linear range* of $\eta$ that is $[-\infty; \infty]$. The *logarithm* is such a function and its inverse is the *exponential* function, which bends the linear range back into the boundary. Other variables, like success rates or rating scales, have lower and upper boundaries. A suitable pair of functions is the *logit* link function and the *logistic* mean function.  
 
 
+
+```r
+plot_glmfun <- function(f = log,
+                        title = "log link function",
+                        lower = .01, upper = 3,
+                        dir = "link"){
+  out <-  
+    tibble(x = seq(lower, upper, (upper - lower)/100)) %>% 
+    ggplot(aes(x)) +
+    stat_function(fun = f) +
+    labs(title = title) +
+    labs(x = expression(mu), y = expression(eta))
+  if(dir == "mean") out <- out + labs(x = expression(eta), 
+                                      y = expression(mu))
+  out
+}
+
+gridExtra::grid.arrange(
+  plot_glmfun(),
+  plot_glmfun(f = exp, "exponential mean function",  -3.5, 1, dir = "mean"),
+  plot_glmfun(f = logit, "logit link function", 0.01, .99),
+  plot_glmfun(f = inv_logit, "logistic mean function",  -5, 5, dir = "mean"))
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-7-1.png" width="66%" />
 
 Using the link function comes at a cost: the linear coefficients $\beta_i$ is losing its interpretation as increment-per-unit and no longer has a natural interpretation. Later we will see that logarithmic and logit scales gain an intuitive interpretation when parameters are exponentiated, $\textrm{exp}(\beta_i)$ (\@ref(poisson-regression) and \@ref(logistic-regression)
@@ -143,8 +199,25 @@ The second term of a linear model, $y_i \sim Norm(\mu_i, \sigma)$ states that th
 The problem can be demonstrated by simulating observations, using  a Gaussian pattern of randomness, and see how this fails to produce realistic data. Imagine a study comparing a novel and a legacy interface design for medical infusion pumps. The researchers let trained nurses perform a single task on both devices and count the errors. Assuming, the average number of errors per tasks is $\mu_L = 3$ for the legacy device and $\mu_N = 1.2$ for the novel device, with standard deviation of $\sigma = .8$. We can simulate a basic data set as:
 
 
+```r
+N = 80
+D_pumps_sim <- 
+  tibble(Design = rep(c("L", "N"), N/2),
+             mu = if_else(Design == "L", 3, 1.2),
+             errors = rnorm(N, mu, sd = 1))
+```
 
 We illustrate the data set using histograms:
+
+
+```r
+D_pumps_sim %>% 
+  ggplot(aes(x = errors)) +
+  facet_grid(~Design) +
+  geom_histogram(bins = 20) +
+  geom_vline(col = "red", xintercept = 0) +
+  coord_flip()
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-9-1.png" width="66%" />
 
@@ -182,6 +255,17 @@ Imagine a survey on commuter behaviour that asks the following questions:
 
 If we simulate such data from a linear model, the relationship between length of route and travel time would look like a evenly wide band, which is due to the constant variance:
 
+
+```r
+N = 100
+tibble(Obs = as.factor(1:N),
+           km  = runif(N, 2, 40),
+           min = rnorm(N, km * 2, 10)) %>% 
+  ggplot(aes(x = km, y = min)) +
+  geom_point() +
+  geom_quantile(quantiles = c(.25, .5, .75))
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-11-1.png" width="66%" />
 
 Again, we get some impossible negative data points, but what is also unrealistic is that persons who live right around the corner experience the same range of possible travel times than people who drive dozens of kilometers. Most of the time, we intuit the dispersion of randomness to increase with the magnitude. 
@@ -197,6 +281,16 @@ E(X) = \alpha \theta\\
 \textrm{Var}(X) = E(X) \theta
 $$
 
+
+```r
+tibble(Obs = as.factor(1:100),
+           km  = runif(100, 2, 40),
+           min = rgamma(100, shape = km * .5, scale = 4)) %>% 
+  ggplot(aes(x = km, y = min)) +
+  geom_point() +
+  geom_quantile(quantiles = c(.25, .5, .75))
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-12-1.png" width="66%" />
 
 A similar situation arises for count data. When counting user errors, we would expect a larger variance for complex tasks and interfaces, e.g. writing an article in a word processor,  as compared to the rather simple situation like operating a medical infusion pump. For count data, the Poisson distribution is often a starting point and for Poisson distributed variables, mean and variance are both exactly determined by the Poisson rate parameter $\lambda$, and therefore linearly connected.
@@ -205,6 +299,16 @@ $$
 X \sim \textrm{Poisson}(\lambda)\\
 \textrm{Var}(X) = E(X) = \lambda
 $$
+
+
+```r
+tibble(Obs = as.factor(1:100),
+           Task  = rep(c("article", "infusion"), 50),
+           errors = rpois(100, lambda = if_else(Task == "article", 200, 8))) %>%
+  ggplot(aes(x = Task, y = errors)) +
+  geom_boxplot() +
+  geom_jitter()
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-13-1.png" width="66%" />
 
@@ -218,6 +322,14 @@ E(X) = p k\\
 $$
 
 To see this, imagine a study that examines the relationship between user expertise (for the convenience on a scale of zero to one) and success rate on ten tasks. The result is a cigar-like shape. For binomial distributions, variance gets largest, when the chance of success is centered at $p = .5$. This is very similar for other distributions with two boundaries, such as beta and logit-Gaussian distributions.
+
+
+```r
+tibble(expertise  = runif(1000, 0, 1),
+           successes = rbinom(1000, 25, expertise)) %>%
+  ggplot(aes(x = expertise, y = successes)) +
+  geom_point()
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-14-1.png" width="66%" />
 
@@ -258,12 +370,36 @@ The link function is the logarithm, as it transforms from the non-negative range
 
 
 
+
+```r
+set.seed(6)
+D_Pois <- 
+  tibble(Obs = 1:30,
+  items_found = rpois(30, lambda = 3.4))
+
+D_Pois %>% 
+  ggplot(aes(x = items_found)) +
+  geom_histogram()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-16-1.png" width="66%" />
 
+```r
+M_Pois <- 
+  stan_glm(items_found ~ 1,
+           family = poisson,
+           data = D_Pois)
+```
 
 
 
 <!-- bayr #1 -->
+
+
+```r
+fixef(M_Pois)
+```
+
 
 
 |model  |type  |fixef     | center| lower| upper|
@@ -271,6 +407,12 @@ The link function is the logarithm, as it transforms from the non-negative range
 |object |fixef |Intercept |   1.31|  1.16|  1.48|
 
 Poisson distributions have only one parameter $\lambda$ (lambda),  has a direct interpretation as it represents the expected mean (and variance) of the distribution. On the contrary, the regression coefficient is on a logarithmic scale to ensure it has no boundaries. To reverse to the scale of measurement, we use the exponential function is the *mean function* [#relinking]:
+
+
+```r
+fixef(M_Pois, mean.func = exp)
+```
+
 
 
 |model  |type  |fixef     | center| lower| upper|
@@ -300,10 +442,30 @@ To demonstrate the interpretation of coefficients other than the intercept (or a
 #### ALIGN
 
 
+```r
+attach(IPump)
+```
+
+
+```r
+M_dev <- 
+  stan_glmer(deviations ~ Design + session + session:Design + 
+               (1 + Design + session|Part) +
+               (1 + Design|Task) +
+               (1|Obs), ## observation-level ramdom effect
+             family = poisson,
+             data = D_pumps) 
+
+M_dev
+```
 
 
 
 
+
+```r
+fixef(M_dev)
+```
 
 
 
@@ -315,6 +477,12 @@ To demonstrate the interpretation of coefficients other than the intercept (or a
 |DesignNovel:session | -0.075| -0.244|  0.090|
 
 Again, the coefficients are on a logarithmic scale and cannot be interpreted right away. By using the exponential mean function, we obtain the following table:
+
+
+```r
+fixef(M_dev, mean.func = exp)
+```
+
 
 
 |fixef               | center| lower| upper|
@@ -345,6 +513,9 @@ On the left-hand side, fitted responses are obtained by the usual linear combina
 
 
 
+```r
+detach(IPump)
+```
 
 
 #### Dissolving saturation effects
@@ -354,6 +525,24 @@ With link functions (other than the identity link), interpreting coefficients is
 The idea of replacing the OFM with a linear regression, which one would better call a *linear__ized__ regression model (LzRM)*, is attractive. For one, with such a model we can obtain valid *forecast* of the learning process. And second, the LRM is more *parsimonous* [#parsimony]. Even with longer sequences, an LzRM just needs two parameters: intercept and slope, whereas the OFM requires one coefficient per session.
 
 What if I also told you, that exponential functions make pretty good learning curves? (Review the simulation in [#OFM]) Even the idea of a multiplicative effect bears some good intuition for learning processes, for example, if we say that by every session, errors are reduced to, say 80%, compared to the previous. This can be demonstrated by simulation of a learning experiment. This simulation takes a constant step size of $\log(.8) = -0.223$ on the linearized scale, resulting in a reduction of 20% per session.
+
+
+```r
+initial_deviations <- 20
+learning_rate <- .8
+
+D_learn <- tibble(session = 0:10,
+                  theta = log(initial_deviations) +  session * log(learning_rate),
+                  mu = exp(theta),
+                  errors = rpois(11, mu))
+
+D_learn %>% 
+  ggplot(aes(x =  session, y = errors)) +
+  geom_point(aes(col = "simul. responses")) +
+  geom_line(aes(y = mu, col = "response scale")) +
+  geom_line(aes(y = theta, col = "linearized scale")) +
+  ylim(0,20)
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-28-1.png" width="66%" />
 
@@ -367,13 +556,48 @@ We estimate both models as usual, with conditional effects for Design:
 
 
 
+```r
+attach(IPump)
+```
+
+
+
+```r
+D_agg <- 
+  D_agg %>% 
+  mutate(Step_1 = as.integer(session >= 1),
+         Step_2 = as.integer(session >= 2))
+
+M_pois_cozfm <- 
+  D_agg %>% 
+  brm(deviations ~ 0 + Design + Step_1:Design + Step_2:Design, family = "poisson", data = .)
+
+M_pois_clzrm <-
+  D_agg %>% 
+  brm(deviations ~ 0 + Design + session:Design, family = "poisson", data = .)
+```
 
 
 
 
 
-
-
+```r
+T_fixef <-
+  bind_rows(
+    posterior(M_pois_cozfm),
+    posterior(M_pois_clzrm)
+  ) %>% 
+  fixef(mean.func = exp) %>% 
+  separate(fixef, into = c("Design", "Learning_unit"), sep = ":") %>% 
+  mutate(model = str_to_upper(str_remove(model, "M_pois_")),
+         Learning_unit = replace_na(Learning_unit, "Initial_performance"),
+         Parameter_type = if_else(Learning_unit == "Initial_performance",
+                                  "Initial_performance",
+                                  "Performance_increment")) %>% 
+  arrange(Design, Learning_unit, model) %>% 
+  discard_redundant() %>% 
+  print()
+```
 
 ```
 ## # A tibble: 10 x 7
@@ -391,6 +615,14 @@ We estimate both models as usual, with conditional effects for Design:
 ## 10 COZFM DesignNovel Step_2              0.865  0.656  1.13  Performance_increm~
 ```
 
+```r
+T_fixef %>% 
+  ggplot(aes(x = Learning_unit, y = center, col = Design, alpha = model, ymin = lower, ymax = upper)) +
+  #geom_point(size = 2) +
+  geom_crossbar(position = "dodge", width = .2, fill = "grey") +
+  facet_wrap(Parameter_type ~ ., scales = "free")
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-31-1.png" width="66%" />
 
 Note that two additional classifiers (Learning_unit, Parameter_type) are added to the table to produce a nicely grouped graph.
@@ -398,6 +630,11 @@ Note that two additional classifiers (Learning_unit, Parameter_type) are added t
 Indeed, the coefficients Step_1 and Step_2 appear to be in a similar region for both designs, although Step_1 remains slightly stronger. As must be expected, the slope of the LzRM sits right in the middle. Both models estimate almost the same Intercepts, i.e. initial performance. Another observation exceeds our expectations on constancy of the learning rate: on the linearized scale, the performance increments are even very similar for the two designs. This opens the possibility for a LzRM that is unconditional on the learning rate (but with conditional intercepts):
 
 
+```r
+M_pois_lzrm <-
+  D_agg %>% 
+  brm(deviations ~ 0 + Design + session, family = "poisson", data = .)
+```
 
 
 
@@ -429,6 +666,14 @@ From the coefficients it seems that the OzFM can best be replaced by the more pa
 
 
 
+```r
+L_pois_cozfm <-  loo(M_pois_cozfm)
+L_pois_clzrm <-  loo(M_pois_clzrm)
+L_pois_lzrm <-  loo(M_pois_lzrm)
+
+loo_compare(x = list(L_pois_lzrm, L_pois_clzrm, L_pois_cozfm))
+```
+
                 elpd_diff   se_diff   elpd_loo   se_elpd_loo   p_loo   se_p_loo   looic   se_looic
 -------------  ----------  --------  ---------  ------------  ------  ---------  ------  ---------
 M_pois_lzrm          0.00     0.000       -482          21.6    7.33       1.14     964       43.1
@@ -442,9 +687,32 @@ Model comparison with LOO is preferring the most parsimonous model, the uncondit
 
 As the LzRM is our best model candidate, We may now use it to forecast what would happen in future sessions. We inject fabricated data (predictors only) into the model and plot the results:
 
+
+```r
+D_forecast <- 
+  expand_grid(session = c(0:10),
+              Design = c("Novel", "Legacy"),
+              Part = 1:50) %>% 
+  as_tbl_obs() %>% 
+  mutate(Session = as.factor(session + 1))
+  
+T_pred <- 
+  post_pred(M_pois_lzrm, newdata = D_forecast) %>% 
+  left_join(D_forecast, by = "Obs") %>% 
+  group_by(Design, Session) %>% 
+  summarize(mean_deviations = mean(value))
+
+T_pred %>% 
+  ggplot(aes(x = Session, col = Design, y = mean_deviations)) +
+  geom_line(aes(group = Design))
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-35-1.png" width="66%" />
 
 
+```r
+detach(IPump)
+```
 
 Based on these forecasts, we can make an interesting comparison of the two devices. Notice that initial performance with Novel is around five deviations. With Legacy this level is reached at about the seventh session. As the learning rate is the same for both devices,  we can say that the Novel design is always six sessions of training ahead of Legacy.
 
@@ -454,6 +722,11 @@ $$y_i = \phi\exp(\rho + x) + \omega$$
 
 where $\omega$ is the positive asymptote
 
+
+```r
+# devtools::install_github("schmettow/asymptote")
+asymptote::ARY
+```
 
 ```
 ## perf ~ ampl * exp(-rate * trial) + asym
@@ -569,6 +842,16 @@ A simple measure for gratitude simply is when a visitor returns to buy more. Thi
 
 
 
+```r
+set.seed(42)
+D_ret <- tibble(visitor = as.factor(1:100),
+                returned = rbinom(100, 1, .4))
+
+D_ret %>% sample_n(6) %>% kable()
+```
+
+
+
 visitor    returned
 --------  ---------
 63                1
@@ -578,14 +861,30 @@ visitor    returned
 91                1
 92                0
 
+```r
+D_ret %>% 
+  ggplot(aes(x = returned)) +
+  geom_bar()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-39-1.png" width="66%" />
 
 In total, 46% of the visitors return. In order to estimate the return rate together with a statement on uncertainty, we run a logistic regression grand mean model and inspect the coefficient table. Note how the linear formula is completely common ground, but we explicitly pass the binomial `family` to the regression engine.
 
 
+```r
+M_ret <- D_ret %>% stan_glm(returned ~ 1, data = .,
+                            family = binomial, iter = iter) # <--
+```
 
 
 
+
+
+
+```r
+fixef(M_ret)
+```
 
 
 
@@ -603,6 +902,20 @@ $$
 
 The inverse function, commonly called the *mean function*, of the logit is the *logistic function*. \@ref(logit_logist) shows link and mean functions side-by-side.
 
+
+```r
+grid.arrange(
+  ggplot(data.frame(mu=c(0, 1)), aes(x = mu)) + 
+    stat_function(fun = mascutils::logit) +
+    xlab(expression(mu)) + ylab(expression(eta)) +
+    ggtitle("logit link function"),
+  ggplot(data.frame(eta=c(-5, 5)), aes(x = eta)) + 
+    stat_function(fun = mascutils::inv_logit) + 
+    xlab(expression(mu)) + ylab(expression(eta)) +
+    ggtitle("logistic mean function"),
+  nrow = 1)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/logit_logist-1.png" width="66%" />
 
 In order to obtain a statement on proportion $\mu$ (note that in a GMM, there is only one), we therefore have to perform the mean transformation:
@@ -613,6 +926,12 @@ $$
 $$
 The `fixef` command lets you pass on a mean function. However, this logistic mean function is only useful for intercepts and other absolute group means, as we will see in \@ref(talking-odds)
 
+```r
+fixef(M_ret, mean.func = inv_logit)
+```
+
+
+
 |model  |type  |fixef     | center| lower| upper|
 |:------|:-----|:---------|------:|-----:|-----:|
 |object |fixef |Intercept |  0.463| 0.368| 0.553|
@@ -622,12 +941,34 @@ The apt reader may have noticed that the returners data set has been simulated w
 Recall the fictional jump-and-run game  *smart smurfer* <!-- 99 --> in \@ref(poisson_dist): the goal of the game is that players collect items and for the user experience it is crucial that this is neither too difficult nor too easy. Imagine, that for adjusting the difficulty level, the developers conduct a quick evaluation study, where they place a number of items (trials) in the game and the success rate of a single player is observed in a series of 15 game sessions. We simulate such a data set:
 
 
+```r
+D_smrf <- 
+  tibble(
+    Session = 1:15,
+    trials = round(runif(15, 0, 25), 0),
+    successes = rbinom(15, trials, .4),
+    failures = trials - successes) %>% 
+  mascutils::as_tbl_obs()
+
+D_smrf
+```
 
 Per session the player has a number of opportunities for collecting an item, which makes it a repeated measures situation. One might expect that we need to include random effects into the model. Later we will see that this is necessary when the sessions were observed on a sample of players with different abilities. However, as long as one can reasonably assume the chance of catching an item to be constant across all sessions, plain logistic regression can deal with *successes in multiple trials*. In order to estimate a model with more than one trial per observation, it is necessary to add a variable for the number of failures and use a `cbind(successes, failures)` statement for the left-hand-side of the model formula. This may seem inconvenient, but it allows to have a different number of trials per observation.
 
 
+```r
+M_smrf <- stan_glm(cbind(successes, failures) ~ 1,# <--
+                   family = binomial,
+                   data = D_smrf, iter = iter)
+```
 
 
+
+
+
+```r
+fixef(M_smrf, mean.func = inv_logit)
+```
 
 
 
@@ -650,10 +991,29 @@ Such a model is practically impossible to estimate, because dichtomous variables
 
 
 
+```r
+attach(IPump)
+```
+
+
+```r
+M_cmpl <-   
+  D_pumps %>%  
+  stan_glmer(completion ~ Design * Session + 
+               (1|Part) + (1|Task),
+             family = binomial,
+             data = .)
+```
 
 
 
 
+
+```r
+T_cmpl <- 
+  fixef(M_cmpl)
+T_cmpl
+```
 
 
 
@@ -704,6 +1064,13 @@ However, there is another transformation, that does the trick. For a better unde
 If the coefficients are log-odds, than we can extract the odds by the inverse of the logarithm, the exponential function, like in the following call of `fixef`:
 
 
+```r
+T_fixef_cmpl_odds <- fixef(M_cmpl, mean.func = exp)
+T_fixef_cmpl_odds
+```
+
+
+
 |fixef                  | center| lower| upper|
 |:----------------------|------:|-----:|-----:|
 |Intercept              |  4.008| 1.071| 15.72|
@@ -731,6 +1098,9 @@ Once, we have transformed the coefficients to the odds scale, we can read coeffi
 
 
 
+```r
+detach(IPump)
+```
 
 <!--What is reported here, are the coefficients on the *linear predictor scale*, with the *logit* as link function. 
 -->
@@ -838,8 +1208,23 @@ The strict variance assumptions of Poisson and binomial models are frequently vi
 Let me give you an example. It is common saying that some people attract mosquito bites more than others. But is that really true? A simple lab experiment would do to test the "Sweet Blood" theory. A sample of participants are exposed to a pack of mosiquitos under carefully controlled conditions (time of day, environmental condition, hungriness of mosquitos). We don't know the mechanisms that makes the blood sweeter, and hence cannot measure it. In the simulation below, it is just assumed that there is a such a property, but in a real study we would not know.
 
 
+```r
+N <- 20
+avg_sweet <- 6
+
+Sweet_blood <-
+  tibble(sweetness = rnorm(N, log(avg_sweet), .5),
+         bites = rpois(N, exp(sweetness)))
+```
 
 We also don't have to know it, because if there is an invisible impact factor, we would see that in the extra variance, as compared to the mean:
+
+
+```r
+Sweet_blood %>% 
+  summarize(mean(bites), var(bites))
+```
+
 
 
  mean(bites)   var(bites)
@@ -849,6 +1234,12 @@ We also don't have to know it, because if there is an invisible impact factor, w
 Overdispersion practically always happens in studies involving objects with complex dynamics, such as the human mind. Two solutions exist for overdispersed count data: we can either switch to a two-parameter response distribution, that gives variance more flexibility (see table below).
 
 <!-- 46 make work with LaTeX -->
+
+
+```r
+readxl::read_excel("Illustrations/GLM_distributions.xlsx", sheet = "plugin")
+```
+
 
 
 canonical     generalization      parameters                limiting case                      
@@ -865,9 +1256,32 @@ The alternative is to introduce an observation-level random effect, which is jus
 
 When Poisson regression is used for overdispersed  count data, the model will produce reliable center estimates, but the credibility limits will be too narrow. (The model suggests better certainty than there is.)  To explain that in simple terms: The model "sees" the location of a measure, which makes it seek  errors in a region with precisely that variance. There will be many measures outside the likely region, but the model will hold on tight, regard these  as (gradual) outliers and give them less weight. A solution to the problem is using a response distribution with *two parameters*. A second parameter usually gives variance of the distribution more flexibility, although not setting it entirely loose. For the Poisson case (i.e. counts without an upper limit) *negative binomial distributions* do the job, for binomial the beta-binomial applies. Both distributions are so-called *mixture distributions*. In mixture distributions, the parameter of the "outer" distribution is not constant, but allowed to vary by a distribution itself. Under this perspective, negative binomial distribution is equivalent to a Poisson distribution, if we let parameter $\lambda$ follow a gamma distribution:
 
+
+```r
+rnegbinom <- function(n, mu, size){
+  shape <- size
+  scale <- mu/size
+  lambdas <- rgamma(n, shape = shape, scale = scale)
+  rpois(n, lambda = lambdas)
+}
+
+rnegbinom(1000, mu = 3, size = 2) %>%  qplot()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-63-1.png" width="66%" />
 
 The figure below shows a negative binomial distribution and Poisson distribution with the same mean.
+
+
+```r
+tibble(x = 0:15,
+           nbinom = dnbinom(x, mu = 3, size = 2),
+           poisson  = dpois(x, 3)) %>% 
+  gather(distribution, prob, -x) %>% 
+  ggplot(aes(x = x, y = prob)) +
+  facet_grid(distribution ~ .) +
+  geom_col(position = "dodge")
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-64-1.png" width="66%" />
 
@@ -875,13 +1289,33 @@ The figure below shows a negative binomial distribution and Poisson distribution
 In [#dissolving_saturation] we have seen how log-linearization can accomodate learning curves, using a Poisson model. It is very likely that this data is over-dispersed. To demonstrate overdispersion, we estimate the unconditional learning curve model  one more time, with a negative-binomial pattern of randomness:
 
 
+```r
+attach(IPump)
+```
+
+
+
+```r
+M_negbin_lzrm <- 
+  D_agg %>% 
+  brm(deviations ~ 0 + Design + session, family = "negbinomial", data = .)
+```
 
 
 
 
 
-
-
+```r
+bind_rows(
+  posterior(M_pois_lzrm),
+  posterior(M_negbin_lzrm)
+) %>%   
+  clu() %>% 
+  print() %>% 
+  filter(type == "fixef") %>% 
+  ggplot(aes(x = fixef, y = center, ymin = lower, ymax = upper, col = model)) +
+           geom_crossbar(position = "dodge")
+```
 
 ```
 ## 
@@ -911,6 +1345,13 @@ Phi is too convoluted to be useful as a practical measure for how much over-disp
 
 
 
+```r
+L_pois_lzrm <- loo(M_pois_lzrm)
+L_negbin_lzrm <- loo(M_negbin_lzrm)
+
+loo_compare(L_pois_lzrm, L_negbin_lzrm)
+```
+
                  elpd_diff   se_diff   elpd_loo   se_elpd_loo   p_loo   se_p_loo   looic   se_looic
 --------------  ----------  --------  ---------  ------------  ------  ---------  ------  ---------
 M_negbin_lzrm          0.0       0.0       -446          10.8    4.17      0.522     891       21.5
@@ -920,6 +1361,9 @@ The bottom line is that whenever there is over-dispersion in count variables, a 
 
 
 
+```r
+detach(IPump)
+```
 
 
 <!-- ```{r} -->
@@ -941,6 +1385,12 @@ Beta-binomial regression follows a similar pattern as neg-binomial. A two parame
 
 A beta-binomial distribution is created by replacing binomial parameter $p$ by a $beta distribution$, with parameters $a$ and $b$:
 
+
+```r
+rbetabinom <- function(n, size, a, b) rbinom(n, size, rbeta(n, a, b))
+rbetabinom(1000, 10, 1, 2) %>% qplot()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-71-1.png" width="66%" />
 
 
@@ -952,6 +1402,49 @@ Note, how the author of this code created a `beta_binomial2` distribution family
 
 
 
+
+```r
+# define a custom beta-binomial family
+beta_binomial2 <- custom_family(
+  "beta_binomial2", dpars = c("mu", "phi"),
+  links = c("logit", "log"), lb = c(NA, 0),
+  type = "int", vars = "trials[n]"
+)
+
+# define custom stan functions
+bb_stan_funs <- "
+  real beta_binomial2_lpmf(int y, real mu, real phi, int N) {
+    return beta_binomial_lpmf(y | N, mu * phi, (1 - mu) * phi);
+  }
+  int beta_binomial2_rng(real mu, real phi, int N) {
+    return beta_binomial_rng(N, mu * phi, (1 - mu) * phi);
+  }
+"
+
+D_betabin <- tibble(y = VGAM::rbetabinom(1000, 9, .1, .3), 
+                    y_bin = rbinom(1000, 9, .1),
+                    n = 9) %>%
+  as_tbl_obs()
+
+qplot(D_betabin$y)
+qplot(D_betabin$y_bin)
+
+M_betabin <- 
+  D_betabin %>% 
+  brm(y | trials(n) ~ 1, family = beta_binomial2, 
+      stan_funs = bb_stan_funs, data = .)
+
+M_bin <- brm(y |trials(n) ~ 1, family = "binomial", data = D_betabin)
+```
+
+
+```r
+bind_rows(
+  posterior(M_bin),
+  posterior(M_betabin)) %>% 
+  mutate(value = mascutils::inv_logit(value)) %>% 
+  clu()
+```
 
 
 
@@ -997,6 +1490,37 @@ See, how $\beta_i$ is a unique deviation per observation $i$, and how a variance
 
 For demonstration of the concept, we simulate from an overdispersed Poisson grand mean model with participant-level random effects, and recover it via regression. 
 
+
+```r
+sim_ovdsp <- function(
+  beta_0 = 2,   # mu = 8
+  sd_Obs = .3, 
+  sd_Part   = .4,
+  N_Part = 30,
+  N_Rep  = 20, 
+  N_Obs =  N_Part * N_Rep,
+  seed = 42){
+  set.seed(seed)
+  Part <- tibble(Part = 1:N_Part,
+                     beta_0p = rnorm(N_Part, 0, sd_Part)) ## participant-level RE
+  D <- tibble(Obs  = 1:N_Obs,
+                    Part = rep(1:N_Part, N_Rep),
+                    beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
+                    beta_0 = beta_0) %>%
+    left_join(Part) %>% 
+    mutate(theta_i = beta_0 + beta_0p + beta_0i,
+           mu_i    = exp(theta_i),               ## inverse link function
+           y_i     = rpois(N_Obs, mu_i))
+  D %>% as_tbl_obs()
+}
+
+  D_ovdsp <- sim_ovdsp()
+
+D_ovdsp %>%
+  ggplot(aes(x = y_i)) +
+  geom_histogram()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-77-1.png" width="66%" />
 
 
@@ -1006,11 +1530,23 @@ For demonstration of the concept, we simulate from an overdispersed Poisson gran
 
 
 
+```r
+M_ovdsp <- 
+  D_ovdsp %>% 
+  stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
+             family = poisson, iter = iter)
+```
 
 
 
 
 Random effect variation is accurately recovered from the simulated data. The following two plots show, that the participant latent scores and even the observation levels themselves can be recovered. Every observation gets an accurate measure of how much it had been pushed by unrecorded sources of variation. Practically, we obtain residuals which can be used for model criticism. For example, extreme outliers can be identified and relations between random variation and predicted values (or groups)  are open to scrutiny.
+
+
+
+```r
+grpef(M_ovdsp)
+```
 
 
 
@@ -1063,10 +1599,30 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 
 
 
+
+```r
+set.seed(20)
+D_exp <- 
+  tibble(Obs = 1:100,
+  time = rexp(100, rate = 1/3))
+
+D_exp %>% 
+  ggplot(aes(x = time)) +
+  geom_histogram(bins = 10)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-85-1.png" width="66%" />
+
+```r
+mean(D_exp$time)
+```
 
 ```
 ## [1] 3.29
+```
+
+```r
+var(D_exp$time)
 ```
 
 ```
@@ -1076,6 +1632,17 @@ For demonstration only, we assume such idealized conditions in the subway smurfe
 As the `stan_glm` engine does not support exponential response distributions, we use `brm`, instead, and recover the parameter.
 
 
+
+```r
+M_exp <- brm(time ~ 1, 
+             family = "exponential", 
+             data = D_exp)
+```
+
+
+```r
+fixef(M_exp, mean.func = exp)
+```
 
 
 
@@ -1092,7 +1659,23 @@ Exponential regression has a single parameter and therefore has the same problem
 
 
 
+
+```r
+set.seed(20)
+D_gam <- 
+  tibble(Obs = 1:100,
+  time = rgamma(100, rate = 1/3, shape = 2))
+
+D_gam %>% 
+  ggplot(aes(x = time)) +
+  geom_histogram(bins = 10)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-89-1.png" width="66%" />
+
+```r
+mean(D_gam$time)
+```
 
 ```
 ## [1] 7.61
@@ -1101,6 +1684,19 @@ Exponential regression has a single parameter and therefore has the same problem
 In comparison to the exponential distribution above, a significant difference is that the mode of the gamma distribution (its peak) is not fixed at zero, but can move along the x-axis. That makes it appear a much more realistic choice for temporal data in behavioural research. We estimate a simple gamma GMM on the simulated data. For historical reasons, `brm` uses the inverse link function ($\theta = 1/\mu$) for Gamma regression per default, but that does not actually serve the purpose of link functions to stretch $\mu$ into the range of real numbers. Instead, we explicitly demand a log link, which makes this a multiplicative model.
 
 
+
+```r
+M_gam <- brm(time ~ 1, 
+             family = Gamma(link = log), 
+             data = D_gam)
+
+M_gam
+```
+
+
+```r
+fixef(M_gam, mean.func = exp)
+```
 
 
 
@@ -1126,6 +1722,22 @@ Analog situations can be found in service design and logistics. Take the exanmpl
 The problem with RT and ToT data is that Zero is not a possible outcome, as any task uses up a minimum time to complete. For example, the table below shows the minimum ToT for finding the academic calendar on ten university websites (case Egan). This varies a lot between designs, but is never even close to zero. The last column puts the minimum observed ToT in relation to the observed range. On two of the websites, the offset was even larger than the obvserved range itself, hence the problem of positive lower boundaries is real in user studies.
 
 
+```r
+attach(Egan)
+```
+
+
+
+```r
+D_egan %>% 
+  filter(success,
+         Task == "academic calendar") %>% 
+  group_by(Task, Design) %>% 
+  summarize(min_time = min(ToT),
+            range = max(ToT) - min_time,
+            min_time/range) %>% 
+  kable()
+```
 
 
 
@@ -1142,26 +1754,97 @@ academic calendar   RUG                           119     132            0.902
 academic calendar   University Tilburg             24      39            0.615
 
 
+```r
+detach(Egan)
+```
 
 
 On the first glance, that does not seem to pose a major problem for Gamma distributions, as the left tail vanishes the more a Gamma distribution is shifted to the right, the impossible regions get smaller. However, Gamma distributions inevitably become more symmetric at larger values. A Gamma distribution far to the right has almost equally long tails and we may eventually use a Gaussian distribution, instead. As there is no separate parameter controlling the skewness of the curve it may happen that the random component captures the amount of variance, but overdoes the left tail, which introduces a bias on the coefficients. The following graphic illustrates the mean-variance-skew relationship on three Gamma distributions that move from left to right (`M`), keeping the variance constant (`V`):
 
+
+```r
+M = c(100,200, 400)
+V = 8000
+
+## gamma
+rate = M/V
+shape = rate^2 * V
+
+ggplot(data.frame(x = c(0, 3000)), aes(x = x)) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[1])) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[2])) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[3])) +
+  labs(x = "ToT", y = "density")
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-97-1.png" width="66%" />
 
 We have seen so far, that distributions with one parameter (Poisson, binomial, exponential) have a fixed relationship between location and dispersion. In order to vary location and dispersion independently, a second parameter is needed (neg-binomial, beta-binomial, Gamma, Gaussian). Only three-parameter distributions can do the trick of setting skewness separately. So called *exponentially modified Gaussian* (Exgaussian) distributions are convolutions of a Gaussian distribution and exponential distribution and have three parameters, $\mu$, $\sigma$ and rate $\beta$. Very roughly, the Gaussian component controls location and dispersion whereas the exponential part adjusts the skew.  When $\beta$ is large in comparison to $\mu$, the distribution is more left skewed. With this additional degree of freedom we can simulate (and estimate) distributions that are far to the right, have strong dispersion *and* strong skewness. The following plot repeats the right-furthest Gamma distribution from above and adds a Gaussian and Exgaussian distributions with the exact same mean and variance.
+
+
+```r
+M = 400
+V = 8000
+
+## Exgaussian
+mu = M
+beta = 80
+sigma = sqrt(V - beta^2)
+
+## Gamma
+rate = M/V
+shape = rate^2 * V
+
+ggplot(data.frame(x = c(0, 800)), aes(x = x)) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate, shape = shape), 
+                mapping = aes(colour = "Gamma")) +
+  stat_function(fun = dnorm, 
+                args = list(mean = M, sd = sqrt(V)), 
+                mapping = aes(colour = "Gaussian")) +
+  stat_function(fun = brms::dexgaussian, 
+                args = list(mu = M, 
+                            sigma = sigma,
+                            beta = beta), 
+                mapping = aes(colour = "Exgaussian")) +
+  labs(colour="Distribution", x = "ToT", y = "density")
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-98-1.png" width="66%" />
 
 The Gamma distribution in this example starts approaching a the perfect bell curve of the Gaussian distribution. In contrast, the exgaussian distribution takes a steep left climb followed by a long right tail, which is caused by its pronounced exponential component. We do the usual exercise to simulate a grand mean model and recover the parameters with the help of the `brm` engine:
 
 
+```r
+attach(Chapter_GLM)
+```
+
+
+```r
+D_exg <- tibble(Y = rexgaussian(100, mu = 100, sigma = 20, beta = 30))
+qplot(D_exg$Y)
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-100-1.png" width="66%" />
 
 
 
+```r
+M_exg <- brm(Y ~ 1,
+             family = exgaussian,
+             data = D_exg)
+```
 
 
+
+
+
+```r
+fixef(M_exg)
+```
 
 
 
@@ -1170,6 +1853,9 @@ The Gamma distribution in this example starts approaching a the perfect bell cur
 |fixef |Intercept |   99.4|  92.9|   107|
 
 
+```r
+detach(Chapter_GLM)
+```
 
 Noteworthy, for Exgaussian models the brm engine uses the identity link function by default. While this is rather convenient for interpretation, it could theoretically lead to impossible predictions. As we will see later, the exgaussian is not immune, but *robust to impossible predictions* because of its tiny left tail. Any linear impact factor, like an experimental treatment can push it 150 ms to the left with insignificant risk of impossible predictions.
 
@@ -1198,8 +1884,22 @@ In the Hugme case, we tried to pin down the hypothetical Geek personality. We us
 
 
 
+```r
+attach(Hugme)
+```
 
 Most of the participant-level frequency distributions of RT have a clear cut-off at around .25 seconds. The steepness of the left climb varies between participants, but some at least are rather sharp, with a right tail that is leveling off slowly. When compared to the illustrations above, it seems that an Exgaussian model could accomodate this data well.
+
+
+```r
+D_hugme %>%
+  group_by(Part) %>% 
+  filter(Part <= 10) %>%
+  ggplot(aes(x = RT, color = PrimeGeek)) +
+  facet_wrap(~Part, nrow = 2) + 
+  geom_density(adjust = 2) +
+  xlim(0, 1.5)
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-108-1.png" width="66%" />
 
@@ -1207,6 +1907,40 @@ In the following, we run three CGM models with Exgaussian, Gamma or Gaussian res
 
 
 
+```r
+memory.limit(16000)
+
+F_1 <- formula(RT ~ 1 + PrimeGeek + (1 + PrimeGeek|Part))
+
+M_1_gau <- D_hugme %>% 
+  brm(F_1,
+      family = gaussian,
+      data = .)
+
+M_1_gam <- D_hugme %>% 
+  brm(F_1,
+      family = Gamma(link = identity),
+      data = .)
+
+M_1_exg <- D_hugme %>% 
+  brm(F_1,
+      family = exgaussian,
+      data = .)
+
+P_1 <- bind_rows( 
+  posterior(M_1_gau),
+  posterior(M_1_gam),
+  posterior(M_1_exg)
+)
+
+T_1_predict <- 
+  bind_rows( 
+    post_pred(M_1_gau, thin = 5),
+    post_pred(M_1_gam, thin = 5),
+    post_pred(M_1_exg, thin = 5)
+  ) %>% 
+  predict()
+```
 
 
 
@@ -1215,6 +1949,16 @@ In the following, we run three CGM models with Exgaussian, Gamma or Gaussian res
 The below plot shows the population-level effects for the three models. The center estimates are very close, which means that neither of the models has a significant bias. However, the Exgaussian model produces much tighter credibility intervals. We have seen such an effect before, when a Poisson model produced tighter intervals than the Negbinomial model.  Here it is the other way round: the more flexible model produces better levels of certainty. 
 
 
+
+```r
+fixef(P_1) %>% 
+  ggplot(aes(y = center, ymin = lower, ymax = upper, 
+             x = fixef, 
+             color = model)) +  
+  facet_wrap(~fixef, scales = "free_y") +
+  geom_crossbar(width = .2, position = "dodge")
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-111-1.png" width="66%" />
 
 The following residual plot give us a hint why this might be so: Apparently, the Exgaussian model takes a much steeper left climb, whereas 
@@ -1222,12 +1966,27 @@ The following residual plot give us a hint why this might be so: Apparently, the
 In any case, if there is a reason to prefer the Exgaussian model, we should primarily see that in how the residuals are shaped. The Exgaussian distribution has one more degree of freedom, which can be used to set an arbitrary skew. The following reveals that the extra flexibility of the Exgaussian has been employed. Both, Gaussian and Gamma are almost symmetric, whereas the Exgausian takes a steeper left climb. The three distributions have almost the same right tail, but the left tail of the Exgaussian is smaller and the extra probability mass has moved to the center.
 
 
+
+```r
+D_hugme <- D_hugme %>% 
+  left_join(T_1_predict) %>% 
+  mutate(resid = RT - center)
+
+D_hugme %>% 
+  ggplot(aes(x = resid, color = model)) +
+  facet_wrap(~PrimeGeek) + 
+  geom_density()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-112-1.png" width="66%" />
 
 We can carefully conclude that the Exgaussian may be very useful for analyzing pychological experiments as it seems to better accomodate reaction times, resulting in a better level of certainty. Given the novelty of Exgaussian models, it is recommended that researchers carry out a careful multi-model analysis. In [#model_selection] we will come back to this case with  a more formal approach and confirm that the Exgaussian has the better predictive accuracy.
 
 
 
+```r
+detach(Hugme)
+```
 
 
 #### Time-on-task
@@ -1239,12 +1998,51 @@ We compare the three patterns of randomness on the CUE8 data set, which contains
 
 
 
+```r
+attach(CUE8)
+```
 
 
 
+```r
+D_cue8_mod <- D_cue8 %>% 
+  filter(Condition == "moderated", !is.na(ToT)) %>% 
+  as_tbl_obs()
+```
 
 
 
+```r
+F_4 <- formula(ToT ~ 1 + Task + (1|Part))
+
+M_4_gau <- D_cue8_mod %>% 
+  brm(F_4,
+      family = gaussian(link = log),
+      data = ., iter = 2000)
+
+M_4_exg <- D_cue8_mod %>% 
+  brm(F_4,
+      family = exgaussian(link = log),
+      data = ., iter = 2000)
+
+M_4_gam <- D_cue8_mod %>% 
+  brm(F_4,
+      family = Gamma(link = log),
+      data = ., iter = 2000)
+
+P_4 <- bind_rows( 
+  posterior(M_4_gau),
+  posterior(M_4_gam) %>% mutate(value = if_else(value %in% c("fixef", "ranef"), exp(value), value)),
+  posterior(M_4_exg)
+)
+
+
+T_4_predict <- bind_rows( 
+  post_pred(M_4_gau, thin = 5),
+  post_pred(M_4_gam, thin = 5),
+  post_pred(M_4_exg, thin = 5)) %>% 
+  predict()
+```
 
 *Note* that the coefficients are on a log-scale for the practical reason that Gamma models are sometimes difficult to estimate on an identity link. Also, when speaking of ToT, it makes  sense to speak multiplicative, such as "ToT with Task A is 80% of task B". 
 
@@ -1254,6 +2052,16 @@ We compare the three patterns of randomness on the CUE8 data set, which contains
 
 
 
+
+```r
+fixef(P_4, mean.func = exp) %>% 
+  ggplot(aes(y = center, ymin = lower, ymax = upper, 
+             x = " ", 
+             color = model)) +  
+  facet_wrap(~fixef, scales = "free_y", nrow = 1) +
+  geom_crossbar(width = .2, position = "dodge")
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-118-1.png" width="66%" />
 
 Different to the reaction times in the previous section, the  three models produce rather different coefficients. These effects are multiplicative and for Task 3, the three models even disgree on whether this task takes longer than Task 1 (Intercept), which in turn is the only effect where the three models seem to agree. 
@@ -1261,9 +2069,21 @@ Different to the reaction times in the previous section, the  three models produ
 Inspecting the residual distributions yields a different pattern as with reaction times: generally, the left skewness is much less pronounced and Gaussian and gamma even tend to be right skewed. Strikingly, the residuals of the exgaussian models sit much tighter around the center, which corresponds with the narrower credibility intervals for the fixed effects.
 
 
+
+```r
+left_join(T_4_predict, D_cue8_mod, by = "Obs") %>% 
+  mutate(resid = ToT - center) %>% 
+  ggplot(aes(x = resid, color = model)) +
+  facet_wrap(~Task, nrow = 1) + 
+  geom_density(adjust = 2)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-119-1.png" width="66%" />
 
 
+```r
+detach(CUE8)
+```
 
 
 #### EDIT: Move RT model selection up
@@ -1366,6 +2186,15 @@ In general, it seems that Exgaussian models for RT and ToT accomodates left skew
 <!-- Different to what has been observed above, the shapes of the residual distributions do not differ much, except for a shift to the right. What could be accountable for that is that the simulation only contained three homogenous groups, rather than the many groups in the previous multi-level data sets (random factors). It remains to be clarified what precisely the biases and drags are caused by, ill-specified response distribution for RT or ToT in complex research designs. Despite these question marks, it has been confirmed that the superior certainty of estimates is not just an artifact of the exgaussian model, but is real and likely to make quantitative inference from RT and ToT data more efficient. -->
 
 One last issue remains to get clarified: using the identity link for exgaussian models is very convenient and is probably much safer as compared to Gaussian models with their longer left tails. But, what risk is there to get impossible, i.e. negative, predictions? We check this on the posterior predictive distributions of both studies, CUE8 and Hugme. The following table shows the proportion observations, that get a negative 2.5% credibility limit assigned:
+
+
+
+```r
+bind_rows(Hugme$T_1_predict, CUE8$T_4_predict) %>%
+  group_by(model) %>% 
+  summarize(mean(lower < 0)) %>% 
+  kable()
+```
 
 
 
@@ -1522,7 +2351,26 @@ Many unkowns are in the game. Only one special case we can alleviate with the mu
 
 To speak of a real case: In the IPump study, a single-item rating scale was used to measure mental workload. The results suggest that all participants used the lower range of the scale, but differed vastly in where they set their upper point. Figure XY orders participants by the maximum value they used. This is obviously related to variance, but seemingly not so much with location. It does not suffice to use a response distribution with mean-variance relationship, as we used to. All these issues make rating scales peculiar and we should not pretend they have the same neat arithmetic properties as objective measures. 
 
+
+```r
+attach(IPump)
+
+D_pumps %>% 
+  group_by(Part) %>% 
+  summarize(min = min(workload),
+            max = max(workload),
+            median = median(workload)) %>%
+  mutate(Part_ord = rank(max, ties.method = "first")) %>% 
+  ggplot(aes(x = Part_ord, ymax = max, ymin = min, y = median)) +
+  geom_errorbar() +
+  geom_point(size = 3)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-129-1.png" width="66%" />
+
+```r
+detach(IPump)
+```
 
 Setting the idiosyncratic rating scale responses aside, how does a common rating scale appear in our framework of link functions and patterns of randomness? Rating scales are bounded on two sides and we already know what that means: a suitable model for rating scales will likely contain a logit link function and a distribution of randomness that is bounded on two sides.
 
@@ -1565,16 +2413,41 @@ Let's see this at the example of the BrowsingAB case, first. User ratings have b
 
 
 
+```r
+attach(BrowsingAB)
+```
+
+
+```r
+BAB1 %>% 
+  ggplot(aes(x = rating)) +
+  facet_grid(Design~.) +
+  geom_histogram() +
+  xlim(1,7)
+```
 
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-131-1.png" width="66%" />
 
 The brms regression engine implements ordinal regression by the family `cratio` (cumulative odds ratio <!-- #116 -->) with a default logit link function.
 
 
+```r
+M_ord_1 <- 
+  BAB1 %>% 
+  brm(rating ~ Design, 
+      family = "cratio", 
+      data = .) 
+```
 
 
 
 <!--We have to keep in mind, though, that the constant shift of thresholds is an assumption [EXPLAIN ASSUMPTION FIRST EXPLICITLY], which may fail. For example, when participants choose different anchor points for their judgements, such as in the IPump study, this is no longer the case. [WHY NOT?] -->
+
+
+```r
+fixef(M_ord_1)
+```
+
 
 
 |fixef   |  center|   lower|  upper|
@@ -1621,6 +2494,9 @@ Besides that, the ordinal model appears very snug to the structure of the data. 
 
 
 
+```r
+detach(BrowsingAB)
+```
 
 ### Beta regression
 
@@ -1663,11 +2539,49 @@ A practical solution is to scale the responses in such a way as to avoid the two
 You may find it inappropriate to mangle a response variable in such an arbitrary way. However, keep in mind that the levels of ordinal responses are highly arbitrary. In terms of measurement theory, all transformations that maintain the order are permitted for ordinal scales. For the following analysis, the data set was further reduced by averaging the scores across tasks and excluding probable cheaters with a ToT < 30s.
 
 
+
+```r
+attach(CUE8)
+
+D_cue8_SUS <-
+  D_cue8 %>% 
+  filter(!is.na(SUS)) %>% 
+  group_by(Part, Team, Condition) %>% 
+  dplyr::summarize(ToT = sum(ToT),
+            SUS = mean(SUS)) %>% 
+  ungroup() %>%
+  filter(ToT > 30) %>% 
+  mutate(SUS = (SUS + 1)/(100 + 2)) %>% ## rescaling to ]0;1[
+  as_tbl_obs()
+
+D_cue8_SUS %>% 
+  ggplot(aes(x = Team, y = SUS, fill = Condition)) +
+  geom_violin() +
+  geom_jitter()
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-144-1.png" width="66%" />
 
 
 
+```r
+M_5_bet <-
+  D_cue8_SUS %>% 
+  brm(SUS ~ Condition + (1 | Team),
+      family = Beta(link = "logit"), iter = 0, chains = 1,
+      data = .)
 
+M_5_bet <-
+  D_cue8_SUS %>% 
+  brm(fit = M_5_bet, data = .)
+
+sync_CE(M_5_bet, Env = CUE8)
+```
+
+
+```r
+M_5_bet
+```
 
 ```
 ##  Family: beta 
@@ -1696,6 +2610,10 @@ You may find it inappropriate to mangle a response variable in such an arbitrary
 ## scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
+```r
+fixef(M_5_bet)
+```
+
 
 
 |fixef              | center|  lower| upper|
@@ -1703,6 +2621,9 @@ You may find it inappropriate to mangle a response variable in such an arbitrary
 |Intercept          |  0.798| -0.506|  1.78|
 |Conditionmoderated | -0.343| -1.699|  1.11|
 
+```r
+grpef(M_5_bet)
+```
 
 
 
@@ -1738,6 +2659,31 @@ As a first illustration, imagine two versions of a continuous rating scale for v
 
 For the sake of simplicity (not for a strong research design), let us assume that one participant has rated a sample of 400 websites in two conditions: narrow anchoring and wide anchoring. The following simulates data as if there were just a minor positive shift of the wider condition, accompanied by an immense up-scaling.
 
+
+```r
+set.seed(42)
+
+N = 400
+
+Conditions <-
+  tribble(~Anchoring, ~mu, ~phi,
+             "wide", .3, 18,
+             "narrow", .3, 6) %>% 
+  mutate(a = mu * phi,
+         b = phi - mu * phi)
+
+D_Anchor <- 
+  tibble(Obs = 1:N,
+             Anchoring = rep(c("wide", "narrow"), N/2)) %>% 
+  left_join(Conditions) %>% 
+  mutate(rating = rbeta(N, a, b))
+
+D_Anchor %>% 
+  ggplot(aes(x = Anchoring, y = rating)) +
+  geom_violin() +
+  ylim(0,1)
+```
+
 <img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-148-1.png" width="66%" />
 
 The two response distributions have the same location, but the more narrow anchoring produces a wider dispersion of responses. How would we confirm this statistically? The Brms engine can link predictors to *any* other parameter of the response distribution, which teh author of the package  calls *distributional models*. They have an immense potential as they relax another assumption of GLM, namely that all variance parameters must strictly follow the mean-variance relationship demanded by a distribution family. As we seen, one can easily create a case where this assumption is violated. 
@@ -1768,10 +2714,22 @@ When estimating dispersion or scale parameters, we have to regard that these are
 
 
 
+```r
+M_beta <- brm(bf(rating ~ 1 + Anchoring,
+              phi ~ 1 + Anchoring),
+           family = Beta(),
+           data = D_Anchor)
+```
 
 
 
 The coefficient table below contains the two regular coefficients and as expected, there is no  difference in location. The intercept on scale parameter $\phi$ is the scale in the narrow condition (with wider variance). The treatment effect on $\phi$ is positive on the log scale, which means it is deflates variance, just as expected.
+
+
+```r
+clu(M_beta)
+```
+
 
 
 |parameter           |fixef         | center|  lower|  upper|
@@ -1791,9 +2749,21 @@ by a random factor.
 Two distributional parameters, $\sigma$ for variance and $\beta$ for skew are added to the multi-line formula interface. The maximum distributional model  would estimate fully separate distributions per every participant and condition. But, since the two response distributions (Geek/nogeek) are similar for most participants, a reduced predictor term is used, assuming that variance and shape are *not* affected by PrimeGeek:
 
 
+```r
+attach(Hugme)
+```
 
 
 
+```r
+M_1_exg_dist  <-
+  brm(formula = bf(RT    ~ 1 + PrimeGeek + (1 + PrimeGeek|Part),
+                   sigma ~ 1 + (1|Part),
+                   beta  ~ 1 + (1|Part)),
+      family = exgaussian(),
+      data = D_hugme,
+      inits = 0)
+```
 
 
 
@@ -1803,6 +2773,20 @@ Two distributional parameters, $\sigma$ for variance and $\beta$ for skew are ad
 If participants show different patterns of randomness, we should see that in participant-level  variation of $\sigma$ and $\beta$, which is confirmed by certainly positive variance estimates. 
 
 <!-- We return to this case with a formal and a theoretical conclusion in [#choos_resp]. -->
+
+
+
+```r
+P_1_exg_dist <- posterior(M_1_exg_dist)
+
+P_1_exg_dist %>% 
+  filter(type %in% c("grpef", "cor")) %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975)) %>% 
+  ungroup()
+```
 
 
 
@@ -1824,6 +2808,9 @@ Variance and skew may even carry additional information, for example on mental *
 
 
 
+```r
+detach(Hugme)
+```
 
 
 <!-- Both random effects variance parameters are certaintly positive  -->

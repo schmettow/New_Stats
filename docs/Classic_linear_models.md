@@ -38,6 +38,18 @@ Reconsider Jane [#design_research]. She was faced with the problem that potentia
 A GMM predicts the *average* expected level of performance in the population ($\beta_0$). Let's atsrt with a toy example: When you want to  predict the IQ score of a totally random and anonymous individual (from this population), the population average (which is standardized to be 100) is your best guess. However, this best guess is imperfect due to the individual differences.  and chances are rather low that 100 is the perfect guess.
 
 
+```r
+# random IQ sample, rounded to whole numbers
+set.seed(42)
+N <- 1000
+D_IQ <-   tibble(score = rnorm(N, mean = 100, sd = 15),
+                 IQ = round(score, 0))
+
+# proportion of correct guesses
+pi_100 <- sum(D_IQ$IQ == 100)/N
+str_c("Proportion of correct guesses (IQ = 100): ", pi_100)
+```
+
 ```
 ## [1] "Proportion of correct guesses (IQ = 100): 0.031"
 ```
@@ -77,6 +89,10 @@ Below we estimate a GMM on (simulated) IQ scores using the `stan_glm` regression
 
 
 
+```r
+M_IQ <- stan_glm(IQ ~ 1,
+                 data = D_IQ)
+```
 
 <!-- ```{r} -->
 <!-- clu <- function(tbl_post){ -->
@@ -89,6 +105,12 @@ Below we estimate a GMM on (simulated) IQ scores using the `stan_glm` regression
 
 
 <!-- ``` -->
+
+
+
+```r
+bayr::clu(M_IQ)
+```
 
 
 
@@ -107,13 +129,23 @@ So, when estimating the grand mean model, we estimate the intercept $\beta_0$ an
 
 
 
+```r
+attach(Sec99)
+```
+
+
+
+```r
+M_1 <- stan_glm(ToT ~ 1, data = D_1)
+```
 
 
 
 
 
-
-
+```r
+summary(M_1)
+```
 
 ```
 ## 
@@ -153,12 +185,24 @@ So, when estimating the grand mean model, we estimate the intercept $\beta_0$ an
 Most of the time a researcher does not want to deal with the posterior directly, but desires a brief summary of where the effects lie and what the level of certainty is. *Tables of estimates*, like the one shown below, serve exactly this purpose. Estimates tables report the central tendency of every estimate, which is the best guess for the true magnitude of an effect. Next to that, the spread of the posterior distribution is summarized as 95% credibility  intervals and represent the degree of uncertainty: the less certain an estimate is, the wider is the interval. A 95% credibility interval gives a range of possible values where you can be 95% certain that it contains the true value. A complete center-lower-upper table of estimates is produced by the `clu` command (bayr package):
 
 
+```r
+clu(M_1)
+```
+
+
+
 |parameter   |type  |fixef     | center| lower| upper|
 |:-----------|:-----|:---------|------:|-----:|-----:|
 |Intercept   |fixef |Intercept |  106.1|  99.6| 112.0|
 |sigma_resid |disp  |NA        |   31.4|  27.6|  36.3|
 
 The `clu` command being used in this book is from the accompanying R package `bayr` and produces tables of estimates, showing *all parameters* in a model, that covers the effects, i.e. coefficients  the dispersion or shape of the error distribution, here the standard error. Often, the distribution parameters are of lesser interest and `clu` comes with sibling commands to only show the (population-level) coefficients:
+
+
+```r
+coef(M_1)
+```
+
 
 
 |parameter |type  |fixef     | center| lower| upper|
@@ -168,6 +212,10 @@ The `clu` command being used in this book is from the accompanying R package `ba
 Note that regression engines, such as rstanarm, bring their own commands to extract estimates, especially `fixef`, but these often report the center estimates, only.
 
 
+```r
+rstanarm:::coef.stanreg(M_1)
+```
+
 ```
 ## (Intercept) 
 ##         106
@@ -176,8 +224,18 @@ Note that regression engines, such as rstanarm, bring their own commands to extr
 In order to always use the convenient commands from package bayr, it is necessary to load Bayr after package Rstanarm.
 
 
+```r
+library(rstanarm)
+library(bayr)
+```
 
 Then, Bayr overwrites the fixef (coef and ranef) commands to produce coefficient tables. 
+
+
+```r
+coef(M_1)
+```
+
 
 
 |parameter |type  |fixef     | center| lower| upper|
@@ -186,6 +244,9 @@ Then, Bayr overwrites the fixef (coef and ranef) commands to produce coefficient
 
 
 
+```r
+detach(Sec99)
+```
 
 
 <!-- #49 --> A GMM is the simplest linear model and as such makes absolute minimal use of knowledge when doing its predictions. The only thing one knows is that test persons come from one and the same population (humans, users, psychology students). Accordingly, predictions are very inaccurate. From the GMM we will depart in two directions. First, in the remainder of this chapter, we will add further predictors to the model, for example age of participants or a experimental conditions. These models will improve our predictive accuracy by using additional knowledge about participants and conditions of testing. In the following chapter on mixed-effects models  [REF MLM], the error term is partitioned into its sources.
@@ -247,9 +308,20 @@ Coefficient tables are the standard way to report regression models. They contai
 
 
 
+```r
+attach(Sec99)
+```
 
 The object `M_1`  is the model object created by `stan_glm`. When you call `summary` you get complex listings that represent different aspects of the estimated model. These aspects and more are saved inside the object in a hierarchy of lists. The central result of the estimation is the *posterior distribution (HPD)*. With package Rstanarm, the posterior distribution is extracted as follows:
 
+
+```r
+P_1_wide <- 
+  as_tibble(M_1) %>% 
+  rename(Intercept = `(Intercept)`)
+
+str(P_1_wide)
+```
 
 ```
 ## Classes 'tbl_df', 'tbl' and 'data.frame':	4000 obs. of  2 variables:
@@ -260,11 +332,35 @@ The object `M_1`  is the model object created by `stan_glm`. When you call `summ
 The resulting data frame is a matrix, where each of the 4000 rows is one coordinate  the MCMC walk has visited in a two-dimensional parameter space [REF MCMC]. For the purpose of reporting parameter estimates, we could create a *coefficient table* like follows: 
 
 
+```r
+P_1_wide %>% 
+  summarize(center_Intercept = median(Intercept),
+            center_sigma = median(sigma),
+            lower_Intercept = quantile(Intercept, .025),
+            lower_sigma = quantile(sigma, .025),
+            upper_Intercept = quantile(Intercept, .975),
+            upper_sigma = quantile(sigma, .975))
+```
+
+
+
  center_Intercept   center_sigma   lower_Intercept   lower_sigma   upper_Intercept   upper_sigma
 -----------------  -------------  ----------------  ------------  ----------------  ------------
               106           31.4              99.6          27.6               112          36.3
 
 As can be seen, creating coefficient tables from wide posterior objects is awful and repetitive, even when there are just two parameters (some models contain hundreds of parameters). Additional effort would be needed to get a well structured table. The package Bayr can extract posterior distributions, too, but produces a *long format*. This works approximately like can be seen in the following code, which employs `tidyr::gather` to make the wide Rstanarm posterior long.
+
+
+```r
+P_1_long <- P_1_wide %>%
+  tidyr::gather(key = parameter)
+  
+
+P_1_long %>%
+  sample_n(10) %>% 
+  arrange(parameter)
+```
+
 
 
 parameter    value
@@ -283,12 +379,29 @@ sigma         33.1
 With long posterior objects, summarizing over the parameters is efficient and straight-forward, in other words: it is tidy.
 
 
+```r
+P_1_long %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+```
+
+
+
 parameter    center   lower   upper
 ----------  -------  ------  ------
 Intercept     106.1    99.6   112.0
 sigma          31.4    27.6    36.3
 
 With the Bayr package, the `posterior` command produces such a long posterior object:
+
+
+```r
+P_1 <- bayr::posterior(M_1)
+P_1
+```
+
 
 
 ** tbl_post: 4000 samples in 1 chains
@@ -299,6 +412,14 @@ With the Bayr package, the `posterior` command produces such a long posterior ob
 |M_1   |Intercept |fixef |Intercept |        1|
 
 When called, the posterior object identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter*. In the case here, there is just one coefficient, the intercept and one dispersion parameter, the standard deviation of residuals The following gives a glance on the real structure of the long posterior object. Most essential are the identification of the iteration (and chain), the parameter name and the value. However, there is a lot more information stored along side, much of which we will only use in later chapters.
+
+
+```r
+P_1 %>% 
+  as_tibble() %>% 
+  filter(!as.logical(iter %% 500)) ## <-- modulo division selects every 500th iteration
+```
+
 
 
 model   chain    iter   order  parameter     type    nonlin   fixef       re_factor   re_entity    value
@@ -327,11 +448,25 @@ Note how the two parameters `Intercept` and `sigma` are assigned different param
 <!-- #120 -->
 
 
+```r
+P_1 %>% 
+  filter(type == "fixef") %>% 
+  clu()
+```
+
+
+
 |model |parameter |type  |fixef     | center| lower| upper|
 |:-----|:---------|:-----|:---------|------:|-----:|-----:|
 |M_1   |Intercept |fixef |Intercept |    106|  99.6|   112|
 
 That is almost precisely how the `bayr::fixef` command is implemented. Note that `coef` and `fixef` can be called on the rstanarm model object, directly, which produces the long posterior in the background.
+
+
+```r
+coef(M_1)
+```
+
 
 
 |parameter |type  |fixef     | center| lower| upper|
@@ -347,12 +482,35 @@ That is almost precisely how the `bayr::fixef` command is implemented. Note that
 The authors of Bayesian books and the various regression engines have different opinions on what to use as center statistic and credibility limits in a coefficient table. The best known option are: the mean, the median and the mode.
 
 
+```r
+T_1 <- 
+  P_1 %>% 
+  group_by(parameter) %>% 
+  summarize(mean   = mean(value),
+            median = median(value),
+            mode   = mascutils::mode(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975))
+T_1
+```
+
+
+
 parameter       mean   median   mode   lower   upper
 ------------  ------  -------  -----  ------  ------
 Intercept      106.0    106.1    106    99.6   112.0
 sigma_resid     31.5     31.4     31    27.6    36.3
 
 We observe that for the Intercept it barely matters which center statistic we use, but there are differences for the standard error. We investigate this further by producing a plot with the marginal posterior distributions of $\mu$ and $\sigma$ with mean, median and mode. 
+
+
+```r
+T_1_long <- 
+  T_1 %>% 
+  gather(key = center, value = value, -parameter)
+T_1_long
+```
+
 
 
 parameter     center    value
@@ -366,7 +524,19 @@ sigma_resid   mode       31.0
 Intercept     lower      99.6
 sigma_resid   lower      27.6
 Intercept     upper     112.0
-sigma_resid   upper      36.3<img src="Classic_linear_models_files/figure-html/unnamed-chunk-24-1.png" width="66%" />
+sigma_resid   upper      36.3
+
+```r
+G_1 <- P_1 %>% 
+  ggplot(aes(x = value)) +
+  facet_wrap(~parameter, scales = "free_x") +
+  geom_density(fill = 1)  + 
+  geom_vline(aes(xintercept = value, col = center), data  = T_1_long)
+
+G_1
+```
+
+<img src="Classic_linear_models_files/figure-html/unnamed-chunk-24-1.png" width="66%" />
 
 This example demonstrates how the long format posterior works together with the GGplot graphics engine. A density plot very accurately renders how certainty is distributed over the range of a parameter. In order to produce vertical lines for point estimate and limits, we first make the summary table long, with one value per row. This is not how we would usually like to read it, but it is very efficient for adding  to the plot.
 
@@ -385,6 +555,17 @@ In this book, *2.5% and 97.5% certainty quantiles* are routinely used to form *9
 
 
 So, the parameter extraction commands used here give the median and the 2.5% and 97.5% limits. The three parameters have in common that they are quantiles, which are handled by Rs `quantile` command. To demystify the `clu`, here is how you can make a basic coefficient table yourself:
+
+
+```r
+P_1 %>%
+  group_by(parameter) %>% 
+  summarize(center = quantile(value, 0.5),
+         lower  = quantile(value, 0.025),
+         upper  = quantile(value, 0.975)) %>% 
+  kable()
+```
+
 
 
 parameter      center   lower   upper
@@ -411,6 +592,13 @@ The `stan_glm` command returns a large object that stores, among others, the ful
 
 
 
+```r
+P_1 <-  posterior(M_1)
+P_1
+```
+
+
+
 ** tbl_post: 4000 samples in 1 chains
 
 
@@ -421,6 +609,17 @@ The `stan_glm` command returns a large object that stores, among others, the ful
 
 The 99 second GMM has two parameters and therefore the posterior distribution has three dimensions: the parameter dimensions $\beta_0$, $\sigma$ and the probability density. Three dimensional plots are difficult to put on a surface, but for somewhat regular patterns, a density plot with contour lines does a sufficient job: <!-- #22 -->
 
+
+```r
+P_1 %>% 
+  select(chain, iter, parameter, value) %>% 
+  spread(parameter, value) %>% 
+  ggplot(aes(x = Intercept, y = sigma_resid, fill = ..level..)) +
+  stat_density_2d(geom = "polygon") +
+  xlim(95, 115) + ylim(25, 40) +
+  scale_fill_continuous(name="relative frequency")
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-26-1.png" width="66%" />
 
 
@@ -430,10 +629,35 @@ The regression object stores the MCMC results as a long series of positions in p
 
 
 
+
+```r
+G_random_walk <-
+  P_1 %>% 
+  filter(iter <= 50) %>% 
+  select(iter, parameter, value) %>% 
+  spread(parameter, value) %>% 
+  ggplot(aes(x = Intercept, y = sigma_resid, label = iter)) +
+  geom_text() +
+  geom_path(alpha = .3) +
+  ylab("residual sd") +
+  xlab("intercept mu") +
+  xlim(95, 115) + ylim(25, 40)
+
+G_random_walk
+```
+
 <img src="Classic_linear_models_files/figure-html/99_seconds_random_walk-1.png" width="66%" />
 
 
 The more complex regression models grow, the more dimensions the PD gets. The linear regression model in the next chapter has three parameter dimensions, which is difficult to visualize. Multi-level models [#MLM] have hundreds of parameters,  which is impossible to intellectually grasp at once. Therefore, it is common to use the *marginal posterior distributions* (MPD), which give the density of one coefficient at time. My preferred geometry for plotting many MPDs is the violin plot, which packs a bunch of densities and therefore can be used when models of many more dimensions.
+
+
+```r
+P_1 %>% 
+  ggplot(aes(x = parameter, y = value)) +
+  geom_violin() +
+  ylim(0, NA)
+```
 
 <img src="Classic_linear_models_files/figure-html/99_seconds_post-1.png" width="66%" />
 
@@ -470,6 +694,9 @@ It turns out that the certainty for average time-on-task above the 99 is an over
 
 
 
+```r
+detach(Sec99)
+```
 
 
 
@@ -488,6 +715,19 @@ In the previous section we have introduced the most basic of all regression mode
 + number of social media contacts
 
 To carry out such a research question, the variable of interest needs to be measured next to the outcome variable. And, the variable must vary. You cannot examine the effects of age or font size on reading performance, when all participants are of same age and you test only one size. Then, for specifying the model, the researcher has to come up with an expectation of how the two are related. Theoretically, that can be any mathematical function, but practically, a *linear function* is often presumed. The following plot shows a variety of linear relations between two variables $x$ and $y$.
+
+
+```r
+mascutils::expand_grid(intercept = c(0, 1, 2),
+                       slope = c(-.5, 0, 1.5),
+                       x = -3:3) %>%
+  arrange(x) %>% 
+  mutate(y = intercept + x * slope,
+         slope = as.factor(slope)) %>% 
+  ggplot(aes(x = x, y = y, color = slope)) +
+  geom_line() +
+  facet_grid(~intercept)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-28-1.png" width="66%" />
 
@@ -517,15 +757,39 @@ $$y_i \sim \textrm{Gaus}(\mu_i, \sigma)$$
 This literally means: with every year of age, ToT increases by $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we visually explore the association between age and ToT using a scatter plot. The blue line in the graph is a so called a *smoother*, more specifically a LOESS. A smoother is an estimated line, just as linear function. But, it is way more flexible. Where the linear function is a straight stick fixed at a pivotal point, LOESS is more like a pipe cleaner. here, LOESS shows a more detailed picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. Actually, that does not look like a straight line, but at least there is steady upwards trend. 
 
 
+```r
+attach(BrowsingAB)
+```
 
+
+
+```r
+BAB1 %>%
+  ggplot(aes(x = age, y = ToT)) +
+  geom_point()+
+  geom_smooth(se = F, fullrange = F)
+```
 
 <img src="Classic_linear_models_files/figure-html/BAB_G_eda_1-1.png" width="66%" />
 
 In fact, the BrowsingAB simulation contains what one could call a psychological model. The effect of age is partly due to farsightedness of participants (making them slower at reading), which more or less suddenly kicks in at a certain range of age. Still, we  make do with a rough linear approximation. To estimate the model, we  use the `stan_glm` command in much the same way as before, but add the  predictor age. The command will internally check the data type of your variable, which is metric in this case. Therefore, it is treated as a *metric predictor* (sometimes also called covariate) <!-- #51-->.
 
 
+```r
+M_age <-
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + age, 
+           data = .)
+```
 
 
+
+
+
+```r
+T_age <- coef(M_age)
+T_age
+```
 
 
 
@@ -552,17 +816,52 @@ Placing the intercept where there is no data has another consequence: the estima
 
 *Shifting the predictor* is a pragmatic solution to the problem: "Shifting" means that the age predictor is moved to the right or the left, such that point zero is in a region populated with observations. In this case, two options seem to make sense: either, the intercept is in the region of youngest participants, or it is the sample average, which is then called *centering*. To shift a variable, just subtract the amount of units (years) where you want the intercept to be. The following code produces a shift of -20 and a centering on the original variable age:
 
+
+```r
+BAB1 <-
+  BAB1 %>% 
+  mutate(age_shft = age - 20,
+         age_cntr = age - mean(age))
+
+BAB1 %>% 
+  tidyr::gather("predictor", "age", starts_with("age")) %>% 
+  ggplot(aes(x = age, y = ToT)) +
+  facet_grid(predictor~.) +
+  geom_point() +
+  geom_smooth(se = F, method = "lm", fullrange = T)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-31-1.png" width="66%" />
 
 By shifting the age variable, the whole data cloud is moved to the left. To see what happens on the inferential level, we repeat the LRM estimation with the two shifted variables:
 
 
 
+```r
+M_age_shft <- 
+  stan_glm(ToT ~ 1 + age_shft, data = BAB1)
+
+M_age_cntr <- 
+  stan_glm(ToT ~ 1 + age_cntr, data = BAB1)
+```
 
 
 
 
 We combine the posterior distributions into one multi-model posterior and read the *multi-model coefficient table*:
+
+
+```r
+P_age <- 
+  bind_rows(posterior(M_age), 
+            posterior(M_age_shft), 
+            posterior(M_age_cntr))
+
+
+T_age <- coef(P_age)
+T_age
+```
+
 
 
 |model      |parameter |fixef     |  center|   lower|  upper|
@@ -578,6 +877,9 @@ We combine the posterior distributions into one multi-model posterior and read t
 
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 ```
@@ -603,6 +905,22 @@ This product is ...
 If you would employ these three scales to assess one and the same product, the data could look like this:
 
 
+```r
+set.seed(42)
+Raw_ratings <- 
+  tibble(Part = 1:100,
+         difficult_easy  = mascutils::rrating_scale(100, 0, .5, 
+                                                    ends = c(1,7)),
+         heavenly_hell   = mascutils::rrating_scale(100, 0, .2, 
+                                                    ends = c(0,10), bin = F),
+         neutral_uncanny = mascutils::rrating_scale(100, -.5, .5, 
+                                                    ends = c(1,5)))
+
+head(Raw_ratings)
+```
+
+
+
  Part   difficult_easy   heavenly_hell   neutral_uncanny
 -----  ---------------  --------------  ----------------
     1                5            5.60                 1
@@ -615,6 +933,22 @@ If you would employ these three scales to assess one and the same product, the d
 In the following, we are comparing the results of these three items. However, they came in the wide format, as you would use to create a correlation table. For a tidy analysis, we first make the data set long. Ratings are now classified by the item they came from. We can produce a grid histogram. 
 
 
+```r
+D_ratings <- 
+  Raw_ratings %>%
+  gather(key = Item, value = rating, -Part) %>% 
+  mascutils:::as_tbl_obs()
+
+D_ratings
+```
+
+
+```r
+D_ratings %>% 
+  ggplot(aes(x = rating)) +
+  facet_grid(Item ~ .) +
+  geom_histogram() + xlim(0, 10)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-39-1.png" width="66%" />
 
@@ -622,11 +956,43 @@ The first problem is that rating scales have been designed with different end po
 
 
 
+
+```r
+D_Items <- tribble(~Item,            ~lower, ~upper,
+                   "difficult_easy",  1,      7,
+                   "heavenly_hell",   0,     10,
+                   "neutral_uncanny", 1,      5)
+
+
+D_ratings <-
+  D_ratings %>% 
+  left_join(D_Items, by = "Item") %>% 
+  mutate(scaled = (rating - lower)/(upper - lower))
+  
+D_ratings %>% 
+  ggplot(aes(x = scaled)) +
+  facet_grid(Item ~ .) +
+  geom_histogram(bins = 100) +
+  xlim(0,1)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-40-1.png" width="66%" />
 
 This partly corrects the horizontal shift between scales. However, the ratings on the third item still are shifted relative to the other two. The reason is that the first two items have the neutral zone right in the center, whereas the third item is neutraul at its left-end point. The second inconsistency is that the second item uses rather extreme anchors (end point labels), which produces a tight accumulation in the center of the range (with a lot of polite people in the sample, at least). The three scales have been rescaled by their *nominal range*, but they differ in their observed variance. 
 
 *z-transformation* rescales a measure by its  *observed variance*. A set of measures is z-transformed by centering it and scaling it by its own standard deviation.
+
+
+```r
+D_ratings %>% 
+  group_by(Item) %>% 
+  mutate(zrating = (rating - mean(rating))/sd(rating)) %>% 
+#   mascutils::z_score(rating) %>% 
+  
+  ggplot(aes(x = rating)) +
+   facet_grid(Item ~ .) +
+   geom_histogram(bins = 100)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-41-1.png" width="66%" />
 
@@ -635,11 +1001,28 @@ By z-transformation, the three scales now exhibit the same mean location and the
 Finally, sometimes researchers use *logarithmic transformation* of outcome measures to reduce what they perceive as pathologies of tha data. In particular, many outcome variables do not follow a Normal distribution, as the random term of linear models assumes, but are left-skewed. Log-transformation often mitigates such problems. However, as we will see in chapter [REF GLM], linear models can be estimated gracefully with a random component that precisely matches the data as it comes. The following time-on-task data is from the IPump study, where nurses have tested two infusion pump interfaces:
 
 
+```r
+attach(IPump)
+```
+
+
+```r
+D_pumps %>% 
+  mutate(logToT = log(ToT)) %>% 
+  select(Design, ToT, logToT) %>% 
+  gather(key = Measure, value = value, -Design) %>% 
+  ggplot(aes(x = value, color = Design)) +
+  facet_wrap(Measure~., scale = "free") +
+  geom_density()
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-43-1.png" width="66%" />
 
 
 
+```r
+detach(IPump)
+```
 
 Frequently, it is count measures and temporal measures to exhibit non-symmetric error distributions. By log transformation one often arrives at a reasonably  Gaussian distributed error. However, the natural unit of te measure (seconds) gets lost by the transformation, making it very difficult to report the results in a quantitative manner. 
 
@@ -661,6 +1044,19 @@ Frequently, it is count measures and temporal measures to exhibit non-symmetric 
 LRM render the quantitative relationship between two metric variables. Another commonly known statistic that seems to do something similar is Pearson's  correlation statistic $r$ (@\ref(#associations)). In the following, we will see that a tight connection between correlation and linear coefficients exists, albeit both having their own advantages. For a demonstration, we reproduce the steps on a simulated data set where X and Y are linearly linked:
 
 
+```r
+D_cor <-
+  tibble(x = runif(100, 0, 50),
+             y = rnorm(100, x *.2, 3))
+```
+
+
+```r
+D_cor %>% 
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-46-1.png" width="66%" />
 
@@ -674,6 +1070,14 @@ $$
 For the sole purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
 
 
+```r
+M_cor <- lm(y ~ x, D_cor)
+beta_1 <- stats::coef(M_cor)[2]
+
+r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
+r
+```
+
 ```
 ##    x 
 ## 0.66
@@ -681,6 +1085,16 @@ For the sole purpose of demonstration, we here resort to the built-in non-Bayesi
 
 The clue with Pearson's $r$ is that it normalized the slope coefficient by the variation found in the sample. This resembles z-transformation as was introduced in  \@ref(transforming-variables). In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$ exactly:
 
+
+```r
+M_z <-
+  D_cor %>% 
+  mutate(x_z = (x - mean(x))/sd(x),
+         y_z = (y - mean(y))/sd(y)) %>% 
+  lm(y_z ~ x_z, .)
+
+stats::coef(M_z)[2]
+```
 
 ```
 ##  x_z 
@@ -699,6 +1113,10 @@ In ANOVA models, when explained variance is large, as compared to residual varia
 Not by coincidence, a measure of explained variance, the *coefficient of determination r^2* can be derived as from Pearson's $r$, by simply squaring it. $r^2$ is in the range $[0;1]$ and represents the proportion of variability that is explained by the predictor:
 
 
+```r
+str_c("X explains r^2 = ",round(r^2,2) * 100, " percent of the variance of Y")
+```
+
 ```
 ## [1] "X explains r^2 = 44 percent of the variance of Y"
 ```
@@ -716,6 +1134,16 @@ The following table shows the correlations between measures in the MMN study, wh
 
 
 
+```r
+attach(MMN)
+
+MMN_2 %>% 
+  select(Corsi, Ospan.A, Ospan.B, time, clicks) %>% 
+  corrr::correlate()
+```
+
+
+
 rowname    Corsi   Ospan.A   Ospan.B    time   clicks
 --------  ------  --------  --------  ------  -------
 Corsi         NA     0.177     0.116   0.068    0.137
@@ -723,6 +1151,10 @@ Ospan.A    0.177        NA     0.876   0.053    0.111
 Ospan.B    0.116     0.876        NA   0.060    0.119
 time       0.068     0.053     0.060      NA    0.838
 clicks     0.137     0.111     0.119   0.838       NA
+
+```r
+detach(MMN)
+```
 
 These correlations give an approximate picture of associations in the data: 
 
@@ -786,8 +1218,18 @@ In the previous section we have seen how linear models are fitting the associati
 However, in many research situations, the predictor variable carries not a measure, but a *group label*. *Factor variables* assign observations to one of a set of predefined groups, such as the following variables do in the BrowsingAB case:
 
 
+```r
+attach(BrowsingAB)
+
+BAB5 %>% 
+  select(Part, Task, Design, Gender, Education, Far_sighted) %>% 
+  sample_n(8)
+```
 
 
+```r
+detach(BrowsingAB)
+```
 
 Two of the variables, Gender and Education clearly carry a group membership of the participants. That is a natural way to think of people groups, such as male of female, or which school type they went to. But, models are inert to anthropocentrism and can divide everything into groups. Most generally, it is always the observations, i.e. the rows in a (tidy) data table, which are divided into groups. Half of the observations habe been made with design A, the rest with B. 
 
@@ -814,8 +1256,19 @@ Asking for differences between two (or more) designs is routine in design resear
 Again, we first take a look at the raw data:
 
 
+```r
+attach(BrowsingAB)
+```
 
 
+
+
+```r
+BAB1 %>%
+  ggplot(aes(x = ToT)) +
+  geom_histogram() +
+	facet_grid(Design~.)
+```
 
 <img src="Classic_linear_models_files/figure-html/eda_anova-1.png" width="66%" />
 
@@ -825,11 +1278,24 @@ This doesn't look too striking. We might consider a slight advantage for design 
 1. With the `fixef` command the estimates are extracted and can be interpreted.
 
 
+```r
+M_CGM <-
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + Design, 
+           data = .)
+```
 
 
 
 
 
+
+
+
+```r
+T_Design <- coef(M_CGM)
+T_Design
+```
 
 
 
@@ -847,9 +1313,19 @@ The second parameter is the effect of "moving to design B". It is given as the *
 A frequent user problem with CGMs is that the regression engine selects the alphabetically first level as the reference level, which often is not correct. Supposed, the two designs had been called Old (A) and New (B), then regression engine would pick New as the reference group. Or think of non-discriminating language  in  statistical reports. In BrowsingAB, gender is coded as f/m and female participants conquer the Intercept. But, sometimes my students code gender as v/m or w/m. Oh, my dear! The best solution is, indeed, to think upfront and try to find level names that make sense. If that is not possible, then the factor variable, which is often of type `character` must be made a factor, which is a data type in its own right in R. When the regression engine sees a factor variable, it takes the first factor level as reference group. That would be nice, but when a factor is created using the `as.factor`, it again takes an alphabethical order of levels. This is over-run by giving a vector of levels in the desired order. The tidy Foracts package provides further commands to set the order of a factor levels.
 
 
+```r
+Gender <- sample(c("v","m"), 4, replace = T)
+
+factor(Gender)
+```
+
 ```
 ## [1] m m v v
 ## Levels: m v
+```
+
+```r
+factor(Gender, c("v", "m"))
 ```
 
 ```
@@ -861,6 +1337,9 @@ A frequent user problem with CGMs is that the regression engine selects the alph
 
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 ### Not stupid: dummy variables {#dummy_variables}
@@ -870,6 +1349,21 @@ Are we missing anything so far? Indeed, I avoided to show any mathematics on fac
 *Factors* basically answer the question: *What group does the observation belong to?*. This is a label, not a number, and cannot enter the regression formula. *Dummy variables* solve the dilemma by converting factor levels to numbers. This is done by giving *every level $l$ of factor $K$* its own dummy variable *K_l*. Now every dummy represents the simple question: *Does this observation belong to group DesignB?*.  The answer is coded as $0$ for "Yes" and $1$ for "No".
 
 
+```r
+attach(BrowsingAB)
+```
+
+
+
+```r
+BAB1 <-  BAB1 %>% 
+  mutate(Design_A = if_else(Design == "A", 1, 0),
+         Design_B = if_else(Design == "B", 1, 0))
+BAB1 %>% 
+  select(Obs, Design, Design_A, Design_B, ToT) %>% 
+  sample_n(8) %>% 
+  kable()
+```
 
 
 
@@ -905,8 +1399,19 @@ The zero/one coding acts like a switches. When $K_{Ai}=1$, the parameter $\beta_
 
 
 
+```r
+M_dummy_1 <-
+  stan_glm(ToT ~ 0 + Design_A + Design_B, 
+     data = BAB1)
+```
 
 
+
+
+
+```r
+coef(M_dummy_1)
+```
 
 
 
@@ -931,6 +1436,12 @@ We have seen how to create dummy variables ourselves by means of mututally exclu
 
 
 
+```r
+BAB1 <-  BAB1 %>% 
+  mutate(Intercept = 1,
+         Design_B = if_else(Design == "B", 1, 0))
+BAB1
+```
 
 
 <!-- Another Instead oTo see that, we extract the dummy variables from the CGM on design with the standard command `model.matrix`. As you can see, for all observations the `(Intercept)` column takes the value `1`, whereas level `DesignB` is switched on and off. -->
@@ -965,6 +1476,12 @@ We have seen how to create dummy variables ourselves by means of mututally exclu
 A frequent user problem with treatment coding is that the regression engine selects the alphabetically first level as the reference level. Supposed, the two designs had been called Old (A) and New (B), then regression engine would pick New as the reference group. By the following you can define dummy variables to have Old be the reference. (But recall the more convenvient ways that were outlined earlier [CGM].)
 
 
+```r
+BAB1 %>% 
+  mutate(Design = if_else(Design == "A", "Old", "New")) %>% 
+  mutate(Intercept = 1,
+         Design_B = if_else(Design == "New", 1, 0))
+```
 
 
 
@@ -972,6 +1489,9 @@ A frequent user problem with treatment coding is that the regression engine sele
 The following chapters deal with more variations of factorial models. Next, we will take a closer look at the absolute  means model [#AMM], which is useful, when a reference group does  not come natural. In section [#OFM], we deal with factorial models, where levels are ordered and introduce *contrast codings*.
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 
@@ -991,12 +1511,29 @@ In the following, we estimate an AMM using the formula method. In the IPump stud
 
 
 
+```r
+attach(IPump)
+```
 
 
 
 
 
+```r
+M_AMM_1 <- 
+  D_Novel %>% stan_glm(ToT ~ 0 + Task,
+                       data = .)
+```
 
+
+
+```r
+coef(M_AMM_1) %>% 
+  rename(Task = fixef ) %>% 
+  ggplot(aes(x = Task, y = center, ymin = lower, ymax = upper)) +
+  geom_point(size = 2) +
+  geom_errorbar()
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-66-1.png" width="66%" />
 
@@ -1004,11 +1541,27 @@ The plot shows the absolute means and we can easily discover that Task 2 is by f
 
 
 
+```r
+detach(IPump)
+```
 
 
 
 
 The choice between CGM and AMM depends on whether a factor represents designed manipulations or  whether it is more something that has been collected. Psychological experiments often have fully designed stimuli, because only then can differences between stimuli get an unambiguous causal interpretation. In the Stroop  experiment, stimuli show a color word (red) written in a color (Red). Both properties are well-defined and can be manipulated freely by the experimenter. That is what you can call a fully controlled stimulus design.  One could argue, that colors and color words have been collected from our perceptual and cultural heredity and are therefore are not really manipulated. This is a valid issue, but it does not matter so much, because the real manipulation is congruency and that is crystal clear:
+
+
+```r
+tribble(~Word, ~Color,
+        "red", "Red",
+        "blue", "Blue",
+        "green", "Green") %>%
+  tidyr::complete(Word, Color) %>%
+  mutate(Condition = if_else(Word == str_to_lower(Color),
+                        "congruent",
+                        "incongruent"))
+```
+
 
 
 Word    Color   Condition   
@@ -1034,9 +1587,31 @@ In more common version of the Stroop task, a neutral condition is added, where t
 
 Factors usually are not metric, which would require them to have units (like years or number of errors) and an order. Age, for example, has the unit of years, which makes statements possible such as: "*per year of age*, participants slow down by ...". The same cannot be said for levels of education. We could assign these levels the numbers 0, 1 and 2 to express the order, but we cannot assume that going from Low to Middle is the same amount of effective education as going from Middle to High. Factorial models are indifferent towards orders and therefore can simply be used for ordered factors. For level of education, we could just use a CGM or AMM, the only issue being that the graphics and regression engines order factors alphabetically: High, Low, Middle.
 
+
+```r
+attach(BrowsingAB)
+
+BAB1 %>% 
+  ggplot(aes(x = Education, y = ToT)) +
+  geom_boxplot()
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-71-1.png" width="66%" />
 
 The following changes the order of levels of GGplot engine is respecting that, and so is the regression engine, putting the intercept on level Low.
+
+
+```r
+BAB1$Education <- factor(as.character(BAB1$Education), 
+                         levels = c("Low", "Middle", "High"))
+
+BAB1 %>% 
+  group_by(Education) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
+  ggplot(aes(x = as.integer(Education), y = mean_ToT)) +
+  geom_step() +
+  scale_x_continuous(breaks=1:3)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-72-1.png" width="66%" />
 
@@ -1044,6 +1619,17 @@ Note that R also knows a separate variable type called ordered factors. This onl
 
 
 
+```r
+M_OFM_1 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + Education, data = .)
+```
+
+
+
+```r
+coef(M_OFM_1)
+```
 
 
 
@@ -1054,6 +1640,9 @@ Note that R also knows a separate variable type called ordered factors. This onl
 |EducationHigh   |EducationHigh   |  -29.0| -44.2| -14.33|
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 
@@ -1061,12 +1650,37 @@ A basic ordered factor model is just a CGM where the coefficients are shown in t
 
 The first idea that could come to mind is to take session as a metric predictor and estimate a LRM -- it has an order and it is the same amount of training, which you could call a unit. The thing with learning processes is that they are curved, more precisely, they gradually move towards an asymptote. The following curve shows the effect of a hypothetical training over 12 sessions. What we see is that the steps are getting smaller when training continues. While the amount of training is the same, the effect on performance declines, which is also called a curve of diminishing returns. The asymptote of this curve is the *maximum performance* the participant can reach, which theoretically is only reached in infinity. The following code defines an exponential learning curve function and renders an example. 
 
+
+```r
+learning_curve <- 
+  function(session, amplitude, rate, asymptote) 
+    amplitude * exp(-rate * session) + asymptote
+
+tibble(session = as.integer(1:12)) %>% 
+  mutate(ToT = learning_curve(session, 10, .3, 2)) %>% 
+  ggplot(aes(x = session, y = ToT)) +
+  geom_step() +
+  scale_x_continuous(breaks=1:12)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-77-1.png" width="66%" />
 
 
 
 
 LRMs can only do straight lines, which means constant effects, whereas learning curves have diminishing effects. For short learning sequences, we can use ordered factorial models, where every session becomes a level. As these levels get their own coefficients, the steps no longer have to be constant. When levels are ordered, the two endpoint levels (first session, last session) can serve as a natural reference group for the intercept. However, how useful would it be to express the performance in session 3 as differences to reference level (session 1). It is more natural to think of learning to take place incrementally, like *walking up stairways*, where the previous step always is your reference.
+
+
+```r
+attach(IPump)
+
+D_Novel %>% 
+  group_by(Session, session) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
+  ggplot(aes(x = as.integer(Session), y = mean_ToT)) +
+  geom_step() +
+  scale_x_continuous(breaks=1:3)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-78-1.png" width="66%" />
 
@@ -1080,6 +1694,21 @@ $$
 Thinking of these dummy variables as switches once again: Recall that treatment dummies have an always-on reference level and exclusive switches for the other levels [#dummy_variables]. Stairways dummies are like a *incremental switches*: when switch $K$ is on, this implies all previous switches are on, too. *Stairways-down* dummies are made as follows:
 
 
+```r
+D_Novel <- 
+  D_Novel %>% 
+  mutate(Session_1 = 1,
+         Step_1 = as.integer(session >= 1),
+         Step_2 = as.integer(session >= 2))
+
+D_Novel %>% 
+  distinct(session, Session_1, Step_1, Step_2) %>% 
+  arrange(session) %>% 
+  as_tibble()
+```
+
+
+
  session   Session_1   Step_1   Step_2
 --------  ----------  -------  -------
        0           1        0        0
@@ -1088,6 +1717,15 @@ Thinking of these dummy variables as switches once again: Recall that treatment 
 
 Now we can run a factorial model using these stairway-down dummies, where the intercept is the upper floor and we are loosing height at every step:
 
+
+```r
+M_OFM_2 <- stan_glm(ToT ~ Session_1 + Step_1 + Step_2, data = D_Novel)
+```
+
+
+```r
+coef(M_OFM_2)
+```
 
 
 
@@ -1103,12 +1741,36 @@ Another question that arises is what level of performance is reached in the end.
 
 
 
+```r
+D_Novel <- 
+  D_Novel %>% 
+  mutate(Session_3 = 1,
+         Step_1 = as.integer(session <= 1),
+         Step_2 = as.integer(session <= 0))
+
+D_Novel %>% 
+  distinct(session, Session_3, Step_1, Step_2) %>% 
+  arrange(desc(session)) %>% 
+  as_tibble()
+```
+
+
+
  session   Session_3   Step_1   Step_2
 --------  ----------  -------  -------
        2           1        0        0
        1           1        1        0
        0           1        1        1
 
+
+```r
+M_OFM_3 <- stan_glm(ToT ~ Session_3 + Step_1 + Step_2, data = D_Novel)
+```
+
+
+```r
+coef(M_OFM_3)
+```
 
 
 
@@ -1121,6 +1783,9 @@ Another question that arises is what level of performance is reached in the end.
 The Intercept is an estimate of final performance and we can ask whether this level of efficiency is actually good enough. In [#reporting_RE] we will see that it is a significant improvement towards the legacy design, hence the name of the level. From a methodological perspective the results of this study indicate that it is worth-while to let participants do multiple session and observe the learning process. In particular, when users do their tasks routinely with a device, like the nurses, initial performance can be a very poor estimate for long-term performance.
 
 
+```r
+detach(IPump)
+```
 
 
 
@@ -1305,6 +1970,17 @@ $$
 $$
 
 
+```r
+attach(AUP)
+M_1 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zncs, data = .)
+
+M_2 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zgex, data = .)
+detach(AUP)
+```
 
 
 
@@ -1320,12 +1996,36 @@ $$
 In R's regression formula language, this is similarly straight-forward. The `+` operator directly corresponds with the `+` in the likelihood formula.
 
 
+```r
+attach(AUP)
+M_3 <- 
+  AUP_1 %>% 
+  stan_glm(zresistance ~ zncs + zgex, data = .) #<--
+
+detach(AUP)
+```
 
 
 
 
 For the comparison of the three models we make use of a feature of the package bayr: the posterior distributions of arbitrary models can be combined into one multi-model posterior object, by just stacking them upon each other. The coefficient table of such a multi-model posterior gains an additional column that identifies the model:
 
+
+
+
+```r
+attach(AUP)
+
+P <-
+  bind_rows(posterior(M_1),
+            posterior(M_2),
+            posterior(M_3))
+
+T_coef_3 <- P %>% 
+  posterior() %>%  
+  coef()
+T_coef_3
+```
 
 
 
@@ -1347,7 +2047,24 @@ When using the two predictors simultaneously, the overall positive tendency rema
 
 For any researcher who has carefully conceived a research question this appears to be a disappointing outcome. The reason is that the two *predictors are correlated*. In this study, participants who are high on NCS also tend to have more pronounced geekism. \@ref(AUP_corr_predictors) reveals the situation:
 
+
+```r
+G_eda_4 <- 
+  AUP_1 %>% 
+  ggplot(aes(x = zncs, y = zgex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = str_c("Correlation between ncs and gex: ", 
+              round(cor(AUP_1$zncs, AUP_1$zgex), 2)))
+
+G_eda_4
+```
+
 <img src="Classic_linear_models_files/figure-html/AUP_corr_predictors-1.png" width="66%" />
+
+```r
+detach(AUP)
+```
 
 
 Participants with a higher NCS also tend to score higher on geekism. Is that surprising? Actually, it is not. People high on NCS love to think. Computers are a good choice for them, because these are complicated devices that make you think. (Many users may even agree that computers help you think, for example when analyzing your data with R.) In turn, geekism is a positive attitude towards working with computers in sophisticated ways, which means such people are more resistant towards the AUP.
@@ -1389,6 +2106,17 @@ We take as an example the BrowsingAB study: the primary research question regard
 <!-- What happened to the likelihood function when we moved from GMM to CGM and LRM? The effect of age was simply added to the intercept. For a model on education level effects, we expanded the dummy variables and then added them all up. Indeed, the linear model is defined as a succession of linear terms  $x_i\beta_i$ and nothing keeps us from adding further predictors to the model. Seeing is believing! The following code estimates a model with design and gender as predictors. -->
 
 
+```r
+attach(BrowsingAB)
+```
+
+
+
+```r
+M_mfm_1 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + Design + Gender, data = .)
+```
 
 
 
@@ -1396,6 +2124,9 @@ We take as an example the BrowsingAB study: the primary research question regard
 
 
 
+```r
+coef(M_mfm_1)
+```
 
 
 
@@ -1406,6 +2137,14 @@ We take as an example the BrowsingAB study: the primary research question regard
 |GenderM   |GenderM   |   0.058| -12.5|  12.4|
 
 By adding gender to the model, both effects are estimated simultaneously. In the following *multi-factorial model (MFM)* the intercept is a reference group, once again. Consider that both factors have two levels, forming a $2 x 2$ matrix.
+
+
+```r
+tribble(~Condition, ~F, ~M,
+        "A", "reference","difference",
+        "B", "difference", "")
+```
+
 
 
 Condition   F            M          
@@ -1431,7 +2170,16 @@ In many multi-factorial situations, one is better advised to use a model with co
 For your convenience, there also exists a an R formula to estimate an MAMM. This formula supresses the intercept and uses an interaction term without main effects (as will be explained in [IFX]).
 
 
+```r
+M_amfm_1 <- stan_glm(ToT ~ 0 + Design:Gender, data = BAB1, iter = 500)
+```
 
+
+
+
+```r
+coef(M_amfm_1)
+```
 
 
 
@@ -1444,11 +2192,23 @@ For your convenience, there also exists a an R formula to estimate an MAMM. This
 
 The coefficient table carries the four group means and be can further processed as a *conditional plot*.
 
+
+```r
+coef(M_amfm_1) %>% 
+  separate(parameter, into = c("Design", "Gender")) %>% 
+  ggplot(aes(x = Design, col = Gender, y = center)) +
+  geom_point(size = 2) +
+  geom_line(aes(group = Gender))
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-98-1.png" width="66%" />
 
 If the two effects were truly independent, these two lines had to be parallel, because the effect of Gender had to be constant. What this graph now suggests is that there is an interaction between the two effects. There is a tiny advantage for female users with design A, whereas men are faster with B with about the same difference. Because these two effects cancel each other out, the combined effect of Gender in model `M_mpm_1` was so close to zero. 
 
 
+```r
+detach(BrowsingAB)
+```
 
 <!-- #124 -->
 
@@ -1458,6 +2218,17 @@ If the two effects were truly independent, these two lines had to be parallel, b
 Recall, that dummy variables make factors compatible with linear regression. We have seen how two metric preditors make a surface and how factors can be visualized by straight lines in a conditional plot. And that is precisely what happens when a factor is combined with a metric predictor: we get a group of lines, one per factor level. For example, we can estimate the effects age and design simultaneously:
 
 
+```r
+attach(BrowsingAB)
+```
+
+
+
+```r
+M_grm_1 <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + Design + age_shft, data = .)
+```
 
 
 
@@ -1466,6 +2237,9 @@ Recall, that dummy variables make factors compatible with linear regression. We 
 
 
 
+```r
+coef(M_grm_1)
+```
 
 
 
@@ -1482,9 +2256,19 @@ It is important to that this is a model of parallel lines, implying that the age
 
 
 
+```r
+M_ampm_1 <- 
+  BAB1 %>% stan_glm(ToT ~ (0 + Design + Design:age_shft) , data = .)
+```
 
 
 
+
+
+
+```r
+coef(M_ampm_1)
+```
 
 
 
@@ -1497,6 +2281,19 @@ It is important to that this is a model of parallel lines, implying that the age
 
 It turns out, the intercepts and slopes are very different as it can be. The first two coefficients represent the two Design intercepts: for a 20 year old, design B works much better, but at the same time design B puts a much stronger  penalty on every  year of age. With these coefficients we can also produce a conditional plot, with one line per Design condition.
 
+
+```r
+coef(M_ampm_1) %>% 
+  select(fixef, center) %>% 
+  mutate(Design = str_extract(fixef, "[AB]"),
+         Coef = if_else(str_detect(fixef, "age"), "Slope", "Intercept")) %>% 
+  select(Design, Coef, center) %>% 
+  spread(key = Coef, value = center) %>% 
+  print() %>% 
+  ggplot() +
+  geom_abline(aes(color = Design, intercept = Intercept, slope = Slope)) +
+  geom_point(data = BAB1, aes(x = age, col = Design, y = ToT))
+```
 
 ```
 ## # A tibble: 2 x 3
@@ -1520,6 +2317,9 @@ So, if we can already fit a model with separate group means (an AMFM) or a bunch
 And, sometimes, experimental hypotheses are even formulated as conditional effects, like the following: some control tasks involve long episodes of vigilance, where mind wandering can interrupt attention on the task. If this is so, we could expect people who meditate to perform better at a long duration task, but showing no difference at short tasks. In a very simple experiment participants reaction  time could be measured in a long and short task condition.
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 
@@ -1592,12 +2392,33 @@ In turn, a design can also comtain compromises that limit the performance of you
 
 
 
+
+```r
+attach(BrowsingAB)
+
+BAB1 %>%
+  ggplot(aes(x = age,
+             col = Design,
+             y = ToT)) +
+  geom_point() +
+  geom_smooth(se = F) +
+  geom_smooth(se = F, aes(col = "combined"))
+```
+
 <img src="Classic_linear_models_files/figure-html/glm_EDA_3-1.png" width="66%" />
 
 The graph suggests that designs A and B differ in the effect of age. Design B appears to perform much better with younger users. At the same time, it seems as if A could be nmore favorable for users at a high age. By adding the conditional effect `Design:age_shft` the following model estimates the linear relationship for the designs separately. This is essentially the same model as the absolute mixed-predictor model M_ampm_1 [#MPM], which also had four coefficients, the intercepts and slopes of two straight lines. We have already seen how the GRM and the AMPM produce different fitted responses. Predictions are independent of contrast coding, but coefficients are not. The following conditional model uses treatment contrasts, like the GRM, and we can compare the coefficients side-by-side.
 
 
 
+```r
+M_cmrm <- 
+  BAB1 %>% 
+  stan_glm(ToT ~ Design + age_shft + Design:age_shft,
+				 data = .)
+
+# T_resid <- mutate(T_resid, M_cmrm = residuals(M_cmrm))
+```
 
 
 
@@ -1634,6 +2455,9 @@ The third coefficient Age_shift appears in both models, but really means somethi
 
 
 
+```r
+detach(BrowsingAB)
+```
 
 
 ### Conditional multifactorial models {#CMFM}
@@ -1641,7 +2465,17 @@ The third coefficient Age_shift appears in both models, but really means somethi
 In a conditional multifactorial model (CMFM), the treatment effect depends on another factor. When the second factor changes in level, this influences the coefficients.  Because of that a CMFM is more flexible. Actually, a full CMFM has as many coefficients as there are multi-level groups and is flexible enough that all group means can be completely independent, just like an AMM does it. Let us see this on an almost trivial example, first. In the fictional BrowsingAB case, a variable `rating` has been gathered. Let us imagine this is a vague emotional rating in the spirit of user experience. Some claim that emotional experience is what makes the sexes different, so one could ask whether this makes a difference for the comparison two designs A and B. 
 
 
+```r
+attach(BrowsingAB)
+```
 
+
+
+```r
+BAB1 %>% 
+  ggplot(aes(y = rating, x = Gender, color = Design)) +
+  geom_boxplot()
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-113-1.png" width="66%" />
 
@@ -1651,9 +2485,37 @@ In a first exploratory plot it looks like the ratings are pretty consistent acro
 
 
 
+```r
+M_mfm_2 <- 
+  BAB1 %>% 
+  stan_glm(rating ~ Design + Gender,
+				 data = .)
+
+M_cmfm_1 <- 
+  BAB1 %>% 
+  stan_glm(rating ~ Design + Gender + Design:Gender,
+				 data = .)
+
+# T_resid <- mutate(T_resid, M_ia2 = residuals(M_ia2))
+```
 
 
 
+
+
+```r
+T_ratings <-
+  bind_rows(
+    posterior(M_mfm_2),
+    posterior(M_cmfm_1)) %>% 
+  coef()
+
+T_ratings %>% 
+  ggplot(aes(y = parameter, col = model,
+             xmin = lower, xmax = upper, x = center)) +
+  geom_errorbarh(height = .2) +
+  geom_point(size = 2)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-115-1.png" width="66%" />
 
@@ -1665,6 +2527,20 @@ It seems we are getting into a lot of null results here. If you have a backgroun
 
 Actually, the purpose of estimating a CMFM can just be to show that some effect is unconditional. As we have seen earlier [MFM], conditional effects can cancel each other out. Take a look at the following hypothetical results of the study. Here, male and female users do not agree. If we would run an MFM in such a situation, we would get very similar coefficients, but would overlook that the relationship between design and rating is just poorly rendered. 
 
+
+```r
+tribble(~Design,     ~Gender, ~mean_rating,
+        "A", "F",     5.6,
+        "A", "M",     5.6 + .4,
+        "A", "Total", mean(c(5.6, 6.0)),
+        "B", "F",     5.6 - .3,
+        "B", "M",     5.6 + .4 -.3 -.6,
+        "B", "Total", mean(c(5.3, 5.1))) %>% 
+  ggplot(aes(x = Design, col = Gender, y = mean_rating)) +
+  geom_point(size = 2) +
+  geom_line(aes(group = Gender))
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-116-1.png" width="66%" />
 
 If something like this happens in a real design study, it may be a good idea to find out, why this difference appears and whether there is a way to make everyone equally happy.  These are questions a model cannot answer. But a CMFM can show, when effects are conditional and when they are not. Much of the time, gender effects is what you rather don't want to have, as it can become a political problem. If conditional adjustment effects are close to zero, that is proof (under uncertainty) that an effect is unconditional. If that is the case, modelling it as a true main effect in a plain MFM is justified, and one is out of the trouble.
@@ -1672,7 +2548,21 @@ If something like this happens in a real design study, it may be a good idea to 
 Let's see a more complex example of conditional MFMs, where conditional effects are really needed. In the IPump study, two infusion pump designs were compared in three successive sessions. In [OFM] we saw how a factorial model can render a learning curve using stairway dummies. With two designs, we can estimate separate learning curves and make comparisons. Let's take a look at the raw data:
 
 
+```r
+attach(IPump)
+```
 
+
+
+```r
+D_agg %>% 
+  group_by(Design, Session) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
+  ggplot(aes(x = Session, y = mean_ToT, color = Design)) +
+  geom_point() +
+  geom_line(aes(group = Design)) +
+  ylim(0,350)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-118-1.png" width="66%" />
 
@@ -1683,9 +2573,32 @@ The first choice to make is between treatment dummies and stairway dummies and b
 We'll keep the stairway effects on the sessions, but have to now make a choice  on where to fix the intercept, and that depends on what aspect of learning is more important. If this were any walk-up-and-use device or a website for making your annual tax report, higher initial performance would indicate that the system is intuitive to use. Medical infusion pumps are used routinely by trained staff. What matters here is long-term performance, and the final session is the best estimate we have for that. We create stairway dummies for session and make this conditional on Design:
 
 
+```r
+T_dummy <-
+  tribble(~Session, ~Session3, ~Step3_2, ~Step2_1,
+          "1", 1, 1, 1,
+          "2", 1, 1, 0,
+          "3", 1, 0, 0) 
+
+D_agg <- 
+  left_join(D_agg, 
+            T_dummy, 
+            by = "Session") 
+
+
+M_cmfm_2 <-
+  stan_glm(ToT ~ 1 + Design + Step3_2 + Step2_1 +
+             Design:(Step3_2 + Step2_1), data = D_agg)
+```
 
 
 
+
+
+
+```r
+coef(M_cmfm_2)
+```
 
 
 
@@ -1702,6 +2615,9 @@ We'll keep the stairway effects on the sessions, but have to now make a choice  
 
 
 
+```r
+detach(IPump)
+```
 
 Note that ...
 
@@ -1787,7 +2703,49 @@ The formula basically says, that if we increase $x_1$ (or any other influencing 
 
 In this and the next section, we will use conditional effects to account for non-linearity. We can distinguish between *saturation effects*, which are  more common and *amplification effects*. <!-- #68 -->
 
-<img src="Classic_linear_models_files/figure-html/interaction_effects-1.png" width="66%" /><img src="Classic_linear_models_files/figure-html/interaction_effects-2.png" width="66%" />
+
+```r
+	mascutils::expand_grid(effect = c("saturation", "amplification"), 
+							A = c(0,1),
+							B = c(0,1)) %>%
+		left_join(tibble(effect = c("saturation","amplification"),
+										beta_1 = c(.1,.1),
+										beta_2 = c(.2,.2),
+										beta_3 = c(-0.3, 0.3)))  %>%
+		mutate(Outcome = A * beta_1 + B * beta_2 + A * B * beta_3) %>%
+		mutate(B = factor(B, labels = c("low", "high")),
+					 A = factor(A, labels = c("low", "high"))) %>%
+		ggplot(aes(x = A, col = B, y = Outcome)) +
+		geom_point(size = 3) +
+		geom_smooth(aes(group = B, col= B), method = "lm") +
+		facet_grid(.~effect)
+```
+
+<img src="Classic_linear_models_files/figure-html/interaction_effects-1.png" width="66%" />
+
+```r
+Interactions <- expand.grid(effect = c("saturation", "amplification"), 
+						A = seq(0,1, length.out = 11),
+						B = seq(0,1, length.out = 11)) %>%
+	left_join(tibble(effect = c("saturation","amplification"),
+									beta_1 = c(.1,.1),
+									beta_2 = c(.2,.2),
+									beta_3 = c(-0.3, 0.3)))  %>%
+	mutate(Outcome = A * beta_1 + B * beta_2 + A * B * beta_3)
+
+library(lattice)
+grid.arrange(
+	wireframe(Outcome ~ A + B, 
+						data = filter(Interactions, effect == "saturation"),
+						main = "saturation"),
+	wireframe(Outcome ~ A + B, 
+						data = filter(Interactions, effect == "amplification"),
+						main = "amplification"),
+	ncol = 2
+)
+```
+
+<img src="Classic_linear_models_files/figure-html/interaction_effects-2.png" width="66%" />
  
 
 A major flaw with the linear model is that it presumes the regression line to rise or fall infinitely. However, *in an endless universe everything has boundaries*. Just think about your performance in reading this text. Several things could be donme to improve reading performance, such as larger font size, simpler sentence structure or translation into your native language.  Still, there is a hard lower limit for time to read, just by the fact, that reading involves saccades (eye movements) and these cannot be accelerated any further. The time someone needs to read a text is limited by fundamental cognitive processing speed. We may be able to reduce the inconvenience of deciphering small text, but once an optimum is reached, there is no further improvement. Such boundaries of performance inevitably lead to non-linear relationships between predictors and outcome. 
@@ -1795,6 +2753,22 @@ A major flaw with the linear model is that it presumes the regression line to ri
 Modern statistics knows several means to deal with non-linearity, some of them are introduced in [GLM]). Still, most researchers use linear models, and it often can be regarded a reasonable approximation under particular circumstances. Mostly, this is that measures keep a distance to the hard boundaries. Because if performance is pushed to the limits, *saturation* occurs. When there is just one treatment repeatedly pushing towards a boundary, we get the diminishing returns effect seen in learning curves [OFM]. If two or more variables are pushing simultaneously, saturation appear as conditional effects. 
 
 Before we turn to a genuine design research case, let me explain saturation effects by an example that I hope is intuitive. The hypothetical question is: do two headache pills have twice the effect of one? Consider a pharmaceutical study on the effectiveness of two pain killer pills A and B, taking place in the aftermath of a huge party on a university campus. Random strolling students are asked to participate. First, they rate their experienced headache on a Likert scale ranging from "fresh like the kiss of morning dew" to "dead highway opossum". Participants are randomly assigned to four groups, each group getting a different combination of pills: no pill, only A, only B, A and B. After 30 minutes, headache is measured again and the difference between both measures is taken as the outcome measure: headache reduction. We inspect the position of four group means graphically:
+
+
+```r
+attach(Headache)
+
+T_means <-  
+  Pills %>% 
+  group_by(PillA, PillB) %>% 
+  summarise(mean_reduction = round(mean(reduction),1))
+
+T_means %>% 
+  ggplot(aes(x = PillA, col = PillB, mean_reduction)) +
+	geom_point() +
+  geom_line(aes(group = PillB)) +
+  ylim(0,2.5)
+```
 
 <img src="Classic_linear_models_files/figure-html/eda_headache-1.png" width="66%" />
 
@@ -1808,6 +2782,17 @@ At the example of headache pills, I will now demonstrate that saturation can cau
 
 
 
+```r
+M_mfm <- stan_glm(reduction ~ 1 + PillA + PillB, data = Pills)
+M_cmfm <- stan_glm(reduction ~ 1 + PillA + PillB + PillA:PillB, data = Pills)
+# M_3 <- stan_glm(reduction ~ 0 + PillA:PillB, data = Pills, iter = 100)
+
+P_1 <- bind_rows(
+  posterior(M_mfm),
+  posterior(M_cmfm) #,
+  #posterior(M_3)
+)
+```
 
 
 
@@ -1815,15 +2800,30 @@ At the example of headache pills, I will now demonstrate that saturation can cau
 The following table puts the center estimates of both models side-by-side.
 
 
+```r
+coef(P_1) %>% 
+  select(model, fixef, center) %>% 
+  spread(key = model, value = center)
+```
+
+
+
 fixef        M_1
 ----------  ----
 Intercept    106
+
+```r
+# %>%  arrange(c(1,2,4,3))
+```
 
 
 
 Both intercepts indicate that headache diminishes due to the placebo alone, but `M_mfm` over-estimates the placebo effect. At the same time, the treatment effects PillA and PillB are under-estimated. That happens, because the unconditional model averages over two conditions, under which pill A or B are given: with the other pill or without. As `M_cmfm` tells, when taken with the another pill, effectiveness is reduced by $-0.37$. The effectiveness of two pills is not their sum, but less than that. One can have headache to a certain degree or no headache at all. If it's gone, any more pills have no additional effects. 
 
 
+```r
+detach(Headache)
+```
 
 
 In general, if two predictors work into the same direction (here the positive direction) and the intercation effect has the opposite direction, this is likely a *saturation effect*: the more of similar is given, the closer it gets to the natural boundaries and the less it adds. Remember that this is really not about side effects in conjunction with other medicines. Quite the opposite: if two type of pills effectively reduce headache, but in conjunction produce a rash, this would be an amplification effect. Amplification effects are theoretically interesting, not only for pharmacists. Saturation effects are boring. When they happen, they only tell us that we have been applying *more of the similar* and that we are running against a set limit of how much we can improve things.
@@ -1832,6 +2832,17 @@ In general, if two predictors work into the same direction (here the positive di
 Back to design research with a another hypothetical study that works similar to the Pills case. Imagine a study aiming at ergonomics of reading for informational websites. In a  first experiment, the researcher found that 12pt font effectively reduces reading time as compared to 10pt by about 5 seconds. 
 
 
+
+
+
+```r
+D_reading_time <-
+  tibble(font_size = c(4, 10, 12, 14, 16, 18),
+           observed_time = c(NA, 40, 30, NA, NA, NA),
+           predicted_time = 60 - font_size/4 * 10)
+
+D_reading_time
+```
 
 
 
@@ -1859,17 +2870,46 @@ The general question arises: can one sufficiently compensate lack of contrast by
 
 <!--#69-->
 
+```r
+attach(Reading)
 
+D_1
+```
+
+
+
+```r
+D_1 %>% 
+  ggplot(aes(col = font_color,
+             x = font_size,
+             y = ToT)) +
+  geom_boxplot()
+```
 
 <img src="Classic_linear_models_files/figure-html/reading_expl_1-1.png" width="66%" />
 
 We see immediately, that both design choices have an impact: black letters, as well as larger letters are faster to read. But, do they add up? Or do both factors behave like headache pills, where more is more, but less than the sum. Clearly, the 12pt-black group could read fastest on average. Neither with large font, nor with optimal contrast alone has the design reached a boundary, i.e. saturation. We run two regression models, a plain MFM and a conditional MFM, that adds an interaction term. We extract the coefficients from both models and view them side-by-side:
 
 
+```r
+M_mfm <- D_1 %>% 
+  stan_glm(ToT ~ 1 + font_size + font_color, data = .)
+
+M_cmfm <- D_1 %>% 
+  stan_glm(ToT ~ 1 + font_size + font_color + font_size : font_color, data = .)
+```
 
 
 
 
+
+```r
+T_read_fixef <-
+  bind_rows(posterior(M_mfm),
+            posterior(M_cmfm)) %>% 
+  coef() %>% 
+  print()
+```
 
 ```
 ## 
@@ -1912,8 +2952,20 @@ If this was real data, we could assign the saturation effect a deeper meaning. I
 Conditional effects are notoriously neglected in research and they are often hard to grasp for audience, even when people have a  classic statistics education. Clear communication is often crucial and conditional models are best understood by using conditional plots. A conditional plot for the 2x2 design contains the four estimated group means. These can be computed from the linear model coefficients, but often it easier to just estimate an AGM alongsite the CGM:
 
 
+```r
+M_amm <-
+  D_1 %>% 
+  stan_glm(ToT ~ 0 + font_size : font_color,
+           data = .)
+```
 
 
+
+
+
+```r
+coef(M_amm)
+```
 
 
 
@@ -1925,10 +2977,29 @@ Conditional effects are notoriously neglected in research and they are often har
 |font_size12pt:font_colorblack |font_size12pt:font_colorblack |   42.7|  38.8|  46.5|
 
 
+```r
+T_amm <- 
+  coef(M_amm) %>% 
+  separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
+  mutate(font_size = str_replace(font_size, "font_size", ""),
+         font_color = str_replace(font_color, "font_color", "")) 
+
+G_amm <- T_amm %>% 
+  ggplot(aes(x = font_color, 
+             color = font_size, shape = font_size,
+             y = center)) +
+  geom_point() +
+  geom_line(aes(group = font_size))
+```
 
 Note that in a CLU table the column `fixef` stores two identifiers, the level of font-size and the level of font_color. For putting them on different GGplot aesthetics we first have to rip them apart using `separate` before using `mutate` and `str_replace` to strip the group labels off the factor names.
 
 Since the coefficient table also contains the 95% certainty limits, we can produce a conditional plot with overlayed credibility intervals (`geom_errorbar`). These limits belong to the group means, and generally cannot be used to tell about the treatment effects.
+
+
+```r
+G_amm + geom_errorbar(aes(ymin = lower, ymax = upper), width = .2)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-131-1.png" width="66%" />
 
@@ -1936,10 +3007,33 @@ Still, it gives the observer some sense of the overall level of certainty. And, 
 
 However, a violin plot requires more that just three CLU estimates. Recall from [random_walk] that the posterior object, obtained with `posterior` stores the full certainty information gained by the MCMC estimation walk. The CLU estimates we so commonly use, are just condensing this information into three numbers (CLU). By pulling the estimated posterior distribution into the plot, we can  produce a conditional plot that conveys more information and is easier on the eye.
 
+
+```r
+P_amm <-
+  posterior(M_amm) %>%
+  filter(type == "fixef") %>% 
+  select(fixef, value) %>% 
+  separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
+  mutate(font_size = str_replace(font_size, "font_size", ""),
+         font_color = str_replace(font_color, "font_color", ""))
+  
+
+G_amm +
+  geom_violin(data = P_amm, 
+              aes(y = value, 
+                  fill = font_size), 
+              alpha = 0.5, 
+              position = position_identity(),
+              width = .2)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-132-1.png" width="66%" />
 
 
 
+```r
+detach(Reading)
+```
 
  
 As the figure shows, ergonomics is maximized by using large fonts and high contrast. Still, there is saturation and therefore it does little harm to go with the gray font, as long as it is 12pt. 
@@ -1964,6 +3058,19 @@ Imagine a study, where they asked a larger set of participants to rate their tec
 While the example primarily serves to introduce amplification effects, it is also an opportunity to get familiar with conditional effects between metric predictors. Although this is not very different to conditional effects on groups, there are a few peculiarities, one being that we cannot straight-forwardly make an exploratory plot. For factors, we have used box plots, but these do not apply for metric predictors. In fact, it is very difficult to come up with a good graphical representation. One might think of 3D wire-frame plots, but these transfer poorly to the 2D medium of these pages. Another option is to create a scatter-plot with the predictors on the axes and encode the outcome variable by shades or size of dots <!-- #71 -->. These options may suffice to see any present main effects, but are too coarse to discover subtle non-linearity. The closest we can get to a good illustration is to create groups and continue as usual. Note, that turning metric predictors into factors is just a hack to create exploratory graphs. By no means do I intend to corroborate the use of group-mean models on metric data.
 
 
+```r
+attach(AR_game)
+```
+
+
+```r
+D_1 %>% 
+  mutate(Sociophile = forcats::fct_rev(ifelse(sociophile > median(sociophile), "high", "low")),
+         Technophile = forcats::fct_rev(ifelse(technophile > median(technophile), "high", "low"))) %>%
+  ggplot(aes(y = intention, x = Technophile, col = Sociophile)) +
+  geom_boxplot() +
+  ylim(0, 0.5)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-135-1.png" width="66%" />
 
@@ -1971,8 +3078,20 @@ From the boxplot it seems that both predictors have a positive effect on intenti
 
 
 
+```r
+M_cmrm <-
+  D_1 %>% 
+  stan_glm(intention ~ 1 + sociophile + technophile + sociophile : technophile,
+           data = .)
+```
 
 
+
+
+
+```r
+coef(M_cmrm)
+```
 
 
 
@@ -1989,6 +3108,26 @@ While plotting the relationship between three metric variables is difficult, the
 
 
 
+```r
+D_2 <- 
+  mascutils::expand_grid(technophile = seq(.1, .9, by = .1),
+                              sociophile = seq(.3, .6, by = .1)) %>% 
+  arrange(technophile)
+
+T_comb_pred <- 
+  post_pred(M_cmrm, newdata = D_2, thin =2) %>%
+  predict()
+
+D_2 <- 
+  D_2 %>% 
+  mutate(intention = T_comb_pred$center)
+
+D_2 %>% 
+  mutate(technophile = as.factor(technophile)) %>% 
+  ggplot(aes(x = sociophile, col = technophile, y = intention)) +
+  geom_point() +
+  geom_line(aes(group = technophile))
+```
 <!-- #72 --> 
 The effect is not stunning, but visible. The lines diverge, which means they have different slopes. With high technophilia, every (tenth) unit of sociophilia has a stronger effect on intention to play.
 
@@ -1996,6 +3135,9 @@ The effect is not stunning, but visible. The lines diverge, which means they hav
 
 
 
+```r
+detach(AR_game)
+```
 
 Saturation effects are about declining  net effects, there more similar treatments pile up, that can be the same amount of training (which gives a curve of diminshing returns) or two similar treatments. Amplification effects are more like two-component glue. When using only one of the components, all you get you get is a smear. The only way of getting a strong hold is to put them together. This has a parallel in Boolean logic [#Boolean?]. The Boolean `OR` operator returns `TRUE` when one of the operands is `TRUE`. Adding more `True` does not change anything anymore, which is an extreme case of saturation. The operator `AND` requires both operands to be `TRUE` for something to happen. 
 
@@ -2043,13 +3185,30 @@ The central argument is that sleep deprivation deteriorates the central nervous 
 The Sleep case study is a simplified simulation of Corcoran's results. Participants were divided into 2x2 groups (quiet/noisy, rested/deprived) and had to react to five signal lamps in a succession of trials. In the original study, performance measure gaps were counted, which is the number of delayed reactions ($>1500ms$). Here we just go with (simulated) reaction times, assuming that declining vigilance manifests itself in slower reactions.
 
 
+```r
+attach(Sleep)
+```
 
+
+
+```r
+D_1 %>% 
+  ggplot(aes(x = Environment,
+             color = Sleep,
+             y = RT)) +
+  geom_boxplot()
+```
 
 <img src="Classic_linear_models_files/figure-html/Sleep_expl-1.png" width="66%" />
 
 Using a 2x2 model including a conditional effect, we examine the conditional association between noise and sleepiness.
 
 
+```r
+M_1 <- 
+  D_1 %>% 
+  stan_glm(RT ~ Environment * Sleep, data = .)
+```
 
 
 
@@ -2077,6 +3236,9 @@ These findings reverb with a well known in Psychology of Human Factors, the Yerk
 
 
 
+```r
+detach(Sleep)
+```
 
 To sum it up, saturation and amplification effects have in common that performance is related to design features in a monotonous increasing manner (, albeit not linearly increasing). Such effects can be interpreted in a straight-forward manner: when saturation occurs with multiple factors, it can be inferred that they all
 impact the same underlying cognitive mechanism and are therefore interchangeable to some extent, like compensating letter size with stronger contrast. In turn, amplification effects indicate that multiple cognitive mechanisms (or attitudes) are necessarily involved and must be regarded during design. The Sleep study demonstrates that conditional effects can also occur in situations with *non monotonously increasing* relationships between design features and performance. When such a relationship takes the form of a parabole, like the Yerkes-Dodson law, the designer (or researcher) is faced with the more complex problem of finding the sweet spot. Central to the Yerkes-Dodson law is that arousal is a gradually increasing condition, and so are noise level and degree of sleep deprivation. A consequential follow-up study would be one, where these levels are manipulated (or measured) on more levels than the original could serve to identify the position of optimal performance more accurately. In [#PRM] we have encountered a similar case: the trough of the Uncanny Valley effect can be estimated and this estimate can help researchers to avoid the critical region.
@@ -2101,6 +3263,15 @@ In the preceding four sections, we used linear models to render processes that a
 
 Robots build our cars and sometimes drive them. They mow the lawn and may soon also deliver parcels to far-off regions. Prophecy is that robots will also enter social domains, such as care for children and the elderly. One can assume that in social settings emotional acceptance plays a significant role for technology adoption. Next to  our voices, our faces and mimic expressions are the main source of interpersonal messaging. Since the dawn of the very idea of robots, anthropomorphic designs have been dominant. Researchers and designers all around the globe are currently pushing the limits of human-likeness of robots. One could assume that emotional response improves with every small step towards perfection. Unfortunately, this is not the case. [Mori] discovered a bizarre non-linearity in human response: people's emotional response is proportional t  human-likeness, but only at the lower end. A <!-- #77 --> robot design with cartoon style facial features will always beat a robot vacuum cleaner. But, an almost anatomically correct robot face may provoke a very negative emotional response, which is called the *uncanny valley*.
 
+
+```r
+tibble(hl = seq(-1, 1, length.out = 100),
+             emotional_valence = -.5 * hl + .6 * hl^3 + .2 * hl^4) %>% 
+  mutate(human_likeness = (hl + 1)/2) %>% 
+  ggplot(aes(x = human_likeness, y = emotional_valence)) +
+  geom_line()
+```
+
 <img src="Classic_linear_models_files/figure-html/uncanny_valley-1.png" width="66%" />
 
 
@@ -2112,6 +3283,25 @@ $$y_i = \beta_0 x_i^0 + \beta_1 x_i^1 + ... + \beta_{k}  x_i^{k}$$
 
 In fact, you are already familiar with two polynomial models. The zero degree polynomial is the grand mean model. This follows from $x_i^0 = 1$, which makes $\beta_0$ a constant, the intercept. Also, a first degree polynomial is simply the linear model. By adding higher degrees we can introduce more complex curvature to the association.
 
+
+```r
+D_poly <-
+  tibble(x = seq(-2, 3, by = .1),
+             degree_0 = 2,
+             degree_1 = 1   *  degree_0 + 3 * x,
+             degree_2 = 0.5 * (degree_1 + 2 * x^2),
+             degree_3 = 0.5 * (degree_2 + -1 * x^3),
+             degree_4 = 0.4 * (degree_3 + 0.5 * x^4),
+             degree_5 = 0.3 * (degree_4 + -0.3 * x^5)) %>% 
+  gather(polynomial, y, degree_0:degree_5) %>% 
+  arrange(polynomial, y, x)
+
+D_poly %>% 
+  ggplot(aes(x, y)) +
+  geom_line() +
+  facet_wrap(~polynomial)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-145-1.png" width="66%" />
 
 
@@ -2122,11 +3312,34 @@ While R provides high-level methods to deal with polynomial regression, it is in
 
 
 
+```r
+attach(Uncanny)
+```
+
+
+
+```r
+M_poly_3 <-
+  UV_1 %>% 
+  mutate(huMech_0 = 1,
+         huMech_1 = huMech,
+         huMech_2 = huMech^2,
+         huMech_3 = huMech^3) %>%
+  stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
+           data = ., iter = 2500)
+  # stan_glm(avg_like ~ poly(huMech, 4),
+  #          data = ., iter = 100)
+
+P_poly_3 <- posterior(M_poly_3)
+```
 
 
 
 
 
+```r
+coef(P_poly_3)         
+```
 
 
 
@@ -2160,6 +3373,19 @@ Mathur et al. followed these analytic steps to arrive at an estimate for the pos
 
 
 
+```r
+library(polynom)
+
+poly     <- polynomial(T_fixef_1$center) # UC function on center
+dpoly    <- deriv(poly)                  # 1st derivative
+ddpoly   <- deriv(dpoly)                 # 2nd derivative
+stat_pts <- solve(dpoly)                 # finding stat points
+slopes   <- as.function(ddpoly)(stat_pts)# slope at stat points
+trough   <- stat_pts[slopes > 0]         # selecting the local minimum
+
+cat("The trough is most likely at a huMech score of ", round(trough, 2))
+```
+
 ```
 ## The trough is most likely at a huMech score of  0.73
 ```
@@ -2171,9 +3397,22 @@ This procedure repeats the original analysis, but there is a limitation: using t
 Every step of the MCMC walk produces a simultaneous draw of the four parameters `huMech_[0:3]`<!-- #79 -->, and therefore fully specifies a third degree polynomial. The posterior distribution of the position of the trough can be computed, by computing the position for every iteration. For the convenience, the R package Uncanny contains a function `trough(coef)` that includes all the above steps. The following code creates a data frame with one row per MCMC draw and the four huMech variables, the function `trough` acts on this data frame as a matrix of coefficients and returns one trough point per row. We have obtained the PD of the trough.
 
 
+```r
+devtools::install_github("schmettow/Uncanny")
+```
 
 
 
+```r
+P_trough <-
+  P_poly_3 %>%
+  filter(type == "fixef") %>%
+  select(chain, iter, fixef, value) %>% 
+  spread(fixef, value) %>% 
+  select(Intercept, starts_with("huMech")) %>% 
+  mutate(trough = uncanny::trough(.)) %>% 
+  gather(key = parameter)
+```
 
 
 This posterior distribution we can plot, or put it into a CLU table:
@@ -2200,6 +3439,26 @@ trough        0.727    0.654    0.840
 
 The 95% CI is a conventional measure of uncertainty and may be more or less irrelevant. The most generous display on uncertainty is a density plot on the full posterior. The density function just smooths over the frequency distribution of trough draws, but makes no arbitrary choices on where to cut it.
 
+
+```r
+UV_1$M_poly_3 <- predict(M_poly_3)$center
+
+gridExtra::grid.arrange(
+  UV_1 %>% 
+    ggplot(aes(x = huMech, y = avg_like)) +
+    geom_point(size = .3) +
+    geom_smooth(aes(y = M_poly_3), se = F),
+  
+  P_trough %>% 
+    filter(parameter == "trough") %>% 
+    ggplot(aes(x = value)) +
+    geom_density() +
+    xlim(0, 1),
+  
+  heights = c(.8, .2)
+)
+```
+
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-151-1.png" width="66%" />
 
 With reasonable certainty, we can say that the trough is at approximately two-thirds of the huMech score range. <!-- #80 --> In contrast, the illustration of the uncanny valley as they used to be perpetuated from the original source, place the trough at about four quarters of the scale. The Uncanny Valley effect seems to set in "earlier" than we thought.
@@ -2208,12 +3467,19 @@ A closer look at the scatterplot above reveals a problem with the data set: It s
 
 
 
+```r
+print("Probability that there is a trough:", 1 - mean(is.na(P_trough)) )
+```
+
 ```
 ## [1] "Probability that there is a trough:"
 ```
 
 
 
+```r
+detach(Uncanny)
+```
 
 
 ### Make yourself a test statistic
@@ -2230,6 +3496,17 @@ Polynomial theory tells us that a cubic function *can* have two stationary point
 Recall, that when a cubic model is estimated, the MCMC walk makes random visits in a four-dimensional coefficient space [#MCMC] (five-dimensional, if we count the error variance). These coordinates are stored *per iteration* in a posterior distribution object. Every iteration represents one possible polynomial.
 
 
+```r
+attach(Uncanny)
+```
+
+
+```r
+post_pred(M_poly_3, thin = 10) %>% 
+  left_join(UV_1, by = "Obs") %>%
+  ggplot(aes(x = huMech, y = value, group = iter)) +
+  stat_smooth(geom='line', alpha=0.2, se=FALSE)
+```
 
 <img src="Classic_linear_models_files/figure-html/unnamed-chunk-155-1.png" width="66%" />
 
@@ -2243,8 +3520,30 @@ All we have to do is count the number of MCMC visits, that have a trough and a s
 With these two functions, we can create two simple test statistics. All we have to do is count how many of the MCMC draws represent a cubic polynomial *with* shoulder and trough.
 
 
+```r
+# devtools::install_github("schmettow/uncanny")
+library(uncanny)
+
+P_wide <-
+  P_poly_3 %>% 
+  filter(type == "fixef") %>% 
+  as_tibble() %>% 
+  select(iter, parameter, value) %>% 
+  spread(key = parameter, value = value) %>% 
+  select(-iter) %>% 
+  mutate(trough     = uncanny::trough(.),
+         shoulder   = uncanny::shoulder(.),
+         is_Uncanny = !is.na(trough) & !is.na(shoulder) )
+
+print("The probability that the Uncanny Valley does NOT exist is:")
+```
+
 ```
 ## [1] "The probability that the Uncanny Valley does NOT exist is:"
+```
+
+```r
+print(mean(P_wide$is_Uncanny))
 ```
 
 ```

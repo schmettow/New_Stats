@@ -6,7 +6,7 @@ purp.book <- T
 purp.mcmc <- F
 purp.debg <- F
 purp.prnt <- T
-purp.rtut <- F
+purp.rtut <- T
 # if(!exists("purp.book")) # Book
 #   purp.book = T
 # if(!exists("purp.mcmc")) # updating MCMC models
