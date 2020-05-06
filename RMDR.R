@@ -138,6 +138,9 @@ options(digits=3)
 
 ## chunk templates
 
+opts_chunk$set(fig.width = 7)
+opts_chunk$set(fig.height = 5)
+
 opts_template$set( 
   tab = list(anchor = 'Table', echo = T, eval = T, results = 'markup' ),
   #fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
