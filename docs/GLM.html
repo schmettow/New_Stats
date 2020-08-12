@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-05-06" />
+<meta name="date" content="2020-08-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="MLM.html"/>
-
+<link rel="next" href="ME.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -245,6 +245,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.4.3" data-path="GLM.html"><a href="GLM.html#distributional-models"><i class="fa fa-check"></i><b>6.4.3</b> Distributional models</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="ME.html"><a href="ME.html"><i class="fa fa-check"></i><b>7</b> Working with models</a><ul>
+<li class="chapter" data-level="7.1" data-path="ME.html"><a href="ME.html#model-criticism"><i class="fa fa-check"></i><b>7.1</b> Model criticism</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ME.html"><a href="ME.html#residual-analysis"><i class="fa fa-check"></i><b>7.1.1</b> Residual analysis</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ME.html"><a href="ME.html#fitted-responses-analysis"><i class="fa fa-check"></i><b>7.1.2</b> Fitted responses analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ME.html"><a href="ME.html#model-selection"><i class="fa fa-check"></i><b>7.2</b> Model selection</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="ME.html"><a href="ME.html#the-problem-of-over-fitting"><i class="fa fa-check"></i><b>7.2.1</b> The problem of over-fitting</a></li>
+<li class="chapter" data-level="7.2.2" data-path="ME.html"><a href="ME.html#cross-validation-and-loo"><i class="fa fa-check"></i><b>7.2.2</b> Cross validation and LOO</a></li>
+<li class="chapter" data-level="7.2.3" data-path="ME.html"><a href="ME.html#information-criteria"><i class="fa fa-check"></i><b>7.2.3</b> Information Criteria</a></li>
+<li class="chapter" data-level="7.2.4" data-path="ME.html"><a href="ME.html#choosing-response-distributions"><i class="fa fa-check"></i><b>7.2.4</b> Choosing response distributions</a></li>
+<li class="chapter" data-level="7.2.5" data-path="ME.html"><a href="ME.html#testing-theories"><i class="fa fa-check"></i><b>7.2.5</b> Testing theories</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -333,12 +346,12 @@ y_i \sim \textrm{Norm}(\mu_i,\sigma)
 <a class="sourceLine" id="cb395-12" title="12"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb395-13" title="13"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
 <pre><code>## **  10 predictions (scale: resp) with 95% credibility limits (five shown below) 
-##   Obs  center lower upper
-## 1   4  0.2951 -1.83  2.44
-## 2   6 -0.0323 -2.25  2.19
-## 3   7 -0.1917 -2.42  2.06
-## 4   9 -0.5018 -2.78  1.78
-## 5  10 -0.6545 -3.01  1.73</code></pre>
+##   Obs   center lower upper
+## 1   3  0.47808 -1.69  2.67
+## 2   6  0.00488 -2.25  2.20
+## 3   7 -0.15672 -2.36  2.07
+## 4   9 -0.46709 -2.78  1.81
+## 5  10 -0.66310 -2.98  1.62</code></pre>
 <p><img src="Generalized_Linear_Models_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" title="1"><span class="kw">detach</span>(IPump)</a></code></pre></div>
 <p>When we use a linear model when there truly is an asymptotic curve, negative values are produced, which are impossible. As the graph shows, this is most pronounced the further we move away from teh observed range. But, it also effects the observed levels, as the lower credibility limits are negative, too.</p>
@@ -2850,20 +2863,13 @@ What would be a legitimate way to catch outliers? The Stroop task has been repli
 </div>
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>Egan, D. Individual differences in human-computer
-interaction. In M. Helander, ed., Handbook of Human Computer interaction. Elsevier Science Publishers, Amsterdam, The Netherlands, 1988, 543–568.<a href="MLM.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
-</div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="MLM.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="MLM.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ME.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

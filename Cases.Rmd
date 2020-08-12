@@ -2017,6 +2017,488 @@ write_csv(Sleepstudy$D_slpstd, "Data/Sleepstudy.csv")
 
 
 
+## Case: Mirrors
+
+A set of novel augmented reality (AR) side-view mirrors have been compared to the classic side-view mirrors.
+Furthermore, participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:
+
++ AR mirrors versus classic mirrors
++ day ride versus night ride
+
+
+The following measures were taken:
+
++ time-on-task (seconds)
++ steering reversal rate (counts, lower is better)
++ cognitive workload (rating scale, 0 to 1)
+
+__Assignment__:
+
+1. Conceive one or more research questions, e.g.:
+    + The AR design creates less workload.
+    + The AR design improves performance especially at night
+2. Read and clean the data set
+3. Produce summary tables and graphs that reflect the research question
+4. Build a model and interpret the parameter estimates
+
+You must submit your assignment as a knitted Rmarkdown document (Word), with full code shown.
+
+__Assessment__:
+
+If you use all the techniques that we have touched during the workshop, you fulfill the required criteria and will receive a 7:
+
++ reading data
++ data manipulation
++ grouped summaries
++ various plots (histograms, boxplots, line plots, scatter plots)
++ facetted plots
++ linear regression models
++ factorial models
++ multi-level models
++ plotting predicted values (=fitted responses) 
++ model criticism with predicted values and residuals (this implies you should run at least one Gaussian model)
++ Negbinomial models 
++ Exgaussian models
+
+The data set gives you plenty opportunity to learn additional techniques from the book and apply them. This will give bonus points and you can receive a higher grade:
+
++ multi-predictor models (multi-factorial, mixed)
++ interaction effects
++ cross-classified models
++ modelling rating scale responses
++ model selection
+
+If you are very ambitious, you can also classify the nine tasks (Situation, left/right) and use this as additional predictors.
+
+Note that:
+
++ It is preferred that you only build one model per outcome variable. Put differently, it does __not__ improve your grade if you run several models of the same kind.
++ It is important to connect every summary, plot and model to a clear question. 
++ You must interpret a model correctly in order to get full appreciation.
+
+
+
+
+
+
+
+
+```{r Mirrors_create, opts.label = "simulate"}
+new_syncenv("Mirrors")
+```
+
+```{r Mirrors_simfunc, opts.label = "sim"}
+
+Mirrors$sim_Mirrors <- function(n_Part = 20, seed = 42){
+  
+  set.seed(seed)
+  n_Exp = n_Part * 36
+  
+  Parts <- tibble(Part = 1:n_Part, 
+                  Intercept_Part = rnorm(n_Part, 0, 5),
+                  Night_Part = rnorm(n_Part, 0, 2),
+                  Experience_Part = rbinom(n_Part, 1, .5),
+                  age = as.integer(runif(n_Part, 18, 60) + Experience_Part * 5))
+  
+  Conditions <- 
+    readxl::read_excel("Cases/Mirrors_Input.xlsx")
+  
+  
+  Exp <-
+    crossing(Parts, Conditions) %>% 
+    #gather(key = "Effect", value = "value", -Task) %>% 
+    crossing() %>% 
+    print()
+  
+  
+  Exp <-
+    expand_grid(Part = Parts$Part,
+                Task = unique(Conditions$Task),
+                AR = c(T, F),
+                Night = c(T, F)) %>% 
+    mutate(AxN = AR & Night) %>% 
+    left_join(Conditions, suffix = c("_x", "_b"), by = "Task") %>% 
+    left_join(Parts) %>% 
+    mutate(mu = Intercept + Intercept_Part +
+             AR_b * AR_x + 
+             Night_b * Night_x + 
+             AxN_b * AxN_x + 
+             Experience * Experience_Part + 
+             Night_x * Night_Part +
+             NxE * Experience_Part * Night_x +
+             age  * 1.02) %>% 
+    mutate(Design = if_else(AR_x, "AR", "Classic"),
+           Condition = if_else(Night_x, "Night", "Day"),
+           Experience = if_else(as.logical(Experience_Part), "High", "Low")) %>% 
+    mutate(mu_SRR = rnorm(n_Exp, mu, 1)/10,
+           mu_ToT = rnorm(n_Exp, mu, 1),
+           mu_wkl = rnorm(n_Exp, mu, 1),
+           mu_wkl = mu_wkl/max(mu_wkl)) %>% 
+    mutate(SRR = rpois(n_Exp, mu_SRR),
+           ToT = brms::rexgaussian(n_Exp, mu_ToT, 2, 10),
+           wkl = rbeta(n_Exp, 
+                       shape1 = -(4 * mu_wkl)/(mu_wkl - 1),
+                       shape2 = 4)) %>% 
+    select(Part, Task, Design, Condition, Experience, age, SRR, ToT, wkl) %>% 
+    as_tbl_obs() 
+  
+  Exp
+}
+
+
+D_Mirrors <- Mirrors$sim_Mirrors()
+
+Mirrors$D_Mirrors <- D_Mirrors
+
+```
+
+```{r}
+
+D_Mirrors %>% 
+  select(SRR:wkl) %>% 
+GGally::ggpairs()
+
+D_Mirrors %>% 
+  filter(SRR < 0| ToT < 0| wkl < 0) %>% 
+  print()
+  
+
+# D_Mirrors %>% 
+#   ggplot(aes(x = Design, col = Condition, y = mu)) +
+# #  facet_wrap(~Part) +
+#   geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Condition, y = wkl)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Condition, y = ToT)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Condition, y = SRR)) +
+# facet_wrap(~Part) +
+  geom_boxplot()
+
+
+
+# D_Mirrors %>% 
+#   ggplot(aes(x = Design, col = D_Experience, y = mu)) +
+# #  facet_wrap(~Part) +
+#   geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Experience, y = wkl)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Experience, y = ToT)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_Mirrors %>% 
+  ggplot(aes(x = Design, col = Experience, y = SRR)) +
+# facet_wrap(~Part) +
+  geom_boxplot()
+```
+
+
+```{r eval = F}
+M_Mirrors_wkl <- brm(wkl ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = Beta(),
+                     data = D_Mirrors)
+
+M_Mirrors_ToT <- brm(ToT ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = exgaussian(),
+                     data = D_Mirrors)
+
+M_Mirrors_SRR <- brm(SRR ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = negbinomial(),
+                     data = D_Mirrors)
+
+
+bind_rows(posterior(M_Mirrors_wkl),
+          posterior(M_Mirrors_ToT),
+          posterior(M_Mirrors_SRR)) %>% 
+fixef_ml()
+
+
+```
+
+
+
+```{r Mirrors_export}
+save(D_Mirrors, file = "Cases/Mirrors.Rda")
+write_sav(D_Mirrors, "Data/Mirrors.sav")
+write_csv(D_Mirrors, "Data/Mirrors.csv")
+
+```
+
+
+
+
+## Case: L2Drive
+
+A set of novel augmented reality (AR) side-view L2Drive have been compared to the classic side-view L2Drive.
+Furthermore, participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:
+
++ AR L2Drive versus classic L2Drive
++ day ride versus night ride
+
+
+The following measures were taken:
+
++ time-on-task (seconds)
++ steering reversal rate (counts, lower is better)
++ cognitive workload (rating scale, 0 to 1)
+
+__Assignment__:
+
+1. Conceive one or more research questions, e.g.:
+    + The AR design creates less workload.
+    + The AR design improves performance especially at night
+2. Read and clean the data set
+3. Produce summary tables and graphs that reflect the research question
+4. Build a model and interpret the parameter estimates
+
+You must submit your assignment as a knitted Rmarkdown document (Word), with full code shown.
+
+__Assessment__:
+
+If you use all the techniques that we have touched during the workshop, you fulfill the required criteria and will receive a 7:
+
++ reading data
++ data manipulation
++ grouped summaries
++ various plots (histograms, boxplots, line plots, scatter plots)
++ facetted plots
++ linear regression models
++ factorial models
++ multi-level models
++ plotting predicted values (=fitted responses) 
++ model criticism with predicted values and residuals (this implies you should run at least one Gaussian model)
++ Negbinomial models 
++ Exgaussian models
+
+The data set gives you plenty opportunity to learn additional techniques from the book and apply them. This will give bonus points and you can receive a higher grade:
+
++ multi-predictor models (multi-factorial, mixed)
++ interaction effects
++ cross-classified models
++ modelling rating scale responses
++ model selection
+
+If you are very ambitious, you can also classify the nine tasks (Situation, left/right) and use this as additional predictors.
+
+Note that:
+
++ It is preferred that you only build one model per outcome variable. Put differently, it does __not__ improve your grade if you run several models of the same kind.
++ It is important to connect every summary, plot and model to a clear question. 
++ You must interpret a model correctly in order to get full appreciation.
+
+
+
+
+
+
+
+
+```{r L2Drive_create, opts.label = "simulate"}
+new_syncenv("L2Drive")
+```
+
+```{r L2Drive_simfunc, opts.label = "sim"}
+
+#L2Drive$sim_L2Drive <- function(){
+  
+  
+  n_Part = 200
+  seed = 42
+  set.seed(seed)
+  n_Exp = n_Part * 36
+  
+  Parts <- tibble(Part = 1:n_Part,
+                  Gamer = rbinom(n_Part, 1, .1),
+                  Overachiever = rbinom(n_Part, 1, .2),
+                  exp_Part  = 5 * Gamer,
+                  rate = 1.2 * rgamma(n_Part, 1000, 1000), # multiplier
+                  asym_Wkl = rgamma(n_Part, 200, 200) * 
+                    exp(Overachiever * .2), # conditional multiplier
+                  asym_ToT = rgamma(n_Part, 200, 200) * asym_Wkl,
+                  asym_SRC = asym_ToT * rgamma(n_Part, 100, 100), # positive correlation
+                  asym_LDP = asym_SRC * asym_ToT * rgamma(n_Part, 100, 100)) %>% 
+    print()
+  
+  ## TODO: Add collisions as outcome variable
+  
+  Parts %>% 
+    select(starts_with("asym")) %>% 
+  GGally::ggpairs()
+  
+  
+  
+  Conditions <- 
+    readxl::read_excel("Cases/L2Drive_Input.xlsx", sheet = "Conditions") %>% 
+    print()
+  
+  
+  Exp <-
+    crossing(Parts, Conditions) %>% 
+    #gather(key = "Effect", value = "value", -Task) %>% 
+    crossing() %>% 
+    print()
+  
+  
+  Exp <-
+    expand_grid(Part = Parts$Part,
+                Task = unique(Conditions$Task),
+                AR = c(T, F),
+                Night = c(T, F)) %>% 
+    mutate(AxN = AR & Night) %>% 
+    left_join(Conditions, suffix = c("_x", "_b"), by = "Task") %>% 
+    left_join(Parts) %>% 
+    mutate(mu = Intercept + Intercept_Part +
+             AR_b * AR_x + 
+             Night_b * Night_x + 
+             AxN_b * AxN_x + 
+             Experience * Experience_Part + 
+             Night_x * Night_Part +
+             NxE * Experience_Part * Night_x +
+             age  * 1.02) %>% 
+    mutate(Design = if_else(AR_x, "AR", "Classic"),
+           Condition = if_else(Night_x, "Night", "Day"),
+           Experience = if_else(as.logical(Experience_Part), "High", "Low")) %>% 
+    mutate(mu_SRR = rnorm(n_Exp, mu, 1)/10,
+           mu_ToT = rnorm(n_Exp, mu, 1),
+           mu_wkl = rnorm(n_Exp, mu, 1),
+           mu_wkl = mu_wkl/max(mu_wkl)) %>% 
+    mutate(SRR = rpois(n_Exp, mu_SRR),
+           ToT = brms::rexgaussian(n_Exp, mu_ToT, 2, 10),
+           wkl = rbeta(n_Exp, 
+                       shape1 = -(4 * mu_wkl)/(mu_wkl - 1),
+                       shape2 = 4)) %>% 
+    select(Part, Task, Design, Condition, Experience, age, SRR, ToT, wkl) %>% 
+    as_tbl_obs() 
+  
+  Exp
+#}
+
+
+D_L2Drive <- L2Drive$sim_L2Drive()
+
+L2Drive$D_L2Drive <- D_L2Drive
+
+```
+
+```{r}
+
+D_L2Drive %>% 
+  select(SRR:wkl) %>% 
+GGally::ggpairs()
+
+D_L2Drive %>% 
+  filter(SRR < 0| ToT < 0| wkl < 0) %>% 
+  print()
+  
+
+# D_L2Drive %>% 
+#   ggplot(aes(x = Design, col = Condition, y = mu)) +
+# #  facet_wrap(~Part) +
+#   geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Condition, y = wkl)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Condition, y = ToT)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Condition, y = SRR)) +
+# facet_wrap(~Part) +
+  geom_boxplot()
+
+
+
+# D_L2Drive %>% 
+#   ggplot(aes(x = Design, col = D_Experience, y = mu)) +
+# #  facet_wrap(~Part) +
+#   geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Experience, y = wkl)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Experience, y = ToT)) +
+#  facet_wrap(~Part) +
+  geom_boxplot()
+
+D_L2Drive %>% 
+  ggplot(aes(x = Design, col = Experience, y = SRR)) +
+# facet_wrap(~Part) +
+  geom_boxplot()
+```
+
+
+```{r eval = F}
+M_L2Drive_wkl <- brm(wkl ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = Beta(),
+                     data = D_L2Drive)
+
+M_L2Drive_ToT <- brm(ToT ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = exgaussian(),
+                     data = D_L2Drive)
+
+M_L2Drive_SRR <- brm(SRR ~ 1 + Design + Experience + Condition + age +
+                       Design:Condition + Experience:Condition +
+                       (1 + Condition|Part) +
+                       (1 + Design + Experience + Condition|Task),
+                     family = negbinomial(),
+                     data = D_L2Drive)
+
+
+bind_rows(posterior(M_L2Drive_wkl),
+          posterior(M_L2Drive_ToT),
+          posterior(M_L2Drive_SRR)) %>% 
+fixef_ml()
+
+
+```
+
+
+
+```{r L2Drive_export}
+save(D_L2Drive, file = "Cases/L2Drive.Rda")
+write_sav(D_L2Drive, "Data/L2Drive.sav")
+write_csv(D_L2Drive, "Data/L2Drive.csv")
+
+```
+
+
 
 
 
