@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-05-06" />
+<meta name="date" content="2020-08-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -245,6 +245,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.4.3" data-path="GLM.html"><a href="GLM.html#distributional-models"><i class="fa fa-check"></i><b>6.4.3</b> Distributional models</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="ME.html"><a href="ME.html"><i class="fa fa-check"></i><b>7</b> Working with models</a><ul>
+<li class="chapter" data-level="7.1" data-path="ME.html"><a href="ME.html#model-criticism"><i class="fa fa-check"></i><b>7.1</b> Model criticism</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ME.html"><a href="ME.html#residual-analysis"><i class="fa fa-check"></i><b>7.1.1</b> Residual analysis</a></li>
+<li class="chapter" data-level="7.1.2" data-path="ME.html"><a href="ME.html#fitted-responses-analysis"><i class="fa fa-check"></i><b>7.1.2</b> Fitted responses analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ME.html"><a href="ME.html#model-selection"><i class="fa fa-check"></i><b>7.2</b> Model selection</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="ME.html"><a href="ME.html#the-problem-of-over-fitting"><i class="fa fa-check"></i><b>7.2.1</b> The problem of over-fitting</a></li>
+<li class="chapter" data-level="7.2.2" data-path="ME.html"><a href="ME.html#cross-validation-and-loo"><i class="fa fa-check"></i><b>7.2.2</b> Cross validation and LOO</a></li>
+<li class="chapter" data-level="7.2.3" data-path="ME.html"><a href="ME.html#information-criteria"><i class="fa fa-check"></i><b>7.2.3</b> Information Criteria</a></li>
+<li class="chapter" data-level="7.2.4" data-path="ME.html"><a href="ME.html#choosing-response-distributions"><i class="fa fa-check"></i><b>7.2.4</b> Choosing response distributions</a></li>
+<li class="chapter" data-level="7.2.5" data-path="ME.html"><a href="ME.html#testing-theories"><i class="fa fa-check"></i><b>7.2.5</b> Testing theories</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -325,24 +338,24 @@ While seeking good explanatory variables is essential for testing theories, for 
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">11</td>
-<td align="right">14.8</td>
+<td align="left">16</td>
+<td align="right">15.9</td>
 </tr>
 <tr class="even">
-<td align="left">5</td>
-<td align="right">16.0</td>
-</tr>
-<tr class="odd">
-<td align="left">20</td>
-<td align="right">19.1</td>
-</tr>
-<tr class="even">
-<td align="left">22</td>
-<td align="right">12.7</td>
-</tr>
-<tr class="odd">
 <td align="left">25</td>
 <td align="right">15.7</td>
+</tr>
+<tr class="odd">
+<td align="left">13</td>
+<td align="right">18.5</td>
+</tr>
+<tr class="even">
+<td align="left">17</td>
+<td align="right">13.3</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+<td align="right">12.3</td>
 </tr>
 </tbody>
 </table>
@@ -434,34 +447,34 @@ y_i \sim \textrm{Gaus}(\mu_i, \sigma_\epsilon)
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">12</td>
-<td align="right">0.268</td>
-<td align="right">-2.28</td>
-<td align="right">4.39</td>
+<td align="left">2</td>
+<td align="right">0.064</td>
+<td align="right">-3.09</td>
+<td align="right">3.29</td>
 </tr>
 <tr class="even">
-<td align="left">25</td>
-<td align="right">-0.023</td>
-<td align="right">-3.41</td>
-<td align="right">3.23</td>
+<td align="left">17</td>
+<td align="right">-0.254</td>
+<td align="right">-4.33</td>
+<td align="right">2.22</td>
 </tr>
 <tr class="odd">
-<td align="left">23</td>
-<td align="right">-0.458</td>
-<td align="right">-4.88</td>
-<td align="right">1.90</td>
+<td align="left">7</td>
+<td align="right">-0.868</td>
+<td align="right">-6.21</td>
+<td align="right">1.44</td>
 </tr>
 <tr class="even">
-<td align="left">9</td>
-<td align="right">0.353</td>
-<td align="right">-2.09</td>
-<td align="right">4.57</td>
+<td align="left">5</td>
+<td align="right">-0.005</td>
+<td align="right">-3.31</td>
+<td align="right">3.12</td>
 </tr>
 <tr class="odd">
-<td align="left">11</td>
-<td align="right">-0.079</td>
-<td align="right">-3.64</td>
-<td align="right">2.76</td>
+<td align="left">10</td>
+<td align="right">-0.176</td>
+<td align="right">-3.91</td>
+<td align="right">2.46</td>
 </tr>
 </tbody>
 </table>
@@ -1073,7 +1086,7 @@ happens, but not necessarily for everyone. The sample in our consisted of mainly
 <p>Every measure is an encounter of one participant and one design. If a multi-item rating scale is used, measures are an encounter between three populations. Every measure combines the impact from three members from these populations. With a single measure, the impact factors are inseparable. But if we have many measures, we can apply a <em>cross-classified multi-level model</em> (CRMM). An intercept-only CRMM just adds intercept random effects for every population.</p>
 <p>As we will see in [#designometrix], the individual random coefficients of a CRMM can be used for psychometric evaluation of rating scales. In the following example, the question is a comparison of diversity across populations. Three decades ago, Dennis Egan published one of the first papers on individual differences in computer systems design and made the following claim:</p>
 <blockquote>
-<p>‘differences among people usually account for much more variability in performance than differences in system designs’ <a href="GLM.html#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>‘differences among people usually account for much more variability in performance than differences in system designs’ <a href="ME.html#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 </blockquote>
 <p>What is interesting about this research question is that it does not speak about effects, but about <em>variability of effects</em> and seeks to compare variability of two totally different populations. In the following we will see how this claim can be tested by measuring multiple encounters between designs and users, apply an intercept-only CRMM and compare the random factor standard deviations.</p>
 <p>Egan’s claim has been cited in many papers that regarded individual differences and we were wondering how it would turn out in the third millenium, with the probably most abundant of all application domains: informational websites. For the convenience, we chose the user population of student users, with ten unversity websites as our design sample. Furthermore, ten representative tasks on such websites were selected, which is another population. During the experiment, all 41 participants completed 10 information search items such as:</p>
@@ -1407,83 +1420,83 @@ happens, but not necessarily for everyone. The sample in our consisted of mainly
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">830</td>
+<td align="right">897</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">943</td>
+<td align="right">785</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">887</td>
+<td align="right">837</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">893</td>
+<td align="right">897</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">1019</td>
+<td align="right">1004</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
-<td align="right">1063</td>
+<td align="right">930</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
-<td align="right">956</td>
+<td align="right">867</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
-<td align="right">868</td>
+<td align="right">971</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
-<td align="right">900</td>
+<td align="right">806</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="right">1036</td>
+<td align="right">953</td>
 </tr>
 <tr class="odd">
 <td align="right">11</td>
-<td align="right">929</td>
+<td align="right">881</td>
 </tr>
 <tr class="even">
 <td align="right">12</td>
-<td align="right">889</td>
+<td align="right">996</td>
 </tr>
 <tr class="odd">
 <td align="right">13</td>
-<td align="right">934</td>
+<td align="right">913</td>
 </tr>
 <tr class="even">
 <td align="right">14</td>
-<td align="right">969</td>
+<td align="right">816</td>
 </tr>
 <tr class="odd">
 <td align="right">15</td>
-<td align="right">904</td>
+<td align="right">824</td>
 </tr>
 <tr class="even">
 <td align="right">16</td>
-<td align="right">794</td>
+<td align="right">946</td>
 </tr>
 <tr class="odd">
 <td align="right">17</td>
-<td align="right">951</td>
+<td align="right">1035</td>
 </tr>
 <tr class="even">
 <td align="right">18</td>
-<td align="right">899</td>
+<td align="right">1056</td>
 </tr>
 <tr class="odd">
 <td align="right">19</td>
-<td align="right">877</td>
+<td align="right">944</td>
 </tr>
 <tr class="even">
 <td align="right">20</td>
-<td align="right">716</td>
+<td align="right">871</td>
 </tr>
 </tbody>
 </table>
@@ -1524,67 +1537,67 @@ happens, but not necessarily for everyone. The sample in our consisted of mainly
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">-2.251</td>
-<td align="right">-0.640</td>
-<td align="right">0.521</td>
-<td align="right">-0.153</td>
-<td align="right">0.002</td>
+<td align="right">0.933</td>
+<td align="right">1.271</td>
+<td align="right">0.258</td>
+<td align="right">-0.657</td>
+<td align="right">1.046</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">-0.702</td>
-<td align="right">-0.103</td>
-<td align="right">-0.900</td>
-<td align="right">0.019</td>
-<td align="right">-1.399</td>
+<td align="right">-0.564</td>
+<td align="right">-0.713</td>
+<td align="right">0.051</td>
+<td align="right">-1.366</td>
+<td align="right">-0.269</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">2.098</td>
-<td align="right">-0.551</td>
-<td align="right">-0.843</td>
-<td align="right">0.869</td>
-<td align="right">-0.218</td>
+<td align="right">0.244</td>
+<td align="right">-0.521</td>
+<td align="right">-1.898</td>
+<td align="right">0.749</td>
+<td align="right">0.798</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">1.684</td>
-<td align="right">0.440</td>
-<td align="right">-2.936</td>
-<td align="right">-0.105</td>
-<td align="right">-0.856</td>
+<td align="right">-1.500</td>
+<td align="right">-2.441</td>
+<td align="right">1.736</td>
+<td align="right">0.504</td>
+<td align="right">0.224</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">-0.460</td>
-<td align="right">0.208</td>
-<td align="right">-0.156</td>
-<td align="right">-0.064</td>
-<td align="right">0.322</td>
+<td align="right">-0.171</td>
+<td align="right">-1.734</td>
+<td align="right">0.700</td>
+<td align="right">0.552</td>
+<td align="right">0.540</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
-<td align="right">-1.212</td>
-<td align="right">0.191</td>
-<td align="right">-0.183</td>
-<td align="right">-0.516</td>
-<td align="right">-1.866</td>
+<td align="right">0.313</td>
+<td align="right">-0.120</td>
+<td align="right">-0.203</td>
+<td align="right">0.750</td>
+<td align="right">0.049</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
-<td align="right">0.598</td>
-<td align="right">0.906</td>
-<td align="right">-0.106</td>
-<td align="right">0.176</td>
-<td align="right">-0.065</td>
+<td align="right">-0.310</td>
+<td align="right">-0.025</td>
+<td align="right">-0.160</td>
+<td align="right">1.084</td>
+<td align="right">2.569</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
-<td align="right">0.783</td>
-<td align="right">0.668</td>
-<td align="right">0.827</td>
-<td align="right">-0.973</td>
-<td align="right">-0.430</td>
+<td align="right">-1.206</td>
+<td align="right">-0.373</td>
+<td align="right">-1.364</td>
+<td align="right">-1.948</td>
+<td align="right">-0.564</td>
 </tr>
 </tbody>
 </table>
@@ -1661,33 +1674,33 @@ It turns out that the 32 items of the test cover the range of very low to modera
 <tbody>
 <tr class="odd">
 <td align="left">Part</td>
-<td align="left">30</td>
-<td align="right">-0.497</td>
-<td align="right">-0.453</td>
+<td align="left">66</td>
+<td align="right">-0.962</td>
+<td align="right">-0.841</td>
 </tr>
 <tr class="even">
-<td align="left">Item</td>
-<td align="left">Geek02</td>
-<td align="right">0.663</td>
-<td align="right">0.553</td>
+<td align="left">Part</td>
+<td align="left">68</td>
+<td align="right">-0.617</td>
+<td align="right">-0.556</td>
 </tr>
 <tr class="odd">
 <td align="left">Part</td>
-<td align="left">10</td>
-<td align="right">-0.100</td>
-<td align="right">-0.095</td>
+<td align="left">19</td>
+<td align="right">0.236</td>
+<td align="right">0.216</td>
 </tr>
 <tr class="even">
-<td align="left">Item</td>
-<td align="left">Geek06</td>
-<td align="right">0.548</td>
-<td align="right">0.431</td>
+<td align="left">Part</td>
+<td align="left">56</td>
+<td align="right">0.023</td>
+<td align="right">0.017</td>
 </tr>
 <tr class="odd">
-<td align="left">Part</td>
-<td align="left">32</td>
-<td align="right">1.511</td>
-<td align="right">1.387</td>
+<td align="left">Item</td>
+<td align="left">Geek08</td>
+<td align="right">-0.455</td>
+<td align="right">-0.401</td>
 </tr>
 </tbody>
 </table>
@@ -1832,34 +1845,34 @@ It turns out that the 32 items of the test cover the range of very low to modera
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">p2_03</td>
-<td align="left">nE7</td>
-<td align="left">2</td>
-<td align="right">-0.572</td>
+<td align="left">p1_08</td>
+<td align="left">nE5</td>
+<td align="left">1</td>
+<td align="right">-1.000</td>
 </tr>
 <tr class="even">
-<td align="left">p2_01</td>
-<td align="left">nE7</td>
-<td align="left">2</td>
-<td align="right">-0.828</td>
+<td align="left">p2_08</td>
+<td align="left">nE8</td>
+<td align="left">3</td>
+<td align="right">-0.320</td>
 </tr>
 <tr class="odd">
-<td align="left">2</td>
-<td align="left">nE6</td>
+<td align="left">p1_07</td>
+<td align="left">nE4</td>
 <td align="left">3</td>
-<td align="right">-0.412</td>
+<td align="right">-0.082</td>
 </tr>
 <tr class="even">
-<td align="left">p1_07</td>
+<td align="left">p2_12</td>
 <td align="left">nE5</td>
 <td align="left">3</td>
-<td align="right">-0.245</td>
+<td align="right">-0.338</td>
 </tr>
 <tr class="odd">
-<td align="left">p1_04</td>
-<td align="left">nE3</td>
-<td align="left">2</td>
-<td align="right">-0.747</td>
+<td align="left">p1_07</td>
+<td align="left">nE2</td>
+<td align="left">3</td>
+<td align="right">-0.032</td>
 </tr>
 </tbody>
 </table>

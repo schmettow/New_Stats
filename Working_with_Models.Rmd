@@ -1,4 +1,4 @@
-# Working with Models {#GLM}
+# Working with models {#ME}
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
@@ -12,9 +12,6 @@ CE <- c("AUP", "BrowsingAB", "Chapter_LM", "Uncanny", "Hugme", "CUE8")
 load_CE_(CE)
 ```
 
-
-
-# Working with models {#ME}
 
 
 In the chapter [#LM], we have seen a marvelous variety of models spawning from just two basic principles, linear combinations and a Gaussian error term. In this chapter I will introduce methods to critically assess models and how to compare models. Every model we use on data is an ideal, that approximates reality, more or less. But how close is a model to reality? Under a Bayesian perspective, reality falls into two parts: past and future. We begin with  *model criticsm* where we examine how well one model fits data, we have gathered in the past. In *model comparison* methods are introduces to decide which model performs better at predicting future data.
@@ -140,7 +137,7 @@ The match of residual distribution with the theoretical distribution is not perf
 
 ```{r fit:age_pois, opts.label = "mcmc"}
 M_age_rtrn <- 
-  stan_glm(returns ~ 1 + age_shft, data = BAB1, iter = 100)
+  stan_glm(returns ~ 1 + age_shft, data = BAB1)
 P_age_rtrn <- posterior(M_age_rtrn)
 ```
 
@@ -163,7 +160,7 @@ C_age_rtrn_sd <-
   select(center) %>% 
   as.numeric()
 
-data_frame(resid = residuals(M_age_rtrn)) %>% 
+tibble(resid = residuals(M_age_rtrn)) %>% 
   ggplot(aes(x = resid)) + 
   geom_histogram(aes(y = ..density..), bins = 10) +
   stat_function(fun = dnorm, 
@@ -188,15 +185,15 @@ attach(Chapter_LM)
 set.seed(42)
 D_bimod <- 
   bind_rows(
-    data_frame(Group = "A", y = rnorm(50, 4, 1)),
-    data_frame(Group = "B", y = rnorm(50, 8, 1))
+    tibble(Group = "A", y = rnorm(50, 4, 1)),
+    tibble(Group = "B", y = rnorm(50, 8, 1))
   )
 
 ```
 
 
 ```{r opts.label = "mcmc"}
-M_bimod <- stan_glm(y ~ 1, data = D_bimod, iter = 100)
+M_bimod <- stan_glm(y ~ 1, data = D_bimod, iter = 500)
 ```
 
 
@@ -217,12 +214,12 @@ Provided one has a small abundance of data, *quantile-quantile (qq) plots* can b
 
 ```{r}
 set.seed(2)
-D_t <- data_frame(y = rt(200, 2))
+D_t <- tibble(y = rt(200, 2))
 ```
 
 
 ```{r opts.label = "mcmc"}
-M_t <- stan_glm(y ~1, data = D_t, iter = 100)
+M_t <- stan_glm(y ~1, data = D_t, iter = 500)
 
 ```
 
@@ -249,7 +246,7 @@ The next step is where the two curves get flattened. First, we compute a sequenc
 
 
 ```{r}
-D_QQ <- data_frame(step = 0:100/100,
+D_QQ <- tibble(step = 0:100/100,
            quant_smpl = quantile(D_t$resid, step),
            quant_theo = qnorm(step, 0, C_sigma))
 
@@ -286,7 +283,7 @@ detach(Chapter_LM)
 Once mastered, the qq-plot is the swiss knife of Normality check. Next to the subtleties, we can also easily discover deviations from symmetry. This is how the residuals of the returns-to-homepage model look like:
 
 ```{r}
-  data_frame(resid = residuals(BrowsingAB$M_age_rtrn)) %>% 
+  tibble(resid = residuals(BrowsingAB$M_age_rtrn)) %>% 
   ggplot(aes(sample = resid)) +
   geom_qq(distribution = qnorm) +
   geom_abline(intercept = 0, slope = 1, col = "red")
@@ -318,8 +315,8 @@ attach(BrowsingAB)
 
 ```{r}
 BAB1 %>% 
-  mutate(resid_Design = residuals(M_Design)) %>% 
-  ggplot(aes(x = Design, y = resid_Design)) +
+  mutate(resid_CGM = residuals(M_CGM)) %>% 
+  ggplot(aes(x = Design, y = resid_CGM)) +
   geom_boxplot()
 ```
 
@@ -337,12 +334,12 @@ BAB1 %>%
   geom_quantile()
 ```
 
-The quantile plot uses a smoothing algorithm (probably not unlike LOESS) to picture the trend of quantiles (25%, 50% and 75%). Here, the quantiles run almost horizontal and parallel, which confirms constant variance. Taking this as a starting point, we can evaluate more complex models, too. The MPM on age and design, just requires to create a grouped quantile plot. This looks best using facetting, rather than separating by colour:
+The quantile plot uses a smoothing algorithm (probably not unlike LOESS) to picture the trend of quantiles (25%, 50% and 75%). Here, the quantiles run almost horizontal and parallel, which confirms constant variance. Taking this as a starting point, we can evaluate more complex models, too. The grouped regression model on age and design just requires to create a grouped quantile plot. This looks best using facetting, rather than separating by colour:
 
 ```{r}
 BAB1 %>% 
-  mutate(resid_mpm_2 = residuals(M_mpm_2)) %>%
-  ggplot(aes(x = age_shft, y = resid_mpm_2)) +
+  mutate(resid_grm_1 = residuals(M_grm_1)) %>%
+  ggplot(aes(x = age_shft, y = resid_grm_1)) +
   facet_grid(~Design) +
   geom_point() +
   geom_quantile()
@@ -395,7 +392,7 @@ $$
 The first assumption of linear models is obvious: the residual distribution must follow a *Normal distribution*. There is an easy and an advanced way to check whether this is true. It is easiest to create a density plot from residuals and compare it to the known properties of a Normal distribution:
 
 ```{BAB1_check_normal, fig.cap= "A histogram on residuals", eval = F}
-data_frame(resid = residuals(M_age)) %>% 
+tibble(resid = residuals(M_age)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
 
@@ -407,7 +404,7 @@ The single residual distribution assumption of linear models, as harmless as it 
 
 ```{quantile_caterpillar, fig.cap = "", eval = F}
 set.seed(42)
-data_frame(age = runif(200, 20, 70),
+tibble(age = runif(200, 20, 70),
            resid = rnorm(200, 0, 46),
            Obs = dplyr::min_rank(age)) %>% 
   ggplot(aes(x = Obs, y = resid)) +
@@ -449,10 +446,10 @@ The first line of the formula does the separation between structural part and pa
 
 Before we come to the method, a warning: *Fitted responses* are more frequently called *predicted values*, and accordinly are extracted by the `predict()` function. This term is in two ways confusing: first, what values? Fair enough, but the second is more profound: The  "predicted values" is suggesting that you can use them for forecasting future responses. Well, you can, but only after you tested forecasting accuracy. In [#APA] we will see that one can easily create a snug fitting model, without any value for forecasting. (And we will learn how to compare the forecasting ability of models.) As [McElreath] points out, one should rather call predicted values *retrodictions*, which is a term that avoids the second I equally like. because they are bound to the current data. I believe the better term is fitted responses, because it reminds us that we are talking about  *idealized responses under one model*. That should keep imaginations in check. The match between idealized responses and the  *original* observations is called *model fit*. And that is *"fit" as in "fitted"* and not as in "fitness".
 
-In the BrowsingAB case, we have recorded age of participant and the LRM `M_age_shft` suggests that with every unit of age, average ToT increased by  `r C_age[2]` seconds. If we now ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$:
+<!-- In the BrowsingAB case, we have recorded age of participant and the LRM `M_age_shft` suggests that with every unit of age, average ToT increased by  ` C_age[2]` seconds. If we now ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$: -->
 
-<!-- $$\mu_{age = 45} =`r C_age[1]` + `r C_age[2]` * 45\\  -->
-<!-- = `r C_age[1] + C_age[2] * 45`$$ -->
+<!-- $$\mu_{age = 45} =` C_age[1]` + ` C_age[2]` * 45\\  -->
+<!-- = ` C_age[1] + C_age[2] * 45`$$ -->
 
 
 <!-- This predicted value is our best guess of how a person of age 45 had performed. But, the separation of an observation into predicted value and error remains just that: a guess under a certain amount of information. Just like coefficients, predicted values are uncertain to some degree. -->
@@ -542,9 +539,12 @@ Mathur & Reichling identified a cubic polynomial as the lowest degree that would
 In the following, the cubic model is compared to the simpler quadratic model. It could be, after all, that a parabole is sufficient to render the valley. On the other side of things, a polynomial model with the ridiculous degree 9 is estimated, just to see whether there is any chance a more complex model would further improve the fit.
 
 
-```{r opts.label = "mcmc"}
+```{r}
 attach(Uncanny)
+```
 
+
+```{r opts.label = "mcmc"}
 M_poly_2 <- UV_1 %>% 
   stan_glm(avg_like ~ poly(huMech, 2), data = .)
 
@@ -555,7 +555,7 @@ M_poly_9 <- UV_1 %>%
   stan_glm(avg_like ~ poly(huMech, 9), data = .)
 ```
 
-```{r}
+```{r opts.label = "mcmc"}
 sync_CE(Uncanny, M_poly_2, M_poly_3, M_poly_9)
 ```
 
@@ -682,6 +682,16 @@ In the following, I will introduce formal methods to model pruning. These can be
 
 Recall that coefficients are tied to fitted responses by the structural part. Consequently, stronger uncertainty in coefficients causes stronger uncertainty of predictions. Are the predictions of LRM inferior to the parsimonous GMM? Since we have simulated this data set, the true population mean is known ($\mu = 2$) and we can assess predictive accuracy by comparing the deviation of fitted responses from the true value. A standard way of summarizing the predictive accuracy of models is the *root mean square error (RMSE)*, which we can compute from the *posterior predictive* distributions.
 
+```{r}
+RMSE <- function(true, value) {
+  se   <- (true - value)^2
+  mse  <- mean(se)
+  rmse <- sqrt(mse)
+  rmse
+}
+```
+
+
 
 ```{r}
 PP_overfit <- 
@@ -699,7 +709,7 @@ The LRM has a larger error by around 10%, which  is a lot for just one additiona
 In practice, the central dilemma in evaluating predictive accuracy is that usually we do not know the real value. The best we can do, is use one data set to estimate the parameters and use a second data set to test how well the model predicts. This is called *cross validation* and it is the gold standard method for assessing predictive accuracy. Here, we can simulate the situation by using the simulation function one more time to produce future data, or more precisely: the data new to the model.
 
 ```{r}
-D_cross_valid <- sim_overfit(n = 100, seed = 1318)
+D_new_data <- sim_overfit(n = 100, seed = 1318)
 
 PP_cross_valid <- 
   bind_rows(post_pred(M_gmm, newdata = D_new_data),
@@ -842,14 +852,20 @@ loo::waic(M_gmm)
 ```
 
 
-Compared to LOO, the WAIC is blazing fast. However, the WAIC has two major down-sides: First, while the RMSE has a straight-forward interpretation as the standard deviation of the expected error, WAICs are  unintelligable by themselves. They only indicate relative predictive accuracy, when multiple models are compared. Second, WAIC as an approximation can be wrong. Fortunately, as can be seen from the warning above, the WAIC command performs an internal check on the integrity of the estimate. When in doubt, the function recommends to "run Loo instead".
+Compared to LOO-CV, the WAIC is blazing fast. However, the WAIC has two major down-sides: First, while the RMSE has a straight-forward interpretation as the standard deviation of the expected error, WAICs are  unintelligable by themselves. They only indicate relative predictive accuracy, when multiple models are compared. Second, WAIC as an approximation can be wrong. Fortunately, as can be seen from the warning above, the WAIC command performs an internal check on the integrity of the estimate. When in doubt, the function recommends to try loo instead.
 
-The developers of the WAIC provide another IC, the LOO-IC. This is a more reliable approximation of the real LOO-CV, which is slower than WAIC, but still has reasonable computation times. The LOO-IC implementation also features an extra safety feature, by checking the integrity of results and helping the user to fix problems. 
+This is not the full LOO-CV method, but another approximation: LOO-IC often is more reliable approximation of the real LOO-CV, than WAIC. It is slower than WAIC, but still has reasonable computation times. Again, the LOO-IC implementation features an extra safety feature, by checking the integrity of results and helping the user to fix problems. 
 
 ```{r opts.label = "mcmc"}
 Loo_gmm <- loo(M_gmm, cores = 1)
 Loo_lrm <- loo(M_lrm, cores = 1)
 ```
+
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_LM, Loo_gmm, Loo_lrm)
+
+```
+
 
 ```{r}
 Loo_gmm
@@ -857,7 +873,7 @@ Loo_lrm
 ```
 
 
-The interpretation of LOO-IC is the same as for all information criteria, the value with the smaller IC wins. What often confuses users of information criteria is when they see two ICs that are huge with only a tiny difference, like 1001317 and 1001320. Recall that information criteria all depend on the likelihood, but in a logarithmic scale. What is a difference on the logarithmic scale is a multiplier on the original scale of the likelihood, which is a product of probabilities. And a small difference becomes a respectible multiplicator:
+The interpretation of LOO-IC is the same as for all information criteria, the value with the smaller IC wins. What often confuses users of information criteria is when they see two ICs that are huge with only a tiny difference, like 1001317 and 1001320. Recall that information criteria all depend on the likelihood, but on a logarithmic scale. What is a difference on the logarithmic scale is a multiplier on the original scale of the likelihood, which is a product of probabilities. And a small difference on the log scale can be a respectable multiplicator:
 
 
 ```{r}
@@ -922,13 +938,6 @@ F10_4_exg <- kfold(M_4_exg, K = 10)
 sync_CE(CUE8, F10_4_gau, F10_4_gam, F10_4_exg)
 ```
 
-```{r}
-
-loo(M_4_gam)
-loo(M_4_exg)
-loo(M_4_gau)
-```
-
 
 ```{r}
 loo_compare(F10_4_gau, F10_4_gam, F10_4_exg) %>% 
@@ -944,16 +953,21 @@ loo_compare(F10_4_gau, F10_4_gam, F10_4_exg) %>%
 detach(CUE8)
 ```
 
-Obviously, predictive accuracy can also be used to check for pover-dispersion, just compare, for instance, a Poisson model to  Negbinomial. I close this section with a more interesting comparison: In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. When applied to the participant level, we saw a strong inter-individual variance in skew and variance, which seemed to justified the model. However, distributional models on participant-level are very opulent and the question is whether this model truly performs better in terms of predictive accuracy. 
+Obviously, predictive accuracy can also be used to check for over-dispersion, just compare, for instance, a Poisson model to  a Negbinomial model. I close this section with a more interesting comparison: In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. When applied to the participant level, we saw a strong inter-individual variance in skew and variance, which seemed to justified the model. However, distributional models on participant-level are very opulent and the question is whether this model truly performs better in terms of predictive accuracy. 
 
 ```{r}
 attach(Hugme)
 
-loo_compare(loo(M_1_exg),
-            loo(M_rt_dist)) 
+Loo_1_exg_dist <- loo(M_1_exg_dist)
+
+loo_compare(Loo_1_exg,
+            Loo_1_exg_dist) 
 
 ```
 
+```{r opts.label = "mcsync"}
+sync_CE(Hugme, Loo_1_exg_dist)
+```
 
 ```{r}
 detach(Hugme)
@@ -963,7 +977,7 @@ detach(Hugme)
 
 ### Testing theories
 
-For everyone who has to publish in Social Science journals, this book has so far left one question unanswered: What is the Bayesian method for testing null hypotheses? To give the short answer: There are no p-values in this statistical framework, but you can always use credibility limits to say "the effect is different from Zero with a certainty larger than 5%". If some very pertinent reviewers want p-values, you can argue that a null-hypothesis test is really just model selection, but unfortunately no p-value tests are available for the models that you are using, and then you introduce one of the methods based on predictive accuracy.
+For everyone who has to publish in Social Science journals, this book has so far left one question unanswered: What is the Bayesian method for testing null hypotheses? To give the short answer: There are no p-values in this statistical framework, but you can always use credibility limits to say "the effect is different from Zero with a certainty larger than 95%". If some pertinent reviewers want p-values, you can argue that a null-hypothesis test is really just model selection, but unfortunately no p-value tests are available for the models that you are using, and then you introduce one of the methods based on predictive accuracy.
 
 But, should you really do null hypothesis testing in design research? Well, if your research implies or even directly targets real costs, benefits and risks for real people, you should continue with quantifying impact factors. That can even go so far that an unnecessary predictor is left in the model, just to make its irrelevance transparent. Everyone whose final report draws any conclusion of how the results can be used for the better, must speak of quantities at some place. 
 
@@ -977,7 +991,7 @@ attach(Uncanny)
 
 
 ```{r}
-# options(mc.cores = 1)
+options(mc.cores = 1)
 Loo_poly_2 <- loo(M_poly_2)
 Loo_poly_3 <- loo(M_poly_3)
 ```
@@ -989,8 +1003,9 @@ sync_CE(Uncanny, Loo_poly_2, Loo_poly_3)
 ```
 
 ```{r}
-Loo_poly_2
-Loo_poly_3
+loo_compare(
+  Loo_poly_2,
+  Loo_poly_3)
 ```
 
 The cubic polynomial has the better predictive accuracy. It suggests that the Uncanny Valley effect is due to a disruptive cognitive change, like when we suddenly become aware that we have been fooled. This is not a direct test of a given theory, but it favors all theories that contain an abrupt process. One of the theories that does not contain a disruptive process goes that the UV effect is caused by religious beliefs. Another theory explains the effect as a the startling when our mind suddenly becomes aware of a deception and re-adjusts.
@@ -1076,7 +1091,7 @@ Model quality can be approached in two ways: either one focusses just on the mod
 <!-- ```{r fit:age_resid_reduction, opts.label = "mcmc"} -->
 <!-- M_0 <- -->
 <!--   BAB1 %>%  -->
-<!--   stan_glm(ToT ~ 1, data = ., iter = 100) -->
+<!--   stan_glm(ToT ~ 1, data = ., iter = 500) -->
 <!-- ``` -->
 
 <!-- ```{r opts.label = "mcsync"} -->
