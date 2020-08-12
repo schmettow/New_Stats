@@ -241,9 +241,6 @@ T_fixef <- coef(P_1)
 ```
 
 
-```{r}
-detach(Sec99)
-```
 
 Let's see what the GMM reports about the population average and its uncertainty:  The table above is called a *CLU table*, because it reports three estimates per coefficient: 
 
@@ -289,6 +286,11 @@ P_1 %>%
   summarise(certainty = mean(value <= 111))
 
 ```
+
+```{r}
+detach(Sec99)
+```
+
 
 The story of Jane is about decision making under risk and under uncertainty. We have seen how easily precise statements on uncertainty can be derived from a statistical model. But regarding rational decision making, this is not an ideal story: What is missing is a systematic analysis of losses (and wins). The benefit of going with the slogan has never been quantified. How many new customers it will really attract and how much they will spend cannot really be known upfront. Let alone, predicting the chance to loose in court and what this costs are almost unintelligeable. The question must be allowed, what good is the formula for utility, when it is practically impossible to determine the losses. And if we cannot estimate utilities, what are the certainties good for?
 
@@ -623,13 +625,15 @@ Strictly spoken, grouped and binned frequencies are not one statistic, but a vec
 Reconsider Jane \@ref(case99). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
 
 
-```{r opts.label = "rtut.nr"}
-mean <- function(x) sum(x)/length(x)
-```
-
 ```{r}
+mean <- function(x) sum(x)/length(x)
 mean(Ver20$ToT)
 ```
+
+```{r opts.label = "invisible"}
+rm(mean)
+```
+
 
 Imagine a competitor of the car rental company goes to court to fight the 99-seconds claim. Not an expert in juridical matters, my humble opinion is that one of the first questions to be regarded probably is: what does "rent a car in 99 seconds" actually promise?
 One way would be the mean ("on average users can rent a car in 99 seconds"), but here are some other ways to interpret the same slogan:
@@ -646,6 +650,10 @@ median <- function(x){
 }
 
 median(Ver20$ToT)
+```
+
+```{r opts.label = "invisible"}
+rm(median)
 ```
 
 
@@ -670,7 +678,7 @@ mode <- function(x, bin_width = 10) {
 
 
 ```{r}
-Ver20
+mode(Ver20$ToT)
 ```
 
 
@@ -865,7 +873,6 @@ variables.
 For an illustration, consider the following hypothetical example of study on the relationship between mental ability test scores and performance in real tasks. The real task could be a buzz wire task or any other complex motor task that has a strong spatial component. As predictors for ToT on the buzz-wire task, mental rotation speed was taken. It was even taken twice (MRS_1, MRS_2), because the researchers are also interested in how stable over time the scores are. The second test is for measuring visual-spatial working memory, using the Corsi task.
 
 ```{r echo = F}
-
 cor2cov <- function(cor, sd) diag(sd) %*% cor %*% t(diag(sd))
 
 cor_mat <- matrix(c(1, .95, -.5, .2, 
@@ -888,14 +895,17 @@ D_psychomet %>% sample_n(5)
 
 The following function computes the covariance of two variables. The covariance between the two MRS scores is positive, indicating that they move into the same direction.
 
-```{r opts.label = "rtut.nr"}
-cov <- function(x, y)
-  mean((x - mean(x, na.rm = T)) * (y - mean(y, na.rm = T)), na.rm = T)
-```
-
 ```{r}
+cov <- function(x, y)
+  mean((x - mean(x)) * (y - mean(y)))
+
 cov(D_psychomet$MRS_1, D_psychomet$MRS_2)
 ```
+
+```{r opts.label = "invisible"}
+rm(cov)
+```
+
 
 The problem with covariance is that it usually is hard to interpret. This is why later, we will transformk covariances into correlations, but for understanding the stapes to go there, we have to understand the link between variance and covariance. The formula for covariance is (with $E(X)$ the mean of $X$):
 
@@ -959,10 +969,14 @@ r_XY = \frac{\textrm{cov}_{XY}}{\textrm{sd}_X \textrm{sd}_Y}
 $$
 
 ```{r}
-mycor <- function(x, y)
+cor <- function(x, y)
   cov(x, y)/(sd(x, na.rm = T) * sd(y, na.rm = T))
 
-mycor(D_psychomet$MRS_1, D_psychomet$MRS_2)
+cor(D_psychomet$MRS_1, D_psychomet$MRS_2)
+```
+
+```{r opts.label = "invisible"}
+rm(cor)
 ```
 
 
