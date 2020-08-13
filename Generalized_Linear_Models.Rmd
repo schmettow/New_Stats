@@ -8,7 +8,7 @@ source("RMDR.R")
 iter = 200
 # memory.limit(16000)
 
-CE <- c("IPump", "BrowsingAB", "CUE8", "Chapter_GLM", "Egan", "Hugme")
+CE <- c("IPump", "BrowsingAB", "CUE8", "Chapter_GLM", "Egan", "Hugme", "Uncanny")
 load_CE_(CE)
 ```
 
@@ -2457,13 +2457,16 @@ Do participants in remote sessions feel less satisfied? There seems to be a  sli
 <!-- Is that a realistic model for the SUS responses? Another glance at the violin plot suggests another pathology: the teams seem to differ in variation. In the closing section I will briefly demonstrate how to deal with differences in variance (rather than mean) by a *distributional model*. -->
 
 
-### Distributional models
+## Distributional models
 
 The framework of GLM, as flexible as it has proven to be up to this point, has one major limitation: it renders the relationship between predictors and the location of the response. We only think in terms of impact factors that improve (or damage) average response times, error rates, satisfaction ratings etc. one would think that multi-level models deal with variance to a large extent, and they do. But, they only give us the variance of a certain effect on a set of objects. That is absolutely not the same as asking: "Do teams in CUE8 differ in the variation of responses?".
 
 That brings me to the final feature of modern regression modelling in the scope of this book: GLMs greatly enhanced the scope of modelling by giving us the choice of response distributions and linearizing functions. Still, all models introduced so far establish an association between predictors and the fitted response $\mu$, only. However, all but the one-parameter distributions come with additional parameters that that form the shape of the error distribution, such as its variance or skew in the case of Exgaussian models. Experimentalists usually consider error variance as a nuisance parameter, but in design research it can well be informative.
 
-Strong variance can be a real problem, because this implies  that extremely poor performance is possible, increasing the risk of hazards. In hazardous environments, variance  is a crucial parameter should be track carefully. Especially,  a design improvement *on average* is not necessarily accompanied by less variance (other than the mean-variance relationship prescribed by the error distribution).
+
+### Item-level anchoring in rating scales
+
+<!-- Strong variance can be a real problem, because this implies  that extremely poor performance is possible, increasing the risk of hazards. In hazardous environments, variance  is a crucial parameter should be track carefully. Especially,  a design improvement *on average* is not necessarily accompanied by less variance (other than the mean-variance relationship prescribed by the error distribution). -->
 
 As a first illustration, imagine two versions of a continuous rating scale for visual beauty that differ in how their extreme levels are labelled:
 
@@ -2522,8 +2525,8 @@ The brms engine uses a parametrization of the beta distribution (other than the 
 
 <!-- ``` -->
 
-For Beta distributions, a large $\phi$ results in reduced dispersion and vive versa
-. Accordingly, when used in a distributional model, a positive effect decreases variance.
+For Beta distributions, a large $\phi$ results in reduced dispersion and vive versa. Accordingly, when used in a distributional model, a positive effect decreases variance.
+
 When estimating dispersion or scale parameters, we have to regard that these are positive, strictly. The Brms engine simply extends the principle of link functions to parameters other than the $\mu$ and sets a default log link for $\phi$. In order to estimate the changes in $\mu$ and $\phi$ simultaneously, the brms engine receives two regression formulas. Having multiple formulas for a regresson model is a notable extension of the R model specification language, which is why Brms brings its own command `bf()` to collect these. We run a distributional Beta regression on the simulated rating scale responses:
 
 ```{r opts.label = "invisible"}
@@ -2553,11 +2556,90 @@ clu(M_beta)
 detach(Chapter_GLM)
 ```
 
+With such a distributional model we can discover differences in anchoring. And, even better, we can account for it. It intuitively makes sense to mix items with extreme and modest anchoring. By merging a distributional model with a designometric multi-level model [designometrix], we can evaluate and use such heteogeneous scales. The general concept is shown in the next section, where we account for participant-level employment of scale.
 
-In [#EXgaus], the Exgaussian model seemed to sit well with reaction times, accomodating their left skew better. But if we review the participant-level plots carefully, we see different shapes. There is visible differences in variance, as well as in skew. The following distributional model estimates the same location effects (PrimeGeek), but give all participants their own  shape, 
-by a random factor.
 
-Two distributional parameters, $\sigma$ for variance and $\beta$ for skew are added to the multi-line formula interface. The maximum distributional model  would estimate fully separate distributions per every participant and condition. But, since the two response distributions (Geek/nogeek) are similar for most participants, a reduced predictor term is used, assuming that variance and shape are *not* affected by PrimeGeek:
+### Participant-level employment of scale
+
+In the previous section, we have seen how to discover differences in anchoring of items. What is seen frequently in designometric studies is different response patterns in participants, in particular how much they tend to use the extremes. We can account for that by letting the variance parameter vary across participants. The last model in this chapter is putting it all together:
+
+1. a structural part for the mean with a fixed-effects polynomial term and a participant-level random effect for the response curve.
+2. a structural part for scale parameter  `rho` with a participant-level random effect on the scale parameter `rho`
+3. a Beta shape of randomness
+
+```{r}
+attach(Uncanny)
+```
+
+
+
+```{r opts.label = "mcmc"}
+RK_1 <-
+  RK_1 %>% 
+  mutate(response_unit = mascutils::rescale_centered(response, scale = .99) + 1)
+
+M_poly_3_beta  <-
+  brm(formula = response_unit ~ 1 + huMech1 + huMech2 + huMech3 + 
+        (1 + huMech1 + huMech2 + huMech3 | Part),
+      family = Beta(),
+      data = RK_1,
+      inits = 0)
+
+M_poly_3_beta_dist  <-
+  brm(formula = bf(response_unit ~ 1 + huMech1 + huMech2 + huMech3 + 
+        (1 + huMech1 + huMech2 + huMech3 | Part),
+                   phi ~ 1 + (1|Part)),
+      family = Beta(),
+      data = RK_1,
+      inits = 0)
+```
+
+
+```{r opts.label = "mcsync"}
+sync_CE(Uncanny, M_poly_3_beta, M_poly_3_beta_dist)
+```
+
+*Note* that on such more exotic and complex models, Brm sometimes has difficulties in finding valid good starting values for the MCMC walk. Like here, it often helps to fix all starting values to Zero.
+
+
+If participants show different employment of scale, we should see that on the participant-level standard deviation of `rho`. 
+
+<!-- We return to this case with a formal and a theoretical conclusion in [#choos_resp]. -->
+
+
+```{r}
+bind_rows(
+  posterior(M_poly_3_beta),
+  posterior(M_poly_3_beta_dist)
+) %>% 
+  filter(type %in% c("grpef", "fixef")) %>% 
+  group_by(model, parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975)) %>% 
+  ungroup()
+
+```
+
+*Note* that the Bayr package does not fully support distributional models, yet, and we have to make without some of the high-level commands, such as grpef.
+
+The standard deviation of `rho` is positive and even half of the population average. While a regular Beta model adjusts the variance according to the usual mean-variance relationship, the distributional model also accounts for overall broader and narrower distributions. We would probably see some subtle adjustments in predictive plots, but this model is also very complex, as every participant get their own `rho`. Therefore, we defer a deeper inspection to the end of the next chapter, where we demonstrate the superiority of the distributional model using information criteria.
+
+
+<!-- , for example on mental *workload*. Imagine you are evaluating a simulator-based driver training, designed with the  idea that movement tasks are better learned if you begin fast, not accurate. This training uses *speed episodes*, where the trainee is asked to do 20% faster, at the expense of accuracy. In such an experiment, *workload* can play a moderating factor, because if you work very hard, you can be fast and accurate at the same time. In such a case, we can  -->
+
+
+```{r}
+detach(Uncanny)
+```
+
+
+### Participant-level shape of randomness
+
+In [#Exgaus], the Exgaussian model seemed to sit well with reaction times, accomodating their left skew better. But if we review the participant-level plots carefully, we see different shapes. There is visible differences in variance, as well as in skew. Can we think of a reason for why participants differ in the skew of their response distribution? Perhaps. Highly, motivated participants are constantly pushing against the physical boundaries of the system, creating a sharp left rise.   
+
+The following distributional model estimates the same location effects (PrimeGeek), but grant all participants their own variance and skew. Two distributional parameters, $\sigma$ for variance and $\beta$ for skew are added to the multi-line formula interface. The maximum distributional model  would estimate fully separate distributions per every participant and condition. But, since the two response distributions (Geek/nogeek) are similar for most participants, a reduced predictor term is used, assuming that variance and shape are *not* affected by the experimental condition, but only the person doing the task.
+
 
 ```{r}
 attach(Hugme)
@@ -2579,18 +2661,14 @@ sync_CE(Hugme, M_1_exg_dist)
 ```
 
 
-*Note* that on such exotic parameters, Brm sometimes has difficulties in finding valid good starting values for the MCMC walk. Like here, it often helps to fix all starting values to Zero.
-
-If participants show different patterns of randomness, we should see that in participant-level  variation of $\sigma$ and $\beta$, which is confirmed by certainly positive variance estimates. 
-
-<!-- We return to this case with a formal and a theoretical conclusion in [#choos_resp]. -->
+If participants show different patterns of randomness, we should see that in participant-level  variation of $\sigma$ and $\beta$, which is confirmed by  positive variance estimates. 
 
 
 ```{r}
 P_1_exg_dist <- posterior(M_1_exg_dist)
 
 P_1_exg_dist %>% 
-  filter(type %in% c("grpef", "cor")) %>% 
+  filter(type %in% c("fixef","grpef")) %>% 
   group_by(parameter) %>% 
   summarize(center = median(value),
             lower = quantile(value, .025),
@@ -2599,18 +2677,30 @@ P_1_exg_dist %>%
 
 ```
 
-*Note* that the Bayr package does not fully support distributional models, yet, and we have to make without some of the high-level commands, such as grpef.
 
-Can we think of a reason for why participants differ in the skew of their response distribution? Perhaps. Highly, motivated participants are constantly pushing against the physical boundaries of the system, creating a sharp left rise.    
 
-Generalized Linear Models gave us control over the average shape of randomness, average variance and average skew. When we use these models, we gain control over the data generating process on an individual level. Distributional models have enormous potential for research and applications. *Rating scales* are vulnerable to different response patterns when the anchoring is ambivalent. But that is not the only possible response pattern. For example, in our own studies on the Uncanny Valley effect, we used analog rating scales and found some participants to reduce the task to a binary answer (left or right end). A Beta distribution can handle such a pattern well, but only if it is consistent.
+---
 
-Variance and skew may even carry additional information, for example on mental *workload*. Imagine you are evaluating a simulator-based driver training, designed with the  idea that movement tasks are better learned if you begin fast, not accurate. This training uses *speed episodes*, where the trainee is asked to do 20% faster, at the expense of accuracy. In such an experiment, *workload* can play a moderating factor, because if you work very hard, you can be fast and accurate at the same time. And a few things you only learn, when you try really hard. Try you must!
+##### END
+
+Distributional models have enormous potential for research and applications. *Rating scales* are vulnerable to participant-level response patterns.
+
+
+<!-- Generalized Linear Models gave us control over the average shape of randomness, average variance and average skew. When we use these models, we gain control over the data generating process on an individual level. Distributional models have enormous potential for research and applications. *Rating scales* are vulnerable to different response patterns when the anchoring is ambivalent. But that is not the only possible response pattern. For example, in our own studies on the Uncanny Valley effect, we used analog rating scales and found some participants to reduce the task to a binary answer (left or right end). A Beta distribution can handle such a pattern well, but only if it is consistent. -->
+
+<!-- Variance and skew may even carry additional information, for example on mental *workload*. Imagine you are evaluating a simulator-based driver training, designed with the  idea that movement tasks are better learned if you begin fast, not accurate. This training uses *speed episodes*, where the trainee is asked to do 20% faster, at the expense of accuracy. In such an experiment, *workload* can play a moderating factor, because if you work very hard, you can be fast and accurate at the same time. And a few things you only learn, when you try really hard. Try you must! -->
 
 
 ```{r}
 detach(Hugme)
 ```
+
+
+
+
+
+
+
 
 
 <!-- Both random effects variance parameters are certaintly positive  -->

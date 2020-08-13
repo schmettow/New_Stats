@@ -883,11 +883,11 @@ exp(1001320 - 1001317)
 
 ### Choosing response distributions
 
-In model pruning we compare the predictve accuracy of models that differ by the structural part. With modern evaluation criteria, there is more we can do to arrive at an optimal model. The methods for model comparison introduced so far also allow to compare Generalized Linear Models with different response distributions. For most outcome variables, choosing an appropriate response distribution is a straight-forward choice, based on just a few properties (continuous versus discrete, boundaries and overdispersion). 
+In model pruning we compare the predicitve accuracy of models that differ by their structural part. With modern evaluation criteria, there is more we can do to arrive at an optimal model. The methods for model comparison introduced so far also allow to compare different response distributions, i.e. the shape of randomness. As we have seen in chapter [GLM], for most outcome variables, choosing an appropriate response distribution is a straight-forward choice, based on just a few properties (continuous versus discrete, boundaries and overdispersion). 
 
-In \@ref(exgaussian-regression) the properties of ToT and RT data suggested that Gaussian error terms are inappropriate, because the eror distribution is highly skewed. While Gamma error distributions can accomodate some skew, this may not be sufficient, because the lower boundary of measures is strongly positive. From an informal analysis of these three models, we concluded that the exgaussian is most suited for ToT and RT outcomes, followed by Gamma, whereas the Gaussian showed a very poor fit. However, visual analysis of residuals on non-Gaussian models is notoriously difficult, due to the variance-mean relationship. Fortunately, the model evaluation criteria introduced so far, also cover comparisons of error distributions. The first analysis is 
+In \@ref(exgaussian-regression) the properties of ToT and RT data suggested that Gaussian error terms are inappropriate, because the error distribution is highly skewed. While Gamma error distributions can accomodate some skew, this may not be sufficient, because the lower boundary of measures is strongly positive. From an informal analysis of these three models, we concluded that the exgaussian is most suited for ToT and RT outcomes, followed by Gamma, whereas the Gaussian showed a very poor fit. However, visual analysis of residuals on non-Gaussian models is notoriously difficult, due to the variance-mean relationship. With information criteria, we can easily select the response distribution with the best predictive accuracy.
 
-The Hugme case experiment is a variant of the Stroop task and the outcomes are reaction times. In this case,  *WAIC failed* to approximate predictive accuracy well, but to our convenience, the authors of package Loo provide a slightly less time efficient, but more accurate estimate, the *LOO-IC*, which is another approximation, not a real LOO-CV. One advantage of LOO-IC over WAIC is that it produces observation-level estimates, which can be checked individually. Often LOO-IC only misses out on a few observations, and the author of package Brms has added a fallback mechanism: by adding the argument `reloo = TRUE`, the problematic observations are refitted as real LOO-CVs.
+In [measures_of_time] we found by informal analysis that Exgaussian regression may be suitable for RT and ToT responses. In the following this is put to a more formal test by using information criteria. This is one case, where *WAIC failed* to approximate predictive accuracy well, but to our convenience, the authors of package Loo provide a slightly less time efficient, but more robust estimate, the *LOO-IC*. One advantage of LOO-IC over WAIC is that it produces observation-level estimates, which can be checked individually. Often LOO-IC only fails on a few observations. The author of package Brms has added a practical fallback mechanism: by adding the argument `reloo = TRUE`, the problematic observations are refitted as real LOO-CVs.
 
 ```{r}
 attach(Hugme)
@@ -899,6 +899,8 @@ Loo_1_gam <- loo(M_1_gam)
 Loo_1_exg <- loo(M_1_exg, reloo = TRUE)
 ```
 
+The command `loo_compare` puts the results in one table and arranges the models by predictive accuracy. Unfortunately, it is not a tidy command, and a little extra tweaking is required to make it tidy. (`loo_compare` puts the models in row names, instead of using an explicit identifier variable). As expected, the Exgaussian error distribution makes for the best model.
+
 ```{r}
 loo_compare(Loo_1_gau, Loo_1_gam, Loo_1_exg) %>% 
   as.data.frame() %>% 
@@ -907,7 +909,6 @@ loo_compare(Loo_1_gau, Loo_1_gam, Loo_1_exg) %>%
   mutate(looic_diff = looic - min(looic))
 ```
 
-#### HERE
 
 ```{r opts.label = "mcsync"}
 sync_CE(Hugme, Loo_1_gau, Loo_1_gam, Loo_1_exg)
@@ -919,13 +920,16 @@ detach(Hugme)
 ```
 
 
-The command `loo_compare` puts the results in one table and arranges the models by predictive accuracy. Unfortunately, it is not a tidy command, and a little extra tweaking is required to make it tidy. (`loo_compare` puts the models in row names, instead of using an explicit identifier variable). As expected, the Exgaussian error distribution makes for the best model.
+The comparison confirms that the Exgaussian response distribution is best suited for these reaction time data. It may also be better suited for reaction time experiments in more general, but this needs more proof by other data sets. For the time being, experimentalists are advised to estimate several response  distributions (especially Exgaussian and Gamma) and select the best fitting distribution using the described method.
+
+The other class of duration measures is ToT data, which is routinely collected in usability tests and other applied design research studies. Formally, it should have similar properties as RT data, but the underlying processes of data generation may still be very different. We investigate the CUE8 data using formal model selection on the same three response distributions.
+
+In the previous analysis, the WAIC estimate self-reported unreliability, and we traded some computing efficiency for reliability by switching too LOO-IC. If LOO-IC is unreliable for  a few observations, these can be fitted by running a few real LOO-CV with `reloo = T`. If more than just a few observations are unreliable, this can get time expensive. In the worst case, we would be thrown back to the very inefficient LOO-CV method. Fortunately, the authors of package Loo provide an alternative fall-back to reloo-ing: In *k-fold cross validation* a model is refit $k$ times, always leaving out and predicting $N/k$ observations. LOO cross validation actually is 1-fold cross validation, which results in fitting $N$ models. 10-fold cross validation stands on middle ground by training the model ten times on a different 90% part of data and testing the model on the remaining 10%:
 
 ```{r}
 attach(CUE8)
 ```
 
-When the highly efficient WAIC reports unreliability, we traded some computing efficiency for reliability by switching too LOO-IC. If LOO-IC is unreliable for  a few observations, these can be fitted by running a few real LOO-CV with `reloo = T`. This can get time expensive with more than a few suffering obervations.  The authors of package Loo provide an alternative fall-back to reloo-ing: In *k-fold cross validation* a model is refit $k$ times, always leaving out and predicting $N/k$ observations. LOO cross validation actually is 1-fold cross validation, which results in fitting $N$ models. 10-fold cross validation stands on middle ground by training the model ten times on a different 90% part of data and testing the model on the remaining 10%:
 
 ```{r opts.label = "mcmc"}
 F10_4_gau <- kfold(M_4_gau, K = 10)
@@ -953,25 +957,36 @@ loo_compare(F10_4_gau, F10_4_gam, F10_4_exg) %>%
 detach(CUE8)
 ```
 
-Obviously, predictive accuracy can also be used to check for over-dispersion, just compare, for instance, a Poisson model to  a Negbinomial model. I close this section with a more interesting comparison: In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. When applied to the participant level, we saw a strong inter-individual variance in skew and variance, which seemed to justified the model. However, distributional models on participant-level are very opulent and the question is whether this model truly performs better in terms of predictive accuracy. 
+Interestingly, the Gamma response distributions is favored over the Exgaussian in this case. Again, this may or may not generalize to future data sets. 
+
+Obviously, predictive accuracy can also be used to check for over-dispersion, just compare, for instance, a Poisson model to  a Negbinomial model. However, over-dispersion in count data is so common that model selection may be a waste of effort. In addition, should there really be no over-dispersion, the Negbimomial model will behave almost exactly like a Poisson model and the costs (in terms of parsimony) are negligible.
+
+
+Therefore, I close this section with a more interesting comparison: In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and other shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. A Beta model with two structural parts (mean and scale) was estimated and their appeared to be significant variance in how participants employed the scale, i.e. the range of responses. However, by individual-level scale parameters the model is massiveley inflated. Is that for the good of predictive accuracy? Below, we use the LOO-IC estimate to compare the distributional model against a regular Beta regression.
 
 ```{r}
-attach(Hugme)
+attach(Uncanny)
+```
 
-Loo_1_exg_dist <- loo(M_1_exg_dist)
 
-loo_compare(Loo_1_exg,
-            Loo_1_exg_dist) 
+```{r}
+Loo_beta <- loo(M_poly_3_beta)
+Loo_dist <- loo(M_poly_3_beta_dist)
 
+loo_compare(Loo_beta,
+            Loo_dist) 
 ```
 
 ```{r opts.label = "mcsync"}
-sync_CE(Hugme, Loo_1_exg_dist)
+sync_CE(Uncanny, Loo_beta, Loo_dist)
 ```
 
-```{r}
-detach(Hugme)
+
+```{r opts.label = "inv"}
+detach(Uncanny)
 ```
+
+Despite its opulence, the distributional model out-ranks the simpler model. It confirms that individual response patterns occur and by granting all participants their own scale, we can expect to gain better predictive accuracy.
 
 
 
@@ -1010,29 +1025,6 @@ loo_compare(
 
 The cubic polynomial has the better predictive accuracy. It suggests that the Uncanny Valley effect is due to a disruptive cognitive change, like when we suddenly become aware that we have been fooled. This is not a direct test of a given theory, but it favors all theories that contain an abrupt process. One of the theories that does not contain a disruptive process goes that the UV effect is caused by religious beliefs. Another theory explains the effect as a the startling when our mind suddenly becomes aware of a deception and re-adjusts.
 
-
-
-<!-- ```{r opts.label = "future"} -->
-<!-- T_pred <-  -->
-<!--   bind_rows(post_pred(M_0), -->
-<!--             post_pred(M_1)) %>%  -->
-<!--   group_by(Obs, model) %>%  -->
-<!--   summarize(predicted = median(value)) %>%  -->
-<!--   left_join(Uncanny$UV_1, by = "Obs") -->
-
-
-<!-- T_pred %>%  -->
-<!--   ggplot(aes(x = huMech, y = avg_like)) + -->
-<!--   geom_point() + -->
-<!--   geom_line(aes(y = predicted, col = model)) -->
-
-<!-- ``` -->
-
-
-<!-- ```{r} -->
-<!-- brms::waic(M_0) -->
-<!-- brms::waic(M_1) -->
-<!-- ``` -->
 
 
 ```{r}

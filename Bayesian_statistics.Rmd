@@ -1,13 +1,13 @@
-# Elements of Bayesian statistics {#bayesian_statistics}
+# Elements of Bayesian statistics
 
-```{r setup}
-knitr::opts_chunk$set(include = FALSE)
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
+#knitr::opts_chunk$set(include = FALSE)
 source("RMDR.R")
 
 CE = c("Rainfall", "Sec99", "IPump", "Rational")
 load_CE_(CE)
 
-purp.mcmc <- T
+purp.mcmc <- F
 ```
 
 
@@ -20,7 +20,7 @@ As human beings we make our decisions on what has happened to us in the past. Fo
 
 The very aim of scientific research is to avoid the pitfalls of our minds and act as rational as possible by translating our theory into a formal model, gathering evidence in an unbiased way and weigh the evidence by formal procedures. This weighing of evidence using data essentially is  *statistical modeling* and statistical models in this book all produces two sorts of numbers: *magnitude of effects* and *level of certainty*. When a statistic is reported together with the strength of evidence, this is conventionally called an *inferential statistic*.  In applied research, real world decisions depend on the evidence, which has two aspects: first, the strength of effects and the level of certainty we have reached. 
 
-Bayesian inferential statistics grounds on the idea of accumulating evidence along research. *Certainty* (or belief or credibility or credence) in Bayesian statistics is formalized as a *probability scale (0 = impossible, 1 = certain)*. Certainty is reached by looking at evidence and such evidence comes from two sources: everything that we already know about the subject and the data we just gathered. These sources are only seemingly different, because when new data is analyzed, a transition occurs from what you new before, *prior belief*, to what you know after seeing the data, *posterior belief*. In other words: by data the current belief gets an update. 
+Bayesian inferential statistics grounds on the idea of accumulating evidence along research. *Certainty* (or *strength of belief* or *credibility* or *credence*) in Bayesian statistics is formalized as a *probability scale (0 = impossible, 1 = certain)*. Certainty is reached by looking at evidence and such evidence comes from two sources: everything that we already know about the subject and the data we just gathered. These sources are only seemingly different, because when new data is analyzed, a transition occurs from what you new before, *prior belief*, to what you know after seeing the data, *posterior belief*. In other words: by data the current belief gets an update. 
 
 Updating our beliefs is essential for acting in rational ways. The first section of this chapter is intended to tell the Big Picture. It puts statistics into the context of decision-making in design research. For those readers with a background in statistics, this section may be a sufficient introduction all by itself.
 
