@@ -396,11 +396,11 @@ detach(Rational)
 
 ### Prior knowledge
 
-It is rarely the case that we encounter a situation *tabula rasa*. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season and the region and even the very planet is sometimes taken into account: the Pathfinder probe carried a bag of high-tech gadgets, including an umbrella, but this was for safe landing only, not to cover from precipation, as Mars is a dry planet.
+It is rarely the case that we encounter a situation as a *blank slate*. Whether we are correct or not, when we look at the sky in the morning, we have some expectations on how likely there will be rain. We also take into account the season and the region and even the very planet is sometimes taken into account: the Pathfinder probe carried a bag of high-tech gadgets, including an umbrella, but this was for safe landing only, not to cover from precipation, as Mars is a dry planet.
 
-In behavioral research it has been general standard that every experiment had to be judged on the produced data alone. For the sake of objectivity, researchers were not allowed to take into account previous results, let alone their personal opinion. In Bayesian statistics, you have the choice. You can make use of external knowledge, but you don't have to.
+Only in behavioral research it has become standard that every experiment had to be judged on the produced data alone. For the sake of objectivity, researchers were not allowed to take into account previous results, let alone their personal opinion. In Bayesian statistics, you have the choice. You can make use of external knowledge, but you don't have to.
 
-Violet, the rational design researcher has been designing and testing e-commerce systems for many years and has supervised several large scale roll-outs. So the current project is not a completely new situation at all. From the top of her head, Violet produces the following table to capture her past projects and the increase in revenue that had been recorded afterwards (on the whole population).
+Violet, the rational design researcher has been designing and testing e-commerce systems for many years and has supervised several large scale roll-outs. So the current project is not a completely new situation at all. From the top of her head, Violet produces the following table to capture her past twenty projects and the increase in revenue that had been recorded afterwards (on the whole population).
 
 ```{r}
 attach(Rational)
@@ -410,8 +410,8 @@ attach(Rational)
 ```{r sim:rational_prior, opts.label = "invisible"}
 set.seed(2)
 D_prior <-
-  data_frame(project = as.factor(1:10), 
-             revenue_increase = exp(rnorm(10, log(1.03), .03)))
+  data_frame(project = as.factor(1:20), 
+             revenue_increase = exp(rnorm(20, log(1.01), .03)))
 ```
 
 ```{r}
@@ -434,29 +434,33 @@ P_prior <- posterior(M_prior)
 ```{r opts.label = "mcsync"}
 sync_CE(Rational, M_prior, P_prior)
 ```
+*Note* that the above model is a so called Generalized Linear Model with a Gamma shape of randomness, which will be explained more deeply in chapter [GLM:response_times].
+
 
 ```{r include=FALSE}
 T_prior <- coef(P_prior, mean.func = exp)
 ```
 
 
-The following CLU table shows the results. The mean increase was `r T_prior[[1,2]]` and without any further information, this is the best guess for the population mean of all present or future projects (of Violet). A statistical model that is based on such a small number of observations usually produces very uncertain estimates. In this case, we have a very low level of certainty, as the 95% credibility limits are wide. There even remains a considerable risk that a project results in a decrease of revenue, although that has never been recorded. (Intercept $<1$, recall that these coefficients are multiplicative).   
+The following CLU table shows the results. The mean increase was `r T_prior[[1,2]]` and without any further information, this is the best guess for revenue increase in any future projects (of Violet). A statistical model that is based on such a small number of observations usually produces very uncertain estimates. In this case, we have a very low level of certainty, as the 95% credibility limits are wide. There even remains a considerable risk that a project results in a decrease of revenue, although that has never been recorded. (In Gamma models coefficients are usually multiplicative, so an Intercept $<1$ is a decline).   
 
 ```{r}
 coef(P_prior, mean.func = exp)
 ```
 
+Or graphically, we can depict the belief as follows:
 
 ```{r previous_belief_in_revenue, opts.label = "fig.small"}
 P_prior %>% 
   filter(parameter == "Intercept") %>% 
   mutate(value = exp(value)) %>% 
   ggplot(aes(x = value)) +
-  geom_density()
+  geom_density(fill = "grey") +
+  xlab("Strength of belief")
 
 ```
 
-The population average (of projects) is less favorable than what Violet saw in her experiment, which is worrying. If the estimated revenue on teh experimental data is correct, it would be a rather extreme outcome. In the following step, she uses the (posterior) certainty from M_prior and employs it as prior information (by means of a Gaussian distribution). Model M_2 has the same formula as M_1 before, but combines the information of both sources, data and prior certainty.     
+The population average (of projects) is less favorable than what Violet saw in her present experiment. If the estimated revenue on the experimental data is correct, it would be a rather extreme outcome. And that is a potential problem, because extreme outcomes are rare. Possibly, the present results are overly optimistic (which can happen by chance) and do not  represent the true change revenue, i.e. on the whole population of users. In Bayesian Statistics, mixing  present results with prior knowledge is a standard procedure to correct this problem. In the following step, she uses the (posterior) certainty from M_prior and employs it as prior information (by means of a Gaussian distribution). Model M_2 has the same formula as M_1 before, but combines the information of both sources, data and prior certainty.     
 
 
 ```{r opts.label = "mcmc"}
@@ -474,6 +478,8 @@ M_2 <-
 
 P_2 <- posterior(M_2)
 ```
+
+*Note*  that the standard deviation here is saying how the strength of belief is distributed for the average revenue. It is not the standard deviation in the a population of projects.
 
 ```{r opts.label = "mcsync"}
 sync_CE(Rational, T_prior, M_2, P_2)
@@ -497,7 +503,11 @@ P_comb <-
     filter(P_2, parameter == "Designproto")) %>% 
   mutate(value = exp(value))
 
-coef(P_comb)
+clu(P_comb)
+```
+
+
+```{r}
 
 P_comb %>%
   ggplot(aes(x = model, y = value)) +
@@ -505,11 +515,10 @@ P_comb %>%
   geom_crossbar(data = coef(P_comb),
                 aes(y = center, ymin = lower, ymax = upper),
                 width = .05)
-  
+
 ```
+Model `M_2` reduces the estimated expected revenue by a small amount. But, remember that Violet has to meet the criterion of a 110% increase in revenue. In the following she extracts the risk of failure (revenue smaller than 110%) from the posterior distribution. 
 
-
-Finally, Violet computes the risk for the true value to be below 110%. As it turns out, the probability of failure increases by around 10%, when prior information is taken into account. That is not so much as to turn around any decisions on the redesign. But, that also contains a positive message: The current data is not extraordinary as to collide with prior knowledge.
 
 ```{r rational_design_risk_of_failure_2, opts.label = "fig.small"}
 P_comb %>%
@@ -518,15 +527,12 @@ P_comb %>%
   summarize(risk_to_fail = mean(outcome))
 ```
 
+So what should Violet report to decision makers. Something like this: "The data from the study us that our chance of success is around two-thirds. *However*, in my long career I have never actually reached such an increase in revenue, so I'd rather say, chance of success is more arounf 50%.
 
 
 ```{r}
 detach(Rational)
 ```
-
-
-
-#### FINISH
 
 
 
@@ -1046,9 +1052,9 @@ Reporting the calculated mean of time-on-task in two designs is descriptive. It 
 
 <!-- This is a Bayesian book and the following considerations are meant to convince the reader that the Bayesian use of probability has a wider domain of application than the frequentist. I also see this as one of the more rare situations where introducing some formalism is supportive in that it dissolves the subtle preoccupations that often accompany intuitive (or, I'd rather say: exemplified) understanding. In addition, the mathematical definition is bare of any real world notions, like observed frequencies or experienced certainties and  (figuratively speaking) makes the different perspectives converge. The algebraic definition of probability is given by the three Kolmogorov axioms. Before we come to that, let me undertake one intermediate step: introducing some set-theoretic concepts, which at the same time is meant as a deep bow to the discipline of thought that is so awe inspiring on the one hand a source of mental suffering for many on the other hand. -->
 
-Mathematics is emptiness. In its purest form, it does not require or have any link to the real world. That makes it so difficult to comprehend. Sometimes a mathematical theory describes real world phenomena, but we have no intuition about it. A classic example is Einstein's General Relativity Theory, which assumes a curved space, rather than straight space as Newtonian  Mechanics does. Our minds are Newtonian and the closest to intuitive understanding I got was the imagination of the universe as a four-dimensional mollusk, thanks to Einstein.
+Mathematics is emptiness. In its purest form, it does not require or have any link to the real world. That makes it so difficult to comprehend. Sometimes a mathematical theory describes real world phenomena, but we have no intuition about it. A classic example is Einstein's General Relativity Theory, which assumes a curved space, rather than the  straight space our senses are tuned to. Our minds are Newtonian and the closest to intuitive understanding we can get is the imagination of the universe as a four-dimensional mollusk, thanks to Einstein.
 
-Math can become easy, if mathematical system directly translate into real world ideas and sensations. I recall how my primary school teacher introduced the sum of two numbers as removing elements from one stack and place it on second (with an obvious stop rule). Later, as a student, I was taught the Peano axiomatic theory of Natural Numbers. As it turned out, I somehow knew them already, because they just formalized, what my teacher had told me. The formal proof for $1 + 1 = 2$ is using just the same elements as me shifting blocks between towers.
+Math can also be easy, even trivial, if mathematical expressions directly translate into ideas and sensations as we have them. I recall how my primary school teacher introduced the sum of two numbers as removing elements from one stack and place it on second (with an obvious stop rule). Later, as a student, I was taught how the sum of two numbers is defined within the Peano axiomatic theory of Natural Numbers. As it turned out, I knew this already, because they just formalized the procedure I was taught as a kid. The formal proof for $1 + 1 = 2$ is using just the same elements as me shifting blocks between towers.
 
 
 <!-- ####  MAKE FIGURE -->
@@ -1082,13 +1088,13 @@ Math can become easy, if mathematical system directly translate into real world 
 
 <!-- #### HERE -->
 
-As we will see, the formal definition of probability is based on set theory, which put it more on the intuitive side of things. The formal theory of probability, the Kolmogorov axioms may be somewhat disappointing from an ontological perspective, as it just defines rules for when a set of numbers can be regarded probabilities. But calculating actual probabilities is rather easy and a few R commands suffice to start playing with set theory and probability. The most tangible interpretation of probabilities is that the probability of an event to happen, say getting a Six when rolling a dice, coincides with the relative frequency of Six in a (very long) sequence of throws. This is called the *frequentist interpretation* of probability and this is how probability will be introduced in the following. While thinking in terms of relative frequency in long running sequences is rather intuitive, it has limitations. Not all events we want to assign a probability can readily be imagined as a long running sequence, for example:
+In this section I will introduce *probability theory*, which is largely based on another mathematical theory that most people find intuitive, *set theory*. The formal theory of probability, the Kolmogorov axioms may be somewhat disappointing from an ontological perspective, as it just defines rules for when a set of numbers can be regarded probabilities. But calculating actual probabilities is rather easy and a few R commands will suffice to start playing with set theory and probability. The most tangible interpretation of probabilities is that the probability of an event to happen, say getting a Six when rolling a dice, coincides with the relative frequency of Six in a (very long) sequence of throws. This is called the *frequentist interpretation* of probability and this is how probability will be introduced in the following. While thinking in terms of relative frequency in long running sequences is rather intuitive, it has limitations. Not all events we want to assign a probability can readily be imagined as a long running sequence, for example:
 
 + the probability that your house burns down (you only have this one)
 + the probability that a space ship will safely reach Mars (there's only this one attempt)
 + the probability that a theory is more true than another (there's only this pair)
 
-The *Bayesian interpretation* of probability is essentially the same as the frequentist, but is mnore relaxed as it does *not require that all* probabilities are measured through relative frequencies in long running sequences. Bayesian thinking includes the idea that probabilities can also be a *degree of belief*, which can, but doesn't have to be grounded in long-running series. In the following I will present in broad strokes how the theory of probability emerges from set theory and can be set into motion by computing relative frequencies of sets and subsets. Then I will introduce the *likelihood*, which is a concept equally used in classic and Bayesian statistics. After clarifying the differences between frequentist and Bayesian ideas of measuring probability, *Bayes theorem* is introduced as the formal underpinning of all Bayesian statistics. We will see how the likelihood and idea of *certainty as probability* combines to a scientific framework that emphasizes the incremental updating of our knowledge about the world we measure.
+The *Bayesian interpretation* of probability is essentially the same as the frequentist, but is more relaxed as it does *not require that all* probabilities are measured through relative frequencies in long running sequences. Bayesian thinking includes the idea that probabilities can also be a *degree of belief*, which can, but doesn't have to be grounded in long-running series. In the following I will present in broad strokes how the theory of probability emerges from set theory and can be set into motion by computing relative frequencies of sets and subsets. Then I will introduce the *likelihood*, which is a concept equally used in classic and Bayesian statistics. After clarifying the differences between frequentist and Bayesian ideas of measuring probability, *Bayes theorem* is introduced as the formal underpinning of all Bayesian statistics. We will see how the likelihood and idea of *certainty as probability* combines to a scientific framework that emphasizes the incremental updating of our knowledge about the world we measure.
 
 
 ### Some set theory
@@ -1778,7 +1784,11 @@ We see a strong asymmetry in how useful the test is in the two situations. Speci
 
 ### The dynamics of belief
 
-In the previous section we have seen an application of Bayes theorem where it served to debunk a diagnostic procedure. As the procedure of testing everyone for HIV may seem reasonable at first, it turned out to be impractical. That is an example of how a principally intuitive theories like Probability Theory can result in counter-intuitive, but correct, answers. These are the most valuable answers, actually.
+##### REWORK
+
+In the previous section we have seen an application of Bayes theorem where it served to debunk a diagnostic procedure. 
+
+<!-- As the procedure of testing everyone for HIV may seem reasonable at first, it turned out to be impractical. That is an example of how a principally intuitive theories like Probability Theory can result in counter-intuitive, but correct, answers. These are the most valuable answers, actually. -->
 
 <!-- In Bayesian statistics -->
 
@@ -1793,7 +1803,7 @@ In the previous section we have seen an application of Bayes theorem where it se
 
 
 
-In Bayesian statistics, certainty (or strength of belief, state of knowledge, credibility) is assumed to follow all rules of probability theory. We may still think of it in terms of frequencies or illustrate it as a gamble, whatever fits the context better. The point is that we may enter degrees of belief (instead of relative frequencies) into Bayes rule, as follows:
+In Bayesian statistics, certainty (or strength of belief, state of knowledge, credibility) is assumed to follow all rules of probability theory. We may still think of it in terms of frequencies or illustrate it as a gamble, whatever fits the context better. The point is that in Bayes' rule we may enter degrees of belief (instead of relative frequencies)  as probabilities:
 
 $$
 P(\theta|\text{Data}) = 
@@ -1897,53 +1907,68 @@ For frequentist thinkers the idea of the sample is central and the mathematical 
 
 ## Statistical models {#statmod}
 
-It is a scientific, maybe even naturalistic, principle that every event to happen has its causes (from the same universe). The better these causes are understood, the better will be all predictions of what is going to happen the next moment, given that one knows the laws of physics. *Laplace demon* is a classic experiment of thought on the issue: the demon is said to have perfect knowledge of laws of physics and about the universe's current state. Within naturalistic thinking, the demon should be able to perfectly predict what is going to happen in the next moment. Of course, such an entity could never exist, because it were actually a computer that matches the universe in size (and energy consumption). In addition, there are limits to how precisely we can measure the current state, although physicist and engineers have pushed the limits very far.
+It is a scientific, maybe even naturalistic, principle that every event to happen has its causes (from the same universe). The better these causes are understood, the better will be all predictions of what is going to happen the next moment, given that one knows the complete state of the universe and the laws of physics. *Laplace demon* is a classic experiment of thought on the issue: the demon is said to have perfect knowledge of laws of physics and about the universe's current state. Within naturalistic thinking, the demon should be able to perfectly predict what is going to happen in the next moment. Of course, such an entity could never exist, because it would actually be a computer that matches the universe in size (and energy consumption). In addition, there are limits to how precisely we can measure the current state, although physicist and engineers have pushed the limits very far. Behavioural science frequently lacks this precision, which results in rather imperfect knowledge about the state. We are often left with a good amount of uncertainty.
 
-When Violet did her experiment to prove the superiority of design B, the only two things she knew about the state of affairs was that the participant sitting in front of her is member of a very loose group of people called the "typical user" and the design her or she was exposed to. That is painstakingly little information on what's currently going on in the patricipant's central nervous system. Her lack of knowledge is profound but still not a problem as the research question was on a gross scale itself, too. Not what happens to individual users needed to be described, but just the difference in *average* duration. Instead, imagine Violet and a colleague had invented a small game where they both guess the time-on-task of individual participants as they enter the lab. Who comes closest wins. As both players are smart people, they do not just randomly announce numbers, but let themselves guide by data of previous sessions. A very simple but reasonable approach would be to always guess what the average ToT in all previous sessions has been. In [#GMM] we will call this a grand mean model.
+When Violet did her experiment to prove the superiority of design B, the only two things she knew about the state of affairs was that the participant sitting in front of her is member of a very loose group of people called the "typical user" and the design her or she was exposed to. That is painstakingly little information on what's currently going on in the participant's central nervous system. Her lack of knowledge is profound but still not a problem as the research question was on a gross scale itself, too. Not what happens to individual users needed to be described, but just the difference in *average* duration. 
 
-Of course, Violet would never expect her grand mean model to  predict the accurate outcome of a session. Still, imagine a device that has perfect knowledge of the website, the complete current neural state of a the participant and the physical environment both are in. As an all-knowing device it would also have complete knowledge on how neural states change.  With this device, Jane could always make a perfect prediction of the outcome. Unfortunately, real design researchers are far from Laplace demonism. Routinely borrowing instruments from social sciences, precision of measurement is humble and the understanding of neural processes during web navigation is highly incomplete. Participants vary in many complex ways in their neural state and this makes a myriad of *small unrelated forces (SMURF)* that steers an individual users in  a unique situation away from the average. Laplace demon has perfect knowledge of all SMURF trajectories and therefore can produce a perfect prediction. Violet, in contrast, is completely ignorant of any SMURFs and her predictions will be way off many times. A common way to conceive this situation is that any measure is composed of a *structural part* and a *random part*, $\epsilon_i$.
+Imagine Violet and a colleague had invented a small game where they both guess the time-on-task of individual participants as they enter the lab. Who comes closest wins. As both players are smart people, they do not just randomly announce numbers, but let themselves guide by data of previous sessions. A very simple but reasonable approach would be to always guess what the average ToT in all previous sessions has been. In [#GMM] we will call this a grand mean model.
+
+Of course, Violet would never expect her grand mean model to  predict the accurate outcome of a session. Still, imagine a device that has perfect knowledge of the website, the complete current neural state of a the participant and the physical environment both are in. As an all-knowing device it would also have complete knowledge on how neural states change.  With this device, Jane could always make a perfect prediction of the outcome. Unfortunately, real design researchers are far from Laplace demonism. Routinely borrowing instruments from social sciences, precision of measurement is humble and the understanding of neural processes during web navigation is highly incomplete. Participants vary in many complex ways in their neural state and this makes a myriad of *small unmeasured forces (SMURF)* that can steer an individual users towards or away from the average. Laplace demon would have perfect knowledge of all forces and would produce a perfect prediction. Violet, in contrast, is completely ignorant of any SMURFs and her predictions will be way off many times. 
+
+A common way to conceive this situation is that all measures are composed of a *structural part*, that captures the relation between known and measured forces and a *random part*, that serves as a bucket for unmeasured forces.
 
 $$\text{Measure}_i = \text{structural part} + \text{random part}_i$$
 
-Note that Measure and Random part both have an observation-level index $i$, which means they are *unique* per observation $i$. The structural part does not have such an index, because it makes a *universal* statement, a proposition that holds for all the observations. And for the scope of this book, a *statistical model* is defined as a *mechanism that separates the structural from the random part*, to some extent. The population average is the most simple of a class of structural parts called *linear models* [#lm] and we will see throughout the whole second Part of this book, how the structural part encodes increasingly complex research questions or theories of ours. After a minimally sufficient introduction to the matter, the remainder of this section will focus on the random part, which is not so random as one may think.
+*Note* that Measure and Random part both have an observation-level index $i$, which means they are *unique* per observation $i$. The structural part does not have such an index, because it is usually designed as a *universal* statement, a proposition that holds for all the observations. If this were different, there would be no way to make predictions from the model. After a minimally sufficient introduction to the matter, the remainder of this section will focus on the random part and we will discover that randomness is *not* completely arbitrary, but falls into certain *shapes of randomness*. And for the scope of this book, a *statistical model* is defined as a *mechanism that separates the structural from the random part* to some extent. 
+
+
+### The structural part
+
+Generally, statistical models consist of these two parts: a structural part that describes the association between measures and the random part, which is the sum of all small unmeasured forces (SMURFs). The structural part of statistical models is called so, because it describes what all observations supposedly have in common. The structural part is what encodes the structure of a study and the dependencies between measures. 
+
+The most simple structure is just that an observation was taken on a member of a population. If we speak of a population (rather than a set), we typically imply that members of the population have something in common. The most simple structural part is therefore taking the mean of the population, which is also called a Grand Mean Model [GMM]. From here on, $\mu_i$ is the result of the structural part for one observation, which for a GMM, is just a constant $\beta_0$.
+
+$$
+\mu_i = \beta_0
+$$
 
 
 
-Generally, statistical models consist of these two parts: the *likelihood* to describe the association between predictors and expected values and the random part, which describes the overall influence of the unexplained SMURFs.
+We will see throughout chapters [LM] and [LML], how the structural part encodes complex dependencies between measures. 
 
-#### FINISH
+The structural part makes a universal statement about the relation between measures. This can basically be anything. However, in many (if not most) statistical models, it is common to separate the set of measure into exactly one *response* (or outcome, or dependent variable) and a set of predictor variables. In the GMM above, there are no predictors, just a constant value.
 
-### Predictions and likelihood
+In the guessing game, Violet could try to improve her guesses, by also taking age of participants into account. Older people tend to be slower. Violet could create a plot from past records. The ellipsoid form of the point cloud indicates that ToT is somehow depending on age. Violet draws a straight line with an upward slope to approximate the relationship. It seems that zero year old persons has an average ToT of around 45 seconds, which increases to around 120 seconds for 50 year old. Arithmetically, this is an increase of around 1.5 seconds per year of age.
 
-The structural part of statistical models 
+```{r opts.label = "inv"}
+lm(ToT ~ age, data = Sec99$Ver20)
+```
 
-#### EDIT
-
-The likelihood function states the dependency of outcome on the predictor variables. The dependency can be a complex mathematical function of multiple predictors, or as simple as the population average. A common likelihood function is the linear function. For example, in their guessing game, Violet could try to improve her population model, by also taking age of participants into account. Older people tend to be slower. Violet creates a plot from past records. The ellipsoid form of the point cloud indicates that ToT is somehow depending on age. Violet draws a straight line with an upward slope to approximate the relationship. It seems that 30 year old persons have an average ToT of around 90 seconds, which increases to around 120 seconds for 50 year old. Arithmetically, this is an increase of around 1.5 seconds per year of age.
 
 
 ```{r opts.label = "fig_small"}
 Sec99$Ver20 %>% 
   ggplot(aes(x = age, y = ToT)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, fullrange = T) +
+  xlim(0,60)
 ```
 
-Violet can use this information to improve her gambling. Instead of stoically calling the population mean, she uses a linear function as predictor: $90 + (\textrm{age} - 30) 1.5 $. In Bayesian statistics, this is called a *likelihood function* and the general form for a single linear likelihood function is:
+Violet can use this information to improve her chance of winning. Instead of stoically calling the population mean, she uses a linear function as predictor: $45 + (\textrm{age} ) 1.5 $. This is called a *linear association* and the general notation is
 
 $$\mu_i = \beta_0 + \beta_1x_{1i}\\$$
+ where $\beta_0$ is the intercept value, $X_1$ is a measure (age) and $\beta_1$ is a *coefficient*. The primary purpose of using a model on data is to estimate the coefficients.
 
-Likelihood functions connect the *expected value* $\mu$ with *observed variables* $x_{i1}, x_{i2}, ..., x_{ik}$, and (to be estimated) parameters, e.g. $\beta_0, \beta_1$. The likelihood function is often called the *deterministic part* of a model, because its prediction strictly depends on the observed values and the predictors, but nothing else. For example, two persons of age 30 will always be predicted to use up 90 seconds. Apparently, this is not the case for real data.
+<!-- The structural part of a model connects the *expected value* $\mu$ with *observed variables* $x_{i1}, x_{i2}, ..., x_{ik}$, and (to be estimated) parameters, e.g. $\beta_0, \beta_1$. The likelihood function is often called the *deterministic part* of a model, because its prediction strictly depends on the observed values and the predictors, but nothing else. For example, two persons of age 30 will always be predicted to use up 90 seconds. Apparently, this is not the case for real data. -->
 
-The linear model is very common in statistical modeling, but likelihoods can basically take all mathematical forms. For example:
+Linear models are very common in statistical modeling, but the structural part of a model can basically take all mathematical forms. For example:
 
-+ the grand mean model, Violet used before: $\mu_i = \beta_0$
 + two predictors with a linear relationship: $\mu_i = \beta_0 + \beta_1x_{1i} + \beta_1x_{2i}\\$
 + a parabolic relationship: $\mu_i = \beta_0 + \beta_1x_{1i} + \beta_2x_{2i}^2$
 + a nonlinear learning curve: $\mu_i = \beta_\textrm{asym} (1 + \exp(-\beta_\textrm{rate}(x_\textrm{training} + \beta_\textrm{pexp})))$
 + the difference between groups A and B, where $x_1$ is a membership (dummy) variable  coded as $A\rightarrow x_1:=0, B\rightarrow x_1:=1$: $\mu_i = \beta_0 + \beta_1x_{1i}$
 
-In the vast majority of cases, the likelihood function is the interesting part of the model, where researchers transform their theoretical considerations or practical questions into a mathematical form. The parameters of the likelihood function are being estimated and answer the urging questions, such as:
+In the vast majority of cases, the structural part is the one of interest, as this is where researchers transform their theoretical considerations or practical questions into a mathematical form. The parameters of the likelihood function are being estimated and answer the urging questions, such as:
 
 + Is the design efficient enough? ($\beta_0$)
 + By how much does performance depend on age? ($\beta_1$)
@@ -1951,9 +1976,13 @@ In the vast majority of cases, the likelihood function is the interesting part o
 + How fast people learn by training ($\beta_\textrm{rate}$)
 + By how much design B is better than A ($\beta_1$)
 
-A subtle, but noteworthy feature of likelihood functions is that $\mu_i$ and $x_i$ have indicators $i$. Potentially, every observation $i$ has their own realization of predictors and gets a unique expected value, whereas the parameters $\beta_0, \beta_1$ asf. are single values that apply for all observations at once. In fact, we can conceive statistical models as operating on multiple levels, where there is always the two: the observation level and the population level. When introducing multi-level models, we will see how this principle extends to more than these two levels. Another related idea is that parameters summarizes patterns found in data. Any summary implies repetition and that is what the likelihood expresses: the pattern that repeats across observations and is therefore predictable.
+A subtle, but noteworthy feature of structural part is that $\mu_i$ and $x_i$ have indicators $i$. Every observation $i$ has their own measures and therefore the realization of the structural part gets a unique expected value. In contrast, the coefficients $\beta_0, \beta_1$ asf. are universal values that apply for all observations at once. 
+
+<!-- In fact, we can conceive statistical models as operating on multiple levels, where there is always the two: the observation level and the population level. When introducing multi-level models, we will see how this principle extends to more than these two levels. Another related idea is that parameters summarizes patterns found in data. Any summary implies repetition and that is what the likelihood expresses: the pattern that repeats across observations and is therefore predictable. -->
 
 
+
+When all all measures $y$, $x$ are known and all coefficients $\beta_.$ have been estimated, we can solve the structural part and obtain a unique value $\mu_i$ for all observations. Considering that $y_i = \mu_i + \text{random part}$, that means we can also view model estimation of a model as a separation of structural part and random part. Unfortunately, it is not sufficient to just have measures and a structural part. We also need to know the shape of randomness and put this into the model.
 
 
 
@@ -1974,25 +2003,28 @@ A subtle, but noteworthy feature of likelihood functions is that $\mu_i$ and $x_
 + in R
 -->
 
-Review the formula $$\text{Measure}_i = \text{structural part} + \text{random part}_i$$. What do we actually have? It turns out that the only part we know for sure is the measure $i$. The structural part contains the answer to our research question, so this is what we want to estimate. Unfortunately, there is another unknown, the $random part$, which we literally need to subtract to get to our answers. Obviously, this would never work if the random part were random in the sense of being completely arbitrary. Fortunately, randomness is not arbitrary, but has a shape, which is described as a probability (or density) distribution. These distributions typically belong to a certain family of distributions, e.g. Poisson disributions or Gaussian distributions. By assuming a certain shape of randomness, we know a lot more about the random component, which will make it easier to flesh out the structure. Choosing the most appropriate distribution therefore is a crucial step  in creating a valid statistical model.      
+Review the formula $$\text{Measure}_i = \text{structural part} + \text{random part}_i$$. What do we actually have? It turns out that the only part we know for sure are measures $y_i$ and $x_{.i}$. The structural part contains the answer to our research question, so this is what we want to estimate. Unfortunately, there is another unknown, the $random part$, which we literally need to subtract to get to our answers. Obviously, this would never work if the random part were random in the sense of being completely arbitrary. Fortunately, randomness is not arbitrary, but has a shape, which is described as a probability (or density) distribution. These distributions typically belong to a certain family of distributions, e.g. Poisson disributions or Gaussian distributions. By assuming a certain shape of randomness, we know a lot more about the random component, which will make it possible to flesh out the structure. Choosing the most appropriate distribution therefore is a crucial step  in creating a valid statistical model. In this section I will introduce in more depth how probability and density distributions describe the shape of randomness.
 
 
 #### Probability and density distributions
 
-The random part of a statistical model is what  changes between observation and is not fully predictable. When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as probability and density distributions. A probability distribution is given by a probability mass function (PMF) that assigns *probabilities to outcomes*, such as:
+The random part of a statistical model contains all (small) unmeasured forces on the response $y_i$. When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as probability and density distributions. A probability distribution is given by a probability mass function (PMF) that assigns *probabilities to outcomes*, such as:
 
 + probability of *task success* is $.81$
 + probability of *99 seconds or better* is $.22$ 
 + probability of all SMURFs together pushing a persons *IQ beyond 115* is around $.33$
 
+Let's see this at a small example: Consider a participant who is asked to complete three tasks of constant difficulty, with a chance of $.3$ for each one to be solved. The outcome variable of interest is the number of correct results, which can take  the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), the Binomial distribution assigns every possible outcome a probability to occur, it is given as:
 
-#### REDACT
+$$
+P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
+$$
 
-Probability mass functions are mathematical functions that assign probabilities to the outcome of a measured variable $Y$. Let's see this at a small example: Consider a participant who is asked to complete three tasks of constant difficulty, with a chance of $.3$ for each one to be solved. The outcome variable of interest is the number of correct completions, which can take  the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), the following probability distribution assigns every possible outcome a probability to occur.
+A Binomial distribution with probability of success $p = .3$ and $k = 3$ tasks looks like the following:
 
 ```{r opts.label = "fig.small"}
 D_three_tasks <- 
-  tibble(y = 0:4,
+  tibble(y = -1:4,
              outcome = as.character(y),
              probability = dbinom(y, size = 3, prob = 0.3),
              cumul_prob     = pbinom(y, size = 3, prob = 0.3))
@@ -2006,11 +2038,32 @@ D_three_tasks %>%
 
 ```
 
-We see that the most likely outcome is one correct task, which occurs with a probability of $P(y = 1) = `r dbinom(1,3,0.3)`$. At the same time, it is surprisingly likely to fail at all tasks, $P(y = 0) = `r dbinom(0,3,0.3)`$. We may also look at *combined events*, say the probability for less than two correct. That is precisely the sum $P(y \leq 1) = P(y = 0) + P(y = 1) = `r sum(dbinom(c(0,1), 3, 0.3))`$. We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: $P(0 \leq y \leq 3) = 1$. Simply in order to comply with the third Kolmogorov axiom,  all probability (and density) distributions have *probability mass of One*.  More precisely, the area covered by the function must be exactly One.
+As we can see, there exist four possible outcomes for a sequence of three tasks: zero, one, two and three tasks correct. We also see that the most likely outcome is one correct task, which occurs with a probability of $P(y = 1) = `r dbinom(1,3,0.3)`$. At the same time, it is surprisingly likely to fail at all tasks, $P(y = 0) = `r dbinom(0,3,0.3)`$. We may also look at *combined events*, say the probability for less than two correct. That is precisely the sum $P(y \leq 1) = P(y = 0) + P(y = 1) = `r sum(dbinom(c(0,1), 3, 0.3))`$. We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: $P(0 \leq y \leq 3) = 1$. Simply in order to comply with the third Kolmogorov axiom,  all probability (and density) distributions have *probability mass of One*.  More precisely, the area covered by the function must be exactly One. Another extreme outcome is that four out of three tasks are correct, which is impossible, or $P(y \gt 3) = 0$.
 
-Outcomes like task successes have a countable number of possible outcomes, and are therefore called *discrete*. If we want to obtain the probability of combined events, we just have to sum probabilities over all the included events. This approach fails, if the outcome is not discret, but continuous. On a continuous scale, every outcome is a point in the strictly geometrical sense of having no extension. That makes the probability masses of any such point extensionless, too, i.e. exactly Zero. 
+Number of successes is a countable measure, and are therefore called *discrete*. If we want to obtain the probability of combined events, we just have to sum probabilities over all the included events, which is like stacking the blocks in the figure above. This approach fails, if the outcome is not discrete, but *continuous*. On a continuous scale, every outcome is a line, in the strictly geometrical sense. That makes the probability masses of any such point extensionless, too, i.e. exactly zero. The probability that the outcome of a continuous measure is *exactly*, say, 42.18 is zero.
 
-Another way to characterize a  random distribution is *cumulative distribution distribution (CDF)*, which is the renders the *increase in probability mass* when moving from left to right over the outcome scale. As shown below for discrete outcomes this function starts at Zero, then moves upwards in increments and reaches One at the left end of the scale.  
+when the measure is continuous, rather than discrete, we cannot assign non-zero probabilities to exact outcomes. But, we can give non-zero probabilities to ranges of outcomes. Consider the distribution of intelligence quotients (IQ) scores. Strictly spoken, the IQ is not continuous, but for instructional reasons, let us assume it were and we can give the IQ with arbitrary precision, for example $115.0$, $100.00010...$ or $\pi * 20$.. 
+
+IQ scores are *designed to follow  the Gaussian* distribution with a mean of 100 and a standard distribution of 15, so we can easily simulate some data for 200 participants undergoing an IQ test.
+
+```{r}
+D_IQ <- tibble(IQ = 0:2000/10,
+               density = dnorm(IQ, 100, 15),
+               cdf = pnorm(IQ, 100, 15),
+               SE = (IQ > 85 ) * (IQ <= 115) * density,
+               around_100 = (IQ >= 99 ) * (IQ <= 101) * density,
+               PDF_085 = (IQ < 85) * density,
+               PDF_115 = (IQ < 115) * density,
+               label = str_c("P(IQ < ", IQ, ")"))
+
+D_IQ %>% 
+  ggplot(aes(x = IQ, y = density)) +
+  geom_area()
+```
+
+We observe that the most likely IQ is 100 and that almost nobody reaches scores higher than 150 or lower than 50. But, how likely is it to have an IQ of exactly 100? The answer is Zero. With continuous measures, we can no longer think in blocks that have a certain area. In fact, the probability of having an IQ of *exactly* $100.00...0$ is exactly zero. The block of IQ = 100 is infinitely narrow and therefore has an area of zero. That is why for continuous outcome variables, we cannot have a PDF, but a *density distribution function (DDF).* At the example of the above Gaussian distribution, we can still identify the point of highest density (IQ = 100), but the density scale is *not probabilities*.  What DDFs share with PDFs is that the area under the curve is always exactly One. In addition, probabilities still arise from density when taking  intervals of values, which is nothing but combined events. Before we return to that, another way of specifying statistical distributions must be introduced.
+
+A cumulative distribution function is the *integral* of a PDF or DDF. *Cumulative distribution functions (CDF)* render how *probability mass* increases when moving from left to right over the outcome scale. Because probability and density are non-negative, a CDF always is *monotonously increasing*. Below we see the CDF of the three-tasks situation. The function starts at Zero, then moves upwards in increments and reaches One at the right end of the scale.  
 
 ```{r opts.label = "fig.small"}
 D_three_tasks %>% 
@@ -2020,123 +2073,144 @@ D_three_tasks %>%
 
 ```
 
+Using the CDF, the probability for any outcome to be in a certain range can be written as the difference between the upper and the lower limit of cumulative probability. For example, the probability of having zero or one tasks correct is
 
-Using the CDF, the probability of an event, that is a *range of outcomes*, can be written as the difference between the upper and the lower limit of cumulative probability mass. For example, the probability of having two or three tasks correct is. Note that the lower limit must be included and strictly spoken, the second term in the difference is the *largest outcome value not included*. Owing to extensionlessness of outcomes this does not matter for continuous outcomes. Note that the lower limit must be included and strictly spoken, the second term in the difference is the *largest outcome value not included*. Owing to extensionlessness of outcomes this does not matter for continuous outcomes. 
+$P(\text{correct} \le 1) = \text{CDF}_{Binom}(x = 2, k = 3, p = .3)$
+
+or
+
+```{r}
+pbinom(1, 3, .3)
+```
+
+On the PDF, we calculated the probability of combined events by summing. With the PDF, we can calculate the probability for any range by subtraction. The probability of more than one tasks correct is:
+
+$P(\text{correct} \ge 2) = \text{CDF}_{Binom}(x = 3, k = 3, p = .3) - \text{CDF}_{Binom}(x = 1, k = 3, p = .3)$
+
 
 ```{r}
 pbinom(3, 3, .3) - pbinom(1, 3, .3)
 ```
+<!-- *Note* that the lower limit must be included and strictly spoken, the second term in the difference is the *largest outcome value not included*. Owing to their extensionlessness this does not matter for continuous outcomes. -->
 
-
-when the outcome measure is *continuous*, rather than discrete, we cannot assign non-zero probabilities to outcomes. But, we can give non-zero probabilities to ranges of outcoms. Consider the distribution of intelligence quotients (IQ) scores. Strictly spoken, the IQ is *not* continuous, as one usually only measures and reports whole number scores. Still, for instructional purposes, assume that the IQ is given in arbitrary precision, for example $115.0$, $100.00010...$ or $\pi * 20$. IQ scores are *designed to follow  the Gaussian* distribution with a mean of 100 and a standard distribution of 15. 
-
-
-#### HERE
-
-That means, we can use this distribution functions to predict 
-
-```{r}
-D_IQ <- tibble(IQ = 0:200,
-                   density = dnorm(IQ, 100, 15),
-                   cdf = pnorm(IQ, 100, 15),
-                   SE = (IQ > 85) * (IQ < 115) * density,
-                   PDF_085 = (IQ < 85) * density,
-                   PDF_115 = (IQ < 115) * density)
-
-D_IQ %>% 
-  ggplot(aes(x = IQ, y = density)) +
-  geom_area()
-
-
-```
-
-We observe that the most likely IQ is 100 and that almost nobody reaches scores higher than 150 or lower than 50. But, how likely is it to have an IQ of exactly 100? Less than you might think! With continuous measures, we can no longer think in blocks that have a certain area. In fact, the probability of having an IQ of *exactly* $100.00...0$ is exactly zero. The block of IQ = 100 is infinitely narrow and therefore has an area of zero. Generally, with continuous outcome variables, We can no longer read probabilities directly. Therefore, probability mass distributions don't apply, but the association between outcome and probability is given by what is called *probability density functions*. Density is not confined to the probability unit interval, but what density distributions share with PDFs is that the area under the curve is always exactly one and that probabilities still arise when taking intervals of values.
-
-Practically, nobody is really interested in infinite precision. When asking *"what is the probability of IQ = 100?"*, the answer is *"zero"*, but what was really meant was: *"what is the probability of an IQ in a close interval around 100?"*. Once we speak of intervals, we clearly have areas larger than zero. The graph below shows the area in the range of 85 to 115. 
+With this method, we can also treat CDFs and obtain probabilities for intervals of values. Practically, nobody is really interested in infinite precision, anyhow. When asking *"what is the probability of IQ = 100?"*, the answer is *"zero"*, but what was really meant was: *"what is the probability of an IQ in a close interval around 100?"*. Once we speak of intervals, we clearly have areas larger than zero. The graph below shows the area in the range of 99 to 101. 
 
 ```{r}
 D_IQ %>% 
   ggplot(aes(x = IQ, y = density)) +
   geom_line() +
-  geom_area(aes(y = SE))
+  geom_area(aes(y = around_100))
 ```
 
-But, how large is this area exactly? As the distribution is curved, we can no longer simply count virtual blocks. Recall that the CDF gives the probability mass, i.e. the area under the curve, for outcomes up to a chosen point. Continuous distributions have CDFs, too, and the the graph below shows the CDF for the IQs. We observe how the curve starts to rise from zero at around 50, has its steepest point at 100, just to slow down and run against 1. 
+The size of the area is precisely the probability of such an event (IQ between 85 and 115). But, how large is this area exactly? As the distribution is curved, we can no longer simply stack virtual blocks. It is the CDF giving the us probability mass up to a certain value, i.e. the area under the curve up to a point. Continuous distributions have no PDFs CDFs, too, and the the graph below shows the CDF for the IQs. We observe how the curve starts to rise from zero at around 50, has its steepest point at 100, just to slow down and run against 1. 
+
+
 
 ```{r}
 D_IQ %>% 
   ggplot(aes(x = IQ, y = cdf)) +
-  geom_line()
+  geom_line(size = 2) +
+  geom_step(data = filter(D_IQ, IQ %in% c(0, 85, 115, 200)), color = "red") +
+  geom_label(data = filter(D_IQ, IQ %in% c(0, 85, 115, 200)), aes(label = label), color = "red", hjust = "left") +
+  xlim(0, 250)
 ```
 
-Take a look at the following graph. It shows the two areas $IQ \leq 85$ and $IQ \leq 115$. The magic patch in the center is just the desired interval. 
-
-```{r}
-D_IQ %>% 
-  ggplot(aes(x = IQ, y = density)) +
-  geom_line() +
-  geom_area(aes(y = PDF_085, fill = "P(IQ < 85)"), alpha = .4) +
-  geom_area(aes(y = PDF_115, fill = "P(IQ < 115)"), alpha = .4)
-
-```
-
-And here the CDF comes into the play. To any point of the PDF, the CDF yields the area up to this point and we can compute the area of the interval by simple subtraction:
+Underneath the smooth CDF, a discrete probability function reduces the continuum into  three horizontal intervals, that have a certain total height associated, as well as a stepsize. The height is the total probability up to this point, whereas stepsize is the probability for an IQ measure to fall within an interval. No that the functionb is block-ified, we can assign probabilities to intervals of values, by simple subtractions on the CDF:
 
 $$
 \begin{aligned}
-P(IQ \leq 115) &&= `r pnorm(85, 100, 15)`
-P(IQ \leq 85) &&= `r pnorm(115, 100, 15)`
-P(85 \leq IQ \leq 115) &= P(IQ \leq 115) - P(IQ \leq 85) &= `r pnorm(115, 100, 15) - pnorm(85, 100, 15)`
+CDF(IQ \geq 99) &= `r pnorm(99, 100, 15)`\\
+CDF(IQ \leq 101) &= `r pnorm(101, 100, 15)`\\
+CDF(99 \leq IQ \leq 101) &= P(IQ \leq 101) - P(IQ \leq 99) \\
+&= `r pnorm(115, 100, 15) - pnorm(85, 100, 15)`
 \end{aligned}
 $$
 
-
-Probability and density distributions usually take on one of a few forms, which can be expressed as mathematical functions. For example, the function for the case of task completion is the binomial distribution, which gives the probability for $y$ successes in $k$ trials when the success rate is $p$:
-
-$$
-Pr(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
-$$
-
-In most cases where the binomial distribution applies, base probability $p$ is the parameter of interest, whereas the number of  trials is known beforehand and therefore does not require estimation. For that reason, the binomial distribution is commonly taken as a one-parameter distribution. When discussing the binomial in more detail, we will learn that $p$ determines the location of the distribution, as well as how widely it is dispersed (preview Figure XY). The distribution that approximated the IQs is called the Gaussian distribution (or Normal). The Gaussian distribution function takes two parameters, $mu$ determines the location of the distribution, say average IQ being 98, 100 or 102 and $sigma$ which gives the dispersion, independently (preview Figure XY).
+To summarize, a density distribution function (DDF) is a function that covers an area of exactly One. A probability distribution function (PDF) is a discrete density function, where the area  is composed of discrete blocks. A PDF has the special property to return plain probabilities. With continuous density this does not work, because it is composed of infintely many and therefore infinetely small blocks. By using the cumuluative distribution function, we can extract probabilities of intervals of values.
 
 
-#### Location and dispersion
+<!-- Probability and density distributions usually take a few forms, that can be expressed as mathematical functions. For example, the function for the discrete case of task completion is the binomial probability distribution, which gives the probability for $y$ successes in $k$ trials when the success rate is $p$: -->
 
-#### REDACT AND MERGE
+<!-- $$ -->
+<!-- Pr(y|p,k) = {k  \choose y}p^y(1-p)^{k-y} -->
+<!-- $$ -->
 
-As we will see, random distributions can take a variety of basic shapes, but two immediate properties are *location* and *dispersion*. Location of a distribution usually reflects where the most typical values come to lie (100 in the IQ example). When an experimenter asks for the difference of  two designs in ToT, this is purely about location. Dispersion can either represent *uncertainty* or *variation* in a population, depending on the research design and statistical model. The most common interpretation is uncertainty. The basic problem with dispersion is that spreading out a distribution influences *how typical* the most typical values are. The fake IQ data basically is a perfect Gaussian distribution with a mean of 100 and a standard deviation of 15. The density of this distribution at an IQ of 100 is `r dnorm(100, 100, 15)`. If IQs had a standard deviation of 30, the density at 100 would fall to `r dnorm(100, 100, 30)`. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when dispersion is low.
+<!-- In most cases where a *binomial distribution* applies, base probability $p$ is the parameter of interest, whereas the number of  trials is known beforehand and therefore does not require estimation. For that reason, the binomial distribution is commonly taken as a one-parameter distribution. When discussing the binomial in more detail, we will learn that $p$ determines the location of the distribution, as well as how widely it is dispersed.  -->
+
+<!-- The distribution that approximated the IQs is called the Gaussian distribution (or Normal distribution). The Gaussian distribution function takes two parameters, $mu$ determines the location of the distribution, say average IQ being 98, 100 or 102 and $sigma$ which gives the amount of dispersion as standard deviation (e.g. 15). -->
+
+
+#### Features of shape
+
+Density distributions can take a variety of shapes. Most distributions are shaped as one hill, like the two distributions covered in the previous section. This means that there is just one maximum point of density and is called a *unimodal* function. Besides discreteness or continuity, as covered in the previous section, unimodal distributions can have several other features:
+
+1. range of support
+2. location on the x axis
+3. dispersion
+4. skew
+
+In this book I advocate the thoughtful choice of density distributions rather than doing batteries of goodness-of-fit to confirm that one of them, often the Gaussian, is an adequate approximation. It usual is straight-forward to determine whether a measure is discrete (like everything that is counted) or (quasi)continuous and that is the most salient feature of distributions. A second, nearly as obvious, feature of any measure is its range. Practically all physical measures, such as duration, size or temperature have natural lower bounds, which typically results in scales of measurement which are non-negative. Counts have a lower boundary, too (zero), but there can be a known upper bound, such as the number of trials. *Range of support*  will be an important feature when we approach Generalized Linear Models [GLM] and is covered there in more detail. For now, it suffices to say that all standard density distributions fall into one of three classes:
+
+
+1. *unbound* distributions range from minus to plus infinity and are suitable for measures that are practically unbound. One example is using the Gaussian distributions for IQ scores. 
+2. distributions *bound at zero* cover the range from Zero up to plus infinity. It is suitable for measures that have a natural lower boundary (of Zero) and no upper boundary for practical reasons. An example is the number of errors during the execution of a complex task.
+3. *double-bound* distributions have a lower and an upper limit. Typically the lower limit is Zero. And example is the distribution of task success that we saw in the previous section.
+
+*Location* of a distribution is the most important feature for almost all statistical models covered later in this book. When we say: "Time-on-task increases by 1.5 seconds per year of age", this translates into a shift on the x-axis. The mean of the ToT distribution is 90 for a 30-year old, 91.5 for a 31-year old and 120 for a 50 year old person. When an experimenter asks for the difference of  two designs in ToT, this is purely about location. In the class of models covered in this book, location is always indicated by the arithmetic mean. Still, it can theoretically also be represented by the median or the mode (in case of uni-modality).
 
 ```{r}
-tibble(IQ = 0:200,
-           density = dnorm(IQ, 100, 30)) %>% 
-  ggplot(aes(x = IQ, y = density)) +
-  geom_area()
-
-
+ggplot(tibble(location = c(90, 91.5, 120), sd = 10), aes(x = location)) +
+  stat_function(fun = dnorm, args = list(mean = 90, sd = 10),
+                mapping = aes(colour = "Gaus(mean = 90, sd = 10)")) +
+  stat_function(fun = dnorm, args = list(mean = 91.5, sd = 10), 
+                mapping = aes(colour = "Gaus(mean = 91.5, sd = 10)")) +
+  stat_function(fun = dnorm, args = list(mean = 120, sd = 10), 
+                mapping = aes(colour = "Gaus(mean = 120, sd = 10)")) +
+  xlim(40, 150) +
+  labs(colour="Location shift of Gaussian distributions", x = "outcome", y = "density")
 ```
 
-The perspective of uncertainty routinely occurs in the experimental comparison of conditions, e.g. design A compared to design B. What causes experimenters worry is when the *residual distributions* in their models is widely spread. Roughly speaking, residuals are the variation that is not predicted by the model. The source of this variation is unknown and usually called *measurement error*. It resides in the realm of the SMURFs. With stronger measurement error dispersion, the two estimated locations get less certainty assigned, which blurs the difference between the two. 
 
-The second perspective on dispersion is that it indicates *variation by a known source*. Frequently, this source is differences between persons. The IQ is an extreme example of this, as these tests are purposefully designed to have the desired distribution. In chapter [LMM] we will encounter several sources of variation, but I am really concerned about human variation, mostly. Commonly, experimental researchers are obsessed by differences in location, which to my mind confuses "the most typical" with "in general". Only when variation by participants is low, this gradually becomes the same. We will re-encounter this idea when turning to multi-level models.
+*Dispersion* represents the level of *variation* around the center of the distribution. In Gaussian distributions, this is given by the standard deviation (or variance). The most significant impact of dispersion is that spreading out a distribution reduces its overall density at any point. In uni-modal distributions, we can think of the mode as the most typical value, the one you should place your bet on. With more variance, the density at this point is reduced, and you should not bet to hard on it any more. IQ measures usually have a mode at a value of 100, with a standard  deviation of 15. The density of a usual IQ distribution at an IQ of 100 is `r dnorm(100, 100, 15)`. If IQs had a standard deviation of 30, the density at 100 would be reduced to `r dnorm(100, 100, 30)`. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when variance is low.
 
-Most distributions routinely used in statistics have one or two parameters. Generally, if there is one parameter this determines both, location and dispersion, whereas two-parameter distributions can vary location and dispersion independently, to some extent. The Gaussian distribution is a special case as $\mu$ purely does location, whereas $\sigma$ is just dispersion. With common two-parametric distributions, both parameters influence location and dispersion in more or less twisted ways. For example, mean and variance of a two-parametric binomial distributions both depend on chance of success $p$ and number of trials $k$, as $\textrm{M} = pk$ and  $\textrm{Var} = kp(1-p)$. 
+```{r}
+ggplot(tibble(location = 100), aes(x = location)) +
+  stat_function(fun = dnorm, args = list(mean = 100, sd = 15), 
+                mapping = aes(colour = "Gaus(mean = 100, sd = 15)")) +
+  stat_function(fun = dnorm, args = list(mean = 100, sd = 30), 
+                mapping = aes(colour = "Gaus(mean = 100, sd = 30)")) +
+  xlim(0, 200) +
+  labs(colour="Dispersion of Gaussian distributions", x = "outcome", y = "density")
+  
+```
 
+<!-- The perspective of uncertainty routinely occurs in the experimental comparison of conditions, e.g. design A compared to design B. What causes experimenters worry is when the *residual distributions* in their models is widely spread, which means that measures compose into a small structural part and a large random part. The source of this variation is unknown and usually called *measurement error*.  -->
 
-#### Range of support and skew [###  ]
+Large location shifts (between experimental conditions) are usually a delight for researchers, as most often research questions are about location changes. In contrast, large dispersion is often associated with uncertainty (or imperfect measures). In Gaussian models this uncertainty or error is directly represented as the standard deviation of residuals, also called the *standard error*. We will re-encounter this idea when turning to model criticism [model citicism].
 
-#### COMPLETE AND MERGE
+Dispersion also plays a role as a measure for *variation within a population*, such as the differences in IQ. This is most prominent in psychometrioc situations, where we want to discern between individuals. A psychometric tool, such as the IQ test, must produce dispersion, otherwise it would not discern between individuals  We will re-encounter this idea when turning to multi-level models [LMM].
 
-In this book I advocate the thoughtful choice of distributions rather than doing batteries of goodness-of-fit to confirm that one of them, the Gaussian, is an adequate approximation. It usual is trivial to determine whether a measure is discrete (like everything that is counted) or (quasi)continuous and that is the most salient feature of distributions. A second, nearly as obvious, feature of any measure is its range. Practically all physical measures, such as duration, size or temperature have natural lower bounds, which typically results in scales of measurement which are non-negative. Counts have a lower boundary, too (zero), but there can be a known upper bound, such as the number of trials. Statistical distributions can be classified the same way: having no bounds (Gaussian, t), one bound (usually the lower, Poisson, exponential) or two bounds (binomial, beta).
+Most distributions routinely used in statistics have one or two parameters. Generally, if there is one parameter this determines both, location and dispersion, with Poisson distributions being an example (see below). Two-parameter distributions can vary location and dispersion, to some extent. However, for most distributions, both parameters are tied to location and dispersion, simultaneously, and in sometimes convoluted ways. The Gaussian distribution is a special case as parameter $\mu$ purely does location, whereas $\sigma$ is just dispersion.
 
+As was said above, most statistical models use the mean of a distribution to render differences between situations. The mean is but one measure of central tendency, with the median and the model being alternatives. If a distribution is symmetric, such as Gaussian distributions, these three parameters are the same. The mean divides the distribution into two areas of same size, and it is the point of highest density. The Gaussian distribution owes its symmetry to the fact, that it has the same range of support in both directions, looking from the mean of the distribution. That is different for zero-bound distributions, which run to plus infinity to the right, but hit a hard limit to the left. These distributions are asymmetric, which typically means that the left side runs steeper than the right side. Such distributions are called to be left-skewed. An example is the Poisson distribution, which will be covered in more detail below. Double-bound distributions, such as Binomial distributions, can also be right skewed, when the mean of the distribution is approaching the right boundary. When moving the mean from left to right, the distribution starts left-skewed, takes a symmetric form in the center of the range and then continues with increasing right skew. The following illustration shows that for the Beta distribution, which has range of support between (not including) Zero and One. At the same time, this illustration conveys another important relationship between features of shape: a distribution that approaches a boundary also is less dispersed.
 
+```{r}
+ggplot(tibble(location = c(.25, .5, .75)), aes(x = location)) +
+  stat_function(fun = dbeta, args = list(shape1 = 2, shape2 = 8),
+                mapping = aes(colour = "Beta(mean = .25)")) +
+    stat_function(fun = dbeta, args = list(shape1 = 5, shape2 = 5),
+                mapping = aes(colour = "Beta(mean = .5)")) +
+    stat_function(fun = dbeta, args = list(shape1 = 8, shape2 = 2),
+                mapping = aes(colour = "Beta(mean = .75)")) +
+  xlim(0, 1) +
+  labs(colour="Location shift of Gaussian distributions", x = "outcome", y = "density")
+```
 
-#### Data generating process
+A frequent problem in statistical modelling is to choose a symmetric distribution, in particular the Gaussian, when the distribution is highly skewed. This will be treated in more depth in chapter [GLM]. 
 
-#### ZAP
+Many dozens distribution functions are known in statistical science and are candidates to choose from. In first orientation, our choice can ground on obvious characteristics of measures, such as discrete/continuous or range, but that is sometimes not sufficient. For example, the pattern of randomness in three-tasks falls into a binomial distribution only, when all trials have the same chance of success. If the tasks are very similar in content and structure, learning is likely to happen and the chance of success differs between trials. Using the binomial distribution when chances are not constant leads to mistaken statistical models.
 
-Many dozens of PMFs and PDFs are known in statistical science and are candidates to choose from. First orientation grounds on superficial characteristics of measures, such as discrete/continuous or range, but that is sometimes not sufficient. For example, the pattern of randomness in three-tasks falls into a binomial distribution only, when all trials have the same chance of success. If the tasks are very similar in content and structure, learning is likely to happen and the chance of success differs between trials. Using the binomial distribution when chances are not constant leads to severely mistaken statistical models.
-
-For most distributions, strict mathematical definitions exist for under which circumstances randomness takes this particular pattern. Frequently, there is one or more natural phenomena that accurately fall into this pattern, such as the number of radioactive isotope cores decaying in a certain interval (Poisson distributed) or ... .  This is particularly the case for the canonical four random distributions that follow. Why are these canonical? The pragmatic answer is: they cover the basic types of measures: chance of success in a number of trials (binomial), counting (Poisson) and continuous measures (exponential, Gaussian).
+For most distributions, strict mathematical descriptions exist for under which circumstances randomness takes this particular shape. Frequently, there is one or more natural phenomena that accurately fall into this pattern, such as the number of radioactive isotope cores decaying in a certain interval (Poisson distributed) or the travel of a particle under Brownian motion (Gaussian).  This is particularly the case for the canonical four random distributions that follow: Poisson, Binomial, Exponential and Gaussian. My goal here is not to bother anyone with formalism, but to introduce my readers to think about distributions as arising from data generating processes.
 
 
 
@@ -2164,8 +2238,6 @@ Random distributions:
 
 #### Binomial distributions {#binomial_dist}
 
-#### REDACT
-
 A very basic performance variable in design research is task success. Think of devices in high risk situations such as medical infusion pumps in surgery. These devices are remarkably simple, giving a medication at a certain rate into the bloodstream for a given time. Yet, they are operated by humans under high pressure and must therefore be extremely error proof in handling. Imagine, the European government would set up a law that manufacturers of medical infusion pump must prove a 90% error-free operation in routine tasks. A possible validation study could be as follows: a sample of $N = 30$ experienced nurses are invited to a testing lab and asked to complete ten standard tasks with the device. The number of error-free task completions per nurse is the recorded performance variable to validate the 90% claim. Under somewhat idealized conditions, namely that all nurses have the same proficiency with the device and all tasks have the success chance of 90%, the outcome follows a *Binomial distribution* and the results could look like the following:
 
 ```{r}
@@ -2177,7 +2249,9 @@ tibble(succs = rbinom(30, 10, .9)) %>%
   scale_x_continuous(breaks = 0:10, limits = c(0,11))
 ```
 
-Speaking about the Binomial distribution in terms of *successes in a number of attempts* is common. As a matter of fact, *any* binary classification of outcomes is amenable for Binomial modeling, like on/off, red/blue, male/female. Imagine, Jane's big boss needs a catchy phrase for an investor meeting. Together they decide that the return rate of customers could be a good measure, translating into a statement such as  *eighty percent of customers come back*. To prove (or disprove) the claim, Jane uses the customer data base and divides all individuals into two groups: those who have precisely one record and those who returned (no matter how many times). This process results in a distribution, that has two possible outcomes: : $0$ for one-timers and $1$ for returners.  This is in fact, a special case of the Binomial distribution with $k = 1$ attempts (the first visit is not counted). Examples are given in the first row of the figure.
+Speaking about the Binomial distribution in terms of *successes in a number of attempts* is common. As a matter of fact, *any* binary classification of outcomes is amenable for Binomial modeling, like on/off, red/blue, male/female. 
+
+An example in web design research is the rate of visitor return, resulting in a variable, that has two possible outcomes: : $0$ for one-timers and $1$ for returners.  This is in fact, a special case of the Binomial distribution with $k = 1$ attempts (the first visit is not counted) and is also called *Bernoulli distribution*. 
 
 
 ```{r}
@@ -2187,27 +2261,43 @@ mascutils::expand_grid(k = c(1, 10, 20),
   mutate(probability = dbinom(succs, k, p)) %>% 
   ggplot(aes(x = succs, y = probability)) +
   geom_step() +
-  facet_grid(k ~ p)
+  facet_grid(k ~ p) +
+  labs(x = "number of successes")
 
 ```
 
-A Binomial distributions has two parameters: $p$ is the chance of success and $k$ is the number of attempts. $p$ is a probability and therefore can take values in the range from zero to one. With larger $p$ the distribution moves to the right. The mean of Binomial distributions is the probability scaled by number of attempts, $M = kp$. Logically, there cannot be more successes then $k$, but with larger $k$ the distribution gets wider. The variance is the odds scaled by number of attempts, $\textrm{Var} = kp(1-p)$. As mean and variance depend on the exact same parameters, they cannot be set independently. In fact, the relation $Var = M(1-p)$ is parabolic, so that variance is largest at $p = .5$, but decreases towards both boundaries. A Binomial distribution with, say $k=10$ and $p = .4$ always has mean $4$ and variance $2.4$. This means, in turn, that an outcome with a mean of $4$ and a variance of $3$ is not Binomially distributed. This occurs frequently, when the success rate is not identical across trials. A common solution is to use plugin distributions, where the parameter $p$ itself is distributed, rather than fixed. A common distribution for $p$ is the *beta* distribution and the *logit-normal* distribution is an alternative.
+Binomial distributions have two parameters: $p$ is the chance of success and $k$ is the number of attempts. $p$ is a probability and therefore can take values in the range from zero to one. Probability of success determines the location of a distribution in that With larger $p$ the distribution moves to the right. The mean of Binomial distributions is the probability scaled by number of attempts, $\textrm{Mean} = kp$. Logically, there cannot be more successes then $k$, but with larger $k$ the distribution gets wider, where the variance is the odds scaled by number of attempts, $\textrm{Var} = kp(1-p)$. As mean and variance depend on the exact same parameters, they cannot be set independently. In fact, the relation is parabolic, so that variance is largest at $p = .5$, but decreases towards both boundaries. A Binomial distribution with, say $k=10$ and $p = .4$ always has mean $4$ and variance $2.4$. This means, in turn, that an outcome with a mean of $4$ and a variance of $3$ is not Binomially distributed. This occurs frequently, when the success rate is not identical across trials. A common solution is to use plugin distributions, where the parameter $p$ itself is distributed, rather than fixed. A common distribution for $p$ is the *beta* distribution and the *logit-normal* distribution is an alternative.
 
-The Binomial distribution has two boundaries, zero below and number of attempts $k$ above. While a lower boundary of zero is often natural, one cannot always speak of a number of attempts. For example, the number of times a customer returns to the car rental website does not yield a natural interpretation of number of attempts. Rather, one could imagine the situation as that any moment is an opportunity to hire a car. At the same time, every single moment has a very, very small chance that a car is hired, indeed. Under these conditions, an infinite (or painstakingly large) number of opportunities and a very low rate, the random pattern is neatly summarized by *Poisson distributions*. 
+The Binomial distribution has two boundaries, zero below and number of attempts $k$ above. Hence, Binomial distributions also require that  there is a clearly defined numner of attempts. For example, the number of times a customer returns to the a website does not have a natural interpretation of number of attempts, because attempts can happen at any moment. Literally, every single moment is an opportunity to go online and hire a car, even many times a day, if you are a holiday planner. At the same time, for a typical customer the per-day chance to hire a car is miniscule. Under these conditions, we get an infinite  number of attempts, or painstakingly large, at least, say $k = 365$ days. At the same time the rate is very small, e.g. $p = 1.5/365$.
+
+```{r}
+set.seed(42)
+tibble(rentals_per_year = rbinom(1000, size = 365, prob = 1.5/365)) %>% 
+  ggplot(aes(x = rentals_per_year)) +
+  geom_histogram()
+```
+
+
+This is a workable solution to display the number of events per period, but it remains a little odd, because the question really is about events per timespan, not success per attempt. When events per timespan is the question, the process is better covered by *Poisson distributions*. 
+
+
+the variable is more neatly summarized by *Poisson distributions*.
 
 
 #### Poisson distributions {#poisson_dist}
 
-Some counting processes have no natural upper limit like the number of trials in a test. In design research, a number of measures are such *unbound counts*:
+Poisson distributions can mathematically be derived from Binomial distributions with very small probability of success with infinite attempts. This implies that Poisson distributions have no upper limit. In design research, a number of measures have no clearly defined upper limit:
 
 + number of erroneous actions
 + frequency of returns
 + behavioral events, e.g. showing exploratory behavior
 + physiological events, such as number of peaks in galvanic skin response
 
-These measures can often be modeled as *Poisson distributed*. A useful way to  think of unbound counts, is that they can happen at every moment, but with a very small chance. Think of a longer interaction sequence of a user with a system, where errors are recorded. It can be conceived as an almost infinite number of opportunities to err, with a very small chance of something to happen. The Poisson distribution is a so called limiting case of the binomial distributions, with infinite $k$ and very small $p$. Of course, such a situation is completely ideal. Yet, Poisson distributions fit such situations well enough.
+These measures can often be modeled as *Poisson distributed*. A useful way to  think of unbound counts, is that they can happen at every moment, but with a very small chance. Think of a longer interaction sequence of a user with a system, where errors are recorded. It can be conceived as an almost infinite number of opportunities to err, with a very small chance of something to happen.
 
-Poisson distributions possess only one parameter $\lambda$ (lambda), that is strictly positive and determines mean and variance of the distribution alike: $\lambda = M = \textrm{Var}$. As a matter of fact, there cannot be massively dispersed distributions close to zero, nor narrow ones in the far. Owing to the lower boundary, Poisson distributions are *asymmetric*, with the left tail always being steeper. Higher $\lambda$s push the distribution away from the boundary and the skew diminishes. It is commonly practiced to approximate counts in the high numbers by *Gaussian distributions*.
+Poisson distributions possess only one parameter $\lambda$ (lambda), that is strictly positive and determines mean and variance of the distribution alike: $\lambda = \textrm{Mean} = \textrm{Var}$. As a result, distributions farther from Zero are alwwayas more dispersed. Because Poisson distributions have a lower boundary, they are *asymmetric*, with the left tail always being steeper. Higher $\lambda$s push the distribution away from the boundary and the skew diminishes. Poisson distributions with a large mean can therefore be approximated by Gaussian distributions:
+
+$\textrm{Pois}(y,\lambda) \approx \textrm{Gaus}(y, \mu = \lambda, sd = \sqrt \lambda) $
 
 
 
@@ -2222,13 +2312,28 @@ mascutils::expand_grid(lambda = c(2, 4, 8),
 ```
 
 
-The linkage between mean and variance is very strict for Poison distributions.  Only a certain amount of randomness can be contained at a location. If there is more randomness, and that is almost certainly so, Poisson distributions are not appropriate. One speaks of *over-dispersion* in such a case.
+For an illustration, consider a video game, *subway smurfer*, where the player jumps and runs a little blue avatar on the roof of a train and catches items passing by. Many items have been placed into the game, but catching a single one is very difficult. The developers are aware that a too low success rate would demotivate players as much as when the game is made to easy. In this experiment, only one player is recorded, and in wonderful ways this player never suffers from fatigue, or is getting better with training. The player plays a 100 times and records the catches after every run. In this idealized situation, the distribution of catches would, approximately, follow a Poisson distribution.
 
-#### TRANSITION
+Because mean and variance are tightly linked, only a certain amount of randomness can be contained at a location. If there is more randomness, and that is almost certainly so in real data, Poisson distributions are not appropriate. One speaks of *over-dispersion* in such a case. For understanding over-dispersion, Consider a variation of the experiment with 100 players doing one game and less restrictive rules. Players come differently equipped to perform visual search tasks and coordinate actions at high speeds. They are tested at different times of the day and by chance feel a bit groggy or energized. The chance of catching varies between players, which violates the assumption that was borrowed from the Binomial, a constant chance of success. The extra variation is seen in the wider of the two distributions.
 
-Consider a very simple video game, *subway smurfer*, where the player jumps and runs a little blue avatar on the roof of a train and catches items passing by. Many items have been placed into the game, but catching a single one is very difficult. The developers are aware that a too low success rate would demotivate players as much as when the game is made to easy. In this experiment, only one player is recorded, and in wonderful ways this player never suffers from fatigue, or is getting better with training. The player plays a 100 times and records the catches after every run. In this idealized situation, the distribution of catches would, approximately, follow a Poisson distribution, as in the figure below.
+```{r}
 
-Consider a variation of the experiment with 100 players doing one game and less restrictive rules. Players come differently equipped to perform visual search tasks and coordinate actions at high speeds. They are tested at different times of the day and by chance feel a bit groggy or energized. The chance of catching varies between players, which violates the assumption that was borrowed from the Binomial, a constant chance $p$. The extra variation is seen in the wider of the two distributions.
+
+## FIXME
+
+
+
+
+tibble(lambda = 20,
+           ci = rpois(100, log(lambda)),
+           ci_ovdsp = rpois(100, log(lambda + rnorm(100, 0, 100)))
+           ) %>% 
+  ggplot(aes(x = ci)) +
+  geom_histogram(aes(fill = "single participant")) +
+  geom_histogram(aes(x = ci_ovdsp, fill = "multi participants"), alpha = .5) +
+  labs(fill="Count distributions", x = "outcome", y = "density")
+```
+
 
 ```{r CE:subsmurf, opts.label = "future"}
 ## simulates time to event 
@@ -2260,49 +2365,40 @@ Subsmurf$simulate_pois <-
                )
   }
 
+
+
 ```
 
+
+
+
+
+Another area for trouble can be Poisson distributions' lower boundary of exactly Zero. Often this works well, a person can perform a sequence with no errors, catch zero items or have no friends on social media.  But, you cannot complete an interaction sequence in zero steps, have a conversation with less than two statements or be a customer with zero customer contacts. If the lower bound is obvious, such as the minimum necessary steps to complete a task. In such a case, a count that starts at zero can be created easily:
+
+$$
+\textrm{additional steps} = \textrm{steps} - \textrm{neccessary steps}
+$$
+
+Another frequent problem at the lower bound bound is zero-inflation. In traffic research, the frequency of going by bus can be an interesting variable to measure acceptance of public transport. If we would make such a survey, e.g. "How many times have you taken the bus the last seven days?", it is not unlikely, that we get a distribution like the following:
 
 ```{r}
-
-
-
-## FIXME
-
-
-
-
-tibble(lambda = 20,
-           ci = rpois(100, log(lambda)),
-           ci_ovdsp = rpois(100, log(lambda + rnorm(100, 0, 100)))
-           ) %>% 
-  ggplot(aes(x = ci)) +
-  geom_histogram(aes(fill = "single participant")) +
-  geom_histogram(aes(x = ci_ovdsp, fill = "multi participants"), alpha = .5) +
-  labs(fill="Count distributions", x = "outcome", y = "density")
+tibble(uses_public_transport = rbernoulli(1000, .8),
+       bus_rides = rpois(1000, uses_public_transport * 4)) %>% 
+  ggplot(aes(x = bus_rides)) +
+  geom_histogram()
 ```
 
-
-
-Poisson distributions' lower boundary can cause trouble: the measure at hand is truly required to include the lower bound. A person can perform a sequence with no errors, catch zero items or have no friends on social media.  But, you cannot complete an interaction sequence in zero steps or have a conversation with less than two statements. Fortunately, once a count measure has a lower boundary right of zero, the offset is often available, such as the minimum necessary steps to complete a task. In such a case, the number of erroneous steps can be derived and used as a measure, instead:
-
-$$
-\textrm{\#errors} = \textrm{\#steps} - \textrm{\#neccessary steps}
-$$
-
-#### ZAP
-
-Another lower bound problem arises, when there first is a hurdle before . In traffic research, the frequency of use public transport certainly is an interesting variable. A straight-forward assessment would be to ask bus passengers "How many times have you taken the bus the last five days?". This clearly is a count measure, but it cannot be zero, because the person is sitting in the bus right now. This could be solved by a more inclusive form of inquiry, such as approaching random households. But, the problem is deeper: actually, the whole population is of two classes, those who use public transport and those who don't.
+In this scenario, the population is not homogenous, but falls into two classes, those who use public transport and those who just never do. The result is a *zero-inflated* distribution. A way to deal with this are hurdle models, which are called as such, because you first have to jump over the hurdle to use public transport, before you are in the game.
 
 
 
-#### Exponential distribution [TBC]
+#### Exponential distribution
 
-Exponential distributions apply for measures of duration. Exponential distributions have the same generating process as Poisson distributions, except, that the *duration for an event to happen* is  the variable of interest, rather than number of events in a given time. The same idealized conditions of a completely unaffected subway smurfer player and constant catchability of items, the duration between any two catches is exponentially distributed. In more general, the chance for the event to happen is the same at any moment, completely independent of how long one has been waiting for it. For this property, the exponential distribution is called *memoryless*.
+Exponential distributions apply for measures of duration. Exponential distributions have the same generating process as Poisson distributions, except, that the *duration between events to happen* is  the variable of interest, rather than number of events in a given time. Under the idealized conditions of a Subway Smurfer player with constant ability to catch items, the duration between any two catches is exponentially distributed.
 
-Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for two reasons: first, the exponential distribution shares with Poisson, that it does not allow variance between participants. Second, the distribution always starts at zero, whereas human reactions always include some basic processing, and be this just the velocity of signals passing nerve cells, which is far below speed of sound (in air).
+Just like Poisson distributions, Exponential distributions have one parameter, called rate and frequently written as $\lambda$. The following figure illustrates Exponential distributions with varying rates.
 
-```{r opts.label = "future"}
+```{r}
 ggplot(tibble(x = c(0, 20)), aes(x = x)) +
   stat_function(fun = dexp, args = list(rate = 1/2), 
                 mapping = aes(colour = "Exp(1/2)")) +
@@ -2313,7 +2409,9 @@ ggplot(tibble(x = c(0, 20)), aes(x = x)) +
   labs(colour="Exponential distributions", x = "outcome", y = "density")
 ```
 
+Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for three reasons: first, Exponential distributions have just one parameter, which means that mean and variance are tightly linked as $\textrm{Mean} = 1/\lambda$ and $\textrm{Var} = 1/\lambda^2$. Like with Poisson distributions, this it does not allow extra variance, e.g. between participants. Second, the distribution always starts at zero, whereas human reactions always require some basic processing, and be this just the velocity of signals travelling nerve cells, which is far below speed of sound (in air). And third, the exponential process has one special property, which is called  *memoryless-ness*. That basically means, that the probability for an event to happen is completely independent of how long one has been waiting for it. In basic physical systems, like nucleus decay, this is the truly the case. But, if a person works on a task, the chance of task completion usually increases when time progresses.
 
+The one thing that exponential distribtions are getting right about durations (in contrast to the frequently employed Gaussian distribution), is the asymmetry. Durations have a lower boundary and that will always produce some skew. For the stated reasons, pure exponential distributions themselves are rarely used in statistical modelling, but two- and three parameter distributions, like Gamma or Exponential-Gaussian are extensions of  Exponential distributions.  Gamma distributions provide a scale parameter for incorporating extra variance, whereas Exponential-Gauss distributions can be used, when the lower boundary is not Zero, but positive [GLM:time_measures].
 
 ```{r opts.label = "future"}
 
@@ -2327,19 +2425,32 @@ Subsmurf$simulate_exp() %>%
 ```
 
 
-#### FINISH
-
-#### Gamma distribution [TBD]
-
-#### WRITE
 
 #### Gaussian distributions
 
-#### EDIT
 
-The best known distributions are *normal distributions* or *Gaussian distributions*. These distributions arise mathematically under the assumption of a myriad of small unrelated forces (SMURF) pushing performance (or any other outcome) up or down. As SMURFs work  in all directions independently, their effects often average out and the majority of observations stays clumped together in the center, more or less.
+The best known distributions are *Gaussian distributions* or *Normal distributions*. These distributions arise mathematically under the assumption of a myriad of small unmeasured forces (SMURF) pushing performance (or any other outcome) up or down. As SMURFs work  in all directions independently, their effects often average out and the majority of observations stays clumped together in the center, more or less. The physical process associated with Gaussian distribution is Brownian motion, the movement of a small particles caused by bumping into molecules of a warm fluid. Imagine, you are standing blind-folded in the middle of a tunnel, which is frequented by blind-folded passengers moving uncoordinated in both directions of the tunnel. Passengers will randomly bump into you from both directions, and this pushes you sometimes forward, sometimes backwards. The total travel caused by many of these small pushes is approximately Gaussian distributed. By tendency, the small pushes cancel each other out, such that the most likely position after, say 100 bumps will be close to where you started (Zero). When this experiment is repeated very often, a Gaussian distribution arises:
 
-Normal distributions have two parameters: $\mu$ marks the center and mean of the distribution. The linear models introduced later are aiming at predicting $\mu$. The second parameter $\sigma$ represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get wider. Different to Poisson and Binomial distributions, mean and variance of the distribution can be set independently and over-dispersion is never an issue.
+
+```{r}
+set.seed(2)
+rtravel <- function(n, bumps = 100) 
+  map_int(1:n, function(x) as.integer(sum(sample(c(-1, 1), x, replace = T))))
+
+D_Tunnel <- 
+  tibble(Part = 1:1000, 
+         travel = rtravel(n = 1000))
+
+D_Tunnel %>% 
+  ggplot(aes(x  = travel)) +
+  geom_histogram(stat = "density")
+
+
+```
+
+
+
+Gaussian distributions take two parameters: $\mu$ marks the location of the  mean of the distribution. Because distributions are symmetric, the mean coincides with median and  mode of the distribution. The second parameter $\sigma$ represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get thicker. Different to Poisson and Binomial distributions, mean and variance of the distribution can be set independently and therefore over-dispersion is never an issue.
 
 
 ```{r}
@@ -2350,13 +2461,17 @@ ggplot(tibble(x = c(-4, 4)), aes(x = x)) +
   labs(colour="Normal distributions", x = "outcome", y = "density")
 ```
 
-Normal distributions have the compelling interpretation of summarizing the effect of SMURFs. They serve to capture randomness in a broad class of regression models and other statistical approaches. The problem with normal distributions is that they only capture the pattern of randomness under two assumption. The first assumption is that the outcome is continuous. While that holds for duration as a measure of performance, it would not hold for counting the errors a user makes. The second assumption is that the SMURFs are truly additive, like the forces add up, when two pool balls collide. This appears subtle at first, but it has the far reaching consequence that the outcome variable must have an infinite range in both directions, which is impossible. 
+As illustrated by the Tunnel example, Gaussian distributions have the most compelling interpretation of summarizing the effect of SMURFs. Therefore, they are useful to capture randomness in a broad class of regression models and other statistical approaches. 
 
-The normal distribution is called "normal", because people normally use it. Of course not. It got its name for a deeper reason, commonly known (and held with awe) as the *central limit theorem*. Basically, this theorem proves what we have passingly observed at binomial and Poisson distributions: the more they move to the right, the more symmetric they get. The central limit theorem proves that, in the long run, a wide range of distributions are indistinguishable from the normal distribution. In practice, infinity is relative. In some cases, it is reasonable to trade in some fidelity for convenience and good approximations make effective statisticians. As a general rule, the normal distribution approximates other distributions well, when the majority of measures stay far from the natural boundaries. That is the case in experiments with very many attempts and moderate chances(e.g. signal detection experiments), when counts are in the high numbers (number of clicks in a complex task) or with long durations. However, these rules are no guarantee and careful model criticism is essential.
+<!-- The problem with Gaussian distributions is that they only capture the pattern of randomness under two assumption. The first assumption is that the outcome is practically continuous. That holds for duration as a measure of performance, but not for counting the errors a user makes. The second assumption is that the SMURFs are truly additive, like the forces add up, when two pool balls collide. This appears subtle at first, but it has the far reaching consequence that the outcome variable must have an infinite range in both directions, which is impossible.  -->
 
-Measurement is prime and specialized (non-central-limit) distributions remain the first recommendation for capturing measurement errors. The true salvation of normal distributions is their application in *multi-level models*. While last century statistics was reigned by questions of location, and variance considered nuisance, new statistics  care for variation. Most notably, amount of variation in a population is added as a central idea in multi-level modeling, which is commonly referred to as *random effects*. These models can become highly complex and convenience is needed more than ever. Normal distributions tie things together in multi-level models, as they keep location and dispersion apart, tidy.
+The Gaussian distribution is called "normal", because people normally use it. For many decades it was the standard distribution to tackle almost every statistical problem. That is so, because statistical models with Gaussian shape of randomness can be computed very efficiently. Indeed, Gaussian distributions are often good approximations, which goes back to the *central limit theorem*. Basically, this theorem proves what we have passingly observed at binomial and Poisson distributions: the more they move to the right, the more symmetric they get. The central limit theorem proves that, in the long run, a wide range of distributions are indistinguishable from the Gaussian distribution. But, the key word is *in the long run*. As a general rule, Gaussian distributions approximates other distributions well, when the majority of measures stay far from the natural boundaries. That is the case in experiments with very many attempts and moderate chances (e.g. signal detection experiments), when counts are in the high numbers (number of clicks in a complex task) or with long durations and little variance in duration. However, in the remainder of this book, especially in chapter [GLM], we will encounter numerous real data sets where the Gaussian distribution is not a good approximation. Gaussian models may be convenient to set up and interpret, but strictly speaking, a Gaussian model is always wrong. And that is for one particular reason: Gaussian distributions are unbound, but there is not a single measure in any scientific discipline that really has no limits. 
 
-The dilemma is then solved with the introduction of *generalized linear models*, which is a framework for  using linear models with appropriate error distributions. Fortunately, MLM and GLM work seamlessly together. With MLM we can conveniently build graceful likelihood models, using normal distributions for populations. The GLM part is a thin layer to get the measurement scale right and choose the right error distribution, just like a looking glass.
+these rules are no guarantee and careful model criticism is essential. We will return to this issue in [model_criticism]
+
+<!-- Measurement is prime and specialized (non-central-limit) distributions remain the first recommendation for capturing measurement errors. The true salvation of normal distributions is their application in *multi-level models*. While last century statistics was reigned by questions of location, and variance considered nuisance, new statistics  care for variation. Most notably, amount of variation in a population is added as a central idea in multi-level modeling, which is commonly referred to as *random effects*. These models can become highly complex and convenience is needed more than ever. Normal distributions tie things together in multi-level models, as they keep location and dispersion apart, tidy. -->
+
+Nowadays, computing power has evolved to a point, where efficient approximations are less needed. Especially with the advent of Bayesian modelling, statistical users have a plethory of distributions to choose from, and we will see more of them when Generalized Linear Models are introduced [GLM]. Most of the time, choosing an appropriate shape for randomness is straight-forward, and doing so makes a model less prone to criticism [model_criticism].
 
 
 
@@ -2404,19 +2519,20 @@ IPump$D_successes %>%
 
 
 
-## Bayesian estimation
+## Towards Bayesian estimation
 
-#### COMPLETE ME
 
-Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradual increase in certainty when new data arrives. Why has Bayesian statistics not been broadly adopted earlier? The reason is that Bayesian estimation was computationally unfeasible for many decades. In practice, the seemingly innocent multiplication of prior and likelihood results in a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may remember how the computation of sum of squares (explained and residual) can be done by paper and pencil in reasonable time (e.g. during an exam). And that is precisely how statistical computations have been performed before the advent of electronic computing machinery. In the frequentist statistical framework, ingenious mathematicians have developed procedures that were rather efficient to compute. That made statistical data analysis possible in those times. It came at costs, though: 
-
-1. procedures make more or less strong assumptions, limiting their applicability.
-2. procedures are asymptotically accurate with inference being accurate at large sample sizes only
-3. common researchers do not understand crucial elements, for example how the F distribution is derived
+Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradual increase in certainty when new data arrives. Why has Bayesian statistics not been broadly adopted earlier? The reason is that Bayesian estimation was computationally unfeasible for many decades. In practice, the seemingly innocent multiplication of prior and likelihood of Bayes' rule results in a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may recall how the computation of an ANOVA could be carried  out on paper and pencil in reasonable time (e.g. during an exam). And that is precisely how statistical computations have been performed before the advent of electronic computing machinery. In the frequentist statistical framework, ingenious mathematicians have developed procedures that were rather efficient to compute. That made statistical data analysis possible in those times. 
 
 Expensive computation is in the past. Modern computers can simulate realistic worlds in real time and the complex integrals in Bayesian statistics they solve hands down. When analytic solutions do not exist, the integrals can still be solved using numerical procedures. Numerical procedures have been used in frequentist statistics, too, for example the iterative least squares algorithm applies for Generalized Linear Models,  Newton-Rapson optimizer can be used to find the maximum likelihood estimate and boot-strapping produces accurate confidence limits. However, these procedures are too limited as they fail for highly multidimensional problems as they are common in advanced regression models.
 
-Most Bayesian estimation engines these days ground on a numerical procedure called *Markov-Chain Monte-Carlo (MCMC)* sampling. This method differs from the earlier mentioned in that it basically is a random walk. The closest frequentist counterpart to MCMC is the bootstrapping algorithm, which draws many samples from data and computes the estimates many times. In some way, MCMC turns this upside down, by randomly drawing possible parameter values and computing the posterior probability many times. Similar to boot strapping, the basic MCMC algorithm is so simple, it can be explained on half a page and implemented with 25 lines of code. Despite its simplicity, the MCMC algorithm is applicable to practically all statistical problems one can imagine. Being so simple and generic at the same time must come at some costs. The downside of MCMC sampling still is computing time. Models with little data and few variables, like the examples in [#rational], are estimated within a few minutes. Multi-level models, which we will encounter  later in this book, can take hours and large psychometric models can take up to a few days of processing time.
+Today, more and more researchers leave frequentist statistics alone and enter the world of Bayesian Statistics. Partly, this may be due to the replicability crisis of 2015, which has shown that, in general, behavioural researchers are not capabable of carrying out frequentist statistics, correctly. In result, the incorrect use of null hypothesis testing and p-values has fully under-mined the discipline of Psychology and that may just be the tip of the iceberg.
+
+I assume that the majority of researchers, who started using Bayesian Statistics, are just thrilled by the versatility of Bayesian estimation, and its natural interpretation. To name just one example for the latter, Frequentist statisticians emphasize the randomness of sampling. It all goes by asking: how would an estimate change, when we draw another sample? This is best seen by the definition of the frequentist *confidence interval*: "the confidence level represents the frequency (i.e. the proportion) of possible confidence intervals that contain the true value of the unknown population parameter." [Wikipedia] Interestingly, when asked about the definition, most researchers answer: "the range, in which the true value falls with a certainty of 95%." Ironically, this is precisely the definition of the Bayesian *credibility interval*. It seems that thinking of certainty by itself, not through frequencies, is more natural than a long series of imagined replications of the same experiment.
+
+The other reason for Bayesian Statistics gaining ground is that today's implementations offer endless possibilities. In frequentist statistics, you would find an implementation for, say, linear models with a Beta shape of randomness [Beta regression]. But, if your research design is multi-level, say for psychometric evaluation, you would be less lucky. You would find plenty implementations for psychometrics, but none suppors Beta distribution. With Bayesian implementations, that is the past. In chapter [designometrix] I show how multi-level models can be used for psychometric data, and in section [Beta regression] I just replace one word in the code. The greatest advantage is that all these possibilities are governed by just one implementation, which even allows to add your own distributions, if you need to [Beta-binomial regression]. The most astonishing fact is that all this is governed by a relatively simple algorithm, running under the hood.
+
+Most Bayesian estimation engines these days ground on a numerical procedure called *Markov-Chain Monte-Carlo (MCMC)* sampling, which we will closer examine in chapter [random_walk]. This method differs from the earlier mentioned in that it basically is a random walk. The closest frequentist counterpart to MCMC is the bootstrapping algorithm, which draws many samples from data (how could it be different) and computes the estimates many times. Bayesian estimation with MCMC turns this upside down, by randomly drawing possible parameter values and computing the posterior probability many times. Similar to boot strapping, the basic MCMC algorithm is so simple, it can be explained on half a page and implemented with 25 lines of code. Despite its simplicity, the MCMC algorithm is applicable to practically all statistical problems one can imagine. Being so simple and generic at the same time must come at some costs. The downside of MCMC sampling still is computing time. Models with little data and few variables, like the examples in [#rational], are estimated within a few seconds. Multi-level models, which we will encounter  later in this book, can take hours and large psychometric models can take up to a few days of processing time.
 
 The particular merit of the MCMC algorithm is that it not only delivers accurate point estimates in almost any situation, it produces the full *posterior probability distribution*. This lets us characterize a parameters magnitude and degree of (un-)certainty. Let's run an analysis on the 20 rainfall observations to see how this happens.
 
@@ -2453,18 +2569,17 @@ posterior(M_1) %>%
 
 From the posterior distribution, we can deduct all kinds of summary statistics, such as:
 
-1. the most likely value for a parameter in question is called the *posterior mode* and is the same as the *maximum likelihood estimate* when prior knowledge is absent.
+1. the most likely value for a parameter in question is called the *posterior mode* and, when prior knowledge is absent, is the same as the frequentist *maximum likelihood estimate*.
 2. the average of parameter values, weighted by their probability is called the *posterior mean*
 3. a defined range to express 95% (or any other level of) certainty is the *95% credibility interval*
 
-We can also make non-standard evaluations on the posterior distribution, for example: How certain is it that $P(rain|cloudy) < 0.7$? We'll demonstrate the use of this in the next section.
+We can also pull non-standard summary statistics from the posterior distribution. For example in [test_statistics] we will ask how valid a third degree polynomial is for rendering the Uncanny Valley effect. 
 
-Coming back to MCMC: how is this distribution actually produced. In plain words, MCMC makes a random walk through parameter space. Regions where the true value is more likely to be are just visited more often. The posterior distribution plots above are really just marginal frequencies. Note how the gray connecting lines show the jumps  in the MCMC random walk.
+Coming back to MCMC random walk: how is the posterior distribution actually produced. The MCMC makes a particular type of random walk through parameter space, where more likely regions are visited more often. Basically, the posterior distribution is approximated by a frequency distribution of the visited values. See the random walk in action in the following figure! Note how the gray connecting lines show the jumps  in the MCMC random walk and how the marginal frequency distributions emerge.
 
-```{r opts.label = "inv"}
+```{r}
 G_mcmc <-
   posterior(M_1) %>% 
-  as_tibble() %>% 
   select(iter, chain, fixef, value) %>% 
   spread(fixef, value) %>% 
   ggplot(aes(x = cloudyFALSE, y = cloudyTRUE)) +
@@ -2479,7 +2594,7 @@ plot(ggExtra::ggMarginal(G_mcmc, type = "histogram"))
 ```{r}
 detach(Rainfall)
 ```
-
+##### WRITE END
 
 ```{r save_CE, opts.label = "invisible"}
 save_CE_(CE)
