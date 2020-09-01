@@ -53,13 +53,14 @@ All the above cases are examples of decision making under uncertainty. The actor
 
 Once you know the probabilities of all outcomes and the respective losses, *decision theory* provides an intuitive framework to estimate these values. *Expected utility* $U$ is the sum product of *outcome probabilities* $P$ and the involved *losses*. In the case of the umbrella, the decision is between two options: taking an umbrella versus taking no umbrella, when it is cloudy. We calculate and compare the expected utilities `U` as follows ($P(\text{outcome})$ is the probability of an outcome):
 
-$$\begin{aligned}
-P(\text{rain}) = 0.6 \\
-P(\text{no rain}) = 1 - P(\text{rain}) = 0.4 \\
-L(\text{carry}) = 2 \\
-L(\text{wet}) = 4 \\
-U(\text{umbrella}) = P(\text{rain}) L(\text{carry}) + P(\text{no rain}) L(\text{carry})  = L(\text{carry}) = 2\\
-U(\text{no umbrella}) = P(\text{rain}) L(\text{wet}) = 2.4
+$$
+\begin{aligned}
+&P(\text{rain}) &&&=& 0.6 \\
+&P(\text{no rain}) &=& 1 - P(\text{rain}) &=& 0.4 \\
+&L(\text{carry}) &&&=& 2 \\
+&L(\text{wet}) &&&=& 4 \\
+&U(\text{umbrella}) &=& P(\text{rain}) L(\text{carry}) + P(\text{no rain}) L(\text{carry})   = L(\text{carry}) &=& 2\\
+&U(\text{no umbrella}) &=& P(\text{rain}) L(\text{wet}) &=& 2.4
 \end{aligned}
 $$
 
@@ -67,30 +68,30 @@ $$
 
 
 
-```{r umbrella_1, opts.label = "tab"}
+```{r umbrella_1}
 attach(Rainfall)
 
 Actions <-
-  tibble(action = c("umbrella", "no umbrella")) %>% 
-  print()
+  tibble(action = c("umbrella", "no umbrella"))
+Actions
 
 Outcomes  <-
   tibble(outcome  = c("rain", "no rain"),
-                     prob   = c(0.6, 0.4)) %>% 
-  print()
+                     prob   = c(0.6, 0.4))
+Outcomes
 
 Losses  <- 
   expand.grid(action = Actions$action, outcome = Outcomes$outcome) %>%
   join(Outcomes) %>%
-  mutate(loss = c(2, 4, 2, 0)) %>% 
-  print()
+  mutate(loss = c(2, 4, 2, 0))
+Losses
 
-Decision <- 
+Utility <- 
   Losses %>%
   mutate(conditional_loss = prob * loss) %>%
   group_by(action) %>%
-  summarise(expected_loss = sum(conditional_loss)) %>% 
-  print()
+  summarise(expected_loss = sum(conditional_loss))
+Utility
 
 ```
 
@@ -374,8 +375,8 @@ The results tell Violet that, most likely, the average user spends $`r T_fixef[1
 N_risk_of_failure <-
   P_1 %>%
   filter(parameter == "Designproto") %>% 
-  summarize(risk_of_failure = mean(exp(value) < 1.1)) %>% 
-  print()
+  summarize(risk_of_failure = mean(exp(value) < 1.1))
+N_risk_of_failure
 ```
 
 The risk of failure is just below 30%. With this information in mind Violet now has several options:
@@ -1088,7 +1089,7 @@ Math can also be easy, even trivial, if mathematical expressions directly transl
 
 <!-- #### HERE -->
 
-In this section I will introduce *probability theory*, which is largely based on another mathematical theory that most people find intuitive, *set theory*. The formal theory of probability, the Kolmogorov axioms may be somewhat disappointing from an ontological perspective, as it just defines rules for when a set of numbers can be regarded probabilities. But calculating actual probabilities is rather easy and a few R commands will suffice to start playing with set theory and probability. The most tangible interpretation of probabilities is that the probability of an event to happen, say getting a Six when rolling a dice, coincides with the relative frequency of Six in a (very long) sequence of throws. This is called the *frequentist interpretation* of probability and this is how probability will be introduced in the following. While thinking in terms of relative frequency in long running sequences is rather intuitive, it has limitations. Not all events we want to assign a probability can readily be imagined as a long running sequence, for example:
+In this section I will introduce *probability theory*, which is largely based on another mathematical theory that most people find intuitive, *set theory*. The formal theory of probability, the Kolmogorov axioms may be somewhat disappointing from an ontological perspective, as it just defines rules for when a set of numbers can be regarded probabilities. But calculating actual probabilities is rather easy and a few R commands will suffice to start playing with set theory and probability. The most tangible interpretation of probabilities is that the probability of an event to happen, say getting a Six when rolling a dice, coincides with the relative frequency of Six in a (very long) sequence of throws. This is called the *frequentist interpretation* of probability and this is how probability will be introduced in the following. While thinking in terms of relative frequency in long running sequences is rather intuitive, it has limitations. Not all events we want to assign a probability can readily be imagined as a long running sequence, for example:
 
 + the probability that your house burns down (you only have this one)
 + the probability that a space ship will safely reach Mars (there's only this one attempt)
@@ -1318,11 +1319,14 @@ The Kolmogorov axioms establish a probability measure and lets us do calculation
 $P(A \cup \Omega/A) = P(A) + P(\Omega/A)$ 
 
 2. From set theory follows that a set $A$ and its complement $\Omega/A$ form a partition on $\Omega$. Using axiom 2, we can infer:
-$$\begin{aligned}
-A \cup \Omega/A = \Omega\\ 
-\Rightarrow P(A) + P(\Omega/A) = P(\Omega) = 1\\ 
-\Rightarrow P(\Omega/A) = 1 - P(A)
-\end{aligned}$$
+
+$$
+\begin{aligned}
+&&A \cup \Omega/A &=& \Omega\\ 
+&\Rightarrow &P(A) + P(\Omega/A) = P(\Omega) &=& 1\\ 
+&\Rightarrow &P(\Omega/A) &=& 1 - P(A)
+\end{aligned}
+$$
 
 <!-- However, we may want to calculate the probability of events that are not disjunct, speaking of sets that is they overlap. If we just add -->
 
@@ -1360,10 +1364,12 @@ D_sets %>%
 
 See how conditional probabilities sum up to one *within* their condition. In this case, the conditional probabilities for harm are the same for successes and failures. As a consequence, it is also the same as  the overall probability, hence:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 P(\textrm{Harm} | \textrm{Timely}) = P(\textrm{No harm} | \textrm{Timely}) =
 P(\textrm{Timely})
-\end{aligned}$$
+\end{aligned}
+$$
 
 This situation is called *independence of events* and it means that knowing about one variable does not help in guessing the other. In Statistics, *conditional probability* and *independence of events* are tightly linked to *likelihoods* and *Bayes theorem* [#Bayes_theorem].
 
@@ -1417,26 +1423,34 @@ Especially for readers with some theoretical grounding in frequentist statistics
 
 In the previous section we have seen how to create probabilities from relative frequencies in data how to do basic calculations with those probabilities. Using these concept, we will see in teh following how data can be used for inference. Inference means to draw conclusions about theoretical models. In the following this will be illustrated at the example of rolling dices, where the default theory is that the dice is fair, hence the probability of Six is assumed to be `\pi_{Six}`. For the matter here, we take the theory of the dice being fair into the equantion, as a condittional probability, in words: "Conditional on this dice being fair, the chance of rolling Six is ${1/6}$".
 
-$$P(y = \textrm{Six}|\pi_\textrm{Six} = {1 \over 6})$$
+$$
+P(y = \textrm{Six}|\pi_\textrm{Six} = {1/6})
+$$
 
 When such a standard standard dice is rolled twice, how likely is an outcome of two times Six? We use probability theory: It is one dice but the results of the rolls are otherwise independent; for example, the probability to roll a Six does not wear off over time or anything like that.
 
-$P(y_1 = \textrm{Six}|\pi = {1 \over 6}) = P(y_2 = \textrm{Six}  = {1 \over 6})$. 
+<!-- $P(y_1 = \textrm{Six}|\pi = {1/6}) = P(y_2 = \textrm{Six}  = {1/6})$.  -->
 
 Because of independence, the joint probability of rolling two times Six is just the product:
 
 $$
-P(y_1 = \textrm{Six} \textrm{ and } y_2 = \textrm{Six}|\pi = {1 \over 6}) \\= 
-P(y_1 = \textrm{Six}) \times P(y_2 = \textrm{Six}|\pi = {1 \over 6}) \\= {1 \over 36}
+\begin{aligned}
+&P(y_1 = \textrm{Six} \textrm{ and } y_2 = \textrm{Six}|\pi = {1/6})\\
+= &P(y_1 = \textrm{Six}|\pi = {1/6}) \times P(y_2 = \textrm{Six}|\pi = {1/6})\\
+ = &{1/36}
+\end{aligned}
 $$
 
-The joint probability of all data points is called the *Likelihood* and generalizes to situations where the probabilities of events are not the same, for example: What is the probability of the first dice being an Four, the second a  five and the third a Three or a Six?
+The joint probability of all data points is called the *Likelihood* and generalizes to situations where the probabilities of events are not the same, for example: What is the probability of the one dice being a Four, the second a  five and the third a Three or a Six?
 
 $$
-P(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \textrm{Three} \textrm{ or } \textrm{Six})\\
-=  {1 \over 6}
-\times \frac 1 6 \times \frac 1 3 = \frac 1 {108}
+\begin{aligned}
+P(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \textrm{Three} \textrm{ or } \textrm{Six}) = \frac{1}{6} \times \frac{1}{6} \times \frac{1}{3} = \frac{1}{108}
+\end{aligned}
 $$
+
+
+
 
 Notice how the likelihood gets smaller in the second example. In fact, likelihoods are products of numbers between zero and one and therefore become smaller with every observation that is added. In most empirical studies, the number of observations is much larger than two or three and the likelihood becomes inexpressibly small. Consider the  following results from 16 rolls.
 
@@ -1481,9 +1495,9 @@ The likelihood of this result, given that it is a fair dice, is $\frac 1 6^{16} 
 
 
 
-The dice rolling example above has a twist. assumed that we may enter $\pi = {1 \over 6}$, because we *believe* that it is a fair dice, without further notice. In other words, we needed no data, because of overwhelming prior knowledge (or theory, if you will). And now we will come to see, why I took the effort to write the probabilities above as conditional probabilities. A likelihood is the probability of the data, given a parameter value. The basic idea of likelihoods is to consider data constant, and vary the parameter. In such a way, we can see how the likelihood changes when we assume different values for $\pi_\textrm{Six}$.
+The dice rolling example above has a twist. assumed that we may enter $\pi = 1/6$, because we *believe* that it is a fair dice, without further notice. In other words, we needed no data, because of overwhelming prior knowledge (or theory, if you will). And now we will come to see, why I took the effort to write the probabilities above as conditional probabilities. A likelihood is the probability of the data, given a parameter value. The basic idea of likelihoods is to consider data constant, and vary the parameter. In such a way, we can see how the likelihood changes when we assume different values for $\pi_\textrm{Six}$.
 
-Imagine we have been called in to uncover fraud with biased dices in a casino. There is suspicion, that the chance of rolling a Six is lower than $1 \over 6$. So, what is the most likely chance of rolling a Six? In the following simulation, 6000 rolls have been recorded:
+Imagine we have been called in to uncover fraud with biased dices in a casino. There is suspicion, that the chance of rolling a Six is lower than $1/6$. So, what is the most likely chance of rolling a Six? In the following simulation, 6000 rolls have been recorded:
 
 
 ```{r}
@@ -1521,7 +1535,7 @@ Rolls %>%
   summarize(pi = n()/n_Rolls)
 ```
 
-In this case, we can simply note down that the *most likely value* is $\pi_{Six} =.147$, which is lower than the fair `r round(1/6, 3)`. But, note the slight ruggedness of the bar chart. Not a single bar is read as exactly $1 \over 6$, so the deviation of Six could have happened by chance. One way to approach this question is comparing the likelihoods $P(\text{Result = Six}|\pi = {1 \over 6})$ and $P(\text{Result = Six}|\pi = {.147})$.
+In this case, we can simply note down that the *most likely value* is $\pi_{Six} =.147$, which is lower than the fair `r round(1/6, 3)`. But, note the slight ruggedness of the bar chart. Not a single bar is read as exactly $1/6$, so the deviation of Six could have happened by chance. One way to approach this question is comparing the likelihoods $P(\text{Result = Six}|\pi = {1/6})$ and $P(\text{Result = Six}|\pi = {.147})$.
 For that purpose, we create a new event variable `Six`, that indicates whether a roll is a Six (`TRUE`) or not (`FALSE`). Further, a *distribution function* is required that assigns these events their probabilities. Distribution functions can take very complicated forms [#statistical models], but in the case here it is the rather simple *Bernoulli distribution*.
 
 <!-- $$ -->
@@ -1572,7 +1586,7 @@ LL_bern <- function(pi) map_dbl(pi, function(x) sum(log(dbern(Rolls$Six, x))))
 LL_bern(c(.1, .2))
 
 LL_grid <- 
-  tibble(pi = seq(.01, .99, by = .01)) %>% ## the grid
+  tibble(pi = seq(.01, .99, by = .01)) %>% 
   mutate(nlogLik = -LL_bern(pi),
          rank = min_rank(nlogLik),
          MLE = (rank == 1))
@@ -1598,9 +1612,10 @@ In classic statistics MLE is one of the most common methods for estimating param
 ### Bayesian and frequentist probability
 
 
+
 <!-- Inferential statistics serves rational decision making under uncertainty by attaching information on the *level of certainty* to a parameter of interest. A central difference between frequentist and Bayesian statistical theory is how the elusive concept of *certainty* emerges. -->
 
-Let us for a moment return to how probability was axiomatically defined by Kolmogorov's axioms. The axioms themselves only speak of relations between sets and probability. There is not a trace of any algorithm that would let you construct a set of numbers that actually *qualifies* as probabilities. There is one theory everyone agrees with: relative frequencies satisfy the three Kolmogorov axioms. That can be demonstrated, as I did in section [#Probability], and there is mathematical proof for that, more precisely: if you repeat a random experiment an infinite number of times, relative frequencies are measures for probability. And since not all mathematical theory has such an intuitive interpretation, we can call ourselves lucky. And at the same time it is obvious, because Kolmogorov, like Peano, sat down to formalize something most people intuitively understand. 
+<!-- Let us for a moment return to how probability was axiomatically defined by Kolmogorov's axioms. The axioms themselves only speak of relations between sets and probability. There is not a trace of any algorithm that would let you construct a set of numbers that actually *qualifies* as probabilities. There is one theory everyone agrees with: relative frequencies satisfy the three Kolmogorov axioms. That can be demonstrated, as I did in section [#Probability], and there is mathematical proof for that, more precisely: if you repeat a random experiment an infinite number of times, relative frequencies are measures for probability. And since not all mathematical theory has such an intuitive interpretation, we can call ourselves lucky. And at the same time it is obvious, because Kolmogorov, like Peano, sat down to formalize something most people intuitively understand.  -->
 
 All statisticians believe that relative frequencies satisfy Kolmogorov's axioms, but not everyone thinks that this is the only way. And that is where frequentist and Bayesian statistics diverge: Frequentest believe that *only relative frequencies* are valid measures for probability, whereas Bayesians believe that *certainty* is a measure of probability, too. As subtle this may sound, it has remarkable consequences in context with Bayes theorem.
 
@@ -1647,7 +1662,7 @@ In effect, the Bayesian certainty is a probability in mathematical terms, withou
 Bayes' theorem emerges from formal probability theory and therefore is neither Bayesian nor frequentist. Essentially, the theorem shows how to calculate a conditional probability of interest $P(A|B)$ from a known conditional probability $P(B|A)$ and two marginal probabilities $P(A)$ and $P(B)$:   
 
 $$
-P(A|B) = { P(A)P(B|A) \over P(B)}
+P(A|B) = \frac{P(A)P(B|A)} {P(B)}
 $$
 
 
@@ -1659,14 +1674,14 @@ In the 1980, the human immunodeficiency virus (HIV) was discovered and since the
 
 $$
 \begin{aligned}
-P(C+) &&= .0001\\
-P(C-) &= 1 - P(C+) &= .9999\\
-P(T+|C+) &&= .99\\
-P(T-|C+) &= 1 - P(T-|C+) &= .01\\
-P(T-|C-) &&= .95\\
-P(T+|C-) &= 1 - P(T-|C-) &= .05\\
-P(T+) &= P(C+)P(T+|C+) + P(C-)P(T+|C-) &\approx .05\\
-P(T-) &= 1 - P(T+) &\approx .95 
+&P(C+) &&&=& .0001\\
+&P(C-) &=& 1 - P(C+) &=& .9999\\
+&P(T+|C+) &&&=& .99\\
+&P(T-|C+) &=& 1 - P(T-|C+) &=& .01\\
+&P(T-|C-) &&&=& .95\\
+&P(T+|C-) &=& 1 - P(T-|C-) &=& .05\\
+&P(T+) &=& P(C+)P(T+|C+) + P(C-)P(T+|C-) &\approx & .05\\
+&P(T-) &=& 1 - P(T+) &\approx & .95 
 \end{aligned}
 $$
 
@@ -1682,8 +1697,8 @@ Using Bayes' theorem, we obtain the following probability for false alarms:
  
 $$
 \begin{aligned}
-P(C-|T+) &= {P(C-)P(T+|C-) \over P(T+)}\\
-&\approx {{.9999 \times .05} \over .05}\\
+P(C-|T+) &= \frac{P(C-)P(T+|C-)}{P(T+)}\\
+&\approx \frac{.9999 \times .05}{05}\\
 &\approx .9999
 \end{aligned}
 $$
@@ -1692,8 +1707,8 @@ Obviously, testing the whole population with the screening test would result in 
 
 $$
 \begin{aligned}
-P(C+|T-) &= {P(C+)P(T-|C+) \over P(T-)}\\
-&\approx {.0001 \times .01 \over .95}\\
+P(C+|T-) &= \frac{P(C+)P(T-|C+)}{P(T-)}\\
+&\approx \frac{.0001 \times .01}{.95}\\
 &\approx .000001
 \end{aligned}
 $$
@@ -1782,11 +1797,14 @@ We see a strong asymmetry in how useful the test is in the two situations. Speci
 <!-- <!-- find correct term for testAbundnc -> -->
 
 
-### The dynamics of belief
 
-##### REWORK
 
-In the previous section we have seen an application of Bayes theorem where it served to debunk a diagnostic procedure. 
+
+
+### Bayesian dynamics of belief
+
+<!-- ##### REWORK -->
+
 
 <!-- As the procedure of testing everyone for HIV may seem reasonable at first, it turned out to be impractical. That is an example of how a principally intuitive theories like Probability Theory can result in counter-intuitive, but correct, answers. These are the most valuable answers, actually. -->
 
@@ -1800,25 +1818,70 @@ In the previous section we have seen an application of Bayes theorem where it se
 
 <!-- > what you believe now is a combination of what you knew before and what you have just seen in the data. -->
 
+Bayes' formula is just a law that follows directly from probability theory. It can easily be illustrated in terms of frequencies: If the number of false alarms is very small in a small group, it gets large in a very large group. What makes such an innocent formula the patron of Bayesian Statistics?  
 
-
-
-In Bayesian statistics, certainty (or strength of belief, state of knowledge, credibility) is assumed to follow all rules of probability theory. We may still think of it in terms of frequencies or illustrate it as a gamble, whatever fits the context better. The point is that in Bayes' rule we may enter degrees of belief (instead of relative frequencies)  as probabilities:
+Bayes' formula can be seen as a sort of knowledge processing device. At the example of HIV test, what we want to know is how likely it is that someone is infected. That is something we can already do without any test, if we have an idea about the prevalence of infections. It already helps to know that only 1 in 10.000 has it. It is a rare desease, so usually no reason to get paranoid! In contrast, if you are running blood bank, knowledge of prevalence is just not good enough and a test is required. This test is used not to make up our minds, but to update our minds. Bayes' formula is just a rational way of updating knowledge by combing what one knew before and what one learns from the present data. A Bayesian estimation takes *prior knowledge* $P(\theta)$ and  the *likelihood* $P(\text{Data}|\theta)$, representing the data as input and the output is *posterior knowledge* $P(\theta|\text{Data})$:
 
 $$
 P(\theta|\text{Data}) = 
-{ P(\theta) P(\text{Data}|\theta) \over P(\text{Data})}
+\frac{ P(\theta) P(\text{Data}|\theta)}{P(\text{Data})}
 $$
-
-In this equation, the only probability that has been measured by frequencies is the *likelihood* $P(\theta|\text{Data})$, where $\theta$ is the parameters to be estimated  (e.g. $\pi$ of Bernoulli distributions). This likelihood carries *evidence from data*. $P(\theta|\text{Data})$ is the *posterior certainty*, or how much we believe in a parameter position, after seeing the data. Posterior certainty turns out to be proportional to the product of *prior certainty* $P(\theta)$ and likelihood. This is the place where prior knowledge and strength of evidence are weighed against each other, for example how strongly we belive that a dice is fair. $P(\text{Data})$ is called the *marginal likelihood*.
-
-In section [#likelihood] it was explained how parameters can be estimated by maximum likelihood estimation. This procedure compared the likelihood over a range of parameter values to determine the position that makes the observed data most likely. In the context of parameter estimation, a model is just such a position in parameter space. Bayesian estimation does it very similar, but operates on posterior probability, which includes prior knowledge. 
 
 As it turns out the marginal likelihood $P(Data)$ cannot be known or easily estimated. The reason why we can still use Bayes rule for estimation is that this term does not depend on the parameter vector $\theta$, which is our search space, meaning that it is practically a constant. For parameter estimation, Bayes rule can be reduced to saying that the posterior certainty is *proportional to* the product of prior certainty and evidence:
 
 $$
 \text{posterior}\ \propto \text{prior}\times\text{likelihood}
 $$
+
+Recall that the likelihood is the probability of the data at hand, given parameter $\theta$. This is typical for frequentist statistics, which assumes that there is one true value and all randomness is caused by fluctuations in the set of possible samples. Your data is just one fish from the pond. Bayesians typically feel that data is the real thing and that parameter $\theta$ is never really true, but represents teh current state of knowledge. 
+
+Brains process data, too, and some argue that the behaviour of brains can be described as Bayesian engines. It is true that prior knowledge is something we use everyday, and many things we do know because of our genes. For example, parents sometimes report that their toddlers abruptly start to reject food that is green. This is often perceived as stubborn behaviour, because of vitamines, fiber, lack of sugar and the greenhouse effect. If it is true, that our ancestors headed their ways through a savannah, the child may actually be right. Savannah flora's worst  enemy are vegetarian savannah animals, and in an arms race, plants have developed an abundance of weapons, such as a tough structure, scarcity of nutriants, thorns, blades and poisons. The child knows that green stuff usually is not edible or even dangerous. This prior knowledge is so over-whelming, that it costs modern parents a lot of patience to update their childrens knowledge of food, and reportedly many fail. A Bayesian statistician would call this a *strong prior*.
+
+Science is what only some central nervous systems do, but the principle is the same: we have a theory which we are unsure about; data is collected and after that we may find this theory more likely or reject it. Testing theories is not a one-shot. Some theories have been tested many times For example, in the famous Stroop effect, participants have to name the ink color of a word. When the word is itself a color word and refers to a different color, response times typically increase. This effect has been replicated in many dozens of published studies and, probably, thousands of student experiments. Cumulative evidence is so strong that, would someone repeat the experiment another time and find the reverse effect, no one would seriously take this as a full debunk of decades of research. In Bayes' formula, prior and posterior are both probabilities, which means we can use the posterior from experiment $n$ as prior for experiment $n + 1$, or:
+
+<!-- from data are both of the same kind, which means that the   -->
+
+
+<!-- The previous section closed with the remark that more research could solve the dilemma of testing diseases with a very low prevalence, and the same goes here: Even just one negative result on teh Stroop effect can raise some mild suspicions about the effect's  universalality and someone may feel that another  replication is required. One  principle of Bayesian thinking is: -->
+
+> Today's posterior is tomorrow's prior.
+
+There is no principled difference between prior and posterior knowledge. They are just degrees of belief at different points in time, expressed as probabilities. Both can differ in strength: prior knowledge can be firm when it rests on an abundance of past evidence. But, prior knowledge can also be over-ruled when a lot of data disproves it. Evidence in data varies in strength: for example, the more observations, the larger the (negative) likelihood becomes, which means stronger evidence. If measures are more accurate (and less disturbed by randomness), smaller sample sizes suffice to reach conclusions of similar strength. This is why larger sample sizes are preferred and why researchers try to improve their methods. 
+
+
+<!-- Prior belief and evidence by data can be congruent or contradict each other. When they are congruent, prior belief is just strengthened by the data. When they are contradicting each other, prior belief is over-ruled to some degree, depending on the strength of (counter-) evidence. Updating our knowledge is essential for individual decision makers, but in particular applies for scientific progress. -->
+
+
+
+
+<!-- That is something people do all the time, if they are not too stubborn. And not just people: most, if not all, biological brains update their image of the environment in order to act for the benefit of their fitness.  -->
+
+<!-- This mechanism of updating states of beliefs is what sets Bayesian statistics apart and it reverbs with what happens in the real world and in science: -->
+
+<!-- + Someone skeptical of climate change may change their view after a couple of very hot summers. -->
+<!-- + When almost everyone believed in Newton's Mechanics as ground truth, some people got curious when it turned out that light speed is constant for every observer. -->
+
+<!-- Note how these examples all have the same dynamics: a prior belief is updated when new data arrives.  -->
+
+
+<!-- Brains process data, too, and some argue that the behaviour of brains can be described as Bayesian engines. It is true that prior knowledge is something we use everyday, and many things we do know because of our genes. For example, parents sometimes report that their toddlers abruptly start to reject food that is green. This is often perceived as stubborn behaviour, because of vitamines, fiber, lack of sugar and the greenhouse effect. If it is true, that our ancestors headed their ways through a savannah, the child may actually be right. Savannah flora's worst  enemy are vegetarian savannah animals, and in an arms race, plants have developed an abundance of weapons, such as a tough structure, scarcity of nutriants, thorns, blades and poisons. The child knows that green stuff usually is not edible or even dangerous. This prior knowledge is so over-whelming, that it costs modern parents a lot of patience to update their childrens knowledge of food, and reportedly many fail. -->
+
+
+
+<!-- In the previous section we have seen an application of Bayes theorem where it served to evaluate a diagnostic procedure. We saw that the very low prevalence for HIV required an extreme specificity for the test to be useful.  -->
+
+
+<!-- In Bayesian statistics, certainty (or strength of belief, state of knowledge, credibility) is assumed to follow all rules of probability theory. We may still think of it in terms of frequencies or illustrate it as a gamble, whatever fits the context better.  -->
+
+
+
+
+
+<!-- In this equation, the only probability that has been measured by frequencies is the *likelihood* $P(\theta|\text{Data})$, where $\theta$ is the parameters to be estimated  (e.g. $\pi$ of Bernoulli distributions). This likelihood carries *evidence from data*. $P(\theta|\text{Data})$ is the *posterior certainty*, or how much we believe in a parameter position, after seeing the data. Posterior certainty turns out to be proportional to the product of *prior certainty* $P(\theta)$ and likelihood. This is the place where prior knowledge and strength of evidence are weighed against each other, for example how strongly we belive that a dice is fair. $P(\text{Data})$ is called the *marginal likelihood*. -->
+
+<!-- In section [#likelihood] it was explained how parameters can be estimated by maximum likelihood estimation. This procedure compared the likelihood over a range of parameter values to determine the position that makes the observed data most likely. In the context of parameter estimation, a model is just such a position in parameter space. Bayesian estimation does it very similar, but operates on posterior probability, which includes prior knowledge.  -->
+
+
 
 
 
@@ -1851,24 +1914,7 @@ $$
 <!-- > what you believe now is a combination of what you knew before and what you have just seen in the data. -->
 
 
-This mechanism of updating states of beliefs is what sets Bayesian statistics apart and it reverbs with what happens in the real world and in science:
 
-+ Someone skeptical of climate change may change their view after a couple of very hot summers.
-+ When almost everyone believed in Newton's Mechanics as ground truth, some people got curious when it turned out that light speed is constant for every observer.
-
-Note how these examples all have the same dynamics: a prior belief is updated when new data arrives. These are precisely the three elements of Bayesian statistics:
-
-1. the *prior belief* is what you believe before (climate change is a myth)
-2. the *likelihood* is what you learn by observation (hot summer)
-3. the *posterior belief* is your adjusted believe after seeing the data (maybe not such a myth)
-
-One could almost say that updating knowledge is the primary purpose of any central nervous system, where the attached  sensors provide the data. All animals with such a system cannot just react to their environment by innate patterns, but *learn* and over a life's course it is not such a stretch to call this a long-running experiment.
-
-Systematic research is what only some central nervous systems do, but the principle is the same: we have a theory which we are unsure about; data is collected and after that we may find this theory more likely (or not). But, that does not exclude that prior knowledge grounds on data, too. In experimental Psychology researchers almost seem to entertain themselves with repetitions of the very same experimental paradigm, with slight variations maybe. For example, in the famous Stroop effect, participants have to name the ink color of a word. When the word is itself a color word and refers to a different color, response times typically increase. This effect has been replicated in many dozens of published studies and, probably, thousands of student experiments. Cumulative evidence is so strong that, would someone repeat the experiment another time and find the reverse effect, no one would seriously take this as a full debunk of decades of research. The previous section closed with the remark that more research could solve the dilemma of testing diseases with a very low prevalence, and the same goes here: Even just one negative result on teh Stroop effect can raise some mild suspicions about the effect's  universalality and someone may feel that another  replication is required. One  principle of Bayesian thinking is:
-
-> Today's posterior is tomorrow's prior.
-
-There is no principled difference between prior and posterior knowledge. They are just degrees of belief at different points in time, expressed as probabilities. Both can differ in strength: prior knowledge can be firm when it rests on an abundance of past evidence. But, prior knowledge can also be over-ruled when a lot of data disproves it. Evidence in data varies in strength: for example, the more observations, the larger the likelihood becomes, which means stronger evidence. If measures are more accurate (and less disturbed by randomness), smaller sample sizes suffice to reach conclusions of similar strength. This is why larger sample sizes are preferred and why researchers try to improve their methods. Prior belief and evidence by data can be congruent or contradict each other. When they are congruent, prior belief is just strengthened by the data. When they are contradicting each other, prior belief is over-ruled to some degree, depending on the strength of (counter-) evidence. Updating our knowledge is essential for individual decision makers, but in particular applies for scientific progress.
 
 <!--#25-->
 
@@ -1917,7 +1963,9 @@ Of course, Violet would never expect her grand mean model to  predict the accura
 
 A common way to conceive this situation is that all measures are composed of a *structural part*, that captures the relation between known and measured forces and a *random part*, that serves as a bucket for unmeasured forces.
 
-$$\text{Measure}_i = \text{structural part} + \text{random part}_i$$
+$$
+\text{Measure}_i = \text{structural part} + \text{random part}_i
+$$
 
 *Note* that Measure and Random part both have an observation-level index $i$, which means they are *unique* per observation $i$. The structural part does not have such an index, because it is usually designed as a *universal* statement, a proposition that holds for all the observations. If this were different, there would be no way to make predictions from the model. After a minimally sufficient introduction to the matter, the remainder of this section will focus on the random part and we will discover that randomness is *not* completely arbitrary, but falls into certain *shapes of randomness*. And for the scope of this book, a *statistical model* is defined as a *mechanism that separates the structural from the random part* to some extent. 
 
@@ -1956,7 +2004,9 @@ Sec99$Ver20 %>%
 
 Violet can use this information to improve her chance of winning. Instead of stoically calling the population mean, she uses a linear function as predictor: $45 + (\textrm{age} ) 1.5 $. This is called a *linear association* and the general notation is
 
-$$\mu_i = \beta_0 + \beta_1x_{1i}\\$$
+$$
+\mu_i = \beta_0 + \beta_1x_{1i}
+$$
  where $\beta_0$ is the intercept value, $X_1$ is a measure (age) and $\beta_1$ is a *coefficient*. The primary purpose of using a model on data is to estimate the coefficients.
 
 <!-- The structural part of a model connects the *expected value* $\mu$ with *observed variables* $x_{i1}, x_{i2}, ..., x_{ik}$, and (to be estimated) parameters, e.g. $\beta_0, \beta_1$. The likelihood function is often called the *deterministic part* of a model, because its prediction strictly depends on the observed values and the predictors, but nothing else. For example, two persons of age 30 will always be predicted to use up 90 seconds. Apparently, this is not the case for real data. -->
@@ -2003,7 +2053,7 @@ When all all measures $y$, $x$ are known and all coefficients $\beta_.$ have bee
 + in R
 -->
 
-Review the formula $$\text{Measure}_i = \text{structural part} + \text{random part}_i$$. What do we actually have? It turns out that the only part we know for sure are measures $y_i$ and $x_{.i}$. The structural part contains the answer to our research question, so this is what we want to estimate. Unfortunately, there is another unknown, the $random part$, which we literally need to subtract to get to our answers. Obviously, this would never work if the random part were random in the sense of being completely arbitrary. Fortunately, randomness is not arbitrary, but has a shape, which is described as a probability (or density) distribution. These distributions typically belong to a certain family of distributions, e.g. Poisson disributions or Gaussian distributions. By assuming a certain shape of randomness, we know a lot more about the random component, which will make it possible to flesh out the structure. Choosing the most appropriate distribution therefore is a crucial step  in creating a valid statistical model. In this section I will introduce in more depth how probability and density distributions describe the shape of randomness.
+Review the formula $\text{Measure}_i = \text{structural part} + \text{random part}_i$. What do we actually have? It turns out that the only part we know for sure are measures $y_i$ and $x_{.i}$. The structural part contains the answer to our research question, so this is what we want to estimate. Unfortunately, there is another unknown, the $random part$, which we literally need to subtract to get to our answers. Obviously, this would never work if the random part were random in the sense of being completely arbitrary. Fortunately, randomness is not arbitrary, but has a shape, which is described as a probability (or density) distribution. These distributions typically belong to a certain family of distributions, e.g. Poisson disributions or Gaussian distributions. By assuming a certain shape of randomness, we know a lot more about the random component, which will make it possible to flesh out the structure. Choosing the most appropriate distribution therefore is a crucial step  in creating a valid statistical model. In this section I will introduce in more depth how probability and density distributions describe the shape of randomness.
 
 
 #### Probability and density distributions
@@ -2038,7 +2088,7 @@ D_three_tasks %>%
 
 ```
 
-As we can see, there exist four possible outcomes for a sequence of three tasks: zero, one, two and three tasks correct. We also see that the most likely outcome is one correct task, which occurs with a probability of $P(y = 1) = `r dbinom(1,3,0.3)`$. At the same time, it is surprisingly likely to fail at all tasks, $P(y = 0) = `r dbinom(0,3,0.3)`$. We may also look at *combined events*, say the probability for less than two correct. That is precisely the sum $P(y \leq 1) = P(y = 0) + P(y = 1) = `r sum(dbinom(c(0,1), 3, 0.3))`$. We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: $P(0 \leq y \leq 3) = 1$. Simply in order to comply with the third Kolmogorov axiom,  all probability (and density) distributions have *probability mass of One*.  More precisely, the area covered by the function must be exactly One. Another extreme outcome is that four out of three tasks are correct, which is impossible, or $P(y \gt 3) = 0$.
+As we can see, there exist four possible outcomes for a sequence of three tasks: zero, one, two and three tasks correct. We also see that the most likely outcome is one correct task, which occurs with a probability of $P(y = 1) = `r dbinom(1,3,0.3)`$. At the same time, it is surprisingly likely to fail at all tasks, $P(y = 0) = `r dbinom(0,3,0.3)`$. We may also look at *combined events*, say the probability for less than two correct. That is precisely the sum $P(y \leq 1) = P(y = 0) + P(y = 1) = `r sum(dbinom(c(0,1), 3, 0.3))`$. We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: $P(0 \leq y \leq 3) = 1$. Simply in order to comply with the third Kolmogorov axiom,  all probability (and density) distributions have *probability mass of One*.  More precisely, the area covered by the function must be exactly One. Another extreme outcome is that four out of three tasks are correct, which is impossible, or $P(y > 3) = 0$.
 
 Number of successes is a countable measure, and are therefore called *discrete*. If we want to obtain the probability of combined events, we just have to sum probabilities over all the included events, which is like stacking the blocks in the figure above. This approach fails, if the outcome is not discrete, but *continuous*. On a continuous scale, every outcome is a line, in the strictly geometrical sense. That makes the probability masses of any such point extensionless, too, i.e. exactly zero. The probability that the outcome of a continuous measure is *exactly*, say, 42.18 is zero.
 
@@ -2119,10 +2169,10 @@ Underneath the smooth CDF, a discrete probability function reduces the continuum
 
 $$
 \begin{aligned}
-CDF(IQ \geq 99) &= `r pnorm(99, 100, 15)`\\
-CDF(IQ \leq 101) &= `r pnorm(101, 100, 15)`\\
-CDF(99 \leq IQ \leq 101) &= P(IQ \leq 101) - P(IQ \leq 99) \\
-&= `r pnorm(115, 100, 15) - pnorm(85, 100, 15)`
+&CDF(IQ \geq 99) &=& `r pnorm(99, 100, 15)`\\
+&CDF(IQ \leq 101) &=& `r pnorm(101, 100, 15)`\\
+&CDF(99 \leq IQ \leq 101) &=& P(IQ \leq 101) - P(IQ \leq 99) \\
+&&=& `r pnorm(115, 100, 15) - pnorm(85, 100, 15)`
 \end{aligned}
 $$
 
@@ -2297,7 +2347,11 @@ These measures can often be modeled as *Poisson distributed*. A useful way to  t
 
 Poisson distributions possess only one parameter $\lambda$ (lambda), that is strictly positive and determines mean and variance of the distribution alike: $\lambda = \textrm{Mean} = \textrm{Var}$. As a result, distributions farther from Zero are alwwayas more dispersed. Because Poisson distributions have a lower boundary, they are *asymmetric*, with the left tail always being steeper. Higher $\lambda$s push the distribution away from the boundary and the skew diminishes. Poisson distributions with a large mean can therefore be approximated by Gaussian distributions:
 
-$\textrm{Pois}(y,\lambda) \approx \textrm{Gaus}(y, \mu = \lambda, sd = \sqrt \lambda) $
+$$
+Y \sim 
+\textrm{Pois}(\lambda) \Rightarrow 
+Y \mathrel{\dot\sim} \textrm{Gaus}(\mu = \lambda, \sigma = \sqrt \lambda) 
+$$
 
 
 
@@ -2522,7 +2576,7 @@ IPump$D_successes %>%
 ## Towards Bayesian estimation
 
 
-Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradual increase in certainty when new data arrives. Why has Bayesian statistics not been broadly adopted earlier? The reason is that Bayesian estimation was computationally unfeasible for many decades. In practice, the seemingly innocent multiplication of prior and likelihood of Bayes' rule results in a complex integral, which in most cases has no analytic solution. If you have enjoyed a classic statistics education, you may recall how the computation of an ANOVA could be carried  out on paper and pencil in reasonable time (e.g. during an exam). And that is precisely how statistical computations have been performed before the advent of electronic computing machinery. In the frequentist statistical framework, ingenious mathematicians have developed procedures that were rather efficient to compute. That made statistical data analysis possible in those times. 
+Frequentist statistics falls short on recognizing that research is incremental. Bayesian statistics embraces the idea of gradual increase in certainty when new data arrives. Why has Bayesian statistics not been broadly adopted earlier? The reason is that Bayesian estimation was computationally unfeasible for many decades.  In practice, the innocent multiplication of prior probability and likelihood of Bayes' becomes a multiplication of two density distributions, which results in complex integrals, which in most cases have no analytic solution. If you have enjoyed a classic statistics education, you may recall how the computation of an ANOVA could be carried  out on paper and pencil in reasonable time (e.g. during an exam). And that is precisely how statistical computations have been performed before the advent of electronic computing machinery. In the frequentist statistical framework, ingenious mathematicians have developed procedures that were rather efficient to compute. That made statistical data analysis possible in those times. 
 
 Expensive computation is in the past. Modern computers can simulate realistic worlds in real time and the complex integrals in Bayesian statistics they solve hands down. When analytic solutions do not exist, the integrals can still be solved using numerical procedures. Numerical procedures have been used in frequentist statistics, too, for example the iterative least squares algorithm applies for Generalized Linear Models,  Newton-Rapson optimizer can be used to find the maximum likelihood estimate and boot-strapping produces accurate confidence limits. However, these procedures are too limited as they fail for highly multidimensional problems as they are common in advanced regression models.
 
