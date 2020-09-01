@@ -1,10 +1,46 @@
 # Cases
 
-```{r setup, echo = FALSE, warnings = FALSE, eval = TRUE, message=F}
+```{r setup, include = FALSE, eval = TRUE}
 ## The following is for running the script through knitr
 source("RMDR.R")
 ```
 
+This book entertains six research cases with real data and eight siumulated cases. They will be provided as loadable R environments with this book. To use these environments, just load the Rda file and attach the environment with the same name:
+
+```{r include = F}
+load_CE("Uncanny.Rda")
+```
+
+```{r eval = F}
+load("Uncanny.Rda")
+```
+
+Then you can list the objects inside the environment:
+
+```{r}
+ls(Uncanny)
+```
+
+and use the included data sets:
+
+```{r}
+UV_1
+```
+
+after using them it is recommended to detach the environment:
+
+```{r}
+detach(Uncanny)
+```
+
+
+
+
+
+These are briefly described in the following. 
+
+
+Besides that the book is covered
 
 TODO: 
 
@@ -93,7 +129,889 @@ save_CE(Chapter_WD)
 
 
 
-## Case Rainfall
+# Book
+
+
+## Real data sets
+
+### Case: CUE8
+
+CUE8 is one of the long series *Comparative Usability Evaluation* studies conducted by Rolf Molich [CUE8]. Previous studies had shown that usability experts differ a lot in identification and reporting of usability problems. In CUE8, Molich and colleagues put the bar much lower and asked, whether different professional teams would obtain consistent measures of time-on-task. Eight independent Teams were given the same test scenario, consisting of five user tasks on a car rental website. Teams were otherwise free to design the test. In particular, some teams conducted remote usability tests, whereas others did standard moderated testing.
+
+#### Measures
+
+Time-on-task was measured in seconds and are also provided on a logarithmic scale, because of violation of Gaussian distribution of errors. In addition, satisfaction has been measured using the Systems Usability Scale with the range of $[0, 100]$.
+
+
+```{r CUE8_create, opts.label = "simulate"}
+new_syncenv("CUE8")
+```
+
+```{r}
+CUE8$D_cue8 <- 
+  foreign::read.spss("external_Data/CUE8 long.sav") %>% 
+  as_tibble() %>% 
+  # haven::read_sav("external_Data/CUE8 long.sav") %>% 
+  mutate(Obs = row_number()) %>% 
+  select(Obs, Team, Part = Participant, Condition = moderated, SUS, Task, ToT) %>% 
+  mutate(Team = str_trim(Team),
+         Team = as.factor(Team),
+         Part = as.factor(Part),
+         Task = as.factor(Task),
+         logToT = log(ToT),
+         logToT = ifelse(logToT == -Inf, NA, logToT)) %>%
+  as_tbl_obs()
+
+summary(CUE8$D_cue8)
+```
+
+
+
+```{r CUE8_simfunc, opts.label = "sim"}
+
+
+
+## simulating the data set
+CUE8$simulate <-
+  function(n_Part = 32,
+           n_Team = 16,
+           n_Task = 5,
+           tau = 10 ## higher levels produce more skew
+  ){
+    n_Obs = n_Part * n_Task
+    Teams = 
+      tibble(Team = as.factor(1:n_Team),
+                 Moderated = rbinom(n_Team, 1, .5)) %>% 
+      mutate(alpha = runif(n_Team,.9, .95) + Moderated * -.05,
+             prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
+    
+    Participants = 
+      tibble(Participant = as.factor(1:n_Part)) %>% 
+      mutate(Team = factor(x = colSums(rmultinom(n_Part, 
+                                                 1, prob = Teams$prevalence)  * 1:n_Team),
+                           levels = c(1:n_Team))) %>% 
+      inner_join(Teams, by = "Team") %>% 
+      mutate(mu_Part = rgamma(n_Part, 160 + Moderated * 20, 200) * 20) ## gaussian part
+    
+    Tasks =
+      tibble(Task = factor(1:n_Task)) %>% 
+      mutate(mu_Task = rgamma(n_Task, 100, 100) * 100) ## gaussian part
+    
+    Obs =
+      expand_grid(Participant = as.factor(1:n_Part), 
+                  Task = as.factor(1:n_Task)) %>% 
+      full_join(Participants, by = "Participant") %>% 
+      full_join(Tasks, by = "Task") %>% 
+      mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50)) %>% 
+      as_tbl_obs()
+    Obs %>% as_tbl_obs()
+  }    
+```
+
+```{r CUE8_load_sim_data, opts.label = "sim"}
+
+CUE8$D_sim_1 <- 
+  CUE8$simulate()
+
+
+names(CUE8)
+
+CUE8$D_cue8
+
+```
+
+  
+
+```{r CUE8_export}
+save(CUE8, file = "Cases/CUE8.Rda")
+write_sav(CUE8$D_study, "Data/CUE8_study.sav")
+write_csv(CUE8$D_study, "Data/CUE8_study.csv")
+write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
+write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
+
+```
+
+
+
+### Case: Uncanny Valley
+
+The Uncanny Valley effect is an astonishing emotional anomaly in the  cognitive processing of artificial faces, like ... robot faces. Intuitively, one would assume that people would always prefer faces that are more human-like. As it turns out, this is only up to a certain point, where increasing human-likeness causes a feeling of eerie. 
+
+For the first time, the UV effect could be rendered in an experiment by Mathur & Reichling. They measured the emotional response to pictures of robot faces using a simple rating scale (Likeability).
+
+#### Experimental design
+
+In order to pursue deeper into the UV effect, two more experiments, PS and RK, have been conducted in our lab. Both experiments have in common that participants see a sequence of robot faces and give an emotional response. Experiments DK and PS aimed at identifying the cognitive level of processing that makes the UV occur and  collected the responses under manipulation of presentation time. The presentation times were 50, 100, 200 and 2000ms. Experiment RK kept the presentation time constant at 2000ms, but presented all stimuli three times. This was to collect enough data for verifying that the UV phenomenon is universal, i.e. occurs for every participant. All three experiments used a full within-subject design. However, every trial presented just one item from the Eeriness scale.
+
+#### Stimuli
+
+The stimuli in the experiments are pictures of robot faces that vary from totally not human-like (like the casing of a robotic vacuum cleaner) to almost indistinguishable from human. Mathur & Reichling collected and tagged the major part of the set of stimuli. The two studies, PS [PS] and RK [RK], successively added stimuli to the set in order to increase the precision in the range where the effect occurs.
+
+The central predictor in these experiments is the human-likeness of a robot face. Mathur & Reichling  produced these measures by use of a rating scale, humano-mechanical scale (huMech). Stimuli that were added by PS and RK were rated by two experts, using MR collection as a a baseline. Variable huMech has been normalized to $[0;1]$.
+
+#### Measures
+
+The Eeriness scale of Ho & MacDorman [REF] has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur & Reichling, responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
+
+```{r}
+summary(RK_1)
+```
+
+
+```{r Uncanny_create, opts.label = "create"}
+new_syncenv("Uncanny")
+
+```
+
+
+
+
+```{r Uncanny_load_data, opts.label = "load"}
+
+load("external_Data/MathurRepl.Rda")
+
+load("external_Data/UV_PS.Rda")
+
+load("external_Data/UV_RK.Rda")
+
+Uncanny$DK_1 <-
+  MathurRepl %>%
+  filter(Experiment == "Keeris") %>% 
+  mutate(Stimulus = str_remove(Stimulus, "^c"),
+         Experiment = "DK",
+         Collection = "MR") %>% 
+  mutate(session = if_else(Condition == "short", 0, 1),
+         Session = as.character(session + 1)) %>% 
+  mutate(presentation_time = if_else(Condition == "short", .05, 2)) %>% 
+    mutate(Condition = case_when(presentation_time <= .1 ~ "brief",
+                               presentation_time == .2 ~ "medium",
+                               presentation_time == 2  ~ "prolonged")) %>% 
+  mutate(huMech = mascutils::rescale_unit(huMech),
+         response = mascutils::rescale_unit(huMech)) %>% 
+  as_tbl_obs() %>% 
+  select(Experiment, Obs, Part, Item, Scale, Stimulus, session, Session, Collection,
+         Condition, presentation_time, response, RT, starts_with("huMech"))
+  
+summary(Uncanny$DK_1)
+
+
+Uncanny$PS_1 <- 
+  PS_1 %>% 
+  mutate(Experiment = "PS",
+         Collection = "PS",
+         Part = as.character(Part),
+         presentation_time = as.numeric(Condition)) %>%
+  mutate(Condition = case_when(presentation_time <= .1 ~ "brief",
+                               presentation_time == .2 ~ "medium",
+                               presentation_time == 2  ~ "prolonged")) %>% 
+  group_by(Part) %>%
+  mutate(trial = row_number()) %>% 
+  ungroup() %>% 
+  mutate(session = case_when(Condition <= "brief" ~ 0,
+                                Condition == "medium" ~ 1,
+                                Condition == "prolonged" ~ 2),
+         Session = as.character(session + 1)
+         ) %>% 
+  as_tbl_obs() %>% 
+  select(Experiment, Obs, Part, Item, Scale, Stimulus, session, Session, Collection,
+         Condition, presentation_time, response, RT, starts_with("huMech"))
+
+Uncanny$D_UV <- bind_rows(Uncanny$DK_1, Uncanny$PS_1, Uncanny$RK_1)
+
+
+Uncanny$RK_2 <-
+  Uncanny$RK_1 %>% 
+  group_by(Stimulus, huMech) %>%
+  summarize(avg_like = mean(response)) %>% 
+  ungroup() %>% 
+  as_tbl_obs()
+
+
+## splicing out 
+Uncanny$UV_1 <- 
+  Uncanny$D_UV %>% 
+  filter(Condition == "prolonged") %>% 
+  select(Part, Stimulus, huMech, response) %>% 
+  group_by(Stimulus, huMech) %>% 
+  summarize(avg_like = mean(response, na.rm = T)) %>% 
+  ungroup() %>% 
+  as_tbl_obs()
+
+```
+```{r}
+attach(Uncanny)
+
+RK_1 %>% 
+  ggplot(aes(x = huMech)) +
+  geom_smooth(aes(y = response, col = "response")) +
+  geom_smooth(aes(y = eeriness, col = "eeriness"))
+
+UV_1 %>% 
+  ggplot(aes(x = huMech, y = avg_like)) +
+  geom_smooth()
+
+detach(Uncanny)
+```
+
+
+```{r Uncanny_functions, eval = F}
+Uncanny$trough <- function (coef, ...) {
+   UseMethod("trough", coef)
+ }
+
+Uncanny$trough.numeric <- 
+    function(coef = c(-.2, -.5, .2, .7)) {
+      if(length(coef) != 4) stop("the uncanny valley trough polynomial requires exactly four parameters")
+      poly   = polynom::polynomial(coef)
+      dpoly  = deriv(poly)
+      ddpoly = deriv(dpoly)
+      points = solve(dpoly)
+      pt_dir = as.function(ddpoly)(points)
+      if(!(any(is.complex(pt_dir)))){ ## when there is solution ...
+        points[pt_dir > 0]            ## select the minimum
+      }else{
+        NA                            ## no solution: return NA
+      }
+    }
+
+Uncanny$trough.matrix <- 
+  function(coef) aaply(as.matrix(coef), .margins = 1, .fun = trough.numeric)
+
+Uncanny$trough.data.frame <- 
+  function(coef) trough.matrix(as.matrix(coef))
+
+```
+
+
+
+
+
+```{r Uncanny_export}
+save(Uncanny, file = "Cases/Uncanny.Rda")
+
+#write_sav(Uncanny$UV_1, "Data/UV_1.sav")
+write_csv(Uncanny$UV_1, "Data/UV_1.csv")
+
+```
+
+
+### Case: IPump, user testing infusion pumps
+
+<!-- Consider the following research situation: Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules. Just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted as well and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users". -->
+
+<!-- That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it then already? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there yet [see LMM]. -->
+
+
+Medical infusion pumps are unsuspicious looking devices that are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained staff, mostly anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
+
+* tiny 3-row LCD displays
+* flimsy foil buttons without haptic marking or feedback
+* modes
+* information hidden in menus
+
+For fixing these issues no additional research is needed, as the problems are pretty obvious to experienced user interface designers. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
+
+* is the interface safe to use?
+* is it efficient to learn?
+* is a novel interface better than a legacy design? And by how much?
+
+<!-- #98 -->We conducted such a study. A novel interface was developed after an extensive study of user requirements and design guidelines. As even the newest international standards  for medical devices do not spell precise quantitative user requirements (such as, a nurse must be able to complete a standard task in *t* seconds and no more than *e* errors may occur), the novel interface was compared to a device with a legacy design. 
+
+#### Experimental design
+
+Eight successive user tasks were identified from training material and documentation. All participants were trained nurses and they were asked to complete the series of  tasks with the devices. In order to capture learnability of the devices, every nurse completed the sequence of tasks in three consecutive sessions. 
+
+
+#### Measures
+
+A number of performance measures were recorded to reflect safety and efficiency of operation:
+
+1. *task completion*: for every task it was assessed whether the nurse had completed it successfully.
+1. *deviations from optimal path*: using the device manual for every task the shortest sequence was identified that would successfully complete the task. The sequence was then broken down into individual operations that were compared to the observed sequence of operations. An algorithm called *Levenshtein distance* was used to count the number of deviations.
+1. *time on task* was recorded as a measure for efficiency.
+1. *mental workload* was recorded using a one-item rating scale.
+
+Furthermore, several participant-level variables have been recorded:
+
+1. professional group: general or intensive care
+1. level of education (Dutch system): MBO, HBO and university
+1. years of job experience as a nurse
+
+<!-- As can be expected in the light of what has been said above, each one these measures violate one or more assumptions of the Gaussian linear model. In the following chapters, proper models from the GLM family are introduced for commonly occuring measures: -->
+
+<!-- 1. *count data*, such as the number of completed tasks and path deviations -->
+<!-- 1. *temporal data*, such as time-on-task -->
+<!-- 1. *rating scales* -->
+
+
+
+
+```{r IPump_create, opts.label = "simulate"}
+new_syncenv("IPump")
+```
+
+
+```{r load_data}
+
+load("external_data/PUMPS.Rda", envir = IPump)
+
+IPump$D_pumps <- 
+  IPump$P %>% 
+  as_tibble() %>% 
+  select(Part = Participant, 
+         Group = professionalGroup,
+         experience,
+         Education = educationLevel,
+         Design = design,
+         session,
+         Task = Task,
+         ToT = completionTime,
+         completion = taskCompletion,
+         deviations = pathDeviation,
+         workload = mentalWorkload) %>% 
+  mutate(Design = if_else(Design == "Braun", 
+                          "Legacy", "Novel"),
+         Education = case_when(Education == "MBO opleiding" ~ "1_MBO",
+                               Education == "HBO opleiding" ~ "2_HBO",
+                               Education == "HBO opleiding" ~ "2_Uni"),
+         Education = forcats::as_factor(Education),
+         Group = ifelse(Group == "VA", "GC", "IC"),
+         Session = as.factor(session),
+         session = as.integer(session) - 1,
+         logToT = log(ToT),) %>% 
+  select(Part, Group, experience, Education, Design, session, Session, Task, ToT, completion, deviations, workload) %>% 
+  as_tbl_obs()
+
+IPump$D_agg <-
+  IPump$D_pumps %>% 
+  group_by(Part, Group, Education, experience,
+           Design, session, Session) %>% 
+  summarize(ToT = sum(ToT, na.rm = T),
+            deviations = sum(deviations, na.rm = T),
+            workload = mean(workload, na.rm = T),
+            completion = all(completion)) %>% 
+  ungroup() %>% 
+  mutate(logToT = log(ToT)) %>% 
+  as_tbl_obs()
+
+IPump$D_Novel <- filter(IPump$D_pumps, Design == "Novel")
+
+
+rm(P, envir = IPump)
+
+IPump$D_pumps
+IPump$D_agg
+
+```
+
+
+
+
+
+
+
+```{r IPump_simfunc, opts.label = "sim"}
+
+## two designs at two moments nurses are familiar with device L
+
+IPump$simulate_1 <-
+  function(n_Part = 30,
+           seed = 42,
+           beta = c(180, 30, -20, -40),
+           sd = 20){
+    set.seed(42)
+    n_Obs = n_Part * 4
+    Exp <-
+      expand_grid(Part = 1:n_Part,
+                  Design = c("L", "N"),
+                  moment = c(1,2)) %>% 
+      mutate(mu = beta[1] + 
+               (Design == "N") * beta[2] +
+               (moment == 2) * beta[3] +
+               (Design == "N") * (moment == 2) * beta[4],
+             ToT = rnorm(n_Obs, mu, sd)) %>% 
+      as_tbl_obs()
+    Exp
+  }
+    
+IPump$D_sim_1 <- IPump$simulate_1()
+
+IPump$D_sim_1 %>% 
+  ggplot(aes(x = moment, 
+             y = ToT, 
+             color = Design)) +
+  geom_smooth(method = "lm", se = F)
+
+
+
+
+```
+
+
+
+
+
+```{r IPump_export}
+save(IPump, file = "Cases/IPump.Rda")
+write_sav(IPump$D_sim_1, "Data/IP_1.sav")
+write_csv(IPump$D_sim_1, "Data/IP_1.csv")
+write_sav(IPump$D_pumps, "Data/Pumps.sav")
+write_csv(IPump$D_pumps, "Data/Pumps.csv")
+write_sav(IPump$D_agg, "Data/Pumps_agg.sav")
+write_csv(IPump$D_agg, "Data/Pumps_agg.csv")
+
+```
+
+
+### Case Sleepstudy (lme4)
+
+This data set ships with the lme4 package and has only been converted to the coding standards used throughout. Eighteen participants underwent sleep deprivation on ten successive days and the average reaction time on a set of tests has been recorded per day and participant. For further information on the data set, consult the documentation (`?lme4::sleepstudy`).
+
+```{r Sleepstudy_load_data, opts.label = "sim"}
+Sleepstudy$D_slpstd <-
+  lme4::sleepstudy %>% 
+  select(Part = Subject, days = Days, RT = Reaction) %>%
+  mutate(days = as.integer(days))
+
+```
+
+
+```{r}
+Sleepstudy$D_slpstd %>% 
+  ggplot(aes(x = days, y = RT)) +
+  facet_wrap(~Part) +
+  geom_point() +
+  geom_smooth(se = F, aes(color = "LOESS")) +
+  geom_smooth(se = F, method = "lm", aes(color = "lm")) +
+  labs(color = "Smoothing function")
+```
+  
+
+
+```{r Sleepstudy_export}
+save(Sleepstudy, file = "Cases/Sleepstudy.Rda")
+#write_sav(Sleepstudy$D_slpstd, "Data/Sleepstudy.sav")
+write_csv(Sleepstudy$D_slpstd, "Data/Sleepstudy.csv")
+
+```
+
+
+
+
+### Case: Egan
+
+in the beginning 1990ies Dennis Egan examined the variability in performance that is due to individual differences [Egan]. He concluded that individual differences are the greater source of performance variance than design differences are. Twenty-five years we put that to a test [test_Egan].
+
+#### Research Design
+
+We selected ten university websites and identified ten typical information search tasks. 41 student users took part and performed the tasks. Our design is a full within-subject design, with *planned missing values*. Instead of all 100 possible combinations of websites and tasks, every participant got a set of trials, where websites and tasks were paired, such that every website and every task appeared *exactly once* per participant.
+
+#### Measures
+
+Four usability measures were taken per trial:
+
+* task success
+* number of clicks (clicks)
+* number of tims user returns to homepage
+* workload (measured by a one-item scale)
+
+
+```{r Egan_create, opts.label = "simulate"}
+new_syncenv("Egan")
+```
+
+
+```{r Egan_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+
+```
+
+```{r Egan_load_data, opts.label = "sim"}
+Egan$D_egan <- 
+  read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
+  as_tibble() %>% 
+  mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
+  select(Part = ParticipantID,
+         Gender = ParticipantGender,
+         age = ParticipantAge,
+         trial = TrialNumber,
+         Design = Website,
+         Task,
+         success = SuccesOnTask,
+         ToT = TimeOnTask,
+         clicks = NumberOfClicks,
+         returns_hp = TimesReturnedHome,
+         workload) %>% 
+  mutate_if(
+    is.labelled, as_factor) %>% 
+  mutate(Part = as.integer(Part),
+         trial = as.integer(trial),
+         success = success == "succes",
+         clicks = as.integer(clicks),
+         returns_hp = as.integer(returns_hp),
+         return_links = as.integer(return_links)) %>% 
+  as_tbl_obs()
+
+
+Egan$D_egan
+
+```
+
+  
+
+```{r Egan_export}
+save(Egan, file = "Cases/Egan.Rda")
+write_sav(Egan$D_egan, "Data/Egan.sav")
+write_csv(Egan$D_egan, "Data/Egan.csv")
+
+```
+
+
+### Case: Millers Magic Number
+
+Miller's magic number says that the short term memory capacity is $7 \pm 2$. Later research by Baddeley & Hitch found that the so-called *working memory* is a multi-component system, that stores visual and verbal information separately. Following up on the experimental research by [Freudenthal], we were interested how differences in capacity of the verbal and visual subsystem explain performance differences in a real web search tasks.
+
+#### Research Design
+
+We selected five municipal websites and five search tasks. For creating the trials, websites and tasks were paired in ush c way, that all participants see every website and every task exactly once.
+
+#### Measures
+
+For visual working memory capacity, we used the Corsi block tapping task. For verbal capacity, the Ospan task was used and both scoring schemes, A and B,  were applied. Number of clicks and time to completion  were recorded as performance measures.
+
+
+
+```{r MMN_raw_data}
+load("external_data/MMN.Rdata")
+
+MMN_raw <- as_tibble(MMN, .name_repair = "minimal")
+
+rm(MMN)
+```
+
+
+```{r MMN_create, opts.label = "simulate"}
+new_syncenv("MMN")
+
+```
+
+
+```{r MMN_load_data, opts.label = "sim"}
+
+MMN$MMN_2 <- 
+  MMN_raw %>% 
+  select(Part = Subject, Website, Task, Corsi, 
+         Ospan.A, Ospan.B, time, clicks) %>% 
+  mascutils::z_score("Corsi") %>% 
+  mascutils::z_score("Ospan.A") %>% 
+  mascutils::z_score("Ospan.B") %>% 
+  mutate(ltime = log(time),
+         lclicks = log(clicks)) %>% 
+  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)  %>% 
+  as_tbl_obs()
+
+names(MMN$MMN_2)
+
+MMN$MMN_1 <-
+  MMN$MMN_2 %>% 
+  group_by(Part, Corsi, Ospan.A, Ospan.B, zCorsi, zOspan.A, zOspan.B) %>% 
+  summarize(time = sum(time),
+            clicks = sum(clicks)) %>% 
+  mutate(ltime = log(time),
+         lclicks = log(clicks)) %>% 
+  as_tbl_obs()
+  
+names(MMN$MMN_1)
+
+```
+
+
+```{r MMN_export}
+
+save(MMN, file = "Cases/MMN.Rda")
+write_sav(MMN$MMN_1, "Data/MMN_1.sav")
+write_sav(MMN$MMN_2, "Data/MMN_2.sav")
+write_csv(MMN$MMN_1, "Data/MMN_1.csv")
+write_csv(MMN$MMN_2, "Data/MMN_2.csv")
+
+```
+
+
+### Case: AUP
+
+In their seminal article, [Carroll & Rosson] coin the term *Active User Paradox* for their observations, that users stick to their habits and are reluctant to put energy into learning a computer system. This seems irrational at first, as users miss a chance to increase their long-term efficiency. (Later research by [Fu & Gray] found that their is a hidden rationality to the AUP.) Still, there are users out there who are enthusiastic about computers and love to solve the intellectual puzzles they provide. We wanted to see whether people of that kind would be more likely to over-win the AUP.
+
+#### Measures
+
+For measuring the personality of users, we used 
+
++ the *need-for-cognition scale*  
++ the *Geekism (gex)* scale. 
++ a scale for *Computer Anxiety Scale*
++ a scale for *Utilitarianism*
+
+Users were given two complex tasks on a computer. Their behavour was observed and events were coded, e.g. "User uses documentation of the system". Events were than rated, counted and aggregated into two scales:
+
++ seeking challenges
++ explorative behaviour
+
+By combining these two scales, we created a total score for *resistance to the AUP*, per participant.
+
+
+
+```{r AUP_raw_data}
+load("external_data/JK.Rda")
+AUP_raw <- Scores
+rm(Scores)
+names(AUP_raw)
+```
+
+
+```{r AUP_create, opts.label = "simulate"}
+new_syncenv("AUP")
+
+```
+
+
+```{r AUP_load_data, opts.label = "sim"}
+AUP$AUP_1 <- 
+  AUP_raw  %>% 
+  as_tibble() %>% 
+  select(Part = Participant, age = Age, gender = Gender, 
+         gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
+         challenge = AUP_challenge, exploration = AUP_explore) %>% 
+  mutate(resistance = challenge + exploration) %>% 
+  mascutils::z_score("gex") %>% 
+  mascutils::z_score("ncs") %>% 
+  mascutils::z_score("compAnx") %>% 
+  mascutils::z_score("resistance") %>% 
+  as_tbl_obs()
+
+names(AUP$AUP_1)
+
+
+```
+
+```{r AUP_test}
+
+AUP$AUP_1 %>% 
+  select(zncs, zgex, zresistance) %>% 
+  GGally::ggpairs(data = .)
+
+lm(zresistance ~ zgex, data = AUP$AUP_1)
+lm(zresistance ~ zncs, data = AUP$AUP_1)
+lm(zresistance ~ zgex + zncs, data = AUP$AUP_1)
+```
+
+
+```{r AUP_export}
+
+save(AUP, file = "Cases/AUP.Rda")
+write_sav(AUP$AUP_1, "Data/AUP_1.sav")
+write_csv(AUP$AUP_1, "Data/AUP_1.csv")
+
+```
+
+
+### Case: Hugme
+
+<!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
+
+<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
+
+
+As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media entertainment it delivers. A geek person seeing a computer is more likely to have certain memories or associations. For example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. 
+
+#### Measures
+
+Before the experiment, participants filled out teh multi-item NCS and Geekism questionnaires. The geekism questionknaire was given a second time after the experiment, originally to assess test-retest reliability.
+
+As response we had chosen recation time in a Stroop task, where participants were first primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geek-ish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we presumed that geeks like to think hard and used the need-for-cognition scale as a second predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek.
+
+
+
+
+#### Stimuli
+
+Stimuli were composed of a priming picture and the word presented in the Stroop task, with prime/word pairs generated randomly for each observation.
+
+Ninety words were selected, 30 for each of the following three categories and translated into English, German and Dutch:
+
+1. hedonism (stylish, braging, wanting, ...)
+2. utilitarianism (useful, assisting, optimizing)
+3. geekism (configuring, technology, exploring)
+
+Seventy-two prime pictures were selected, with 24 for each of the following categories:
+
+1. control (pictures unrelated to technology)
+2. geek (pictures showing computers in a geekish setting, e.g. an open computer case or a terminal console)
+
+
+#### Data modelling and transformations in a nutshell
+
+The Hugme experiment is a multi-population study: participants, pictures, words and items (from two scales) all provide information that is relevant for the statistical model. For analyzing the relationship between geekism, NCS on te one hand and the difference in reaction times between word and picture catehories, we need the table `D_hugme`, which provides the predictor data for every observation from the experiment. The way this table was constructed is an instructive example of how researchers can logically structure and efficiently  transform data from complex studies.
+
+The Table `R_exp` is the raw data that we got from the experiment. It contains the encounter of participants with primes and words, but misses the classification of words and primes, as well as participant-level variables. The classification of words and primes is stored separately in three *entity tables*: `E_Words`, `E_Primes`, whereas a `E_part` contains demographic data:
+
+```{r}
+Hugme$E_Part
+```
+
+All entity tables capture the information in the sample of precisely one population, with one row per member and a unique identifier. This identifier is called a *key* and is crucial for putting all the information together, using *joins*. Table `R_exp` provides teh scaffold for the join operations, in that it contains all identifier variables. In fact, the combination of Part, Word and Prime is a key by itself, as it uniquely identifies every observation:
+
+```{r}
+Hugme$R_exp
+
+cat("The number of unique combinations also is", 
+    dim(distinct(Hugme$R_exp, Part, Word, Prime))[1])
+```
+
+In multi-level modelling, we called this an encounter or crossing of samples. In data modelling, this is called a *relationship table*. A join always operates on two tables that share at least one key variable. The following code takes the `R_exp` the relationship table to the left and merges in additional data from the entity table, picking on the key variable. This works successively:
+
+
+```{r}
+Hugme$R_exp %>% 
+  left_join(Hugme$E_Words, by = "Word") %>% 
+  left_join(Hugme$E_Prime, by = "Prime") %>% 
+  left_join(Hugme$E_Part, by = "Part")
+```
+
+
+`R_quest` contains  the item responses in the classic matrix form. This does not comply with the idea observation being an encounter of participants and items. In particular, items 
+
+
+For table `D_quest` this was gathered into the long form, suitable for running a psychometric analysis with multi-level models.  
+
+
+
+
+```{r Hugme_create, opts.label = "simulate"}
+new_syncenv("Hugme")
+```
+
+
+```{r hugme_simfunc, opts.label = "sim"}
+
+
+## reading the data
+
+```
+
+```{r hugme_load_data, opts.label = "sim"}
+load("external_data/HUG3/HUG3.Rda")
+load("external_data/HUG3/Q3.Rda")
+
+Hugme$E_Words <- 
+  readxl::read_excel("Data/Hugme/Trials.xlsx") %>% 
+  distinct(text_EN, text_DE, text_NL, HUGword) %>% 
+  mutate(WordCat = case_when(
+    HUGword  == "h" ~ "hedo",
+    HUGword  == "u" ~ "util",
+    HUGword  == "g" ~ "geek")) %>% 
+  select(Word = text_EN, Word_DE = text_DE, Word_NL = text_NL, WordCat)
+
+Hugme$D_hugme <- 
+  HUG3 %>% 
+  left_join(Hugme$E_Words, by = c("Target" = "Word_DE")) %>% 
+  filter(!is.na(Word)) %>% 
+  rename(Part = Subj) %>% 
+  mutate(RT = RT/1000,
+         WordGeek = WordCat == "geek",
+         PrimeGeek = primeCat == "geek") %>% 
+  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
+         Word, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
+  mascutils:::as_tbl_obs()
+
+```
+
+```{r}
+Hugme$R_exp <- 
+  Hugme$D_hugme %>% 
+  select(Part, Word, Prime, correct, RT)
+
+Hugme$R_quest <- 
+  Q3 %>%
+  select(UserID = Subj,
+         Gender, Age, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
+  as.tibble()
+
+```
+
+
+```{r}
+
+Hugme$D_quest <-
+  Hugme$R_quest %>%
+  select(Part = UserID, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>%
+  gather(Item, rating, -Part) %>%
+  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>%
+  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>%
+  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>%
+  arrange(Part, Scale, Item) %>%
+  mascutils:::as_tbl_obs.tbl_df()
+
+```
+
+
+
+
+```{r}
+## Extracting remaining entities
+
+Hugme$E_Part <- 
+  Hugme$R_quest %>% 
+  as.tibble() %>% 
+  select(Part = UserID, gender = Gender, age = Age) %>% 
+  mutate(Part = as.integer(Part),
+         age = as.integer(age))
+
+Hugme$E_Items <- readxl::read_excel("Data/Hugme/Items.xlsx")
+
+Hugme$E_Primes <- 
+  Hugme$D_hugme %>% 
+  distinct(Prime, PrimeCat)
+
+openxlsx::write.xlsx(Hugme$E_Words, file = "Data/Hugme/Words.xlsx")
+openxlsx::write.xlsx(Hugme$E_Part, file = "Data/Hugme/Parts.xlsx")
+openxlsx::write.xlsx(Hugme$E_Primes, file = "Data/Hugme/Primes.xlsx")
+
+```
+
+
+
+```{r}
+## reverse creating raw data files
+
+Hugme$R_exp %>% 
+  group_by(Part) %>% 
+  nest() %>% 
+  purrr::pmap(~write_csv(..2, path = paste0("Data/Hugme/P_",..1,".csv")))
+
+```
+
+  
+
+```{r hugme_export}
+save(Hugme, file = "Cases/Hugme.Rda")
+write_sav(Hugme$D_hugme, "Data/Hugme.sav")
+write_csv(Hugme$D_hugme, "Data/Hugme.csv")
+write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
+write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
+write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
+write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
+```
+
+
+
+
+## Synthetic data sets 
+
+
+### Case Rainfall
+
+We don't want to get wet, which is why we use the weather forecast. If we want to make our own forecasts, we need data. This simulation records rainfall on 20 days. On around 60% of these days, the sky was cloudy in the morning. With a blue sky in the morning, the chance of rain is 30%. On cloudy days it is 60%.
 
 
 ```{r Rainfall_create}
@@ -112,7 +1030,7 @@ Rainfall$simulate <-
     set.seed = 1,
     debug = F){
     
-    if (!is.na(set.seed)) set.seed(set.seed)
+    if (!is.na(set.seed)) set.seed()
     ## number of observations
     tibble(cloudy = rbinom(n_Days, 1, .6)) %>%
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
@@ -172,10 +1090,9 @@ write_csv(Rainfall$Rain, "Data/Rainfall.csv")
 ```
 
 
-## Case 99 seconds
+### Case 99 seconds
 
-Case 99 seconds is 
-The group mean of the second design is fixed to 105, with the CI80 of [103, 111]
+The maerketing department of a car rental website claims that "You can rent a car in 99 seconds." In this simulation, time-on-task measures are taken from 100 test users. These are Gaussian distributed with a mean of 105 and a standard error of 42. ToT also correlates with age, while there is no gender difference.
 
 ```{r Sec99_create, opts.label = "simulate"}
 new_syncenv("Sec99")
@@ -205,7 +1122,7 @@ Sec99$simulate <-
       mutate(Gender = if_else(rbinom(n_Part, 1, .4) == 1,
                              "male", "female"))
     Sec99 %>% as_tbl_obs()
-  }    
+  }
 
 ## missing values in age
 
@@ -233,7 +1150,10 @@ save(Sec99, file = "Cases/Sec99.Rda")
 
 
 
-## Case: Rational
+### Case: Rational
+
+A project needs a predicted  increase in revenue by a factor of 1.1 for management to give green light. The simulation produces a between-subject comparison  study, where 50 users each see the current version of the website or the prototype. Revenue in both groups is Gamma distributed with a mean of 100 for the current version and a multiplyer of 1.1 for the prototype.
+
 
 ```{r Rational_create, opts.label = "invisible"}
 new_syncenv("Rational")
@@ -287,7 +1207,9 @@ write_csv(Rational$RD, "Data/Rational.csv")
 ```
 
 
-## Case: BrowsingAB
+### Case: BrowsingAB
+
+
 
 ```{r BAB_create, opts.label = "simulate"}
 try(detach(BrowsingAB))
@@ -336,7 +1258,7 @@ BrowsingAB$simulate <-
     sd_T0 = 50,
     # Far_sightedness:Small_font
     lambda_SD1 = 60,
-    # Residual) {)
+    # Residual
     sd_epsilon = 30,
     set.seed = 42,
     debug = F
@@ -477,91 +1399,11 @@ detach(BrowsingAB)
 
 
 
-## Case: CUE8
 
-```{r CUE8_create, opts.label = "simulate"}
-new_syncenv("CUE8")
-```
+### Case: Headache
 
+This simulation takes perceived headache measured on 16 participants before and after an administration of headache pills. Participants either get both pills A and B, only A, only B or no pill (placebo). Pill A and B are both effective on their own, but there is a saturation effect, when both pills are taken. Baseline headache is generated from Beta distributions. In order to avoid unplausible (i.e. negative) values, reduction in headache involves a log transformation.
 
-```{r CUE8_simfunc, opts.label = "sim"}
-
-
-## simulating the data set
-CUE8$simulate <-
-  function(n_Part = 32,
-           n_Team = 16,
-           n_Task = 5,
-           tau = 10 ## higher levels produce more skew
-  ){
-    n_Obs = n_Part * n_Task
-    Teams = 
-      tibble(Team = as.factor(1:n_Team),
-                 Moderated = rbinom(n_Team, 1, .5)) %>% 
-      mutate(alpha = runif(n_Team,.9, .95) + Moderated * -.05,
-             prevalence = MCMCpack::rdirichlet(1, alpha = alpha)[1,])
-    
-    Participants = 
-      tibble(Participant = as.factor(1:n_Part)) %>% 
-      mutate(Team = factor(x = colSums(rmultinom(n_Part, 
-                                                 1, prob = Teams$prevalence)  * 1:n_Team),
-                           levels = c(1:n_Team))) %>% 
-      inner_join(Teams, by = "Team") %>% 
-      mutate(mu_Part = rgamma(n_Part, 160 + Moderated * 20, 200) * 20) ## gaussian part
-    
-    Tasks =
-      tibble(Task = factor(1:n_Task)) %>% 
-      mutate(mu_Task = rgamma(n_Task, 100, 100) * 100) ## gaussian part
-    
-    Obs =
-      expand_grid(Participant = as.factor(1:n_Part), 
-                  Task = as.factor(1:n_Task)) %>% 
-      full_join(Participants, by = "Participant") %>% 
-      full_join(Tasks, by = "Task") %>% 
-      mutate(seconds = rexgauss(n_Obs, mu_Part + mu_Task, tau, 50)) %>% 
-      as_tbl_obs()
-    Obs %>% as_tbl_obs()
-  }    
-```
-
-```{r CUE8_load_sim_data, opts.label = "sim"}
-
-CUE8$D_sim_1 <- 
-  CUE8$simulate()
-
-CUE8$D_cue8 <- 
-  foreign::read.spss("external_Data/CUE8 long.sav") %>% 
-  as_tibble() %>% 
-  # haven::read_sav("external_Data/CUE8 long.sav") %>% 
-  mutate(Obs = row_number()) %>% 
-  select(Obs, Team, Part = Participant, Condition = moderated, SUS, Task, ToT) %>% 
-  mutate(Team = str_trim(Team),
-         Team = as.factor(Team),
-         Part = as.factor(Part),
-         Task = as.factor(Task),
-         logToT = log(ToT),
-         logToT = ifelse(logToT == -Inf, NA, logToT)) %>%
-  as_tbl_obs()
-
-names(CUE8)
-
-CUE8$D_cue8
-
-```
-
-  
-
-```{r CUE8_export}
-save(CUE8, file = "Cases/CUE8.Rda")
-write_sav(CUE8$D_study, "Data/CUE8_study.sav")
-write_csv(CUE8$D_study, "Data/CUE8_study.csv")
-write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
-write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
-
-```
-
-
-## Case: Headache
 
 ```{r Headache_create, opts.label = "simulate"}
 new_syncenv("Headache")
@@ -601,7 +1443,9 @@ write_csv(Headache$Pills, "Data/Headache.csv")
 ```
 
 
-## Case: Reading time
+### Case: Reading time
+
+This simulation covers an experiment where participants got to read a text on screen and their reading time is recorded. 40 participants are divided over four experimental conditions, where the font size is either 10pt or 12pt and where the font color is either black (high contrast) or gray. Small and gray font results in an average reading time of 60 seconds. 12pt is read 12s faster and black font is read 10s faster. Due to a saturation effect, 12pt and black combined do not result in 22s, but only 14s. Reading time (ToT) is generated with Gaussian distribution.
 
 ```{r Reading_create, opts.label = "simulate"}
 new_syncenv("Reading")
@@ -672,7 +1516,9 @@ write_csv(Reading$D_1, "Data/Reading.csv")
 
 
 
-## Case: AR_game
+### Case: AR_game
+
+A company seeks their customer profile for a novel Augmented Reality game. 200 participants rate how technophile or sociophile they are (generated from Beta distributions) and rate their intention to buy the product. The coefficients are set to create a slight benefit  (for intention) of being sociophile or technophile and an amplification effect for participants that are both. Intention is sampled from a Gaussian distribution, but with an inverse logit transformation to create boundaries at $[0;1]$.
 
 ```{r AR_game_create, opts.label = "simulate"}
  
@@ -736,7 +1582,9 @@ save(AR_game, file = "Cases/AR_game.Rda")
 ```
 
 
-## Case: Sleep
+### Case: Sleep
+
+This simulation is loosely modelled after an experiment Corcoran [D. W. J. Corcoran (1962) Noise and loss of sleep, Quarterly Journal of Experimental Psychology, 14:3, 178-182, DOI: 10.1080/17470216208416533] who measured the combined effects of sleep deprivation and noisy environments. It turned out that noise and sleep deprivation both increase reaction times, but that noise helps when someone is very tired. Outcomes were simulated from Gaussian distributions.
 
 ```{r Sleep_create, opts.label = "simulate"}
 new_syncenv("Sleep")
@@ -783,18 +1631,30 @@ Sleep$D_1 %>%
   
 ```
 
-Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
+These results can be explained by the Yerkes-Dodson law, which states that  performance on cognitive tasks is best under moderate arousal. It is assumed that arousal increases energy, but also causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between. The two lines Energy and Focus have been produced by a logistic function, whereas Performance is the product of the two.
 
 ```{r Sleep_sim_YD}
 Sleep$simulate_YD <- 
-    function(arousal, offset = 1, scale = 1.8){
+    function(arousal = c(-200:200)/100, offset = 1, scale = 1.8){
     tibble(arousal = arousal) %>% 
       mutate(energy = plogis(arousal + offset, scale = .5),
              focus =  (1 - plogis(arousal, scale = .5))) %>% 
       mutate(performance = energy * focus * scale) %>% 
       as_tbl_obs()
-  }
+    }
+
+Sleep$simulate_YD() %>% 
+  ggplot(aes(x = arousal, y = performance, color = "Performance")) +
+  geom_line() +
+  geom_line(aes(y = energy, color = "Energy")) +
+  geom_line(aes(y = focus, color = "Focus")) +
+  labs(color = "")
+  
+  
+  
 ```
+
+
 
 
 ```{r Sleep_export}
@@ -806,575 +1666,16 @@ write_csv(Sleep$D_1, "Data/Sleep.csv")
 
 
 
-## Case: Uncanny Valley
 
-```{r Uncanny_create, opts.label = "simulate"}
-new_syncenv("Uncanny")
 
-```
 
 
 
 
-```{r Uncanny_load_data, opts.label = "sim"}
+# Workshops
 
-load("external_Data/MathurRepl.Rda")
-load("external_Data/UV_PS.Rda")
 
-load("external_Data/UV_RK.Rda")
-
-# MathurRepl <- 
-#   MathurRepl %>% 
-#   mutate(Part = as.character(Part), 
-#          Stimulus = str_remove(Stimulus, "^c"),
-#          Experiment = if_else(Experiment == "Keeris", "DK", "MR"))
-  
-
-Uncanny$PS_1 <- 
-  PS_1 %>% 
-  mutate(Experiment = "PS",
-         Collection = "PS",
-         Part = as.character(Part)) %>%
-  group_by(Part) %>%
-  mutate(trial = row_number()) %>% 
-  ungroup() %>% 
-  select(Part, Item, Stimulus, )
-
-Uncanny$RK_1 <-
-  RK_1 %>% 
-  mutate(Experiment = "RK",
-         Collection = "RK",
-         Condition = "long",
-         Session = as.character(repetition + 1)) %>%
-  group_by(Part) %>%
-  mutate(trial = row_number()) %>% 
-  ungroup()
-
-# Uncanny$D_all <-
-#   MathurRepl %>% 
-#   bind_rows(Uncanny$PS_1 %>% select_(.dots = names(PS_))) %>% 
-#   bind_rows(Uncanny$RK_1 %>% select_(.dots = names(MathurRepl))) %>% 
-#   as_tbl_obs()
-
-
-# rm(MathurRepl)
-
-
-## splicing out 
-Uncanny$UV_1 <- 
-  Uncanny$RK_1 %>% 
-  filter(Set == "MR") %>% 
-  select(Part, Stimulus, huMech, response) %>% 
-  group_by(Stimulus, huMech) %>% 
-  summarize(avg_like = mean(response, na.rm = T)) %>% 
-  ungroup() %>% 
-  as_tbl_obs()
-
-names(Uncanny)
-
-```
-```{r}
-Uncanny$RK_1 %>% 
-  ggplot(aes(x = huMech)) +
-  geom_smooth(aes(y = response, col = "response")) +
-  geom_smooth(aes(y = eeriness, col = "eeriness"))
-
-Uncanny$UV_1 %>% 
-  ggplot(aes(x = huMech, y = avg_like)) +
-  geom_smooth()
-```
-
-
-```{r Uncanny_functions, eval = F}
-Uncanny$trough <- function (coef, ...) {
-   UseMethod("trough", coef)
- }
-
-Uncanny$trough.numeric <- 
-    function(coef = c(-.2, -.5, .2, .7)) {
-      if(length(coef) != 4) stop("the uncanny valley trough polynomial requires exactly four parameters")
-      poly   = polynom::polynomial(coef)
-      dpoly  = deriv(poly)
-      ddpoly = deriv(dpoly)
-      points = solve(dpoly)
-      pt_dir = as.function(ddpoly)(points)
-      if(!(any(is.complex(pt_dir)))){ ## when there is solution ...
-        points[pt_dir > 0]            ## select the minimum
-      }else{
-        NA                            ## no solution: return NA
-      }
-    }
-
-Uncanny$trough.matrix <- 
-  function(coef) aaply(as.matrix(coef), .margins = 1, .fun = trough.numeric)
-
-Uncanny$trough.data.frame <- 
-  function(coef) trough.matrix(as.matrix(coef))
-
-```
-
-
-
-
-
-```{r Uncanny_export}
-save(Uncanny, file = "Cases/Uncanny.Rda")
-
-#write_sav(Uncanny$UV_1, "Data/UV_1.sav")
-write_csv(Uncanny$UV_1, "Data/UV_1.csv")
-
-```
-
-
-
-## Case: Stroop
-
-
-```{r Stroop_create, opts.label = "simulate"}
-new_syncenv("Stroop")
-```
-
-
-```{r Stroop_simfunc, opts.label = "sim"}
-
-
-## simulating the data set
-Stroop$simulate <-
-  function(b_int = 500,   ## congruent (Intercept)
-           b_incon = 100, ## incongruent
-           b_neutr = 30,  ## neural
-           b_trial = 5,   ## 
-           b_age = 2,
-           sd_int = 50,
-           sd_trial = .5,
-           sd_treat = 10,
-           min_age = 18,
-           max_age = 60,
-           sd_resid = 50,
-           n_Part = 30,
-           outlier_rate = .02,
-           correct_rate = .9){
-    
-    n_Stim = 32
-    
-    Part <-
-      tibble(Part = 1:n_Part,
-                 t_int = rnorm(n_Part, 0, sd_int),
-                 age = round(runif(n_Part, min_age, max_age)),
-                 t_trial = rnorm(n_Part, 0, sd_trial),
-                 t_incon = rnorm(n_Part, 0, sd_treat),
-                 t_neutr = rnorm(n_Part, 0, sd_treat))
-    
-    Colors <- 
-      tibble(Color = c("red", "green", "blue", "yellow"),
-                 Key = c("red", "green", "blue", "yellow"))
-    
-    Words <-  
-      tibble(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
-      mutate(Word_type = ifelse(Word %in% Colors$Color, "color", "neutral"))
-    
-    Stimuli <- 
-      expand.grid(Color = Colors$Color,
-                           Word = Words$Word,
-                           stringsAsFactors = F) %>% 
-      inner_join(Words, by = "Word") %>% 
-      mutate(Stimulus = row_number(),
-             Condition = ifelse(Word_type == "neutral",
-                                "neutral", 
-                                ifelse(Word == Color,
-                                       "congruent",
-                                       "incongruent")),
-             Incongruent = (Condition == "incongruent"))
-
-    Trials <- 
-      Stimuli %>% 
-      mutate(trial = sample(1:n_Stim, replace = F))
-    
-    Stroop <- 
-      expand.grid(Part = Part$Part, 
-                  trial = Trials$trial) %>% 
-      inner_join(Part, by = "Part") %>% 
-      inner_join(Trials, by = "trial") %>% 
-      mutate(mu = b_int + t_int + 
-               (b_incon + t_incon) * (Condition == 'incongruent') +
-               (b_neutr + t_neutr) * (Condition == 'neutral') +
-               (b_age * age) +
-               (b_trial + t_trial) * trial) %>% 
-      mutate(RT = rnorm(n_Part * n_Stim, mu, sd_resid)) %>% 
-      mutate(RT = RT + rbinom(n_Part * n_Stim, 1, outlier_rate) * RT * 3) %>% 
-      mutate %>% 
-      as_tbl_obs()
-  }
-
-Stroop$Strp_1 <- 
-  Stroop$simulate() %>% 
-  select(Obs, Part, trial, Color, Word, Condition, RT)
-
-Stroop$R_Strp_1 <- 
-  Stroop$Strp_1 %>% 
-  select(Obs, Part, trial, Color, Word, RT)
-
-Stroop$Strp_1_avg <-
-  Stroop$simulate() %>% 
-  group_by(Part, Condition, Incongruent, age) %>% 
-  summarize(RT = mean(RT)) %>% 
-  ungroup()  %>% 
-  as_tbl_obs()
-
-Stroop$Strp_1 %>% 
-  ggplot(aes(x = Condition,
-             y = RT)) +
-  geom_boxplot() +
-  facet_wrap(~Part, nrow = 5)
-  
-
-
-```
-
-
-
-
-
-```{r Stroop_export}
-save(Stroop, file = "Cases/Stroop.Rda")
-write_sav(Stroop$Strp_1, "Data/Strp_1.sav")
-write_csv(Stroop$Strp_1, "Data/Strp_1.csv")
-write_sav(Stroop$Strp_1_avg, "Data/Strp_1_avg.sav")
-write_csv(Stroop$Strp_1_avg, "Data/Strp_1_avg.csv")
-
-```
-
-
-## Case: Yerkes-Dodson law
-
-Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
-
-```{r YD_create, opts.label = "simulate"}
-new_syncenv("YD")
-```
-
-
-```{r YD_simfunc, opts.label = "sim"}
-
-
-## simulating the data set
-YD$simulate_nonstoch <- 
-    function(arousal, offset = 1, scale = 1.8){
-    tibble(arousal = arousal) %>% 
-      mutate(energy = plogis(arousal + offset, scale = .5),
-             focus =  (1 - plogis(arousal, scale = .5))) %>% 
-      mutate(performance = energy * focus * scale) %>% 
-      as_tbl_obs()
-  }
-
-YD$D_1 <- 
-  YD$simulate_nonstoch(seq(-4,4,.1))
-
-names(YD$D_1)
-
-```
-
-We proviode three plot functions for the case:
-
-* a theoretical function, showing the presumed cognitive mechanism 
-* an exploratory function, showing the real data
-* a model function
-
-```{r YD_plot}
-YD$plot_theo_1 <- 
-  function(D_non_stoch){
-    D_non_stoch %>% 
-      gather(outcome, value, -arousal) %>%
-      mutate(level = ifelse(outcome == "performance",
-                            "performance", "mediators")) %>% 
-      ggplot(aes(x = arousal, y = value, col = outcome)) +
-      geom_line() +
-      facet_wrap("level", scales = "free_y") +
-      ylim(0, 1) +
-      theme(axis.text.y=element_blank())      
-  }
-
-YD$D_1 %>% 
-  YD$plot_theo_1()
-
-```
-
-
-
-
-```{r YD_export}
-save(YD, file = "Cases/YD.Rda")
-write_sav(YD$D_1, "Data/YD_1.sav")
-write_csv(YD$D_1, "Data/YD_1.csv")
-
-```
-
-
-## IPump: Comparing performance over time between two infusion pump designs 
-
-<!-- Consider the following research situation: Shortly after the millennium, medical infusion pumps became infamous for killing people. Infusion pumps are rather simple devices that administer medication to a patients body in a controlled manner. Being widely used in surgery and intensive care, development of these devices must comply to national and international regulations. Unfortunately, the regulations of those days almost completely overlooked the human factor. While those devices would always function "as described in the user manual", they contained all kinds of severe violations of user-interface design rules. Just to name few: foil switches with poor haptic feedback, flimsy alphanumeric LCD screenlets and a whole bunch of modes. Imagine a medical devices company has partnered with some renowned research institute to develop the infusion pump of the future. Users got interviewed and observed, guidelines were consulted, prototypes developed, tested and improved. At the end of the process the design was implemented as an interactive simulation. In the meantime, national agencies had reacted as well and regulations now demand a routine user-oriented development cycle. One of the new rules says: "the design must undergo validation testing with trained users". -->
-
-<!-- That means you have to first introduce and train your users to get fluent with the device, then test them. We [REF] thought that the training process itself is of immense importance. Why not test it then already? In the real study we tested everyone three times and traced individual progress. This requires a repeated measures analysis and we are not quite there yet [see LMM]. -->
-
-
-## Case: IPump, user testing infusion pumps
-
-Medical infusion pumps are unsuspicious looking devices that are en-mass installed in surgery and intensive care. Their only purpose is controlled injection of medication in the blood stream of patients. Pumps are rather simple devices as infusion is not more than a function of volume and time. They are routinely used by trained staff, mostly anaesthesiologists and  nurses. We should have great faith in safe operation under such conditions. The truth is, medical infusion pumps have reportedly killed dozens of people, thousands were harmed and an unknown number of nurses lost their jobs. The past generation of pumps is cursed with a chilling set of completely unnecessary design no-gos:
-
-* tiny 3-row LCD displays
-* flimsy foil buttons without haptic marking or feedback
-* modes
-* information hidden in menus
-
-For fixing these issues no additional research is needed, as the problems are pretty obvious to experienced user interface designers. What needs to be done, though, is proper validation testing of existing and novel interfaces, for example:
-
-* is the interface safe to use?
-* is it efficient to learn?
-* is a novel interface better than a legacy design? And by how much?
-
-<!-- #98 -->We conducted such a study. A novel interface was developed after an extensive study of user requirements and design guidelines. As even the newest national standards  for medical devices do not spell precise quantitative user requirements (such as, a nurse must be able to complete a standard task in *t* seconds and no more than *e* errors may occur), the novel interface was compared to a device with a legacy design. The participants were nurses and they were asked to complete a set of eight standard tasks with the devices. In order to capture learnability of the devices, every nurse completed the sequence of tasks in three consecutive sessions. A number of performance measures were recorded to reflect safety and efficiency of operation:
-
-1. *task completion*: for every task it was assessed whether the nurse had completed it successfully.
-1. *deviations from optimal path*: using the device manual for every task the shortest sequence was identified that would successfully complete the task. The sequence was then broken down into individual operations that were compared to the observed sequence of operations. An algorithm called *Levenshtein distance* was used to count the number of deviations.
-1. *time on task* was recorded as a measure for efficiency.
-1. *mental workload* was recorded using a one-item rating scale.
-
-As can be expected in the light of what has been said above, each one these measures violate one or more assumptions of the Gaussian linear model. In the following chapters, proper models from the GLM family are introduced for commonly occuring measures:
-
-1. *count data*, such as the number of completed tasks and path deviations
-1. *temporal data*, such as time-on-task
-1. *rating scales*
-
-
-
-
-```{r IPump_create, opts.label = "simulate"}
-new_syncenv("IPump")
-```
-
-
-```{r IPump_simfunc, opts.label = "sim"}
-
-## two designs at two moments nurses are familiar with device L
-
-IPump$simulate_1 <-
-  function(n_Part = 30,
-           seed = 42,
-           beta = c(180, 30, -20, -40),
-           sd = 20){
-    set.seed(42)
-    n_Obs = n_Part * 4
-    Exp <-
-      expand_grid(Part = 1:n_Part,
-                  Design = c("L", "N"),
-                  moment = c(1,2)) %>% 
-      mutate(mu = beta[1] + 
-               (Design == "N") * beta[2] +
-               (moment == 2) * beta[3] +
-               (Design == "N") * (moment == 2) * beta[4],
-             ToT = rnorm(n_Obs, mu, sd)) %>% 
-      as_tbl_obs()
-    Exp
-  }
-    
-IPump$D_sim_1 <- IPump$simulate_1()
-
-IPump$D_sim_1 %>% 
-  ggplot(aes(x = moment, 
-             y = ToT, 
-             color = Design)) +
-  geom_smooth(method = "lm", se = F)
-
-
-
-
-```
-
-
-```{r load_data}
-
-load("external_data/PUMPS.Rda", envir = IPump)
-
-IPump$D_pumps <- 
-  IPump$P %>% 
-  as_tibble() %>% 
-  select(Part = Participant, 
-         Group = professionalGroup,
-         experience,
-         Education = educationLevel,
-         Design = design,
-         session,
-         Task = Task,
-         ToT = completionTime,
-         completion = taskCompletion,
-         deviations = pathDeviation,
-         workload = mentalWorkload) %>% 
-  mutate(Design = if_else(Design == "Braun", 
-                          "Legacy", "Novel"),
-         Education = stringr::str_replace(.$Education, " opleiding", ""),
-         Education = forcats::as_factor(.$Education),
-         Group = ifelse(Group == "VA", "GC", "IC"),
-         Session = as.factor(session),
-         session = as.integer(session) - 1,
-         logToT = log(ToT),) %>% 
-  as_tbl_obs()
-
-IPump$D_agg <-
-  IPump$D_pumps %>% 
-  group_by(Part, Group, Education, experience,
-           Design, session, Session) %>% 
-  summarize(ToT = sum(ToT, na.rm = T),
-            deviations = sum(deviations, na.rm = T),
-            workload = mean(workload, na.rm = T),
-            completion = all(completion)) %>% 
-  ungroup() %>% 
-  mutate(logToT = log(ToT)) %>% 
-  as_tbl_obs()
-
-IPump$D_Novel <- filter(IPump$D_pumps, Design == "Novel")
-
-
-rm(P, envir = IPump)
-
-IPump$D_pumps
-IPump$D_agg
-
-```
-
-
-
-
-
-```{r IPump_export}
-save(IPump, file = "Cases/IPump.Rda")
-write_sav(IPump$D_sim_1, "Data/IP_1.sav")
-write_csv(IPump$D_sim_1, "Data/IP_1.csv")
-write_sav(IPump$D_pumps, "Data/Pumps.sav")
-write_csv(IPump$D_pumps, "Data/Pumps.csv")
-write_sav(IPump$D_agg, "Data/Pumps_agg.sav")
-write_csv(IPump$D_agg, "Data/Pumps_agg.csv")
-
-```
-
-
-
-
-
-## Case: Millers Magic Number
-
-```{r MMN_raw_data}
-load("external_data/MMN.Rdata")
-
-MMN_raw <- as_tibble(MMN, .name_repair = "minimal")
-
-rm(MMN)
-```
-
-
-```{r MMN_create, opts.label = "simulate"}
-new_syncenv("MMN")
-
-```
-
-
-```{r MMN_load_data, opts.label = "sim"}
-
-MMN$MMN_2 <- 
-  MMN_raw %>% 
-  select(Part = Subject, Website, Task, Corsi, 
-         Ospan.A, Ospan.B, time, clicks) %>% 
-  mascutils::z_score("Corsi") %>% 
-  mascutils::z_score("Ospan.A") %>% 
-  mascutils::z_score("Ospan.B") %>% 
-  mutate(ltime = log(time),
-         lclicks = log(clicks)) %>% 
-  select(Part, Website, Task, Corsi:Ospan.B, zCorsi:zOspan.B, time:lclicks)  %>% 
-  as_tbl_obs()
-
-names(MMN$MMN_2)
-
-MMN$MMN_1 <-
-  MMN$MMN_2 %>% 
-  group_by(Part, Corsi, Ospan.A, Ospan.B, zCorsi, zOspan.A, zOspan.B) %>% 
-  summarize(time = sum(time),
-            clicks = sum(clicks)) %>% 
-  mutate(ltime = log(time),
-         lclicks = log(clicks)) %>% 
-  as_tbl_obs()
-  
-names(MMN$MMN_1)
-
-```
-
-
-```{r MMN_export}
-
-save(MMN, file = "Cases/MMN.Rda")
-write_sav(MMN$MMN_1, "Data/MMN_1.sav")
-write_sav(MMN$MMN_2, "Data/MMN_2.sav")
-write_csv(MMN$MMN_1, "Data/MMN_1.csv")
-write_csv(MMN$MMN_2, "Data/MMN_2.csv")
-
-```
-
-
-## Case: AUP
-
-```{r AUP_raw_data}
-load("external_data/JK.Rda")
-AUP_raw <- Scores
-rm(Scores)
-names(AUP_raw)
-```
-
-
-```{r AUP_create, opts.label = "simulate"}
-new_syncenv("AUP")
-
-```
-
-
-```{r AUP_load_data, opts.label = "sim"}
-AUP$AUP_1 <- 
-  AUP_raw  %>% 
-  as_tibble() %>% 
-  select(Part = Participant, age = Age, gender = Gender, 
-         gex = Gex, util = Util, ncs = NCS, compAnx = CompAnx, 
-         challenge = AUP_challenge, exploration = AUP_explore) %>% 
-  mutate(resistance = challenge + exploration) %>% 
-  mascutils::z_score("gex") %>% 
-  mascutils::z_score("ncs") %>% 
-  mascutils::z_score("compAnx") %>% 
-  mascutils::z_score("resistance") %>% 
-  as_tbl_obs()
-
-names(AUP$AUP_1)
-
-
-```
-
-```{r AUP_test}
-
-AUP$AUP_1 %>% 
-  select(zncs, zgex, zresistance) %>% 
-  GGally::ggpairs(data = .)
-
-lm(zresistance ~ zgex, data = AUP$AUP_1)
-lm(zresistance ~ zncs, data = AUP$AUP_1)
-lm(zresistance ~ zgex + zncs, data = AUP$AUP_1)
-```
-
-
-```{r AUP_export}
-
-save(AUP, file = "Cases/AUP.Rda")
-write_sav(AUP$AUP_1, "Data/AUP_1.sav")
-write_csv(AUP$AUP_1, "Data/AUP_1.csv")
-
-```
-
-
-## Case: Schools
+### Case: Schools
 
 
 ```{r Schools_create, opts.label = "simulate"}
@@ -1473,169 +1774,12 @@ write_csv(Schools$D_2, "Data/Schools_2.csv")
 
 
 
-## Case: Stroop_competition
-
-
-```{r Stroop_comp_create, opts.label = "simulate"}
-new_syncenv("Stroop_comp")
-```
-
-
-```{r Stroop_comp_simfunc, opts.label = "sim"}
-library(retimes)
-
-## simulating the data set
-Stroop_comp$simulate <-
-  function(n_Part = 25, ## sample size 
-           n_Stim = 120, ## number of trials
-           beta_0 = 400, ## pop-level RT congrent 
-           beta_1 = 100, ## pop-level RT incongr
-           beta_2 = 5,   ## not used (neutral)
-           sd_0   = 50,
-           sd_1   = 10,
-           sd_2   = 2, ## not used
-           sigma = 20,
-           tau_0 = 50,
-           tau_1 = 100,
-           sd_tau_1 = 20,
-           rate_delay = .03,
-           seed = 2){
-    
-
-    set.seed(seed)
-    n_Obs = n_Part * n_Stim
-    
-    Part <-
-      tibble(Part = 1:n_Part,
-                 theta_0 = rnorm(n_Part, 0, sd_0),
-                 theta_1 = rnorm(n_Part, 0, sd_1),
-                 theta_2 = rnorm(n_Part, 0, sd_2),
-                 theta_3 = rnorm(n_Part, 0, sd_tau_1))
-    Stim <- 
-      tibble(Stim = 1:n_Stim,
-                 Cond = rep(c("C", "I"), n_Stim/2))
-    
-    Obs <- 
-      expand_grid(Part = Part$Part, Stim = Stim$Stim) %>% 
-      mutate(Obs = 1:n_Obs) %>% 
-      left_join(Part) %>% 
-      left_join(Stim) %>% 
-      mutate(mu = beta_0 + theta_0 + (beta_1 + theta_1) * (Cond == "I"),
-             tau = tau_0 + (tau_1 + theta_3) * (Cond == "I")) %>% 
-      mutate(RT = rexgauss(n_Obs, mu, sigma, tau)) %>% 
-      as_tbl_obs()
-
-    Obs
-  }
-
-Stroop_comp$D_1 <-  
-  Stroop_comp$simulate() %>% 
-  
-
-Stroop_comp$G_1 <-
-  Stroop_comp$D_1 %>%
-  ggplot(aes(x = RT, col = Cond)) +
-  geom_density() +
-  xlim(0,2000) +
-  facet_wrap(~Part)
-
-Stroop_comp$G_1
-
-Stroop_comp$G_2 <-
-  Stroop_comp$D_1 %>%
-  ggplot(aes(x = RT)) +
-  geom_histogram() +
-  xlim(0,2000) +
-  facet_grid(Cond~.)
-Stroop_comp$G_2
-
-Stroop_comp$G_3 <-
-  Stroop_comp$D_1 %>% 
-  group_by(Part, Cond) %>% 
-  summarize(mean_RT = mean(RT)) %>% 
-  ggplot(aes(x = mean_RT, col = Cond)) +
-  geom_density()
-Stroop_comp$G_3
-
-Stroop_comp$M_1 <- lme4::lmer(RT ~ Cond + (1 + Cond|Part), data = Stroop_comp$D_1)
-summary(M_1)
-
-```
 
 
 
 
 
-```{r Stroop_comp_export}
-save(Stroop_comp, file = "Cases/Stroop_comp.Rda")
-write_sav(Stroop_comp$D_1, "Data/Stroop_comp_1.sav")
-write_csv(Stroop_comp$D_1, "Data/Stroop_comp_1.csv")
-
-```
-
-
-## Case: Egan
-
-```{r Egan_create, opts.label = "simulate"}
-new_syncenv("Egan")
-```
-
-
-```{r Egan_simfunc, opts.label = "sim"}
-
-
-## simulating the data set
-
-```
-
-```{r Egan_load_data, opts.label = "sim"}
-Egan$D_egan <- 
-  read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
-  as_tibble() %>% 
-  mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
-  select(Part = ParticipantID,
-         Gender = ParticipantGender,
-         age = ParticipantAge,
-         trial = TrialNumber,
-         Design = Website,
-         Task,
-         success = SuccesOnTask,
-         ToT = TimeOnTask,
-         clicks = NumberOfClicks,
-         returns_hp = TimesReturnedHome,
-         return_links = TimesUsedLinks,
-         workload) %>% 
-  mutate_if(
-    is.labelled, as_factor) %>% 
-  mutate(Part = as.integer(Part),
-         trial = as.integer(trial),
-         success = success == "succes",
-         clicks = as.integer(clicks),
-         returns_hp = as.integer(returns_hp),
-         return_links = as.integer(return_links)) %>% 
-  as_tbl_obs()
-
-
-Egan$D_egan
-
-```
-
-  
-
-```{r Egan_export}
-save(Egan, file = "Cases/Egan.Rda")
-write_sav(Egan$D_egan, "Data/Egan.sav")
-write_csv(Egan$D_egan, "Data/Egan.csv")
-
-```
-
-
-
-
-
-
-
-## Case: LapTrain
+### Case: LapTrain
 
 ```{r LapTrain_create, opts.label = "simulate"}
 new_syncenv("LapTrain")
@@ -1669,7 +1813,7 @@ write_csv(LapTrain$D_laptrain, "Data/LapTrain.csv")
 ```
 
 
-## Case Hugme 1 (alt.chi)
+### Case Hugme 1 (alt.chi)
 
 ```{r opts.label = "simulate"}
 new_syncenv("Hugme_1")
@@ -1697,131 +1841,10 @@ write_csv(Hugme_1$D_hugme, "Data/Hugme_1.csv")
 ```
 
 
-## Case: Hugme 3
-
-<!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
-
-<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
-
-
-As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media it delivers. A geek person seeing a computer is more likely to have certain memories or associations. For example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. As a response we had chosen the Stroop task, and in order to make this more likely, participants were primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geekish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we presumed that geeks like to think hard and used the need-for-cognition scale as a second predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek. 
-
-```{r Hugme_create, opts.label = "simulate"}
-new_syncenv("Hugme")
-```
-
-
-```{r hugme_simfunc, opts.label = "sim"}
-
-
-## reading the data
-
-```
-
-```{r hugme_load_data, opts.label = "sim"}
-load("external_data/HUG3/HUG3.Rda")
-load("external_data/HUG3/Q3.Rda")
-
-Hugme$E_Words <- 
-  readxl::read_excel("Data/Hugme/Trials.xlsx") %>% 
-  distinct(text_EN, text_DE, text_NL, HUGword) %>% 
-  mutate(WordCat = case_when(
-    HUGword  == "h" ~ "hedo",
-    HUGword  == "u" ~ "util",
-    HUGword  == "g" ~ "geek")) %>% 
-  select(Word = text_EN, Word_DE = text_DE, Word_NL = text_NL, WordCat)
-
-Hugme$D_hugme <- 
-  HUG3 %>% 
-  left_join(Hugme$E_Words, by = c("Target" = "Word_DE")) %>% 
-  filter(!is.na(Word)) %>% 
-  rename(Part = Subj) %>% 
-  mutate(RT = RT/1000,
-         WordGeek = WordCat == "geek",
-         PrimeGeek = primeCat == "geek") %>% 
-  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
-         Word, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
-  mascutils:::as_tbl_obs()
-
-
-# Hugme$D_quest <- 
-#   Hugme$R_quest %>% 
-#   select(Part = UserID, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
-#   gather(Item, rating, -Part) %>% 
-#   mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>% 
-#   mutate(Item = str_replace(Item, "GeekR", "Geek")) %>% 
-#   mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>% 
-#   arrange(Part, Scale, Item) %>% 
-#   mascutils:::as_tbl_obs.tbl_df()
-
-```
-
-```{r}
-Hugme$R_exp <- 
-  Hugme$D_hugme %>% 
-  select(Part, Word, Prime, correct, RT)
-
-Hugme$R_quest <- 
-  Q3 %>%
-  select(UserID = Subj,
-         Gender, Age, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
-  as.tibble()
-
-```
 
 
 
-
-```{r}
-## Extracting remaining entities
-
-Hugme$E_Part <- 
-  Hugme$R_quest %>% 
-  as.tibble() %>% 
-  select(Part = UserID, gender = Gender, age = Age) %>% 
-  mutate(Part = as.integer(Part),
-         age = as.integer(age))
-
-Hugme$E_Items <- readxl::read_excel("Data/Hugme/Items.xlsx")
-
-Hugme$E_Primes <- 
-  Hugme$D_hugme %>% 
-  distinct(Prime, PrimeCat)
-
-openxlsx::write.xlsx(Hugme$E_Words, file = "Data/Hugme/Words.xlsx")
-openxlsx::write.xlsx(Hugme$E_Part, file = "Data/Hugme/Parts.xlsx")
-openxlsx::write.xlsx(Hugme$E_Primes, file = "Data/Hugme/Primes.xlsx")
-
-```
-
-
-
-```{r}
-## reverse creating raw data files
-
-Hugme$R_exp %>% 
-  group_by(Part) %>% 
-  nest() %>% 
-  purrr::pmap(~write_csv(..2, path = paste0("Data/Hugme/P_",..1,".csv")))
-
-```
-
-  
-
-```{r hugme_export}
-save(Hugme, file = "Cases/Hugme.Rda")
-write_sav(Hugme$D_hugme, "Data/Hugme.sav")
-write_csv(Hugme$D_hugme, "Data/Hugme.csv")
-write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
-write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
-write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
-write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
-```
-
-
-
-
-## Case Stroop Mind Wandering
+### Case Stroop Mind Wandering
 
 https://osf.io/kxpqu/
 
@@ -1863,7 +1886,7 @@ write_csv(StroopMW$D_stroopmw, "Data/StroopMW.csv")
 ```
 
 
-## Case: Joystick
+### Case: Joystick
 
 With the emerge of automation in automotives, there are opportunities to  thoroughly redesign the cockpit of cars. In particular, the steering wheel is a rather clunky control. A automotive research team has developed an alternative joystick control that sits right in the middle console.
 
@@ -1945,79 +1968,12 @@ write_csv(Joystick$D_joy, "Data/joystick.csv")
 
 ```
 
-## Case Websites on the Internet
-
-Data scraped from https://www.softwarefindr.com/how-many-websites-are-there/
-
-
-```{r Websites_create, opts.label = "simulate"}
-new_syncenv("Websites")
-```
-
-
-
-```{r Websites_load_data, opts.label = "sim"}
-Websites$D_Websites <-
-  readxl::read_excel("external_data/Websites.xlsx") %>% 
-  mutate(year = Year - min(Year) + 1) %>% 
-  select(Year, year, websites)
-  
-
-```
-
-
-```{r}
-Websites$D_Websites %>% 
-  ggplot(aes(x = Year, y = websites)) +
-  geom_point() +
-  geom_smooth()
-```
-  
-
-
-```{r Websites_export}
-save(Websites, file = "Cases/Websites.Rda")
-write_sav(Websites$D_Websites, "Data/Websites.sav")
-write_csv(Websites$D_Websites, "Data/Websites.csv")
-
-```
-
-
-## Case Sleepstudy (lme4)
-
-
-```{r Sleepstudy_load_data, opts.label = "sim"}
-Sleepstudy$D_slpstd <-
-  lme4::sleepstudy %>% 
-  select(Part = Subject, days = Days, RT = Reaction) %>%
-  mutate(days = as.integer(days))
-
-```
-
-
-```{r}
-Sleepstudy$D_slpstd %>% 
-  ggplot(aes(x = days, y = RT)) +
-  facet_wrap(~Part) +
-  geom_point() +
-  geom_smooth(se = F, aes(color = "LOESS")) +
-  geom_smooth(se = F, method = "lm", aes(color = "lm")) +
-  labs(color = "Smoothing function")
-```
-  
-
-
-```{r Sleepstudy_export}
-save(Sleepstudy, file = "Cases/Sleepstudy.Rda")
-#write_sav(Sleepstudy$D_slpstd, "Data/Sleepstudy.sav")
-write_csv(Sleepstudy$D_slpstd, "Data/Sleepstudy.csv")
-
-```
 
 
 
 
-## Case: Mirrors
+
+### Case: Mirrors
 
 A set of novel augmented reality (AR) side-view mirrors have been compared to the classic side-view mirrors.
 Furthermore, participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:
@@ -2250,7 +2206,7 @@ write_csv(D_Mirrors, "Data/Mirrors.csv")
 
 
 
-## Case: L2Drive
+### Case: L2Drive
 
 A set of novel augmented reality (AR) side-view L2Drive have been compared to the classic side-view L2Drive.
 Furthermore, participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:
@@ -2308,10 +2264,6 @@ Note that:
 + It is preferred that you only build one model per outcome variable. Put differently, it does __not__ improve your grade if you run several models of the same kind.
 + It is important to connect every summary, plot and model to a clear question. 
 + You must interpret a model correctly in order to get full appreciation.
-
-
-
-
 
 
 
@@ -2498,8 +2450,333 @@ write_csv(D_L2Drive, "Data/L2Drive.csv")
 
 ```
 
+# Publications
+
+
+# Other
+
+### Case: Stroop
+
+
+```{r Stroop_create, opts.label = "simulate"}
+new_syncenv("Stroop")
+```
+
+
+```{r Stroop_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+Stroop$simulate <-
+  function(b_int = 500,   ## congruent (Intercept)
+           b_incon = 100, ## incongruent
+           b_neutr = 30,  ## neural
+           b_trial = 5,   ## 
+           b_age = 2,
+           sd_int = 50,
+           sd_trial = .5,
+           sd_treat = 10,
+           min_age = 18,
+           max_age = 60,
+           sd_resid = 50,
+           n_Part = 30,
+           outlier_rate = .02,
+           correct_rate = .9){
+    
+    n_Stim = 32
+    
+    Part <-
+      tibble(Part = 1:n_Part,
+                 t_int = rnorm(n_Part, 0, sd_int),
+                 age = round(runif(n_Part, min_age, max_age)),
+                 t_trial = rnorm(n_Part, 0, sd_trial),
+                 t_incon = rnorm(n_Part, 0, sd_treat),
+                 t_neutr = rnorm(n_Part, 0, sd_treat))
+    
+    Colors <- 
+      tibble(Color = c("red", "green", "blue", "yellow"),
+                 Key = c("red", "green", "blue", "yellow"))
+    
+    Words <-  
+      tibble(Word = c("red", "green", "blue", "yellow", "house", "chair", "bird", "car")) %>% 
+      mutate(Word_type = ifelse(Word %in% Colors$Color, "color", "neutral"))
+    
+    Stimuli <- 
+      expand.grid(Color = Colors$Color,
+                           Word = Words$Word,
+                           stringsAsFactors = F) %>% 
+      inner_join(Words, by = "Word") %>% 
+      mutate(Stimulus = row_number(),
+             Condition = ifelse(Word_type == "neutral",
+                                "neutral", 
+                                ifelse(Word == Color,
+                                       "congruent",
+                                       "incongruent")),
+             Incongruent = (Condition == "incongruent"))
+
+    Trials <- 
+      Stimuli %>% 
+      mutate(trial = sample(1:n_Stim, replace = F))
+    
+    Stroop <- 
+      expand.grid(Part = Part$Part, 
+                  trial = Trials$trial) %>% 
+      inner_join(Part, by = "Part") %>% 
+      inner_join(Trials, by = "trial") %>% 
+      mutate(mu = b_int + t_int + 
+               (b_incon + t_incon) * (Condition == 'incongruent') +
+               (b_neutr + t_neutr) * (Condition == 'neutral') +
+               (b_age * age) +
+               (b_trial + t_trial) * trial) %>% 
+      mutate(RT = rnorm(n_Part * n_Stim, mu, sd_resid)) %>% 
+      mutate(RT = RT + rbinom(n_Part * n_Stim, 1, outlier_rate) * RT * 3) %>% 
+      mutate %>% 
+      as_tbl_obs()
+  }
+
+Stroop$Strp_1 <- 
+  Stroop$simulate() %>% 
+  select(Obs, Part, trial, Color, Word, Condition, RT)
+
+Stroop$R_Strp_1 <- 
+  Stroop$Strp_1 %>% 
+  select(Obs, Part, trial, Color, Word, RT)
+
+Stroop$Strp_1_avg <-
+  Stroop$simulate() %>% 
+  group_by(Part, Condition, Incongruent, age) %>% 
+  summarize(RT = mean(RT)) %>% 
+  ungroup()  %>% 
+  as_tbl_obs()
+
+Stroop$Strp_1 %>% 
+  ggplot(aes(x = Condition,
+             y = RT)) +
+  geom_boxplot() +
+  facet_wrap(~Part, nrow = 5)
+  
+
+
+```
 
 
 
 
 
+```{r Stroop_export}
+save(Stroop, file = "Cases/Stroop.Rda")
+write_sav(Stroop$Strp_1, "Data/Strp_1.sav")
+write_csv(Stroop$Strp_1, "Data/Strp_1.csv")
+write_sav(Stroop$Strp_1_avg, "Data/Strp_1_avg.sav")
+write_csv(Stroop$Strp_1_avg, "Data/Strp_1_avg.csv")
+
+```
+
+
+### Case: Yerkes-Dodson law
+
+Non-stochastic simulation of the Yerkes-Dodson law. It is assumed that arousal increases energy and causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between.
+
+```{r YD_create, opts.label = "simulate"}
+new_syncenv("YD")
+```
+
+
+```{r YD_simfunc, opts.label = "sim"}
+
+
+## simulating the data set
+YD$simulate_nonstoch <- 
+    function(arousal, offset = 1, scale = 1.8){
+    tibble(arousal = arousal) %>% 
+      mutate(energy = plogis(arousal + offset, scale = .5),
+             focus =  (1 - plogis(arousal, scale = .5))) %>% 
+      mutate(performance = energy * focus * scale) %>% 
+      as_tbl_obs()
+  }
+
+YD$D_1 <- 
+  YD$simulate_nonstoch(seq(-4,4,.1))
+
+names(YD$D_1)
+
+```
+
+We proviode three plot functions for the case:
+
+* a theoretical function, showing the presumed cognitive mechanism 
+* an exploratory function, showing the real data
+* a model function
+
+```{r YD_plot}
+YD$plot_theo_1 <- 
+  function(D_non_stoch){
+    D_non_stoch %>% 
+      gather(outcome, value, -arousal) %>%
+      mutate(level = ifelse(outcome == "performance",
+                            "performance", "mediators")) %>% 
+      ggplot(aes(x = arousal, y = value, col = outcome)) +
+      geom_line() +
+      facet_wrap("level", scales = "free_y") +
+      ylim(0, 1) +
+      theme(axis.text.y=element_blank())      
+  }
+
+YD$D_1 %>% 
+  YD$plot_theo_1()
+
+```
+
+
+
+
+```{r YD_export}
+save(YD, file = "Cases/YD.Rda")
+write_sav(YD$D_1, "Data/YD_1.sav")
+write_csv(YD$D_1, "Data/YD_1.csv")
+
+```
+
+
+
+
+
+
+
+### Case: Stroop_competition
+
+
+```{r Stroop_comp_create, opts.label = "simulate"}
+new_syncenv("Stroop_comp")
+```
+
+
+```{r Stroop_comp_simfunc, opts.label = "sim"}
+library(retimes)
+
+## simulating the data set
+Stroop_comp$simulate <-
+  function(n_Part = 25, ## sample size 
+           n_Stim = 120, ## number of trials
+           beta_0 = 400, ## pop-level RT congrent 
+           beta_1 = 100, ## pop-level RT incongr
+           beta_2 = 5,   ## not used (neutral)
+           sd_0   = 50,
+           sd_1   = 10,
+           sd_2   = 2, ## not used
+           sigma = 20,
+           tau_0 = 50,
+           tau_1 = 100,
+           sd_tau_1 = 20,
+           rate_delay = .03,
+           seed = 2){
+    
+
+    set.seed(seed)
+    n_Obs = n_Part * n_Stim
+    
+    Part <-
+      tibble(Part = 1:n_Part,
+                 theta_0 = rnorm(n_Part, 0, sd_0),
+                 theta_1 = rnorm(n_Part, 0, sd_1),
+                 theta_2 = rnorm(n_Part, 0, sd_2),
+                 theta_3 = rnorm(n_Part, 0, sd_tau_1))
+    Stim <- 
+      tibble(Stim = 1:n_Stim,
+                 Cond = rep(c("C", "I"), n_Stim/2))
+    
+    Obs <- 
+      expand_grid(Part = Part$Part, Stim = Stim$Stim) %>% 
+      mutate(Obs = 1:n_Obs) %>% 
+      left_join(Part) %>% 
+      left_join(Stim) %>% 
+      mutate(mu = beta_0 + theta_0 + (beta_1 + theta_1) * (Cond == "I"),
+             tau = tau_0 + (tau_1 + theta_3) * (Cond == "I")) %>% 
+      mutate(RT = rexgauss(n_Obs, mu, sigma, tau)) %>% 
+      as_tbl_obs()
+
+    Obs
+  }
+
+Stroop_comp$D_1 <-  
+  Stroop_comp$simulate() %>% 
+  
+
+Stroop_comp$G_1 <-
+  Stroop_comp$D_1 %>%
+  ggplot(aes(x = RT, col = Cond)) +
+  geom_density() +
+  xlim(0,2000) +
+  facet_wrap(~Part)
+
+Stroop_comp$G_1
+
+Stroop_comp$G_2 <-
+  Stroop_comp$D_1 %>%
+  ggplot(aes(x = RT)) +
+  geom_histogram() +
+  xlim(0,2000) +
+  facet_grid(Cond~.)
+Stroop_comp$G_2
+
+Stroop_comp$G_3 <-
+  Stroop_comp$D_1 %>% 
+  group_by(Part, Cond) %>% 
+  summarize(mean_RT = mean(RT)) %>% 
+  ggplot(aes(x = mean_RT, col = Cond)) +
+  geom_density()
+Stroop_comp$G_3
+
+Stroop_comp$M_1 <- lme4::lmer(RT ~ Cond + (1 + Cond|Part), data = Stroop_comp$D_1)
+summary(M_1)
+
+```
+
+
+
+
+
+```{r Stroop_comp_export}
+save(Stroop_comp, file = "Cases/Stroop_comp.Rda")
+write_sav(Stroop_comp$D_1, "Data/Stroop_comp_1.sav")
+write_csv(Stroop_comp$D_1, "Data/Stroop_comp_1.csv")
+
+```
+
+
+### Case Websites on the Internet
+
+Data scraped from https://www.softwarefindr.com/how-many-websites-are-there/
+
+
+```{r Websites_create, opts.label = "simulate"}
+new_syncenv("Websites")
+```
+
+
+
+```{r Websites_load_data, opts.label = "sim"}
+Websites$D_Websites <-
+  readxl::read_excel("external_data/Websites.xlsx") %>% 
+  mutate(year = Year - min(Year) + 1) %>% 
+  select(Year, year, websites)
+  
+
+```
+
+
+```{r}
+Websites$D_Websites %>% 
+  ggplot(aes(x = Year, y = websites)) +
+  geom_point() +
+  geom_smooth()
+```
+  
+
+
+```{r Websites_export}
+save(Websites, file = "Cases/Websites.Rda")
+write_sav(Websites$D_Websites, "Data/Websites.sav")
+write_csv(Websites$D_Websites, "Data/Websites.csv")
+
+```

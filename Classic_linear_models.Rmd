@@ -912,13 +912,13 @@ Elaborations on Euclidean space, how double linear regression creates flat surfa
 
 On a deeper level the bizarre age = 0 prediction is an example of a principle <!-- #55 -->, that will re-occur several times throughout this book.
 
-**In this universe everything is finite.**
+**In our endless universe everything is finite.**
 
 A well understood fact about LRM is that they allow us to fit a straight line to data. A lesser regarded consequence from the mathematical underpinnings of such models is that this line extends infinitely in both directions. To fulfill this assumption, the outcome variable needs to have an infinite range, too,  $y_i \in [-\infty; \infty]$ (unless the slope is zero). Every scientifically trained person and many lay people know, that even elementary magnitudes in physics are finite: all speeds are limited to $\approx 300.000 km/s$, the speed of light, and temperature has a lower limit of $-276°C$ (or $0°K$). If there can neither be endless acceleration nor cold, it would be daring to assume any psychological effect to be infinite in both directions.
 
-The endlessly linear assumption (ELA) is a central piece of all LRMs. From a formal perspective, the ELA is always violated in a universe like ours. So, should we never ever use a linear model and move on to non-linear models right away? Pragmatically, the LRM often is a reasonably effective approximation. From figure [#G_eda_1] we have seen that the increase of time-on-task by age is not strictly linear, but follows a more complex curved pattern. This pattern might be of interest to someone studying the psychological causes of the decline in performance. For the applied design researcher it probably suffices to summarize the monotonous relationship by one slope coefficient. In \@ref(MRM) we will estimate the age effects for designs A and B separately, which lets us compare fairness towards older people.
+The endlessly linear assumption (ELA) is a central piece of all LRMs, that is always violated in a universe like ours. So, should we never ever use a linear model and move on to non-linear models right away? Pragmatically, the LRM often is a reasonably effective approximation. From figure [#G_eda_1] we have seen that the increase of time-on-task by age is not strictly linear, but follows a more complex curved pattern. This pattern might be of interest to someone studying the psychological causes of the decline in performance. For the applied design researcher it probably suffices to see that the increase is monotonous and model it approximately by one slope coefficient. In \@ref(MRM) we will estimate the age effects for designs A and B separately, which lets us compare fairness towards older people.
 
-As has been said, theorists may desire a more detailed picture and see disruptions of linearity as indicators for interesting psychological processes. An uncanny example of theoretical work will be given when I introduce polynomial regression [#PRM]. For the rest of us, linear regression is a pragmatic choice, as long as:
+As has been said, theorists may desire a more detailed picture and see a disruption of linearity as indicators for interesting psychological processes. A literally uncanny example of such theoretical work will be given when introducing polynomial regression [#PRM]. For now, linear regression is a pragmatic choice, as long as:
 
 1. the pattern is monotonically increasing
 1. any predictions stay in the observed range and avoid the boundary regions, or beyond.
@@ -1310,7 +1310,7 @@ sync_CE(BrowsingAB, M_OFM_1)
 
 A basic ordered factor model is just a CGM where the coefficients are shown in the desired order. The second and third coefficient carry the respective difference towards level Low. EducationHigh is *not* the difference towards EducationMiddle. In this case it makes sense to understand Middle and High as a smaller step or a larger step up from Low. It is not always like that. Sometimes, the only way of moving from the reference group to some other level implies going through all the intermediates, just like walking up a stairway. Then it makes more sense to use a model where coefficients are individual steps. In the IPump study, we looked at the speed of learning of a novel interface design by letting the participants repeat a set of tasks in three successive sessions.  here the three sessions make a stairway: going from the fist to the third session always involves the second session. Before we come to that, we first have to see, why Session must be an ordered factor and not a metric predictor.
 
-The first idea that could come to mind is to take session as a metric predictor and estimate a LRM -- it has an order and it is the same amount of training, which you could call a unit. The thing with learning processes is that they are curved, more precisely, they gradually move towards an asymptote. The following curve shows the effect of a hypothetical training over 12 sessions. What we see is that the steps are getting smaller when training continues. While the amount of training is the same, the effect on performance declines, which is also called a curve of diminishing returns. The asymptote of this curve is the *maximum performance* the participant can reach, which theoretically is only reached in infinity. The following code defines an exponential learning curve function and renders an example. 
+The first idea that could come to mind is to take session as a metric predictor and estimate a LRM -- there is an ordering and it is the same amount of training per step, which you could call a unit. The thing with learning processes is that they are curved, more precisely, they gradually move towards an asymptote. The following curve shows the effect of a hypothetical training over 12 sessions. What we see is that the steps are getting smaller when training continues. While the amount of training is the same, the effect on performance declines, which is also called a curve of diminishing returns. The asymptote of this curve is the *maximum performance* the participant can reach, which theoretically is only reached in infinity. The following code defines an exponential learning curve function and renders an example. 
 
 ```{r}
 learning_curve <- 
@@ -2793,9 +2793,9 @@ attach(Uncanny)
 ```
 
 
-```{r fit:UV_1, opts.label = "mcmc"}
+```{r fit:RK_2, opts.label = "mcmc"}
 M_poly_3 <-
-  UV_1 %>% 
+  RK_2 %>% 
   mutate(huMech_0 = 1,
          huMech_1 = huMech,
          huMech_2 = huMech^2,
@@ -2889,10 +2889,10 @@ P_trough %>%
 The 95% CI is a conventional measure of uncertainty and may be more or less irrelevant. The most generous display on uncertainty is a density plot on the full posterior. The density function just smooths over the frequency distribution of trough draws, but makes no arbitrary choices on where to cut it.
 
 ```{r}
-UV_1$M_poly_3 <- predict(M_poly_3)$center
+RK_2$M_poly_3 <- predict(M_poly_3)$center
 
 gridExtra::grid.arrange(
-  UV_1 %>% 
+  RK_2 %>% 
     ggplot(aes(x = huMech, y = avg_like)) +
     geom_point(size = .3) +
     geom_smooth(aes(y = M_poly_3), se = F),
@@ -2941,7 +2941,7 @@ attach(Uncanny)
 
 ```{r}
 post_pred(M_poly_3, thin = 10) %>% 
-  left_join(UV_1, by = "Obs") %>%
+  left_join(RK_2, by = "Obs") %>%
   ggplot(aes(x = huMech, y = value, group = iter)) +
   stat_smooth(geom='line', alpha=0.2, se=FALSE)
 ```
@@ -2953,7 +2953,7 @@ post_pred(M_poly_3, thin = 10) %>%
 
 All we have to do is count the number of MCMC visits, that have a trough and a shoulder. The function `trough` in the Uncanny package (on Github) is designed to return the position, when it exists and simply returns `NA` otherwise. The same goes for the function `shoulder`, which finds the local maximum, if any.
 
-With these two functions, we can create two simple test statistics. All we have to do is count how many of the MCMC draws represent a cubic polynomial *with* shoulder and trough.
+With these two functions, we can create two simple test statistics, by counting how many of the MCMC draws represent a cubic polynomial *with* shoulder and trough.
 
 ```{r}
 # devtools::install_github("schmettow/uncanny")
@@ -2962,21 +2962,21 @@ library(uncanny)
 P_wide <-
   P_poly_3 %>% 
   filter(type == "fixef") %>% 
-  as_tibble() %>% 
+  #as_tibble() %>% 
   select(iter, parameter, value) %>% 
   spread(key = parameter, value = value) %>% 
-  select(-iter) %>% 
+  select(Intercept, starts_with("huMech")) %>% 
   mutate(trough     = uncanny::trough(.),
          shoulder   = uncanny::shoulder(.),
          is_Uncanny = !is.na(trough) & !is.na(shoulder) )
 
-print("The probability that the Uncanny Valley does NOT exist is:")
+print("The probability that the Uncanny Valley does exist is:")
 print(mean(P_wide$is_Uncanny))
 ```
 
-So, with the data of Mathur & Reichling we can be pretty sure that the Uncanny Valley effect is present. This conclusion sounds strong, and is even more interesting from a philosophy-of-science point-of-view. It was in 1970, when Masahiro Mori published his theory on the relation  between human likeness and emotional response. This article is astonishingly recent and clearly anticipates the emerge of human-like robots and virtual characters  [https://spectrum.ieee.org/automaton/robotics/humanoids/the-uncanny-valley]. But for a modern reader in Social Sciences the article abruptly stops, right where we would expect the experimental part confirming the theory. It seems that Mori's theory sprang just from his own feelings. Introspection as a scientific method is likely to give seasoned researcher another uncanny feeling. But, we must not mistaken here, Mori used his inner world for finding a theory, not for testing it. Once the world was ready, Mori's theory turned out to be immensely useful and can be proven.
+So, with the our data we can be pretty sure that the Uncanny Valley effect is present. Probably, there is a very tiny chance that it does not exist, which we would only catch by increasing the resolution of the posterior, i.e. running more MCMC iterations. This conclusion is even more interesting from a philosophy-of-science point-of-view. It was in 1970, when Masahiro Mori published his theory on the relation  between human likeness and emotional response. Fifty years later this article all but outdated in how lucidly it  anticipates the emerge of human-like robots and virtual characters  [https://spectrum.ieee.org/automaton/robotics/humanoids/the-uncanny-valley]. But for a modern reader in Social Sciences the article abruptly stops, right where we would expect the experimental part confirming the theory. It seems that Mori's theory sprang just from his own feelings. Introspection as a scientific method is likely to give seasoned researcher another uncanny feeling. But, we must not mistaken here, Mori used his inner world for finding a theory, not for testing it. Once the world was ready it, Mori's theory turned out to provable and immensely useful for design.
 
-Still, I argue that we have not yet fully confirmed  Mori's theory. Strictly spoken, the data of Mathur & Reichling only prove that *on average* the effect exists. That is something, but it is much stronger to state: *everyone* experiences the Uncanny Valley. In essence, we could estimate the same cubic models, but *one per participant*. That requires more data, because the analysis of very participant requires the data from every participant. The next chapter will introduce *multi-level models*, which can simultaneously estimate a model on population level and participant level. At the end of that chapter, we will return to Uncanny  Valley with more data to feed our chains. Spoiler alert: the Uncanny Valley effect could be *universal*.
+Still, I argue that we have not yet fully confirmed  Mori's theory. Strictly spoken, the data of Mathur & Reichling only prove that *on average* the effect exists, that is if we aggregate over participants. It would be much stronger to state: *everyone* experiences the Uncanny Valley. In essence, we could estimate the same cubic models, but *one per participant*. That requires non-aggregated data, because the analysis of very participant requires the data from every participant. The next chapter will introduce *multi-level models*, which can simultaneously estimate a model on population level and participant level. At the end of the following chapter, we will return to the Uncanny  Valley with more data to feed our chains. Spoiler alert: the Uncanny Valley effect could be *universal*.
 
 
 
