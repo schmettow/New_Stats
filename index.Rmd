@@ -292,6 +292,3 @@ neutral   [CHAIR ]: green
 ### situations [TBD]
 
 
-
-# Elements of Bayesian Statistics
-

@@ -4,3 +4,4 @@ rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd"
 #rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd"]
 #rmd_files: ["index.Rmd", "Getting_started_with_R.Rmd"]
 new_session: yes
+graphics: yes

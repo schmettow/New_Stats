@@ -8,7 +8,7 @@ source("RMDR.R")
 #iter = 200
 # memory.limit(16000)
 
-CE <- c("AUP", "BrowsingAB", "Chapter_LM", "Uncanny", "Hugme", "CUE8")
+CE <- c("AUP", "BrowsingAB", "Chapter_LM", "Uncanny", "Hugme", "CUE8", "IPump")
 load_CE_(CE)
 ```
 
@@ -67,7 +67,7 @@ The second part deals with the problem of comparing multiple models. Predictive 
 
 ## Model criticism
 
-For a start, I would like to contrast the overall approach of model criticism  to the workflow frequently encountered in classic statistics. Boldly speaking, classicically trained researchers often assume that the "assumptions of ANOVA" need to be checked beforehand. Often a process called *assumptions checking* is carried out before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see in this section, the order of actions is just the other way round. The straight-forward way to check the integrity of a model is to examine the fitted model and find its flaws, which is called *model criticism*. 
+For a start, I would like to contrast  the overall approach of model criticism  to the workflow frequently encountered in classic statistics. Boldly speaking, classicically trained researchers often assume that the "assumptions of ANOVA" need to be checked beforehand. Often a process called *assumptions checking* is carried out before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see in this section, the order of actions is just the other way round. The straight-forward way to check the integrity of a model is to examine the fitted model and find its flaws, which is called *model criticism*. 
 Another symptom of classic assumption checking is the batteries of arcane non-parametric tests that is often carried out. This practice has long been criticized in the statistical literature for its logical flaws and practical limitations. Here, I will fully abandon hypothesis tests for model criticism and demonstrate graphical methods, which are based on two additional types of estimates we can extract from linear models (next to coefficients):
 
 1. with *residuals* we test the assumptions on the shape of randomness 
@@ -263,7 +263,7 @@ sync_CE(Chapter_LM, D_bimod, D_t, D_QQ, M_bimod, M_t)
 ```
 
 
-In the ideal case, they match perfectly and the quantiles are on a straight line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the turning points. From these points on the theoretical quantiles start to lag behind. The lower and upper 1% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Gaussian distribution  renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem of misusing a Gaussian distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Perhaps, researchers used the Gaussian distribution for the risk models, under-estimating the risk of extreme events. <!-- #63 -->
+In the ideal case, they match perfectly and the quantiles are on a straight line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the turning points. From these points on the theoretical quantiles start to lag behind. The lower and upper 1% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Gaussian distribution  renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem of misusing a Gaussian distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Rumor tells, researchers used the Gaussian distribution for the risk models, under-estimating the risk of extreme events. <!-- #63 -->
 
 The ggplot engine provides an easy to use geometry for qqlots, which lets us further explore deviant patterns. Variables with t distribution take an inverse-sigmoid shape due to their fat tails. 
 
@@ -391,7 +391,7 @@ $$
 
 The first assumption of linear models is obvious: the residual distribution must follow a *Normal distribution*. There is an easy and an advanced way to check whether this is true. It is easiest to create a density plot from residuals and compare it to the known properties of a Normal distribution:
 
-```{BAB1_check_normal, fig.cap= "A histogram on residuals", eval = F}
+```{r BAB1_check_normal, fig.cap= "A histogram on residuals", eval = F}
 tibble(resid = residuals(M_age)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
@@ -402,7 +402,7 @@ The residual distribution of `M_age` appears perfectly symmetric and has just on
 
 The single residual distribution assumption of linear models, as harmless as it may appear, brings forth two claims:  residuals must have the same dispersion everywhere, which is called *homogeneity  of variance* and residuals must have *independence* from any predictors. All residuals are supposed to fall into a horizontal band of even width, like in the figure \@ref(quantile_caterpillar). Note how this figure is created by first simulating data using the approximate coefficients of model `M_age`. The independence of residuals emerges by the absence of any relation with age in the data generating code.
 
-```{quantile_caterpillar, fig.cap = "", eval = F}
+```{r quantile_caterpillar, fig.cap = "", eval = F}
 set.seed(42)
 tibble(age = runif(200, 20, 70),
            resid = rnorm(200, 0, 46),
@@ -428,7 +428,7 @@ Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 7
 
 ### Fitted responses analysis
 
-Frequently, the research question  is how strong the effect of a predictor variable is on the response. This strength of effect is what coefficient table tell us. But, how do we know that the model actually fits the process under examination?  We have seen several examples of models that do not align well with the observation, in particular when plain MPM were used in the presence of conditional effect. It is tempting to jump to the question, which of two (or more) models is best. I'll reserve that for the final section [APA]. Here I will introduce technqiue to assess whether a model fits the data well, that is based on this model alone. More precisely, the method is based on *fitted responses*, which is the $\mu_i$ that appears in the model formula. We will see that, just like coefficients estimates, fitted responses can be extracted as CLU tables. In essence, by comparing fitted responses to observed responses $\y_i$, we can examine how well a model actually fits the data and identify find potential patterns in the data that the model ignores.
+Frequently, the research question  is how strong the effect of a predictor variable is on the response. This strength of effect is what coefficient table tell us. But, how do we know that the model actually fits the process under examination?  We have seen several examples of models that do not align well with the observation, in particular when plain MPM were used in the presence of conditional effect. It is tempting to jump to the question, which of two (or more) models is best. I'll reserve that for the final section [APA]. Here I will introduce technqiue to assess whether a model fits the data well, that is based on this model alone. More precisely, the method is based on *fitted responses*, which is the $\mu_i$ that appears in the model formula. We will see that, just like coefficients estimates, fitted responses can be extracted as CLU tables. In essence, by comparing fitted responses to observed responses $y_i$, we can examine how well a model actually fits the data and identify find potential patterns in the data that the model ignores.
 
 Remember that all linear model assume that an observed value is composed of a structural component, the one that repeats across observations, and a Gaussian distributed error, as can best be seen in the classic notation:
 
@@ -545,19 +545,20 @@ attach(Uncanny)
 
 
 ```{r opts.label = "mcmc"}
-M_poly_2 <- UV_1 %>% 
+M_poly_2 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 2), data = .)
 
-M_poly_3 <- UV_1 %>% 
+M_poly_3 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 3), data = .)
 
-M_poly_9 <- UV_1 %>% 
+M_poly_9 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 9), data = .)
 ```
 
 ```{r opts.label = "mcmc"}
 sync_CE(Uncanny, M_poly_2, M_poly_3, M_poly_9)
 ```
+
 
 
 
@@ -573,7 +574,7 @@ T_fit_poly <-
 ```
 
 ```{r}
-UV_1 %>% 
+RK_2 %>% 
   bind_cols(T_fit_poly) %>% 
   ggplot(aes(x = huMech)) + 
   geom_point(aes(y = avg_like, col = "observed")) +
@@ -594,6 +595,9 @@ We observe that the two lower-degree polynomials deviate strongly from the obser
 To sum it up, visual analysis with fitted responses is an effective way to discover shortcomings of a model with respect to the structural part. A possible strategy is to start with a basic model, that covers just the main research questions and explore how well it performs under different conditions. With metric predictors, fitted response analysis can uncover problems with the linearity assumption. 
 
 
+```{r opts.label = "inv"}
+detach(Uncanny)
+```
 
 
 ## Model selection
@@ -880,6 +884,36 @@ The interpretation of LOO-IC is the same as for all information criteria, the va
 exp(1001320 - 1001317)
 ```
 
+For a real application, we pick up the infusion pump case, where we left it in section [#linearzing_sat], where we informally compared three Poisson models for the learning rate on path deviations:
+
+* an ordered factor model with four learning rate coefficients (`M_pois_cozfm`)
+* a linearized regression with two learning rate coefficients (`M_pois_clzrm`)
+* a linearized regression with one learning rate coefficient (`M_pois_lzrm`)
+
+From the coefficients it seemed that the OzFM can best be replaced by the more parsimonous LzRM. Still, the there remains a slight differences in the two steps. This is a good example where formal model selection is useful.
+
+
+```{r}
+attach(IPump)
+```
+
+
+```{r}
+L_pois_cozfm <-  loo(M_pois_cozfm)
+L_pois_clzrm <-  loo(M_pois_clzrm)
+L_pois_lzrm <-  loo(M_pois_lzrm)
+
+loo_compare(x = list(L_pois_lzrm, L_pois_clzrm, L_pois_cozfm))
+
+```
+
+
+Model comparison with LOO-IC points us at the unconditional LzRM as the most parsimonous model, followed by the conditional LzRM; the conditional OFM goes in last. Model comparison confirms, that we may assume a learning rate that is approximately constant across the learning process *and* the designs.
+
+```{r opts.label = "inv"}
+detach(IPump)
+```
+
 
 ### Choosing response distributions
 
@@ -957,12 +991,12 @@ loo_compare(F10_4_gau, F10_4_gam, F10_4_exg) %>%
 detach(CUE8)
 ```
 
-Interestingly, the Gamma response distributions is favored over the Exgaussian in this case. Again, this may or may not generalize to future data sets. 
+Interestingly, the Gamma response distributions is favored over the Exgaussian in this case for ToT. Again, this may or may not generalize to future data sets.  
 
 Obviously, predictive accuracy can also be used to check for over-dispersion, just compare, for instance, a Poisson model to  a Negbinomial model. However, over-dispersion in count data is so common that model selection may be a waste of effort. In addition, should there really be no over-dispersion, the Negbimomial model will behave almost exactly like a Poisson model and the costs (in terms of parsimony) are negligible.
 
 
-Therefore, I close this section with a more interesting comparison: In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and other shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. A Beta model with two structural parts (mean and scale) was estimated and their appeared to be significant variance in how participants employed the scale, i.e. the range of responses. However, by individual-level scale parameters the model is massiveley inflated. Is that for the good of predictive accuracy? Below, we use the LOO-IC estimate to compare the distributional model against a regular Beta regression.
+Therefore, I close this section with a more interesting comparison:  In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and other shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. A Beta model with two structural parts (mean and scale) was estimated and their appeared to be significant variance in how participants employed the scale, i.e. the range of responses. However, by individual-level scale parameters the model is massiveley inflated. Is that for the good of predictive accuracy? Below, we use the LOO-IC estimate to compare the distributional model against a regular Beta regression.
 
 ```{r}
 attach(Uncanny)

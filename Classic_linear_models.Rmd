@@ -72,16 +72,20 @@ In a later chapters we will investigate on the sources of randomness [REF MLM]. 
 Formally, a GMM is written as follows, where $\mu_i$ is the *predicted value* of person $i$ and $\beta_0$ is the population mean $\beta_0$, which is referred to as *Intercept* (see [#CGM]).
 
 $$
-\mu_i = \beta_0\\
-y_i = \mu_i, + \epsilon_i\\
-\epsilon_i \sim \textrm{Gaus}(0, \sigma_\epsilon)
+\begin{aligned}
+\mu_i &= \beta_0\\
+y_i &= \mu_i, + \epsilon_i\\
+\epsilon_i &\sim \textrm{Gaus}(0, \sigma_\epsilon)
+\end{aligned}
 $$
 
 This way of writing a linear model only works for Gaussian linear models, as only here, the residuals are symmetric and are adding up to Zero. In chapter [#GLM], we will introduce linear models with different error distributions. For that reason, I will use a slightly different notation throughout:
 
 $$
-\mu_i = \beta_0\\
-y_i \sim \textrm{Gaus}(\mu_i, \sigma_\epsilon)
+\begin{aligned}
+\mu_i &= \beta_0\\
+y_i &\sim \textrm{Gaus}(\mu_i, \sigma_\epsilon)
+\end{aligned}
 $$
 The notable difference between the two notations is that in the first we have just one error distribution. In the second model, every observation actually is taken from its own distribution, located at $\mu_i$, albeit with a *constant variance*.
 
@@ -228,9 +232,11 @@ $$y_i \sim \textrm{Gaus}(\mu_i, \sigma_{\epsilon})$$
 The random term specifies how all unknown sources of variation take effect on the measures, and these are manifold. Randomness can arise due to all kinds of individual differences, situational conditions, and, last but not least, measurement errors. The Gaussian distribution sometimes is a good approximation for randomness and linear models are routinely used in research. In several classic statistics books, the following  formula is used to describe the GMM (and likewise more complex linear models):
 
 $$
-y_i = \mu_i + \epsilon_i\\
-\mu_i = \beta_0\\
-\epsilon_i \sim \textrm{Norm}(0, \sigma_\epsilon)
+\begin{aligned}
+y_i &= \mu_i + \epsilon_i\\
+\mu_i &= \beta_0\\
+\epsilon_i &\sim \textrm{Gaus}(0, \sigma_\epsilon)
+\end{aligned}
 $$
 
 First, it is to say, that these two formulas are mathematically equivalent. The primary difference to our formula is that the *residuals $\epsilon_i$*, are given separately. The pattern of residuals is then specified as a single Gaussian distribution. Residual distributions are a highly useful concept in modelling, as they can be used to check a given model. Then the the classic formula is more intuitive. The reason for separating the model into likelihood and random term is that it works in more cases. When turning to Generalized Linear Models (GLM) in chapter \@ref(generalized-linear-models), we will use other patterns of randomness, that are no longer additive, like in $\mu_i + \epsilon_i$. As I consider the use of GLMs an element of professional statistical practice, I use the general formula throughout.
@@ -544,23 +550,29 @@ mascutils::expand_grid(intercept = c(0, 1, 2),
 
 A linear function is a straight line, which is specified by two parameters: *intercept* $\beta_0$ and *slope* $\beta_1$:
 
-$$f(x_1) = \beta_0 + \beta_1x_{1i}$$
+$$
+f(x_1) = \beta_0 + \beta_1x_{1i}
+$$
 
 The intercept is *"the point where a function graph crosses the x-axis"*, or more formally:
 
-$$f(x_1 = 0) = \beta_0$$
+$$
+f(x_1 = 0) = \beta_0
+$$
 
 The second parameter, $\beta_1$ is called the *slope*. The slope determines the steepness of the line. When the slope is $.5$, the line will rise up by .5 on Y, when moving one step to the right on X.
 
-$$f(x_1 + 1) = \beta_0 + \beta_1x_{1i} + \beta_1$$
+$$
+f(x_1 + 1) = \beta_0 + \beta_1x_{1i} + \beta_1
+$$
 
 There is also the possibility that the slope is zero. In such a case, the predictor has no effect and can be left out. Setting $\beta_1 = 0$ produces a horizontal line, with $y_i$  being constant over the whole range. This shows that the GMM is a special case of LRMs, where the slope is fixed to zero, hence  $\mu_i = \beta_0$.
 
-Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this hypothetical experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower when using the internet? Or: is there a linear relationship between age and ToT? The structural and random terms of the LRM are: <!-- #49 -->
+Linear regression gives us the opportunity to discover how ToT can be predicted by age ($x_1$) in the BrowsingAB case. In this hypothetical experiment,  two designs A and B are compared, but we ignore this for now. Instead we ask: are older people slower when using the internet? Or: is there a linear relationship between age and ToT? The structural term is: <!-- #49 -->
 
-$$\mu_i = \beta_0 + \beta_1x_{1i}$$
-$$y_i \sim \textrm{Gaus}(\mu_i, \sigma)$$
-
+$$
+\mu_i = \beta_0 + \beta_1\textrm{age}_{i}
+$$
 
 This literally means: with every year of age, ToT increases by $\beta_1$ seconds. Before we run a linear regression with `stan_glm`, we visually explore the association between age and ToT using a scatter plot. The blue line in the graph is a so called a *smoother*, more specifically a LOESS. A smoother is an estimated line, just as linear function. But, it is way more flexible. Where the linear function is a straight stick fixed at a pivotal point, LOESS is more like a pipe cleaner. here, LOESS shows a more detailed picture of the relation between age and ToT. There is a rise between 20 and 40, followed by a stable plateau, and another rise starting at 60. Actually, that does not look like a straight line, but at least there is steady upwards trend. 
 
@@ -821,7 +833,7 @@ D_cor %>%
 Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation [REF transformations] and that a covariance is the mean squared deviance from the population mean. This is how the correlation is decontaminated from the idiosyncracies of the involved measures, their location and dispersion. Similarly, the slope parameter in a LRM is a measure of association, too. It is agnostic of the overall location of measures since this is captured by the intercept. However, dispersion remains intact.  This ensures that the slope and the intercept together retain information about location, dispersion and association of data, and we can ultimately make predictions. Still, there is a tight relationship between Pearson's $r$ and a slope coefficient $\beta_1$, namely:
 
 $$
-r = \beta_1 \frac{sd_X}{sd_Y}
+r = \beta_1 \frac{\sigma_X}{\sigma_Y}
 $$
 
 For the sole purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
@@ -1344,7 +1356,11 @@ D_Novel %>%
 This is what a factorial model with *stairway dummy coding* does. The first coefficient $\beta_0$ is the starting point, for example the first session, and all other coefficients ( $\beta_1, \beta_2$) are a sequence of step sizes. The expected value $\mu_i$ for session $K$, using stairways dummies $K_0, K_1, K_2$ is:
 
 $$
-\mu_i = K_{1i} \beta_{0} + K_{2i} (\beta_{0} + \beta_{1}) +  K_{2i} (\beta_{0} + \beta_{1} + \beta_{2})
+\begin{aligned}
+\mu_i = & K_{1i} \beta_{0} &+ \\
+&K_{2i} (\beta_{0} + \beta_{1}) &+\\
+&K_{2i} (\beta_{0} + \beta_{1} + \beta_{2})
+\end{aligned}
 $$
 
 
@@ -1600,8 +1616,10 @@ detach(AUP)
 As we will see later, it is preferable to build one model with two simultaneous predictors. For instructive purposes we begin with two separate LRMs, one for each predictor. Throughout the regression models we use z-transformed scores. Neither the personality nor the resistance scores truly have a metric interpretation, so nothing is lost in translation. 
 
 $$
-\mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs}\\
-\mu_i = \beta_0 + \beta_\mathrm{gex} x_\mathrm{gex}
+\begin{aligned}
+&M1: \mu_i = \beta_0 + \beta_\mathrm{ncs} x_\mathrm{ncs}\\
+&M2: \mu_i = \beta_0 + \beta_\mathrm{gex} x_\mathrm{gex}
+\end{aligned}
 $$
 
 ```{r fit:AUP_LR, opts.label = "mcmc"}
@@ -2239,7 +2257,9 @@ Learning curves are saturation processes, which can look linear when viewed in s
 
 Most statistically trained researchers are aware of some common assumptions of linear regression, such as the normally distributed residuals and variance homogeneity. Less commonly regarded is the assumption of linearity, which arises from the basic regression formula:
 
-$$y_i = \beta_0 + \beta_1 x_{1i}$$
+$$
+y_i = \beta_0 + \beta_1 x_{1i}
+$$
 
 The formula basically says, that if we increase $x_1$ (or any other influencing variable) by one unit, $y$ will increase by $\beta_1$. It also says that $y$ is composed as a mere sum. In this section, we will discover that these innocent assumptions do not hold.
 
@@ -2759,7 +2779,9 @@ tibble(hl = seq(-1, 1, length.out = 100),
 
 A polynomial function of degree $k$ has the form: <!-- #78 -->
 
-$$y_i = \beta_0 x_i^0 + \beta_1 x_i^1 + ... + \beta_{k}  x_i^{k}$$
+$$
+y_i = \beta_0 x_i^0 + \beta_1 x_i^1 + ... + \beta_{k}  x_i^{k}
+$$
 
 In fact, you are already familiar with two polynomial models. The zero degree polynomial is the grand mean model. This follows from $x_i^0 = 1$, which makes $\beta_0$ a constant, the intercept. Also, a first degree polynomial is simply the linear model. By adding higher degrees we can introduce more complex curvature to the association.
 
@@ -2829,7 +2851,10 @@ We can extract the fixef effects table as usual. The four coefficients specify t
 
 Finding a local minimum is a two step procedure: first, we must find all *stationary points*, which includes local minima and maxima. Then, we determine which of the resulting points is the local minimum. Stationary points occur, where the curve bends from a rising to falling or vice versa. At these points, the slope is zero, neither rising nor falling. Therefrore, stationary points are identified by the derivative of the polynomial, which is a second degree (cubic) polynomial:
 
-$$f'(x) = \beta_1 + 2\beta_2x + 3\beta_2x^2$$
+$$
+f'(x) = \beta_1 + 2\beta_2x + 3\beta_2x^2
+$$
+
 The derivative $f'(x)$ of a function $f(x)$ gives the slope of $f(x)$ at any given point $x$. When $f'(x) > 0$, $f(x)$ is rising at $x$, with $f'(x) < 0$ it is falling. Stationary points are precisely those points, where $f'(x) = 0$ and can be found by solving the equation. The derivative of a third degree polynomial is of the second degree, which has a quadratic part. This can produce a parabolic form, which hits point zero twice, once rising and once falling. A rising encounter of point zero indicates that $f(x)$ has a local minimum at $x$, a falling one indicates a local maximum. In consequence, solving $f'(x) = 0$ can result in two solutions, one minimum and one maximum, which need to be distinguished further. 
 
 If the stationary point is a local minimum, as the trough, slope switches from negative to positive; $f'(x)$ crosses $x = 0$ in a rising manner, which is a positive slope of $f'(x)$. Therefore, a stationary point is a local minimum, if $f''(x) > 0$.

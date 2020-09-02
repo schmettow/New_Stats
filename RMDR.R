@@ -132,17 +132,19 @@ opts_chunk$set(echo = T,
                eval = purp.book, 
                results = "markup",
                cache = 0,
-               out.width = "90%")
+               out.width = "90%",
+               tidy = F)
 
 options(digits=3)
 
 ## chunk templates
 
-opts_chunk$set(fig.width = 7)
-opts_chunk$set(fig.height = 5)
+opts_chunk$set(fig.width = 6)
+opts_chunk$set(fig.height = 4)
 
 opts_template$set( 
-  tab = list(anchor = 'Table', echo = T, eval = T, results = 'markup' ),
+  tab = list(anchor = 'Table', echo = T, 
+             eval = T, results = 'markup' ),
   #fig.full = list(fig.width = 8, fig.height = 12, anchor = 'Figure'),
   #fig.large = list(fig.width = 8, fig.height = 8, anchor = 'Figure'), 
   #fig.small = list(fig.width = 4, fig.height = 4, anchor = 'Figure'),

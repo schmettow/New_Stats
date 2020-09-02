@@ -36,7 +36,7 @@ bookdown::render_book("_bookdown.yml",
                       output_format = "bookdown::pdf_book", 
                       clean = F,
                       new_session = T,
-                      output_dir = "PDF/",
+                      output_dir = "../../../../previews",
                       encoding = "UTF-8")
 
 

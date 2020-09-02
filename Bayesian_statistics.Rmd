@@ -360,10 +360,8 @@ The coefficients of the Gamma model are on a logartithmic scale, but when expone
 coef(P_1, mean.func = exp)
 ```
 
-```{r include = F}
-T_fixef <- 
-  fixef(P_1, mean.func = exp) %>% 
-  mascutils::discard_redundant()
+```{r}
+T_fixef <- fixef(P_1, mean.func = exp)
 T_fixef
 
 ```
@@ -381,7 +379,7 @@ N_risk_of_failure
 
 The risk of failure is just below 30%. With this information in mind Violet now has several options:
 
-1. deciding that `r N_risk_of_failure * 100`% is a risk she *dares* to take and recommend going forward with the development
+1. deciding that `r N_risk_of_failure$risk_of_failure * 100`% is a risk she *dares* to take and recommend going forward with the development
 2. *continue testing* more users to reach a higher level of certainty
 3. take into account sources of evidence from the past, or *prior knowledge*
 

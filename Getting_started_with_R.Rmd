@@ -305,8 +305,10 @@ As R is an interpreter language, meaning there is no tedious compile-and-run cyc
 R is a way to *report and archive* what precisely you have been doing with your data. In statistics, mathematical formulas  are the common form of unambiguously describing a statistical model. For example, the following equation defines a linear regression model between the observed outcome $y$ and the predictor $x$:
 
 $$
-\mu_i = \beta_0 +  \beta_1x_i\\
-y_i \sim N(\mu_i, \sigma)
+\begin{aligned}
+\mu_i &= \beta_0 +  \beta_1x_i\\
+y_i &\sim N(\mu_i, \sigma)
+\end{aligned}
 $$
 
 As we will later see [CLM], in Rs formula language the same model is unambiguously specified  as:

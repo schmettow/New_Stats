@@ -287,7 +287,7 @@ Uncanny$DK_1 <-
                                presentation_time == .2 ~ "medium",
                                presentation_time == 2  ~ "prolonged")) %>% 
   mutate(huMech = mascutils::rescale_unit(huMech),
-         response = mascutils::rescale_unit(huMech)) %>% 
+         response ) %>% 
   as_tbl_obs() %>% 
   select(Experiment, Obs, Part, Item, Scale, Stimulus, session, Session, Collection,
          Condition, presentation_time, response, RT, starts_with("huMech"))
@@ -310,13 +310,15 @@ Uncanny$PS_1 <-
   mutate(session = case_when(Condition <= "brief" ~ 0,
                                 Condition == "medium" ~ 1,
                                 Condition == "prolonged" ~ 2),
-         Session = as.character(session + 1)
-         ) %>% 
+         Session = as.character(session + 1)) %>% 
+  mutate(huMech = mascutils::rescale_unit(huMech),
+         response = mascutils::rescale_unit(response)) %>%
   as_tbl_obs() %>% 
-  select(Experiment, Obs, Part, Item, Scale, Stimulus, session, Session, Collection,
+  select(Experiment, Obs, Part, Item, Scale, Stimulus, 
+         session, Session, Collection,
          Condition, presentation_time, response, RT, starts_with("huMech"))
 
-Uncanny$D_UV <- bind_rows(Uncanny$DK_1, Uncanny$PS_1, Uncanny$RK_1)
+Uncanny$D_UV <- bind_rows(Uncanny$DK_1, Uncanny$RK_1)
 
 
 Uncanny$RK_2 <-
@@ -339,18 +341,18 @@ Uncanny$UV_1 <-
 
 ```
 ```{r}
-attach(Uncanny)
+Uncanny$D_UV %>% 
+  group_by(Experiment, Stimulus, huMech) %>% 
+  mutate(avg_like = mean(response)) %>% 
+  ggplot(aes(x = huMech, y = avg_like, color = Experiment)) +
+  geom_smooth() +
+  geom_point()
 
-RK_1 %>% 
-  ggplot(aes(x = huMech)) +
-  geom_smooth(aes(y = response, col = "response")) +
-  geom_smooth(aes(y = eeriness, col = "eeriness"))
-
-UV_1 %>% 
+Uncanny$RK_2 %>% 
   ggplot(aes(x = huMech, y = avg_like)) +
-  geom_smooth()
+  geom_smooth() +
+  geom_point()
 
-detach(Uncanny)
 ```
 
 
