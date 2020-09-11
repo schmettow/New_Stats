@@ -14,7 +14,7 @@ load_CE_(CE)
 
 
 
-In chapters \@ref(lm) and \@ref(mlm), we have seen a marvelous variety of models spawning from just two basic principles, linear combination of multiple effects and Gaussian distribution. Chapter \@ref(#glm) further expanded the variety of models, letting us choose response  distributions that sit snug. This chapter, is dedicated to methods that assess how snug a model is.
+In chapters \@ref(lm) and \@ref(mlm), we have seen a marvelous variety of models spawning from just two basic principles, linear combination of multiple effects and Gaussian distribution. Chapter \@ref(glm) further expanded the variety of models, letting us choose response  distributions that sit snug. This chapter, is dedicated to methods that assess how snug a model is.
 
 <!-- I will introduce methods to critically assess linear models and how to compare them. Every model we use on data is an ideal, that approximates reality, more or less. But how close is a model to reality? Under a Bayesian perspective, reality falls into two parts: past and future.  -->
 
