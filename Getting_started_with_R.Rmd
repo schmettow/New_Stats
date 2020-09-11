@@ -1,4 +1,4 @@
-# Getting started with R {#getting_started_r}
+# Getting started with R {#gsr}
 
 
 
@@ -173,7 +173,7 @@ Again, you have to do that only once after installing R and you can afterwards l
 
 
 
-### A first statistical program {#first_program}
+### A first statistical program {#first-program}
 
 
 After you have set up your R environment, you are ready to run your first R program (you will not yet understand all the code, but as you proceed with this book, all will become clear):
@@ -315,7 +315,7 @@ y_i &\sim N(\mu_i, \sigma)
 \end{aligned}
 $$
 
-As we will later see [#cgm], in Rs formula language the same model is unambiguously specified  as:
+As we will later see \@ref(cgm), in Rs formula language the same model is unambiguously specified  as:
 
 `y ~ x`
 
@@ -883,7 +883,7 @@ ORPO %>%
 
 The ORPO rule dictates another principle: every row should have a unique identifier, which can be a combination of values. In the example above, every observation is uniquely identified by the participant identifier and the design condition. If we extend the example slightly, it is immediatly apparent, why the ORPO rule is justified. Imagine, the study actually asked three partcipants to rate two different tasks on two different designs by three self-report items. By the ORPO rule, we can easily extend the data frame as below (showing a random selection of rows). I leave it up to the reader to figure out how to press such a data set in the wide legacy format.
 
-Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record  data in multi-method experiments and join them automatically. An exammple is given in Appendix  [#case:Hugme]. Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects models and the notion of *members of a population* [#non-human-populations]. Throughout the book I will use standard names for recurring identifier variables in design research:
+Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record  data in multi-method experiments and join them automatically. An exammple is given in Appendix  \@ref(hugme). Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects models and the notion of *members of a population* \@ref(non-human-populations). Throughout the book I will use standard names for recurring identifier variables in design research:
 
 + Part
 + Design
@@ -1092,7 +1092,7 @@ Exp <-
 ```
 
 
-The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in [#cgm], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does *not* contain is F-statistics and p-values;  and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The `fixef` command extracts the parameter estimates from the model to answer the question.
+The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in \@ref(cgm), old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does *not* contain is F-statistics and p-values;  and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The `fixef` command extracts the parameter estimates from the model to answer the question.
 
 
 

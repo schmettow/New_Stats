@@ -1,4 +1,4 @@
-# Working with models {#ME}
+# Working with models {#wwm}
 
 
 ```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
@@ -14,11 +14,15 @@ load_CE_(CE)
 
 
 
-In the chapter [#LM], we have seen a marvelous variety of models spawning from just two basic principles, linear combinations and a Gaussian error term. In this chapter I will introduce methods to critically assess models and how to compare models. Every model we use on data is an ideal, that approximates reality, more or less. But how close is a model to reality? Under a Bayesian perspective, reality falls into two parts: past and future. We begin with  *model criticsm* where we examine how well one model fits data, we have gathered in the past. In *model comparison* methods are introduces to decide which model performs better at predicting future data.
+In chapters \@ref(lm) and \@ref(mlm), we have seen a marvelous variety of models spawning from just two basic principles, linear combination of multiple effects and Gaussian distribution. Chapter \@ref(#glm) further expanded the variety of models, letting us choose response  distributions that sit snug. This chapter, is dedicated to methods that assess how snug a model is.
 
-With linear models we can combine and recombine any set of predictors in many ways. We saw examples, where the more simple of two model seemed to work better, but often it was the more complex conditional effects model [CEM] that was closer to the data. Visual methods to assess *goodness-of-fit*, that help scrutinize the structural part of linear models. The random part is rather inflexible for Linear Models, where the error follows Gaussian distribution, with a constant variance. Checking these assumptions is based on *residual analysis*.
+<!-- I will introduce methods to critically assess linear models and how to compare them. Every model we use on data is an ideal, that approximates reality, more or less. But how close is a model to reality? Under a Bayesian perspective, reality falls into two parts: past and future.  -->
 
-The second part deals with the problem of comparing multiple models. Predictive accuracy is introduced a a criterion to compare models. Methods to measure predictive accuracy are demonstrated  and we will see how pruning unnecessary parameters can improve a model. Finally, model comparison can also be used the other way round: in hypotheses testing, researchers usually aim at showing that a parameter is neccessary.
+We begin with  model criticsm \@ref(model-criticism), where we examine how well one model fits data, we have gathered in the past. In section \@ref(model-selection) model selection methods are introduces, which help  decide which of several models performs better in the future, by providing the most accurate forecasts.
+
+With linear models we can combine and recombine any set of predictors in many ways. We saw examples, where the more simple of two model seemed to work better, but often it was the more complex conditional effects model that was closer to the data. We will use graphical methods to assess *goodness-of-fit*, which helps to scrutinize the structural part of linear models. The random part of linear models is fixed, in that errors follows Gaussian distribution, with a constant variance. Checking these assumptions is based on *residual analysis*. That being said, the section on model criticism introduces techniques that only apply to Gaussian linear models \@ref(lm), making it a good follow-up for readers who have just worked through that chapter. 
+
+Everyone who is already using multi-level models \@ref(mlm) and Generalized Linear Models \@ref(glm) might want to step right into model selection \@ref(model-selection), where a more formal approach is presented to compare different models. In contrast to the graphical methods, introduced in \@model-criticism,  it is applicable for a wider range of models, even wider than the models covered by this book. The problem of comparing multiple models and selecting the fittest first rises the question of what "fittest" actually means and I will settle on the principle of forecasting accuracy.  Methods to approximate predictive accuracy are demonstrated  and we will see how pruning unnecessary parameters can improve a model. Finally, we will see how model comparison can be used by experimentalists, to test whether  a hypotheses is solid. 
 
 
 <!-- #### IPump -->
@@ -65,7 +69,7 @@ The second part deals with the problem of comparing multiple models. Predictive 
 
 
 
-## Model criticism
+## Model criticism {#model-criticism}
 
 For a start, I would like to contrast  the overall approach of model criticism  to the workflow frequently encountered in classic statistics. Boldly speaking, classicically trained researchers often assume that the "assumptions of ANOVA" need to be checked beforehand. Often a process called *assumptions checking* is carried out before the researcher actually dares to hit the button labelled as *RUN ANOVA*. As we will see in this section, the order of actions is just the other way round. The straight-forward way to check the integrity of a model is to examine the fitted model and find its flaws, which is called *model criticism*. 
 Another symptom of classic assumption checking is the batteries of arcane non-parametric tests that is often carried out. This practice has long been criticized in the statistical literature for its logical flaws and practical limitations. Here, I will fully abandon hypothesis tests for model criticism and demonstrate graphical methods, which are based on two additional types of estimates we can extract from linear models (next to coefficients):
@@ -74,7 +78,7 @@ Another symptom of classic assumption checking is the batteries of arcane non-pa
 1. with *fitted responses* we check the structural part of the model
 
 
-### Residual analysis
+### Residual analysis {#residual-analysis}
 
 So far, it seems, linear models equip us well for a vast variety of research situations. We can produce continuous and factorial models, account for saturation effects, discover conditional effects and even do the weirdest curved forms. just by the magic of combining linear coefficients. However, the random term  stoically stayed the same every time, that it often wasn't worth mentioning:
 
@@ -88,7 +92,7 @@ y_i = \mu_i + \epsilon_i\\
 \epsilon_i \sim \textrm{Gaus}(0, \sigma_\epsilon)
 $$
 
-In this notation, observed values $y_i$ are decomposed into predicted values and *individual* residuals $\epsilon_i$. These are frequently called *errors*, hence the greek symbol $\epsilon$. The standard deviation of residuals $\sigma_\epsilon$ is commonly called the *standard error*. The random pattern of the model can now be expressed as a single Gaussian distribution. The reason why I do not use this notation routinely, is that it only works for linear models, but not for models with other random patterns. More specifically, Generalized Linear Models \@ref(generalized_linear_models) cannot be specified that way. But, for the purpose of residual analysis, it appears more intuitive. <!-- #61 -->
+In this notation, observed values $y_i$ are decomposed into predicted values and *individual* residuals $\epsilon_i$. These are frequently called *errors*, hence the greek symbol $\epsilon$. The standard deviation of residuals $\sigma_\epsilon$ is commonly called the *standard error*. The random pattern of the model can now be expressed as a single Gaussian distribution. The reason why I do not use this notation routinely, is that it only works for linear models, but not for models with other random patterns. More specifically, Generalized Linear Models \@ref(glm) cannot be specified that way. But, for the purpose of residual analysis, it appears more intuitive. <!-- #61 -->
 
 In the previous section we have seen how to extract fitted responses $\mu_i$ from estimated models. With fitted responses, we evaluate the structural part of the model, the linear connection of coefficients, which practically always carry the research question. to the main objectives of the research. Residual analysis looks at the pattern of randomness, which the classic linear notation defines as *Gaussian distributed* with *constant variance*.    
 
@@ -96,13 +100,13 @@ $$
 \epsilon_i \sim \textrm{Gaus}(0, \sigma_\epsilon)
 $$
 
-As we have seen in \@ref(distributions), Gaussian distributions are one pattern of randomness among many and this choice may therefore be appropriate, or not. As a heuristic, if observed values are located rather in the middle of the possible range of measurement (and avoid the edges), Gaussian distributions work well. But, like linearity is compromised by saturation, a distribution is affected when squeezed against a hard boundary, as will be discussed in more depth in [GLM].
+As we have seen in \@ref(distributions), Gaussian distributions are one pattern of randomness among many and this choice may therefore be appropriate, or not. As a heuristic, if observed values are located rather in the middle of the possible range of measurement (and avoid the edges), Gaussian distributions work well. But, like linearity is compromised by saturation, a distribution is affected when squeezed against a hard boundary, as has been discussed in \@ref(elements-glm).
 
-Like with fitted responses, we will use graphical methods, to assess these two assumptions. When either one is violated, the validity of the model is compromised, although maybe not as much as a linear regression model is compromised curved associations like the Unbcanny Valley effect. It is noteworthy at this point, that these two assumptions severely limit what you may actually do with linear models. In some cases, the these assumptions are met well enough, but in many data sets they are visibly violated. Luckily, the linear model with a Gaussian term has been superceded by a class of models that give us more choice from patterns of random ness and let's accomodate pattern of randomness as it is. I may go as far as saying: some readers can skip this part and jump right to chapter [#GLM].
+Like with fitted responses, we will use graphical methods, to assess these two assumptions. When either one is violated, the validity of the model is compromised, although maybe not as much as a linear regression model is compromised curved associations like the Unbcanny Valley effect. It is noteworthy at this point, that these two assumptions severely limit what you may actually do with linear models. In some cases, the these assumptions are met well enough, but in many data sets they are visibly violated. Luckily, the linear model with a Gaussian term has been superceded by a class of models that give us more choice from patterns of random ness and let's accomodate pattern of randomness as it is. I may go as far as saying: some readers can skip this part and jump right to chapter \@ref(model-selecion).
 
 
 
-#### Gaussian distribution {#resid_normality}
+#### Gaussian residual distribution {#gauss-resid}
 
 
 
@@ -175,7 +179,7 @@ detach(BrowsingAB)
 ```
 
 
-The estimation produces the usual coefficients, as well as a standard error. However, the residuals do not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first_program). In brief, a bimodal residual distribution can arise, when two groups exist in the data, which lay far apart. The following  code illustrates the situation by simulating a simple data set with two groups, that is fed into a GMM.
+The estimation produces the usual coefficients, as well as a standard error. However, the residuals do not even remotely resemble the theoretical curve. While it is unimodal, it appears rather asymmetric, with a steep rise to the left and a long tail to the right. That is a typical outcome when count measures get too close to the left boundary. How about unimodality? We have not discussed any multimodal theoretical distributions in \@ref(distributions), but one has been displayed in \@ref(first-program). In brief, a bimodal residual distribution can arise, when two groups exist in the data, which lay far apart. The following  code illustrates the situation by simulating a simple data set with two groups, that is fed into a GMM.
 
 ```{r}
 attach(Chapter_LM)
@@ -206,7 +210,7 @@ D_bimod  %>%
 ```
 
 
-These two deviations from Gaussian distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(GLM). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Multimodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, it almost comes natural to distinguish between users who have used the design before and those who did not. If the grouping variable is recorded, the solution is group comparison models \@ref(CGM), already introduced.
+These two deviations from Gaussian distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \@ref(glm). This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures. Multimodality is caused by heterogeneous groups in the data, like experimental conditions, design or type of user. For a grouping structure to cause distinguished multimodality, differences between groups have to be pronounced in relation to the standard error. It is often the case, that these variables are controlled conditions, such as in an AB test. It is also quite likely that strong grouping structures can be thought of beforehand and be recorded. For example, in usability tests with diverse user samples, it almost comes natural to distinguish between users who have used the design before and those who did not. If the grouping variable is recorded, the solution is group comparison models \@ref(cgm), already introduced.
 
 Visual assessment of symmetry and unimodality is simple and effective in many cases. But, Gaussian distributions are not the only ones to have these properties. At least logistic distributions and t distributions have these, too, with subtle differences in curvature. Gaussian and t distributions differ in how quickly probability drops in the tails. Gaussian distributions drop much faster, meaning that extreme events are practically impossible. With t-distributions, extreme values drop in probability, too, but the possibility of catastrophies (or wonders) stays substantial for a long time.
 
@@ -289,15 +293,15 @@ Once mastered, the qq-plot is the swiss knife of Normality check. Next to the su
   geom_abline(intercept = 0, slope = 1, col = "red")
 ```
 
-To the left, extreme values have a lower probability than predicted by the Gaussian distribution, but the right tail is much fatter, once again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified,  neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(poisson_regression). 
+To the left, extreme values have a lower probability than predicted by the Gaussian distribution, but the right tail is much fatter, once again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified,  neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(poisson-reg). 
 
 
 
 
 
-#### Constant variance {#resid_constant_variance}
+#### Constant variance {#constant-var}
 
-In \@ref(resid_normality), we assessed one assumption that underlies all linear models, namely Gaussian distribution of residuals. The second assumption underlying the linear model random (or residual) is that residual variance is constant throughout the whole range. In both classic and modern notation, this stems from the fact that there is just a single $\sigma_\epsilon$ defined. However large $\mu_i$ is, the dispersion of residuals is not supposed to change.
+In \@ref(resid-normality), we assessed one assumption that underlies all linear models, namely Gaussian distribution of residuals. The second assumption underlying the linear model random (or residual) is that residual variance is constant throughout the whole range. In both classic and modern notation, this stems from the fact that there is just a single $\sigma_\epsilon$ defined. However large $\mu_i$ is, the dispersion of residuals is not supposed to change.
 
 Before we dive into the matter of checking the assumption, let's do a brief reality check using common sense:
 
@@ -321,7 +325,7 @@ BAB1 %>%
 ```
 
 
-Both sets of residuals are reasonably symmetric, but it appears that design B produces more widely spread residuals. Something in the design causes individual performance to vary stronger from the population mean. The cause of this effect will be disclosed in \@ref(differential_design_effects). (In essence, design B is rather efficient to use for younger users, whereas older users seem to have severe issues.)
+Both sets of residuals are reasonably symmetric, but it appears that design B produces more widely spread residuals. Something in the design causes individual performance to vary stronger from the population mean. The cause of this effect has been disclosed in \@ref(cmfm). (In essence, design B is rather efficient to use for younger users, whereas older users seem to have severe issues.)
 
 Visual checks of constant variance for factors is straight forward using common boxplots. For continuous predictors, such as age, requires a more uncommon graphical representation  known as *quantile plots*. These are not the same as qq plots, but luckily are included with ggplot. <!-- #63 -->
 
@@ -368,7 +372,7 @@ AUP_1 %>%
   geom_quantile()
 ```
 
-We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, when we turn towards \@ref(generalized_linear_models), we will find that these  models provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as conditional effects or heterogeneity in groups.
+We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespectively of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, Generalized Linear Models \@ref(glm), provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as conditional effects or heterogeneity in groups.
 
 ```{r}
 detach(AUP)
@@ -426,9 +430,9 @@ Quantile plots resemble the boxplot, in that they approximate the 25%, 50% and 7
 -->
 
 
-### Fitted responses analysis
+### Fitted responses analysis {#fitted-responses}
 
-Frequently, the research question  is how strong the effect of a predictor variable is on the response. This strength of effect is what coefficient table tell us. But, how do we know that the model actually fits the process under examination?  We have seen several examples of models that do not align well with the observation, in particular when plain MPM were used in the presence of conditional effect. It is tempting to jump to the question, which of two (or more) models is best. I'll reserve that for the final section [APA]. Here I will introduce technqiue to assess whether a model fits the data well, that is based on this model alone. More precisely, the method is based on *fitted responses*, which is the $\mu_i$ that appears in the model formula. We will see that, just like coefficients estimates, fitted responses can be extracted as CLU tables. In essence, by comparing fitted responses to observed responses $y_i$, we can examine how well a model actually fits the data and identify find potential patterns in the data that the model ignores.
+Frequently, the research question  is how strong the effect of a predictor variable is on the response. This strength of effect is what coefficient table tell us. But, how do we know that the model actually fits the process under examination?  We have seen several examples of models that do not align well with the observation, in particular when plain MPM were used in the presence of conditional effect. Here, I will introduce technqiue to assess whether a model fits the data well, that is based on this model alone. More precisely, the method is based on *fitted responses*, which is the $\mu_i$ that appears in the model formula. We will see that, just like coefficients estimates, fitted responses can be extracted as CLU tables. In essence, by comparing fitted responses to observed responses $y_i$, we can examine how well a model actually fits the data and identify find potential patterns in the data that the model ignores.
 
 Remember that all linear model assume that an observed value is composed of a structural component, the one that repeats across observations, and a Gaussian distributed error, as can best be seen in the classic notation:
 
@@ -444,7 +448,7 @@ The first line of the formula does the separation between structural part and pa
 + IPump: Do both designs have the same learning progress, or do we need conditional effects? 
 + Uncanny: Does the cubic polynomial provide a right amount of flexibility (number of stationary points), or would a simpler model (a quadratic polynomial) or a more complex model render the relationship better?  
 
-Before we come to the method, a warning: *Fitted responses* are more frequently called *predicted values*, and accordinly are extracted by the `predict()` function. This term is in two ways confusing: first, what values? Fair enough, but the second is more profound: The  "predicted values" is suggesting that you can use them for forecasting future responses. Well, you can, but only after you tested forecasting accuracy. In [#APA] we will see that one can easily create a snug fitting model, without any value for forecasting. (And we will learn how to compare the forecasting ability of models.) As [McElreath] points out, one should rather call predicted values *retrodictions*, which is a term that avoids the second I equally like. because they are bound to the current data. I believe the better term is fitted responses, because it reminds us that we are talking about  *idealized responses under one model*. That should keep imaginations in check. The match between idealized responses and the  *original* observations is called *model fit*. And that is *"fit" as in "fitted"* and not as in "fitness".
+Before we come to the method, a warning: *Fitted responses* are more frequently called *predicted values*, and accordinly are extracted by the `predict()` function. This term is in two ways confusing: first, what values? Fair enough, but the second is more profound: The  "predicted values" is suggesting that you can use them for forecasting future responses. Well, you can, but only after you tested forecasting accuracy. In \@ref(overfitting) we will see that one can easily create a snug fitting model, without any value for forecasting. (And we will learn how to compare the forecasting ability of models.) As [%McElreath] points out, one should rather call predicted values *retrodictions*, which is a term that avoids the second I equally like. because they are bound to the current data. I believe the better term is fitted responses, because it reminds us that we are talking about  *idealized responses under one model*. That should keep imaginations in check. The match between idealized responses and the  *original* observations is called *model fit*. And that is *"fit" as in "fitted"* and not as in "fitness".
 
 <!-- In the BrowsingAB case, we have recorded age of participant and the LRM `M_age_shft` suggests that with every unit of age, average ToT increased by  ` C_age[2]` seconds. If we now ask: what is predicted for a person of age 45? We get the predicted value $\mu_i$: -->
 
@@ -491,7 +495,7 @@ BAB1 %>%
 Note that the sequence of smooth geometries all use different sources for the y coordinate. The literal values for the color aesthetic produce the legend; the legend title is created by `labs()`.
 
 
-The only two features the LOESS smoother and the linear model have in common is their total upward trend and fitted responses at ages 20 and 50. The LOESS indicates some wobbliness in the response, with something that even could be a local maximum at around age 37. One has to be a little careful here, because LOESS is just another engine that produces a set of fitted responses. LOESS i a very flexible model, and as we will see in [APA], flexible models tend to over-fit, which means that they start to pull noise into the structural part. This results in less accurate forecasts. In conclusion, LOESS and LRM tell different stories and we cannot tell which one is closer to the truth without further investigation. Conditional effects are always among the suspects, when in comes to non-linearities. The wobbly relationship could be the result of a mixture of conditions. By pulling the Factor Design into the graph, we can assess how well the unconditional model fits both conditions. 
+The only two features the LOESS smoother and the linear model have in common is their total upward trend and fitted responses at ages 20 and 50. The LOESS indicates some wobbliness in the response, with something that even could be a local maximum at around age 37. One has to be a little careful here, because LOESS is just another engine that produces a set of fitted responses. LOESS i a very flexible model, and as we will see in \@ref(overfitting), flexible models tend to over-fit, which means that they start to pull noise into the structural part. This results in less accurate forecasts. In conclusion, LOESS and LRM tell different stories and we cannot tell which one is closer to the truth without further investigation. Conditional effects are always among the suspects, when in comes to non-linearities. The wobbly relationship could be the result of a mixture of conditions. By pulling the Factor Design into the graph, we can assess how well the unconditional model fits both conditions. 
 
 ```{r fig.width = 12, fig.height = 6}
 G_Design_age <-
@@ -532,9 +536,9 @@ The improved model now seems captures the overall increment by age in both condi
 detach(BrowsingAB)
 ```
 
-The Uncanny Valley effect is all about non-linearity and we have seen in [Poly] how a complex curves can be captured by higher-degree polynomials. With every degree added to a polynomial, the model gets one more coefficient. It should be clear by now that models with more coefficients are more flexibel. In multi-factorial models, adding a conditional term lets all group means move freely, whereas the flexibility of a polynomial can be measured by how many stationary points are possible, because you need one for every peak and valley. Higher degree polynomials can do even more tricks, such as saddle points, that have a local slope of zero without changing direction.
+The Uncanny Valley effect is all about non-linearity and we have seen in \@ref(prm) how a complex curves can be captured by higher-degree polynomials. With every degree added to a polynomial, the model gets one more coefficient. It should be clear by now that models with more coefficients are more flexibel. In multi-factorial models, adding a conditional term lets all group means move freely, whereas the flexibility of a polynomial can be measured by how many stationary points are possible, because you need one for every peak and valley. Higher degree polynomials can do even more tricks, such as saddle points, that have a local slope of zero without changing direction.
 
-Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in [APA], whereas here we use visualizations of fitted responses to evaluate the possible models. 
+Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models. 
 
 In the following, the cubic model is compared to the simpler quadratic model. It could be, after all, that a parabole is sufficient to render the valley. On the other side of things, a polynomial model with the ridiculous degree 9 is estimated, just to see whether there is any chance a more complex model would further improve the fit.
 
@@ -590,9 +594,9 @@ Note that:
 + all posterior predictive distributions (PPD) are collected into one multi-model posterior predictions object (class tbl_post_pred)
 + from the PP, multi-model CLUs are then created at once and turned into a wide table using `spread`,  which can be attached to the original data.
 
-We observe that the two lower-degree polynomials deviate strongly from the observed pattern. The quadratic polynomial is a parabole and one could expect it to fit the valley part somewhat, but it does not. The cubic  polynmial curve almost seems to snap into the right position. That is confirmed by observing that using a 9-degree polynomial barely changes the fitted curve, although, according to polynomial theory, this model could have as many as eight stationary points, which is a ridiculous amount of flexibility. This polynomial also sits perfectly snug with the LOESS (on the original observations), which means it is at least as flexible. These results confirm that [Mathur & Reichling] got it just right with using a cubic polynomial. This model captures the salient features of the data, not more, but also not less. One could argue, that since the 9-degree polynomial makes almost the ame predictions as the cubic polynomial, it does no harm  to always estimate a more flexible model. As we will see in [APA] this is problematic, as models with unnecessary flexibility tends to "over-fit", which means seeing structure in the noise, which reduces forecasting accuracy.
+We observe that the two lower-degree polynomials deviate strongly from the observed pattern. The quadratic polynomial is a parabole and one could expect it to fit the valley part somewhat, but it does not. The cubic  polynmial curve almost seems to snap into the right position. That is confirmed by observing that using a 9-degree polynomial barely changes the fitted curve, although, according to polynomial theory, this model could have as many as eight stationary points, which is a ridiculous amount of flexibility. This polynomial also sits perfectly snug with the LOESS (on the original observations), which means it is at least as flexible. These results confirm that [%Mathur & Reichling] got it just right with using a cubic polynomial. This model captures the salient features of the data, not more, but also not less. One could argue, that since the 9-degree polynomial makes almost the ame predictions as the cubic polynomial, it does no harm  to always estimate a more flexible model. As we will see in the \@ref(overfitting), this is problematic, as models with unnecessary flexibility tends to "over-fit", which means seeing structure in the noise, which reduces forecasting accuracy.
 
-To sum it up, visual analysis with fitted responses is an effective way to discover shortcomings of a model with respect to the structural part. A possible strategy is to start with a basic model, that covers just the main research questions and explore how well it performs under different conditions. With metric predictors, fitted response analysis can uncover problems with the linearity assumption. 
+To sum it up, visual analysis on fitted responses is an effective way to discover shortcomings of a Gaussian linear model with respect to the structural part. A possible strategy is to start with a basic model, that covers just the main research questions and explore how well it performs under different conditions. With metric predictors, fitted response analysis can uncover problems with the linearity assumption. 
 
 
 ```{r opts.label = "inv"}
@@ -600,7 +604,7 @@ detach(Uncanny)
 ```
 
 
-## Model selection
+## Model selection {#model-selection}
 
 If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formally there exist four linear models to choose from:
 
@@ -610,14 +614,14 @@ If one measures two predictors $x_1$, $x_2$ and one outcome variable $y$, formal
 + `y ~ x_1 + x_2` (both main effects)
 + `y ~ x_1 * x_2` (both main effects and interaction)
 
-For a data set with three predictors, the set of possible models is already 18. This section deals with how to choose the right one. Section [#fitted responses] has already shown that under-specified models can introduce severe biases. The opposite is when a model carries unnecessary parameters, which is called *over-fitting* and leads to an inferior *predictive accuracy*. The subsequent sections accept predictive accuracy as a legitimate measure for model comparison and introduces methods to measure predictive accuracy: simulation, cross validation, leave-one-out cross validation and information criteria. The final two sections show how model selection can be used to test hypothesis, without using the infamous p-value.
+For a data set with three predictors, the set of possible models is already 18. This section deals with how to choose the right one. In \@ref(lm), we have seen multiple times, how a model improves by adding another coefficient, for example a missing conditional effect \@ref(cfxm) can lead to severe biases. The opposite of such under-specification is when a model carries unnecessary parameters, which causes *over-fitting* and reduces *predictive accuracy*. The subsequent sections accept predictive accuracy as a legitimate measure for model comparison and introduces methods to measure predictive accuracy: simulation, cross validation, leave-one-out cross validation and information criteria. The final two sections show how model selection can be used to test hypothesis, without using the infamous p-value.
 
 
-### The problem of over-fitting
+### The problem of over-fitting {#overfitting}
 
 In this chapter we have seen multiple times how a model that is too simple fails to align with the structure presnet in the data. For example, recall the IPump case, where an ordinal model was much more accurate in rendering the learning process than the simpler regression model. In several other cases, we have seen how introducing conditional effects improves model fit. At these examples, it is easy to see how omitting relevant predictors reduces the predictive accuracy of a model. 
 
-Too sparse models produce inferior predictions, but that is only one side of the coin: Models that contain *irrelevant predictors* also produce inferior predictions. This is called *over-fitting* and can be understood better if we first recall, that a models job is to divide observed magnitudes into the structural part and the random part [#statmod]. The structural part is what all observations have in common, all future observations included. The structural part always is our best guess and the better a model separates structure from randomness, the more accurate our forecasts become.  The process of separation is imperfect to some degree. Irrelevant predictors usually get center estimates close to zero in a linear model, but their posterior distribution (or credibility intervals) usually has its probability mass spread out over a range of non-zero values. The irrelevant parameter adds a degree of freedom which introduces additional uncertainty. As an analogy, an irrelevant parameter is to a model, what a loose wheel is to a car. Even on a perfectly flat road it will cause a wobbly driving experience.
+Too sparse models produce inferior predictions, but that is only one side of the coin: Models that contain *irrelevant predictors* also produce inferior predictions. This is called *over-fitting* and can be understood better if we first recall, that a models job is to divide observed magnitudes into the structural part and the random part \@ref(statmod). The structural part is what all observations have in common, all future observations included. The structural part always is our best guess and the better a model separates structure from randomness, the more accurate our forecasts become.  The process of separation is imperfect to some degree. Irrelevant predictors usually get center estimates close to zero in a linear model, but their posterior distribution (or credibility intervals) usually has its probability mass spread out over a range of non-zero values. The irrelevant parameter adds a degree of freedom which introduces additional uncertainty. As an analogy, an irrelevant parameter is to a model, what a loose wheel is to a car. Even on a perfectly flat road it will cause a wobbly driving experience.
 
 For further illustration, we simulate a small data set by drawing two variables from two Gaussian distributions. One variable is the (presumed) predictor, the other is the outcome and because they are completely unrelated, a GMM would be appropriate. But what happens if the researcher assumes that there is a linear relation and adds the irrelevant predictor to the model?
 
@@ -676,13 +680,13 @@ Every parameter that is added to a model, adds to it some amount of flexibility.
 1. The center estimate is close to Zero.
 2. If the parameter is removed, this causes little change in other parameters.
 
-In the following, I will introduce formal methods to model pruning. These can be used in more complex situations, such as pruning multi-level models or selecting an appropriate error distribution type [#temporal].
+In the following, I will introduce formal methods to model pruning. These can be used in more complex situations, such as pruning multi-level models or selecting an appropriate error distribution type.
 
 
 
 
 
-### Cross validation and LOO
+### Cross validation and LOO {#cross-validation}
 
 Recall that coefficients are tied to fitted responses by the structural part. Consequently, stronger uncertainty in coefficients causes stronger uncertainty of predictions. Are the predictions of LRM inferior to the parsimonous GMM? Since we have simulated this data set, the true population mean is known ($\mu = 2$) and we can assess predictive accuracy by comparing the deviation of fitted responses from the true value. A standard way of summarizing the predictive accuracy of models is the *root mean square error (RMSE)*, which we can compute from the *posterior predictive* distributions.
 
@@ -830,7 +834,7 @@ PP_Loo %>%
 
 
 
-### Information Criteria
+### Information Criteria {#ic}
 
 So far, we have seen that the right level of parsimony is essential for good predictive accuracy. While LOO can be considered gold standard for assessing predictive accuracy, it has a severe downside. Estimating Bayesian models with MCMC is very computing intensive and for some models in this book, doing a single estimating is in the range of dozens of minutes to more than an hour. LOO estimates the model as many times as there are observations, which quickly leads to unbearable computing time for larger data sets.
 
@@ -845,7 +849,7 @@ $$
 By these two simple terms the AIC brings model fit and complexity into balance. Note that lower deviance is better and so is lower complexity. In effect, when comparing two models, the one with the *lower AIC wins*. As it grounds on the likelihood, it is routinely been used to compare models estimated by classic maximum likelihood estimation. The AIC formula is ridiculously simple and still has a solid foundation in mathematical information theory. It is easily computed, as model deviance is a by-product of parameter estimation. And if that was not enough, the *AIC is an approximation of LOO cross-validation*, beating it in computational efficiency.
 
 
-Still, the AIC has limitations. While it covers the full family of Generalized Linear Models [#GLM], it is not suited for Multi-level Models [#MLM]. The reason is that in multi-level models the degree of freedom (its flexibility) is no longer proportional to the formal number of parameters. Hence, the AIC penalty term is over-estimating. The *Deviance Information Criterion (DIC)* was the first generalization of the AIC to solve this problem by using an estimate for degrees of freedom. These ideas have more recently been refined into the *Widely Applicable Information Criterion (WAIC)*. Like DIC this involves estimating the penalty term $p_\text {WAIC}$. In addition, WAIC makes use of the full posterior predictive distribution, which is results in the *estimated log pointwise predictive density*, $\text{elpd}_\text{WAIC}$ as goodness-of-fit measure [#REF]. The standard implementation of WAIC is provided by package Loo, and works with all Rstanarm models (and Brms, [#GLM]). When invoked on a model, it returns all three estimates:
+Still, the AIC has limitations. While it covers the full family of Generalized Linear Models \@ref(glm), it is not suited for Multi-level Models \@ref(mlm). The reason is that in multi-level models the degree of freedom (its flexibility) is no longer proportional to the formal number of parameters. Hence, the AIC penalty term is over-estimating. The *Deviance Information Criterion (DIC)* was the first generalization of the AIC to solve this problem by using an estimate for degrees of freedom. These ideas have more recently been refined into the *Widely Applicable Information Criterion (WAIC)*. Like DIC this involves estimating the penalty term $p_\text {WAIC}$. In addition, WAIC makes use of the full posterior predictive distribution, which is results in the *estimated log pointwise predictive density*, $\text{elpd}_\text{WAIC}$ as goodness-of-fit measure [%REF]. The standard implementation of WAIC is provided by package Loo, and works with all models estimated with Rstanarm or Brms. When invoked on a model, it returns all three estimates:
 
 ```{r}
 attach(Chapter_LM)
@@ -884,7 +888,7 @@ The interpretation of LOO-IC is the same as for all information criteria, the va
 exp(1001320 - 1001317)
 ```
 
-For a real application, we pick up the infusion pump case, where we left it in section [#linearzing_sat], where we informally compared three Poisson models for the learning rate on path deviations:
+For a real application, we pick up the infusion pump case, where we left it in section \@ref(learning-curves), where we informally compared three Poisson models for the learning rate on path deviations:
 
 * an ordered factor model with four learning rate coefficients (`M_pois_cozfm`)
 * a linearized regression with two learning rate coefficients (`M_pois_clzrm`)
@@ -915,13 +919,13 @@ detach(IPump)
 ```
 
 
-### Choosing response distributions
+### Choosing response distributions {#choose-dist}
 
-In model pruning we compare the predicitve accuracy of models that differ by their structural part. With modern evaluation criteria, there is more we can do to arrive at an optimal model. The methods for model comparison introduced so far also allow to compare different response distributions, i.e. the shape of randomness. As we have seen in chapter [GLM], for most outcome variables, choosing an appropriate response distribution is a straight-forward choice, based on just a few properties (continuous versus discrete, boundaries and overdispersion). 
+In model pruning we compare the predicitve accuracy of models that differ by their structural part. With modern evaluation criteria, there is more we can do to arrive at an optimal model. The methods for model comparison introduced so far also allow to compare different response distributions, i.e. the shape of randomness. As we have seen in chapter \@ref(elements-glm), for most outcome variables, choosing an appropriate response distribution is a straight-forward choice, based on just a few properties (continuous versus discrete, boundaries and overdispersion). 
 
-In \@ref(exgaussian-regression) the properties of ToT and RT data suggested that Gaussian error terms are inappropriate, because the error distribution is highly skewed. While Gamma error distributions can accomodate some skew, this may not be sufficient, because the lower boundary of measures is strongly positive. From an informal analysis of these three models, we concluded that the exgaussian is most suited for ToT and RT outcomes, followed by Gamma, whereas the Gaussian showed a very poor fit. However, visual analysis of residuals on non-Gaussian models is notoriously difficult, due to the variance-mean relationship. With information criteria, we can easily select the response distribution with the best predictive accuracy.
+In \@ref(exgauss-reg) the properties of ToT and RT data suggested that Gaussian error terms are inappropriate, because the error distribution is highly skewed. While Gamma error distributions can accomodate some skew, this may not be sufficient, because the lower boundary of measures is strongly positive. From an informal analysis of these three models, we concluded that the exgaussian is most suited for ToT and RT outcomes, followed by Gamma, whereas the Gaussian showed a very poor fit. However, visual analysis of residuals on non-Gaussian models is notoriously difficult, due to the variance-mean relationship. With information criteria, we can easily select the response distribution with the best predictive accuracy.
 
-In [measures_of_time] we found by informal analysis that Exgaussian regression may be suitable for RT and ToT responses. In the following this is put to a more formal test by using information criteria. This is one case, where *WAIC failed* to approximate predictive accuracy well, but to our convenience, the authors of package Loo provide a slightly less time efficient, but more robust estimate, the *LOO-IC*. One advantage of LOO-IC over WAIC is that it produces observation-level estimates, which can be checked individually. Often LOO-IC only fails on a few observations. The author of package Brms has added a practical fallback mechanism: by adding the argument `reloo = TRUE`, the problematic observations are refitted as real LOO-CVs.
+In \@ref(exgauss-reg) we found by informal analysis that Exgaussian regression may be suitable for RT and ToT responses. In the following this is put to a more formal test by using information criteria. This is one case, where *WAIC failed* to approximate predictive accuracy well, but to our convenience, the authors of package Loo provide a slightly less time efficient, but more robust estimate, the *LOO-IC*. One advantage of LOO-IC over WAIC is that it produces observation-level estimates, which can be checked individually. Often LOO-IC only fails on a few observations. The author of package Brms has added a practical fallback mechanism: by adding the argument `reloo = TRUE`, the problematic observations are refitted as real LOO-CVs.
 
 ```{r}
 attach(Hugme)
@@ -996,7 +1000,7 @@ Interestingly, the Gamma response distributions is favored over the Exgaussian i
 Obviously, predictive accuracy can also be used to check for over-dispersion, just compare, for instance, a Poisson model to  a Negbinomial model. However, over-dispersion in count data is so common that model selection may be a waste of effort. In addition, should there really be no over-dispersion, the Negbimomial model will behave almost exactly like a Poisson model and the costs (in terms of parsimony) are negligible.
 
 
-Therefore, I close this section with a more interesting comparison:  In section [#dist_models] *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and other shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. A Beta model with two structural parts (mean and scale) was estimated and their appeared to be significant variance in how participants employed the scale, i.e. the range of responses. However, by individual-level scale parameters the model is massiveley inflated. Is that for the good of predictive accuracy? Below, we use the LOO-IC estimate to compare the distributional model against a regular Beta regression.
+Therefore, I close this section with a more interesting comparison:  In section \@ref(distributional-models) *distributional models* were introduced as a generalization  of GLMs, that allow to also link predictors to variance and other shape parameters, such as the Gaussian $\sigma$, the Beta $\rho$ and the two parameters of the Exgaussian distribution, $\sigma$ for dispersion and $\beta$ for skew. A Beta model with two structural parts (mean and scale) was estimated and their appeared to be significant variance in how participants employed the scale, i.e. the range of responses. However, by individual-level scale parameters the model is massively inflated. Is that for the good of predictive accuracy? Below, we use the LOO-IC estimate to compare the distributional model against a regular Beta regression.
 
 ```{r}
 attach(Uncanny)
@@ -1024,13 +1028,13 @@ Despite its opulence, the distributional model out-ranks the simpler model. It c
 
 
 
-### Testing theories
+### Testing theories {#testing-theories}
 
 For everyone who has to publish in Social Science journals, this book has so far left one question unanswered: What is the Bayesian method for testing null hypotheses? To give the short answer: There are no p-values in this statistical framework, but you can always use credibility limits to say "the effect is different from Zero with a certainty larger than 95%". If some pertinent reviewers want p-values, you can argue that a null-hypothesis test is really just model selection, but unfortunately no p-value tests are available for the models that you are using, and then you introduce one of the methods based on predictive accuracy.
 
 But, should you really do null hypothesis testing in design research? Well, if your research implies or even directly targets real costs, benefits and risks for real people, you should continue with quantifying impact factors. That can even go so far that an unnecessary predictor is left in the model, just to make its irrelevance transparent. Everyone whose final report draws any conclusion of how the results can be used for the better, must speak of quantities at some place. 
 
-Still, it seems to make sense to test theories by comparing predictive accuracy of models. Recall the uncanny valley phenomenon. In chapter \@ref(polynomial_regression) the non-linear relationship between human likeness of robot faces and emotional response was modelled as a 3-deg polynomial, at first, and we have reported a bunch of quantitative results, such as the position of the trough. We encountered the case again for an exmaination of goodness-of-fit [#fitted responses], which we examined informally. Our plots of fitted responses suggested that the cubic polynomial fitted than the simpler quadratic. A quadratic function produces a parabole and can therefore also can have a local minimum. But it cannot have the shoulder that makes the effect so abrupt. This abruptness is what has fascinated so many reseachers, but is it really true? 
+Still, it seems to make sense to test theories by comparing predictive accuracy of models. Recall the uncanny valley phenomenon. In chapter \@ref(prm) the non-linear relationship between human likeness of robot faces and emotional response was modeled as a 3-deg polynomial, at first, and we have reported a bunch of quantitative results, such as the position of the trough. We encountered the case again for an examination of goodness-of-fit \@ref(fitted-responses). Our plots of fitted responses suggested that the cubic polynomial fitted than the simpler quadratic. A quadratic function produces a parabole and can therefore also can have a local minimum. But it cannot have the shoulder that makes the effect so abrupt. This abruptness is what has fascinated so many researchers, but is it really true? 
 
 
 ```{r}
@@ -1210,4 +1214,4 @@ Model quality can be approached in two ways: either one focusses just on the mod
 
 <!-- 1. The innovators behind the WWW have a long tradition in figurative use of nautical metaphors, like navigator, cybernaut, ... Do people in a world-wide hypermedia system behave like animals roaming known and lesser known territory? Then we would expect performance to be dependent on abilities for spatial cognition, like the visual-spatial working memory. Another theory could draw on the fact that for most websites, the written word prevails. Would we not expect people with better verbal processing capabilities to excel? Consider a study `MMN` (for Miller's magic number, an iconic term in working memory research) that examines the influence of working memory capacities on people's browsing performance. Two tests for WM capacity were used: the Corsi task for visual-spatial WM capacity and the Ospan task for verbal WM capacity. Then participants were given five different search tasks on five websites. As a measure of efficiency, total time on task and number of clicks were  recorded. As these variables tend to have skewed residual distributions, logarithmic transformation was applied before analysis. *Do LRM on both WM predictors separately, then move on to an MRM*. -->
 
-# Reflections
+# Reflections {#reflections}
