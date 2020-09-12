@@ -1,4 +1,4 @@
-# Getting started with R {#getting_started_r}
+# Getting started with R {#gsr}
 
 
 
@@ -25,7 +25,7 @@ Where to get these gems? R is an open source system and has spawned an open ecos
 Finally, R comes with a very rudimentary programming environment that carries the questionable charm of early 1990s. Whereas several alternatives exist, most R users will feel most comfortable with the R programming environment Rstudio. At the time of writing, it is the most user-friendly and feature rich software to program in R. The next sections describe how you can set up a fully functional environment and verify that it works. Subsequently, we will get to know the basics of programming in R.
 
 
-## Setting up the R environment
+## Setting up the R environment {#setting-up-r}
 
 First, we <!-- #4 --> have to make sure that you have the two essential applications R and Rstudio downloaded and installed on your computer. The two programs can be retrieved from the addresses below. Make sure to select the version fit for your operating system. 
 
@@ -85,7 +85,7 @@ If your installation went fine, you should see an output like the following. If 
 
 
 
-### Installing CRAN packages
+### Installing CRAN packages {#install-cran}
 
 While R comes with a set of standard packages, thousands of packages are available to enhance functionality for every purpose you can think of. Most packages are available from the *Comprehensive R Network Archive (CRAN)*.
 
@@ -151,7 +151,9 @@ Finally, run the complete code block at once by selecting it and `Ctrl-Enter`. Y
 
 *Note* that R has a somewhat idiosyncratic jargon: many languages, such as Java or Python, call "libraries" what R calls "packages". *The* library  in R is strictly the set of packages installed on your computer and the `library` command loads a package from the library.
 
-### Installing packages from Github
+
+
+### Installing packages from Github {#install-github}
 
 Two packages, *mascutils* and *bayr* are written by the author of this book. They have not yet been committed to CRAN, but they are available on *Github* which is a general purpose versioning system for software developers and few authors. Fortunately, with the help of the *devtools* package it is rather easy to install these packages, too. Just enter the Rstudio console and type:
 
@@ -167,7 +169,7 @@ Again, you have to do that only once after installing R and you can afterwards l
 
 
 
-### A first statistical program {#first_program}
+### A first statistical program {#first-program}
 
 
 After you have set up your R environment, you are ready to run your first R program (you will not yet understand all the code, but as you proceed with this book, all will become clear):
@@ -187,25 +189,10 @@ levels <- c("control","experimental")
 Group <- rep(levels, N/2)
 age <- round(runif(N, 18, 35),0)
 outcome <- rnorm(N, 42 * 5, 10) + (Group == "experimental") * 42
-Experiment <- data_frame(Group, age, outcome)
+Experiment <- tibble(Group, age, outcome) %>% mascutils::as_tbl_obs()
 
 Experiment %>% sample_n(8)
-```
 
-
-
-Group           age   outcome
--------------  ----  --------
-control          28       217
-experimental     20       235
-experimental     33       263
-control          31       199
-control          31       217
-experimental     34       253
-control          20       204
-experimental     31       245
-
-```r
 ## Plotting the distribution of outcome
 Experiment %>% 
   ggplot( aes(x = outcome) ) + 
@@ -276,6 +263,8 @@ Isn't it amazing, that in less than 20 simple statements we have just reached th
 
 A new Word document should appear that shows all code and the output. Now, you can copy-and-paste the graphics into another document or a presentation.
 
+
+
 ### Bibliographic notes
 
 [Getting started with Rstudio (presentation)](http://www.calvin.edu/~rpruim/talks/Rminis/RStartingUp.pdf)
@@ -288,7 +277,7 @@ A new Word document should appear that shows all code and the output. Now, you c
 
 
 
-## Learning R: a primer
+## Learning R: a primer {#r-primer}
 
 
 > cRazy as in 'idiosyncrasy'
@@ -322,11 +311,13 @@ As R is an interpreter language, meaning there is no tedious compile-and-run cyc
 R is a way to *report and archive* what precisely you have been doing with your data. In statistics, mathematical formulas  are the common form of unambiguously describing a statistical model. For example, the following equation defines a linear regression model between the observed outcome $y$ and the predictor $x$:
 
 $$
-\mu_i = \beta_0 +  \beta_1x_i\\
-y_i \sim N(\mu_i, \sigma)
+\begin{aligned}
+\mu_i &= \beta_0 +  \beta_1x_i\\
+y_i &\sim N(\mu_i, \sigma)
+\end{aligned}
 $$
 
-As we will later see [CLM], in Rs formula language the same model is unambiguously specified  as:
+As we will later see \@ref(cgm), in Rs formula language the same model is unambiguously specified  as:
 
 `y ~ x`
 
@@ -339,7 +330,7 @@ We just applied our own rule of outlier removal to the data. Others may consider
 
 
 ```r
-D <- data_frame(score = c(1, 2, 4, 3, 5, 6, 50, 800))
+D <- tibble(score = c(1, 2, 4, 3, 5, 6, 50, 800))
 
 D %>% filter(score < mean(score)) 
 ```
@@ -392,14 +383,14 @@ llply(LoM, rowSums)
 
 ```
 ## [[1]]
-##  [1] 0 0 1 1 1 0 0 1 0 0 1 0 1 0 0 1 0 1 0 1 1 0 0 1 0
+##  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0
 ## 
 ## [[2]]
-##  [1] 0 1 0 1 1 0 0 0 0 1 0 1 0 0 0 1 0 1 0 1 1 0 0 0 0 1 1 1 0 0 0 1 0 1 1 0
+##  [1] 1 0 0 1 1 1 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 1 0 1 0 0 0
 ## 
 ## [[3]]
-##  [1] 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0
-## [39] 1 0 0 0 0 1 1 1 1 0 0
+##  [1] 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0
+## [39] 0 0 1 0 1 0 0 0 0 0 0
 ```
 
 
@@ -417,7 +408,7 @@ Beginners are at peace with all of this. You can count like you do. Functional p
 
 
 
-### Assigning and calling Objects
+### Assigning and calling Objects {#objects}
 
 Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.
 
@@ -482,7 +473,7 @@ tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<0000000038AE8C10>"
+## [1] "<000000003DA72458>"
 ```
 
 ```r
@@ -490,12 +481,12 @@ tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<0000000038A9EDF8>"
+## [1] "<000000003DADF430>"
 ```
 
 
 
-### Vectors
+### Vectors {#vectors}
 
 Notice the `[1]` that R put in front of the single value when printing it? This is an *index*. Different to other programming languages, all basic data types are *vectors* in R. Vectors are containers for storing many values *of the same type*. The values are addressed by the index, `N_Obs[1]` calls the first element. In R, *indices start counting with 1*, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.
 
@@ -508,14 +499,14 @@ mean(X)
 ```
 
 ```
-## [1] 2.1
+## [1] 2.03
 ```
 
 The `rnorm` command *produces* a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The `mean` command takes the collection and *reduces* it to a single value. By the way, this is precisely, what we call *a statistic: a single quantity that characterizes a collection of quantities*.
 
 
 
-### Basic object types
+### Basic object types {#object-types}
 
 Objects can be of various *classes*. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.
 
@@ -610,7 +601,7 @@ class(mean_score)
 ## [1] "numeric"
 ```
 
-Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value `TRUE` in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will use in [LM: dummy variables].
+Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value `TRUE` in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will put to use for  building [factorial models ](#dummy).
 
 
 ```r
@@ -696,7 +687,7 @@ This book is about programming and statistics at the same time. Unfortunately, t
 
 
 
-### Operators and functions
+### Operators and functions {#operators-functions}
 
 R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterize a vector. The following functions do that with to the vector `X`, every in their own way:
 
@@ -721,7 +712,7 @@ quantile(X, c(.17, .83))
 
 ```
 ##  17%  83% 
-## 1.08 3.19
+## 1.16 2.83
 ```
 
 Most functions in R have *optional arguments* that let you change how the function performs. The basic mathematical  functions all have the optional argument `na.rm`. This is a switch that determines how the function deals with missing values `NA`. Many optional arguments have *defaults*. The default of `na.rm` is `FALSE` ("return NA in case of NAs in the vector"). By setting it to `TRUE`, they are removed before operation.
@@ -748,11 +739,11 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As `seed` has been
 
 
 ```r
-D_1 = data_frame(X = rnorm(20, 2, 1))
+D_1 = tibble(X = rnorm(20, 2, 1))
 M_1 = stan_glm(X ~ 1, 
                data = D_1)
 
-D_2 = data_frame(X = rpois(20, 2))
+D_2 = tibble(X = rpois(20, 2))
 M_2 = stan_glm(X ~ 1,
                family = poisson,
                seed = 42,
@@ -822,139 +813,32 @@ More examples of creating basic functions can be found in section \@ref(descript
 
 
 
-### Storing data in data frames
+### Storing data in data frames {#data-frames}
 
 Most behavioral research collects *real data* to work with. As behavior researchers are obsessed about finding  associations between variables, real data usually contains several. If you have a sample of observations (e.g. participants) and every case has the same variables (measures or groups), data is stored in a table  structure, where columns are variables and rows are observations. 
 
 R knows the `data.frame` objects to store variable-by-observation tables. Data frames are tables, where columns represent statistical variables. Variables have names and can be  of different data types, as they usually appear in empirical research. In many cases data frames are imported to R, as they represent real data. Here, we first see how to create data frames by simulation. First, we usually want some initial inspection of a freshly harvested data frame.
 
-Data frames are objects. By just calling a data frame it gets printed to the screen. This is a good moment to reflect on one idiosyncrasy in R, a feature, of course.
-R is primarily used interactively, which has the immense advantage that the programmer can incrementally build the data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call `Experiment`:
+<!-- Data frames are objects. By just calling a data frame it gets printed to the screen. This is a good moment to reflect on one idiosyncrasy in R, a feature, of course. R is primarily designed for interactive use, which matches the way researchers build their data analysis. This implies, that the programmer often wants to quickly check what currently is in a variable. Now, observe what happens when we call `Experiment`: -->
 
+<!-- ```{r df_call } -->
+<!-- Experiment -->
+<!-- ``` -->
 
-```r
-Experiment
-```
+<!-- This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first eight observations as examples. What we don't see is the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above. -->
 
+<!-- ```{r df_call_print, opts.label = "rtut.nr"} -->
+<!-- print(Experiment) -->
 
+<!-- ``` -->
 
-Group           age   outcome
--------------  ----  --------
-control          27       208
-experimental     19       243
-control          30       213
-experimental     34       253
-control          26       211
-experimental     26       246
-control          18       215
-experimental     25       239
-control          21       209
-experimental     22       252
-control          29       209
-experimental     22       251
-control          34       212
-experimental     22       254
-control          26       199
-experimental     31       257
-control          19       216
-experimental     21       256
-control          24       204
-experimental     29       256
-control          30       223
-experimental     31       245
-control          25       213
-experimental     24       253
-control          27       219
-experimental     21       266
-control          29       213
-experimental     21       264
-control          31       212
-experimental     33       251
-control          34       193
-experimental     31       258
-control          30       199
-experimental     30       251
-control          27       209
-experimental     25       271
-control          33       224
-experimental     33       260
-control          30       207
-experimental     24       249
-control          31       199
-experimental     34       266
-control          23       201
-experimental     32       254
-control          31       217
-experimental     34       256
-control          24       213
-experimental     28       252
-control          31       223
-experimental     31       246
-control          31       202
-experimental     19       242
-control          27       194
-experimental     31       261
-control          25       212
-experimental     23       238
-control          28       217
-experimental     23       259
-control          34       208
-experimental     29       238
-control          34       204
-experimental     35       257
-control          34       223
-experimental     33       263
-control          25       217
-experimental     20       235
-control          24       204
-experimental     30       251
-control          33       201
-experimental     18       280
-control          22       227
-experimental     26       257
-control          25       207
-experimental     24       260
-control          23       207
-experimental     25       254
-control          35       202
-experimental     22       254
-control          25       234
-experimental     19       253
-control          20       204
-experimental     33       261
-control          34       211
-experimental     28       243
-control          33       219
-experimental     22       240
-control          19       213
-experimental     31       270
-control          25       209
-experimental     22       254
-control          34       212
-experimental     32       242
-control          27       218
-experimental     28       253
-control          31       206
-experimental     23       267
-control          34       207
-experimental     28       263
-control          30       197
-experimental     35       261
+<!-- Such `print` functions exist for dozens of classes of objects. They represent what the developers thought would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand.  -->
 
-This is useful information printed to the screen, we see sample size, names of objects and their classes, and the first ten observations as examples. Obviously, this is not the data itself, but some sort of summary. It would be a complete disaster, if R would pass this information on when the call is part of an assignment or other operation on the data, for example: `NewExp <- Experiment`. Apparently, R is aware of whether a called object is part of an operation, or purely for the programmers eyes. For any object, if *called to the console in an intercative session*, R silently uses the `print` function on the object. The following would give precisely the same results as above.
+<!-- However, when working interactively, most of the time you do a data transformation and assign it to a new variable, thus you check it immediately. As the assignment is always silent (unless there occurs an error), you are forced to type a print statement afterwards. There is shortcut for that: if you embrace the assignment statement in brackets, the result will be printed to the screen. As convenient as this is, especially when creating longer data transformation chains, it introduces some visual clutter. In this book I use it sparingly, at most. -->
 
+<!-- The dedicated print function does what way back a developer thought would be the most useful information in most cases. Depending on the situation, it can provide too much, too little or just the wrong information. For example: when simulating a data set, we want to check whether the resulting data frame has the desired length and whether the variables have the correct class. The standard implementation of the print command, dumps the whole data frame to the screen, which can be much more than ever needed. The newer dplyr implementation `tibble` (from the tidyverse, also called *tibble*) you have seen in action already, is much better suited for this situation, as it displays dimensions and variable classes. In contrast, if the job is to spot whether there are many missing values (`NA`), the classic print performs better. -->
 
-```r
-print(Experiment)
-```
-
-Such `print` functions exist for dozens of classes of objects. They represent what the developers thought would be the most salient or logical thing to print in an interactive session. By virtue of the object system, R finds the right print function for the object at hand. 
-
-However, when working interactively, most of the time you do a data transformation and assign it to a new variable, thus you check it immediately. As the assignment is always silent (unless there occurs an error), you are forced to type a print statement afterwards. There is shortcut for that: if you embrace the assignment statement in brackets, the result will be printed to the screen. As convenient as this is, especially when creating longer data transformation chains, it introduces some visual clutter. In this book I use it sparingly, at most.
-
-The dedicated print function does what way back a developer thought would be the most useful information in most cases. Depending on the situation, it can provide too much, too little or just the wrong information. For example: when simulating a data set, like in [First Exercise], we want to check whether the resulting data frame has the desired length and whether the variables have the correct class. The standard implementation of the print command, dumps the whole data frame to the screen, which can be much more than ever needed. The newer dplyr implementation `data_frame` (from the tidyverse, also called *tibble*) you have seen in action already, is much better suited for this situation, as it displays dimensions and variable classes. In contrast, if the job is to spot whether there are many missing values (`NA`), the classic print performs better.
-
-Whatever the question is, several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns). Particularly useful for data initial screening, is that missing values are listed per variable.
+Several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes, ibluding dara frames, is `summary`. For all data frames, it produces an overview  with descriptive statistics for all variables (i.e. columns), matching their object type. Particularly useful for data initial screening, is that missing values are listed per variable.
 
 
 ```r
@@ -962,13 +846,13 @@ print(summary(Experiment))
 ```
 
 ```
-##     Group                age          outcome   
-##  Length:100         Min.   :18.0   Min.   :193  
-##  Class :character   1st Qu.:23.8   1st Qu.:210  
-##  Mode  :character   Median :28.0   Median :235  
-##                     Mean   :27.4   Mean   :232  
-##                     3rd Qu.:31.0   3rd Qu.:254  
-##                     Max.   :35.0   Max.   :280
+##       Obs           Group                age          outcome   
+##  Min.   :  1.0   Length:100         Min.   :18.0   Min.   :184  
+##  1st Qu.: 25.8   Class :character   1st Qu.:22.0   1st Qu.:208  
+##  Median : 50.5   Mode  :character   Median :26.5   Median :233  
+##  Mean   : 50.5                      Mean   :26.8   Mean   :231  
+##  3rd Qu.: 75.2                      3rd Qu.:32.0   3rd Qu.:252  
+##  Max.   :100.0                      Max.   :35.0   Max.   :273
 ```
 
 
@@ -980,10 +864,11 @@ str(Experiment)
 ```
 
 ```
-## Classes 'tbl_df', 'tbl' and 'data.frame':	100 obs. of  3 variables:
+## Classes 'tbl_obs', 'tbl_df', 'tbl' and 'data.frame':	100 obs. of  4 variables:
+##  $ Obs    : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Group  : chr  "control" "experimental" "control" "experimental" ...
-##  $ age    : num  27 19 30 34 26 26 18 25 21 22 ...
-##  $ outcome: num  208 243 213 253 211 ...
+##  $ age    : num  23 20 20 20 20 23 20 21 33 35 ...
+##  $ outcome: num  217 254 207 243 206 ...
 ```
 
 
@@ -997,7 +882,7 @@ mean(Experiment$outcome)
 ```
 
 ```
-## [1] 232
+## [1] 231
 ```
 
 As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call 
@@ -1009,39 +894,13 @@ As data frames are rectangular structures, you can also access individual values
 
 ```r
 Experiment[  1, 3]
-```
-
-
-
-| outcome|
-|-------:|
-|     208|
-
-```r
 Experiment[1:3, 2]
-```
-
-
-
-| age|
-|---:|
-|  27|
-|  19|
-|  30|
-
-```r
 Experiment[  1,  ]
 ```
 
-
-
-Group      age   outcome
---------  ----  --------
-control     27       208
-
 Addressing one or more elements in square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression `Experiment[,]` is fully valid and will just the return the whole data frame.
 
-There is an important difference, however, when using R's classic `data.frame` as compared to dplyr's `data_frame`implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with  `data.frame`, when the addressed elements expand over multiple columns, like 
+There is an important difference, however, when using R's classic `data.frame` as compared to dplyr's `tibble`implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with  `data.frame`, when the addressed elements expand over multiple columns, like 
 `Experiment[, 1:2]`, the result will be a `data.frame` object, too. However, when slicing a single column, the result is a vector:
 
 
@@ -1052,10 +911,10 @@ Exp_classic[1:2,1:2]  ## data.frame
 
 
 
-Group           age
--------------  ----
-control          27
-experimental     19
+ Obs  Group        
+----  -------------
+   1  control      
+   2  experimental 
 
 ```r
 Exp_classic[1,]       ## data.frame
@@ -1063,47 +922,33 @@ Exp_classic[1,]       ## data.frame
 
 
 
-Group      age   outcome
---------  ----  --------
-control     27       208
+ Obs  Group      age   outcome
+----  --------  ----  --------
+   1  control     23       217
 
 ```r
 Exp_classic[,1]       ## vector
 ```
 
 ```
-##   [1] "control"      "experimental" "control"      "experimental" "control"     
-##   [6] "experimental" "control"      "experimental" "control"      "experimental"
-##  [11] "control"      "experimental" "control"      "experimental" "control"     
-##  [16] "experimental" "control"      "experimental" "control"      "experimental"
-##  [21] "control"      "experimental" "control"      "experimental" "control"     
-##  [26] "experimental" "control"      "experimental" "control"      "experimental"
-##  [31] "control"      "experimental" "control"      "experimental" "control"     
-##  [36] "experimental" "control"      "experimental" "control"      "experimental"
-##  [41] "control"      "experimental" "control"      "experimental" "control"     
-##  [46] "experimental" "control"      "experimental" "control"      "experimental"
-##  [51] "control"      "experimental" "control"      "experimental" "control"     
-##  [56] "experimental" "control"      "experimental" "control"      "experimental"
-##  [61] "control"      "experimental" "control"      "experimental" "control"     
-##  [66] "experimental" "control"      "experimental" "control"      "experimental"
-##  [71] "control"      "experimental" "control"      "experimental" "control"     
-##  [76] "experimental" "control"      "experimental" "control"      "experimental"
-##  [81] "control"      "experimental" "control"      "experimental" "control"     
-##  [86] "experimental" "control"      "experimental" "control"      "experimental"
-##  [91] "control"      "experimental" "control"      "experimental" "control"     
-##  [96] "experimental" "control"      "experimental" "control"      "experimental"
+##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
+##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
+##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+##  [91]  91  92  93  94  95  96  97  98  99 100
 ```
 
-Predictability and a few other useful tweaks made me prefer `data_frame` over `data.frame`. But, many third-party packages continue to produce classic `data.frame` objects. For example, there is an alternative to package ``readxl`, `openxlsx`, which reads (and writes) Excel files. It returns classic data.frames, which can easily be converted as follows:
+Predictability and a few other useful tweaks made me prefer `tibble` over `data.frame`. But, many third-party packages continue to produce classic `data.frame` objects. For example, there is an alternative to package ``readxl`, `openxlsx`, which reads (and writes) Excel files. It returns classic data.frames, which can easily be converted as follows:
 
 
 ```r
 D_foo <- 
   read.xlsx("foo.xlsx") %>% 
-  as_data_frame()
+  as_tibble()
 ```
 
-While `data_frame[]` behaves perfectly predictable, in that it always returns a data frame, even when this is just a single column or cell. Sometimes, one wants to truly extract a vector. With a `data_frame` a single column can be extracted as a vector, using double square brackets, or using the `$` operator.
+While `tibble[]` behaves perfectly predictable, in that it always returns a data frame, even when this is just a single column or cell. Sometimes, one wants to truly extract a vector. With a `tibble` a single column can be extracted as a vector, using double square brackets, or using the `$` operator.
 
 
 ```r
@@ -1122,20 +967,7 @@ Experiment[c(1,3), "age"]     <- -99
 
 ## printing first few observations
 head(Experiment)
-```
 
-
-
-Group           age   outcome
--------------  ----  --------
-control         -99       208
-experimental     19       660
-control         -99       213
-experimental     34       253
-control          26       211
-experimental     26       987
-
-```r
 ## setting to NA
 Experiment[c(2, 6),"outcome"] <- NA
 Experiment[c(1, 3),"age"]     <- NA
@@ -1153,7 +985,7 @@ rnorm(20, mean = c(1,2), sd = 1)
 
 The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the `sd = 1` parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions.
 
-### Import, export and archiving
+### Import, export and archiving {#import-export}
 
 R lets you import data from almost every conceivable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for Excel files). Besides that R has its own file format for storing data, which is *.Rda*  files. With these files you can save data frames (and any other object in R), using the `save(data, file = "some_file.Rda")` and `load(file = "some_file.Rda")` commands. 
 
@@ -1199,7 +1031,7 @@ Once you have loaded, prepared and started to analyze a data frame in R, there i
 
 
 
-### Case environments
+### Case environments {#case-env}
 
 This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: `BrowsingAB_M_1`, `AUP_M_1`, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.
 
@@ -1274,7 +1106,7 @@ simulate ## calling a function without parantheses prints its code
 ##     
 ##     out %>% as_tbl_obs()
 ##     }
-## <bytecode: 0x000000002c4a9ae0>
+## <bytecode: 0x000000002e177200>
 ```
 
 ```r
@@ -1293,7 +1125,9 @@ load("my_data_analysis.Rda")
 
 Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.
 
-### Structuring data
+
+
+### Structuring data {#structuring-data}
 
 
 
@@ -1332,7 +1166,7 @@ ORPO %>%
 
 The ORPO rule dictates another principle: every row should have a unique identifier, which can be a combination of values. In the example above, every observation is uniquely identified by the participant identifier and the design condition. If we extend the example slightly, it is immediatly apparent, why the ORPO rule is justified. Imagine, the study actually asked three partcipants to rate two different tasks on two different designs by three self-report items. By the ORPO rule, we can easily extend the data frame as below (showing a random selection of rows). I leave it up to the reader to figure out how to press such a data set in the wide legacy format.
 
-Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record  data in multi-method experiments and join them automatically. This is shown in chapter [DM]. Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects models and the notion of *members of a population*. Throughout the book I will use standard names for recurring identifier variables in design research:
+Using identifiers is good practice for several reasons. First, it reduces problems during manual data entry. Second, it allows to efficiently record  data in multi-method experiments and join them automatically. An exammple is given in Appendix  \@ref(hugme). Lastly, the identifiers will become statistically interesting by themselves when we turn to linear mixed-effects models and the notion of *members of a population* \@ref(non-human-populations). Throughout the book I will use standard names for recurring identifier variables in design research:
 
 + Part
 + Design
@@ -1361,7 +1195,7 @@ ORPO %>%
 
 
 
-### Data transformation
+### Data transformation {#data-transformation}
 
 Do you wonder about the strange use of `%>%` in my code above? This is the tidy way of programming data transformations in R. 
 
@@ -1412,14 +1246,14 @@ Exp %>%
 
 
 
-Condition       mean     sd
--------------  -----  -----
-control          210   8.76
-experimental     255   9.29
+Condition       mean      sd
+-------------  -----  ------
+control          209   10.16
+experimental     253    9.72
 
 
 
-### Plotting data
+### Plotting data {#plotting}
 
 Good statistical graphics can vastly improve your and your readers understanding of data and results. This book exclusively introduces the modern ggplot2 graphics system of R, which is based on the [grammar of graphics](http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/).
 
@@ -1563,7 +1397,7 @@ BAB1 %>%
 Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable, but not vice versa.
 
 
-### Fitting regression models
+### Fitting regression models {#fitting}
 
 Above we have seen examples of functions that boil down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the `lm` command, that applies regression models to data (provided as data frames).
 
@@ -1577,7 +1411,7 @@ In the following, we will use another simulated data frame `Exp` to demonstrate 
 N_Obs <- 20
 set.seed(42)
 Exp <-
-  data_frame(Obs = 1:N_Obs,
+  tibble(Obs = 1:N_Obs,
              Condition = rep(c("Experimental", "Control"),
                              N_Obs/2),
              age = runif(N_Obs, 18, 35),
@@ -1586,7 +1420,7 @@ Exp <-
 ```
 
 
-The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in [LM], old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does *not* contain is F-statistics and p-values;  and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The `fixef` command extracts the parameter estimates from the model to answer the question.
+The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as *ANOVA*.  As it will turn out in \@ref(cgm), old-fashioned ANOVA can be replaced by a rather simple regression model, that I call  comparison of groups model (CGM). The estimation of regression models is done by a *regression engine*, which basically is a (very powerful) R command. The specification for any regression model is given in R's formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame `Exp` using the regression engine  `stan_glm`. The desired model estimates the effect of `Condition` on `outcome`. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does *not* contain is F-statistics and p-values;  and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The `fixef` command extracts the parameter estimates from the model to answer the question.
 
 
 
@@ -1677,7 +1511,7 @@ These will all be covered in later chapters.
 
 
 
-### Knitting statistical reports
+### Knitting statistical reports {#knitting}
 
 As you have seen throughout this chapter, with R you can effectively manage data, create impressively expressive graphics and conveniently estimate statistical models. Then usually comes the painful moment where all this needs to be assembled into a neat report. With R and Rstudio it has never been easier than that. In fact, complete books have been written in R, like the one you are reading.
 
@@ -1721,7 +1555,7 @@ In the notion of this chapter, this is just to get you started and knitr is so t
 
 
 
-### Exercises
+### Exercises {#ex-gsr}
 
 1. In the book package (directory `/Data`) you will find the data set of the (virtual) study BAB1, which we will be using in coming chapters. This data comes as comma-separated value file with the file ending `.csv`. Load this file into R using the `read_csv` command and check the dataframe.
 
@@ -1756,7 +1590,7 @@ In the notion of this chapter, this is just to get you started and knitr is so t
 
 
 
-### Bibliographic notes
+### Bibliographic notes {#lib_gsr} 
 
 [R for Data Science](http://r4ds.had.co.nz/) is a book co-authored by Hadley "Tidy" Wickham. 
 

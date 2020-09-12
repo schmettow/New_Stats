@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-09-11" />
+<meta name="date" content="2020-09-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,16 +64,14 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -82,9 +80,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -361,26 +359,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>save the file as <code>.Rprofile</code> in <code>D:/Users/YourName/R/</code></li>
 <li>open the menu and go to <code>Tools -&gt; Global options -&gt; General -&gt; Default working directory</code>. Select <code>D:/Users/YourName/R/</code>.</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="gsr.html#cb1-1"></a><span class="co">## .Rprofile</span></span>
-<span id="cb1-2"><a href="gsr.html#cb1-2"></a></span>
-<span id="cb1-3"><a href="gsr.html#cb1-3"></a><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb1-4"><a href="gsr.html#cb1-4"></a></span>
-<span id="cb1-5"><a href="gsr.html#cb1-5"></a>.First &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
-<span id="cb1-6"><a href="gsr.html#cb1-6"></a>  RHOME &lt;&lt;-<span class="st"> </span><span class="kw">getwd</span>()</span>
-<span id="cb1-7"><a href="gsr.html#cb1-7"></a>    <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Loading .Rprofile in&quot;</span>, <span class="kw">getwd</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb1-8"><a href="gsr.html#cb1-8"></a>  <span class="kw">.libPaths</span>(<span class="kw">c</span>(<span class="kw">paste0</span>(RHOME,<span class="st">&quot;Rlibrary&quot;</span>), <span class="kw">.libPaths</span>()))</span>
-<span id="cb1-9"><a href="gsr.html#cb1-9"></a>}</span>
-<span id="cb1-10"><a href="gsr.html#cb1-10"></a></span>
-<span id="cb1-11"><a href="gsr.html#cb1-11"></a>.Last &lt;-<span class="st"> </span><span class="cf">function</span>(){ </span>
-<span id="cb1-12"><a href="gsr.html#cb1-12"></a>  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Goodbye at &quot;</span>, <span class="kw">date</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb1-13"><a href="gsr.html#cb1-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">## .Rprofile</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5">.First &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb1-6" title="6">  RHOME &lt;&lt;-<span class="st"> </span><span class="kw">getwd</span>()</a>
+<a class="sourceLine" id="cb1-7" title="7">    <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Loading .Rprofile in&quot;</span>, <span class="kw">getwd</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb1-8" title="8">  <span class="kw">.libPaths</span>(<span class="kw">c</span>(<span class="kw">paste0</span>(RHOME,<span class="st">&quot;Rlibrary&quot;</span>), <span class="kw">.libPaths</span>()))</a>
+<a class="sourceLine" id="cb1-9" title="9">}</a>
+<a class="sourceLine" id="cb1-10" title="10"></a>
+<a class="sourceLine" id="cb1-11" title="11">.Last &lt;-<span class="st"> </span><span class="cf">function</span>(){ </a>
+<a class="sourceLine" id="cb1-12" title="12">  <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Goodbye at &quot;</span>, <span class="kw">date</span>(), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb1-13" title="13">}</a></code></pre></div>
 <p>With the above steps you have created a customized start-up profile for R. The profile primarily sets the library path to point to a directory on the computers drive. As you are owning this directory, R can install the packages without admin rights. In the second part, you configure Rstudio’s default path, which is where R, invoked from Rstudio, searches for the .Rprofile.</p>
 <p>After closing and reopening Rstudio, you should see a message in the console window saying:</p>
 <blockquote>
 <p>Loading .Rprofile in D:/Users/YourName/R/</p>
 </blockquote>
 <p>That means that R has found the <code>.Rprofile</code> file and loaded it at start-up. The <code>.Rprofile</code> file primarily sets the path of the <em>library</em>, which is the collection of packages you install yourself. Whether this was successful can be checked by entering the <code>console</code> window in Rstudio, type the command below and hit Enter.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="gsr.html#cb2-1"></a><span class="kw">.libPaths</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">.libPaths</span>()</a></code></pre></div>
 <p>If your installation went fine, you should see an output like the following. If the output lacks the first entry, your installation was not successful and you need to check all the above steps.</p>
 <blockquote>
 <p>[1] “D:/Users/YourName/R/Rlibrary” “C:/Program Files/R/R-3.3.0/library”</p>
@@ -399,25 +397,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><em>readxl</em> for reading Excel files</li>
 <li><em>stringr</em> for string matching and manipulation</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="gsr.html#cb3-1"></a><span class="co">## tidyverse</span></span>
-<span id="cb3-2"><a href="gsr.html#cb3-2"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb3-3"><a href="gsr.html#cb3-3"></a></span>
-<span id="cb3-4"><a href="gsr.html#cb3-4"></a><span class="co">## data manipulation</span></span>
-<span id="cb3-5"><a href="gsr.html#cb3-5"></a><span class="kw">library</span>(openxlsx)</span>
-<span id="cb3-6"><a href="gsr.html#cb3-6"></a></span>
-<span id="cb3-7"><a href="gsr.html#cb3-7"></a><span class="co">## plotting</span></span>
-<span id="cb3-8"><a href="gsr.html#cb3-8"></a><span class="kw">library</span>(gridExtra)</span>
-<span id="cb3-9"><a href="gsr.html#cb3-9"></a></span>
-<span id="cb3-10"><a href="gsr.html#cb3-10"></a><span class="co">## regression models</span></span>
-<span id="cb3-11"><a href="gsr.html#cb3-11"></a><span class="kw">library</span>(rstanarm)</span>
-<span id="cb3-12"><a href="gsr.html#cb3-12"></a></span>
-<span id="cb3-13"><a href="gsr.html#cb3-13"></a><span class="co">## other</span></span>
-<span id="cb3-14"><a href="gsr.html#cb3-14"></a><span class="kw">library</span>(devtools) <span class="co">## only needed for installing from Github</span></span>
-<span id="cb3-15"><a href="gsr.html#cb3-15"></a><span class="kw">library</span>(knitr)</span>
-<span id="cb3-16"><a href="gsr.html#cb3-16"></a></span>
-<span id="cb3-17"><a href="gsr.html#cb3-17"></a><span class="co">## non-CRAN packages</span></span>
-<span id="cb3-18"><a href="gsr.html#cb3-18"></a><span class="kw">library</span>(mascutils)</span>
-<span id="cb3-19"><a href="gsr.html#cb3-19"></a><span class="kw">library</span>(bayr)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## tidyverse</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">## data manipulation</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">library</span>(openxlsx)</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">## plotting</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="kw">library</span>(gridExtra)</a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">## regression models</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="kw">library</span>(rstanarm)</a>
+<a class="sourceLine" id="cb3-12" title="12"></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">## other</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="kw">library</span>(devtools) <span class="co">## only needed for installing from Github</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb3-16" title="16"></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">## non-CRAN packages</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="kw">library</span>(mascutils)</a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="kw">library</span>(bayr)</a></code></pre></div>
 <p>We start by <em>checking the packages</em>:</p>
 <ol style="list-style-type: decimal">
 <li>create a new R file by <code>File --&gt; New file --&gt; R script</code></li>
@@ -427,18 +425,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Error in library(tidyverse) : there is no package called ‘tidyverse’</p>
 </blockquote>
 <p>This means that the respective package is not yet present in your R library. Before you can use the package <em>tidyverse</em> you have to install it from CRAN. For doing so, use the built-in package management in RStudio, which fetches the package from the web and is to be found in the tab <em>Packages</em>. At the first time, you may have to select a repository and refresh the package list, before you can find and install packages. Then click <code>Install</code>, enter the names of the missing package(s) and install. On the R console the following command downloads and installs the package <em>tidyverse</em>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="gsr.html#cb4-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</a></code></pre></div>
 <p>CRAN is like a giant stream of software pebbles, shaped over time in a growing tide. Typically, a package gets better with every version, be it in reliability or versatility, so you want to be up-to-date. Rstudio has a nice dialogue to update packages and there is the R command:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="gsr.html#cb5-1"></a><span class="kw">update.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">update.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</a></code></pre></div>
 <p>Finally, run the complete code block at once by selecting it and <code>Ctrl-Enter</code>. You will see some output to the console, which you should check once again. Unless the output contains any error messages (like above), you have successfully installed and loaded all packages.</p>
 <p><em>Note</em> that R has a somewhat idiosyncratic jargon: many languages, such as Java or Python, call “libraries” what R calls “packages”. <em>The</em> library in R is strictly the set of packages installed on your computer and the <code>library</code> command loads a package from the library.</p>
 </div>
 <div id="install-github" class="section level3">
 <h3><span class="header-section-number">2.1.2</span> Installing packages from Github</h3>
 <p>Two packages, <em>mascutils</em> and <em>bayr</em> are written by the author of this book. They have not yet been committed to CRAN, but they are available on <em>Github</em> which is a general purpose versioning system for software developers and few authors. Fortunately, with the help of the <em>devtools</em> package it is rather easy to install these packages, too. Just enter the Rstudio console and type:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="gsr.html#cb6-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb6-2"><a href="gsr.html#cb6-2"></a><span class="kw">install_github</span>(<span class="st">&quot;schmettow/mascutils&quot;</span>)</span>
-<span id="cb6-3"><a href="gsr.html#cb6-3"></a><span class="kw">install_github</span>(<span class="st">&quot;schmettow/bayr&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">library</span>(devtools)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw">install_github</span>(<span class="st">&quot;schmettow/mascutils&quot;</span>)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">install_github</span>(<span class="st">&quot;schmettow/bayr&quot;</span>)</a></code></pre></div>
 <p>Again, you have to do that only once after installing R and you can afterwards load the packages with the <code>library</code> command. Only if the package gets an update to add functionality or remove bugs, you need to run these commands again.</p>
 </div>
 <div id="first-program" class="section level3">
@@ -450,32 +448,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Copy-and-paste the code below into your first file, right after library commands.</li>
 <li>Run the code lines one-by-one and observe what happens (in RStudio: Ctrl-Enter)</li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="gsr.html#cb7-1"></a><span class="co">## Simulation of a data set with 100 participants </span></span>
-<span id="cb7-2"><a href="gsr.html#cb7-2"></a><span class="co">## in two between-subject conditions</span></span>
-<span id="cb7-3"><a href="gsr.html#cb7-3"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb7-4"><a href="gsr.html#cb7-4"></a>levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;control&quot;</span>,<span class="st">&quot;experimental&quot;</span>)</span>
-<span id="cb7-5"><a href="gsr.html#cb7-5"></a>Group &lt;-<span class="st"> </span><span class="kw">rep</span>(levels, N<span class="op">/</span><span class="dv">2</span>)</span>
-<span id="cb7-6"><a href="gsr.html#cb7-6"></a>age &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">runif</span>(N, <span class="dv">18</span>, <span class="dv">35</span>),<span class="dv">0</span>)</span>
-<span id="cb7-7"><a href="gsr.html#cb7-7"></a>outcome &lt;-<span class="st"> </span><span class="kw">rnorm</span>(N, <span class="dv">42</span> <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">10</span>) <span class="op">+</span><span class="st"> </span>(Group <span class="op">==</span><span class="st"> &quot;experimental&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">42</span></span>
-<span id="cb7-8"><a href="gsr.html#cb7-8"></a>Experiment &lt;-<span class="st"> </span><span class="kw">tibble</span>(Group, age, outcome) <span class="op">%&gt;%</span><span class="st"> </span>mascutils<span class="op">::</span><span class="kw">as_tbl_obs</span>()</span>
-<span id="cb7-9"><a href="gsr.html#cb7-9"></a></span>
-<span id="cb7-10"><a href="gsr.html#cb7-10"></a>Experiment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</span>
-<span id="cb7-11"><a href="gsr.html#cb7-11"></a></span>
-<span id="cb7-12"><a href="gsr.html#cb7-12"></a><span class="co">## Plotting the distribution of outcome</span></span>
-<span id="cb7-13"><a href="gsr.html#cb7-13"></a>Experiment <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-14"><a href="gsr.html#cb7-14"></a><span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb7-15"><a href="gsr.html#cb7-15"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">## Simulation of a data set with 100 participants </span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">## in two between-subject conditions</span></a>
+<a class="sourceLine" id="cb7-3" title="3">N &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb7-4" title="4">levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;control&quot;</span>,<span class="st">&quot;experimental&quot;</span>)</a>
+<a class="sourceLine" id="cb7-5" title="5">Group &lt;-<span class="st"> </span><span class="kw">rep</span>(levels, N<span class="op">/</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb7-6" title="6">age &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">runif</span>(N, <span class="dv">18</span>, <span class="dv">35</span>),<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb7-7" title="7">outcome &lt;-<span class="st"> </span><span class="kw">rnorm</span>(N, <span class="dv">42</span> <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, <span class="dv">10</span>) <span class="op">+</span><span class="st"> </span>(Group <span class="op">==</span><span class="st"> &quot;experimental&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">42</span></a>
+<a class="sourceLine" id="cb7-8" title="8">Experiment &lt;-<span class="st"> </span><span class="kw">tibble</span>(Group, age, outcome) <span class="op">%&gt;%</span><span class="st"> </span>mascutils<span class="op">::</span><span class="kw">as_tbl_obs</span>()</a>
+<a class="sourceLine" id="cb7-9" title="9"></a>
+<a class="sourceLine" id="cb7-10" title="10">Experiment <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a>
+<a class="sourceLine" id="cb7-11" title="11"></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">## Plotting the distribution of outcome</span></a>
+<a class="sourceLine" id="cb7-13" title="13">Experiment <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/first_simulation_1-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="gsr.html#cb8-1"></a><span class="co">## ... outcome by group</span></span>
-<span id="cb8-2"><a href="gsr.html#cb8-2"></a>Experiment <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-3"><a href="gsr.html#cb8-3"></a><span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">fill =</span> Group, <span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb8-4"><a href="gsr.html#cb8-4"></a><span class="st">  </span><span class="kw">geom_density</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co">## ... outcome by group</span></a>
+<a class="sourceLine" id="cb8-2" title="2">Experiment <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">fill =</span> Group, <span class="dt">x =</span> outcome) ) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">geom_density</span>()</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/first_simulation_1-2.png" width="90%" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="gsr.html#cb9-1"></a><span class="co">## ... statistical model comparing the groups</span></span>
-<span id="cb9-2"><a href="gsr.html#cb9-2"></a></span>
-<span id="cb9-3"><a href="gsr.html#cb9-3"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(<span class="dt">formula =</span> outcome <span class="op">~</span><span class="st"> </span>Group, </span>
-<span id="cb9-4"><a href="gsr.html#cb9-4"></a>            <span class="dt">data =</span> Experiment) </span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="gsr.html#cb10-1"></a><span class="kw">fixef</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co">## ... statistical model comparing the groups</span></a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(<span class="dt">formula =</span> outcome <span class="op">~</span><span class="st"> </span>Group, </a>
+<a class="sourceLine" id="cb9-4" title="4">            <span class="dt">data =</span> Experiment) </a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">fixef</span>(model)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -571,9 +569,9 @@ y_i &amp;\sim N(\mu_i, \sigma)
 </blockquote>
 </blockquote>
 <p>We just applied our own rule of outlier removal to the data. Others may consider this rule invalid or arbitrary. Disagreement is virtue in science and one can only disagree with what one actually sees. In R, the researcher <em>formally reports</em> what precisely has been done with the data. For example, the same outlier removal rule is unambiguously specified by the following code (the first line just simulates some data).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="gsr.html#cb11-1"></a>D &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">50</span>, <span class="dv">800</span>))</span>
-<span id="cb11-2"><a href="gsr.html#cb11-2"></a></span>
-<span id="cb11-3"><a href="gsr.html#cb11-3"></a>D <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(score <span class="op">&lt;</span><span class="st"> </span><span class="kw">mean</span>(score)) </span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">D &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">50</span>, <span class="dv">800</span>))</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3">D <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(score <span class="op">&lt;</span><span class="st"> </span><span class="kw">mean</span>(score)) </a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -612,26 +610,26 @@ y_i &amp;\sim N(\mu_i, \sigma)
 </blockquote>
 </blockquote>
 <p>And so does R:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="gsr.html#cb12-1"></a><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</a></code></pre></div>
 <pre><code>## [1] 1 2 3</code></pre>
 <p>Counting from one is perhaps the most lovable idiosyncracy of R. But, lets also welcome people who have experience with other programming languages:</p>
 <p>The first thing one has to know about R is that it is a <em>functional programming</em> language. A function simply is a programmed procedure that takes data as input, applies some transformation and returns data as output. That sounds trivial, but there is an important difference to most other languages: Different to procedures in Pascal or object oriented methods (in Java or Python), functions are forbidden to modify any external object. A certain function is a black box, but one can be sure that the only thing it does is return a new object.</p>
 <p>At the same time, functions are first-class citizens in R and can be called everywhere, even as an <em>argument to another function</em>. The <em>plyr</em> package is famous for functions that call functions, also called high-level functions. The following three liner makes heavy use of high level functions. First, a list of binary matrices is generated by repeatedly calling a random number generator, then the row sum of all matrices is computed and returned as a (new) list.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="gsr.html#cb14-1"></a>make_binary_matrix &lt;-<span class="st"> </span></span>
-<span id="cb14-2"><a href="gsr.html#cb14-2"></a><span class="st">  </span><span class="cf">function</span>(size) <span class="kw">as.matrix</span>(<span class="kw">rbernoulli</span>(size<span class="op">^</span><span class="dv">2</span>, <span class="dt">p =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>))</span>
-<span id="cb14-3"><a href="gsr.html#cb14-3"></a></span>
-<span id="cb14-4"><a href="gsr.html#cb14-4"></a>LoM &lt;-<span class="st"> </span><span class="kw">llply</span>(<span class="kw">c</span>(<span class="dv">5</span><span class="op">:</span><span class="dv">7</span>), make_binary_matrix)</span>
-<span id="cb14-5"><a href="gsr.html#cb14-5"></a></span>
-<span id="cb14-6"><a href="gsr.html#cb14-6"></a><span class="kw">llply</span>(LoM, rowSums)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">make_binary_matrix &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="cf">function</span>(size) <span class="kw">as.matrix</span>(<span class="kw">rbernoulli</span>(size<span class="op">^</span><span class="dv">2</span>, <span class="dt">p =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb14-3" title="3"></a>
+<a class="sourceLine" id="cb14-4" title="4">LoM &lt;-<span class="st"> </span><span class="kw">llply</span>(<span class="kw">c</span>(<span class="dv">5</span><span class="op">:</span><span class="dv">7</span>), make_binary_matrix)</a>
+<a class="sourceLine" id="cb14-5" title="5"></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="kw">llply</span>(LoM, rowSums)</a></code></pre></div>
 <pre><code>## [[1]]
-##  [1] 1 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 1 1 1 0 0 0 0 0 1
+##  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0
 ## 
 ## [[2]]
-##  [1] 0 0 0 1 0 0 0 0 0 1 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [1] 1 0 0 1 1 1 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 1 0 1 0 0 0
 ## 
 ## [[3]]
-##  [1] 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 0
-## [39] 0 0 0 0 0 0 0 0 0 0 0</code></pre>
+##  [1] 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0
+## [39] 0 0 1 0 1 0 0 0 0 0 0</code></pre>
 <p>What we have seen is a routine application of higher level functions: apply a transformation to a sequence of data sets. In a majority of programming languages you had to write a loop instead and this is why experienced programmers can easily fall for the active user paradox when they learn R, by sticking to loops. Believe me one thing: Once you have wrapped your head around functional programming, you will program the same procedure in a quarter of time with half the code and your program will run significantly faster. My general advice is:</p>
 <blockquote>
 <blockquote>
@@ -646,83 +644,83 @@ y_i &amp;\sim N(\mu_i, \sigma)
 <h3><span class="header-section-number">2.2.1</span> Assigning and calling Objects</h3>
 <p>Any statistical analysis can be thought of as a production chain. You take the raw data and process it into a neat data table, which you feed into graphics and regression engines or summarize by other means. At almost every step there is an input and an output object.</p>
 <p><em>Objects</em> are a basic feature of R. They are temporary storage places in the computer’s memory. Objects always have a name chosen by the programmer. By its name, a stored object can be found back at any time. Two basic operations apply for all objects: an object is stored by <em>assigning</em> it a name and it is retrieved by <em>calling</em> its name. If you wanted to store the number of observations in your data set under the name <code>N_obs</code>, you use the assignment operator <code>&lt;-</code>. The name of the variable is left of the operator, the assigned value is right of it.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="gsr.html#cb16-1"></a>N_obs &lt;-<span class="st"> </span><span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">N_obs &lt;-<span class="st"> </span><span class="dv">100</span></a></code></pre></div>
 <p>Now, that the value is stored, you can call it any time by simply calling its name:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="gsr.html#cb17-1"></a>N_obs</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">N_obs</a></code></pre></div>
 <pre><code>## [1] 100</code></pre>
 <p>Just calling the name prints the value to Console. In typical interactive programming sessions with R, this is already quite useful. But, you can do much more with this mechanism.</p>
 <p>Often, what you want is to do calculations with the value. For example, you have a repeated measures study and want to calculate the average number of observations per participant. For this you need the number of observations, and the number of participants. The below code creates both objects, does the calculation (right of <code>&lt;-</code>) and stores it in another object <code>avg_N_Obs</code></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="gsr.html#cb19-1"></a>N_Obs &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb19-2"><a href="gsr.html#cb19-2"></a>N_Part &lt;-<span class="st"> </span><span class="dv">25</span></span>
-<span id="cb19-3"><a href="gsr.html#cb19-3"></a>avg_N_Obs &lt;-<span class="st"> </span>N_Obs<span class="op">/</span>N_Part</span>
-<span id="cb19-4"><a href="gsr.html#cb19-4"></a>avg_N_Obs</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">N_Obs &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb19-2" title="2">N_Part &lt;-<span class="st"> </span><span class="dv">25</span></a>
+<a class="sourceLine" id="cb19-3" title="3">avg_N_Obs &lt;-<span class="st"> </span>N_Obs<span class="op">/</span>N_Part</a>
+<a class="sourceLine" id="cb19-4" title="4">avg_N_Obs</a></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>Objects can exist without a name, but are volatile, then. They cannot be used any further. The following arithmetic operation does create an object, a single number. For a moment or so this number exists somewhere in your computers memory, but once it is printed to the screen, it is gone. Of course, the same expression can be called again, resulting in the same number. But, strictly, it is a different object.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="gsr.html#cb21-1"></a>N_Obs<span class="op">/</span>N_Part <span class="co">## gone after printing</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">N_Obs<span class="op">/</span>N_Part <span class="co">## gone after printing</span></a></code></pre></div>
 <pre><code>## [1] 4</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="gsr.html#cb23-1"></a>N_Obs<span class="op">/</span>N_Part <span class="co">## same value, different object</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">N_Obs<span class="op">/</span>N_Part <span class="co">## same value, different object</span></a></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>There even is a formal way to show that the two numbers, although having the same value assigned, are located at different addresses. This is just for the purpose of demonstration and you will rarely use it in everyday programming tasks:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="gsr.html#cb25-1"></a><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</span></code></pre></div>
-<pre><code>## [1] &quot;&lt;000000003DA641A0&gt;&quot;</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="gsr.html#cb27-1"></a><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</span></code></pre></div>
-<pre><code>## [1] &quot;&lt;000000003DACF258&gt;&quot;</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</a></code></pre></div>
+<pre><code>## [1] &quot;&lt;000000003DA72458&gt;&quot;</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">tracemem</span>(N_Obs<span class="op">/</span>N_Part)</a></code></pre></div>
+<pre><code>## [1] &quot;&lt;000000003DADF430&gt;&quot;</code></pre>
 </div>
 <div id="vectors" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Vectors</h3>
 <p>Notice the <code>[1]</code> that R put in front of the single value when printing it? This is an <em>index</em>. Different to other programming languages, all basic data types are <em>vectors</em> in R. Vectors are containers for storing many values <em>of the same type</em>. The values are addressed by the index, <code>N_Obs[1]</code> calls the first element. In R, <em>indices start counting with 1</em>, which is different to most other languages that start at zero. And if you have a single value only, this is just a vector of length one.</p>
 <p>For statistics programming having vectors as basic data types makes perfect sense. Any statistical data is a collection of values. What holds for data is also true for functions applied to data. Practically all frequently used mathematical functions work on vectors, take the following example:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="gsr.html#cb29-1"></a>X &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb29-2"><a href="gsr.html#cb29-2"></a><span class="kw">mean</span>(X)</span></code></pre></div>
-<pre><code>## [1] 2.12</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">X &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="kw">mean</span>(X)</a></code></pre></div>
+<pre><code>## [1] 2.03</code></pre>
 <p>The <code>rnorm</code> command <em>produces</em> a vector of length 100 from three values. More precisely, it does 100 random draws from a normal distribution with mean 2 and an SD of 1. The <code>mean</code> command takes the collection and <em>reduces</em> it to a single value. By the way, this is precisely, what we call <em>a statistic: a single quantity that characterizes a collection of quantities</em>.</p>
 </div>
 <div id="object-types" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Basic object types</h3>
 <p>Objects can be of various <em>classes</em>. In R the common basic classes are: logical, factor, character, integer and numeric. Besides that, programmers can define their own complex classes, for example, to store the results of regression models.</p>
 <p>Objects of type <em>logical</em> store the two levels <code>TRUE</code>, <code>FALSE</code>, like presence or absence of a treatment, or passed and failed test items. With Boolean operators one can compute new logical values, for example</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="gsr.html#cb31-1"></a>Apple &lt;-<span class="st"> </span><span class="ot">TRUE</span></span>
-<span id="cb31-2"><a href="gsr.html#cb31-2"></a>Pear  &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
-<span id="cb31-3"><a href="gsr.html#cb31-3"></a></span>
-<span id="cb31-4"><a href="gsr.html#cb31-4"></a>Apple <span class="op">&amp;</span><span class="st"> </span>Pear <span class="co">## and</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">Apple &lt;-<span class="st"> </span><span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb31-2" title="2">Pear  &lt;-<span class="st"> </span><span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb31-3" title="3"></a>
+<a class="sourceLine" id="cb31-4" title="4">Apple <span class="op">&amp;</span><span class="st"> </span>Pear <span class="co">## and</span></a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="gsr.html#cb33-1"></a>Apple <span class="op">|</span><span class="st"> </span>Pear <span class="co">## or</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">Apple <span class="op">|</span><span class="st"> </span>Pear <span class="co">## or</span></a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>More generally, logical values can be used for categorization, when their are only two categories, which is called a <em>dichotomous variable</em>. For example, gender is usually coded as a vector of characters (<code>"m", "f", "f"</code>), but one can always do:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="gsr.html#cb35-1"></a>is_female &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>)</span>
-<span id="cb35-2"><a href="gsr.html#cb35-2"></a>is_male   &lt;-<span class="st"> </span><span class="kw">c</span>(T, F, F)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">is_female &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb35-2" title="2">is_male   &lt;-<span class="st"> </span><span class="kw">c</span>(T, F, F)</a></code></pre></div>
 <p>Programmers are lazy folks when it comes to typing, therefore R allows you to abbreviate <code>TRUE</code> and <code>FALSE</code> as shown above. As a consequence, one should never assign objects the name reserved for logical values, so don’t do one of the following:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="gsr.html#cb36-1"></a><span class="co">## never do this</span></span>
-<span id="cb36-2"><a href="gsr.html#cb36-2"></a><span class="ot">TRUE</span> &lt;-<span class="st"> &quot;All philosophers have beards&quot;</span> <span class="co">## a character object, see below</span></span>
-<span id="cb36-3"><a href="gsr.html#cb36-3"></a>F    &lt;-<span class="st"> &quot;All gods existed before the big bang&quot;</span></span>
-<span id="cb36-4"><a href="gsr.html#cb36-4"></a><span class="dv">42</span> <span class="op">*</span><span class="st"> </span>F</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co">## never do this</span></a>
+<a class="sourceLine" id="cb36-2" title="2"><span class="ot">TRUE</span> &lt;-<span class="st"> &quot;All philosophers have beards&quot;</span> <span class="co">## a character object, see below</span></a>
+<a class="sourceLine" id="cb36-3" title="3">F    &lt;-<span class="st"> &quot;All gods existed before the big bang&quot;</span></a>
+<a class="sourceLine" id="cb36-4" title="4"><span class="dv">42</span> <span class="op">*</span><span class="st"> </span>F</a></code></pre></div>
 <p>The class <code>numeric</code> stores real numbers and is therefore abundant in statistical programming. All the usual arithmetic operations apply:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="gsr.html#cb37-1"></a>a &lt;-<span class="st"> </span><span class="fl">1.0</span></span>
-<span id="cb37-2"><a href="gsr.html#cb37-2"></a>b &lt;-<span class="st"> </span>a <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb37-3"><a href="gsr.html#cb37-3"></a><span class="kw">sqrt</span>(b)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">a &lt;-<span class="st"> </span><span class="fl">1.0</span></a>
+<a class="sourceLine" id="cb37-2" title="2">b &lt;-<span class="st"> </span>a <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="kw">sqrt</span>(b)</a></code></pre></div>
 <pre><code>## [1] 1.41</code></pre>
 <p>Objects of class <code>integer</code> are more specific as they store natural numbers, only. This often occurs as counts, ranks or indices.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="gsr.html#cb39-1"></a>friends &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">anton =</span> <span class="dv">1</span>, </span>
-<span id="cb39-2"><a href="gsr.html#cb39-2"></a>             <span class="dt">berta =</span> <span class="dv">3</span>, </span>
-<span id="cb39-3"><a href="gsr.html#cb39-3"></a>             <span class="dt">carlo =</span> <span class="dv">2</span>)</span>
-<span id="cb39-4"><a href="gsr.html#cb39-4"></a><span class="kw">order</span>(friends)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">friends &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">anton =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb39-2" title="2">             <span class="dt">berta =</span> <span class="dv">3</span>, </a>
+<a class="sourceLine" id="cb39-3" title="3">             <span class="dt">carlo =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb39-4" title="4"><span class="kw">order</span>(friends)</a></code></pre></div>
 <pre><code>## [1] 1 3 2</code></pre>
 <p>The usual arithmetic operations apply, although the result of operation may no longer be <code>integer</code>, but <code>numeric</code></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="gsr.html#cb41-1"></a>N &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb41-2"><a href="gsr.html#cb41-2"></a>sum_of_scores &lt;-<span class="st"> </span><span class="dv">32</span></span>
-<span id="cb41-3"><a href="gsr.html#cb41-3"></a>mean_score &lt;-<span class="st"> </span><span class="dv">32</span><span class="op">/</span><span class="dv">3</span></span>
-<span id="cb41-4"><a href="gsr.html#cb41-4"></a>mean_score</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">N &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb41-2" title="2">sum_of_scores &lt;-<span class="st"> </span><span class="dv">32</span></a>
+<a class="sourceLine" id="cb41-3" title="3">mean_score &lt;-<span class="st"> </span><span class="dv">32</span><span class="op">/</span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb41-4" title="4">mean_score</a></code></pre></div>
 <pre><code>## [1] 10.7</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="gsr.html#cb43-1"></a><span class="kw">class</span>(mean_score)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">class</span>(mean_score)</a></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <p>Surprisingly, logical values can be used in arithmetic expressions, too. When R encounters value <code>TRUE</code> in an arithmetic context, it replaces it with 1, zero otherwise. Used with multiplication, this acts like an on/off switch, which we will put to use for building <a href="lm.html#dummy">factorial models</a>.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="gsr.html#cb45-1"></a><span class="ot">TRUE</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="ot">TRUE</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span></a></code></pre></div>
 <pre><code>## [1] 2</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="gsr.html#cb47-1"></a><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## [1] 2</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="gsr.html#cb49-1"></a>is_car &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>) <span class="co">## bicycle otherwise</span></span>
-<span id="cb49-2"><a href="gsr.html#cb49-2"></a>wheels &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>is_car <span class="op">*</span><span class="st"> </span><span class="dv">2</span></span>
-<span id="cb49-3"><a href="gsr.html#cb49-3"></a>wheels</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">is_car &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>) <span class="co">## bicycle otherwise</span></a>
+<a class="sourceLine" id="cb49-2" title="2">wheels &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>is_car <span class="op">*</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb49-3" title="3">wheels</a></code></pre></div>
 <pre><code>## [1] 4 4 2</code></pre>
 <p>Data sets usually contain variables that are not numeric, but partition the data into groups. For example, we frequently group observations by the following</p>
 <ul>
@@ -732,59 +730,59 @@ y_i &amp;\sim N(\mu_i, \sigma)
 <li><code>Education</code>: level of education (e.g., low, middle or high)</li>
 </ul>
 <p>Two object types apply for grouping observations: <em>factor</em> and <em>character</em>. While factors specialize on grouping observations, character objects can also be used to store longer text, say the description of a usability problem. The following identifies two conditions in a study, say a comparison of designs A and B. Note how the factor identifies its <em>levels</em> when called to the screen:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gsr.html#cb51-1"></a>design_char &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>)</span>
-<span id="cb51-2"><a href="gsr.html#cb51-2"></a>design_char</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">design_char &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>)</a>
+<a class="sourceLine" id="cb51-2" title="2">design_char</a></code></pre></div>
 <pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;B&quot; &quot;A&quot;</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="gsr.html#cb53-1"></a>design_fact &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>))</span>
-<span id="cb53-2"><a href="gsr.html#cb53-2"></a>design_fact</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">design_fact &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>))</a>
+<a class="sourceLine" id="cb53-2" title="2">design_fact</a></code></pre></div>
 <pre><code>## [1] A B B A
 ## Levels: A B</code></pre>
 <p>Statistical analyses deal with real world data which ever so often is messy. Frequently, a planned observation could not be recorded, because the participant decided to quit or the equipment did not work properly or the internet collapsed. Users of certain legacy statistics packages got used to coding missing observations as <code>-999</code> and then declared this a missing value. In R <em>missing values are first-class citizens</em>. Every vector of a certain class can contain missing values, which are identified as <code>NA</code>.</p>
 <p>Most basic statistics functions, like <code>mean()</code>, <code>sd()</code> or <code>median()</code> are act conservatively when the data contains missing values. If there is a single <code>NA</code> in the variable to be summarized, the result is <code>NA</code>. While this is good in the sense of transparency, much of the time what the researcher wants is to have the summary statistic with <code>NA</code> values being removed, first.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gsr.html#cb55-1"></a>clicks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">2</span>)</span>
-<span id="cb55-2"><a href="gsr.html#cb55-2"></a><span class="kw">mean</span>(clicks)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1">clicks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb55-2" title="2"><span class="kw">mean</span>(clicks)</a></code></pre></div>
 <pre><code>## [1] NA</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="gsr.html#cb57-1"></a><span class="kw">mean</span>(clicks, <span class="dt">na.rm =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">mean</span>(clicks, <span class="dt">na.rm =</span> T)</a></code></pre></div>
 <pre><code>## [1] 2.5</code></pre>
 <p>This book is about programming and statistics at the same time. Unfortunately, there are a few terms that have a particular meaning in both domains. One of those is a “variable”. In statistics, a variable usually is a property we have recorded, say the body length of persons, or their gender. In general programming, a variable is a space in the computers memories, where results can be stored and recalled. Fortunately, R avoids any confusion and calls <em>objects</em> what is usually called a programming variable.</p>
 </div>
 <div id="operators-functions" class="section level3">
 <h3><span class="header-section-number">2.2.4</span> Operators and functions</h3>
 <p>R comes with a full bunch of functions for creating and summarizing data. Let me first introduce you to functions that produce exactly one number to characterize a vector. The following functions do that with to the vector <code>X</code>, every in their own way:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="gsr.html#cb59-1"></a><span class="kw">length</span>(X)</span>
-<span id="cb59-2"><a href="gsr.html#cb59-2"></a><span class="kw">sum</span>(X)</span>
-<span id="cb59-3"><a href="gsr.html#cb59-3"></a><span class="kw">mean</span>(X)</span>
-<span id="cb59-4"><a href="gsr.html#cb59-4"></a><span class="kw">var</span>(X)</span>
-<span id="cb59-5"><a href="gsr.html#cb59-5"></a><span class="kw">sd</span>(X)</span>
-<span id="cb59-6"><a href="gsr.html#cb59-6"></a><span class="kw">min</span>(X)</span>
-<span id="cb59-7"><a href="gsr.html#cb59-7"></a><span class="kw">max</span>(X)</span>
-<span id="cb59-8"><a href="gsr.html#cb59-8"></a><span class="kw">median</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">length</span>(X)</a>
+<a class="sourceLine" id="cb59-2" title="2"><span class="kw">sum</span>(X)</a>
+<a class="sourceLine" id="cb59-3" title="3"><span class="kw">mean</span>(X)</a>
+<a class="sourceLine" id="cb59-4" title="4"><span class="kw">var</span>(X)</a>
+<a class="sourceLine" id="cb59-5" title="5"><span class="kw">sd</span>(X)</a>
+<a class="sourceLine" id="cb59-6" title="6"><span class="kw">min</span>(X)</a>
+<a class="sourceLine" id="cb59-7" title="7"><span class="kw">max</span>(X)</a>
+<a class="sourceLine" id="cb59-8" title="8"><span class="kw">median</span>(X)</a></code></pre></div>
 <p>These functions are a transformation of data. The input to these transformations is <code>X</code> and is given as an <em>argument</em> to the function. Other functions require more than one argument. The <code>quantile</code> function is routinely used to summarize a variable. Recall that <code>X</code> has been drawn from a Normal distribution of <span class="math inline">\(\mu=2\)</span> and standard deviation <span class="math inline">\(\sigma = 1\)</span>. All Normal distributions have the property that about 66% of the mass is within the range of <span class="math inline">\(\mu-\sigma\)</span> and <span class="math inline">\(\mu+\sigma\)</span> <!-- #9 -->. That means in turn: 17% are below <span class="math inline">\(\mu-\sigma\)</span> and 66 + 17 = 83% are <em>below</em> <span class="math inline">\(\mu+\sigma\)</span>. The number of observations in a certain range of values is called a <em>quantile</em>. The <code>quantile</code> function operates on X, but takes an (optional) vector of quantiles as second argument:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="gsr.html#cb60-1"></a><span class="kw">quantile</span>(X, <span class="kw">c</span>(.<span class="dv">17</span>, <span class="fl">.83</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">quantile</span>(X, <span class="kw">c</span>(.<span class="dv">17</span>, <span class="fl">.83</span>))</a></code></pre></div>
 <pre><code>##  17%  83% 
-## 1.12 3.11</code></pre>
+## 1.16 2.83</code></pre>
 <p>Most functions in R have <em>optional arguments</em> that let you change how the function performs. The basic mathematical functions all have the optional argument <code>na.rm</code>. This is a switch that determines how the function deals with missing values <code>NA</code>. Many optional arguments have <em>defaults</em>. The default of <code>na.rm</code> is <code>FALSE</code> (“return NA in case of NAs in the vector”). By setting it to <code>TRUE</code>, they are removed before operation.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="gsr.html#cb62-1"></a>B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">3</span>)</span>
-<span id="cb62-2"><a href="gsr.html#cb62-2"></a><span class="kw">mean</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb62-2" title="2"><span class="kw">mean</span>(B)</a></code></pre></div>
 <pre><code>## [1] NA</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="gsr.html#cb64-1"></a><span class="kw">mean</span>(B, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">mean</span>(B, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## [1] 2</code></pre>
 <p>Most more complex routines in R have an abundance of parameters, most of which have reasonable defaults, fortunately. To give a more complex example, the first call of <code>stan_glm</code> performs a Bayesian estimation of the grand mean model. The second does a
 Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</code> has been fixed, every subsequent run will produce the exact same chains. My apologies for the jargon! <!-- #10 --></p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="gsr.html#cb66-1"></a>D_<span class="dv">1</span> =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">X =</span> <span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
-<span id="cb66-2"><a href="gsr.html#cb66-2"></a>M_<span class="dv">1</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, </span>
-<span id="cb66-3"><a href="gsr.html#cb66-3"></a>               <span class="dt">data =</span> D_<span class="dv">1</span>)</span>
-<span id="cb66-4"><a href="gsr.html#cb66-4"></a></span>
-<span id="cb66-5"><a href="gsr.html#cb66-5"></a>D_<span class="dv">2</span> =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">X =</span> <span class="kw">rpois</span>(<span class="dv">20</span>, <span class="dv">2</span>))</span>
-<span id="cb66-6"><a href="gsr.html#cb66-6"></a>M_<span class="dv">2</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</span>
-<span id="cb66-7"><a href="gsr.html#cb66-7"></a>               <span class="dt">family =</span> poisson,</span>
-<span id="cb66-8"><a href="gsr.html#cb66-8"></a>               <span class="dt">seed =</span> <span class="dv">42</span>,</span>
-<span id="cb66-9"><a href="gsr.html#cb66-9"></a>               <span class="dt">iter =</span> <span class="dv">5000</span>,</span>
-<span id="cb66-10"><a href="gsr.html#cb66-10"></a>               <span class="dt">data =</span> D_<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">D_<span class="dv">1</span> =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">X =</span> <span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">2</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb66-2" title="2">M_<span class="dv">1</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb66-3" title="3">               <span class="dt">data =</span> D_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb66-4" title="4"></a>
+<a class="sourceLine" id="cb66-5" title="5">D_<span class="dv">2</span> =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">X =</span> <span class="kw">rpois</span>(<span class="dv">20</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb66-6" title="6">M_<span class="dv">2</span> =<span class="st"> </span><span class="kw">stan_glm</span>(X <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb66-7" title="7">               <span class="dt">family =</span> poisson,</a>
+<a class="sourceLine" id="cb66-8" title="8">               <span class="dt">seed =</span> <span class="dv">42</span>,</a>
+<a class="sourceLine" id="cb66-9" title="9">               <span class="dt">iter =</span> <span class="dv">5000</span>,</a>
+<a class="sourceLine" id="cb66-10" title="10">               <span class="dt">data =</span> D_<span class="dv">1</span>)</a></code></pre></div>
 <p>R brings the usual set of arithmetic operators, like <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> and more. In fact, an operator is just a function. The sum of two numbers can, indeed, be written in these two ways:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="gsr.html#cb67-1"></a><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
 <pre><code>## [1] 3</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="gsr.html#cb69-1"></a><span class="st">`</span><span class="dt">+</span><span class="st">`</span>(<span class="dv">1</span>,<span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="st">`</span><span class="dt">+</span><span class="st">`</span>(<span class="dv">1</span>,<span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>The second term is a function that takes two numbers as input and returns a third. It is just a different syntax, and this one is called the <em>polish notation</em>. I will never use it throughout the rest of this book.</p>
 <p>Another set of commonly used operators are logical, they implement <em>Boolean algebra</em>. Some common Boolean operators are shown in the truth table:</p>
@@ -845,11 +843,11 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 <p>Be careful not to confuse Boolean “and” and “or” with their common natural language use. If you ask: “Can you buy apples <em>or</em> pears on the market?”, the natural answer would be: “both”. The Boolean answer is: TRUE. In a requirements document you could state “This app is for children and adults”. In Boolean the answer would be FALSE, because no one can be a child and an adult at the same time, strictly. A correct Boolean statement would be: “The envisioned users can be adult or child”. <!-- #11 --></p>
 <p>Further Boolean operators exist, but can be derived from the three above. For example, the exclusive OR, “either A or B” can be written as: <code>(A | B) &amp; !(A &amp; B)</code>. This term only gets TRUE when A or B is TRUE, but not both. In the data analysis workflow, Boolean logic is frequently used for filtering data and we re-encounter them in data transformation.</p>
 <p>Finally, it sometimes is convenient or necessary to program own functions. A full coverage of developing functions is beyond the scope of this introduction, so I show just one simple example. If one desires a more convenient function to compute the mean that ignore missing values by default, this can be constructed as follows:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="gsr.html#cb71-1"></a>mean_conv &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb71-2"><a href="gsr.html#cb71-2"></a>  <span class="kw">mean</span>(<span class="dt">x =</span> B, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb71-3"><a href="gsr.html#cb71-3"></a>}</span>
-<span id="cb71-4"><a href="gsr.html#cb71-4"></a></span>
-<span id="cb71-5"><a href="gsr.html#cb71-5"></a><span class="kw">mean_conv</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">mean_conv &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb71-2" title="2">  <span class="kw">mean</span>(<span class="dt">x =</span> B, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb71-3" title="3">}</a>
+<a class="sourceLine" id="cb71-4" title="4"></a>
+<a class="sourceLine" id="cb71-5" title="5"><span class="kw">mean_conv</span>(B)</a></code></pre></div>
 <pre><code>## [1] 2</code></pre>
 <p>Notice that:</p>
 <ul>
@@ -875,39 +873,39 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 <!-- However, when working interactively, most of the time you do a data transformation and assign it to a new variable, thus you check it immediately. As the assignment is always silent (unless there occurs an error), you are forced to type a print statement afterwards. There is shortcut for that: if you embrace the assignment statement in brackets, the result will be printed to the screen. As convenient as this is, especially when creating longer data transformation chains, it introduces some visual clutter. In this book I use it sparingly, at most. -->
 <!-- The dedicated print function does what way back a developer thought would be the most useful information in most cases. Depending on the situation, it can provide too much, too little or just the wrong information. For example: when simulating a data set, we want to check whether the resulting data frame has the desired length and whether the variables have the correct class. The standard implementation of the print command, dumps the whole data frame to the screen, which can be much more than ever needed. The newer dplyr implementation `tibble` (from the tidyverse, also called *tibble*) you have seen in action already, is much better suited for this situation, as it displays dimensions and variable classes. In contrast, if the job is to spot whether there are many missing values (`NA`), the classic print performs better. -->
 <p>Several commands are available to look into a data frame from different perspectives. Another command that is implemented for a variety of classes, ibluding dara frames, is <code>summary</code>. For all data frames, it produces an overview with descriptive statistics for all variables (i.e. columns), matching their object type. Particularly useful for data initial screening, is that missing values are listed per variable.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="gsr.html#cb73-1"></a><span class="kw">print</span>(<span class="kw">summary</span>(Experiment))</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">print</span>(<span class="kw">summary</span>(Experiment))</a></code></pre></div>
 <pre><code>##       Obs           Group                age          outcome   
-##  Min.   :  1.0   Length:100         Min.   :18.0   Min.   :188  
-##  1st Qu.: 25.8   Class :character   1st Qu.:23.0   1st Qu.:210  
-##  Median : 50.5   Mode  :character   Median :26.0   Median :229  
-##  Mean   : 50.5                      Mean   :26.4   Mean   :230  
-##  3rd Qu.: 75.2                      3rd Qu.:31.0   3rd Qu.:250  
+##  Min.   :  1.0   Length:100         Min.   :18.0   Min.   :184  
+##  1st Qu.: 25.8   Class :character   1st Qu.:22.0   1st Qu.:208  
+##  Median : 50.5   Mode  :character   Median :26.5   Median :233  
+##  Mean   : 50.5                      Mean   :26.8   Mean   :231  
+##  3rd Qu.: 75.2                      3rd Qu.:32.0   3rd Qu.:252  
 ##  Max.   :100.0                      Max.   :35.0   Max.   :273</code></pre>
 <p>The <code>str</code> (structure) command works on any R object and displays the hierarchical structure (if there is one):</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="gsr.html#cb75-1"></a><span class="kw">str</span>(Experiment)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="kw">str</span>(Experiment)</a></code></pre></div>
 <pre><code>## Classes &#39;tbl_obs&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;: 100 obs. of  4 variables:
 ##  $ Obs    : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Group  : chr  &quot;control&quot; &quot;experimental&quot; &quot;control&quot; &quot;experimental&quot; ...
-##  $ age    : num  25 21 21 35 33 34 20 26 33 29 ...
-##  $ outcome: num  210 242 206 245 204 ...</code></pre>
+##  $ age    : num  23 20 20 20 20 23 20 21 33 35 ...
+##  $ outcome: num  217 254 207 243 206 ...</code></pre>
 <p>Data frames store variables, but statistical procedures operate on variables. We need ways of accessing and manipulating statistical variables and we will have plenty. First, recall that in R the basic object types are all vectors. You can store as many elements as you want in an object, as long as they are of the same class.</p>
 <p>Internally, data frames are a collection of “vertical” vectors that are equally long. Being a collection of vectors, the variables of a data frame can be of different classes, like <code>character</code>, <code>factor</code> or <code>numeric</code>. In the most basic case, you want to calculate a statistic for a single variable out of a data frame. The <code>$</code> operator pulls the variable out as a vector:</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="gsr.html#cb77-1"></a><span class="kw">mean</span>(Experiment<span class="op">$</span>outcome)</span></code></pre></div>
-<pre><code>## [1] 230</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">mean</span>(Experiment<span class="op">$</span>outcome)</a></code></pre></div>
+<pre><code>## [1] 231</code></pre>
 <p>As data frames are rectangular structures, you can also access individual values by their addresses. The following commands call</p>
 <ul>
 <li>the first <em>outcome</em> measure</li>
 <li>the first to third elements of <em>Group</em></li>
 <li>the complete first row</li>
 </ul>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="gsr.html#cb79-1"></a>Experiment[  <span class="dv">1</span>, <span class="dv">3</span>]</span>
-<span id="cb79-2"><a href="gsr.html#cb79-2"></a>Experiment[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">2</span>]</span>
-<span id="cb79-3"><a href="gsr.html#cb79-3"></a>Experiment[  <span class="dv">1</span>,  ]</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">Experiment[  <span class="dv">1</span>, <span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb79-2" title="2">Experiment[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb79-3" title="3">Experiment[  <span class="dv">1</span>,  ]</a></code></pre></div>
 <p>Addressing one or more elements in square brackets, always requires two elements, first the row, second the column. As odd as it looks, one or both elements can be empty, which just means: get all rows (or all columns). Even the expression <code>Experiment[,]</code> is fully valid and will just the return the whole data frame.</p>
 <p>There is an important difference, however, when using R’s classic <code>data.frame</code> as compared to dplyr’s <code>tibble</code>implementation: When using single square brackets on dplyr data frames one always gets a data frame back. That is a very predictable behavior, and very much unlike the classic: with <code>data.frame</code>, when the addressed elements expand over multiple columns, like
 <code>Experiment[, 1:2]</code>, the result will be a <code>data.frame</code> object, too. However, when slicing a single column, the result is a vector:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="gsr.html#cb80-1"></a>Exp_classic &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(Experiment)</span>
-<span id="cb80-2"><a href="gsr.html#cb80-2"></a>Exp_classic[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]  <span class="co">## data.frame</span></span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">Exp_classic &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(Experiment)</a>
+<a class="sourceLine" id="cb80-2" title="2">Exp_classic[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]  <span class="co">## data.frame</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -926,7 +924,7 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="gsr.html#cb81-1"></a>Exp_classic[<span class="dv">1</span>,]       <span class="co">## data.frame</span></span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">Exp_classic[<span class="dv">1</span>,]       <span class="co">## data.frame</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -940,12 +938,12 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 <tr class="odd">
 <td align="right">1</td>
 <td align="left">control</td>
-<td align="right">25</td>
-<td align="right">210</td>
+<td align="right">23</td>
+<td align="right">217</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="gsr.html#cb82-1"></a>Exp_classic[,<span class="dv">1</span>]       <span class="co">## vector</span></span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">Exp_classic[,<span class="dv">1</span>]       <span class="co">## vector</span></a></code></pre></div>
 <pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
 ##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
 ##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
@@ -953,52 +951,52 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 ##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
 ##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
 <p>Predictability and a few other useful tweaks made me prefer <code>tibble</code> over <code>data.frame</code>. But, many third-party packages continue to produce classic <code>data.frame</code> objects. For example, there is an alternative to package `<code>readxl</code>, <code>openxlsx</code>, which reads (and writes) Excel files. It returns classic data.frames, which can easily be converted as follows:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="gsr.html#cb84-1"></a>D_foo &lt;-<span class="st"> </span></span>
-<span id="cb84-2"><a href="gsr.html#cb84-2"></a><span class="st">  </span><span class="kw">read.xlsx</span>(<span class="st">&quot;foo.xlsx&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb84-3"><a href="gsr.html#cb84-3"></a><span class="st">  </span><span class="kw">as_tibble</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">D_foo &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb84-2" title="2"><span class="st">  </span><span class="kw">read.xlsx</span>(<span class="st">&quot;foo.xlsx&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb84-3" title="3"><span class="st">  </span><span class="kw">as_tibble</span>()</a></code></pre></div>
 <p>While <code>tibble[]</code> behaves perfectly predictable, in that it always returns a data frame, even when this is just a single column or cell. Sometimes, one wants to truly extract a vector. With a <code>tibble</code> a single column can be extracted as a vector, using double square brackets, or using the <code>$</code> operator.</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="gsr.html#cb85-1"></a>Experiment[[<span class="dv">1</span>]]       <span class="co">## vector</span></span>
-<span id="cb85-2"><a href="gsr.html#cb85-2"></a>Experiment<span class="op">$</span>Group      <span class="co">## the same</span></span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">Experiment[[<span class="dv">1</span>]]       <span class="co">## vector</span></a>
+<a class="sourceLine" id="cb85-2" title="2">Experiment<span class="op">$</span>Group      <span class="co">## the same</span></a></code></pre></div>
 <p>Sometimes, it may be necessary to change values in a data frame. For example, a few outliers have been discovered during data screening, and the researcher decides to mark them as missing values. The syntax for indexing elements in a data frame can be used in conjunction with the assignment operator <code>&lt;-</code>. In the example below, we make the simulated experiment more realistic by injecting a few outliers. Then we discard these outliers by setting them all to <code>NA</code>.</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="gsr.html#cb86-1"></a><span class="co">## injecting</span></span>
-<span id="cb86-2"><a href="gsr.html#cb86-2"></a>Experiment[<span class="dv">2</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">660</span></span>
-<span id="cb86-3"><a href="gsr.html#cb86-3"></a>Experiment[<span class="dv">6</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">987</span></span>
-<span id="cb86-4"><a href="gsr.html#cb86-4"></a>Experiment[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="dv">-99</span></span>
-<span id="cb86-5"><a href="gsr.html#cb86-5"></a></span>
-<span id="cb86-6"><a href="gsr.html#cb86-6"></a><span class="co">## printing first few observations</span></span>
-<span id="cb86-7"><a href="gsr.html#cb86-7"></a><span class="kw">head</span>(Experiment)</span>
-<span id="cb86-8"><a href="gsr.html#cb86-8"></a></span>
-<span id="cb86-9"><a href="gsr.html#cb86-9"></a><span class="co">## setting to NA</span></span>
-<span id="cb86-10"><a href="gsr.html#cb86-10"></a>Experiment[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">6</span>),<span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb86-11"><a href="gsr.html#cb86-11"></a>Experiment[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),<span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="co">## injecting</span></a>
+<a class="sourceLine" id="cb86-2" title="2">Experiment[<span class="dv">2</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">660</span></a>
+<a class="sourceLine" id="cb86-3" title="3">Experiment[<span class="dv">6</span>,      <span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="dv">987</span></a>
+<a class="sourceLine" id="cb86-4" title="4">Experiment[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb86-5" title="5"></a>
+<a class="sourceLine" id="cb86-6" title="6"><span class="co">## printing first few observations</span></a>
+<a class="sourceLine" id="cb86-7" title="7"><span class="kw">head</span>(Experiment)</a>
+<a class="sourceLine" id="cb86-8" title="8"></a>
+<a class="sourceLine" id="cb86-9" title="9"><span class="co">## setting to NA</span></a>
+<a class="sourceLine" id="cb86-10" title="10">Experiment[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">6</span>),<span class="st">&quot;outcome&quot;</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb86-11" title="11">Experiment[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),<span class="st">&quot;age&quot;</span>]     &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
 <p>Besides the injection, note two more features of addressing data frame elements. The first is, that vectors can be used to address multiple rows, e.g. 2 and 6. In fact, the range operator <code>1:3</code> we used above is just a convenient way of creating a vector <code>c(1,2,3)</code>. Although not shown in the example, this works for columns alike.</p>
 <p>The careful reader may also have noted another oddity in the above example. With <code>Experiment[c(2, 6),"outcome"]</code> we addressed two elements, but right-hand side of <code>&lt;-</code> is only one value. That is a basic mechanism of R, called <em>reuse</em>. When the left-hand side is longer than the right-hand side, the right-hand side is reused as many times as needed. Many basic functions in R work like this, and it can be quite useful. <!-- #12 --> For example, you may want to create a vector of 20 random numbers, where one half has a different mean as the second half of observations.</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="gsr.html#cb87-1"></a><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">sd =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1"><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">sd =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>The above example reuses the two mean values 50 times, creating an alternating pattern. Strictly speaking, the <code>sd = 1</code> parameter is reused, too, a 100 times. While reuse often comes in convenient, it can also lead to difficult programming errors. So, it is a good advice to be aware of this mechanism and always carefully check the input to vectorized functions.</p>
 </div>
 <div id="import-export" class="section level3">
 <h3><span class="header-section-number">2.2.6</span> Import, export and archiving</h3>
 <p>R lets you import data from almost every conceivable source, given that you have installed and loaded the appropriate packages (foreign, haven or openxlsx for Excel files). Besides that R has its own file format for storing data, which is <em>.Rda</em> files. With these files you can save data frames (and any other object in R), using the <code>save(data, file = "some_file.Rda")</code> and <code>load(file = "some_file.Rda")</code> commands.</p>
 <p>Few people create their data tables directly in R, but have legacy data sets in Excel (<em>.xslx</em>) and SPSS files (<em>.sav</em>). Moreover, the data can be produced by electronic measurement devices (e.g. electrodermal response measures) or programmed experiments can provide data in different forms, for example as <em>.csv</em> (comma-separated-values) files. All these files can be opened by the following commands:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="gsr.html#cb88-1"></a><span class="co">## Text files</span></span>
-<span id="cb88-2"><a href="gsr.html#cb88-2"></a>Experiment &lt;-<span class="st"> </span></span>
-<span id="cb88-3"><a href="gsr.html#cb88-3"></a><span class="st">  </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Experiment.csv&quot;</span>)</span>
-<span id="cb88-4"><a href="gsr.html#cb88-4"></a></span>
-<span id="cb88-5"><a href="gsr.html#cb88-5"></a><span class="co">## Excel</span></span>
-<span id="cb88-6"><a href="gsr.html#cb88-6"></a>Experiment &lt;-<span class="st"> </span></span>
-<span id="cb88-7"><a href="gsr.html#cb88-7"></a><span class="st">  </span><span class="kw">read_excel</span>(<span class="st">&quot;Data/Experiment.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">1</span>)</span>
-<span id="cb88-8"><a href="gsr.html#cb88-8"></a></span>
-<span id="cb88-9"><a href="gsr.html#cb88-9"></a><span class="co">## SPSS (haven)</span></span>
-<span id="cb88-10"><a href="gsr.html#cb88-10"></a>Experiment &lt;-<span class="st"> </span></span>
-<span id="cb88-11"><a href="gsr.html#cb88-11"></a><span class="st">  </span><span class="kw">read_sav</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>)</span>
-<span id="cb88-12"><a href="gsr.html#cb88-12"></a></span>
-<span id="cb88-13"><a href="gsr.html#cb88-13"></a><span class="co">## SPSS (foreign)</span></span>
-<span id="cb88-14"><a href="gsr.html#cb88-14"></a>Experiment &lt;-</span>
-<span id="cb88-15"><a href="gsr.html#cb88-15"></a><span class="st">  </span><span class="kw">read.spss</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>, <span class="dt">to.data.frame =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="co">## Text files</span></a>
+<a class="sourceLine" id="cb88-2" title="2">Experiment &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb88-3" title="3"><span class="st">  </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Experiment.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb88-4" title="4"></a>
+<a class="sourceLine" id="cb88-5" title="5"><span class="co">## Excel</span></a>
+<a class="sourceLine" id="cb88-6" title="6">Experiment &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb88-7" title="7"><span class="st">  </span><span class="kw">read_excel</span>(<span class="st">&quot;Data/Experiment.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb88-8" title="8"></a>
+<a class="sourceLine" id="cb88-9" title="9"><span class="co">## SPSS (haven)</span></a>
+<a class="sourceLine" id="cb88-10" title="10">Experiment &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb88-11" title="11"><span class="st">  </span><span class="kw">read_sav</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>)</a>
+<a class="sourceLine" id="cb88-12" title="12"></a>
+<a class="sourceLine" id="cb88-13" title="13"><span class="co">## SPSS (foreign)</span></a>
+<a class="sourceLine" id="cb88-14" title="14">Experiment &lt;-</a>
+<a class="sourceLine" id="cb88-15" title="15"><span class="st">  </span><span class="kw">read.spss</span>(<span class="st">&quot;Data/Experiment.sav&quot;</span>, <span class="dt">to.data.frame =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Note that I gave two options for reading SPSS files. The first (with an underscore) is from the newer haven package (part of tidyverse). With some SPSS files, I experienced problems with this command, as it does not convert SPSS’s data type <em>labelled</em> (which is almost the same as an R factor). The alternative is the classic <code>read.spss</code> command which works almost always, but as a default it creates a list of lists, which is not what you typically want. With the extra argument, as shown, it behaves as expected.</p>
 <p>Remember, data frames are objects and volatile as such. If you leave your session, they are gone. Once you have you data frame imported and cleaned, you may want to store it to a file. Like for reading, many commands are available for writing all kinds of data formats. If you are lucky to have a complete R-based workflow, you can conveniently use R’s own format for storing data, <code>Rdata</code> files. For storing a data frame and then reading it back in (in your next session), simply do:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="gsr.html#cb89-1"></a><span class="kw">save</span>(Experiment, <span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)</span>
-<span id="cb89-2"><a href="gsr.html#cb89-2"></a><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="kw">save</span>(Experiment, <span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)</a>
+<a class="sourceLine" id="cb89-2" title="2"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;Data/Experiment.Rda&quot;</span>)</a></code></pre></div>
 <p>Note that with <code>save</code> and <code>load</code> all objects are restored by their original names, without using any assignments. Take care, as this will not overwrite any object with the same name. Another issue is that for the <code>save</code> command you have to explicitly refer to the <code>file</code> argument and provide the file path as a character object. In Rstudio, begin typing <code>file=""</code>, put the cursor between the quotation marks and hit <code>Tab</code>, which opens a small dialogue for navigation to the desired directory.</p>
 <p>Once you have loaded, prepared and started to analyze a data frame in R, there is little reason to go back to any legacy program. Still, the <code>haven</code> and <code>foreign</code> packages contain commands to write to various file formats. I’ll keep that as an exercise to the reader.</p>
 </div>
@@ -1006,21 +1004,21 @@ Poisson grand mean model with 5000 iterations per MCMC chain. As <code>seed</cod
 <h3><span class="header-section-number">2.2.7</span> Case environments</h3>
 <p>This book features more than a dozen case studies. Every case will be encountered several times and multiple objects are created along the way: data sets, regressions, graphics, tables, you name it. That posed the problem of naming the objects, so that they are unique. I could have chosen object names, like: <code>BrowsingAB_M_1</code>, <code>AUP_M_1</code>, etc. But, this is not what you normally would do, when working on one study at a time. Moreover, every letter you add to a line of code makes it more prone to errors and less likely that you, dear reader, are typing it in and trying it out yourself.</p>
 <p>For these reasons, all cases are enclosed in <em>case environments</em> and provided with this book. For getting a case environment to work in your session, it has to be loaded from the respective R data file first:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="gsr.html#cb90-1"></a><span class="kw">load</span>(<span class="st">&quot;BrowsingAB.Rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">load</span>(<span class="st">&quot;BrowsingAB.Rda&quot;</span>)</a></code></pre></div>
 <p>In R, <em>environments</em> are containers for collections of objects. If an object <code>BAB1</code> is placed in an environment <code>BrowsingAB</code>, it can be called as <code>BrowsingAB$BAB1</code>. This way, no brevity is gained. Another way to assess objects in an environment is to <em>attach the environment first</em> as:</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="gsr.html#cb91-1"></a><span class="kw">attach</span>(BrowsingAB)</span>
-<span id="cb91-2"><a href="gsr.html#cb91-2"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
-<span id="cb91-3"><a href="gsr.html#cb91-3"></a><span class="kw">detach</span>(BrowsingAB)</span>
-<span id="cb91-4"><a href="gsr.html#cb91-4"></a></span>
-<span id="cb91-5"><a href="gsr.html#cb91-5"></a><span class="kw">attach</span>(Reading)</span>
-<span id="cb91-6"><a href="gsr.html#cb91-6"></a>D_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="kw">attach</span>(BrowsingAB)</a>
+<a class="sourceLine" id="cb91-2" title="2">BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a>
+<a class="sourceLine" id="cb91-3" title="3"><span class="kw">detach</span>(BrowsingAB)</a>
+<a class="sourceLine" id="cb91-4" title="4"></a>
+<a class="sourceLine" id="cb91-5" title="5"><span class="kw">attach</span>(Reading)</a>
+<a class="sourceLine" id="cb91-6" title="6">D_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>Calling <code>attach</code> gets you into the <em>namespace</em> of the environment (formally correct: the namespace gets imported to your working environment). All objects in that namespace become immediately visible by their mere name. The <code>detach</code> command leaves the environment, again. When working with the case environments, I strongly recommend to detach before attaching another environment.</p>
 <p>All case environments provided with this book contain one or more data sets. Many of the cases are synthetic data which has been generated by a simulation function. This function, routinely called <code>simulate</code>, is provided with the case environment, too. That gives you the freedom to produce your own data sets with the same structure, but different effects.
 Generally, calling the simulation function without any further arguments, exactly reproduces the synthetic data set provided with the case environment.</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="gsr.html#cb92-1"></a><span class="kw">simulate</span>()  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() <span class="co">## reproduces the data frame D_1</span></span>
-<span id="cb92-2"><a href="gsr.html#cb92-2"></a><span class="kw">simulate</span>(<span class="dt">N =</span> <span class="dv">6</span>)  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() <span class="co">## simulates first 6 participants only</span></span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">simulate</span>()  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() <span class="co">## reproduces the data frame D_1</span></a>
+<a class="sourceLine" id="cb92-2" title="2"><span class="kw">simulate</span>(<span class="dt">N =</span> <span class="dv">6</span>)  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>() <span class="co">## simulates first 6 participants only</span></a></code></pre></div>
 <p>Furthermore, once you delve deeper into R, you can critically inspect the simulation function’s code for its behavioral and psychological assumptions (working through the later chapters on data management and simulation will help).</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="gsr.html#cb93-1"></a>simulate <span class="co">## calling a function without parantheses prints its code</span></span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">simulate <span class="co">## calling a function without parantheses prints its code</span></a></code></pre></div>
 <pre><code>## function(N = 40,
 ##            beta = c(Intercpt = 60, 
 ##                     fnt_size_12 = -12, 
@@ -1052,27 +1050,27 @@ Generally, calling the simulation function without any further arguments, exactl
 ##     
 ##     out %&gt;% as_tbl_obs()
 ##     }
-## &lt;bytecode: 0x000000002c084dc0&gt;</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="gsr.html#cb95-1"></a><span class="kw">detach</span>(Reading)</span></code></pre></div>
+## &lt;bytecode: 0x000000002e177200&gt;</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">detach</span>(Reading)</a></code></pre></div>
 <p>Finally, the case environments contain all objects that have been created throughout this book. This is especially useful for the regression models, as fitting these can take from a few seconds to hours.</p>
 <p>Note that working with environments is a tricky business. Creating these case environments in an efficient way was more difficult than you may think. Therefore, I do <em>not</em> recommend using environments in everday data analysis, with one exception: at any moment the current working environment contains all objects that have been created, so far. That is precisely the set of objects shown in the Environment pane of Rstudio (or call <code>ls()</code> for a listing). Saving all objects and retrieving them when returning from a break is as easy as:<!-- #13 --></p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="gsr.html#cb96-1"></a><span class="kw">save</span>(<span class="dt">file =</span> <span class="st">&quot;my_data_analysis.Rda&quot;</span>)</span>
-<span id="cb96-2"><a href="gsr.html#cb96-2"></a><span class="co">## have a break</span></span>
-<span id="cb96-3"><a href="gsr.html#cb96-3"></a><span class="kw">load</span>(<span class="st">&quot;my_data_analysis.Rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">save</span>(<span class="dt">file =</span> <span class="st">&quot;my_data_analysis.Rda&quot;</span>)</a>
+<a class="sourceLine" id="cb96-2" title="2"><span class="co">## have a break</span></a>
+<a class="sourceLine" id="cb96-3" title="3"><span class="kw">load</span>(<span class="st">&quot;my_data_analysis.Rda&quot;</span>)</a></code></pre></div>
 <p>Next to that, Rstudio can be configured to save the current workspace on exit and reload it on the next start. When working on just one data analysis for a longer period of time, this can be a good choice.</p>
 </div>
 <div id="structuring-data" class="section level3">
 <h3><span class="header-section-number">2.2.8</span> Structuring data</h3>
 <p>In the whole book, data sets are structured according to the rule <em>one-row-per-observation of the dependent variable</em> (the ORPO rule). Many researchers still organize their data tables as one-row-per-participant, as is requested by some legacy statistics programs. This is fine in research with non-repeated measures, but will not function properly with modern regression models, like linear mixed-effects models. Consider a study where two designs were evaluated by three participants using a self-report item, like “how easy to use is the interface?” Then, the <em>wrong way</em> of structuring the data would be:</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="gsr.html#cb97-1"></a>ORPO <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb97-2"><a href="gsr.html#cb97-2"></a><span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb97-3"><a href="gsr.html#cb97-3"></a><span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb97-4"><a href="gsr.html#cb97-4"></a><span class="st">  </span><span class="kw">spread</span>(Design, response) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb97-5"><a href="gsr.html#cb97-5"></a><span class="st">  </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1">ORPO <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb97-2" title="2"><span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb97-3" title="3"><span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb97-4" title="4"><span class="st">  </span><span class="kw">spread</span>(Design, response) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb97-5" title="5"><span class="st">  </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>The correct way of setting up the data frame is:</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="gsr.html#cb98-1"></a>ORPO <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb98-2"><a href="gsr.html#cb98-2"></a><span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb98-3"><a href="gsr.html#cb98-3"></a><span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1">ORPO <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb98-2" title="2"><span class="st">  </span><span class="kw">filter</span>(Task <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Item <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb98-3" title="3"><span class="st">  </span>mascutils<span class="op">::</span><span class="kw">discard_redundant</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1123,9 +1121,9 @@ Generally, calling the simulation function without any further arguments, exactl
 <li>Task</li>
 </ul>
 <p>Note that usually these entities get numerical identifiers, but these numbers are just labels. Throughout, variables are written Uppercase when they are entities, but not real numbers. An exception is the trial order in experiments with massive repeated measures. These get a numerical type to allow exploring effects over time such as learning, training and fatigue.</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="gsr.html#cb99-1"></a>ORPO <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb99-2"><a href="gsr.html#cb99-2"></a><span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb99-3"><a href="gsr.html#cb99-3"></a><span class="st">  </span><span class="kw">arrange</span>(Part, Task, Design, Item)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1">ORPO <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb99-2" title="2"><span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb99-3" title="3"><span class="st">  </span><span class="kw">arrange</span>(Part, Task, Design, Item)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1187,27 +1185,27 @@ Generally, calling the simulation function without any further arguments, exactl
 <p>Do you wonder about the strange use of <code>%&gt;%</code> in my code above? This is the tidy way of programming data transformations in R.</p>
 <p>The so-called magritte operator <code>%&gt;%</code> is part of the <em>dplyr/tidyr</em> framework for data manipulation. It chains steps of data manipulation by connecting transformation functions, also called piping. In the following, we will first see a few basic examples. Later, we will proceed to longer transformation chains and see how graceful dplyr piping is, compared to the classic data transformation syntax in R.</p>
 <p>Importing data from any of the possible resources, will typically give a data frame. However, often the researcher wants to <em>select</em> or <em>rename</em> variables in the data frame. Say, you want the variable <em>Group</em> to be called <em>Condition</em>, omit the variable <em>age</em> and store the new data frame as <em>Exp</em>. The <code>select</code> command does all this. In the following code the data frame <code>Experiment</code> is piped into <code>select</code>. The variable <em>Condition</em> is renamed to <em>Group</em>, and the variable <em>outcome</em> is taken as-is. All other variables are discarded.</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="gsr.html#cb100-1"></a>Exp &lt;-<span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb100-2"><a href="gsr.html#cb100-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, outcome) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1">Exp &lt;-<span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb100-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, outcome) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>Another frequent step in data analysis is cleaning the data from missing values and outliers. In the following code example, we first “inject” a few missing values for age (which were coded as -99) and outliers (&gt;500) in the outcome variable. Note that I am using some R commands that you don’t need to understand by now. Then we reuse the above code for renaming (this time keeping <em>age</em> on board) and add some filtering steps:</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="gsr.html#cb101-1"></a><span class="co">## rename, then filtering</span></span>
-<span id="cb101-2"><a href="gsr.html#cb101-2"></a>Exp &lt;-<span class="st">  </span></span>
-<span id="cb101-3"><a href="gsr.html#cb101-3"></a><span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb101-4"><a href="gsr.html#cb101-4"></a><span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, age, outcome) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb101-5"><a href="gsr.html#cb101-5"></a><span class="st">  </span><span class="kw">filter</span>(outcome <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb101-6"><a href="gsr.html#cb101-6"></a><span class="st">  </span><span class="kw">filter</span>(age <span class="op">!=</span><span class="st"> </span><span class="dv">-99</span>)</span>
-<span id="cb101-7"><a href="gsr.html#cb101-7"></a></span>
-<span id="cb101-8"><a href="gsr.html#cb101-8"></a>Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="co">## rename, then filtering</span></a>
+<a class="sourceLine" id="cb101-2" title="2">Exp &lt;-<span class="st">  </span></a>
+<a class="sourceLine" id="cb101-3" title="3"><span class="st">  </span>Experiment <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb101-4" title="4"><span class="st">  </span><span class="kw">select</span>(<span class="dt">Condition =</span> Group, age, outcome) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb101-5" title="5"><span class="st">  </span><span class="kw">filter</span>(outcome <span class="op">&lt;</span><span class="st"> </span><span class="dv">500</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb101-6" title="6"><span class="st">  </span><span class="kw">filter</span>(age <span class="op">!=</span><span class="st"> </span><span class="dv">-99</span>)</a>
+<a class="sourceLine" id="cb101-7" title="7"></a>
+<a class="sourceLine" id="cb101-8" title="8">Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>During data preparation and analysis, new variables are created routinely. For example, the covariate is often shifted to the center before using linear regression:</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="gsr.html#cb102-1"></a>mean_age =<span class="st"> </span><span class="kw">mean</span>(Exp<span class="op">$</span>age)</span>
-<span id="cb102-2"><a href="gsr.html#cb102-2"></a>Exp &lt;-<span class="st"> </span>Exp <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb102-3"><a href="gsr.html#cb102-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_cntrd =</span> age <span class="op">-</span><span class="st"> </span>mean_age)</span>
-<span id="cb102-4"><a href="gsr.html#cb102-4"></a>Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1">mean_age =<span class="st"> </span><span class="kw">mean</span>(Exp<span class="op">$</span>age)</a>
+<a class="sourceLine" id="cb102-2" title="2">Exp &lt;-<span class="st"> </span>Exp <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb102-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_cntrd =</span> age <span class="op">-</span><span class="st"> </span>mean_age)</a>
+<a class="sourceLine" id="cb102-4" title="4">Exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>Finally, for the descriptive statistics part of your report, you probably want to summarize the outcome variable per experimental condition. The following chain of commands first groups the data frame, then computes means and standard deviations. At every step, a data frame is piped into another command, which processes the data frame and outputs a data frame.</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="gsr.html#cb103-1"></a>Exp <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb103-2"><a href="gsr.html#cb103-2"></a><span class="st">  </span><span class="kw">group_by</span>(Condition) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb103-3"><a href="gsr.html#cb103-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(outcome),</span>
-<span id="cb103-4"><a href="gsr.html#cb103-4"></a>           <span class="dt">sd =</span> <span class="kw">sd</span>(outcome) )</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1">Exp <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb103-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(Condition) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb103-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(outcome),</a>
+<a class="sourceLine" id="cb103-4" title="4">           <span class="dt">sd =</span> <span class="kw">sd</span>(outcome) )</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1219,13 +1217,13 @@ Generally, calling the simulation function without any further arguments, exactl
 <tbody>
 <tr class="odd">
 <td align="left">control</td>
-<td align="right">210</td>
-<td align="right">8.99</td>
+<td align="right">209</td>
+<td align="right">10.16</td>
 </tr>
 <tr class="even">
 <td align="left">experimental</td>
-<td align="right">250</td>
-<td align="right">10.57</td>
+<td align="right">253</td>
+<td align="right">9.72</td>
 </tr>
 </tbody>
 </table>
@@ -1243,62 +1241,62 @@ Generally, calling the simulation function without any further arguments, exactl
 <li>my personal favorite: horizontal density diagrams with <code>geom_violin()</code></li>
 </ul>
 <p>For a brief demonstration of ggplots basic functionality, we use the <code>BAB1</code> data set of the BrowsingAB case. We attach the case environment and use the <code>str</code> command to take a first look at the data:</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="gsr.html#cb104-1"></a><span class="kw">attach</span>(BrowsingAB)</span>
-<span id="cb104-2"><a href="gsr.html#cb104-2"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="kw">attach</span>(BrowsingAB)</a>
+<a class="sourceLine" id="cb104-2" title="2">BAB1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a></code></pre></div>
 <p>The BrowsingAB case is a virtual series of studies, where two websites were compared by how long it takes users to complete a given task, time-on-task (ToT). Besides the design factor, a number of additional variables exist, that could possibly play a role for ToT, too. We explore the data set with ggplot:</p>
 <p>We begin with a plot that shows the association between age of the participant and ToT. Both variables are metric and suggest themselves to be put on a 2D plane, with coordinates x and y, a <em>scatter plot</em>.</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="gsr.html#cb105-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb105-2"><a href="gsr.html#cb105-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
-<span id="cb105-3"><a href="gsr.html#cb105-3"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb105-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb105-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/build_ggpl_2-1.png" width="90%" /></p>
 <p>Let’s take a look at the elements of the command chain: The first two lines pipe the data frame into the ggplot engine.</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="gsr.html#cb106-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb106-2"><a href="gsr.html#cb106-2"></a><span class="st">  </span><span class="kw">ggplot</span>(...)</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb106-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(...)</a></code></pre></div>
 <p>At that moment, the ggplot engine “knows” which variables the data frame contains and hence are available for the plot. It does not yet know, which variables are being used, and how. The next step is, usually, to consider a basic (there exist more than 30) <em>geometry</em> and put it on a <em>layer</em>. The scatter plot geometry of ggplot is <code>geom_point</code>:</p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="gsr.html#cb107-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb107-2"><a href="gsr.html#cb107-2"></a><span class="st">  </span><span class="kw">ggplot</span>(...) <span class="op">+</span></span>
-<span id="cb107-3"><a href="gsr.html#cb107-3"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb107-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(...) <span class="op">+</span></a>
+<a class="sourceLine" id="cb107-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p>The last step is the <em>aesthetic mapping</em>, which tells ggplot the variables to use and how to map them to <em>aesthetic</em> properties of the geometry. The basic properties of points in a coordinate system are the x and y-positions:</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="gsr.html#cb108-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb108-2"><a href="gsr.html#cb108-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
-<span id="cb108-3"><a href="gsr.html#cb108-3"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb108-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb108-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p>The function <code>aes</code> creates a mapping where the aesthetics per variable are given. When call <code>aes</code> directly, we see that it is just a table.</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="gsr.html#cb109-1"></a><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)</a></code></pre></div>
 <pre><code>## Aesthetic mapping: 
 ## * `x` -&gt; `age`
 ## * `y` -&gt; `ToT`</code></pre>
 <p>One tiny detail in the above chain has not yet been explained: the <code>+</code>. When choosing the geometry, you actually <em>add a layer</em> to the plot. This is, of course, not the literal mathematical sum. Technically, what the author of the ggplot2 package did, was to <em>overload</em> the <code>+</code> operator. A large set of ggplot functions can be combined in a myriad of ways, just using <code>+</code>. The overloaded <code>+</code> in ggplot is a brilliant analogy: you can infinitely chain ggplot functions, like you can create long sums. You can store ggplot object and later modify it by adding functions. The analogy has its limits, though: other than sums, order matters in ggplot combinations: the first in the chain is always <code>ggplot</code> and layers are drawn upon each other.</p>
 <p>Let’s move on with a slightly different situation that will result in a different geometry. Say, we are interested in the distribution of the time-on-task measures under the two designs. We need a geometry, that visualizes the distribution of quantitative variables split by a grouping variable, factor. The box plot does the job:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="gsr.html#cb111-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb111-2"><a href="gsr.html#cb111-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Design,  <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
-<span id="cb111-3"><a href="gsr.html#cb111-3"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Design,  <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb111-3" title="3"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-32-1.png" width="90%" /></p>
 <p>The box plot maps ToT to y (again). The factor Design is represented as a split on the x-axis. Interestingly, the box plot does not represent the data as raw as in the scatter plot example. The geometry actually performs an analysis on ToT, which produces five statistics: min, first quartile, median, third quartile and max. These statistics define the vertical positions of bars and end points.</p>
 <p>Now, we combine all three variables in one plot: how does the association between ToT and age differ by design? As we have two quantitative variables, we stay with the scatter plot for now. As we intend to separate the groups, we need a property of points to distinguish them. Points offer several additional aesthetics, such as color, size and shape. We choose color, and add it to the aesthetic mapping by <code>aes</code>. Note, that it does not matter whether you use the British or American way of writing (colour vs. color).</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="gsr.html#cb112-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb112-2"><a href="gsr.html#cb112-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></span>
-<span id="cb112-3"><a href="gsr.html#cb112-3"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb112-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb112-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-33-1.png" width="90%" /></p>
 <p>Now, we can distinguish the groups visually, but there is too much clutter to discover any relation. With the box plot we saw that some geometries do not represent the raw data, but summaries (statistics) of data. For scatter plots, a geometry that does the job of summarizing the trend is <code>geom_smooth</code>. This geometry summarizes a cloud of points by drawing a LOESS-smooth line through it. Note how the color mapping is applied to all geometry layers.</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="gsr.html#cb113-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb113-2"><a href="gsr.html#cb113-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></span>
-<span id="cb113-3"><a href="gsr.html#cb113-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb113-4"><a href="gsr.html#cb113-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb113-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb113-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb113-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-34-1.png" width="90%" /></p>
 <p>We see a highly interesting pattern: the association between age and ToT follows two slightly different mirrored sigmoid curves.</p>
 <p>Now that we have represented three variables with properties of geometries, what if we wanted to add a fourth one, say education level? Formally, we could use another aesthetic, say shape of points, to represent it. You can easily imagine that this would no longer result in a clear visual figure. For situations, where there are many factors, or factors with many levels, it is impossible to reasonably represent them in one plot. The alternative is to use <em>facetting</em>. A facet splits the data by a grouping variable and creates one single plot for every group:</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="gsr.html#cb114-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb114-2"><a href="gsr.html#cb114-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></span>
-<span id="cb114-3"><a href="gsr.html#cb114-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb114-4"><a href="gsr.html#cb114-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
-<span id="cb114-5"><a href="gsr.html#cb114-5"></a><span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb114-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT, <span class="dt">color =</span> Design)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb114-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb114-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb114-5" title="5"><span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-35-1.png" width="90%" /></p>
 <p>See, how the <code>facet_grid</code> command takes a formula, instead of just a variable name. This makes faceting the primary choice for highly-dimensional situations. For example, we may also choose to represent both factors, Design and education by facets:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="gsr.html#cb115-1"></a>BAB1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb115-2"><a href="gsr.html#cb115-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
-<span id="cb115-3"><a href="gsr.html#cb115-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb115-4"><a href="gsr.html#cb115-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
-<span id="cb115-5"><a href="gsr.html#cb115-5"></a><span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>Design)</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">BAB1 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,  <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-5" title="5"><span class="st">  </span><span class="kw">facet_grid</span>(Education <span class="op">~</span><span class="st"> </span>Design)</a></code></pre></div>
 <p><img src="Getting_started_with_R_files/figure-html/unnamed-chunk-36-1.png" width="90%" /></p>
 <p>Note how the color aesthetic, although unnecessary, is kept. It is possible to map several aesthetics (or facets) to one variable, but not vice versa.</p>
 </div>
@@ -1306,20 +1304,20 @@ Generally, calling the simulation function without any further arguments, exactl
 <h3><span class="header-section-number">2.2.11</span> Fitting regression models</h3>
 <p>Above we have seen examples of functions that boil down a vector to a single statistic, like the mean. R has several functions that summarize data in a more complex way. One function with a wide range of applications is the <code>lm</code> command, that applies regression models to data (provided as data frames).</p>
 <p>In the following, we will use another simulated data frame <code>Exp</code> to demonstrate linear models. To make this more interesting, we simulate <code>Exp</code> in a slightly advanced way, with quantitative associations between variables. Note how the <em>expected value</em> <span class="math inline">\(\mu\)</span> is created by drawing on the variables <code>Condition</code> and <code>age</code>. The last step adds (somewhat) realistic noise to the measures, by drawing from the normal distribution with a mean of <span class="math inline">\(mu\)</span>.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="gsr.html#cb116-1"></a>N_Obs &lt;-<span class="st"> </span><span class="dv">20</span></span>
-<span id="cb116-2"><a href="gsr.html#cb116-2"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb116-3"><a href="gsr.html#cb116-3"></a>Exp &lt;-</span>
-<span id="cb116-4"><a href="gsr.html#cb116-4"></a><span class="st">  </span><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span>N_Obs,</span>
-<span id="cb116-5"><a href="gsr.html#cb116-5"></a>             <span class="dt">Condition =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Experimental&quot;</span>, <span class="st">&quot;Control&quot;</span>),</span>
-<span id="cb116-6"><a href="gsr.html#cb116-6"></a>                             N_Obs<span class="op">/</span><span class="dv">2</span>),</span>
-<span id="cb116-7"><a href="gsr.html#cb116-7"></a>             <span class="dt">age =</span> <span class="kw">runif</span>(N_Obs, <span class="dv">18</span>, <span class="dv">35</span>),</span>
-<span id="cb116-8"><a href="gsr.html#cb116-8"></a>             <span class="dt">mu =</span> <span class="dv">200</span> <span class="op">+</span><span class="st"> </span>(Condition <span class="op">==</span><span class="st"> &quot;Control&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">50</span> <span class="op">+</span><span class="st"> </span>age <span class="op">*</span><span class="st"> </span><span class="dv">1</span>,</span>
-<span id="cb116-9"><a href="gsr.html#cb116-9"></a>             <span class="dt">outcome =</span> <span class="kw">rnorm</span>(N_Obs, mu, <span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1">N_Obs &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb116-2" title="2"><span class="kw">set.seed</span>(<span class="dv">42</span>)</a>
+<a class="sourceLine" id="cb116-3" title="3">Exp &lt;-</a>
+<a class="sourceLine" id="cb116-4" title="4"><span class="st">  </span><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span>N_Obs,</a>
+<a class="sourceLine" id="cb116-5" title="5">             <span class="dt">Condition =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Experimental&quot;</span>, <span class="st">&quot;Control&quot;</span>),</a>
+<a class="sourceLine" id="cb116-6" title="6">                             N_Obs<span class="op">/</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb116-7" title="7">             <span class="dt">age =</span> <span class="kw">runif</span>(N_Obs, <span class="dv">18</span>, <span class="dv">35</span>),</a>
+<a class="sourceLine" id="cb116-8" title="8">             <span class="dt">mu =</span> <span class="dv">200</span> <span class="op">+</span><span class="st"> </span>(Condition <span class="op">==</span><span class="st"> &quot;Control&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="dv">50</span> <span class="op">+</span><span class="st"> </span>age <span class="op">*</span><span class="st"> </span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb116-9" title="9">             <span class="dt">outcome =</span> <span class="kw">rnorm</span>(N_Obs, mu, <span class="dv">10</span>))</a></code></pre></div>
 <p>The experiment involves two groups, which in classic statistics would clearly point to what is commonly referred to as <em>ANOVA</em>. As it will turn out in <a href="lm.html#cgm">4.3.1</a>, old-fashioned ANOVA can be replaced by a rather simple regression model, that I call comparison of groups model (CGM). The estimation of regression models is done by a <em>regression engine</em>, which basically is a (very powerful) R command. The specification for any regression model is given in R’s formula language. Learning this formula language is key to unleashing the power of regression models in R. We can perform a CGM on the data frame <code>Exp</code> using the regression engine <code>stan_glm</code>. The desired model estimates the effect of <code>Condition</code> on <code>outcome</code>. This produces a regression object that contains an abundance of information, much of it is of little interest for now. (A piece of information, that it does <em>not</em> contain is F-statistics and p-values; and that is why it is not an ANOVA, strictly speaking!) The foremost question is how strong the difference between the groups is. The <code>fixef</code> command extracts the parameter estimates from the model to answer the question.</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="gsr.html#cb117-1"></a>M_<span class="dv">1</span> &lt;-<span class="st"> </span></span>
-<span id="cb117-2"><a href="gsr.html#cb117-2"></a><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition, </span>
-<span id="cb117-3"><a href="gsr.html#cb117-3"></a>     <span class="dt">data =</span> Exp)</span></code></pre></div>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="gsr.html#cb118-1"></a><span class="kw">fixef</span>(M_<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1">M_<span class="dv">1</span> &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb117-2" title="2"><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition, </a>
+<a class="sourceLine" id="cb117-3" title="3">     <span class="dt">data =</span> Exp)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">fixef</span>(M_<span class="dv">1</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1345,10 +1343,10 @@ Generally, calling the simulation function without any further arguments, exactl
 </tbody>
 </table>
 <p>Another classic model is <em>linear regression</em>, where outcome is predicted by a metric variable, say <code>age</code>. The <code>stan_glm</code> regression engine is truly multi-purpose and does the job with grace:</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="gsr.html#cb119-1"></a>M_<span class="dv">2</span> &lt;-<span class="st"> </span></span>
-<span id="cb119-2"><a href="gsr.html#cb119-2"></a><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>age, </span>
-<span id="cb119-3"><a href="gsr.html#cb119-3"></a>     <span class="dt">data =</span> Exp)</span></code></pre></div>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="gsr.html#cb120-1"></a><span class="kw">fixef</span>(M_<span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1">M_<span class="dv">2</span> &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb119-2" title="2"><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>age, </a>
+<a class="sourceLine" id="cb119-3" title="3">     <span class="dt">data =</span> Exp)</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="kw">fixef</span>(M_<span class="dv">2</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1374,10 +1372,10 @@ Generally, calling the simulation function without any further arguments, exactl
 </tbody>
 </table>
 <p>If you are interested in both at the same time, you can combine that in one model by the following formula:</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="gsr.html#cb121-1"></a>M_<span class="dv">3</span> &lt;-<span class="st"> </span></span>
-<span id="cb121-2"><a href="gsr.html#cb121-2"></a><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition <span class="op">+</span><span class="st"> </span>age, </span>
-<span id="cb121-3"><a href="gsr.html#cb121-3"></a>     <span class="dt">data =</span> Exp)</span></code></pre></div>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="gsr.html#cb122-1"></a><span class="kw">fixef</span>(M_<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1">M_<span class="dv">3</span> &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb121-2" title="2"><span class="st">  </span><span class="kw">stan_glm</span>(outcome <span class="op">~</span><span class="st"> </span>Condition <span class="op">+</span><span class="st"> </span>age, </a>
+<a class="sourceLine" id="cb121-3" title="3">     <span class="dt">data =</span> Exp)</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="kw">fixef</span>(M_<span class="dv">3</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1438,7 +1436,7 @@ Generally, calling the simulation function without any further arguments, exactl
 <p>The most user-friendly way to achieve both, a good looking report and full transparency, is to write a document that contains all before mentioned: text, graphics, tables and R code. In the R environment such mixed documents can be written in the <em>markdown/knitr</em> framework.</p>
 <p>Markdown implements a simple markup language, with that you can typset simple, structured texts in a plain ASCII editor. Later in the workflow, such a markup document is transformed into one of various output formats, that are rendered by the respective programs, such as Microsoft Word or an HTML browser.</p>
 <div class="figure">
-<img src="Illustrations/markup_minimal_report.png" alt="" />
+<img src="Illustrations/markup_minimal_report.png" alt="A minimal statistical report in markdown" />
 <p class="caption">A minimal statistical report in markdown</p>
 </div>
 <p>The above text is an alternation of markup text and <em>chunks</em>, those weirdly enclosed pieces of R code. While the text is static, the chunks are processed by the knitr engine, evaluating the enclosed R code and knitting the output into a document. Very conveniently, when the output is a figure, it will be inserted into the document right away. The <code>kable</code> command from the knitr package, in turn, produces neatly rendered tables from data frame objects. By default, the R code is shown, too, but that can be customized.</p>
@@ -1467,7 +1465,7 @@ Generally, calling the simulation function without any further arguments, exactl
 <li><p>Use the data set BAB5 in BrowsingAB. It contains a follow-up experiment, where participants had to do five different tasks on the website. Plot the association between age and ToT by task, using color. Then put Task on a facet grid, and use color to represent Design again.</p></li>
 <li><p>Use the data set BAB5 in BrowsingAB. Using a transformation chain, take the sum or average of participants’ ToT. Then run a few simple regression models.</p></li>
 <li><p>Use your own data. Drop an Excel and/or an SPSS file into the same directory as your current R file. Read the data into a data frame and summarize what is in the data frame. Use ggplot to create one or more exploratory graphs. Then use dplyr <code>summarize</code> to create summary statistics.</p></li>
-<li><p>Do a full exploratory analysis of the dataframe D_agg in case environment IPump. It has the predictors Design, Group, Education and experience. It has the outcome variables ToT, deviations and workload.</p>
+<li>Do a full exploratory analysis of the dataframe D_agg in case environment IPump. It has the predictors Design, Group, Education and experience. It has the outcome variables ToT, deviations and workload.
 <ol style="list-style-type: decimal">
 <li>Get the data frame into R and produce a summary.</li>
 <li>Plot a histogram for all dependent variables.</li>
@@ -1543,7 +1541,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["New_Stats.pdf"],
 "toc": {
 "collapse": "subsection"
 }
