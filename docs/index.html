@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-09-12" />
+<meta name="date" content="2020-09-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,7 +137,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
 </ul></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.2</b> What is New Statistics?</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.3</b> How to use this book</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.3.1</b> In the classroom</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#handbook"><i class="fa fa-check"></i><b>1.3.2</b> As a handbook</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.3.3</b> The stone of Rosetta</a></li>
+</ul></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.4</b> Quantitative design research</a></li>
 <li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#studies-in-design-research"><i class="fa fa-check"></i><b>1.5</b> Studies in Design Research</a></li>
 <li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#observations-measures"><i class="fa fa-check"></i><b>1.6</b> Observations and measures</a><ul>
@@ -301,7 +307,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.7</b> AUP</a></li>
 <li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.8</b> Hugme</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data-sets"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
 <li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
 <li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
 <li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
@@ -333,7 +339,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title">New statistics for the design researcher</h1>
 <h2 class="subtitle"><em>A Bayesian course in tidy R</em></h2>
 <p class="author"><em>Martin Schmettow</em></p>
-<p class="date"><em>2020-09-12</em></p>
+<p class="date"><em>2020-09-14</em></p>
 </div>
 <div id="intro" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -397,8 +403,8 @@ Blue light makes people wake up easier, could it also be used to let car drivers
 <li>R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.</li>
 </ol>
 </div>
-<div id="how-to-read" class="section level2">
-<h2><span class="header-section-number">1.3</span> How to read this book</h2>
+<div id="how-to-use" class="section level2">
+<h2><span class="header-section-number">1.3</span> How to use this book</h2>
 <p>Chapter <a href="index.html#quant-design-research">1.4</a> introduces a framework for quantitative design research. It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems. Then the idea of design as decision making under uncertainty is developed at the example of two case studies.</p>
 <p>Chapter <a href="ebs.html#ebs">3</a> introduces the basic idea of Bayesian statistics, which boils down to three remarkably intuitive conjectures:</p>
 <ol style="list-style-type: decimal">
@@ -422,6 +428,215 @@ re-organize the reading guide into three learning routes:
 
 for all routes, distinguish between reader types, perhaps make a cross table
 -->
+<div id="classroom" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> In the classroom</h3>
+<p>Content-wise, this book covers about 200% of a typical Social Sciences Statistics curriculum. At least at my university, students learn roughly learn about the first 50% of chapters <a href="ebs.html#ebs">3</a>, <a href="lm.html#lm">4</a>, <a href="mlm.html#mlm">5</a>, <a href="glm.html#glm">6</a> and <a href="wwm.html#wwm">7</a>, before they graduate. However, never have I been in the situation myself, to teach a whole statistics curriculum to a cohort of students. The idea for this book emerged from statistics workshops, which I have given outside and inside universities, for professionals, colleagues and a group of master students.</p>
+<p>If you are a docent in the <em>Social Sciences</em>, this book certainly can back an entry-level Statistics course. However, you should be aware that the approach in this book is not yet common ground. While you yourself may find the approach of Bayesian parameter estimation compellingly intuitive, your colleagues may not like the idea, that future generations may no longer be able to read their publications, when they rest on classic null hypothesis testing. Another consideration is that this book is only useful for students with the capacity to learn just a little bit of programming. Do not under-estimate your students on this. I have seen it happen at my home university, that cohorts of Psychology students first started learning SPSS syntax, and now learn R. Still, that puts you into the situation of teaching Programming. To summarize, what I said in <a href="index.html#rosetta">1.3.3</a>, programming you better don’t teach in a series of lectures, but by pushing your students’ noses into the code. Chapter <a href="gsr.html#gsr">2</a> has served me well to get Psychology students over the first hurdles. If you have come so far as to give R programming workshops, consider staying with this form of taching. I’ll come back to it.</p>
+<p>My experience tells that there is an increasing demand to teach empirical research methods to <em>engineering</em> students. If that is your situation, this book is particularly well-suited to make a course. Not only is programming in R much less of a concern (or is even a surplus), but also is this book free of outdated customs, that actually have never been appropriate for an engineering context. Engineers, as I know them, are interested in quantification of design effects, rather than falsifying theories. In addition, the case studies in this book convey knowledge about effective research designs and validity of measures, as does the following section (<a href="index.html#quant-design-research">1.4</a>).</p>
+<!-- As Statistics education for engineering students rarely is as extensive as in the Social Sciences, you may have to cut some corners. I would  suggest to scrap Chapter \@ref(ebs), as engineering students are likely to have a good grasp of basic math and  good intuition about probability and uncertainty.  -->
+<p>In both of the above cases, if I were asked to develop a full course on the matter, I would make it a series of workshops, roughly five one-day (or ten half-a-day). The most effective method for a <em>workshop</em> is to have students get acquainted with the matter by studying selected parts of the book, in advance, and let them work on one assignment during the workshop. I have made good experience with tutored pair-programming, where two students work together, while the teacher stays in the background, most of the time. During each workshop, students are given a data set with a brief story to it and an assignment, like the following example:</p>
+<hr />
+<p>Some novel augmented-reality (AR) side-view mirrors have been designed and the benefits for driving performance needs to be assessed. An experiment has been conducted, where the AR mirros were compared to the classic side-view mirrors. Participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:</p>
+<ul>
+<li>AR mirrors versus classic mirrors</li>
+<li>day ride versus night ride</li>
+</ul>
+<p>The following measures were taken:</p>
+<ul>
+<li>time-on-task (seconds)</li>
+<li>steering reversal rate (counts, lower is better)</li>
+<li>cognitive workload (rating scale, 0 to 1)</li>
+</ul>
+<p><strong>Assignment</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Conceive one or more research questions, e.g.:
+<ul>
+<li>The AR design creates less workload.</li>
+<li>The AR design improves performance especially at night</li>
+</ul></li>
+<li>Read and clean the data set</li>
+<li>Produce summary tables and graphs that reflect the research question</li>
+<li>Build a model and interpret the parameter estimates.
+<ol style="list-style-type: lower-alpha">
+<li>Start with a linear model that reflects your research question. Use sections <a href="lm.html#grm">4.4.3</a>, <a href="lm.html#mfm">4.4.2</a> and <a href="lm.html#saturation">4.5.3</a></li>
+<li>Select a GLM family that matches your chosen response variable. Use sections <a href="#exgaus-reg"><strong>??</strong></a>, <a href="#poisson-reg"><strong>??</strong></a> or <a href="glm.html#beta-reg">6.4.2</a>.</li>
+<li>Build a multi-level model. Use sections <a href="#thinking-multilevel"><strong>??</strong></a>, <a href="mlm.html#intercept-re">5.1</a> and <a href="mlm.html#slope-re">5.2</a></li>
+</ol></li>
+</ol>
+<hr />
+<p>If you use this book for workshops, that means you will have to come up with some data sets. Unless you can pull a few out of the drawer, it may be tricky to put your hands on some real data sets. A way out is to simulate data. In this book I haven’t gone to the lengths of systematically introducing data simulation, but I do use several simulated data sets and the code for simulation can be found in <a href="cases.html#synthetic-data">A.2</a>.</p>
+<p>If you have a somewhat experienced audience and you want to bring as much as possible across in little time, I would suggest going into <em>demonstration</em> mode. This is best pictured as think-aloud live demonstration. However, this is only feasable, if you have such outstanding programming skills, that you can write valid code in real time, while you talk, think and react. If you use live demonstration as a technique, encourage your students to work with you, to keeps them in the action-feedback loop <a href="index.html#rosetta">1.3.3</a>.</p>
+<p>Examination is the other part of teaching. Without further a-do, here is what I do: Students get an assignment that looks exactly like the workshop assignment, adding the following sentence: “You must submit your assignment as a knitted Rmarkdown document (Word output), with full code shown.”</p>
+<p>That does not mean, you cannot examine by using a written exam. It certainly is un-wise, to let students write code on paper, but still you can easily produce exam questions that test on understanding concepts, such as:</p>
+<ul>
+<li>Interpret the following coefficient table</li>
+<li>What is the difference between saturation and amplification effects?</li>
+<li>In which situation is it better to use an ordinal factor model, rather than a linear regression?</li>
+<li>Customer waiting times have been measured in several custome service hotlines. What would be an appropriate distribution family?</li>
+</ul>
+<div id="make-knowledge-graph" class="section level4">
+<h4><span class="header-section-number">1.3.1.1</span> Make knowledge graph</h4>
+</div>
+<div id="end" class="section level4">
+<h4><span class="header-section-number">1.3.1.2</span> END</h4>
+</div>
+</div>
+<div id="handbook" class="section level3">
+<h3><span class="header-section-number">1.3.2</span> As a handbook</h3>
+<p>As I already said in <a href="index.html#classroom">1.3.1</a>, roughly the first 50% of every chapter</p>
+</div>
+<div id="rosetta" class="section level3">
+<h3><span class="header-section-number">1.3.3</span> The stone of Rosetta</h3>
+<p>When I started working as a university teacher in the Netherlands, I followed a one-week language course to learn Dutch. Unfortunately, the course was a mix of people from three continents, including people from China, Ghana, Turkey and Bulgaria. As a consequence, the course was mostly given in English language. I did not learn anything in this course, but after the day I decided to just fully expose myself to and start speaking Dutch, no matter how awkward it sounded, I learned to speak it fluently quite rapidly.</p>
+<p>Next to my job of writing books on statistics, I have ten years of experience in teaching the art of Programming to Psychology students. I have long held the belief, that learning to program mostly grounds on skills of abstract thinking, similar to learning math (and love for computers). This is not the most salient attributes of Psychology students, on average. Only recently, a study revealed to me, that learning a programming language is just that: learning a language [%prog_lang]. That means, as much as the Dutch teacher has wasted my time by every English word, every moment a programming teacher distracts a student from writing and reading code is lost.</p>
+<p>You only learn a programming language by being fully exposed to it, and that is what I do in this book. Following the brief introduction to the programming language R, I will no longer explain every piece of code. Instead, I give you every single line of code that I used to produce data, statistical models, tables and graphics. Every piece of code is meant as an exposure. Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a skill, two things are essential:</p>
+<ol style="list-style-type: decimal">
+<li>repetition</li>
+<li>a closed loop between action and feedback</li>
+</ol>
+<p>The importance of closed-loop interaction holds even stronger, if the skill to be learned is a language. This book is written in three languages: English, R and here and there a little bit of math. Precise description a non-trivial chain of data processing is difficult to do in a fuzzy natural language, like English. R, like math, is a formal language, and every piece of code will always produce the exact same result. The difference between math and R is that math is purely descriptive (or rather, imaginative), whereas R is productive. You can specify a Gaussian distributed variable in math, by saying:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu &amp;= 7\\
+\sigma &amp;= 3\\
+Y &amp;\sim \textrm{Gauss}(\mu, \sigma)\\
+\end{aligned}
+\]</span></p>
+<p>Or, you can <em>produce</em> such a variable by saying it in R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a>Data_gaus &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">mean =</span> <span class="dv">3</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<p>The math expression requires that the recipient of the message knows what Gaussian distribution is. In R, you can simply show, how it looks like:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1"></a>Data_gaus <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="index.html#cb2-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
+<span id="cb2-3"><a href="index.html#cb2-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+<p>In many other books on statistics, math is used to precisely specify a model or any other data transformation. Specifying how data has been processed is essential for <em>transparency of research</em>. In the ideal case, data processing is given as a recipe so precise, that every other researcher would obtain the exact same results. That is called <em>re-producability</em>. Math notation lives up to the principle of transparency, but most people do not have the skills, to produce something from math notation. Speaking for myself, if someone would ask me right now, how to produce data from a Gaussian distribution, just given its formula, I would not know:</p>
+<p><span class="math display">\[
+P(x) = \frac{1}
+{{\sigma \sqrt {2\pi } }}
+e^{{{ - \left( {x - \mu } \right)^2 / 2\sigma^2}}}
+\]</span></p>
+<p>In practice, math notation is hardly re-producable, whereas R code is. If anyone gives me their coe and the data, I can expect to get the exact same results. If I apply the code to my own data, I am doing an exact replication of a study. On top of that, I will always be able to check the validity of every single step in the analysis, as I will demonstrate below.</p>
+<p>The principle of transparency in scientific reports requires the author to</p>
+<ul>
+<li>specify all transformations that have been acted out on the data</li>
+<li>specify all tables and figures that are presented</li>
+<li>specify all assumptions of statistical models</li>
+</ul>
+<p>Traditionally, specification of figures and tables is done by putting text in captions. While English texts may please a lot of readers, this has disadvantages:</p>
+<ol style="list-style-type: decimal">
+<li>A table or figure is the result of complex data transformations, which are difficult to put in words, precisely. Sometimes, important details are given in other parts of the document, or are just lost. An example is outlier removal.</li>
+<li>Describing what a figure or table shows, does not put most readers into the position to reproduce or replicate the table or figure.</li>
+</ol>
+<p>For these three reasons, exposure, precision and productivity, I chose to not put any caption texts on figures and tables. Instead, all results presented in this book, are fully specified by the R code that produced them. From a didactic point of view, I am deliberately taking away the convenience that may come with natural language captions, for putting my readers’ brains into an action-feedback loop. All R code in this book has been crafted to specifically serve this purpose. In particular, all code snippets are written as data processing chains, with one operation per line. The best way to understand the code at first, is to run it starting at the top, examine what the first transformation did and then include the next step:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb3-2"><a href="index.html#cb3-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb3-3"><a href="index.html#cb3-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11.973</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">5.556</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.927</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.591</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2.544</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">-3.429</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">-2.927</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">2.076</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">0.740</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">-5.329</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb4-2"><a href="index.html#cb4-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb4-3"><a href="index.html#cb4-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="index.html#cb4-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11.973</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">5.556</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.927</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.591</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2.544</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">2.076</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">0.740</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb5-2"><a href="index.html#cb5-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb5-3"><a href="index.html#cb5-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="index.html#cb5-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-5"><a href="index.html#cb5-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y))</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb6-2"><a href="index.html#cb6-2"></a><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-3"><a href="index.html#cb6-3"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-4"><a href="index.html#cb6-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
+<span id="cb6-5"><a href="index.html#cb6-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="90%" />
+#### END ME</p>
+</div>
 </div>
 <div id="quant-design-research" class="section level2">
 <h2><span class="header-section-number">1.4</span> Quantitative design research</h2>

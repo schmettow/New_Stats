@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-09-12" />
+<meta name="date" content="2020-09-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,7 +137,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
 </ul></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.2</b> What is New Statistics?</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.3</b> How to use this book</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.3.1</b> In the classroom</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#handbook"><i class="fa fa-check"></i><b>1.3.2</b> As a handbook</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.3.3</b> The stone of Rosetta</a></li>
+</ul></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.4</b> Quantitative design research</a></li>
 <li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#studies-in-design-research"><i class="fa fa-check"></i><b>1.5</b> Studies in Design Research</a></li>
 <li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#observations-measures"><i class="fa fa-check"></i><b>1.6</b> Observations and measures</a><ul>
@@ -301,7 +307,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.7</b> AUP</a></li>
 <li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.8</b> Hugme</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data-sets"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
 <li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
 <li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
 <li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>

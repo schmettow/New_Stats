@@ -8,6 +8,14 @@ site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers,  applied psychologists and everyone else who works hard to make this world a better  place.
 documentclass: svmono
 ---
+
+
+```{r setup, 	message = FALSE,	warning = FALSE,	include = FALSE}
+source("RMDR.R")
+```
+
+
+
 # (PART) Preparations {-}
 
 # Introduction {#intro}
@@ -82,7 +90,8 @@ This book makes the following assumptions:
 9.	R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.
 
 
-## How to read this book {#how-to-read}
+## How to use this book {#how-to-use}
+
 
 Chapter \@ref(quant-design-research) introduces a framework for quantitative design research. It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems. Then the idea of design as decision making under uncertainty is developed at the example of two case studies.
 
@@ -116,7 +125,171 @@ re-organize the reading guide into three learning routes:
 for all routes, distinguish between reader types, perhaps make a cross table
 -->
 
+
+
+
+### In the classroom {#classroom}
+
+Content-wise, this book covers about 200% of a typical Social Sciences Statistics curriculum. At least at my university, students learn roughly learn about the first 50% of chapters \@ref(ebs), \@ref(lm), \@ref(mlm), \@ref(glm) and \@ref(wwm), before they graduate. However, never have I been in the situation myself, to teach a whole statistics curriculum to a cohort of students. The idea for this book emerged from statistics workshops, which I have given outside and inside universities, for professionals, colleagues and a group of master students.
+
+If you are a docent in the *Social Sciences*, this book certainly can back an entry-level Statistics course. However, you should be aware that the approach in this book is not yet common ground. While you yourself may find the approach of Bayesian parameter estimation compellingly intuitive, your colleagues may not like the idea, that future generations may no longer be able to read their publications, when they rest on classic null hypothesis testing. Another consideration is that this book is only useful for students with the capacity to learn just a little bit of programming. Do not under-estimate your students on this. I have seen it happen at my home university, that cohorts of Psychology students first started learning SPSS syntax, and now learn R. Still, that puts you into the situation of teaching Programming. To summarize, what I said in \@ref(rosetta), programming you better don't teach in a series of lectures, but by pushing your students' noses into the code. Chapter \@ref(gsr) has served me well to get Psychology students over the first hurdles. If you have come so far as to give R programming workshops, consider staying with this form of taching. I'll come back to it.
+
+My experience tells that there is an increasing demand to teach empirical research methods to *engineering* students. If that is your situation, this book is particularly well-suited to make a course. Not only is programming in R much less of a concern (or is even a surplus), but also is this book free of outdated customs, that actually have never been appropriate for an engineering context. Engineers, as I know them, are interested in quantification of design effects, rather than falsifying theories. In addition, the case studies in this book convey knowledge about effective research designs and validity of measures, as does the following section (\@ref(quant-design-research)). 
+
+
+<!-- As Statistics education for engineering students rarely is as extensive as in the Social Sciences, you may have to cut some corners. I would  suggest to scrap Chapter \@ref(ebs), as engineering students are likely to have a good grasp of basic math and  good intuition about probability and uncertainty.  -->
+
+In both of the above cases, if I were asked to develop a full course on the matter, I would make it a series of workshops, roughly five one-day (or ten half-a-day). The most effective method for a *workshop* is to have students get acquainted with the matter by studying selected parts of the book, in advance, and let them work on one assignment during the workshop. I have made good experience with tutored pair-programming, where two students work together, while the teacher stays in the background, most of the time. During each workshop, students are given a data set with a brief story to it and an assignment, like the following example:
+
+---
+
+Some novel augmented-reality (AR) side-view mirrors have been designed and the benefits for driving performance needs to be assessed. An experiment has been conducted, where the AR mirros were compared to the classic side-view mirrors. Participants have been classified in low and high driving experience and age was recorded. Every participant completed a set of eight tasks under the following conditions:
+
++ AR mirrors versus classic mirrors
++ day ride versus night ride
+
+
+The following measures were taken:
+
++ time-on-task (seconds)
++ steering reversal rate (counts, lower is better)
++ cognitive workload (rating scale, 0 to 1)
+
+__Assignment__:
+
+1. Conceive one or more research questions, e.g.:
+    + The AR design creates less workload.
+    + The AR design improves performance especially at night
+2. Read and clean the data set
+3. Produce summary tables and graphs that reflect the research question
+4. Build a model and interpret the parameter estimates.
+   a. Start with a linear model that reflects your research question. Use sections \@ref(grm), \@ref(mfm) and \@ref(saturation)
+   b. Select a GLM family that matches your chosen response variable. Use sections \@ref(exgaus-reg), \@ref(poisson-reg) or \@ref(beta-reg).
+   c. Build a multi-level model. Use sections \@ref(thinking-multilevel), \@ref(intercept-re) and \@ref(slope-re)
+
+---
+
+If you use this book for workshops, that means you will have to come up with some data sets. Unless you can pull a few out of the drawer, it may be tricky to put your hands on some real data sets. A way out is to simulate data. In this book I haven't gone to the lengths of systematically introducing data simulation, but I do use several simulated data sets and the code for simulation can be found in \@ref(synthetic-data).
+
+If you have a somewhat experienced audience and you want to bring as much as possible across in little time, I would suggest going into *demonstration* mode. This is best pictured as think-aloud live demonstration. However, this is only feasable, if you have such outstanding programming skills, that you can write valid code in real time, while you talk, think and react. If you use live demonstration as a technique, encourage your students to work with you, to keeps them in the action-feedback loop \@ref(rosetta).
+
+Examination is the other part of teaching. Without further a-do, here is what I do: Students get an assignment that looks exactly like the workshop assignment, adding the following sentence: "You must submit your assignment as a knitted Rmarkdown document (Word output), with full code shown."
+
+That does not mean, you cannot examine by using a written exam. It certainly is un-wise, to let students write code on paper, but still you can easily produce exam questions that test on understanding concepts, such as:
+
++ Interpret the following coefficient table
++ What is the difference between saturation and amplification effects?
++ In which situation is it better to use an ordinal factor model, rather than a linear regression?
++ Customer waiting times have been measured in several custome service hotlines. What would be an appropriate distribution family?
+
+#### Make knowledge graph
+
+#### END
+
+### As a handbook {#handbook}
+
+As I already said in \@ref(classroom), roughly the first 50% of every chapter
+
+
+### The stone of Rosetta {#rosetta}
+
+When I started working as a university teacher in the Netherlands, I followed a one-week language course to learn Dutch. Unfortunately, the course was a mix of people from three continents, including people from China, Ghana, Turkey and Bulgaria. As a consequence, the course was mostly given in English language. I did not learn anything in this course, but after the day I decided to just fully expose myself to and start speaking Dutch, no matter how awkward it sounded, I learned to speak it fluently quite rapidly.
+
+Next to my job of writing books on statistics, I have ten years of experience in teaching the art of Programming to Psychology students. I have long held the belief, that learning to program mostly grounds on skills of abstract thinking, similar to learning math (and love for computers). This is not the most salient attributes of Psychology students, on average. Only recently, a study revealed to me, that learning a programming language is just that: learning a language [%prog_lang]. That means, as much as the Dutch teacher has wasted my time by every English word, every moment a programming teacher distracts a student from writing and reading code is lost. 
+
+You only learn a programming language by being fully exposed to it, and that is what I do in this book. Following the brief introduction to the programming language R, I will no longer explain every piece of code. Instead, I give you every single line of code that I used to produce data, statistical models, tables and graphics. Every piece of code is meant as an exposure. Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a skill, two things are essential: 
+
+1. repetition
+1. a closed loop between action and feedback
+
+The importance of closed-loop interaction holds even stronger, if the skill to be learned is a language. This book is written in three languages: English, R and here and there a little bit of math. Precise description a non-trivial chain of data processing is difficult to do in a fuzzy natural language, like English. R, like math, is a formal language, and every piece of code will always produce the exact same result. The difference between math and R is that math is purely descriptive (or rather, imaginative), whereas R is productive. You can specify a Gaussian distributed variable in math, by saying:
+
+$$
+\begin{aligned}
+\mu &= 7\\
+\sigma &= 3\\
+Y &\sim \textrm{Gauss}(\mu, \sigma)\\
+\end{aligned}
+$$
+
+Or, you can *produce* such a variable by saying it in R:
+
+```{r}
+Data_gaus <- tibble(y = rnorm(n = 1000, mean = 3, sd = 5))
+```
+
+The math expression requires that the recipient of the message knows what Gaussian distribution is. In R, you can simply show, how it looks like:
+
+```{r}
+Data_gaus %>% 
+  ggplot(aes(x = y)) +
+  geom_histogram(bins = 12)
+```
+
+In many other books on statistics, math is used to precisely specify a model or any other data transformation. Specifying how data has been processed is essential for *transparency of research*. In the ideal case, data processing is given as a recipe so precise, that every other researcher would obtain the exact same results. That is called *re-producability*. Math notation lives up to the principle of transparency, but most people do not have the skills, to produce something from math notation. Speaking for myself, if someone would ask me right now, how to produce data from a Gaussian distribution, just given its formula, I would not know:
+
+$$
+P(x) = \frac{1}
+{{\sigma \sqrt {2\pi } }}
+e^{{{ - \left( {x - \mu } \right)^2 / 2\sigma^2}}}
+$$
+
+In practice, math notation is hardly re-producable, whereas R code is. If anyone gives me their coe and the data, I can expect to get the exact same results. If I apply the code to my own data, I am doing an exact replication of a study. On top of that, I will always be able to check the validity of every single step in the analysis, as I will demonstrate below. 
+
+The principle of transparency in scientific reports requires the author to 
+
++ specify all transformations that have been acted out on the data
++ specify all tables and figures that are presented
++ specify all assumptions of statistical models
+
+Traditionally, specification  of figures and tables is done by putting text in captions. While English texts may please a lot of readers, this has disadvantages: 
+
+1. A table or figure is the result of complex data transformations, which are difficult to put in words, precisely. Sometimes, important details are given in other parts of the document, or are just lost. An example is outlier removal.
+2. Describing what a figure or table shows, does not put most readers into the position to reproduce or replicate the table or figure.
+
+For these three reasons, exposure, precision and productivity, I chose to not put any caption texts on figures and tables. Instead, all results presented in this book, are fully specified by the R code that produced them. From a didactic point of view, I am deliberately taking away the convenience that may come with natural language captions, for putting my readers' brains into an action-feedback loop. All R code in this book has been crafted to specifically serve this purpose. In particular, all code snippets are written as data processing chains, with one operation per line. The best way to understand the code at first, is to run it starting at the top, examine what the first transformation did and then include the next step:
+
+
+```{r}
+set.seed(47)
+tibble(Obs = 1:10,
+       y = rnorm(n = 10, mean = 2, sd = 5))
+```
+
+```{r}
+set.seed(47)
+tibble(Obs = 1:10,
+       y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+  filter(y > 0)
+  
+```
+
+```{r}
+set.seed(42)
+tibble(Obs = 1:10,
+       y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+  filter(y > 0) %>% 
+  ggplot(aes(x = y))
+  
+```
+
+```{r}
+set.seed(47)
+tibble(y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+  filter(y > 0) %>% 
+  ggplot(aes(x = y)) +
+  geom_histogram(bins = 10)
+  
+```
+#### END ME
+
+
+
+
+
+
 ## Quantitative design research {#quant-design-research}
+
 
 #### BEGIN
 

@@ -1086,7 +1086,7 @@ detach(Hugme)
 Now you know how Entity Relationship Modelling works. This paradigm came up with the second generation of data base systems in the 1990s (The first generation used strictly hierarchical data structures) and has been fully adopted by the packages Dplyr and Tidyr from the Tidyverse.
 
 
-## Synthetic data sets 
+## Synthetic data sets  {#synthetic-data}
 
 
 ### Rainfall {#rainfall}
@@ -1102,7 +1102,7 @@ new_syncenv("Rainfall")
 
 
 
-```{r Rainfall_sim, opts.label = "CE"}
+```{r Rainfall_sim, eval = F}
 ## simulating the data set
 Rainfall$simulate <-
   function(
@@ -1116,10 +1116,13 @@ Rainfall$simulate <-
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
       mutate(cloudy = as.logical(cloudy),
              rain = as.logical(rain)) %>% 
-      as_tbl_obs()
-    
+      mascutils::as_tbl_obs()
   }
 
+```
+
+
+```{r opts.label = "CE"}
 Rainfall$Rain <- 
   Rainfall$simulate()
 
@@ -1179,7 +1182,7 @@ new_syncenv("Sec99")
 ```
 
 
-```{r Sec99_simulate, opts.label = "CE"}
+```{r Sec99_simulate, eval = F}
 
 ## simulating the data set
 Sec99$simulate <-
@@ -1208,6 +1211,10 @@ Sec99$simulate <-
 
 Sec99$Ver20$age[c(6, 19, 73)] <- NA
 
+```
+
+
+```{r opts.label = "CE"}
 ## Gender
 # Sec99$Ver20$Gender <- if_else(rbinom(n_Part, 1, .4) == 1,
 #                              "male", "female")
@@ -1249,10 +1256,7 @@ new_syncenv("Rational")
 save(Rational, file = "Cases/Rational.Rda")
 ```
 
-
-```{r Rational_simulate, opts.label = "CE"}
-
-
+```{r eval = F}
 ## simulating the data set
 Rational$simulate <-
   function(n_Part = 100,
@@ -1275,6 +1279,13 @@ Rational$simulate <-
       as_tbl_obs()
     RD  %>% as_tbl_obs()
   }
+
+```
+
+
+```{r Rational_simulate, opts.label = "CE"}
+
+
 
 Rational$RD <- 
   Rational$simulate()
@@ -1308,8 +1319,7 @@ new_syncenv("BrowsingAB")
 ```
 
 
-```{r BAB_simfunc, opts.label = "CE"}
-
+```{r eval = F}
 
 ## simulating the data set
 BrowsingAB$simulate <-
@@ -1425,6 +1435,12 @@ BrowsingAB$simulate <-
       as_tbl_obs()
   }
 
+```
+
+
+```{r BAB_simfunc, opts.label = "CE"}
+
+
 BrowsingAB$BAB1 <- 
   BrowsingAB$simulate(n_Task = 1) %>% 
   mutate(Part = Obs)
@@ -1499,11 +1515,7 @@ This simulation takes perceived headache measured on 16 participants before and 
 new_syncenv("Headache")
 ```
 
-
-```{r Headache_simfunc, opts.label = "CE"}
-
-
-## simulating the data set
+```{r eval = F}
 Headache$simulate <-
   function(N = 16, 
            seed = 42){
@@ -1517,6 +1529,15 @@ Headache$simulate <-
       mutate(PillA = as.factor(PillA),
              PillB = as.factor(PillB)) %>% as_tbl_obs()
   }
+
+```
+
+
+
+```{r Headache_simfunc, opts.label = "CE"}
+
+
+## simulating the data set
 
 Headache$Pills <- Headache$simulate(N = 40)
 Headache
@@ -1550,10 +1571,7 @@ new_syncenv("Reading")
 ```
 
 
-```{r Reading_simfunc, opts.label = "CE", eval = F}
-
-
-## simulating the data set
+```{r eval = F}
 Reading$simulate <-
   function(N = 40,
            beta = c(Intercpt = 60, 
@@ -1578,14 +1596,17 @@ Reading$simulate <-
                 beta[4] * (font_color == "black") * (font_size == "12pt"),
               ToT = rnorm(N,  mu, sigma)) %>% 
     as_tbl_obs()
-    
-    #class(out) <- append(class(out), "sim_tbl")
-    attr(out, "coef") <- list(beta = beta,
-                              sigma = sigma)
-    attr(out, "seed") <- seed
-    
-    out %>% as_tbl_obs()
+
+    out
     }
+
+```
+
+
+```{r Reading_simfunc, opts.label = "CE", eval = F}
+
+
+## simulating the data set
 
 Reading$D_1 <- Reading$simulate()
 names(Reading$D_1)
@@ -1630,11 +1651,7 @@ new_syncenv("AR_game")
 
 ```
 
-
-```{r AR_game_simfunc, opts.label = "CE"}
-
-
-## simulating the data set
+```{r eval = F}
 AR_game$simulate <-
   function(N = 200,
            beta = c(-1, 1, .4, .6),
@@ -1660,6 +1677,14 @@ AR_game$simulate <-
     
     out %>% as_tbl_obs()
     }
+
+```
+
+
+```{r AR_game_simfunc, opts.label = "CE"}
+
+
+## simulating the data set
 
 AR_game$D_1 <- AR_game$simulate(N = 40)
 names(AR_game$D_1)
@@ -1698,17 +1723,13 @@ detach(AR_game)
 
 ### Sleep {#sleep}
 
-This simulation is loosely modelled after an experiment Corcoran [D. W. J. Corcoran (1962) Noise and loss of sleep, Quarterly Journal of Experimental Psychology, 14:3, 178-182, DOI: 10.1080/17470216208416533] who measured the combined effects of sleep deprivation and noisy environments. It turned out that noise and sleep deprivation both increase reaction times, but that noise helps when someone is very tired. Outcomes were simulated from Gaussian distributions.
+This simulation is loosely modelled after an experiment Corcoran [%D. W. J. Corcoran (1962) Noise and loss of sleep, Quarterly Journal of Experimental Psychology, 14:3, 178-182, DOI: 10.1080/17470216208416533] who measured the combined effects of sleep deprivation and noisy environments. It turned out that noise and sleep deprivation both increase reaction times, but that noise helps when someone is very tired. Outcomes were simulated from Gaussian distributions.
 
 ```{r Sleep_create, opts.label = "CE"}
 new_syncenv("Sleep")
 ```
 
-
-```{r Sleep_simfunc, opts.label = "CE"}
-
-
-## simulating the data set
+```{r eval = F}
 Sleep$simulate <-
   function(N = 40, 
            beta = c(Intcpt = 70, 
@@ -1732,6 +1753,15 @@ Sleep$simulate <-
       select(3,1,2,4,5)  %>% 
       as_tbl_obs()
   }
+
+```
+
+
+
+```{r Sleep_simfunc, opts.label = "CE"}
+
+
+## simulating the data set
 
 
 Sleep$D_1 <- Sleep$simulate(N = 40)

@@ -24,7 +24,7 @@
 <meta name="author" content="Martin Schmettow" />
 
 
-<meta name="date" content="2020-09-12" />
+<meta name="date" content="2020-09-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,7 +137,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.3" data-path="index.html"><a href="index.html#applied-researcher"><i class="fa fa-check"></i><b>1.1.3</b> The applied researcher</a></li>
 </ul></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.2</b> What is New Statistics?</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-read"><i class="fa fa-check"></i><b>1.3</b> How to read this book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.3</b> How to use this book</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.3.1</b> In the classroom</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#handbook"><i class="fa fa-check"></i><b>1.3.2</b> As a handbook</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.3.3</b> The stone of Rosetta</a></li>
+</ul></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.4</b> Quantitative design research</a></li>
 <li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#studies-in-design-research"><i class="fa fa-check"></i><b>1.5</b> Studies in Design Research</a></li>
 <li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#observations-measures"><i class="fa fa-check"></i><b>1.6</b> Observations and measures</a><ul>
@@ -301,7 +307,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.7</b> AUP</a></li>
 <li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.8</b> Hugme</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data-sets"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
 <li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
 <li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
 <li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
@@ -332,9 +338,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="cases" class="section level1">
 <h1><span class="header-section-number">A</span> Cases</h1>
 <p>This book comes with eight research cases with real data and eight simulated cases. They will be provided as R environments saved as Rda files. To use these environments, you have to download the Rda file and load it:</p>
-<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb746-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Uncanny.Rda&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb752-1"><a href="cases.html#cb752-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Uncanny.Rda&quot;</span>)</span></code></pre></div>
 <p>The loading puts the environment into your R session and you can see the content using the Environment tab in Rstudio. Or you issue the <code>ls</code> command:</p>
-<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb747-1" title="1"><span class="kw">ls</span>(Uncanny)</a></code></pre></div>
+<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb753-1"><a href="cases.html#cb753-1"></a><span class="kw">ls</span>(Uncanny)</span></code></pre></div>
 <pre><code>##  [1] &quot;D_UV&quot;               &quot;DK_1&quot;               &quot;Loo_beta&quot;          
 ##  [4] &quot;Loo_dist&quot;           &quot;Loo_poly_2&quot;         &quot;Loo_poly_3&quot;        
 ##  [7] &quot;M_dsgmx_1&quot;          &quot;M_poly_2&quot;           &quot;M_poly_3&quot;          
@@ -344,34 +350,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [19] &quot;RK_2&quot;               &quot;T_poly_3_ml&quot;        &quot;T_univ_uncanny&quot;    
 ## [22] &quot;UV_1&quot;               &quot;UV_dsgmx&quot;</code></pre>
 <p>In order to use the environment content in your R session, you have to attach it.</p>
-<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb749-1" title="1"><span class="kw">attach</span>(Uncanny)</a></code></pre></div>
+<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb755-1"><a href="cases.html#cb755-1"></a><span class="kw">attach</span>(Uncanny)</span></code></pre></div>
 <p><em>Real data</em> cases contain one or more data sets as dataframes (tibbles), such as:</p>
-<div class="sourceCode" id="cb750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb750-1" title="1">UV_<span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="cases.html#cb756-1"></a>UV_<span class="dv">1</span></span></code></pre></div>
 <p>Before switching to a different case environment, it is recommended to detach the present environment:</p>
-<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb751-1" title="1"><span class="kw">detach</span>(Uncanny)</a></code></pre></div>
+<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb757-1"><a href="cases.html#cb757-1"></a><span class="kw">detach</span>(Uncanny)</span></code></pre></div>
 <p><em>Synthetic data</em> cases contain a simulation function that precisely produces the data set as it has been used in this book. Sometimes, the simulation function also provides additional arguments to make changes to the data set.</p>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb752-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/AR_game.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb752-2" title="2"><span class="kw">attach</span>(AR_game)</a></code></pre></div>
+<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb758-1"><a href="cases.html#cb758-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/AR_game.Rda&quot;</span>)</span>
+<span id="cb758-2"><a href="cases.html#cb758-2"></a><span class="kw">attach</span>(AR_game)</span></code></pre></div>
 <p>The following simulates the AR_game data set, exactly as it was used in section [amplification].</p>
-<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb753-1" title="1"><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb753-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb753-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb753-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb759-1"><a href="cases.html#cb759-1"></a><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb759-2"><a href="cases.html#cb759-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></span>
+<span id="cb759-3"><a href="cases.html#cb759-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb759-4"><a href="cases.html#cb759-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 <p>All simulation functions provide the argument <code>seed</code>, which sets the random number generator(s) to a specific value. Using a different seed value produces a data set with the same structure, but different values.</p>
-<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb754-1" title="1"><span class="kw">simulate</span>(<span class="dt">seed =</span> <span class="dv">1317</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb754-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb754-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb754-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb760"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb760-1"><a href="cases.html#cb760-1"></a><span class="kw">simulate</span>(<span class="dt">seed =</span> <span class="dv">1317</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb760-2"><a href="cases.html#cb760-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></span>
+<span id="cb760-3"><a href="cases.html#cb760-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb760-4"><a href="cases.html#cb760-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 <p>Additional arguments can be used to change the structure of the data set. In the present example, the amplification effect can be turned into a [saturation] effect, by changing the beta argument:</p>
-<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb755-1" title="1"><span class="kw">simulate</span>(<span class="dt">beta =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">.4</span>, <span class="dv">-1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb755-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb755-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb755-4" title="4"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="cases.html#cb761-1"></a><span class="kw">simulate</span>(<span class="dt">beta =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">.4</span>, <span class="dv">-1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb761-2"><a href="cases.html#cb761-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> technophile, <span class="dt">color =</span> sociophile, <span class="dt">y =</span> intention)) <span class="op">+</span></span>
+<span id="cb761-3"><a href="cases.html#cb761-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb761-4"><a href="cases.html#cb761-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
 <p>If you want to understand how a simulation function works and how it can be controlled, you can display the code of the function, just by calling it without parentheses:</p>
-<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb756-1" title="1">simulate</a></code></pre></div>
+<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="cases.html#cb762-1"></a>simulate</span></code></pre></div>
 <pre><code>## function(N = 200,
 ##            beta = c(-1, 1, .4, .6),
 ##            sigma = .2,
@@ -396,9 +402,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##     
 ##     out %&gt;% as_tbl_obs()
 ##     }
-## &lt;bytecode: 0x000000004b89df60&gt;</code></pre>
+## &lt;bytecode: 0x000000004b8b1798&gt;</code></pre>
 <p>Real and synthetic case environments provide all data used in this book, but also all models are included that have been estimated. When working through this book, this saves you the effort to run the models by yourself.</p>
-<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb758-1" title="1">M_cmrm</a></code></pre></div>
+<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="cases.html#cb764-1"></a>M_cmrm</span></code></pre></div>
 <pre><code>## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      intention ~ 1 + sociophile + technophile + sociophile:technophile
@@ -418,7 +424,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## ------
 ## * For help interpreting the printed output see ?print.stanreg
 ## * For info on the priors used see ?prior_summary.stanreg</code></pre>
-<div class="sourceCode" id="cb760"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb760-1" title="1"><span class="kw">detach</span>(AR_game)</a></code></pre></div>
+<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="cases.html#cb766-1"></a><span class="kw">detach</span>(AR_game)</span></code></pre></div>
 <!-- TODO:  -->
 <!-- + add attributes to all CEs -->
 <!-- + create syncenv print method -->
@@ -445,10 +451,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="measures" class="section level4">
 <h4><span class="header-section-number">A.1.1.1</span> Measures</h4>
 <p>Time-on-task was measured in seconds and are also provided on a logarithmic scale, because of violation of Gaussian distribution of errors. In addition, satisfaction has been measured using the Systems Usability Scale with the range of <span class="math inline">\([0, 100]\)</span>.</p>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb761-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/CUE8.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb761-2" title="2"><span class="kw">attach</span>(CUE8)</a>
-<a class="sourceLine" id="cb761-3" title="3">D_cue8</a>
-<a class="sourceLine" id="cb761-4" title="4"><span class="kw">detach</span>(CUE8)</a></code></pre></div>
+<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb767-1"><a href="cases.html#cb767-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/CUE8.Rda&quot;</span>)</span>
+<span id="cb767-2"><a href="cases.html#cb767-2"></a><span class="kw">attach</span>(CUE8)</span>
+<span id="cb767-3"><a href="cases.html#cb767-3"></a>D_cue8</span>
+<span id="cb767-4"><a href="cases.html#cb767-4"></a><span class="kw">detach</span>(CUE8)</span></code></pre></div>
 </div>
 </div>
 <div id="uncanny" class="section level3">
@@ -467,14 +473,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="measures-1" class="section level4">
 <h4><span class="header-section-number">A.1.2.3</span> Measures</h4>
 <p>The Eeriness scale of Ho &amp; MacDorman [REF] has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur &amp; Reichling, responses have been reversed (negative Eeriness) and normalized to the interval <span class="math inline">\([-1; 0]\)</span>. In addition, reaction times have been recorded.</p>
-<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb762-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Uncanny.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb762-2" title="2"><span class="kw">attach</span>(Uncanny)</a>
-<a class="sourceLine" id="cb762-3" title="3">Uncanny<span class="op">$</span>RK_<span class="dv">2</span> <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb762-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> huMech, <span class="dt">y =</span> avg_like)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb762-5" title="5"><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb762-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="cases.html#cb768-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Uncanny.Rda&quot;</span>)</span>
+<span id="cb768-2"><a href="cases.html#cb768-2"></a><span class="kw">attach</span>(Uncanny)</span>
+<span id="cb768-3"><a href="cases.html#cb768-3"></a>Uncanny<span class="op">$</span>RK_<span class="dv">2</span> <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb768-4"><a href="cases.html#cb768-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> huMech, <span class="dt">y =</span> avg_like)) <span class="op">+</span></span>
+<span id="cb768-5"><a href="cases.html#cb768-5"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
+<span id="cb768-6"><a href="cases.html#cb768-6"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-24-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb763-1" title="1"><span class="kw">detach</span>(Uncanny)</a></code></pre></div>
+<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb769-1"><a href="cases.html#cb769-1"></a><span class="kw">detach</span>(Uncanny)</span></code></pre></div>
 </div>
 </div>
 <div id="ipump" class="section level3">
@@ -519,30 +525,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- 1. *count data*, such as the number of completed tasks and path deviations -->
 <!-- 1. *temporal data*, such as time-on-task -->
 <!-- 1. *rating scales* -->
-<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb764-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/IPump.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb764-2" title="2"><span class="kw">attach</span>(IPump)</a>
-<a class="sourceLine" id="cb764-3" title="3">IPump<span class="op">$</span>D_agg <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb764-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Session, <span class="dt">color =</span> Design, <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb764-5" title="5"><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb764-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="cases.html#cb770-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/IPump.Rda&quot;</span>)</span>
+<span id="cb770-2"><a href="cases.html#cb770-2"></a><span class="kw">attach</span>(IPump)</span>
+<span id="cb770-3"><a href="cases.html#cb770-3"></a>IPump<span class="op">$</span>D_agg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb770-4"><a href="cases.html#cb770-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Session, <span class="dt">color =</span> Design, <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
+<span id="cb770-5"><a href="cases.html#cb770-5"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
+<span id="cb770-6"><a href="cases.html#cb770-6"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-25-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb765-1" title="1"><span class="kw">detach</span>(IPump)</a></code></pre></div>
+<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb771-1"><a href="cases.html#cb771-1"></a><span class="kw">detach</span>(IPump)</span></code></pre></div>
 </div>
 </div>
 <div id="sleepstudy" class="section level3">
 <h3><span class="header-section-number">A.1.4</span> Case Sleepstudy</h3>
 <p>This data set ships with the lme4 package and has only been converted to the coding standards used throughout. Eighteen participants underwent sleep deprivation on ten successive days and the average reaction time on a set of tests has been recorded per day and participant. For further information on the data set, consult the documentation (<code>?lme4::sleepstudy</code>). Variable names have been changed to fit the naming scheme of this book.</p>
-<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb766-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Sleepstudy.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb766-2" title="2"><span class="kw">attach</span>(Sleepstudy)</a>
-<a class="sourceLine" id="cb766-3" title="3">D_slpstd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb766-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> days, <span class="dt">y =</span> RT)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb766-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Part) <span class="op">+</span></a>
-<a class="sourceLine" id="cb766-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb766-7" title="7"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F, <span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;LOESS&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb766-8" title="8"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;lm&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb766-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">color =</span> <span class="st">&quot;Smoothing function&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb772-1"><a href="cases.html#cb772-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Sleepstudy.Rda&quot;</span>)</span>
+<span id="cb772-2"><a href="cases.html#cb772-2"></a><span class="kw">attach</span>(Sleepstudy)</span>
+<span id="cb772-3"><a href="cases.html#cb772-3"></a>D_slpstd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb772-4"><a href="cases.html#cb772-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> days, <span class="dt">y =</span> RT)) <span class="op">+</span></span>
+<span id="cb772-5"><a href="cases.html#cb772-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Part) <span class="op">+</span></span>
+<span id="cb772-6"><a href="cases.html#cb772-6"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb772-7"><a href="cases.html#cb772-7"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F, <span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;LOESS&quot;</span>)) <span class="op">+</span></span>
+<span id="cb772-8"><a href="cases.html#cb772-8"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;lm&quot;</span>)) <span class="op">+</span></span>
+<span id="cb772-9"><a href="cases.html#cb772-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">color =</span> <span class="st">&quot;Smoothing function&quot;</span>)</span></code></pre></div>
 <p><img src="Appendix_files/figure-html/unnamed-chunk-26-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb767-1" title="1"><span class="kw">detach</span>(Sleepstudy)</a></code></pre></div>
+<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb773-1"><a href="cases.html#cb773-1"></a><span class="kw">detach</span>(Sleepstudy)</span></code></pre></div>
 </div>
 <div id="egan" class="section level3">
 <h3><span class="header-section-number">A.1.5</span> Egan</h3>
@@ -560,10 +566,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>number of tims user returns to homepage</li>
 <li>workload (measured by a one-item scale)</li>
 </ul>
-<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb768-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Egan.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb768-2" title="2"><span class="kw">attach</span>(Egan)</a>
-<a class="sourceLine" id="cb768-3" title="3">Egan<span class="op">$</span>D_egan</a>
-<a class="sourceLine" id="cb768-4" title="4"><span class="kw">detach</span>(Egan)</a></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="cases.html#cb774-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Egan.Rda&quot;</span>)</span>
+<span id="cb774-2"><a href="cases.html#cb774-2"></a><span class="kw">attach</span>(Egan)</span>
+<span id="cb774-3"><a href="cases.html#cb774-3"></a>Egan<span class="op">$</span>D_egan</span>
+<span id="cb774-4"><a href="cases.html#cb774-4"></a><span class="kw">detach</span>(Egan)</span></code></pre></div>
 </div>
 </div>
 <div id="mmn" class="section level3">
@@ -576,10 +582,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="measures-4" class="section level4">
 <h4><span class="header-section-number">A.1.6.2</span> Measures</h4>
 <p>For visual working memory capacity, we used the Corsi block tapping task. For verbal capacity, the Ospan task was used and both scoring schemes, A and B, were applied. Number of clicks and time to completion were recorded as performance measures.</p>
-<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb769-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/MMN.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb769-2" title="2"><span class="kw">attach</span>(MMN)</a>
-<a class="sourceLine" id="cb769-3" title="3">MMN_<span class="dv">2</span></a>
-<a class="sourceLine" id="cb769-4" title="4"><span class="kw">detach</span>(MMN)</a></code></pre></div>
+<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="cases.html#cb775-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/MMN.Rda&quot;</span>)</span>
+<span id="cb775-2"><a href="cases.html#cb775-2"></a><span class="kw">attach</span>(MMN)</span>
+<span id="cb775-3"><a href="cases.html#cb775-3"></a>MMN_<span class="dv">2</span></span>
+<span id="cb775-4"><a href="cases.html#cb775-4"></a><span class="kw">detach</span>(MMN)</span></code></pre></div>
 </div>
 </div>
 <div id="aup" class="section level3">
@@ -601,11 +607,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>explorative behaviour</li>
 </ul>
 <p>By combining these two scales, we created a total score for <em>resistance to the AUP</em>, per participant.</p>
-<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb770-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/AUP.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb770-2" title="2"><span class="kw">attach</span>(AUP)</a>
-<a class="sourceLine" id="cb770-3" title="3">MMN<span class="op">$</span>AUP_<span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="cases.html#cb776-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/AUP.Rda&quot;</span>)</span>
+<span id="cb776-2"><a href="cases.html#cb776-2"></a><span class="kw">attach</span>(AUP)</span>
+<span id="cb776-3"><a href="cases.html#cb776-3"></a>MMN<span class="op">$</span>AUP_<span class="dv">1</span></span></code></pre></div>
 <pre><code>## NULL</code></pre>
-<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb772-1" title="1"><span class="kw">detach</span>(AUP)</a></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="cases.html#cb778-1"></a><span class="kw">detach</span>(AUP)</span></code></pre></div>
 </div>
 </div>
 <div id="hugme" class="section level3">
@@ -637,9 +643,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">A.1.8.3</span> Data modelling in a nutshell</h4>
 <p>The Hugme experiment is a multi-population study: participants, pictures, words and items (from two scales) all provide information that is relevant for the statistical model. For analyzing the relationship between geekism, NCS on te one hand and the difference in reaction times between word and picture categories, we need the table <code>D_hugme</code>, which provides the predictor data for every observation from the experiment. The way this table was constructed is an instructive example of how researchers can logically structure and efficiently transform data from complex studies.</p>
 <p>The Table <code>R_exp</code> is the raw data that we got from the experiment. It contains the encounter of participants with primes and words, but misses the classification of words and primes, as well as participant-level variables. The classification of words and primes is stored separately in three <em>entity tables</em>: <code>E_Words</code>, <code>E_Primes</code>, whereas a <code>E_part</code> contains demographic data:</p>
-<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb773-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Hugme.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb773-2" title="2"><span class="kw">attach</span>(Hugme)</a></code></pre></div>
-<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb774-1" title="1">E_Part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="cases.html#cb779-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Hugme.Rda&quot;</span>)</span>
+<span id="cb779-2"><a href="cases.html#cb779-2"></a><span class="kw">attach</span>(Hugme)</span></code></pre></div>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="cases.html#cb780-1"></a>E_Part <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -691,7 +697,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb775-1" title="1">E_Words <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="cases.html#cb781-1"></a>E_Words <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -752,102 +758,366 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb776-1" title="1">E_Primes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="cases.html#cb782-1"></a>E_Primes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">8</span>)</span></code></pre></div>
 <p>All entity tables capture the information in the sample of precisely one population, with one row per member and a unique identifier. This identifier is called a <em>key</em> and is crucial for putting all the information together, using <em>joins</em>. Any response measure, like RT, is something that happens at every encounter. More abstractly, we could say, that this encounter is a <em>relation</em> between participants, words and primes, and the response is an <em>attribute</em> of the relation. <code>R_exp</code> is a relationship table which stores responses together with the encounter.</p>
 <p>In fact, the encounters between Part, Word and Prime can be called a key, because the combination truly identifies every observation:</p>
-<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb777-1" title="1">R_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</a>
-<a class="sourceLine" id="cb777-2" title="2"></a>
-<a class="sourceLine" id="cb777-3" title="3"><span class="kw">cat</span>(<span class="st">&quot;The number of unique encounters is&quot;</span>, </a>
-<a class="sourceLine" id="cb777-4" title="4">    <span class="kw">dim</span>(<span class="kw">distinct</span>(R_exp, Part, Word, Prime))[<span class="dv">1</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="cases.html#cb783-1"></a>R_exp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb783-2"><a href="cases.html#cb783-2"></a></span>
+<span id="cb783-3"><a href="cases.html#cb783-3"></a><span class="kw">cat</span>(<span class="st">&quot;The number of unique encounters is&quot;</span>, </span>
+<span id="cb783-4"><a href="cases.html#cb783-4"></a>    <span class="kw">dim</span>(<span class="kw">distinct</span>(R_exp, Part, Word, Prime))[<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## The number of unique encounters is 4027</code></pre>
 <p>What is still missing in the table are all the variables that further describe or classify members of any of the three samples. Think of the püredictors you need for running group-means analysis or linear regression on the data. Table <code>R_exp</code> provides the scaffold and the other variables we can pull in from the entity tables by using <em>join</em> operations. A join always operates on two tables that share at least one key variable. The following code takes the <code>R_exp</code> the relationship table to the left and merges in additional data from the entity table, picking on the key variable. This works successively on the three entity tables:</p>
-<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb779-1" title="1">R_exp <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb779-2" title="2"><span class="st">  </span><span class="kw">left_join</span>(E_Words, <span class="dt">by =</span> <span class="st">&quot;Word&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb779-3" title="3"><span class="st">  </span><span class="kw">left_join</span>(E_Primes, <span class="dt">by =</span> <span class="st">&quot;Prime&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb779-4" title="4"><span class="st">  </span><span class="kw">left_join</span>(E_Part, <span class="dt">by =</span> <span class="st">&quot;Part&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="cases.html#cb785-1"></a>R_exp <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb785-2"><a href="cases.html#cb785-2"></a><span class="st">  </span><span class="kw">left_join</span>(E_Words, <span class="dt">by =</span> <span class="st">&quot;Word&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb785-3"><a href="cases.html#cb785-3"></a><span class="st">  </span><span class="kw">left_join</span>(E_Primes, <span class="dt">by =</span> <span class="st">&quot;Prime&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb785-4"><a href="cases.html#cb785-4"></a><span class="st">  </span><span class="kw">left_join</span>(E_Part, <span class="dt">by =</span> <span class="st">&quot;Part&quot;</span>)</span></code></pre></div>
 <!-- `R_quest` contains  the item responses in the classic matrix form. This does not comply with the idea observation being an encounter of participants and items. In particular, items  -->
 <!-- For table `D_quest` this was gathered into the long form, suitable for running a psychometric analysis with multi-level models.   -->
-<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb780-1" title="1"><span class="kw">detach</span>(Hugme)</a></code></pre></div>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="cases.html#cb786-1"></a><span class="kw">detach</span>(Hugme)</span></code></pre></div>
 <p>Now you know how Entity Relationship Modelling works. This paradigm came up with the second generation of data base systems in the 1990s (The first generation used strictly hierarchical data structures) and has been fully adopted by the packages Dplyr and Tidyr from the Tidyverse.</p>
 </div>
 </div>
 </div>
-<div id="synthetic-data-sets" class="section level2">
+<div id="synthetic-data" class="section level2">
 <h2><span class="header-section-number">A.2</span> Synthetic data sets</h2>
 <div id="rainfall" class="section level3">
 <h3><span class="header-section-number">A.2.1</span> Rainfall</h3>
 <p>We don’t want to get wet, which is why we use the weather forecast. If we want to make our own forecasts, we need data. This simulation records rainfall on 20 days. On around 60% of these days, the sky was cloudy in the morning. With a blue sky in the morning, the chance of rain is 30%. On cloudy days it is 60%.</p>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb787-1"><a href="cases.html#cb787-1"></a><span class="co">## simulating the data set</span></span>
+<span id="cb787-2"><a href="cases.html#cb787-2"></a>Rainfall<span class="op">$</span>simulate &lt;-</span>
+<span id="cb787-3"><a href="cases.html#cb787-3"></a><span class="st">  </span><span class="cf">function</span>(</span>
+<span id="cb787-4"><a href="cases.html#cb787-4"></a>    <span class="dt">n_Days =</span> <span class="dv">20</span>,</span>
+<span id="cb787-5"><a href="cases.html#cb787-5"></a>    <span class="dt">set.seed =</span> <span class="dv">1</span>,</span>
+<span id="cb787-6"><a href="cases.html#cb787-6"></a>    <span class="dt">debug =</span> F){</span>
+<span id="cb787-7"><a href="cases.html#cb787-7"></a>    </span>
+<span id="cb787-8"><a href="cases.html#cb787-8"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(set.seed)) <span class="kw">set.seed</span>()</span>
+<span id="cb787-9"><a href="cases.html#cb787-9"></a>    <span class="co">## number of observations</span></span>
+<span id="cb787-10"><a href="cases.html#cb787-10"></a>    <span class="kw">tibble</span>(<span class="dt">cloudy =</span> <span class="kw">rbinom</span>(n_Days, <span class="dv">1</span>, <span class="fl">.6</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb787-11"><a href="cases.html#cb787-11"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">rain =</span> <span class="kw">rbinom</span>(<span class="dv">20</span>, <span class="dv">1</span>, <span class="fl">0.3</span> <span class="op">+</span><span class="st"> </span>cloudy <span class="op">*</span><span class="st"> </span><span class="fl">0.3</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb787-12"><a href="cases.html#cb787-12"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">cloudy =</span> <span class="kw">as.logical</span>(cloudy),</span>
+<span id="cb787-13"><a href="cases.html#cb787-13"></a>             <span class="dt">rain =</span> <span class="kw">as.logical</span>(rain)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb787-14"><a href="cases.html#cb787-14"></a><span class="st">      </span>mascutils<span class="op">::</span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb787-15"><a href="cases.html#cb787-15"></a>  }</span></code></pre></div>
 </div>
 <div id="sec99" class="section level3">
 <h3><span class="header-section-number">A.2.2</span> 99 seconds</h3>
 <p>The maerketing department of a car rental website claims that “You can rent a car in 99 seconds.” In this simulation, time-on-task measures are taken from 100 test users. These are Gaussian distributed with a mean of 105 and a standard error of 42. ToT also correlates with age, while there is no gender difference.</p>
-<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb781-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Sec99.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb781-2" title="2"><span class="kw">attach</span>(Sec99)</a>
-<a class="sourceLine" id="cb781-3" title="3">Ver20 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb781-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb781-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="Appendix_files/figure-html/unnamed-chunk-40-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb782-1" title="1"><span class="kw">detach</span>(Sec99)</a></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="cases.html#cb788-1"></a><span class="co">## simulating the data set</span></span>
+<span id="cb788-2"><a href="cases.html#cb788-2"></a>Sec99<span class="op">$</span>simulate &lt;-</span>
+<span id="cb788-3"><a href="cases.html#cb788-3"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">n_Part =</span> <span class="dv">100</span>, </span>
+<span id="cb788-4"><a href="cases.html#cb788-4"></a>           <span class="dt">mu_ToT =</span> <span class="dv">105</span>, </span>
+<span id="cb788-5"><a href="cases.html#cb788-5"></a>           <span class="dt">sigma_ToT =</span> <span class="dv">30</span>,</span>
+<span id="cb788-6"><a href="cases.html#cb788-6"></a>           <span class="dt">set.seed =</span> <span class="dv">42</span>,</span>
+<span id="cb788-7"><a href="cases.html#cb788-7"></a>           <span class="dt">debug =</span> F){</span>
+<span id="cb788-8"><a href="cases.html#cb788-8"></a>    </span>
+<span id="cb788-9"><a href="cases.html#cb788-9"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(set.seed)) <span class="kw">set.seed</span>(set.seed)</span>
+<span id="cb788-10"><a href="cases.html#cb788-10"></a>    <span class="co">## number of observations</span></span>
+<span id="cb788-11"><a href="cases.html#cb788-11"></a>    n_Obs =<span class="st"> </span>n_Part</span>
+<span id="cb788-12"><a href="cases.html#cb788-12"></a>    </span>
+<span id="cb788-13"><a href="cases.html#cb788-13"></a>    <span class="co">## OUT</span></span>
+<span id="cb788-14"><a href="cases.html#cb788-14"></a>    Sec99 =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span>n_Part,</span>
+<span id="cb788-15"><a href="cases.html#cb788-15"></a>                       <span class="dt">Part =</span> <span class="dv">1</span><span class="op">:</span>n_Part,</span>
+<span id="cb788-16"><a href="cases.html#cb788-16"></a>                       <span class="dt">ToT =</span> <span class="kw">rnorm</span>(n_Obs, mu_ToT, sigma_ToT)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb788-17"><a href="cases.html#cb788-17"></a><span class="st">      </span><span class="co">## dirty hack to create correlated age</span></span>
+<span id="cb788-18"><a href="cases.html#cb788-18"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="kw">rpois</span>(n_Part, <span class="kw">rnorm</span>(n_Part, <span class="dv">30</span> <span class="op">+</span><span class="st"> </span>ToT<span class="op">/</span><span class="dv">8</span>, <span class="dv">2</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb788-19"><a href="cases.html#cb788-19"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">Gender =</span> <span class="kw">if_else</span>(<span class="kw">rbinom</span>(n_Part, <span class="dv">1</span>, <span class="fl">.4</span>) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb788-20"><a href="cases.html#cb788-20"></a>                             <span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>))</span>
+<span id="cb788-21"><a href="cases.html#cb788-21"></a>    Sec99 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb788-22"><a href="cases.html#cb788-22"></a>  }</span>
+<span id="cb788-23"><a href="cases.html#cb788-23"></a></span>
+<span id="cb788-24"><a href="cases.html#cb788-24"></a><span class="co">## missing values in age</span></span>
+<span id="cb788-25"><a href="cases.html#cb788-25"></a></span>
+<span id="cb788-26"><a href="cases.html#cb788-26"></a>Sec99<span class="op">$</span>Ver20<span class="op">$</span>age[<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">19</span>, <span class="dv">73</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb789-1"><a href="cases.html#cb789-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Sec99.Rda&quot;</span>)</span>
+<span id="cb789-2"><a href="cases.html#cb789-2"></a><span class="kw">attach</span>(Sec99)</span>
+<span id="cb789-3"><a href="cases.html#cb789-3"></a>Ver20 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb789-4"><a href="cases.html#cb789-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> ToT)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb789-5"><a href="cases.html#cb789-5"></a><span class="st">  </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="Appendix_files/figure-html/unnamed-chunk-42-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="cases.html#cb790-1"></a><span class="kw">detach</span>(Sec99)</span></code></pre></div>
 </div>
 <div id="rational" class="section level3">
 <h3><span class="header-section-number">A.2.3</span> Rational</h3>
 <p>A project needs a predicted increase in revenue by a factor of 1.1 for management to give green light. The simulation produces a between-subject comparison study, where 50 users each see the current version of the website or the prototype. Revenue in both groups is Gamma distributed with a mean of 100 for the current version and a multiplyer of 1.1 for the prototype.</p>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="cases.html#cb791-1"></a><span class="co">## simulating the data set</span></span>
+<span id="cb791-2"><a href="cases.html#cb791-2"></a>Rational<span class="op">$</span>simulate &lt;-</span>
+<span id="cb791-3"><a href="cases.html#cb791-3"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">n_Part =</span> <span class="dv">100</span>,</span>
+<span id="cb791-4"><a href="cases.html#cb791-4"></a>    <span class="dt">mu_legacy =</span> <span class="dv">50</span>,</span>
+<span id="cb791-5"><a href="cases.html#cb791-5"></a>    <span class="dt">eta_proto =</span> <span class="fl">1.1</span>,</span>
+<span id="cb791-6"><a href="cases.html#cb791-6"></a>    <span class="dt">scale =</span> <span class="dv">2</span>,</span>
+<span id="cb791-7"><a href="cases.html#cb791-7"></a>    <span class="dt">set.seed =</span> <span class="dv">1</span>,</span>
+<span id="cb791-8"><a href="cases.html#cb791-8"></a>    <span class="dt">debug =</span> F){</span>
+<span id="cb791-9"><a href="cases.html#cb791-9"></a></span>
+<span id="cb791-10"><a href="cases.html#cb791-10"></a>    </span>
+<span id="cb791-11"><a href="cases.html#cb791-11"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(set.seed)) <span class="kw">set.seed</span>(set.seed)</span>
+<span id="cb791-12"><a href="cases.html#cb791-12"></a>    </span>
+<span id="cb791-13"><a href="cases.html#cb791-13"></a>    RD    &lt;-<span class="st"> </span></span>
+<span id="cb791-14"><a href="cases.html#cb791-14"></a><span class="st">      </span><span class="kw">tibble</span>(<span class="dt">Part =</span> <span class="dv">1</span><span class="op">:</span>n_Part,</span>
+<span id="cb791-15"><a href="cases.html#cb791-15"></a>                 <span class="dt">Design =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;current&quot;</span>, <span class="st">&quot;proto&quot;</span>), n_Part<span class="op">/</span><span class="dv">2</span>),</span>
+<span id="cb791-16"><a href="cases.html#cb791-16"></a>                 <span class="dt">mu =</span> mu_legacy <span class="op">*</span><span class="st"> </span><span class="kw">ifelse</span>(Design <span class="op">==</span><span class="st"> &quot;proto&quot;</span>, eta_proto, <span class="dv">1</span>),</span>
+<span id="cb791-17"><a href="cases.html#cb791-17"></a>                 <span class="dt">shape =</span> mu<span class="op">/</span>scale,</span>
+<span id="cb791-18"><a href="cases.html#cb791-18"></a>                 <span class="dt">scale =</span> scale,</span>
+<span id="cb791-19"><a href="cases.html#cb791-19"></a>                 <span class="dt">Euro =</span> <span class="kw">rgamma</span>(n_Part, <span class="dt">shape =</span> shape, <span class="dt">scale =</span> scale)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb791-20"><a href="cases.html#cb791-20"></a><span class="st">      </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb791-21"><a href="cases.html#cb791-21"></a>    RD  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb791-22"><a href="cases.html#cb791-22"></a>  }</span></code></pre></div>
 </div>
 <div id="browsingab" class="section level3">
 <h3><span class="header-section-number">A.2.4</span> BrowsingAB</h3>
+<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb792-1"><a href="cases.html#cb792-1"></a><span class="co">## simulating the data set</span></span>
+<span id="cb792-2"><a href="cases.html#cb792-2"></a>BrowsingAB<span class="op">$</span>simulate &lt;-</span>
+<span id="cb792-3"><a href="cases.html#cb792-3"></a><span class="st">  </span><span class="cf">function</span>(</span>
+<span id="cb792-4"><a href="cases.html#cb792-4"></a>    <span class="dt">n_Part =</span> <span class="dv">100</span>,</span>
+<span id="cb792-5"><a href="cases.html#cb792-5"></a>    <span class="dt">n_Task =</span> <span class="dv">5</span>,</span>
+<span id="cb792-6"><a href="cases.html#cb792-6"></a>    <span class="co">## within-subject design is default</span></span>
+<span id="cb792-7"><a href="cases.html#cb792-7"></a>    <span class="dt">within_Part =</span> T,</span>
+<span id="cb792-8"><a href="cases.html#cb792-8"></a>    <span class="co">## Fixed effects</span></span>
+<span id="cb792-9"><a href="cases.html#cb792-9"></a>    <span class="co"># intercept</span></span>
+<span id="cb792-10"><a href="cases.html#cb792-10"></a>    <span class="dt">beta_S0 =</span> <span class="dv">120</span>,</span>
+<span id="cb792-11"><a href="cases.html#cb792-11"></a>    <span class="co"># male</span></span>
+<span id="cb792-12"><a href="cases.html#cb792-12"></a>    <span class="dt">beta_S1 =</span> <span class="dv">2</span>,</span>
+<span id="cb792-13"><a href="cases.html#cb792-13"></a>    <span class="co"># edu low</span></span>
+<span id="cb792-14"><a href="cases.html#cb792-14"></a>    <span class="dt">beta_S2_1 =</span> <span class="dv">20</span>,</span>
+<span id="cb792-15"><a href="cases.html#cb792-15"></a>    <span class="co"># edu middle</span></span>
+<span id="cb792-16"><a href="cases.html#cb792-16"></a>    <span class="dt">beta_S2_2 =</span> <span class="dv">5</span>,</span>
+<span id="cb792-17"><a href="cases.html#cb792-17"></a>    <span class="co"># age</span></span>
+<span id="cb792-18"><a href="cases.html#cb792-18"></a>    <span class="dt">beta_S3 =</span> <span class="fl">.1</span>,</span>
+<span id="cb792-19"><a href="cases.html#cb792-19"></a>    <span class="co"># age:edu low</span></span>
+<span id="cb792-20"><a href="cases.html#cb792-20"></a>    <span class="dt">beta_S4_1 =</span> <span class="fl">.3</span>,</span>
+<span id="cb792-21"><a href="cases.html#cb792-21"></a>    <span class="co"># age:edu middle</span></span>
+<span id="cb792-22"><a href="cases.html#cb792-22"></a>    <span class="dt">beta_S4_2 =</span> <span class="dv">0</span>,</span>
+<span id="cb792-23"><a href="cases.html#cb792-23"></a>    <span class="co"># age:designB</span></span>
+<span id="cb792-24"><a href="cases.html#cb792-24"></a>    <span class="dt">beta_S5 =</span> <span class="fl">.4</span>,</span>
+<span id="cb792-25"><a href="cases.html#cb792-25"></a>    <span class="co"># designB</span></span>
+<span id="cb792-26"><a href="cases.html#cb792-26"></a>    <span class="dt">beta_D1 =</span> <span class="dv">-60</span>,</span>
+<span id="cb792-27"><a href="cases.html#cb792-27"></a>    </span>
+<span id="cb792-28"><a href="cases.html#cb792-28"></a>    <span class="co">## Random effects</span></span>
+<span id="cb792-29"><a href="cases.html#cb792-29"></a>    <span class="co"># subject intercept</span></span>
+<span id="cb792-30"><a href="cases.html#cb792-30"></a>    <span class="dt">sd_S0 =</span> <span class="dv">20</span>,</span>
+<span id="cb792-31"><a href="cases.html#cb792-31"></a>    <span class="co"># subject slope design</span></span>
+<span id="cb792-32"><a href="cases.html#cb792-32"></a>    <span class="dt">sd_S1 =</span> <span class="dv">10</span>,</span>
+<span id="cb792-33"><a href="cases.html#cb792-33"></a>    <span class="co"># task intercept</span></span>
+<span id="cb792-34"><a href="cases.html#cb792-34"></a>    <span class="dt">sd_T0 =</span> <span class="dv">50</span>,</span>
+<span id="cb792-35"><a href="cases.html#cb792-35"></a>    <span class="co"># Far_sightedness:Small_font</span></span>
+<span id="cb792-36"><a href="cases.html#cb792-36"></a>    <span class="dt">lambda_SD1 =</span> <span class="dv">60</span>,</span>
+<span id="cb792-37"><a href="cases.html#cb792-37"></a>    <span class="co"># Residual</span></span>
+<span id="cb792-38"><a href="cases.html#cb792-38"></a>    <span class="dt">sd_epsilon =</span> <span class="dv">30</span>,</span>
+<span id="cb792-39"><a href="cases.html#cb792-39"></a>    <span class="dt">set.seed =</span> <span class="dv">42</span>,</span>
+<span id="cb792-40"><a href="cases.html#cb792-40"></a>    <span class="dt">debug =</span> F</span>
+<span id="cb792-41"><a href="cases.html#cb792-41"></a>  ){</span>
+<span id="cb792-42"><a href="cases.html#cb792-42"></a>    </span>
+<span id="cb792-43"><a href="cases.html#cb792-43"></a>    n_Design =<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb792-44"><a href="cases.html#cb792-44"></a>    </span>
+<span id="cb792-45"><a href="cases.html#cb792-45"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.na</span>(set.seed)) <span class="kw">set.seed</span>(set.seed)</span>
+<span id="cb792-46"><a href="cases.html#cb792-46"></a>    <span class="co">## number of observations</span></span>
+<span id="cb792-47"><a href="cases.html#cb792-47"></a>    n_Obs =<span class="st"> </span>n_Part <span class="op">*</span><span class="st"> </span>n_Design <span class="op">*</span><span class="st"> </span>n_Task</span>
+<span id="cb792-48"><a href="cases.html#cb792-48"></a>    </span>
+<span id="cb792-49"><a href="cases.html#cb792-49"></a>    <span class="co">## Subject frame</span></span>
+<span id="cb792-50"><a href="cases.html#cb792-50"></a>    Part =<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb792-51"><a href="cases.html#cb792-51"></a>      <span class="dt">Part =</span> <span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span>n_Part),</span>
+<span id="cb792-52"><a href="cases.html#cb792-52"></a>      <span class="dt">Gender =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>), </span>
+<span id="cb792-53"><a href="cases.html#cb792-53"></a>                      <span class="dt">size =</span> n_Part, <span class="dt">replace =</span> T),</span>
+<span id="cb792-54"><a href="cases.html#cb792-54"></a>      <span class="dt">Education =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Middle&quot;</span>, <span class="st">&quot;High&quot;</span>), </span>
+<span id="cb792-55"><a href="cases.html#cb792-55"></a>                         <span class="dt">size =</span> n_Part, <span class="dt">replace =</span> T),</span>
+<span id="cb792-56"><a href="cases.html#cb792-56"></a>      <span class="dt">theta_S0 =</span> <span class="kw">rnorm</span>(n_Part, <span class="dv">0</span>, sd_S0),</span>
+<span id="cb792-57"><a href="cases.html#cb792-57"></a>      <span class="dt">theta_S1 =</span> <span class="kw">rnorm</span>(n_Part, <span class="dv">0</span>, sd_S1),</span>
+<span id="cb792-58"><a href="cases.html#cb792-58"></a>      <span class="dt">age =</span> <span class="kw">as.integer</span>(<span class="kw">runif</span>(n_Part, <span class="dv">20</span>, <span class="dv">80</span>))</span>
+<span id="cb792-59"><a href="cases.html#cb792-59"></a>    ) <span class="op">%&gt;%</span></span>
+<span id="cb792-60"><a href="cases.html#cb792-60"></a><span class="st">      </span><span class="co"># LVs</span></span>
+<span id="cb792-61"><a href="cases.html#cb792-61"></a><span class="st">      </span><span class="co"># probability of far sightedness increases with age</span></span>
+<span id="cb792-62"><a href="cases.html#cb792-62"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">p_Far_sighted =</span> age <span class="op">/</span><span class="st"> </span><span class="dv">150</span></span>
+<span id="cb792-63"><a href="cases.html#cb792-63"></a>             <span class="co">#p_Far_sighted = plogis(mu_Far_sighted)</span></span>
+<span id="cb792-64"><a href="cases.html#cb792-64"></a>             ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb792-65"><a href="cases.html#cb792-65"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">Far_sighted =</span> <span class="kw">as.logical</span>(<span class="kw">rbinom</span>(n_Part, <span class="dv">1</span>, p_Far_sighted)))</span>
+<span id="cb792-66"><a href="cases.html#cb792-66"></a>    </span>
+<span id="cb792-67"><a href="cases.html#cb792-67"></a>    </span>
+<span id="cb792-68"><a href="cases.html#cb792-68"></a>    Task =<span class="st"> </span></span>
+<span id="cb792-69"><a href="cases.html#cb792-69"></a><span class="st">      </span><span class="kw">tibble</span>(<span class="dt">Task =</span> <span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span>n_Task),</span>
+<span id="cb792-70"><a href="cases.html#cb792-70"></a>                      <span class="dt">theta_T0 =</span> <span class="kw">rnorm</span>(n_Task, <span class="dv">0</span>, sd_T0))</span>
+<span id="cb792-71"><a href="cases.html#cb792-71"></a>    </span>
+<span id="cb792-72"><a href="cases.html#cb792-72"></a>    Design =<span class="st"> </span></span>
+<span id="cb792-73"><a href="cases.html#cb792-73"></a><span class="st">      </span><span class="kw">tibble</span>(<span class="dt">Design =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">## LVs</span></span>
+<span id="cb792-74"><a href="cases.html#cb792-74"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">Small_font =</span> (Design <span class="op">==</span><span class="st"> &quot;B&quot;</span>))</span>
+<span id="cb792-75"><a href="cases.html#cb792-75"></a>    </span>
+<span id="cb792-76"><a href="cases.html#cb792-76"></a>    </span>
+<span id="cb792-77"><a href="cases.html#cb792-77"></a>    BrowsingAB =</span>
+<span id="cb792-78"><a href="cases.html#cb792-78"></a><span class="st">      </span><span class="co">## creating a complete design</span></span>
+<span id="cb792-79"><a href="cases.html#cb792-79"></a><span class="st">      </span><span class="kw">expand_grid</span>(</span>
+<span id="cb792-80"><a href="cases.html#cb792-80"></a>        <span class="dt">Part =</span> <span class="kw">levels</span>(Part<span class="op">$</span>Part),</span>
+<span id="cb792-81"><a href="cases.html#cb792-81"></a>        <span class="dt">Task =</span> <span class="kw">levels</span>(Task<span class="op">$</span>Task),</span>
+<span id="cb792-82"><a href="cases.html#cb792-82"></a>        <span class="dt">Design =</span> <span class="kw">levels</span>(Design<span class="op">$</span>Design)) <span class="op">%&gt;%</span></span>
+<span id="cb792-83"><a href="cases.html#cb792-83"></a><span class="st">      </span><span class="co">## joining in the sample tables</span></span>
+<span id="cb792-84"><a href="cases.html#cb792-84"></a><span class="st">      </span><span class="kw">inner_join</span>(Part) <span class="op">%&gt;%</span></span>
+<span id="cb792-85"><a href="cases.html#cb792-85"></a><span class="st">      </span><span class="kw">inner_join</span>(Design) <span class="op">%&gt;%</span></span>
+<span id="cb792-86"><a href="cases.html#cb792-86"></a><span class="st">      </span><span class="kw">inner_join</span>(Task) <span class="op">%&gt;%</span></span>
+<span id="cb792-87"><a href="cases.html#cb792-87"></a><span class="st">      </span><span class="co">## latent variables</span></span>
+<span id="cb792-88"><a href="cases.html#cb792-88"></a><span class="st">      </span><span class="co"># small font at website B</span></span>
+<span id="cb792-89"><a href="cases.html#cb792-89"></a><span class="st">      </span><span class="kw">mutate</span>(lambda_SD1 <span class="op">*</span><span class="st"> </span>Small_font <span class="op">*</span><span class="st"> </span>Far_sighted) <span class="op">%&gt;%</span></span>
+<span id="cb792-90"><a href="cases.html#cb792-90"></a><span class="st">      </span><span class="co">## dependent variable</span></span>
+<span id="cb792-91"><a href="cases.html#cb792-91"></a><span class="st">      </span><span class="kw">mutate</span>(</span>
+<span id="cb792-92"><a href="cases.html#cb792-92"></a>        <span class="dt">mu =</span> beta_S0 <span class="op">+</span></span>
+<span id="cb792-93"><a href="cases.html#cb792-93"></a><span class="st">          </span>(Gender <span class="op">==</span><span class="st"> &quot;male&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S1 <span class="op">+</span></span>
+<span id="cb792-94"><a href="cases.html#cb792-94"></a><span class="st">          </span>(Education <span class="op">==</span><span class="st"> &quot;Low&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S2_<span class="dv">1</span> <span class="op">+</span></span>
+<span id="cb792-95"><a href="cases.html#cb792-95"></a><span class="st">          </span>(Education <span class="op">==</span><span class="st"> &quot;Middle&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S2_<span class="dv">1</span> <span class="op">+</span></span>
+<span id="cb792-96"><a href="cases.html#cb792-96"></a><span class="st">          </span>age <span class="op">*</span><span class="st"> </span>beta_S3 <span class="op">+</span></span>
+<span id="cb792-97"><a href="cases.html#cb792-97"></a><span class="st">          </span>age <span class="op">*</span><span class="st"> </span>(Education <span class="op">==</span><span class="st"> &quot;Low&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S4_<span class="dv">1</span> <span class="op">+</span></span>
+<span id="cb792-98"><a href="cases.html#cb792-98"></a><span class="st">          </span>age <span class="op">*</span><span class="st"> </span>(Education <span class="op">==</span><span class="st"> &quot;Middle&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S4_<span class="dv">2</span> <span class="op">+</span></span>
+<span id="cb792-99"><a href="cases.html#cb792-99"></a><span class="st">          </span>age <span class="op">*</span><span class="st"> </span>(Design <span class="op">==</span><span class="st"> &quot;B&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_S5 <span class="op">+</span></span>
+<span id="cb792-100"><a href="cases.html#cb792-100"></a><span class="st">          </span>(Design <span class="op">==</span><span class="st"> &quot;B&quot;</span>) <span class="op">*</span><span class="st"> </span>beta_D1 <span class="op">+</span></span>
+<span id="cb792-101"><a href="cases.html#cb792-101"></a><span class="st">          </span>theta_S0 <span class="op">+</span></span>
+<span id="cb792-102"><a href="cases.html#cb792-102"></a><span class="st">          </span>theta_S1 <span class="op">*</span><span class="st"> </span>(Design <span class="op">==</span><span class="st"> &quot;A&quot;</span>) <span class="op">+</span></span>
+<span id="cb792-103"><a href="cases.html#cb792-103"></a><span class="st">          </span>theta_T0 <span class="op">+</span></span>
+<span id="cb792-104"><a href="cases.html#cb792-104"></a><span class="st">          </span>lambda_SD1 <span class="op">*</span><span class="st"> </span>Far_sighted <span class="op">*</span><span class="st"> </span>Small_font) <span class="op">%&gt;%</span></span>
+<span id="cb792-105"><a href="cases.html#cb792-105"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">ToT =</span> <span class="kw">rnorm</span>(n_Obs, mu, sd_epsilon),</span>
+<span id="cb792-106"><a href="cases.html#cb792-106"></a>             <span class="dt">clicks =</span> <span class="kw">rpois</span>(n_Obs, mu<span class="op">/</span><span class="dv">20</span>),</span>
+<span id="cb792-107"><a href="cases.html#cb792-107"></a>             <span class="dt">returns =</span> <span class="kw">rpois</span>(n_Obs, mu<span class="op">/</span><span class="dv">80</span>),</span>
+<span id="cb792-108"><a href="cases.html#cb792-108"></a>             <span class="dt">rating =</span> <span class="kw">ceiling</span>(<span class="kw">inv_logit</span>((mu <span class="op">-</span><span class="st"> </span><span class="dv">150</span>)<span class="op">/</span><span class="dv">50</span>) <span class="op">*</span><span class="st"> </span><span class="dv">7</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb792-109"><a href="cases.html#cb792-109"></a><span class="st">      </span><span class="kw">select</span>(Part, Task, Design, </span>
+<span id="cb792-110"><a href="cases.html#cb792-110"></a>             Gender, Education, age, Far_sighted, Small_font, </span>
+<span id="cb792-111"><a href="cases.html#cb792-111"></a>             ToT, clicks, returns, rating) <span class="op">%&gt;%</span></span>
+<span id="cb792-112"><a href="cases.html#cb792-112"></a><span class="st">      </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb792-113"><a href="cases.html#cb792-113"></a>  }</span></code></pre></div>
 </div>
 <div id="headache" class="section level3">
 <h3><span class="header-section-number">A.2.5</span> Headache</h3>
 <p>This simulation takes perceived headache measured on 16 participants before and after an administration of headache pills. Participants either get both pills A and B, only A, only B or no pill (placebo). Pill A and B are both effective on their own, but there is a saturation effect, when both pills are taken. Baseline headache is generated from Beta distributions. In order to avoid unplausible (i.e. negative) values, reduction in headache involves a log transformation.</p>
-<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb783-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Headache.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb783-2" title="2"><span class="kw">attach</span>(Headache)</a>
-<a class="sourceLine" id="cb783-3" title="3"><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb783-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> PillA, <span class="dt">color =</span> PillB, <span class="dt">y =</span> reduction)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb783-5" title="5"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="Appendix_files/figure-html/unnamed-chunk-42-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb784-1" title="1"><span class="kw">detach</span>(Headache)</a></code></pre></div>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="cases.html#cb793-1"></a>Headache<span class="op">$</span>simulate &lt;-</span>
+<span id="cb793-2"><a href="cases.html#cb793-2"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">N =</span> <span class="dv">16</span>, </span>
+<span id="cb793-3"><a href="cases.html#cb793-3"></a>           <span class="dt">seed =</span> <span class="dv">42</span>){</span>
+<span id="cb793-4"><a href="cases.html#cb793-4"></a>    <span class="kw">set.seed</span>(seed)</span>
+<span id="cb793-5"><a href="cases.html#cb793-5"></a>    <span class="kw">tibble</span>(<span class="dt">before =</span> <span class="kw">round</span>(<span class="kw">rbeta</span>(N, <span class="dv">3</span>, <span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="dv">4</span> <span class="op">+</span><span class="st"> </span><span class="dv">3</span>),</span>
+<span id="cb793-6"><a href="cases.html#cb793-6"></a>               <span class="dt">PillA =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>), N<span class="op">/</span><span class="dv">2</span>),</span>
+<span id="cb793-7"><a href="cases.html#cb793-7"></a>               <span class="dt">PillB =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="ot">TRUE</span>, N<span class="op">/</span><span class="dv">2</span>), <span class="kw">rep</span>(<span class="ot">FALSE</span>, N<span class="op">/</span><span class="dv">2</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb793-8"><a href="cases.html#cb793-8"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">reduction =</span> <span class="kw">rnorm</span>(N, </span>
+<span id="cb793-9"><a href="cases.html#cb793-9"></a>                               before<span class="op">/</span><span class="dv">7</span> <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">8</span> <span class="op">*</span><span class="st"> </span>PillA <span class="op">+</span><span class="st"> </span><span class="dv">6</span> <span class="op">*</span><span class="st"> </span>PillB), </span>
+<span id="cb793-10"><a href="cases.html#cb793-10"></a>                               <span class="fl">0.5</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb793-11"><a href="cases.html#cb793-11"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">PillA =</span> <span class="kw">as.factor</span>(PillA),</span>
+<span id="cb793-12"><a href="cases.html#cb793-12"></a>             <span class="dt">PillB =</span> <span class="kw">as.factor</span>(PillB)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb793-13"><a href="cases.html#cb793-13"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb794-1"><a href="cases.html#cb794-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Headache.Rda&quot;</span>)</span>
+<span id="cb794-2"><a href="cases.html#cb794-2"></a><span class="kw">attach</span>(Headache)</span>
+<span id="cb794-3"><a href="cases.html#cb794-3"></a><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb794-4"><a href="cases.html#cb794-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> PillA, <span class="dt">color =</span> PillB, <span class="dt">y =</span> reduction)) <span class="op">+</span></span>
+<span id="cb794-5"><a href="cases.html#cb794-5"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="Appendix_files/figure-html/unnamed-chunk-47-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="cases.html#cb795-1"></a><span class="kw">detach</span>(Headache)</span></code></pre></div>
 </div>
 <div id="reading" class="section level3">
 <h3><span class="header-section-number">A.2.6</span> Reading time</h3>
 <p>This simulation covers an experiment where participants got to read a text on screen and their reading time is recorded. 40 participants are divided over four experimental conditions, where the font size is either 10pt or 12pt and where the font color is either black (high contrast) or gray. Small and gray font results in an average reading time of 60 seconds. 12pt is read 12s faster and black font is read 10s faster. Due to a saturation effect, 12pt and black combined do not result in 22s, but only 14s. Reading time (ToT) is generated with Gaussian distribution.</p>
-<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb785-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Reading.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb785-2" title="2"><span class="kw">attach</span>(Reading)</a>
-<a class="sourceLine" id="cb785-3" title="3"><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb785-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">col =</span> font_color,</a>
-<a class="sourceLine" id="cb785-5" title="5">             <span class="dt">x =</span> font_size,</a>
-<a class="sourceLine" id="cb785-6" title="6">             <span class="dt">y =</span> ToT)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb785-7" title="7"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="Appendix_files/figure-html/unnamed-chunk-43-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" title="1"><span class="kw">detach</span>(Reading)</a></code></pre></div>
+<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb796-1"><a href="cases.html#cb796-1"></a>Reading<span class="op">$</span>simulate &lt;-</span>
+<span id="cb796-2"><a href="cases.html#cb796-2"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">N =</span> <span class="dv">40</span>,</span>
+<span id="cb796-3"><a href="cases.html#cb796-3"></a>           <span class="dt">beta =</span> <span class="kw">c</span>(<span class="dt">Intercpt =</span> <span class="dv">60</span>, </span>
+<span id="cb796-4"><a href="cases.html#cb796-4"></a>                    <span class="dt">fnt_size_12 =</span> <span class="dv">-12</span>, </span>
+<span id="cb796-5"><a href="cases.html#cb796-5"></a>                    <span class="dt">fnt_color_blk =</span> <span class="dv">-10</span>, </span>
+<span id="cb796-6"><a href="cases.html#cb796-6"></a>                    <span class="dt">ia_blk_12 =</span> <span class="dv">8</span>),</span>
+<span id="cb796-7"><a href="cases.html#cb796-7"></a>           <span class="dt">sigma =</span> <span class="dv">5</span>,</span>
+<span id="cb796-8"><a href="cases.html#cb796-8"></a>           <span class="dt">seed =</span> <span class="dv">42</span>) </span>
+<span id="cb796-9"><a href="cases.html#cb796-9"></a>    {</span>
+<span id="cb796-10"><a href="cases.html#cb796-10"></a>    <span class="kw">set.seed</span>(seed)</span>
+<span id="cb796-11"><a href="cases.html#cb796-11"></a>    out &lt;-</span>
+<span id="cb796-12"><a href="cases.html#cb796-12"></a><span class="st">      </span><span class="kw">tibble</span>(<span class="dt">Part =</span> <span class="dv">1</span><span class="op">:</span>N,</span>
+<span id="cb796-13"><a href="cases.html#cb796-13"></a>                 <span class="dt">font_size =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), N<span class="op">/</span><span class="dv">2</span>), </span>
+<span id="cb796-14"><a href="cases.html#cb796-14"></a>                                    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), </span>
+<span id="cb796-15"><a href="cases.html#cb796-15"></a>                                    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;10pt&quot;</span>, <span class="st">&quot;12pt&quot;</span>)),</span>
+<span id="cb796-16"><a href="cases.html#cb796-16"></a>                 <span class="dt">font_color =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, N<span class="op">/</span><span class="dv">2</span>), <span class="kw">rep</span>(<span class="dv">2</span>, N<span class="op">/</span><span class="dv">2</span>)),</span>
+<span id="cb796-17"><a href="cases.html#cb796-17"></a>                                     <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), </span>
+<span id="cb796-18"><a href="cases.html#cb796-18"></a>                                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;black&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb796-19"><a href="cases.html#cb796-19"></a><span class="st">       </span><span class="kw">mutate</span>( <span class="dt">mu =</span> beta[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb796-20"><a href="cases.html#cb796-20"></a><span class="st">                </span>beta[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(font_size <span class="op">==</span><span class="st"> &quot;12pt&quot;</span>) <span class="op">+</span></span>
+<span id="cb796-21"><a href="cases.html#cb796-21"></a><span class="st">                </span>beta[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>(font_color <span class="op">==</span><span class="st"> &quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb796-22"><a href="cases.html#cb796-22"></a><span class="st">                </span>beta[<span class="dv">4</span>] <span class="op">*</span><span class="st"> </span>(font_color <span class="op">==</span><span class="st"> &quot;black&quot;</span>) <span class="op">*</span><span class="st"> </span>(font_size <span class="op">==</span><span class="st"> &quot;12pt&quot;</span>),</span>
+<span id="cb796-23"><a href="cases.html#cb796-23"></a>              <span class="dt">ToT =</span> <span class="kw">rnorm</span>(N,  mu, sigma)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb796-24"><a href="cases.html#cb796-24"></a><span class="st">    </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb796-25"><a href="cases.html#cb796-25"></a></span>
+<span id="cb796-26"><a href="cases.html#cb796-26"></a>    out</span>
+<span id="cb796-27"><a href="cases.html#cb796-27"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="cases.html#cb797-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Reading.Rda&quot;</span>)</span>
+<span id="cb797-2"><a href="cases.html#cb797-2"></a><span class="kw">attach</span>(Reading)</span>
+<span id="cb797-3"><a href="cases.html#cb797-3"></a><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb797-4"><a href="cases.html#cb797-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">col =</span> font_color,</span>
+<span id="cb797-5"><a href="cases.html#cb797-5"></a>             <span class="dt">x =</span> font_size,</span>
+<span id="cb797-6"><a href="cases.html#cb797-6"></a>             <span class="dt">y =</span> ToT)) <span class="op">+</span></span>
+<span id="cb797-7"><a href="cases.html#cb797-7"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="Appendix_files/figure-html/unnamed-chunk-49-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb798-1"><a href="cases.html#cb798-1"></a><span class="kw">detach</span>(Reading)</span></code></pre></div>
 </div>
 <div id="argame" class="section level3">
 <h3><span class="header-section-number">A.2.7</span> AR_game</h3>
 <p>A company seeks their customer profile for a novel Augmented Reality game. 200 participants rate how technophile or sociophile they are (generated from Beta distributions) and rate their intention to buy the product. The coefficients are set to create a slight benefit (for intention) of being sociophile or technophile and an amplification effect for participants that are both. Intention is sampled from a Gaussian distribution, but with an inverse logit transformation to create boundaries at <span class="math inline">\([0;1]\)</span>.</p>
-<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb787-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/AR_game.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb787-2" title="2"><span class="kw">attach</span>(AR_game)</a>
-<a class="sourceLine" id="cb787-3" title="3"><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb787-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">technophile_grp =</span> technophile <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(technophile),</a>
-<a class="sourceLine" id="cb787-5" title="5">         <span class="dt">sociophile_grp =</span> sociophile <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(sociophile)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb787-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> sociophile_grp,</a>
-<a class="sourceLine" id="cb787-7" title="7">             <span class="dt">color =</span> technophile_grp,</a>
-<a class="sourceLine" id="cb787-8" title="8">             <span class="dt">y =</span> intention)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb787-9" title="9"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="Appendix_files/figure-html/unnamed-chunk-44-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb788-1" title="1"><span class="kw">detach</span>(AR_game)</a></code></pre></div>
+<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb799-1"><a href="cases.html#cb799-1"></a>AR_game<span class="op">$</span>simulate &lt;-</span>
+<span id="cb799-2"><a href="cases.html#cb799-2"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">N =</span> <span class="dv">200</span>,</span>
+<span id="cb799-3"><a href="cases.html#cb799-3"></a>           <span class="dt">beta =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">.4</span>, <span class="fl">.6</span>),</span>
+<span id="cb799-4"><a href="cases.html#cb799-4"></a>           <span class="dt">sigma =</span> <span class="fl">.2</span>,</span>
+<span id="cb799-5"><a href="cases.html#cb799-5"></a>           <span class="dt">seed =</span> <span class="dv">42</span>) </span>
+<span id="cb799-6"><a href="cases.html#cb799-6"></a>    {</span>
+<span id="cb799-7"><a href="cases.html#cb799-7"></a>    <span class="kw">set.seed</span>(seed)</span>
+<span id="cb799-8"><a href="cases.html#cb799-8"></a>    out &lt;-</span>
+<span id="cb799-9"><a href="cases.html#cb799-9"></a><span class="st">      </span><span class="kw">tibble</span>(<span class="dt">Part =</span> <span class="dv">1</span><span class="op">:</span>N,</span>
+<span id="cb799-10"><a href="cases.html#cb799-10"></a>                 <span class="dt">technophile =</span> <span class="kw">rbeta</span>(N, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb799-11"><a href="cases.html#cb799-11"></a>                 <span class="dt">sociophile =</span> <span class="kw">rbeta</span>(N, <span class="dv">2</span>, <span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb799-12"><a href="cases.html#cb799-12"></a><span class="st">      </span><span class="kw">mutate</span>( <span class="dt">eta =</span> beta[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb799-13"><a href="cases.html#cb799-13"></a><span class="st">                </span>beta[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>technophile <span class="op">+</span></span>
+<span id="cb799-14"><a href="cases.html#cb799-14"></a><span class="st">                </span>beta[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>sociophile <span class="op">+</span></span>
+<span id="cb799-15"><a href="cases.html#cb799-15"></a><span class="st">                </span>beta[<span class="dv">4</span>] <span class="op">*</span><span class="st"> </span>technophile <span class="op">*</span><span class="st"> </span>sociophile,</span>
+<span id="cb799-16"><a href="cases.html#cb799-16"></a>              <span class="dt">intention =</span> mascutils<span class="op">::</span><span class="kw">inv_logit</span>(<span class="kw">rnorm</span>(N,  eta, sigma))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb799-17"><a href="cases.html#cb799-17"></a><span class="st">      </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb799-18"><a href="cases.html#cb799-18"></a>    </span>
+<span id="cb799-19"><a href="cases.html#cb799-19"></a>    <span class="kw">class</span>(out) &lt;-<span class="st"> </span><span class="kw">append</span>(<span class="kw">class</span>(out), <span class="st">&quot;sim_tbl&quot;</span>)</span>
+<span id="cb799-20"><a href="cases.html#cb799-20"></a>    <span class="kw">attr</span>(out, <span class="st">&quot;coef&quot;</span>) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">beta =</span> beta,</span>
+<span id="cb799-21"><a href="cases.html#cb799-21"></a>                              <span class="dt">sigma =</span> sigma)</span>
+<span id="cb799-22"><a href="cases.html#cb799-22"></a>    <span class="kw">attr</span>(out, <span class="st">&quot;seed&quot;</span>) &lt;-<span class="st"> </span>seed</span>
+<span id="cb799-23"><a href="cases.html#cb799-23"></a>    </span>
+<span id="cb799-24"><a href="cases.html#cb799-24"></a>    out <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb799-25"><a href="cases.html#cb799-25"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="cases.html#cb800-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/AR_game.Rda&quot;</span>)</span>
+<span id="cb800-2"><a href="cases.html#cb800-2"></a><span class="kw">attach</span>(AR_game)</span>
+<span id="cb800-3"><a href="cases.html#cb800-3"></a><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb800-4"><a href="cases.html#cb800-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">technophile_grp =</span> technophile <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(technophile),</span>
+<span id="cb800-5"><a href="cases.html#cb800-5"></a>         <span class="dt">sociophile_grp =</span> sociophile <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(sociophile)) <span class="op">%&gt;%</span></span>
+<span id="cb800-6"><a href="cases.html#cb800-6"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> sociophile_grp,</span>
+<span id="cb800-7"><a href="cases.html#cb800-7"></a>             <span class="dt">color =</span> technophile_grp,</span>
+<span id="cb800-8"><a href="cases.html#cb800-8"></a>             <span class="dt">y =</span> intention)) <span class="op">+</span></span>
+<span id="cb800-9"><a href="cases.html#cb800-9"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="Appendix_files/figure-html/unnamed-chunk-51-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb801-1"><a href="cases.html#cb801-1"></a><span class="kw">detach</span>(AR_game)</span></code></pre></div>
 </div>
 <div id="sleep" class="section level3">
 <h3><span class="header-section-number">A.2.8</span> Sleep</h3>
-<p>This simulation is loosely modelled after an experiment Corcoran [D. W. J. Corcoran (1962) Noise and loss of sleep, Quarterly Journal of Experimental Psychology, 14:3, 178-182, DOI: 10.1080/17470216208416533] who measured the combined effects of sleep deprivation and noisy environments. It turned out that noise and sleep deprivation both increase reaction times, but that noise helps when someone is very tired. Outcomes were simulated from Gaussian distributions.</p>
+<p>This simulation is loosely modelled after an experiment Corcoran [%D. W. J. Corcoran (1962) Noise and loss of sleep, Quarterly Journal of Experimental Psychology, 14:3, 178-182, DOI: 10.1080/17470216208416533] who measured the combined effects of sleep deprivation and noisy environments. It turned out that noise and sleep deprivation both increase reaction times, but that noise helps when someone is very tired. Outcomes were simulated from Gaussian distributions.</p>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="cases.html#cb802-1"></a>Sleep<span class="op">$</span>simulate &lt;-</span>
+<span id="cb802-2"><a href="cases.html#cb802-2"></a><span class="st">  </span><span class="cf">function</span>(<span class="dt">N =</span> <span class="dv">40</span>, </span>
+<span id="cb802-3"><a href="cases.html#cb802-3"></a>           <span class="dt">beta =</span> <span class="kw">c</span>(<span class="dt">Intcpt =</span> <span class="dv">70</span>, </span>
+<span id="cb802-4"><a href="cases.html#cb802-4"></a>                    <span class="dt">noisy =</span> <span class="dv">8</span>,</span>
+<span id="cb802-5"><a href="cases.html#cb802-5"></a>                    <span class="dt">deprived =</span> <span class="dv">200</span>, </span>
+<span id="cb802-6"><a href="cases.html#cb802-6"></a>                    <span class="dt">n_d =</span> <span class="dv">-100</span>), </span>
+<span id="cb802-7"><a href="cases.html#cb802-7"></a>           <span class="dt">sigma =</span> <span class="dv">50</span>, </span>
+<span id="cb802-8"><a href="cases.html#cb802-8"></a>           <span class="dt">seed  =</span> <span class="dv">42</span>){</span>
+<span id="cb802-9"><a href="cases.html#cb802-9"></a>    <span class="kw">set.seed</span>(seed)</span>
+<span id="cb802-10"><a href="cases.html#cb802-10"></a>    <span class="kw">expand.grid</span>(<span class="dt">.N =</span> <span class="dv">1</span><span class="op">:</span>(N<span class="op">/</span><span class="dv">4</span>), </span>
+<span id="cb802-11"><a href="cases.html#cb802-11"></a>                <span class="dt">Environment =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="st">&quot;Calm&quot;</span>, <span class="st">&quot;Noisy&quot;</span>)),</span>
+<span id="cb802-12"><a href="cases.html#cb802-12"></a>                <span class="dt">Sleep =</span> <span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="st">&quot;Rested&quot;</span>, <span class="st">&quot;Sleepy&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb802-13"><a href="cases.html#cb802-13"></a><span class="st">      </span><span class="kw">select</span>(<span class="op">-</span>.N) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb802-14"><a href="cases.html#cb802-14"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">Part =</span> <span class="dv">1</span><span class="op">:</span>N,</span>
+<span id="cb802-15"><a href="cases.html#cb802-15"></a>             <span class="dt">mu =</span> beta[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb802-16"><a href="cases.html#cb802-16"></a><span class="st">               </span>beta[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>(Environment <span class="op">==</span><span class="st"> &quot;Noisy&quot;</span>) <span class="op">+</span></span>
+<span id="cb802-17"><a href="cases.html#cb802-17"></a><span class="st">               </span>beta[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>(Sleep <span class="op">==</span><span class="st"> &quot;Sleepy&quot;</span>) <span class="op">+</span></span>
+<span id="cb802-18"><a href="cases.html#cb802-18"></a><span class="st">               </span>beta[<span class="dv">4</span>] <span class="op">*</span><span class="st"> </span>(Environment <span class="op">==</span><span class="st"> &quot;Noisy&quot;</span>) <span class="op">*</span><span class="st"> </span>(Sleep <span class="op">==</span><span class="st"> &quot;Sleepy&quot;</span>),</span>
+<span id="cb802-19"><a href="cases.html#cb802-19"></a>             <span class="dt">RT =</span> <span class="kw">rnorm</span>(N,mu,sigma)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb802-20"><a href="cases.html#cb802-20"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">RT =</span> <span class="kw">ifelse</span>(RT <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, RT, <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb802-21"><a href="cases.html#cb802-21"></a><span class="st">      </span><span class="kw">select</span>(<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>)  <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb802-22"><a href="cases.html#cb802-22"></a><span class="st">      </span><span class="kw">as_tbl_obs</span>()</span>
+<span id="cb802-23"><a href="cases.html#cb802-23"></a>  }</span></code></pre></div>
 <p>These results can be explained by the Yerkes-Dodson law, which states that performance on cognitive tasks is best under moderate arousal. It is assumed that arousal increases energy, but also causes loss of focus. These two counter-acting forces reach an optimal point somewhere in between. The two lines Energy and Focus have been produced by a logistic function, whereas Performance is the product of the two.</p>
-<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb789-1" title="1"><span class="kw">load</span>(<span class="st">&quot;Cases/Sleep.Rda&quot;</span>)</a>
-<a class="sourceLine" id="cb789-2" title="2"><span class="kw">attach</span>(Sleep)</a>
-<a class="sourceLine" id="cb789-3" title="3"><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb789-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Environment,</a>
-<a class="sourceLine" id="cb789-5" title="5">             <span class="dt">color =</span> Sleep,</a>
-<a class="sourceLine" id="cb789-6" title="6">             <span class="dt">y =</span> RT)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb789-7" title="7"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="Appendix_files/figure-html/unnamed-chunk-45-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb790-1" title="1"><span class="kw">detach</span>(Sleep)</a></code></pre></div>
+<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="cases.html#cb803-1"></a><span class="kw">load</span>(<span class="st">&quot;Cases/Sleep.Rda&quot;</span>)</span>
+<span id="cb803-2"><a href="cases.html#cb803-2"></a><span class="kw">attach</span>(Sleep)</span>
+<span id="cb803-3"><a href="cases.html#cb803-3"></a><span class="kw">simulate</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb803-4"><a href="cases.html#cb803-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Environment,</span>
+<span id="cb803-5"><a href="cases.html#cb803-5"></a>             <span class="dt">color =</span> Sleep,</span>
+<span id="cb803-6"><a href="cases.html#cb803-6"></a>             <span class="dt">y =</span> RT)) <span class="op">+</span></span>
+<span id="cb803-7"><a href="cases.html#cb803-7"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="Appendix_files/figure-html/unnamed-chunk-53-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="cases.html#cb804-1"></a><span class="kw">detach</span>(Sleep)</span></code></pre></div>
 
 </div>
 </div>
@@ -856,7 +1126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <hr />
 <ol>
 <li id="fn1"><p>Egan, D. Individual differences in human-computer
-interaction. In M. Helander, ed., Handbook of Human Computer interaction. Elsevier Science Publishers, Amsterdam, The Netherlands, 1988, 543–568.<a href="mlm.html#fnref1" class="footnote-back">↩</a></p></li>
+interaction. In M. Helander, ed., Handbook of Human Computer interaction. Elsevier Science Publishers, Amsterdam, The Netherlands, 1988, 543–568.<a href="mlm.html#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
