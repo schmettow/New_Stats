@@ -171,16 +171,50 @@ __Assignment__:
 
 If you use this book for workshops, that means you will have to come up with some data sets. Unless you can pull a few out of the drawer, it may be tricky to put your hands on some real data sets. A way out is to simulate data. In this book I haven't gone to the lengths of systematically introducing data simulation, but I do use several simulated data sets and the code for simulation can be found in \@ref(synthetic-data).
 
-If you have a somewhat experienced audience and you want to bring as much as possible across in little time, I would suggest going into *demonstration* mode. This is best pictured as think-aloud live demonstration. However, this is only feasable, if you have such outstanding programming skills, that you can write valid code in real time, while you talk, think and react. If you use live demonstration as a technique, encourage your students to work with you, to keeps them in the action-feedback loop \@ref(rosetta).
+If the audience is somewhat experienced, meaning that they at least have some practice in programming R,  and you want to bring as much as possible across in little time, the method of choice is *live programming* mode. This is best pictured as think-aloud live demonstration - you talk while you are writing R code. Of course, this is only feasible, if you have such outstanding programming skills, that you can write valid code, while you talk and think. An important element of live programming is that students type the code as they see it on the presentation screen. Encourage your students to work with you, to keeps them in the action-feedback loop, from head to the finger tips \@ref(rosetta).
 
-Examination is the other part of teaching. Without further a-do, here is what I do: Students get an assignment that looks exactly like the workshop assignment, adding the following sentence: "You must submit your assignment as a knitted Rmarkdown document (Word output), with full code shown."
-
-That does not mean, you cannot examine by using a written exam. It certainly is un-wise, to let students write code on paper, but still you can easily produce exam questions that test on understanding concepts, such as:
+Examination is the other part of teaching. Without further a-do, here is what I do: During my workshops, students get to work on a case study and for examination they get to do a data analysis on a similar case. That does not mean, you cannot examine by using a written exam. It certainly is un-wise, to let students write code on paper, but still you can easily produce exam questions that test on understanding concepts, such as:
 
 + Interpret the following coefficient table
 + What is the difference between saturation and amplification effects?
 + In which situation is it better to use an ordinal factor model, rather than a linear regression?
-+ Customer waiting times have been measured in several custome service hotlines. What would be an appropriate distribution family?
++ Customer waiting times have been measured in several customer service hotlines. What would be an appropriate distribution family?
+
+
+
+
+### Routes
+
+If you use this book for studying, two considerations play a role for finding the optimal route through this book. what is your *background in Statistics?* For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math. As such, it may be a while ago and a refresher is on order. Chapter \@ref(rational) is a quick-read, if you are confident. If you lack any background in statistics, \@ref(ebs) should be studied, first. If your background is Social Sciences, then you probably know quite something about probabilities and Statistics, but, you wonder more what the "Bayesian" is all about and how compatible it is to you. Section \@ref(bayes-freq-prob) discusses the issue and after all, it is question of belief.
+
+The precondition for using this book effectively, is the skill of *coding in R*. If you have basic skills in another programming language, studying chapter \@ref(gsr) should do the trick. If you are experienced in programming, but not yet in R, feel confident to skip that chapter and return to it, only when you have a strange encounter. Chapters \@ref(structuring-data) to \@ref(knitting) explain programming techniques, where R differs the most from general purpose languages. If this is the first time, you learn a programming language, your mileage may vary. Chapter \@ref(gsr) can at least provide you with an overview of all that you have to know, but some other books provide a more gentle and detailed introduction to R. In any case, learning your first programming language by a book alone may turn out difficult.
+
+The next consideration is whether you want to go *horizontal or vertical*. All of chapters \@ref(lm) through \@ref(glm) first add a few essential techniques in the first three sections, before going "horizontal" in the remaining sections, which explore and further expand these techniques.
+
+My preferred way for workshops based on this book is *vertical*, by touching once on all three of these chapters, such as the following route, using the IPump case study \@ref(ipump).
+
+1. Section \@ref(gmm) introduces the regression engine and basic reporting techniques, such as coefficient tables
+2. Section \@ref(cgm) introduces the principles of factorial models, just enough to analyse data from an experimental design comparison.
+3. Section \@ref(multi-level) introduces just enough multi-level thinking to make the factorial model multi-level.
+4. Section \@ref(elements-glm) explains the three limitations of linear models, and introduces link functions and choice of random distribution.
+5. Section \@ref(poisson-dist) introduces Poisson distribution as one common shape of randomness, that many people have not yet heard of.
+6. Section \@ref(poisson-reg) puts Poisson distribution and link function to practical use on the response variable deviations
+
+Experimenters in Cognitive Psychology, if they read this, often use reaction time data to test their hypotheses. The suggested vertical route matches the above up to \@ref(elements-glm). Then, section \@ref(duration-measures) introduces Exponential-Gaussian distribution as plug-in-and-use alternative to the "Normal" error term. Section \@ref(model-selection), and \@ref(testing-theories)in particular, show how hypothesis testing (and more) can be done in a Bayesian framework.
+
+User Experience researchers (and Social Psychologists) make abundant use of rating scales. The vertical route in such a case is 
+
+1. Section \@ref(gmm),  \@ref(cgm) and \@ref(multi-level). 
+4. Section \@ref(non-human-populations) introduces non-human populations, of which items in a rating scale are one.
+5. Section \@ref(psychometrics) shows how basic psychometric analysis can be done by using multi-level models.
+6. Section \@ref(rating-scales) elaborates on the randomness pattern of rating scales and suggests Beta regression (\@ref(beta-reg))
+
+In any case, if you are in the process of *developing a design-oriented rating scale*, start by reading the last paragraph of section \@ref(designometrix)!
+
+I can also think of reasons to take a more horizontal route. For example, market research often involves an insane amount of possible predictors (for when and why someone is buying a product or using a service). Sections \@ref(mpm) and  \@ref(cfxm) explore a broad set of  multi-predictor models. Section \@ref(model-selection) introduces techniques to find just-the-right set of predictors. Experimentalists, in turn, can learn more efficient ways of designing their studies by working through chapter \@ref(mlm), entirely. Researchers in Human Factors routinely collect multiple performance variables, such as time-on-task, number of errors and cognitive workload ratings. This is the particular strength of chapter \@ref(glm).
+
+
+
 
 #### Make knowledge graph
 
@@ -188,7 +222,11 @@ That does not mean, you cannot examine by using a written exam. It certainly is 
 
 ### As a handbook {#handbook}
 
-As I already said in \@ref(classroom), roughly the first 50% of every chapter
+As I already said in \@ref(classroom), roughly the first 50% of every chapter are essential to understand the ground rules and basic procedures. The rest is deepening understanding or is covering special cases. 
+
+Chapter \@ref(lm) introduces the basics on single-predictor models during the first three sections, whereas sections \@ref(mpm) and \@ref are closer to real research situations, in all their complexity and weird things that can happen with multiple predictors. It is for a good  reason, that these three chapters 
+
+
 
 
 ### The stone of Rosetta {#rosetta}
@@ -281,6 +319,10 @@ tibble(y = rnorm(n = 10, mean = 2, sd = 5)) %>%
   geom_histogram(bins = 10)
   
 ```
+
+
+
+
 #### END ME
 
 
