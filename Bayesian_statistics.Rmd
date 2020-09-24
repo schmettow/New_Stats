@@ -408,7 +408,7 @@ attach(Rational)
 ```{r sim:rational_prior, opts.label = "invisible"}
 set.seed(2)
 D_prior <-
-  data_frame(project = as.factor(1:20), 
+  tibble(project = as.factor(1:20), 
              revenue_increase = exp(rnorm(20, log(1.01), .03)))
 ```
 
@@ -707,7 +707,7 @@ Distributions <- tribble(~Dist, ~a, ~b,
                 "symmetric", 8, 8,
                 "right_skewed", 1, 8)
 
-Data <- as.tibble(lapply(Distributions, rep, 1000)) %>% 
+Data <- as_tibble(lapply(Distributions, rep, 1000)) %>% 
   mutate(y = rbeta(3000, a, b))
 
 Stats <- 
@@ -888,7 +888,7 @@ mean_vec <- c(2, 2, 180, 6)
 
 D_psychomet <- 
   mvtnorm::rmvnorm(300, mean = mean_vec, sigma = cor2cov(cor_mat, sd_vec)) %>%
-  as.tibble() %>% 
+  as_tibble() %>% 
   rename(MRS_1 = V1, MRS_2 = V2, ToT = V3, Corsi = V4)
 ```
 

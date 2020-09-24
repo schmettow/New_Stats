@@ -89,6 +89,23 @@ This book makes the following assumptions:
 8.	The best way to anticipate and plan data analysis is to simulate data upfront.
 9.	R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities.
 
+New Statistics can also be described as a style of reporting. A classic analysis report has the following structure:
+
+1. Recollecting the hypothesis: *Participants in the control condition are faster*.
+1. Descriptive statistics: *The difference of means in the sample is $21.7$.
+1. Stating the null hypothesis: $H_0: (M_\textrm{exp} - M_\textrm{control}) = 0$
+1. Testing the assumptions of ANOVA:
+   a. homogeneity of variance: 
+   a. Normal distribution of residuals
+1. Reporting p-values: The chance that a difference of $21.7$ appears,  although the null hypothesis is true, is $p \leq .05$
+
+A New Statistics report looks like this:
+
+1. Recollecting a quantitative research question: *Participants in the experimental condition are 10% faster*.
+1. Explorative figures: *The boxplot shows that participants in the experimental condition are faster by around 20 seconds.
+1. Model description: *We use a model on response time with two linearized predictors, Condition and age (for control), with Gamma  distributed responses*
+1. Reporting CLU estimates: Most likelyx 
+
 
 ## How to use this book {#how-to-use}
 
@@ -219,12 +236,6 @@ I can also think of reasons to take a more horizontal route. For example, market
 #### Make knowledge graph
 
 #### END
-
-### As a handbook {#handbook}
-
-As I already said in \@ref(classroom), roughly the first 50% of every chapter are essential to understand the ground rules and basic procedures. The rest is deepening understanding or is covering special cases. 
-
-Chapter \@ref(lm) introduces the basics on single-predictor models during the first three sections, whereas sections \@ref(mpm) and \@ref are closer to real research situations, in all their complexity and weird things that can happen with multiple predictors. It is for a good  reason, that these three chapters 
 
 
 

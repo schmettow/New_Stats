@@ -27,7 +27,7 @@ The subsequent two sections introduce the basics of estimating multi-level linea
 
 The participant-level is really just the factor and once it is regarded alongside the population level, a model is multi-level.  However, in multi-level linear modelling we usually  use a different type of factor, for the particpant level. The additional idea is that the levels of the factor, hence the individuals, are part of a *population*. The consequences of this perspective, will be discussed in \@ref(pool-shrink): a population is a set of entities that do vary to some extent but also clump around a typical value. And that is precisely what *random effects* do: levels are drawn from an overarching distribution, usually the Gaussian. This distribution is estimated simultaneously to the individual parameters ($\beta_{1\cdot}$), with some interesting consequences.  We will return to a more fundamental research case, the Uncanny Valley, and examine the *universality* of this strange effect \@ref(universality).
 
-Once it is clear what the concept of random effects means for studying participant behaviour, we will see that it transfers with grace to *non-human populations*, such as designs, teams or questionnaire items. Three sections introduce multi-population multi-level models: In \@ref(non-human-populations) we will use a random effects model with four populations and compare their relative contribution to overall variance in performance. Section \@ref(re_nested) will show how multiple levels can form a  hierarchy and in \@ref(re_psychometrics) we will see that multi-level models can be employed the development of  *psychometrics tests*, that apply for people. Finally, we will see how to treat tests to compare designs, which I call *designometrics* \@ref(designometrix). 
+Once it is clear what the concept of random effects means for studying participant behaviour, we will see that it transfers with grace to *non-human populations*, such as designs, teams or questionnaire items. Three sections introduce multi-population multi-level models: In \@ref(non-human-populations) we will use a random effects model with four populations and compare their relative contribution to overall variance in performance. Section \@ref(re_nested) will show how multiple levels can form a  hierarchy and in \@ref(re_psychometrics) we will see that multi-level models can be employed the development of  *psychometrics tests*, that apply for people. Finally, we will see how to treat tests to compare designs, which I call *design-o-metrics* \@ref(designometrix). 
 
 
 
@@ -1347,7 +1347,7 @@ In conclusion, whereas classical techniques for repeated measures often require 
 
 
 
-## Psychometrics and designometric models {#psychometrics}
+## Psychometrics and design-o-metric models {#psychometrics}
 
 Up to to this point, we have characterized random factors mainly by their variance. However, a random effect is just like a factor, where the levels are typically entities in a sample. In a multi-level model, these levels are represented as coefficients. Every entity gets their own estimate which represents the level of functioning of the entity. These values can either be compared against an external benchmark, or they are compared to each other. When human individuals are being compared this is called *psychometrics*. 
 
@@ -1607,7 +1607,7 @@ detach(Hugme)
 
 ### Design-o-metrix {#designometrix}
 
-Psychometrics, as it was introduced above, deals with comparing human individuals. In Design Research, this may be of interest, but the real stake is to *compare designs*. As we will see in this section, psychometric concepts can well be extended to *designometric problems*. However, there is one twist, which has up til now been overlooked in most of Design Research: in  designometric  studies the target population is designs, not humans. In a typical psychometric study, measurements are an encounter of humans with items, with the ultimate goal of measuring humans. A designometric measurement is the encounter of three popluations, humans, items and, ultimately,  designs. Classic psychometric tools use a 2-dimensional matrix as input and cannot deal with a third dimension. Multi-level models have no such limits. All we have to do, is crossing in another non-human population \ref(non-human-populations).
+Psychometrics, as it was introduced above, deals with comparing human individuals. In Design Research, this may be of interest sometimes, but the real stake is to *compare designs*. As we will see in this section, psychometric concepts can well be extended to *design-o-metric problems*. However, there is one twist, which has up til now been overlooked in most of Design Research: in  design-o-metric  studies the target population is designs, not humans. In a typical psychometric study, measurements are an encounter of humans with items, with the ultimate goal of measuring humans. A design-o-metric measurement is the encounter of three popluations, humans, items and, ultimately,  designs. Classic psychometric tools use a 2-dimensional matrix as input and cannot deal with a third dimension. Multi-level models have no such limits. All we have to do, is crossing in another non-human population \ref(non-human-populations).
 
 We revisit the Uncanny Valley data set \@ref(prm). The experiment used eight items from the Eeriness scale [%MacDorman] to  ask the judgment of participants on 82 stimuli showing robot faces. In one of our experiments (RK_1), participants simply rated all robots face in three separate session. Here are a few example observations: 
 
@@ -1633,7 +1633,7 @@ UV_dsgmx <-
 UV_dsgmx
 ```
 
-Measures in the Uncanny experiment are an encounter of three samples: Part, Item and Design, and Design is the one of interest. That means we need a model that produces Design-level scores. For the user of multi-level models that just means to add a Design random effect to the psychometric model (Part, Item). Models, where a design random factor sits on top of a psychometric model, I call from here on a *designometric models*. The most basic designometric model is a three-way cross-classified intercept-only model, from which design scores can be extracted. By extending the test-retest psychometric model `M_psymx_2`, we can estimate test-retest stability.
+Measures in the Uncanny experiment are an encounter of three samples: Part, Item and Design, and Design is the one of interest. That means we need a model that produces Design-level scores. For the user of multi-level models that just means to add a Design random effect to the psychometric model (Part, Item). Models, where a design random factor sits on top of a psychometric model, I call from here on a *design-o-metric models*. The most basic design-o-metric model is a three-way cross-classified intercept-only model, from which design scores can be extracted. By extending the test-retest psychometric model `M_psymx_2`, we can estimate test-retest stability.
 
 ```{r opts.label = "mcmc"}
 M_dsgmx_1 <-
@@ -1649,11 +1649,9 @@ M_dsgmx_1 <-
 Like in the psychometric situation, we extract the correlations.  Since we have three sessions, we get two stability scores per level.
 
 ```{r}
-
 M_dsgmx_1 %>% 
   posterior() %>% 
   clu_cor() %>% 
-  print() %>% 
   ggplot(aes(x = re_factor,
              y = center,
              ymin = lower,
@@ -1675,11 +1673,11 @@ sync_CE(Uncanny, UV_dsgmx, M_dsgmx_1)
 
 The test-retest stability for designs is very reassuring. Ratings on the Eeriness scale are highly reproducable and the error will be very small. To a lesser, but still sufficient degree are person scores stable. 
 
-But, what does the person score (and its stability) actually mean? It describes the tendency of a person to give high ratings on Eeriness. Should a researcher want to assess how vulnerable a person is to the Uncanny Valley effect, the Eeriness scale is also reliable for measuring persons. Many scales in design research lend themselves to be looked at from a designometric and psychometric perspective. For example, a hypothetical scale to measure comfort of sitting can be used to evaluate seats, but can also be used to measure how comfortable a person is with sitting.
+But, what does the person score (and its stability) actually mean? It describes the tendency of a person to give high ratings on Eeriness. Should a researcher want to assess how vulnerable a person is to the Uncanny Valley effect, the Eeriness scale is also reliable for measuring persons. Many scales in design research lend themselves to be looked at from a design-o-metric and psychometric perspective. For example, a hypothetical scale to measure comfort of sitting can be used to evaluate seats, but can also be used to measure how comfortable a person is with sitting.
 
-No seat fits every person, or put differently: the comfort  of a seat depends  on the person sitting in it. This points us at one of many possible extensions to carry out deeper designometric analysis. If the difficulty of an item in a psychometric test depends on who is being tested, this is called *differential item functioning*. For example, the large international student evaluations PISA and TIMMS routinely check their test items for cultural differences. The aim is to formulate test questions in such a way that they are equally comprehensible with all cultural backgrounds. Most likely, this is a desireable property for designometric scales, too. In a multi-level designometric model, this could be incorporated as an interaction effect between cultural background and item-level coefficients.
+No seat fits every person, or put differently: the comfort  of a seat depends  on the person sitting in it. This points us at one of many possible extensions to carry out deeper design-o-metric analysis. If the difficulty of an item in a psychometric test depends on who is being tested, this is called *differential item functioning*. For example, the large international student evaluations PISA and TIMMS routinely check their test items for cultural differences. The aim is to formulate test questions in such a way that they are equally comprehensible with all cultural backgrounds. Most likely, this is a desireable property for design-o-metric scales, too. In a multi-level design-o-metric model, this could be incorporated as an interaction effect between cultural background and item-level coefficients.
 
-That all being said about designometric models, my observation is that practically all published rating scales in design research have been validated under a psychometric perspective, rather than a designometric. This is a mistake! If the purpose of the scale is to compare designs, the scale validation must be carried out on the design scores. In the worst case, a designometric scale is evaluated by a study, where a sample of participants and a sample of items do only encounter a single design, rather than a sample. It worries me that practically all purportedly designometric scales out there have been validated under the wrong perspective, and I call this the *psychometric fallacy* in design research.
+That all being said about design-o-metric models, my observation is that practically all published rating scales in design research have been validated under a psychometric perspective, rather than a design-o-metric. This is a mistake! If the purpose of the scale is to compare designs, the scale validation must be carried out on the design scores. In the worst case, a design-o-metric scale is evaluated by a study, where a sample of participants and a sample of items do only encounter a single design, rather than a sample. It worries me that practically all purportedly design-o-metric scales out there have been validated under the wrong perspective, and I call this the *psychometric fallacy* in design research.
 
 
 

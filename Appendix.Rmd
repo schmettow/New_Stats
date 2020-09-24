@@ -1670,7 +1670,7 @@ AR_game$simulate <-
               intention = mascutils::inv_logit(rnorm(N,  eta, sigma))) %>% 
       as_tbl_obs()
     
-    class(out) <- append(class(out), "sim_tbl")
+    #class(out) <- append(class(out), "sim_tbl")
     attr(out, "coef") <- list(beta = beta,
                               sigma = sigma)
     attr(out, "seed") <- seed

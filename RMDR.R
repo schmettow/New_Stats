@@ -154,7 +154,7 @@ opts_template$set(
   #fig.half = list(fig.width = 4, fig.height = 4, dpi = 120, dev = "svg", echo = purp.rtut),
   invisible = list(eval = purp.book, echo = purp.debg, message=purp.debg, warning=purp.debg),
   inv = list(eval = purp.book, echo = purp.debg, message=purp.debg, warning=purp.debg),
-  #sim = list(eval = purp.book, echo = purp.debg),
+  CE = list(eval = purp.debg, include = purp.debg),
   mcmc = list(eval = purp.mcmc, echo = purp.rtut),
   mcsync = list(eval = purp.mcmc, echo = purp.debg),
   #rtut = list(eval = purp.rtut, echo = purp.rtut, warnings = purp.rtut, results = "markup"),

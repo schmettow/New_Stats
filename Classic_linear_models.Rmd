@@ -2577,13 +2577,16 @@ attach(AR_game)
 ```
 
 ```{r}
-D_1 %>% 
-  mutate(Sociophile = forcats::fct_rev(ifelse(sociophile > median(sociophile), "high", "low")),
-         Technophile = forcats::fct_rev(ifelse(technophile > median(technophile), "high", "low"))) %>%
+as_tibble(D_1) %>%
+  mutate(Sociophile = forcats::fct_rev(if_else(sociophile > median(sociophile),
+                                              "high", "low")),
+         Technophile = forcats::fct_rev(if_else(technophile > median(technophile),
+                                               "high", "low"))) %>%
   ggplot(aes(y = intention, x = Technophile, col = Sociophile)) +
   geom_boxplot() +
   ylim(0, 0.5)
-  
+
+
   
 ```
 
