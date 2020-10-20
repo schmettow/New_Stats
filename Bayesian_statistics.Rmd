@@ -543,6 +543,151 @@ detach(Rational)
 <!-- The p-value [...] Imagine giant replication study that showed that 35% of published psychology studies are not replicable. In fact, such a study exists and it has far-reaching consequences. [...]  [REF] shows that rejection bias is one reason: studies that have not reached the *magic .05 level* of significance, have a lower chance of publication. [REF] sees as a reason that author's implicitly trick the system by *the garden of forking paths*  strategy. The research project collects an array of variables, followed by a fishing expenditure. Theory is conveniently considered last, but written up in  a pseudo-a prior way. -->
 
 
+## Observations and measures {#observations-measures}
+
+
+
+
+### Interaction sequences {#interaction-seq}
+
+A general concept in design is to think of purposes as *user tasks*. A user task can be defined as a starting condition, a desired outcome and a procedure to get there. The knowledge required to follow the procedure can be found in two major locations: the users mind (mental model) and the interface (design model). A principle of user-centered design is to create a task representation that either matches the users current representation of the task, or easily enters the users mind. The first is called intuitiveness of a design, the latter ease-of-learning.
+
+A highly intuitive design matches the users mental model, and in effect can be used out-of-the-box, without the requirement to instruct or train a user. Intuitiveness relies on the match between design and mental model. Whereas the design model is explicit, the mental model needs to be elicited from the users mind. Eliciting procedural mental models is difficult. You may think it is sufficient to just ask users about the idea of a procedure, but that is a limited approach. If I ask you about the precise steps in preparing a cup of coffee in your kitchen, that probably is a more demanding and error-prone than to ask you to prepare an actual cup of coffee. Two reasons make up for this discrepancy:
+
+1. The human mind has separate facilities for procedural knowledge and declarative knowledge. If I ask you about a procedure, you first have to make a translation.
+1. The more automated a task is, the less available it is to your conscious mind.
+
+Our ability to verbalize our actions are limited. If there were no such verbalization limit, designing for tasks would be simple: just ask! Only mind-reading is more convenient. In user-centered design verbal inquiries are a central method. But, results fromn user interviews can be incomplete or biased. 
+
+An example for incompleteness is that users sometimes fail to report what they think is obvious. For example, in modern computer desktop applications a function to undo a step is standard and probably it is one of the most frequently used functions. In other types of systems, for example data-base driven information systems, implementing an Undo function is non-trivial, because data base records can be changed by multiple users. It can be implemented by so-called roll-back mechanisms, which reduce performance and storage capacity of the system. When collecting user requirements for such a system, the developer has little interest in Undo, whereas the user has a huge interest, but does not mention it.
+
+Verbal reports of action sequences are incomplete. But, if there is something even worse with humans: there ability to imagine a new situations. Imagine you had a time machine and you would travel back to the year 1981, which is a year before the series Knight Rider went on broadcast. If you would ask car drivers from that era, how they would envision a navigation assistant device, you would probably end up with something that looks more like a Star Trek computer console than with anything comparable to modern navigation device.
+
+This why another central principle of user-centered design is observation of users. By directly observing how a person prepares a cup of coffee, we can learn about the details of behavior and close the verbalization gap. By observing many action sequences, we can carve out detailed user requirements, or fix an existing design. The first thing many people do in the mnorning is fix themselves a cup of coffee. With a conventional filter brewing machine, the user prepares the machine, switches it on and uses the time to release the bladder. Already in the bathroom, the user brushes teeth and the puts the laundry into the dryer. In the meantime, the coffee maker has done its job. Italian-style coffee makers need a period of pre-heating, before being operational. After the user has returned from the bathroom, the coffee maker is long back to sleep mode.
+
+Observing user interactions does not require one-way mirrors and nights of video coding. Because of the verbalization gap, a lot can be learned just by watching over the users shoulder. The method of think-aloud usability testing even goes one step further and combines behavior observation with verbalization. Interaction sequences can even be collected without a human ovbserver. Log files of web servers provide sequences of users navigating web site. Plugin software is available that records keystrokes and mouse actions on computers. The difficult part is the following: When observing 50 users while doing a non-trivial task, no two interaction sequences are exactly the same (if i had to bet on it). By itself, there is little value without further means of interpretation and this can go two ways up: qualitative and quantitative.
+
+The *qualitative design researcher* will collect interaction sequences, as well as verbal reports and shuffle them around until an intelligible picture emerges. Don't get me wrong: This is an art. One way to describe the purpose of user testing is to *find out all possible ways how things can go wrong.* Every break-down that is observed in only once in a sample of users, tells a story of what may happen to hundreds or thousands of users in the future.
+
+ <!-- is not just an art, but also scientific at its heart.  -->
+
+<!-- The diligent and skilled *qualitative* researchers are able to extract meaningful patterns from such sequences. For example, in usability tests, the following patterns are frequently observed and interpreted.   -->
+
+<!-- + a user jumping back to the main screen felt being in a dead-end  -->
+<!-- + a frowning user feels confused -->
+<!-- +  -->
+
+
+
+
+
+The *quantitative* researcher will aim at deriving measures from the interaction sequence. Formally, *to measure* means assigning numbers to observed sequences, so that these can be brought into an *order*, at least. Obviously, we need some sort of transformation that gives us a single *performance score*. This we call here the *performance function* and we have many choices, for example:
+
++ the number of all exploratory events
++ their relative frequency
++ their longest uninterrupted sequence
++ total time spent in exploration
+
+
+Sometimes, you have to go a long way up the qualitative route, before you can derive useful measures. In [%Schnittker, Schmettow & Schraagen, 2016], we coded sequences from nurses using an infusion pump. Individual sequences were compared to a optimal reference path, the similar the better. But how to measure similarity? For eample, *Levensthein distance* counts the number of edits to transform one sequence into the other  and we used it as the performance score: *deviation from optimal path*. Even more interpreting was another study we did on the active user paradox. We recorded interaction sequences of users doing some repetitive tasks with a graphics software. The sessions were taped and analysed using a behavioural coding scheme. First, events were classified on a low level (e.g. "reading the handbook", "first time trying a function") and later aggregated to broader classes (e.g. "exploratory behavior"). The number of events in a given time frame that were classified as such were finally taken as a measure, representing the exploratory tendencies.
+
+
+
+
+
+### Performance measures {#perf-measures}
+
+
+A good point to start with is the classic concept of "usability", which the ISO 9142-11 defines by the following three high-level criteria:
+
++ effectiveness: can users accomplish their tasks?
++ efficiency: what resources have to be spend for a task, e.g. time.
++ satisfaction: how did the user like it?
+
+While these criteria originated in the field of Human-Computer Interaction, they can easily be adapted to compare everything that people do their work with. Even within the field, it has been adapted to hundreds of studies and a hundred ways are reported of assessing these criteria. 
+
+*Effectiveness* is often measured by *completion rate (CR)*. A classic waterfall approach would be to consult the  user requirements documents and identify the, let's say eight, crucial tasks the system must support. User test might then show that most users fail at the two tasks, and a completion rate of 75% is recorded for the system. Completion rate is only a valid effectiveness measure with *distinct tasks*. Strictly, the set of tasks also had to be *complete*, covering the whole system. When completion rate is taken from in series of *repetitive tasks*, it depends on whether it is effectiveness or efficiency. It is effectiveness, when a failed operation is unrepairable, such as a traffic accident, data loss on a computer or medical errors. But, who cares for a single number between 0 and 1, when the user test provides such a wealth of information on *why* users failed? Effectiveness, in the sense of task completion, is primarily a qualitative issue and we shall rarely encounter it in this book.
+
+A more subtle notion of effectiveness is the *quality of outcome*, and despite the very term, is a measure. Perhaps, it should better be called *task perfection*. Reconsider the AUP study, where participants had to modify a given graphic, e.g. change some colors and erase parts of it. Of course, some participants worked neatly, whereas others used broader strokes (literally). There certainly is a reasonable objective way to rank all results by quality.
+
+*Efficiency* is where it really gets quantitative as with efficiency, we ask about resources: time, attention, strain, distraction and Euros. Other than that, efficiency can be measured in a vast variety of ways: ToT, clicks, mental workload or time spent watching the traffic while driving. 
+
+Counting the *number of clicks* before someone has found the desired piece of information is a coarse, but easy to acquire and intuitive measure of efficiency, and so is *time-on-task (ToT)*, which is just the sum . Still, these  It differs from ToT in that it only counts real action, not the time a participant read the manual or watched the sky. In the downside, this is a very limited definition of action. While errors are usually best analyzed qualitatively, *error rate* can be efficiency, too, when failures are non-critical, but can be repaired in some time, such as correcting a typing error.
+
+ToT and other performance measures can be very noisy. The general recipe to reduce noise and improve certainty is to collect more data. The obvious way of doing this is inceasing teh sample size, but that can be costly. A more efficient way to reduce uncertainty with a given sample is to collect more data on every participant. It is therefore always recommended to plan for *repeated measures*. Chapter \@ref(mlm) will introduce models that deal with repeated measures in a straight-forward way.
+
+<!-- Above, I did not mean to say that design research always requires the sometimes painful recording of interaction sequences. The majority of studies jumps over them and proceed to performance measures, directly, by counting attempts or pressing stop watches. -->
+
+Counting steps-to-completion or errors often requires the laborous process of interaction analysis. Measures of duration are much easier to obtain and in many situations they are spot-on: 
+In usability studies, *time-on-task* is a direct measure of efficiency. When controlling a car in dense city traffic, a few hundred milliseconds is what makes huge a difference and therefore *reaction time* is a valid performance measure. In experimental cognitive research reaction times have been succesfully used in countless experiments to reveal the structure of the mind. 
+
+<!-- The Stroop tasks is a golden evergreen cognitive psychology and serves as an example. Participants are shown a words drawn in one of three ink colors and are asked to name the ink as quick as possible. The Stroop effect occurs: in the incongruent condition, participants respond much slower than in the congruent and neutral (a few hundred ms). There is ample sweet replication of this effect and an ecosystem of theories surround it. -->
+
+<!-- black tower PC + "explore" -> "can someone hand me a screwdriver" -->
+
+<!-- CONDITION WORD    : Ink -->
+<!-- congruent [GREEN ]: green -->
+<!-- incongr   [YELLOW]: green -->
+<!-- neutral   [CHAIR ]: green -->
+
+
+
+### Satisfaction and other feelings
+
+The standard definition of usability defines three levels of usability, two performance-related effectiveness and efficiency, and satisfaction. The latter has long been held the enfant terrible of the three. That's not a big surprise, as satisfaction is about the *feelings* of users.
+
+Early research in the 1990s took enough with a few rating scales, that measure satisfaction, as the *absence of negative feelings*. Later, when User Experience era took off, a wave of constructs and measures washed over the research community, here are just a few examples:
+
+- beauty
+- anxiety
+- coolness
+- credibility
+- meaning of life
+
+
+Feelings are a tricky business when it comes to measuring them. Most frequently, rating scales are employed, and often the same author makes the remark, that the study should be replicated with more solid measures for emotional states. Unfortunately those do not exist. Also, several authors took on the same construct, but called it differently, or the other way round.
+
+Rating scales exist for a vast variety of concepts, but they come in only a few forms: first, there exist single item or multi-item scales. *Single-item* instruments are the hydrogen of rating scales. They are useful for obtaining a time-series of measures. For example, the effect of learning can be seen in a decline of cognitive workload over time. From a methodological point-of-view, single-item scales are to be seen critical, because many quality checks rest on having multiple items. Still, the validity of single-item scales can be proven by strict experiments.
+
+*Multi-item* rating scales are the standard. Participants or users respond to a number of statements, that have an overarching theme. Multi-item scales are amenable to a number of procedures for quality check, such as reliability. In design research, measures of feelings are usually are taken as design benchmarks. It would be impractical to report responses of individual items. Therefore, multi-item ratings are routinely aggregated total scores, such as the *average score*.
+
+Next to the number of items, rating scale instruments differ in *cardinality of the response*, how much possible responses there are. By far most rating scales use between four and nine *ordered bins*. So called *visual analog* rating scales measure on a  continuum. This can be done on paper, using a ruler to translate the response into numbers, or on teh computer, using a slider bar. That being said, one can also think of situations, where the answer is a simple Yes/No, such as for the question: Do you think you solved the task correctly?
+
+Finally, rating scales have either *unipolar or bipolar anchoring* rating scales. Many rating scales put labels (instead of just numbers) on minimum and the maximum bins. With a unipolar item, the left anchor is neutral, whereas the right is not, like in:
+
+0: Dull ... 1: Bliss
+
+Dull is not the opposite of bliss, it is the absence of it, just like Zero is not the opposite of One. Bipolar scales are more heated than that, with hell and bliss:
+
+-1: Ugly ... + 1: Beautiful
+
+Another consideration regards binned bipolar scales. If such a scale has an uneven number, the center bin is neutral. 
+
+-1:Ugly 0:Neutral +1:Beautifuly
+
+Sometimes, this is a good thing, for example, when the participant may just not know:
+
+The help pages of the program are written in a clear language.
+
+-1: Not at all 0: I didn't notice +1: Totally
+
+An even numbner of bins is recommended often for very long questionnaires, where there is the risk that participants automatically fink the neutral bin, because they are getting bored. In such a case, the absence of a neutral bin forces participants to make a choice.
+
+What kind of rating scale you use has consequences for your statistical model. As we will see in section \@ref(psychometrics), multi-level models are a good match for multi-item rating scales. What really matters is whether using a visual analog scale or a binned scale. Data from visual analog scales is more easily treated, by either a Gaussian \@ref(psychometrics) or a Beta linearized model \@ref(beta-reg). Both are relatively lean methods. For binned rating scales you would have to use the beast called ordinal logistic regression \@ref(ord-logist-reg). My advice would be to use visual analog scales, whenever possible, even if this means caring a little less about exactly reproducing the original scale.
+
+While rating scales are prevalent for measuring feelings, that does not mean there are no other, more objective, ways.  There has been some buzz about *physiological measures*, like galvanic skin response or EEG, lately. In our own lab, I have seen these measures fail more often than succeed for the evaluation of products (such as wine or floor cleaning robots).
+
+*Implicit measures* are means to assess certain attitudes or feelings by means of experimental setups. For example, We once tried to measure technophile attitude (geekism) using a variant of the classic Stroop task. In [%Schmettow, Noordzij, Mundt] we showed them pictures with computers on them, followed by a color-printed word (e.g., "explore") on which to perform the Stroop task. It was conceived that reaction time is increased when a participant experiences a strong association, like how good it feels to build your own computer. The initial success was soon washed away by a failure to reproduce these results. Another approach is the Approach-Avoidance task, which has gotten some merits in research on addiction and racism. In simple terms, participants (or users) are asked to push or pull a joystick and it seems that they pull faster, when they see something they like (a bottle of booze) and push faster when they dislike what they see (a photograph of war victims). However, I have seen this approach failing to produce relevant results in a design comparison experiment. Generally, such experiments produce reaction time differences below the 100ms mark and therefore many trials are needed to carve out any differences. At the same time, I have doubts that the emotional reactions towards, say computer interfaces, play in the same league as the stimuli used in research addiction or racism research. Emotional responses in design research may just be too mellow to disturb cognitive processes with a strength that is measurable. 
+
+
+
+<!-- The problem, I feel, is that too many reseachers base their research on feelings on their own feelings. That is not always wrong, if these feelings are well-reflected, like was the case when the apple fell on Newton's head or when  Mori discovered the Uncanny Valley effect. -->
+
+
+<!-- ### Designs and Features [TBD] -->
+
+<!-- ### the human factor [TBD] -->
+
 
 
 
@@ -2647,8 +2792,108 @@ plot(ggExtra::ggMarginal(G_mcmc, type = "histogram"))
 ```{r}
 detach(Rainfall)
 ```
-##### WRITE END
 
 ```{r save_CE, opts.label = "invisible"}
 save_CE_(CE)
 ```
+
+
+## On priors and defaults
+
+Bayesian priors are a wonderful idea. Who would not like to make the best of their knowledge? In the remainder of this book, I will *not* further introduce Bayesian priors and I owe you an explanation of how they can be used and why I don't use them. Let's first take a look at the continuum of certainty.
+
+Like any knowledge, prior knowledge is certain to a degree. An example of  *overwhelming prior* knowledge is an IQ score, which is designed to follow a Gaussian distribution with a mean of 100 and a standard deviation of 15. IQ scores are also designed to be non-discriminating. Rumors are, that a certain professor unknowingly used such an IQ test to identify gender differences in intelligence. A Bayesian model with overwhelming priors will always return the prior itself. 
+
+*Strong prior* knowledge can exist in the form of earlier experiments. For example, the famous Stroop task is an experiment on human cognition that has been replicated hundreds of times. In the Stroop task two conditions are mainly compared: the congruent and the incongruent condition and the experiment has been repeated so many times, that we have a pretty good idea of typical reaction times. For example, someone could ask whether a certain deficit in cognitive functioning could be detected by the Stroop task. This seems like a clinical trial experiment with a diagnosed group versus the healthy control group.  Because we have strong knowledge about the RT distribution in the population of young and healthy Psychology students, the experiment can effectively be reduced to only assess diagnosed participants.
+
+Strong priors are the most useful, because we need to collect less data. Strong priors are only available, when similar experiments have been conducted in the past and the results have been recorded, properly. In the domain of design research, repetition of experiments rare and any variation of circumstances can have significant effects. Design research simply is a *domain of weak prior knowledge*.
+
+*Weak prior* knowledge is unspecific knowledge about effects. A certain experimentalist may not know the precise population average in the Stroop task, but would expect the majority RTs to be in range 300 - 2000ms. For the research question this is rather useless information, but for the process of estimation it is not. The MCMC algorithm is a random walk in a highly dimensional space and every little guidance us useful.
+
+Use of priors is a complex task on its own. For one thing, priors are specified as distribution function. When the MCMC algorithm dances its random walk on Experiment 1, the result is a frequency distribution, which can take any shape. In contrast, the result is *not* a distribution function. Before we can use the results of Experiment 1 as priors for Experiment 2, we first have to identify the distribution. The knowledge required to do that in a correct way for the models presented in this book, would fill a book on its own.
+
+Still, there can be repetitions of the same experiment, leading to valuable prior knowledge. For example, the experiment on the Uncanny Valley effects, which I will present in \@ref(prm), was our third replication of [%Mathur]. All four experiments, including the original, share most of the stimuli (robot faces), the experimental design (a three-way design-o-metric encounter \@ref(designometrix)) and the instrument of measurement (Eeriness ratings). The purpose of the fourth experiment was to estimate most precisely, at which point emotional reactions towards human-like faces take a plunge, the trough of the Uncanny Valley. From the first three experiments we had a good approximation of where the trough is. That means we can, and should use this information. The thing is, I do not have to specify priors, as I own the data of the previous two replications and I have a copy of the original data. With the methods described in this book, I can just merge the four data sets and run my model with full prior knowledge, circumventing the formal specification of priors.
+
+Bayes' formula requires that there is a prior distribution. It can be totally flat, but it still is a distribution. Both regression engines used through-out this book allow user-specified priors for all parameters in a model. Unfortunately, the interface for doing that is anything but user-friendly. Fortunately, it seems that weak priors can effectively be automated. Rstanarm  [%Rstanarm] and Brms [%Brms] both run on the whole class of Generalized Linear Multi-level Models without user-specified priors. In personal communication, Paul Bürkner, author of the Brms package was confident that the weakly informative priors generated by his implementation are safe to use for the models presented in this book. Just a little less confident, the Rstanarm package warns the user that priors have been automatically generated and that there is the possibility that running the model in a future version  of the package may result in different results.
+
+For the data and models at hand, I don't expect that future updates on the algorithm for prior specification will require me to update the conclusions I have drawn. It rather reflects that specification of priors is still an art. Even in more recent books, the recommendations  for prior specification differ. When the warning message is gone, the time has come to write an artisanal chapter on Prior Specification.
+
+<!-- Speaking of which. The two regression engines provide a lean and comprehensive formula language, yet it specifies a huge range of models. From a simple expression like `(1|Part)`, the engine creates tens, sometimes  hundreds or thousands of parameters.  -->
+<!-- Both engines accept specification of priors by the user, but these are given in yet another language, Stan [%Stan]. -->
+
+
+## Further readings
+
+1. Giving priors an inferior role in this book was a pragmatic choice and this does not make me proud. For readers who want to pursue into this direction I  recommend 
+    a. [%McElreath], who builds this topic from ground up and provides a user-friendly interface for the simultaneous specification of likelihood and prior. 
+    a. [%BDA] is most explicit about prior specification, but requires mathematical skills.
+1. Users who now feel that they thoroughly need to re-think Statistics, I warmly recommend  [%McElreath].
+1. An extensive set of statistical distributions is contained by [%BDA]. Another good source on this topic is [%Wikipedia:stats_dist].
+1. [%McElreath] uses a phantastic metaphor to explain teh MCMC algorithm.
+
+
+
+
+
+
+
+
+
+
+
+Wait! We would have, if these studies  research had used New Statistics 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
