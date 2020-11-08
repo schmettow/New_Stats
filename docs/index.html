@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>New statistics for design researchers</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="New statistics for design researchers" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="New statistics for design researchers" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
+  
+
+<meta name="author" content="Martin Schmettow" />
+
+
+<meta name="date" content="2020-11-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="gsr.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.2</b> Quantitative design research</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.3</b> What is New Statistics?</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.4</b> How to use this book</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#routes"><i class="fa fa-check"></i><b>1.4.1</b> Routes</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.4.2</b> In the classroom</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.4.3</b> The stone of Rosetta</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#scoping-and-additional-readings"><i class="fa fa-check"></i><b>1.5</b> Scoping and additional readings</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="gsr.html"><a href="gsr.html"><i class="fa fa-check"></i><b>2</b> Getting started with R</a><ul>
+<li class="chapter" data-level="2.1" data-path="gsr.html"><a href="gsr.html#setting-up-r"><i class="fa fa-check"></i><b>2.1</b> Setting up the R environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="gsr.html"><a href="gsr.html#install-cran"><i class="fa fa-check"></i><b>2.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="2.1.2" data-path="gsr.html"><a href="gsr.html#install-github"><i class="fa fa-check"></i><b>2.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="2.1.3" data-path="gsr.html"><a href="gsr.html#first-program"><i class="fa fa-check"></i><b>2.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="2.1.4" data-path="gsr.html"><a href="gsr.html#bibliographic-notes"><i class="fa fa-check"></i><b>2.1.4</b> Bibliographic notes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="gsr.html"><a href="gsr.html#r-primer"><i class="fa fa-check"></i><b>2.2</b> Learning R: a primer</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="gsr.html"><a href="gsr.html#objects"><i class="fa fa-check"></i><b>2.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="2.2.2" data-path="gsr.html"><a href="gsr.html#vectors"><i class="fa fa-check"></i><b>2.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="2.2.3" data-path="gsr.html"><a href="gsr.html#object-types"><i class="fa fa-check"></i><b>2.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="2.2.4" data-path="gsr.html"><a href="gsr.html#operators-functions"><i class="fa fa-check"></i><b>2.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="2.2.5" data-path="gsr.html"><a href="gsr.html#data-frames"><i class="fa fa-check"></i><b>2.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="2.2.6" data-path="gsr.html"><a href="gsr.html#import-export"><i class="fa fa-check"></i><b>2.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="2.2.7" data-path="gsr.html"><a href="gsr.html#case-env"><i class="fa fa-check"></i><b>2.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="2.2.8" data-path="gsr.html"><a href="gsr.html#structuring-data"><i class="fa fa-check"></i><b>2.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="2.2.9" data-path="gsr.html"><a href="gsr.html#data-transformation"><i class="fa fa-check"></i><b>2.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="2.2.10" data-path="gsr.html"><a href="gsr.html#plotting"><i class="fa fa-check"></i><b>2.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="2.2.11" data-path="gsr.html"><a href="gsr.html#fitting"><i class="fa fa-check"></i><b>2.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="2.2.12" data-path="gsr.html"><a href="gsr.html#knitting"><i class="fa fa-check"></i><b>2.2.12</b> Knitting statistical reports</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="gsr.html"><a href="gsr.html#lib_gsr"><i class="fa fa-check"></i><b>2.3</b> Further reading</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ebs.html"><a href="ebs.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a><ul>
+<li class="chapter" data-level="3.1" data-path="ebs.html"><a href="ebs.html#decision-making"><i class="fa fa-check"></i><b>3.1</b> Rational decision making in design research</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="ebs.html"><a href="ebs.html#measuring-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="3.1.2" data-path="ebs.html"><a href="ebs.html#benchmarking-designs"><i class="fa fa-check"></i><b>3.1.2</b> Benchmarking designs</a></li>
+<li class="chapter" data-level="3.1.3" data-path="ebs.html"><a href="ebs.html#comparing-designs"><i class="fa fa-check"></i><b>3.1.3</b> Comparison of designs</a></li>
+<li class="chapter" data-level="3.1.4" data-path="ebs.html"><a href="ebs.html#prior-knowledge"><i class="fa fa-check"></i><b>3.1.4</b> Prior knowledge</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="ebs.html"><a href="ebs.html#observations-measures"><i class="fa fa-check"></i><b>3.2</b> Observations and measures</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ebs.html"><a href="ebs.html#interaction-seq"><i class="fa fa-check"></i><b>3.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ebs.html"><a href="ebs.html#perf-measures"><i class="fa fa-check"></i><b>3.2.2</b> Performance measures</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ebs.html"><a href="ebs.html#satisfaction-and-other-feelings"><i class="fa fa-check"></i><b>3.2.3</b> Satisfaction and other feelings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ebs.html"><a href="ebs.html#descriptive-stats"><i class="fa fa-check"></i><b>3.3</b> Descriptive statistics</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ebs.html"><a href="ebs.html#frequencies"><i class="fa fa-check"></i><b>3.3.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ebs.html"><a href="ebs.html#central-tendency"><i class="fa fa-check"></i><b>3.3.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ebs.html"><a href="ebs.html#dispersion"><i class="fa fa-check"></i><b>3.3.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.3.4" data-path="ebs.html"><a href="ebs.html#associations"><i class="fa fa-check"></i><b>3.3.4</b> Associations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ebs.html"><a href="ebs.html#bayes-prob-theory"><i class="fa fa-check"></i><b>3.4</b> Bayesian probability theory</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ebs.html"><a href="ebs.html#set-theory"><i class="fa fa-check"></i><b>3.4.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ebs.html"><a href="ebs.html#probability"><i class="fa fa-check"></i><b>3.4.2</b> Probability</a></li>
+<li class="chapter" data-level="3.4.3" data-path="ebs.html"><a href="ebs.html#likelihood"><i class="fa fa-check"></i><b>3.4.3</b> Likelihood</a></li>
+<li class="chapter" data-level="3.4.4" data-path="ebs.html"><a href="ebs.html#bayes-freq-prob"><i class="fa fa-check"></i><b>3.4.4</b> Bayesian and frequentist probability</a></li>
+<li class="chapter" data-level="3.4.5" data-path="ebs.html"><a href="ebs.html#bayes-theorem"><i class="fa fa-check"></i><b>3.4.5</b> Bayes theorem</a></li>
+<li class="chapter" data-level="3.4.6" data-path="ebs.html"><a href="ebs.html#dynamics-belief"><i class="fa fa-check"></i><b>3.4.6</b> Bayesian dynamics of belief</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="ebs.html"><a href="ebs.html#statmod"><i class="fa fa-check"></i><b>3.5</b> Statistical models</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="ebs.html"><a href="ebs.html#structural-part"><i class="fa fa-check"></i><b>3.5.1</b> The structural part</a></li>
+<li class="chapter" data-level="3.5.2" data-path="ebs.html"><a href="ebs.html#distributions"><i class="fa fa-check"></i><b>3.5.2</b> Distributions: shapes of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="ebs.html"><a href="ebs.html#bayes-estimation"><i class="fa fa-check"></i><b>3.6</b> Towards Bayesian estimation</a></li>
+<li class="chapter" data-level="3.7" data-path="ebs.html"><a href="ebs.html#priors-defaults"><i class="fa fa-check"></i><b>3.7</b> On priors and defaults</a></li>
+<li class="chapter" data-level="3.8" data-path="ebs.html"><a href="ebs.html#further-readings"><i class="fa fa-check"></i><b>3.8</b> Further readings</a></li>
+</ul></li>
+<li class="part"><span><b>II Models</b></span></li>
+<li class="chapter" data-level="4" data-path="lm.html"><a href="lm.html"><i class="fa fa-check"></i><b>4</b> Linear models</a><ul>
+<li class="chapter" data-level="4.1" data-path="lm.html"><a href="lm.html#gmm"><i class="fa fa-check"></i><b>4.1</b> Quantification at work: grand mean models</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="lm.html"><a href="lm.html#random-walk"><i class="fa fa-check"></i><b>4.1.1</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="lm.html"><a href="lm.html#likelihood-random-term"><i class="fa fa-check"></i><b>4.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="4.1.3" data-path="lm.html"><a href="lm.html#posterior-dist"><i class="fa fa-check"></i><b>4.1.3</b> Working with the posterior distribution</a></li>
+<li class="chapter" data-level="4.1.4" data-path="lm.html"><a href="lm.html#clu"><i class="fa fa-check"></i><b>4.1.4</b> Center and interval estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="lm.html"><a href="lm.html#lrm"><i class="fa fa-check"></i><b>4.2</b> Walk the line: linear regression</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="lm.html"><a href="lm.html#transform-measures"><i class="fa fa-check"></i><b>4.2.1</b> Transforming measures</a></li>
+<li class="chapter" data-level="4.2.2" data-path="lm.html"><a href="lm.html#correlations"><i class="fa fa-check"></i><b>4.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="4.2.3" data-path="lm.html"><a href="lm.html#endless-linear"><i class="fa fa-check"></i><b>4.2.3</b> Endlessly linear</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="lm.html"><a href="lm.html#factorial-models"><i class="fa fa-check"></i><b>4.3</b> Factorial Models</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="lm.html"><a href="lm.html#cgm"><i class="fa fa-check"></i><b>4.3.1</b> A versus B: Comparison of groups</a></li>
+<li class="chapter" data-level="4.3.2" data-path="lm.html"><a href="lm.html#dummy"><i class="fa fa-check"></i><b>4.3.2</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="lm.html"><a href="lm.html#treatment-contrasts"><i class="fa fa-check"></i><b>4.3.3</b> Treatment contrast</a></li>
+<li class="chapter" data-level="4.3.4" data-path="lm.html"><a href="lm.html#amm"><i class="fa fa-check"></i><b>4.3.4</b> Absolute Means Model</a></li>
+<li class="chapter" data-level="4.3.5" data-path="lm.html"><a href="lm.html#ofm"><i class="fa fa-check"></i><b>4.3.5</b> Ordered Factors Models</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="lm.html"><a href="lm.html#mpm"><i class="fa fa-check"></i><b>4.4</b> Putting it all together: multi predictor models</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="lm.html"><a href="lm.html#mrm"><i class="fa fa-check"></i><b>4.4.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="4.4.2" data-path="lm.html"><a href="lm.html#mfm"><i class="fa fa-check"></i><b>4.4.2</b> Crossover: multifactorial models</a></li>
+<li class="chapter" data-level="4.4.3" data-path="lm.html"><a href="lm.html#grm"><i class="fa fa-check"></i><b>4.4.3</b> Line-by-line: grouped regression models</a></li>
+<li class="chapter" data-level="4.4.4" data-path="lm.html"><a href="lm.html#emp-stat-control"><i class="fa fa-check"></i><b>4.4.4</b> Empirical versus statistical control</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="lm.html"><a href="lm.html#cfxm"><i class="fa fa-check"></i><b>4.5</b> Conditional effects models</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="lm.html"><a href="lm.html#cmrm"><i class="fa fa-check"></i><b>4.5.1</b> Conditional multiple regression</a></li>
+<li class="chapter" data-level="4.5.2" data-path="lm.html"><a href="lm.html#cmfm"><i class="fa fa-check"></i><b>4.5.2</b> Conditional multifactorial models</a></li>
+<li class="chapter" data-level="4.5.3" data-path="lm.html"><a href="lm.html#saturation"><i class="fa fa-check"></i><b>4.5.3</b> Saturation: hitting the boundaries</a></li>
+<li class="chapter" data-level="4.5.4" data-path="lm.html"><a href="lm.html#amplification"><i class="fa fa-check"></i><b>4.5.4</b> Amplification: more than the sum</a></li>
+<li class="chapter" data-level="4.5.5" data-path="lm.html"><a href="lm.html#cfx-theory"><i class="fa fa-check"></i><b>4.5.5</b> Conditional effects and design theory</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="lm.html"><a href="lm.html#prm"><i class="fa fa-check"></i><b>4.6</b> Doing the rollercoaster: polynomial regression models</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="lm.html"><a href="lm.html#test-stat"><i class="fa fa-check"></i><b>4.6.1</b> Make yourself a test statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="lm.html"><a href="lm.html#further-readings-1"><i class="fa fa-check"></i><b>4.7</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mlm.html"><a href="mlm.html"><i class="fa fa-check"></i><b>5</b> Multilevel models</a><ul>
+<li class="chapter" data-level="5.1" data-path="mlm.html"><a href="mlm.html#intercept-re"><i class="fa fa-check"></i><b>5.1</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="5.2" data-path="mlm.html"><a href="mlm.html#slope-re"><i class="fa fa-check"></i><b>5.2</b> Slope random effects: variance in change</a></li>
+<li class="chapter" data-level="5.3" data-path="mlm.html"><a href="mlm.html#thinking-multi-level"><i class="fa fa-check"></i><b>5.3</b> Thinking multi-level</a></li>
+<li class="chapter" data-level="5.4" data-path="mlm.html"><a href="mlm.html#universality"><i class="fa fa-check"></i><b>5.4</b> Testing universality of theories</a></li>
+<li class="chapter" data-level="5.5" data-path="mlm.html"><a href="mlm.html#non-human-populations"><i class="fa fa-check"></i><b>5.5</b> Non-human populations and cross-overs</a></li>
+<li class="chapter" data-level="5.6" data-path="mlm.html"><a href="mlm.html#nested-re"><i class="fa fa-check"></i><b>5.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="5.7" data-path="mlm.html"><a href="mlm.html#pool-shrink"><i class="fa fa-check"></i><b>5.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="5.8" data-path="mlm.html"><a href="mlm.html#psychometrics"><i class="fa fa-check"></i><b>5.8</b> Psychometrics and design-o-metric models</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="mlm.html"><a href="mlm.html#coverage"><i class="fa fa-check"></i><b>5.8.1</b> Coverage</a></li>
+<li class="chapter" data-level="5.8.2" data-path="mlm.html"><a href="mlm.html#reliability"><i class="fa fa-check"></i><b>5.8.2</b> Reliability</a></li>
+<li class="chapter" data-level="5.8.3" data-path="mlm.html"><a href="mlm.html#validity"><i class="fa fa-check"></i><b>5.8.3</b> Validity</a></li>
+<li class="chapter" data-level="5.8.4" data-path="mlm.html"><a href="mlm.html#designometrix"><i class="fa fa-check"></i><b>5.8.4</b> Towards Design-o-metrix</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="mlm.html"><a href="mlm.html#further-readings-2"><i class="fa fa-check"></i><b>5.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>6</b> Generalized Linear Models</a><ul>
+<li class="chapter" data-level="6.1" data-path="glm.html"><a href="glm.html#elements-glm"><i class="fa fa-check"></i><b>6.1</b> Elements of Generalized Linear Models</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="glm.html"><a href="glm.html#relinking-linearity"><i class="fa fa-check"></i><b>6.1.1</b> Re-linking linearity</a></li>
+<li class="chapter" data-level="6.1.2" data-path="glm.html"><a href="glm.html#choosing-randomness"><i class="fa fa-check"></i><b>6.1.2</b> Choosing patterns of randomness</a></li>
+<li class="chapter" data-level="6.1.3" data-path="glm.html"><a href="glm.html#mean-var-rel"><i class="fa fa-check"></i><b>6.1.3</b> Mean-variance relationship</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="glm.html"><a href="glm.html#count-data"><i class="fa fa-check"></i><b>6.2</b> Count data</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="glm.html"><a href="glm.html#pois-reg"><i class="fa fa-check"></i><b>6.2.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="6.2.2" data-path="glm.html"><a href="glm.html#logistic-reg"><i class="fa fa-check"></i><b>6.2.2</b> Logistic (aka Binomial) regression</a></li>
+<li class="chapter" data-level="6.2.3" data-path="glm.html"><a href="glm.html#overdispersion"><i class="fa fa-check"></i><b>6.2.3</b> Modelling overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="glm.html"><a href="glm.html#duration-measures"><i class="fa fa-check"></i><b>6.3</b> Duration measures</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="glm.html"><a href="glm.html#exp-gam-reg"><i class="fa fa-check"></i><b>6.3.1</b> Exponential and Gamma regression</a></li>
+<li class="chapter" data-level="6.3.2" data-path="glm.html"><a href="glm.html#exgauss-reg"><i class="fa fa-check"></i><b>6.3.2</b> ExGaussian regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="glm.html"><a href="glm.html#rating-scales"><i class="fa fa-check"></i><b>6.4</b> Rating scales</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="glm.html"><a href="glm.html#ord-logist-reg"><i class="fa fa-check"></i><b>6.4.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="6.4.2" data-path="glm.html"><a href="glm.html#beta-reg"><i class="fa fa-check"></i><b>6.4.2</b> Beta regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="glm.html"><a href="glm.html#distributional-models"><i class="fa fa-check"></i><b>6.5</b> Beyond mean: distributional models</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="glm.html"><a href="glm.html#item-anchoring"><i class="fa fa-check"></i><b>6.5.1</b> Item-level anchoring in rating scales</a></li>
+<li class="chapter" data-level="6.5.2" data-path="glm.html"><a href="glm.html#part-employment"><i class="fa fa-check"></i><b>6.5.2</b> Participant-level employment of scale</a></li>
+<li class="chapter" data-level="6.5.3" data-path="glm.html"><a href="glm.html#part-skew"><i class="fa fa-check"></i><b>6.5.3</b> Participant-level skew in reaction times</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="glm.html"><a href="glm.html#further-readings-3"><i class="fa fa-check"></i><b>6.6</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="wwm.html"><a href="wwm.html"><i class="fa fa-check"></i><b>7</b> Working with models</a><ul>
+<li class="chapter" data-level="7.1" data-path="wwm.html"><a href="wwm.html#model-criticism"><i class="fa fa-check"></i><b>7.1</b> Model criticism</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="wwm.html"><a href="wwm.html#residual-analysis"><i class="fa fa-check"></i><b>7.1.1</b> Residual analysis</a></li>
+<li class="chapter" data-level="7.1.2" data-path="wwm.html"><a href="wwm.html#fitted-responses"><i class="fa fa-check"></i><b>7.1.2</b> Fitted responses analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="wwm.html"><a href="wwm.html#model-selection"><i class="fa fa-check"></i><b>7.2</b> Model selection</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="wwm.html"><a href="wwm.html#overfitting"><i class="fa fa-check"></i><b>7.2.1</b> The problem of over-fitting</a></li>
+<li class="chapter" data-level="7.2.2" data-path="wwm.html"><a href="wwm.html#cross-validation"><i class="fa fa-check"></i><b>7.2.2</b> Cross validation and LOO</a></li>
+<li class="chapter" data-level="7.2.3" data-path="wwm.html"><a href="wwm.html#ic"><i class="fa fa-check"></i><b>7.2.3</b> Information Criteria</a></li>
+<li class="chapter" data-level="7.2.4" data-path="wwm.html"><a href="wwm.html#model-selection-1"><i class="fa fa-check"></i><b>7.2.4</b> Model selection</a></li>
+<li class="chapter" data-level="7.2.5" data-path="wwm.html"><a href="wwm.html#choose-dist"><i class="fa fa-check"></i><b>7.2.5</b> Comparing response distributions</a></li>
+<li class="chapter" data-level="7.2.6" data-path="wwm.html"><a href="wwm.html#testing-theories"><i class="fa fa-check"></i><b>7.2.6</b> Testing hypotheses</a></li>
+<li class="chapter" data-level="7.2.7" data-path="wwm.html"><a href="wwm.html#a-note-on-bayes-factor"><i class="fa fa-check"></i><b>7.2.7</b> A note on Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="wwm.html"><a href="wwm.html#further-readings-4"><i class="fa fa-check"></i><b>7.3</b> Further readings</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="cases.html"><a href="cases.html"><i class="fa fa-check"></i><b>A</b> Cases</a><ul>
+<li class="chapter" data-level="A.1" data-path="cases.html"><a href="cases.html#real-cases"><i class="fa fa-check"></i><b>A.1</b> Real cases</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.1</b> Hugme</a></li>
+<li class="chapter" data-level="A.1.2" data-path="cases.html"><a href="cases.html#cue8"><i class="fa fa-check"></i><b>A.1.2</b> CUE8</a></li>
+<li class="chapter" data-level="A.1.3" data-path="cases.html"><a href="cases.html#uncanny"><i class="fa fa-check"></i><b>A.1.3</b> Uncanny Valley</a></li>
+<li class="chapter" data-level="A.1.4" data-path="cases.html"><a href="cases.html#ipump"><i class="fa fa-check"></i><b>A.1.4</b> IPump</a></li>
+<li class="chapter" data-level="A.1.5" data-path="cases.html"><a href="cases.html#sleepstudy"><i class="fa fa-check"></i><b>A.1.5</b> Case Sleepstudy</a></li>
+<li class="chapter" data-level="A.1.6" data-path="cases.html"><a href="cases.html#egan"><i class="fa fa-check"></i><b>A.1.6</b> Egan</a></li>
+<li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#mmn"><i class="fa fa-check"></i><b>A.1.7</b> Case: Millers Magic Number</a></li>
+<li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.8</b> AUP</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
+<li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
+<li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
+<li class="chapter" data-level="A.2.4" data-path="cases.html"><a href="cases.html#browsingab"><i class="fa fa-check"></i><b>A.2.4</b> BrowsingAB</a></li>
+<li class="chapter" data-level="A.2.5" data-path="cases.html"><a href="cases.html#headache"><i class="fa fa-check"></i><b>A.2.5</b> Headache</a></li>
+<li class="chapter" data-level="A.2.6" data-path="cases.html"><a href="cases.html#reading"><i class="fa fa-check"></i><b>A.2.6</b> Reading time</a></li>
+<li class="chapter" data-level="A.2.7" data-path="cases.html"><a href="cases.html#argame"><i class="fa fa-check"></i><b>A.2.7</b> AR_game</a></li>
+<li class="chapter" data-level="A.2.8" data-path="cases.html"><a href="cases.html#sleep"><i class="fa fa-check"></i><b>A.2.8</b> Sleep</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for design researchers</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">New statistics for design researchers</h1>
+<h2 class="subtitle"><em>A Bayesian workflow in tidy R</em></h2>
+<p class="author"><em>Martin Schmettow</em></p>
+<p class="date"><em>2020-11-08</em></p>
+</div>
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="whom-for" class="section level2">
+<h2><span class="header-section-number">1.1</span> Whom this book is for</h2>
+<p>Are you a design researcher?
+Is your work about improving computer software, cars, medical devices, services or trainings?
+Are you using data for your work, in order to measure or compare how well a design works?
+Welcome to the club!</p>
+<p>Of course, I have no idea who you are, personally, but I figure you as one of the following types:</p>
+<p>You are an Human Factors researcher, thirty-three years old, leading a small team in the center for research of a car maker.
+Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
+Downstream research relies on your competent assessment of what is feasible.
+For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
+You are working together with two engineers and a student from industrial design.
+Your plan is to put a light color device into a prototype car.
+Two workstation are stuffed into the boot of the car for record physiological signals and driving performance.
+This all is very expensive and someone is paying for it.
+Your skin is in the game.</p>
+<p>Or, you are a young academic and just got a cum laude master’s degree in computer science.
+For your thesis you developed and implemented an animated avatar for a digital assistant.
+A professor from the social psychology department has read your thesis.
+She just got funding for a project on mass emergency communication using projected virtual characters.
+Being afraid that a psychologist researcher would not be up to the technical part of the project and found you.
+But, you ask yourself, am I up to the task of running experimental studies and do the statistics?</p>
+<p>Or, you are a student in some applied field of Psychology and your thesis project is about evaluating a design, or a training, or a therapeutic intervention, or making this world a better place in any other way.
+From your bachelor studies, you already have a background in Statistics, but it occurs to you, the basics won’t do it for what you have in mind.</p>
+<p>Finally, perhaps you are an experimentalist.
+Are you doing research with people, but your research question addresses the human mind, in general, and the answers you seek are far from being applicable to anything in sight.
+You are not a design researcher, but don’t put this book away too fast!
+The only difference between a design experiment and a psychological lab experiment, is in the different stakes, not the research design and structure of data.
+In cognitive experiments, a drop in reaction time can mean that some priming or learning has occured, which can either strengthen or defeat a certain theory on human cognition.
+In a design experiment, if users can work faster with one interface compared to another, that is usually a good thing. For a statistical model, intentions don’t matter. Chances are good that you will be able to read through the ephemeral details of the design research cases I present and apply the same methods to your own research situations.</p>
+<!-- As you can see in the table of contents, you don't even have to read more than half the book to get there.  -->
+<!-- It may be true that strictly experimental data does not require more than group comparison. Still, I please you: also read the chapter on multilevel models. So much contemporary experimental research mistakens *average* for *universal*. It makes a difference to ask: -->
+<!-- >"Are responses in the Stroop task responses delayed in the incongruent condition?" -->
+<!-- or to ask: -->
+<!-- >"Every person responds delayed in the incongruent condition?" -->
+<!-- If your work is about revealing universal laws of behaviour, you have to search for the answer on an individual level. Technically, that means a rather simple multi-level model and a spaghetti plot will do the rest. But note that such a model is composed of many little participant-level models and all of them need their data. For multi-level models you need a within-subject design and repeated measures. On the second thought that makes full sense, as what really ask is: -->
+<!-- >"Do all people shift into a slower mode in the incongruent condition?" -->
+<!-- This is not about groups of people, but mode transitions in individual brains. These transitions can only be observed by putting one-and-the-same person into all the conditions. If you fear that the order of modes makes a difference, why not put order under statistical control? Record what you cannot control and check the interaction effects. Maybe it is not so bad. -->
+<!-- Just another candy for you: Response times! Have you been struggling with them forever, because they are not Normal distributed? Have you resorted to non-parametric tests so many times that what you say became "response times are non-parametric"? You shouldn't say that. Furthermore, your non-parametric sacrifices can be history with Generalized Linear Models. -->
+<!-- Then again, you may soon notice a disturbing lack of stars. Is this book like a very dark night? Consider the opposite possibility: most times when you don't see the stars is at daylight. But let me hand you a torch with a chapter on model selection. The following paragraph may help you pushing your work through the review process: -->
+<!-- >In order to confirm that the Stroop effect exists, we compared the predictive power of two models by information crieria. M_0 is an intercept-only model that denies the Stroop effect, M_1 allows for it. In order to evaluate universality of the Stroop effect, the models got participant-level random effects. As response times tend to have an offset and are left-skewed we chose exponential-Gaussian error distributions. -->
+<!-- ### The applied researcher {#applied-researcher} -->
+<!-- Tongue-in-cheek, applied researchers take real problems to get their questions, but rarely solve them. Why not? It is legitimate, almost natural, to ask what causes the Uncanny Valley effect, for instance. You do a series of experimental study and also throw personality scales into the  game. Maybe, the effect is not unversal. Why? Just that. -->
+<!-- 43 -->
+</div>
+<div id="quant-design-research" class="section level2">
+<h2><span class="header-section-number">1.2</span> Quantitative design research</h2>
+<p>A <em>design</em> is the structure of an artifact (or a process) that someone conceived for a purpose.
+This definition is extremely broad as it covers everything, tea kettles, software, cockpits, training programs and complex human-machine systems.
+The only exception I can think of is art, which is not design, because purposefulness is a requirement.
+Quantitative design research simply is about measuring to what extent a design, a class of designs or a design feature fulfills its purposes.
+We all have purposes and much of the time it is quite a job to get there.
+Getting-there typically requires resources and often we have to strike some sort of balance.
+The two basic questions in <em>quantitative design research</em> are:</p>
+<ol style="list-style-type: decimal">
+<li>To what extent does a design fulfill its purpose?</li>
+<li>What are the costs for the design?</li>
+</ol>
+<p>A good design simply fulfills its purpose enough to justify the costs. The methods and examples in this book all deal with the first question. Quantitative design research practically always is an <em>evaluation</em> of some sort.
+This evaluation can either be very specific, such as the effect of a new or changed feature in A/B testing, or generic, such as the uncanny effect of human-likeness of robot faces on the feelings of people.
+Broadly, the purpose of specific design study is to evaluate the fitness of a single design, before it enters the next development stage (or is rolled out to the users).
+In contrast, generic design studies have the purpose to inform future designs of a class.
+In both cases, something is at stake, immediately or in the future, and this is why quantification is required.</p>
+<!-- To the apt reader this may sound as I would next reduce all quantitative design research to the concept of usability, as it is defined by the ISO standard 9241-11 and this is, indeed what I do below. -->
+<!-- Not because this is all there is, but because the usability criteria are a good framework to place what is most important: the measures. -->
+<!-- The two performance-oriented usability criteria are effectiveness (degree of purpose fulfillment) and efficiency (the energy needed to get there). -->
+<!-- The third classic criterion is Satisfaction, and this is about feelings, rather than performance. -->
+<!-- Furthermore, quantitative design research is about designs, rather than  -->
+<!-- #### HERE -->
+<!-- The point here is that statistician actually don't care much about definitions from a domain, but think about research problems in a more abstract manner. Here is a number of things, a statistician would inquire: -->
+<!-- + On what a scale is the measurement of purpose fulfillment? -->
+<!-- + What is the expected precision of measures? Is a lot of noise to be expected? -->
+<!-- + How many observations are available? -->
+<!-- + Is the research concerned with how purpose fulfillment compares under various conditions? -->
+<!-- + How are observations grouped? -->
+<!-- In this book, quantitative design research is rather defined by a set of typical research problems, which includes the structure of the research question, as well as the empirical circumstances. In the following I will break this down one by one, and will also point out why the statistical framework of this book *Bayesian regression models* will do the job. -->
+<!-- In fact, this definition is even redundant in two points: first, artifacts are usually made for a purpose and some call them just "tools". Second,  who else than people have purposes? Well, many wild animals reportedly create artificial structures for purposes such as shelter, mating and hunting. And when I have chosen such a broad definition for design, it is that I have absolutely no objections against using this book to compare the stability of birds nestings, for example. (In such a case, everyone please, read "design" as "part of the extended phenotype" and "purpose" as "emerged by natural selection". -->
+<!-- This book applies to everything anyone likes to call a design, but only under  -->
+<!-- the key but only so for a specific set of research questions that hinge on the word "purpose".  -->
+<!-- ##### Introduce magnitude, as this is used when explaining uncertainty. -->
+<p><em>Quantification</em> happens on two levels: the research questions and measures.
+In most research, a process called measurement produces numbers.
+This can be as simple as the reaction time to a signal, or as advanced as a trained neural network that judges the emotional content of tweets.</p>
+<p>For calling a study <em>quantitative research</em> it is required to ask <em>quantitative research questions</em>.
+In the real world, decisions are (or should be) based on benefits and rational allocation of resources.
+Changing the background color of a website might just be a switch (and can have undesired effects as users hate change), but restructuring an intranet site can be very costly.
+In industrial design research, there usually is someone who wants to know whether this or that redesign is worth it, and that requires to ask research questions like the following examples:</p>
+<ul>
+<li>By how much does reaction time degrade with age and it is safe that people beyond 80 still drive?</li>
+<li>Does design B reduce the required number of steps by a third, at least?</li>
+<li>What proportion of users prefers red over yellow? All websites better go red?</li>
+</ul>
+<p>Sadly, in much existing research, the quantitative perspective is frequently lost along the way and conclusions read more like:</p>
+<ul>
+<li>Older people have longer reaction times in traffic situations (<span class="math inline">\(p \leq .05\)</span>).</li>
+<li>People find information more easily with design A, compared to B (<span class="math inline">\(p \leq .05\)</span>).</li>
+<li>Chinese people on average prefer red color schemes over yellow (<span class="math inline">\(p \leq .001\)</span>).</li>
+</ul>
+<p>There simply is no numbers in these statements (except for the notorious p-values, which I will briefly discuss in chapter <a href="ebs.html#ebs">3</a>).
+The statistical methods introduces in this book do a terrific job at drawing quantitative conclusions.
+Every regression model features a so called <em>outcome</em>, which must be a measure (rather than a category).</p>
+<p>Modern designs tend to be very complex and so are research questions, potentially.
+The options for designing just your personal homepage are myriad and there is considerable uncertainty about which feastures, or rather which configuration of features works best.
+Consider every option, say font type, font size, color, background color, position of menu, a potential impact factor on how pleasant the page is to read. At the same time, these features are not independent. For a simple example, readability of a website depends on font size and contrast, which means you can trade in one for the other.
+Perhaps, someone should once and for all figure out the optimal configuration. Such a study would require, that as many as possible impact factors are represented in a single study and evaluated by a single comprehensive statistical model.
+<!-- The primary reason for this recommendation is given in chapter \@ref(cfxm): impact factors have the nasty tendency to not act out independent of each other. -->
+The models introduced in thios book handle such complexity with grace.
+There is theoretically no limit for the number of impact factors or <em>predictors</em>.</p>
+<p>The central peculiarity in all behavioural research is that measures are extremely <em>noisy</em>, with the consequence that we can never draw totally firm conclusions.
+In chapter <a href="ebs.html#ebs">3</a>, the concept of uncertainty will be elaborated upon, but for now it suffices to understand that no statistical models can make fully certain predictions.
+Imagine a simple test for cognitive processing speed. Participants wait for a signal and react to it. Although the task is the same every time, the measures most likely will be scattered, like 900ms, 1080ms, 1110ms. Imagine further this were an ability test in a training for, say, astronauts. To be admissioned to the space program the applicant needs a score of less than 1000ms. Would you dare to decide on the career of a young person based on these three observations? Hardly so. Uncertainty can be reduced by taking more measures, but 100% certainty can never be reached. The approach presented in this book address teh uncertainty problem by making the level of uncertainty transparent.</p>
+<p>In contrast, consider measuring a persons waste length for the purpose of tayloring a suit.
+By using a meter, the taylor measures 990mm, and would be perfectly fine with that.
+Why did the taylor not take a second and a third measure?
+Well, experience tells that meters are pretty precise measures and waste length shows relatively little variation (under constant habits).
+Say the two measures were 995mm and 989mm.
+Such small deviations have practically no influence on cutting the linen.</p>
+<blockquote>
+<p>“Our minds are not run as top - down dictatorships ; they are rambunctious parliaments, populated by squabbling factions and caucuses, with much more going on beneath the surface than our conscious awareness ever accesses.”</p>
+</blockquote>
+<blockquote>
+<p>Carroll, Sean.
+The Big Picture (Kindle Locations 5029-5031).
+Oneworld Publications.
+Kindle Edition.</p>
+</blockquote>
+<p>Vast fluctuations of measures are common in design research, simply for the fact that human behaviour is involved.
+Every magnitude we derive from a study is uncertain to some degree.
+Uncertainty makes that at any moment, we can rely on a quantitative result only to some extent, which influences how we take risks.
+New Statistics solves this problem by attaching a degree of uncertainty to every effect.
+Section <a href="ebs.html#decision-making">3.1</a> gives some reasoning and examples, how to operate rationally under uncertainty, and drives you right into the arms of Bayesian statistics.</p>
+<p>When you have no greater goal in mind than proving your design is of quality, <em>user studies</em> are effective and quick means.
+In the easiest case, you want to put your design against a fixed benchmark.
+For example, in the design of automotives, media devices in the cockpit may not distract the driver for more than 1.5 seconds at times.
+If you want to prove that a design complies to this rule, you will have to plug some advanced eye tracking gear into a prototype car and send people on the test drive.
+But once the data is in, things get really simple.
+The saccade measures directly represent what you were out for: the length of episodes of visual attention on the media display.
+In web design, it is common to compare two or more designs in order to make the best choice.
+An e-commerce company can put a potential future design on the test drive, delivering it to a customer sample.
+Performance is measured as hard currency, which is as close to the purpose as it can get.</p>
+<p>A user studies solves the momentary problem of comparing a local design to a benchmark (which can be another design).
+In the long run, design configurations are too manyfold to be compared in a one-by-one manner.
+It is inevitable that we try to trace some general patterns and apply our knowledge to a whole class of designs at once.
+Our research design just got one step more complex.
+Instead of just checking whether a smaller font size creates problems on a single website, the reseacher reaches out to comparing the combined effect of aging and font size on reading time, in general.
+This is what I call a <em>design experiment</em>.</p>
+<p>Design experiments allow for much broader conclusions, if done right, but there are a some issues:</p>
+<ol style="list-style-type: decimal">
+<li>The design features under scrunity must be under control of the researcher. It does not suffice to collect some websites with varying font sizes, but every website needs to undergo the test at various font sizes.</li>
+<li>The design feature must undergo a full range of manipulations. You will not find the laws of readability by just comparing 10pt versus 12pt.</li>
+<li>Design features usually do not stand on their own. Readability is influenced by other factors, such as contrast and comprehensibility. Deriving a model from just one design will only generalize to this one design. Hence, the researcher must run the experiment on a sample of designs, with one of two strategies (or a mix of both): the <em>randomization strategy</em> takes a representative sample of designs, hoping that other impact factors average out. As we will see in <a href="lm.html#cfxm">4.5</a>, this is a daring assumption. Therefore, the preferred way is <em>statistical control</em>, where potential impact factors are recorded and added as control variables to the regression model.</li>
+</ol>
+<p>The parameters for decision making vary with the purpose.
+In an admission test for astronaut training, a decision is raised on individuals.
+Also, there is only this one shot, figuratively and literally, and the costs are enormous.
+Down on earth, many designs affect many people at once, sometimes in the billions, if just a little bit.
+Consider any commercial or informational website.
+If you decide, for aesthetic reasons, to shrink the font size, it is not unlikely, that you just start loosing all visitors from the e-senior generation.
+Or, if your content is really good, they may swallow the bitter pill and start using looking glasses on their O-pads.
+As a researcher, you can approach any of these problems by a specific user study or a generic design experiment.</p>
+<!-- this in a : do a user study to compare the new design to the current design, or be the one who finds out the laws that predicts the optimal trade-off between readability and aesthetic pleasure. -->
+<p>Effective design research hinges on many methodological considerations, such as selection of valid measures, efficient experimental designs and sampling schemes.
+To keep this confined in a textbook on statistical models, I will briefly address measures in the following chapter.
+Experimental design will not explicitly being addressed, but all real case studies used in this book have been carefully designed and I am confident to offer them as templates for your own research.</p>
+<!-- The golden rule for efficient experimental design is to always take a *full within-subject design* as a starting point. -->
+<!-- That means that all participants encounter all possible experimental conditions. -->
+<!-- On the one hand that reduces the noise of measures, by eliminating inter-individual variance. -->
+<!-- At the same time, within-subject designs allow to draw conclusions on individual level. -->
+<!-- Throughout the book, you will see multiple examples of how such a multi-level analysis yields answers to highly relevant research questions. -->
+<!-- Sampling theory, in contrast, will not be addressed in this book. -->
+<!-- Readers will be referred to complementing sources at the end of the chapter. -->
+<!-- ##### TODO -->
+<!-- + Designing is wicked -->
+<!-- + Evaluative design research -->
+<!-- + Decision problems in design research -->
+<!-- + Design research as exploration -->
+<!-- + Mapping multidimensional impact factors -->
+<!-- + Quantification for decision making -->
+<!-- + Minimax decision making on designs -->
+<!-- + Measures and psychometrics -->
+<!-- + Emergent design theories -->
+<!-- ## Studies in Design Research -->
+<!-- + user studies -->
+<!-- + experimental/fundamental studies -->
+<!-- + qualitative vs quantitative -->
+</div>
+<div id="what-new-stats" class="section level2">
+<h2><span class="header-section-number">1.3</span> What is New Statistics?</h2>
+<p>New Statistics is neither novel, nor are the contained methods truly bleeding-edge.
+The term has been coined by <span class="citation">(Cumming 2013)</span> and it is new in two respects: first, what can be subsumed as Classic Statistics is a zoo of crude tools from the first half of the 20th century.
+Second, NewStats and ClassicStats take different perspectives.
+ClassicStats emphasizes the approach of testing hypotheses, that were derived from theories, which is known as <em>null hypothesis significance testing (NHST)</em>. New Statistics is about quantification of impact factors.</p>
+<p>The difference is best illustrated by seeing how in either one the results are reported.
+A classic analysis report has the following structure:</p>
+<ol style="list-style-type: decimal">
+<li><p>Recollect the hypothesis: <em>Participants in the control condition are faster.</em></p></li>
+<li><p>Descriptive statistics: <em>The difference of means in the sample is <span class="math inline">\(217\)</span>.</em></p></li>
+<li><p>State the null hypothesis: <span class="math inline">\(H_0: (M_\textrm{exp} - M_\textrm{control}) = 0\)</span></p></li>
+<li><p>Test the assumptions of ANOVA:</p>
+<ol style="list-style-type: lower-alpha">
+<li>homogeneity of variance</li>
+<li>Normal distribution of residuals</li>
+</ol></li>
+<li><p>If assumptions are not violated, continue with ANOVA, otherwise with a non-parametric test.</p></li>
+<li><p>Report p-values: <em>The chance that a difference of <span class="math inline">\(217ms\)</span> happens, when the null hypothesis is true, is <span class="math inline">\(p \leq .05\)</span></em></p></li>
+<li><p>… proceeding to the next research question and repeat the cycle</p></li>
+</ol>
+<p>A New Statistics report has the following structure:</p>
+<ol style="list-style-type: decimal">
+<li>Collect all research questions: <em>Participants in the experimental condition are 10% faster</em> and <em>Older participants are slower</em>.</li>
+<li>Explorative figures: <em>The boxplot shows that participants with the novel design are faster by around 200 seconds on average.</em> and <em>The scatterplot shows a positive trend with age</em>.</li>
+<li>Reasoning about the measures and shape of randomness: <em>Response time are strictly positive and frequently left-skewed.</em></li>
+<li>Building one model: <em>We use a model on response time with two predictors, Condition and age, with Exponential-Gaussian distributed responses.</em></li>
+<li>Reporting quantities with uncertainty: <em>The novel design leads to faster reaction times, with a best guess of 205 ms difference. With 95% certainty, the true difference is at least 172 ms</em></li>
+</ol>
+<p>The first to note is that in New Stats <em>research questions are quantitative</em>.
+For the design researcher it is essential to know how large an improvement is, because design always takes place in a web of trade-offs.
+Let’s take the example of putting blue light into cars, to keep drivers awake.
+It is one thing to test that on a test drive or a simulator, it is another to kick it off into development and produce a car series.
+That means that applied or industrial researchers eventually have to report their results to decision makers and the data must ascertain not only that there is an improvement, but that the improvement justifies the costs.</p>
+<!-- This is much more effective when *using figures*. -->
+<!-- But, first things first, figures are also powerful tools to design powerful statistical models. -->
+<p>In New Statistics we have a much <em>higher flexibility in designing statistical models</em>.
+Classic models are like a zoo, where most animals cannot interbreed.
+You can find an animal that is furry, another one that has green color and a third one that can swim.
+But, you cannot cross them into one animal that does it all.
+New Statistics is like modern genetics, where properties of animals are encoded on basic building blocks.
+Theoretically, once you understand the basic building blocks, you can assemble the animal you want.
+In our favor, the building blocks of statistical models have long been understood and they are just a few.
+This book covers the family of <em>Generalized Linear Multi-level Models</em>, which consists of the following building blocks</p>
+<ol style="list-style-type: decimal">
+<li>A <em>linear relation</em> describes the basic quantitative relationship between a metric predictor and a metric outcome.</li>
+<li>By <em>dummy coding</em>, categorical (i.e. non-metric) predictors can be used, as well.</li>
+<li>By <em>linear combination</em>, the simultaneous effect of multiple predictors can be modelled.</li>
+<li><em>Random effects</em> apply for categorical variables, where the levels members of one population.</li>
+<li><em>Multi-level</em> modelling allows the simultaneous estimations on population-level and participant-level.</li>
+<li><em>Link functions</em> linearizes the predictor-outcome relationship for outcomes which have boundaries (which they all do).</li>
+<li><em>Error distributions</em> adjust the shape of randomness to the type of outcome variable.</li>
+</ol>
+<p>The power NewStats model lies in the combinatoric explosion arising from the full interoperability of its building blocks.
+The most powerful building block is the combination of linear terms.
+A linear model for the effect of blue light would be written as <code>RT ~ Light</code>.
+To simultaneously address the age effect, we had to write just <code>RT ~ Light + age</code>.
+In New Statistics, statistical models are not pulled off the shelf, but are designed in a thoughtful manner, based on an analysis of the <em>data-generating process</em>.</p>
+<p>I wouldn’t go so far as to say, we are only scratching the surface with the family of GLMM, but there definitely are more building blocks, that further expand the family of models, for example, also allowing non-linear relationships (see <a href="lm.html#prm">4.6</a> and <a href="glm.html#learning-curves">6.2.1.2</a>).
+New Statistics does not require the GLMM family per se, it only requires that models have a <em>quantitative interpretation</em>.
+That includes the whole set of models commonly referred to as <em>parametric models</em>, of which GLMM is one class.</p>
+<p>If there are parametric models, what about <em>non-parametric models</em>? In ClassicStats, non-parametric tests are routinely used as a fall-back for when none of the few available parametric models sits well.
+Non-parametric methods are banned from NewStats, for two reasons: first, they don’t give quantitative answers. Second, they are not needed.
+When reaction times are not “distributed Normal”, the researcher can simply swap the building block that defines the shape of randomness.
+Or even better: the researcher knows that reaction times are not Normal and selects an appropriate response distribution right away.
+Infamously in ClassicStats, non-parametric tests are often misused to check the assumptions of a model, like the Normality assumption.
+New Statistics does not require such crude tricks.
+The process of assumption checking (and being screwed if any are violated) is simply replaced by a top-down <em>knowledge-driven model design</em>.</p>
+<p>Finally, ClassicStats and NewStats models differ in what pops out of them.
+The very reason to run a statistical model, rather than pulling the answers from descriptive statistics, like group averages, is that data obtained from a sample is never a complete picture, but is always tainted by some <em>degree of uncertainty</em>.
+In ClassicStats, questions are posed as binary (Yes/No), following the traditional method of null hypothesis significance testing: Is there a difference, or not?
+Awkwardly, the way a null hypothesis is posed does not seem to focus on the difference, but on the opposite: Imagine, there really were no difference. How likely would the observed data be?
+If we were to repeat the experiment a hundred times, how often would we see such a result?
+If this blurs your mind, you are not alone.
+Where do all these experiments come from?
+In fact, the p-value is just a clever mathematical trick to extrapolate from the data at hand, to what would happen with an infinite number of replications.
+While we could view the so called alpha error as a continuous measure of certainty, it is not a measure of how strong an effect is.
+Instead, the p-value is a convolution of effect size, noise level and sample size. That makes it very difficult to interpret, which is most apparent with the mal-practivce of non-parametric tests for assumptions checking: If the data set is small, even large deviations from, say Normality, will not be detected. On large data sets the opposite happens: minor deviations lead to the rejection of a reasonable approximation.
+In practice, the p-value is not even used as a continuous measure, but is further simplified by a social norm: If the p-value is smaller then 5%, the null hypothesis is rejected, if it is not, we are in the limbo.</p>
+<p>New Statistics asks quantitative questions and our models produce quantitative answers, together with levels of uncertainty.
+These answers come as parameter estimates, like the difference between two groups.
+Estimates are uncertain and it is common, to express the level of uncertainty as intervals that contain the true value with a probability of 95%.
+This can be customized in various ways, which is immensely useful in decision-making situations.</p>
+<p>In this book I am advocating the <em>Bayesian approach</em> for doing New Statistics.
+That does not mean, you cannot use classic tools, such as the method of maximum likelihood estimation or bootstrapping, to estimate parameters and certainty intervals.
+However, the Bayesian approach has a number of advantages, that makes it a perfect match for New Statistics:</p>
+<ol style="list-style-type: decimal">
+<li>The Bayesian school of thinking does not require you to imagine infinite series of replication. Parameters and uncertainty have a <em>straight-forward interpretation</em>: There is a best guess for the true value and there is an interval within which it lies with a given certainty. Even stronger, Bayesian models produce posterior distributions, which contain the full information on uncertainty and can be used in multiple ways. That means, we can practically always create an certainty statement that precisely matches whatever is at stake.</li>
+<li>In classic models, the level of uncertainty is only given for a subset of parameters, called population-level coefficients. A Bayesian model generates information on <em>uncertainty for every parameter</em> in the model. As a result, Bayesian models can be used to compare variance parameters between groups, or individuals within a group (so called random effects), and even correlations between individual traits. This may sound unusual and complicated, but we will see several examples of when this is very useful.</li>
+<li>The classic p-value also is a trick in the sense of: you can only pull it a number of times. Null hypothesis tests are available only for a very limited class of models. Bayesian tools covers a <em>much broader class of models</em>. For example, modelling reaction times correctly, requires a response distribution that is skewed and has an offset. Classic tools have few options for skewed response distributions, but not with an offset. Modern Bayesian engines even give you the choice out of three such distributions (such as the Ex Gaussian, see @exgaus-reg.</li>
+<li>Sometimes it is fully legit to ask Yes/No questions, such as: does an effect contribute to making predictions, or not? Modern Bayesian Statistics has developed a powerful toolset for what is called, <em>model selection</em> (<a href="wwm.html#model-selection">7.2</a>). This can either be used to test hypotheses, or to harness the shear variety of models, that can be build.</li>
+</ol>
+<!-- ##### HERE -->
+<!-- Furthermore, the whole idea is very lofty. There are some experimental results from the labs, but it is totally unclear whether blue light would have an effect in the situation of driving. So, you better  -->
+<!-- 1. Figures are preferred over tables. -->
+<!-- 1. One model rules all research questions. -->
+<!-- 1. Models are constructed to match features of the data. -->
+<!-- 1. Answers come with a level of certainty. -->
+<!-- This book makes the following assumptions: -->
+<!-- 1. Design research is for decision making, where one accounts for expected utility of design options. This requires -->
+<!--    a.  quantitative statements -->
+<!--    b.  statements of (un)certainty -->
+<!-- 2. Bayesian statistics is intuitive. Everybody has a good intuition about probability, value, decision making and gambling. It requires little effort to get to a more formal level of understanding. -->
+<!-- 3. Data arrives through data generating processes. Premise of statistical modelling is to neatly align to the generating process’ anatomy. -->
+<!-- 4. Applied research data is multivariate and correlated. There is nothing such as a nuisance variable. Everything that helps understanding advantages and drawbacks of a design matters. -->
+<!-- 5. Average? Neverage! People differ, and diversity matters in design. -->
+<!-- 6. The universe is endless, but everything in it is finite, which strictly is at odds with linearity assumptions.  -->
+<!-- 7. The human eye is a highly capable pattern evaluator. It would be a waste to not use visuals for exploring data and communicating results. -->
+<!-- 8. The best way to anticipate and plan data analysis is to simulate data upfront. -->
+<!-- 9. R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities. -->
+<!-- A New Statistics report looks like this: -->
+</div>
+<div id="how-to-use" class="section level2">
+<h2><span class="header-section-number">1.4</span> How to use this book</h2>
+<p>Chapter <a href="index.html#quant-design-research">1.2</a> introduces a framework for quantitative design research.
+It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems.
+Then the idea of design as decision making under uncertainty is developed at the example of two case studies.</p>
+<p>Chapter <a href="ebs.html#ebs">3</a> introduces the basic idea of Bayesian statistics, which boils down to three remarkably intuitive conjectures:</p>
+<ol style="list-style-type: decimal">
+<li>uncertainty is the rule</li>
+<li>you gain more certainty by observations</li>
+<li>your present knowledge about the world is composed of what you learned from data and what you knew before.</li>
+</ol>
+<p>The same chapter goes on with introducing basic terms of statistical thinking.
+Finally, an overview on common statistical distributions serve as a vehicle to make the reader familiar with data generating processes.
+I am confident that this chapter serves newbies and classically trained researchers with all tools they need to understand Bayesian statistics.
+Arguably, for the formally trained reader this is more of a bedtime reading.</p>
+<p>Chapter <a href="gsr.html#gsr">2</a> is a minimal introduction to R, this marvelous programming language that has quickly become the Lingua Franka of statistical computing.
+Readers with some programming experience can work through this in just one day and they will get everything they need to get started with the book.
+Readers with prior R experience still may get a lot out of this chapter, as it introduces the <em>tidy</em> paradigm of R programming.
+Tidy R is best be thought of as a set standard libraries 2.0 that all follow the same regiment are therefore highly interoperable.
+New tidy packages are arriving at an accelerating pace in the R world, and coding tidy is usually much briefer, easier to read and less error prone, than “classic” R.
+<!-- It has at least the same significance as turning from procedural programming to object orientation. -->
+While this chapter can only serve as a stepping stone, the reader will encounter countless code examples throughout the book, which can serve as exercises (<a href="index.html#rosetta">1.4.3</a>) and templates alike.</p>
+<p>The second part of the book starts with three chapters that strictly built on each other.
+The first chapter <a href="lm.html#lm">4</a> introduces basic elements of linear models, which are factors, covariates and interaction effects.
+A number of additional sections cover under-the-hood concepts, such as dummy variables or contrasts. Working through this chapter is essential for beginners as it develops the jargon.</p>
+<p>However, for most readers, the first chapter is not sufficient to get to do some real work, as it does not cover models for more complex research designs, such as repeated measures.
+This is treated extensively in chapter <a href="mlm.html#mlm">5</a>.
+It proceeds from simple repeated measures designs to complex designs, where human and multiple non-human populations encounter each other. It culminates in a re-build of psychometric models, consisting entirely of GLMM building blocks. The chapter ends with a completely novel, yet over-due, definition of designometrics, statistical models for comparing designs (not humans).</p>
+<!-- After working through this chapter, the reader is prepared to design highly effective studies. -->
+<!-- As long as the patterns of randomness are not off by to much from the linear model assumptions, it also suffices to get to work, seriously. -->
+<p>The third chapter <a href="glm.html#glm">6</a> opens up a plethora of possibilities to analyze all kinds of performance variables, that are usually considered “non-Normal” in Classic Statistics. In fact, the first part of the chapter is dedicated to convince the reader that there is no such thing as a Normal distribution in reality.
+Standard models are introduces to deal with counts, chances, temporal variables and rating scales.
+It is also meant as an eye opener for reseachers who routinely resorted to non-parametric procedures.
+After working through this chapter, I would consider anyone a sincere data analyst.</p>
+<!-- The fourth chapter \@ref(nonlinear_models) re-iterates on the truth that in an endless universe everything is finite. We leave our fond of high-level regression engine alone and take a closer look at the nuts and bolts it is based upon. By the example of a logistic growth process and efefcts of training, the reader gains a preview on the almighty model specification language Stan. -->
+<!-- The third part of the book is primarily dedicated to researchers who deal with complex and high-stake problems, routinely. Elememts of the statistical workflow are spread out in much detail, covering data manipulation, advanced graphics, simulation and model evaluation. -->
+<!--
+re-organize the reading guide into three learning routes:
+
++ learning R
++ learning statistical modelling
++ learning doing effective research
+
+for all routes, distinguish between reader types, perhaps make a cross table
+-->
+<div id="routes" class="section level3">
+<h3><span class="header-section-number">1.4.1</span> Routes</h3>
+<p>If you use this book for self study, two considerations play a role for finding the optimal route through this book.
+what is your <em>background in Statistics?</em> For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
+As such, it may be a while ago and a refresher is on order.
+Chapter <a href="cases.html#rational">A.2.3</a> is a quick-read, if you are feeling confident.
+If you lack any background in statistics, <a href="ebs.html#ebs">3</a> should be studied, first.
+If your background is Social Sciences, then you probably know quite something about probabilities and Statistics. If you wonder what all this new “Bayesian” is all about and how compatible it is to you, <a href="ebs.html#bayes-freq-prob">3.4.4</a> is a small bridge.</p>
+<p>The precondition for using this book effectively, is the skill of <em>coding in R</em>.
+If you have basic skills in another programming language, studying chapter <a href="gsr.html#gsr">2</a> will do.
+If you are very experienced in programming, but not yet in R, feel confident to skip that chapter and return to it only, when you have a strange encounter.
+Chapters <a href="gsr.html#structuring-data">2.2.8</a> to <a href="gsr.html#knitting">2.2.12</a> explain programming techniques, where R differs the most from general purpose languages.
+If this is the first time, you learn a programming language, your mileage may vary.
+Chapter <a href="gsr.html#gsr">2</a> can at least provide you with an overview of all that you have to know, but some other books provide a more gentle and detailed introduction to R.
+In any case, learning your first programming language by one book alone may turn out difficult.</p>
+<p>All of chapters <a href="lm.html#lm">4</a> through <a href="glm.html#glm">6</a> have a similar structure. The first half adds a few essential techniques, whereas the remaining sections explore the depths and possibilities.
+If you read this book to get an overview at the first read, the recommended route is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Section <a href="lm.html#gmm">4.1</a> introduces the regression engine and basic reporting techniques, such as coefficient tables</li>
+<li>Section <a href="lm.html#cgm">4.3.1</a> introduces the principles of factorial models, just enough to analyse data from an experimental design comparison.</li>
+<li>Section <a href="mlm.html#thinking-multi-level">5.3</a> introduces just enough multi-level thinking to get you started.</li>
+<li>Section <a href="glm.html#elements-glm">6.1</a> explains the three limitations of linear models, and introduces link functions and choice of random distribution.</li>
+<li>Section <a href="ebs.html#poisson-dist">3.5.2.4</a> introduces Poisson distribution as one common shape of randomness, that many people have not yet heard of.</li>
+<li>Section <a href="glm.html#pois-reg">6.2.1</a> puts Poisson distribution and link function to practical use on the response variable deviations</li>
+</ol>
+<p>Readers approaching this book with a specific class of problems in mind, can also drill into it, like in the following examples:</p>
+<p>Experimenters in Cognitive Psychology often use reaction time measures to test their hypotheses.
+The suggested vertical route matches the above up to <a href="glm.html#elements-glm">6.1</a>.
+Then, section <a href="glm.html#duration-measures">6.3</a> introduces Exponential-Gaussian distribution as plug-in-and-use alternative to the “Normal” error term.
+Section <a href="wwm.html#model-selection">7.2</a>, and <a href="wwm.html#testing-theories">7.2.6</a>in particular, show how hypothesis testing (and more) can be done in a Bayesian framework.</p>
+<p>User Experience researchers (and Social Psychologists) make abundant use of rating scales.
+The vertical route in such a case is</p>
+<ol style="list-style-type: decimal">
+<li>Section <a href="lm.html#gmm">4.1</a>, <a href="lm.html#cgm">4.3.1</a> and <a href="mlm.html#thinking-multi-level">5.3</a>.</li>
+<li>Section <a href="mlm.html#non-human-populations">5.5</a> introduces items of a rating scale as non-human populations.</li>
+<li>Section <a href="mlm.html#psychometrics">5.8</a> shows how basic psychometric analysis can be done by using multi-level models.</li>
+<li>Section <a href="glm.html#rating-scales">6.4</a> elaborates on the randomness pattern of rating scales and suggests Beta regression (<a href="glm.html#beta-reg">6.4.2</a>)</li>
+</ol>
+<p>That being said, if you are in the process of <em>developing a design-oriented rating scale</em>, start by reading the last paragraph of section <a href="mlm.html#designometrix">5.8.4</a>!</p>
+<p>There can also be reasons to take a more horizontal route.
+For example, market research often involves an insane amount of possible predictors (for when and why someone is buying a product or using a service).
+Sections <a href="lm.html#mpm">4.4</a> and <a href="lm.html#cfxm">4.5</a> explore a broad set of multi-predictor models.
+Section <a href="wwm.html#model-selection">7.2</a> introduces techniques to find just-the-right set of predictors.
+Experimentalists, in turn, can learn more efficient ways of designing their studies by working through chapter <a href="mlm.html#mlm">5</a>, entirely.
+Researchers in Human Factors routinely collect multiple performance variables, such as time-on-task, number of errors and cognitive workload ratings.
+All these measures deserve their special way of being treated, which is emphasized in chapter <a href="glm.html#glm">6</a>.</p>
+<!-- #### Make knowledge graph -->
+<!-- #### END -->
+</div>
+<div id="classroom" class="section level3">
+<h3><span class="header-section-number">1.4.2</span> In the classroom</h3>
+<p>Content-wise, this book covers roughly 200% of a typical Social Sciences Statistics curriculum.
+At least at my university, students roughly learn the equivalent of the first 50% of chapters <a href="ebs.html#ebs">3</a>, <a href="lm.html#lm">4</a>, <a href="mlm.html#mlm">5</a>, <a href="glm.html#glm">6</a> and <a href="wwm.html#wwm">7</a>, before they graduate.
+However, only occasionally have I been in the situation myself, to teach a whole statistics curriculum to a cohort of students.
+Instead, this book emerged from statistics workshops, which I have given inside and outside universities, for professionals, colleagues and groups of master students.</p>
+<p>If you are a docent in the <em>Social Sciences</em>, this book certainly can back an entry-level Statistics course.
+However, you should be aware that the approach in this book is not yet common ground.
+While you yourself may find the approach of Bayesian parameter estimation compellingly intuitive, your colleagues may not like the idea, that future generations of students perceive their work as outdated.
+Another consideration is that this book is only useful for students with the capacity to learn just a little bit of programming. But, do not under-estimate your students on this.
+I have seen it happen at my home university, that cohorts of Psychology students first started learning SPSS syntax, and now learn R and also Python.
+Still, using this book in te classroom poses the challenge to teach some programmingthat puts you into the situation of teaching Programming. Chapter <a href="gsr.html#gsr">2</a> has served me well to push Psychology students over the first hurdles.</p>
+<!-- To summarize, what I said in \@ref(rosetta), programming you better don't teach in a series of lectures, but by pushing your students' noses into the code. -->
+<!-- If you have come so far as to give R programming workshops, consider staying with this form of taching. -->
+<!-- I'll come back to it. -->
+<p>To my personal observations, there is an increasing demand to teach social science research methods to <em>engineering</em> students.
+If that is your situation, this book is particularly well-suited to make a course.
+Not only will programming in R not be a major hurdle, but also is this book free of outdated customs, that actually have never been appropriate for an engineering context, especially the approach of null hypothesis significxance testing. Engineers, as I know them, are interested in quantification of design effects, rather than falsifying theories.
+In addition, the case studies in this book convey knowledge about effective research designs and validity of measures.</p>
+<!-- As Statistics education for engineering students rarely is as extensive as in the Social Sciences, you may have to cut some corners. I would  suggest to scrap Chapter <a href="ebs.html#ebs">3</a>, as engineering students are likely to have a good grasp of basic math and  good intuition about probability and uncertainty.  -->
+<p>In both of the above cases, if I were asked to develop a full course on the matter, I would make it a series of workshops.
+The most effective method for a <em>workshop</em> is to have students get acquainted with the matter by studying selected parts of the book, in advance, and let them work on assignments during tutored workshops.
+I have made good experience with tutored pair-programming, where two students work together, while the teacher stays in the background, most of the time.
+During each workshop, students are given a data set with a brief story to it and an assignment, like the following example:</p>
+<hr />
+<p>Some novel augmented-reality (AR) side-view car mirrors have been designed and the benefits for driving performance needs to be assessed.
+An experiment has been conducted, where the AR mirros were compared to the classic side-view mirrors.
+Participants have been classified in low and high driving experience and age was recorded.
+Every participant completed a set of eight tasks under the following conditions:</p>
+<ul>
+<li>AR mirrors versus classic mirrors</li>
+<li>day ride versus night ride</li>
+</ul>
+<p>The following measures were taken:</p>
+<ul>
+<li>time-on-task (seconds)</li>
+<li>steering reversal rate (counts, lower is better)</li>
+<li>cognitive workload (rating scale, 0 to 1)</li>
+</ul>
+<p><strong>Assignment</strong>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Conceive one or more research questions, e.g.:</p>
+<ul>
+<li>The AR design creates less workload.</li>
+<li>The AR design improves performance especially at night</li>
+</ul></li>
+<li><p>Read and clean the data set</p></li>
+<li><p>Produce summary tables and graphs that reflect the research question</p></li>
+<li><p>Build a model and interpret the parameter estimates.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Start with a linear model that reflects your research question. Use sections <a href="lm.html#grm">4.4.3</a>, <a href="lm.html#mfm">4.4.2</a> and <a href="lm.html#saturation">4.5.3</a></li>
+<li>Select a GLM family that matches your chosen response variable. Use sections <a href="glm.html#exgauss-reg">6.3.2</a>, <a href="glm.html#pois-reg">6.2.1</a> or <a href="glm.html#beta-reg">6.4.2</a>.</li>
+<li>Build a multi-level model. Use sections <a href="mlm.html#thinking-multi-level">5.3</a>, <a href="mlm.html#intercept-re">5.1</a> and <a href="mlm.html#slope-re">5.2</a></li>
+</ol></li>
+</ol>
+<hr />
+<p>If you use this book for teaching, that means you will have to come up with some data sets.
+Unless you are a seasoned researcher who can pull data out of the drawer, this might be a problem. A solution is to simulate data, like I have done multiple times in this book.
+While I haven’t gone to the lengths of systematically introducing data simulation, the code for all simulated data can be either be found inline or in the electronic case environments that come with the book (<a href="cases.html#synthetic-data">A.2</a>).</p>
+<p>During my workshops I often use the method of <em>live programming</em>. This is best pictured as think-aloud live demonstration - you talk while you are writing the code.
+This requires that you speak R natively, such that you can write valid code, while you talk and think.
+An important element of live programming is that students type the code as they see it on the presentation screen.
+Encouraging your students to type along, keeps them in an action-feedback loop, from head to the finger tips <a href="index.html#rosetta">1.4.3</a>.</p>
+<p>Examination is the other part of teaching and here is what I do in my courses: During my workshops, students get to work on a case study and for examination they get to do a data analysis on a similar case.
+If you prefer written exams, I advise against let students produce code on paper. Rather, I would construct questions that focus reading code, or the understanding of concepts, such as:</p>
+<ul>
+<li>Interpret the following coefficient table</li>
+<li>What is the difference between saturation and amplification effects?</li>
+<li>In which situation is it better to use an ordinal factor model, rather than a linear regression?</li>
+<li>Customer waiting times have been measured in several customer service hotlines. What would be an appropriate distribution family?</li>
+</ul>
+</div>
+<div id="rosetta" class="section level3">
+<h3><span class="header-section-number">1.4.3</span> The stone of Rosetta</h3>
+<p>After I started working as a university teacher in the Netherlands, I followed a one-week language course to learn Dutch.
+Attendees of the course were of mixed cultures from three continents, including people from China, Ghana, Turkey and Bulgaria. As a consequence, the teacher spoke English to expolain Dutch. I learned very little Dutch in this course.
+Only after one day I decided to just fully expose myself to and start speaking Dutch, no matter what, I learned to speak it quite fluently.</p>
+<p>Next to my favorite hobby of writing books on Statistics, I am giving programming courses to Psychology students.
+I have long held the belief, that the skill of coding grounds on abstract thinking (similar to learning math) and computer enthusiasm.
+Being a formal thinker and a nerd, are not the first things that come to mind for psychology students. Almost surprisingly, almost all of them can learn this skill within three months.</p>
+<p>Only recently, a study revealed, that learning a programming language is just that: learning a second language <span class="citation">(Prat et al. 2020)</span>. If that is true, the best way to learn it is to create a closed feedback loop. Taken to the extreme that means, as much as the Dutch language teacher has wasted my time by every English word, every moment a programming teacher distracts a student from writing and reading code is lost.</p>
+<p>You learn a language by being exposed to it, and that is what I will do to you in this book.
+Following the brief introduction to the programming language R, I will show to you every single line of code that I used to produce data, statistical models, tables and graphics.
+Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a skill, repetition is essential.</p>
+<p>Before I came to the Netherlands I lived about ten years in a southern part of Germany where many people speak a strong dialect, Bayrisch.
+Surprisingly, I am better at speaking Dutch than I ever were at this dialect.
+Maybe, this is because Dutch people react cheerful when you try in their language, whereas people from Bayern hate it, when you imitate their way of speaking.
+(The trick I found most useful for doing a half-way acceptable imitation is to imagine a native-speaking friend and how he would say it.)
+When learning R, no one will laugh at you when you struggle to express yourself.
+And the same trick works here, too: If you want to produce or express a certain result, just flip through the pages of this book and you may find a piece of code where I “said” something similar.
+Cutting-and-pasting is a basic form of a fundamental principle of good coding: maximizing re-use.</p>
+<p>The importance of closed-loop interaction holds even stronger, if the skill to be learned is a language.
+This book is written in three languages: English, R and here and there a little bit of math.
+Precise description a chain of data processing is difficult to do in a fuzzy natural language, like English (or Dutch).
+R, like math, is a formal language, and every piece of code will always produce the exact same result.
+The difference between math and R is that math is purely descriptive (or rather, imaginative), whereas R not just productive, it is also interactive.
+You can specify a Gaussian distributed variable in math, by saying:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu &amp;= 7\\
+\sigma &amp;= 3\\
+Y &amp;\sim \textrm{Gauss}(\mu, \sigma)\\
+\end{aligned}
+\]</span></p>
+<p>Or, you can <em>produce</em> such a variable in R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a>Data_gaus &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">mean =</span> <span class="dv">3</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<p>The math expression requires that the recipient of the message can imagine how a Gaussian distribution looks like.
+In R, you can simply show, how it looks like:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1"></a>Data_gaus <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="index.html#cb2-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
+<span id="cb2-3"><a href="index.html#cb2-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+<p>In many other books on statistics, math is used to precisely specify a model or any other data transformation.
+Specifying how data has been processed is essential for <em>transparency of research</em>.
+In the ideal case, data processing is given as a recipe so precise, that every other researcher would obtain the exact same results. That is called <em>re-producability</em>.
+Math notation lives up to the principle of transparency, but most people do not have the skills, to produce something from math notation.
+Speaking for myself, if someone would ask me for the formula of Gaussian distributions from the top of my head, I would be in trouble:</p>
+<p><span class="math display">\[
+P(x) = \frac{1}
+{{\sigma \sqrt {2\pi } }}
+e^{{{ - \left( {x - \mu } \right)^2 / 2\sigma^2}}}
+\]</span></p>
+<p>Because math is such an inaccessible language, in practice, math notation is hardly re-producable, whereas R code is.
+If anyone gives me their R code and the data, I can expect to get the exact same results.
+If I apply the code to my own data, I am doing an exact replication of a study.
+On top of that, I will always be able to check the validity of every single step in the analysis, as I will demonstrate below.</p>
+<p>The principle of transparency in scientific reports requires the author to specify all</p>
+<ul>
+<li>transformations that have been acted out on the data</li>
+<li>tables and figures that are presented</li>
+<li>assumptions of statistical models</li>
+</ul>
+<p>Traditionally, specification of figures and tables is done by putting text in captions.
+While English texts may please a lot of readers, this has disadvantages:</p>
+<ol style="list-style-type: decimal">
+<li>A table or figure is the result of complex data transformations, which are difficult to put in words, precisely. Sometimes, important details are given in other parts of the document, or are just lost. An example is outlier removal.</li>
+<li>Describing what a figure or table shows, does not put the readers into the position to reproduce or replicate the table or figure.</li>
+</ol>
+<p>For these reasons, I decided to spare any caption texts on figures and tables in this book.
+Instead, all results presented in this book, are fully specified by the R code that produces them.
+From a didactic point of view, I am deliberately taking away the convenience that may come with natural language, for putting my readers’ brains into an action-feedback loop.
+All R code in this book has been crafted to specifically serve this purpose.
+In particular, all code snippets are written as data processing chains, with one operation per line.
+The best way to understand the code at first, is to run it starting at the top, examine what the first transformation did and then include the next step:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb3-2"><a href="index.html#cb3-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb3-3"><a href="index.html#cb3-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11.973</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">5.556</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.927</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.591</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2.544</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">-3.429</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">-2.927</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">2.076</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">0.740</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">-5.329</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb4-2"><a href="index.html#cb4-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb4-3"><a href="index.html#cb4-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="index.html#cb4-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11.973</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">5.556</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.927</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.591</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2.544</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">2.076</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">0.740</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb5-2"><a href="index.html#cb5-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
+<span id="cb5-3"><a href="index.html#cb5-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="index.html#cb5-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-5"><a href="index.html#cb5-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y))</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb6-2"><a href="index.html#cb6-2"></a><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-3"><a href="index.html#cb6-3"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-4"><a href="index.html#cb6-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
+<span id="cb6-5"><a href="index.html#cb6-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p>End this is not the end of the story.
+Rather, it is the beginning of another phase in programming, where you modify another person’s code, after you understood how it works.
+This understanding does not have to be completely right from the beginning.
+For example, it is almost obvious that changing <code>mean = 2</code> changes the mean of the distribution.
+It may require a closer look to see that <code>filter(y &gt; 0)</code> removes non-positive values.
+The real fun starts, when you understand that the ggplot graphics engine can produce multiple layers and provides a huge set of geometries and with some googling you find a recipe to add a properly scaled density line to the plot:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb7-2"><a href="index.html#cb7-2"></a><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-3"><a href="index.html#cb7-3"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-4"><a href="index.html#cb7-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
+<span id="cb7-5"><a href="index.html#cb7-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb7-6"><a href="index.html#cb7-6"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>..count..))</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<p>In contrast to math notation, R is productive and that opens new ways for learning statistics.
+Several chapters will make use of a technique best described as generation-and-recovery, where a data generating process is expressed as a simulation function and the result is recovered by a matching model. Loop closed!</p>
+<!-- ## Observations and measures  -->
+</div>
+</div>
+<div id="scoping-and-additional-readings" class="section level2">
+<h2><span class="header-section-number">1.5</span> Scoping and additional readings</h2>
+<p>To keep the book lean, I refrained to use citations a lot.
+That does not mean I am independent.
+The opposite is the case and the following authors greatly influenced my way of thinking and I admire every single one of them so much that I certainly copy-catted more than I am aware of.</p>
+<p><span class="citation">(Gelman and Hill 2006)</span> is the oldest Statistics textbook I still have in use.
+Not only was it the first one of its kind to promote the programming language R, it also develops a similar framework of models and already introduces a few Bayesian</p>
+<p><span class="citation">(McElreath 2018)</span> is targeted at statistical users, who are so deeply stuck in the Classic Statistics paradigm that they need a proper therapy.
+In an informal language, it covers theoretical and philosophical issues of Bayesian Statistics at a great of a depth and is fully compatible with New Statistics.
+This was the one book that inspired me to replace mathematical formalism with code.</p>
+<p><span class="citation">(<em>Doing Bayesian Data Analysis</em> 2015)</span> is another highly regarded in this league of Bayesian textbooks.
+For professional academic researchers, this book is a valuable addition, as it is more profound, comes with a comparably huge bibliography and translates the NHST framework into Bayesian language, rather than dismiss it entirely.</p>
+<p><span class="citation">(Lee and Wagenmakers 2009)</span> is a Bayesian journey through Cognitive Psychology.
+Like no other book it demonstrates the knowledge-driven process of translating research question into statistical models.</p>
+<p><span class="citation">(Gelman et al. 2013)</span> simply is the reference in Bayesian applied statistics.
+Many aspects of Bayesian analysis, that the present book and others in its league rather illustrate than justify, are explained and discussed with exquisite detail.</p>
+<!-- Readers who are interested to follow-up on   -->
+<!-- Andrew Gelman and his team have like no other group in the world  -->
+<!-- + NewStats textbooks -->
+<!-- + Bayesian classic text books -->
+<!-- + Sampling theory -->
+<!-- + P-value -->
+<!-- Given the focus on Statistics in this book, other methodological issues in design research I could only address to some extent.   -->
+<!-- ##### COMPLETE ME -->
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="gsr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
