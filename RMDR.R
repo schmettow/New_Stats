@@ -87,29 +87,30 @@ library(syncenv)
 
 ## cross referencing system
 
-# storing anchors 
-# Anchors = data.frame(type=character(), 
-#                      label=character(), 
-#                      no = integer())
-# # registering anchor types
-# AnchorTypes = data.frame(type = c("fig", "tab", "sim", "model"), 
-#                          prefix = c("Figure", "Table", "Simulation", "Model"))
-# 
-# knit_hooks$set(anchor = function(before, options, envir) {
-#   if(!before){
-#     ## cross referencing system
-#     label = opts_current$get("label")
-#     message("label",label,"found")
-#     if(label %in% Anchors$label) warning(paste("anchor hook: label", label, "exists"))
-#     type = stringr::str_split(label, ":", 2)[[1]][1]
-#     if(!(type %in% AnchorTypes$type)) warning(paste("Anchor type", type, "not defined"))
-#     message(paste("Found caption type ", type, " with label ", label))
-#     no = (filter(Anchors, type == type) %>% nrow() + 1)
-#     Anchors <<- bind_rows(Anchors, data.frame(label = label, type = type, no = no))
-#     message(paste("created anchor", type, no, label))
-#     #return(paste0("{#",label,"}"))
-#   }
-# })
+# storing anchors
+
+Anchors = data.frame(type=character(),
+                     label=character(),
+                     no = integer())
+# registering anchor types
+AnchorTypes = data.frame(type = c("fig", "tab", "sim", "model"),
+                         prefix = c("Figure", "Table", "Simulation", "Model"))
+
+knit_hooks$set(anchor = function(before, options, envir) {
+  if(!before){
+    ## cross referencing system
+    label = opts_current$get("label")
+    message("label",label,"found")
+    if(label %in% Anchors$label) warning(paste("anchor hook: label", label, "exists"))
+    type = stringr::str_split(label, ":", 2)[[1]][1]
+    if(!(type %in% AnchorTypes$type)) warning(paste("Anchor type", type, "not defined"))
+    message(paste("Found caption type ", type, " with label ", label))
+    no = (filter(Anchors, type == type) %>% nrow() + 1)
+    Anchors <<- bind_rows(Anchors, data.frame(label = label, type = type, no = no))
+    message(paste("created anchor", type, no, label))
+    #return(paste0("{#",label,"}"))
+  }
+})
 
 # figr <- function(ref){
 #   #ref = quote(ref)
@@ -126,6 +127,21 @@ library(syncenv)
 
 #opts_knit$set(kfigr.prefix = T)
 
+
+hook_source <- knitr::knit_hooks$get('source')
+
+knitr::knit_hooks$set(source = function(x, options) {
+  #x <- xfun::split_lines(x)  # split into individual lines
+  #x <- x[!grepl("kable\\(",x)]
+  x <- gsub("%>%\\W*?kable(.*)", "", x, perl = T)
+  #x <- paste(x, collapse = "\n")  # combine into a single string
+  hook_source(x, options)
+})
+
+opts <- options(knitr.kable.NA = "")
+
+knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
+
 opts_chunk$set(echo = T, 
                warning = purp.debg, 
                message = purp.debg,
@@ -133,14 +149,16 @@ opts_chunk$set(echo = T,
                results = "markup",
                cache = 0,
                out.width = "90%",
-               tidy = F)
+               tidy = T)
 
 options(digits=3)
+options(width = 42) ## R text output in Springer format
 
 ## chunk templates
 
 opts_chunk$set(fig.width = 6)
 opts_chunk$set(fig.height = 4)
+opts_chunk$set(tidy = 'styler')
 
 opts_template$set( 
   tab = list(anchor = 'Table', echo = T, 
@@ -168,13 +186,87 @@ opts_template$set(
 
 
 ## ggplot
-theme_set(theme_minimal())
-theme_mulifacet <- function() {
+
+theme_NewStats <-  theme_minimal()
+
+theme_set(theme_NewStats)
+
+theme_multifacet <- function() {
   theme_minimal() + 
   theme(axis.ticks = element_blank(), 
         axis.text.x = element_blank())
 }
-        
+
+update_geom_defaults("bar", list(fill = NA, color = 1))
+update_geom_defaults("col", list(fill = NA, color = 1))
+
+# update_geom_defaults("bar", list(fill = NA, color = 1))
+# update_geom_defaults("col", list(fill = NA, color = 1))
+# 
+# ink_colors <- list(
+#   "black"   = "#000000",
+#   "white"    = "#ffffff"
+# )
+# 
+# 
+# ink_pal <- function(
+#   primary = "black", 
+#   other = "white", 
+#   direction = 1
+# ) {
+#   stopifnot(primary %in% names(ink_colors))
+#   
+#   function(n) {
+#     if (n > 2) warning("B/W palette")
+#     
+#     if (n == 2) {
+#       other <- if (!other %in% names(ink_colors)) {
+#         other
+#       } else {
+#         ink_colors[other]
+#       }
+#       color_list <- c(other, ink_colors[primary])
+#     } else {
+#       color_list <- ink_colors[1:n]
+#     }
+#     
+#     color_list <- unname(unlist(color_list))
+#     if (direction >= 0) color_list else rev(color_list)
+#   }
+# }
+# 
+# 
+# scale_color_ink <- function(
+#   primary = "black", 
+#   other = "white", 
+#   direction = 1, 
+#   ...
+# ) {
+#   ggplot2::discrete_scale(
+#     "color", "ink", 
+#     ink_pal(primary, other, direction), 
+#     ...
+#   )
+# }
+# 
+# 
+# scale_fill_ink <- function(
+#   primary = "white", 
+#   other = "black", 
+#   direction = 1, 
+#   ...
+# ) {
+#   ggplot2::discrete_scale(
+#     "fill", "ink", 
+#     ink_pal(primary, other, direction), 
+#     ...
+#   )
+# }
+# 
+# scale_colour_discrete <- scale_color_ink
+# scale_fill_discrete <- scale_fill_ink
+# 
+
 
 # distribution functions, link functions 
 logit = Vectorize(function(mu, upper = 1) log(mu/(upper-mu)))

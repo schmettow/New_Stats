@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 github-repo: schmettow/New_Stats
 site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers,  applied psychologists and everyone else who works hard to make this world a better  place.
-documentclass: svmono
+documentclass: book
 bibliography: references.bib
 ---
 
@@ -605,19 +605,15 @@ If you prefer written exams, I advise against let students produce code on paper
 
 ### The stone of Rosetta {#rosetta}
 
-After I started working as a university teacher in the Netherlands, I followed a one-week language course to learn Dutch.
-Attendees of the course were of mixed cultures from three continents, including people from China, Ghana, Turkey and Bulgaria. As a consequence, the teacher  spoke English to expolain Dutch. I learned very little Dutch in this course.
-Only after one day I decided to just fully expose myself to and start speaking Dutch, no matter what, I learned to speak it quite fluently.
-
 Next to my favorite hobby of writing books on Statistics, I am giving programming courses to Psychology students. 
-I have long held the belief, that the skill of coding grounds on abstract thinking (similar to learning math) and computer enthusiasm. 
+Long have I held the belief, that the skill of coding grounds on abstract thinking (similar to learning math) and computer enthusiasm. 
 Being a formal thinker and a nerd, are not the first things that come to mind for psychology students. Almost surprisingly, almost all of them  can learn this skill within three months.
 
-Only recently, a study revealed, that learning a programming language is just that: learning a second language [@prat2020]. If that is true, the best way to learn it is to create a closed feedback loop. Taken to the extreme that means, as much as the Dutch language teacher has wasted my time by every English word, every moment a programming teacher distracts a student from writing and reading code is lost.
+Shortly after I started working in the Netherlands, a Dutch teacher wasted my time by explaining Dutch language in English words. Only recently, a study revealed, that learning a programming language is just that: learning a second language [@prat2020]. If that is true, the best way to learn it is to create a closed feedback loop. Taken to the extreme that means, every moment a programming teacher distracts a student from writing and reading code is lost.
 
 You learn a language by being exposed to it, and that is what I will do to you in this book.
 Following the brief introduction to the programming language R, I will show to you every single line of code that I used to produce data, statistical models, tables and graphics.
-Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a skill, repetition is essential.
+Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a language, repetition is essential.
 
 Before I came to the Netherlands I lived about ten years in a southern part of Germany where many people speak a strong dialect, Bayrisch.
 Surprisingly, I am better at speaking Dutch than I ever were at this dialect.
@@ -649,9 +645,9 @@ Data_gaus <- tibble(y = rnorm(n = 1000, mean = 3, sd = 5))
 ```
 
 The math expression requires that the recipient of the message can imagine how a Gaussian distribution looks like.
-In R, you can simply show, how it looks like:
+In R, you can simply show, how it looks like (Figure \@ref(fig:data_gaus_1)):
 
-```{r}
+```{r data-gaus-1, fig.cap="A Gaussian distribution"}
 Data_gaus %>% 
   ggplot(aes(x = y)) +
   geom_histogram(bins = 12)
@@ -669,7 +665,7 @@ P(x) = \frac{1}
 e^{{{ - \left( {x - \mu } \right)^2 / 2\sigma^2}}}
 $$ 
 
-Because math is such an inaccessible language, in practice, math notation is hardly re-producable, whereas R code is.
+Because math is such an inaccessible language, in practice, math notation is hardly reproducable, whereas R code is.
 If anyone gives me their R code and the data, I can expect to get the exact same results.
 If I apply the code to my own data, I am doing an exact replication of a study.
 On top of that, I will always be able to check the validity of every single step in the analysis, as I will demonstrate below.
@@ -693,48 +689,51 @@ All R code in this book has been crafted to specifically serve this purpose.
 In particular, all code snippets are written as data processing chains, with one operation per line.
 The best way to understand the code at first, is to run it starting at the top, examine what the first transformation did and then include the next step:
 
-```{r}
+```{r stepwise-1}
 set.seed(47)
-tibble(Obs = 1:10,
-       y = rnorm(n = 10, mean = 2, sd = 5))
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs()
 ```
 
-```{r}
+```{r stepwise-2}
 set.seed(47)
-tibble(Obs = 1:10,
-       y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
   filter(y > 0)
   
 ```
 
-```{r}
+
+```{r stepwise-3, fig.cap="Piping data into the plotting engine"}
 set.seed(47)
-tibble(Obs = 1:10,
-       y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
   filter(y > 0) %>% 
   ggplot(aes(x = y))
   
 ```
 
-```{r}
+
+```{r stepwise-4, fig.cap="Plotting a histogram"}
 set.seed(47)
-tibble(y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
   filter(y > 0) %>% 
   ggplot(aes(x = y)) +
   geom_histogram(binwidth = 2)
   
 ```
 
-End this is not the end of the story.
-Rather, it is the beginning of another phase in programming, where you modify another person's code, after you understood how it works.
-This understanding does not have to be completely right from the beginning.
-For example, it is almost obvious that changing `mean = 2` changes the mean of the distribution.
-It may require a closer look to see that `filter(y > 0)` removes non-positive values.
-The real fun starts, when you understand that the ggplot graphics engine can produce multiple layers and provides a huge set of geometries and with some googling you find a recipe to add a properly scaled density line to the plot:
 
-```{r}
+It is almost obvious that changing `mean = 2` changes the mean (Table \@ref(tab:stepwise-1)) of the distribution ß, and that `filter(y > 0)` removes non-positive values (Table \@ref(tab:stepwise-2)). The real fun starts when the Ggplot graphics engine is loaded with data. In Figure \@ref(fig:stepwise-3) you only see an empty coordinate system. In Figure \@ref(fig:stepwise-4) a so called geometry is added, creating a histogram.
+
+And this is not the end of the story.
+Rather, it is the beginning of another phase in learning to programming, where you start working with existing code and modify it to your needs. 
+The ggplot graphics engine in particular is easy to learn and, yet, provides almost endless possibilities to express yourself in a report. It is also very well documented. With some googling you will quickly find a recipe to add a properly scaled density line to the plot (Figure \@ref(fig:stepwise-5)):
+
+```{r stepwise-5, fig.cap = "Adding another layer"}
 set.seed(47)
-tibble(y = rnorm(n = 10, mean = 2, sd = 5)) %>% 
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
   filter(y > 0) %>% 
   ggplot(aes(x = y)) +
   geom_histogram(binwidth = 2) +
@@ -749,11 +748,11 @@ Several chapters will make use of a technique best described as generation-and-r
 
 <!-- ## Observations and measures  -->
 
-## Scoping and additional readings
+## Thank you and supplementary readings
 
 To keep the book lean, I refrained to use citations a lot.
-That does not mean I am independent.
-The opposite is the case and the following authors greatly influenced my way of thinking and I admire every single one of them so much that I certainly copy-catted more than I am aware of.
+That does not mean I was independent.
+The opposite is the case and the following authors greatly influenced my way of thinking and I certainly copy-catted more than I am aware of. Thank them for the inspiration!
 
 [@gelman2006] is the oldest Statistics textbook I still have in use.
 Not only was it the first one of its kind to promote the programming language R, it also develops a similar framework of models and already introduces a few Bayesian
@@ -770,6 +769,8 @@ Like no other book it demonstrates the knowledge-driven process of translating r
 
 [@gelman2013] simply is the reference in Bayesian applied statistics.
 Many aspects of Bayesian analysis, that the present book and others in its league rather illustrate than justify, are explained and discussed with exquisite detail.
+
+Then, I want to thank all former students who have collected the data sets I am using: Jop Havinga, Cornelia Schmidt, Lea Echelmeyer, Marc Danielski, Robin Koopmans, Frauke van Beek, Raphaela Schnittker, Jan Sommer, Julian Keil, Franziska Geesen and Nicolas Sander.
 
 <!-- Readers who are interested to follow-up on   -->
 

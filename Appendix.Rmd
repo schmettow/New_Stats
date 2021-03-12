@@ -13,7 +13,7 @@ This book comes with eight research cases with real data and eight simulated cas
 load_CE(Uncanny)
 ```
 
-```{r}
+```{r eval = F}
 load("Cases/Uncanny.Rda")
 ```
 
@@ -29,10 +29,10 @@ In order to use the environment content in your R session, you have to attach it
 attach(Uncanny)
 ```
 
-*Real data* cases contain one or more data sets as dataframes (tibbles), such as:
+*Real data* cases contain one or more data sets as data frames (tibbles), such as:
 
 ```{r}
-UV_1
+RK_1
 ```
 
 Before switching to a different case environment, it is recommended to detach the present environment:
@@ -69,7 +69,7 @@ simulate(seed = 1317) %>%
 Additional arguments can be used to change the structure of the data set. In the present example, the amplification effect can be turned into a [saturation] effect, by changing the beta argument:
 
 ```{r}
-simulate(beta = c(-1, 1, .4, -1)) %>% 
+simulate(beta = c(-1, 1, .4, -3)) %>% 
   ggplot(aes(x = technophile, color = sociophile, y = intention)) +
   geom_point() +
   geom_smooth()
@@ -166,6 +166,221 @@ save_CE(Chapter_WM)
 
 
 ## Real cases {#real-cases}
+
+
+### Hugme {#hugme}
+
+<!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
+
+<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
+
+
+As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. 
+
+However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media entertainment it delivers. A geek person seeing a computer is more likely to have certain memories, for example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this personality type exists, we thought, then bringing up such thoughts should distract a geek in an experimental task, the Stroop task. This brief nostalgic would be measurable as a delayed response.
+
+#### Measures
+
+Before the experiment, participants filled out teh multi-item NCS and Geekism questionnaires. The geekism questionknaire was given a second time after the experiment, originally to assess test-retest reliability.
+
+As response we had chosen recation time in a Stroop task, where participants were first primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geek-ish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we presumed that geeks like to think hard and used the need-for-cognition scale as a second predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek.
+
+
+
+
+#### Stimuli
+
+Stimuli were composed of a priming picture and the word presented in the Stroop task, with prime/word pairs generated randomly for each observation.
+
+Ninety words were selected, 30 for each of the following three categories and translated into English, German and Dutch:
+
+1. hedonism (stylish, braging, wanting, ...)
+2. utilitarianism (useful, assisting, optimizing)
+3. geekism (configuring, technology, exploring)
+
+Seventy-two prime pictures were selected, with 24 for each of the following categories:
+
+1. control (pictures unrelated to technology)
+2. geek (pictures showing computers in a geekish setting, e.g. an open computer case or a terminal console)
+
+
+```{r Hugme_create, opts.label = "CE"}
+new_syncenv("Hugme")
+```
+
+
+```{r hugme_simfunc, opts.label = "CE"}
+
+
+## reading the data
+
+```
+
+```{r hugme_load_data, opts.label = "CE"}
+load("external_data/HUG3/HUG3.Rda")
+load("external_data/HUG3/Q3.Rda")
+
+Hugme$E_Words <- 
+  readxl::read_excel("Data/Hugme/Trials.xlsx") %>% 
+  distinct(text_EN, text_DE, text_NL, HUGword) %>% 
+  mutate(WordCat = case_when(
+    HUGword  == "h" ~ "hedo",
+    HUGword  == "u" ~ "util",
+    HUGword  == "g" ~ "geek")) %>% 
+  select(Word = text_EN, Word_DE = text_DE, Word_NL = text_NL, WordCat)
+
+Hugme$D_hugme <- 
+  HUG3 %>% 
+  left_join(Hugme$E_Words, by = c("Target" = "Word_DE")) %>% 
+  filter(!is.na(Word)) %>% 
+  rename(Part = Subj) %>% 
+  mutate(RT = RT/1000,
+         WordGeek = WordCat == "geek",
+         PrimeGeek = primeCat == "geek") %>% 
+  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
+         Word, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
+  as_tbl_obs()
+
+```
+
+```{r opts.label = "CE"}
+Hugme$R_exp <- 
+  Hugme$D_hugme %>% 
+  select(Part, Word, Prime, correct, RT)
+
+Hugme$R_quest <- 
+  Q3 %>%
+  select(UserID = Subj,
+         Gender, Age, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
+  as_tibble()
+
+```
+
+
+```{r opts.label = "CE"}
+
+Hugme$D_quest <-
+  Hugme$R_quest %>%
+  select(Part = UserID, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>%
+  gather(Item, rating, -Part) %>%
+  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1),
+         Session = as.factor(session)) %>%
+  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>%
+  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>%
+  arrange(Part, Scale, Item) %>%
+  as_tbl_obs()
+
+```
+
+
+
+
+```{r opts.label = "CE"}
+## Extracting remaining entities
+
+Hugme$E_Part <- 
+  Hugme$R_quest %>% 
+  as.tibble() %>% 
+  select(Part = UserID, gender = Gender, age = Age) %>% 
+  mutate(Part = as.integer(Part),
+         age = as.integer(age))
+
+Hugme$E_Items <- readxl::read_excel("Data/Hugme/Items.xlsx")
+
+Hugme$E_Primes <- 
+  Hugme$D_hugme %>% 
+  distinct(Prime, PrimeCat)
+
+openxlsx::write.xlsx(Hugme$E_Words, file = "Data/Hugme/Words.xlsx")
+openxlsx::write.xlsx(Hugme$E_Part, file = "Data/Hugme/Parts.xlsx")
+openxlsx::write.xlsx(Hugme$E_Primes, file = "Data/Hugme/Primes.xlsx")
+
+```
+
+
+
+```{r opts.label = "CE"}
+## reverse creating raw data files
+
+Hugme$R_exp %>% 
+  group_by(Part) %>% 
+  nest() %>% 
+  purrr::pmap(~write_csv(..2, path = paste0("Data/Hugme/P_",..1,".csv")))
+
+```
+
+  
+
+```{r hugme_export, opts.label = "CE"}
+save(Hugme, file = "Cases/Hugme.Rda")
+write_sav(Hugme$D_hugme, "Data/Hugme.sav")
+write_csv(Hugme$D_hugme, "Data/Hugme.csv")
+write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
+write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
+write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
+write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
+```
+
+
+
+#### Data modelling in a nutshell {#data_modelling}
+
+The Hugme experiment is a multi-population study: participants, pictures, words and items (from two scales) all provide information that is relevant for the statistical model. For analyzing the relationship between geekism, NCS on te one hand and the difference in reaction times between word and picture categories, we need the table `D_hugme`, which provides the predictor data for every observation from the experiment. The way this table was constructed is an instructive example of how researchers can logically structure and efficiently  transform data from complex studies.
+
+The Table `R_exp` is the raw data that we got from the experiment. It contains the encounter of participants with primes and words, but misses the classification of words and primes, as well as participant-level variables. The classification of words and primes is stored separately in three *entity tables*: `E_Words`, `E_Primes`, whereas a `E_part` contains demographic data:
+
+```{r}
+load("Cases/Hugme.Rda")
+attach(Hugme)
+```
+
+```{r opts.label = "invisible"}
+Hugme$E_Primes <- as_tibble(Hugme$E_Primes)
+```
+
+
+```{r}
+E_Part %>% sample_n(8)
+E_Words %>% sample_n(8)
+E_Primes %>% sample_n(8)
+```
+
+All entity tables capture the information in the sample of precisely one population, with one row per member and a unique identifier. This identifier is called a *key* and is crucial for putting all the information together, using *joins*. Any response measure, like RT, is something that happens at every encounter. More abstractly, we could say, that this encounter is a *relation* between participants, words and primes, and the response is an *attribute* of the relation. `R_exp` is a relationship table which stores responses together with the encounter. 
+
+In fact, the encounters between Part, Word and Prime can be called a key, because the combination truly identifies every observation:
+
+```{r}
+R_exp %>% as_tbl_obs()
+
+cat("The number of unique encounters is", 
+    nrow(distinct(R_exp, Part, Word, Prime))[1])
+```
+
+What is still missing in the table are all the variables that further describe or classify  members of any of the three samples. Think of the püredictors you need for running group-means analysis or linear regression on the data. Table `R_exp` provides the scaffold and the other variables we can pull in from the entity tables by using *join* operations. A join always operates on two tables that share at least one key variable. The following code takes the `R_exp` the relationship table to the left and merges in additional data from the entity table, picking on the key variable. This works successively on the three entity tables:
+
+
+```{r}
+R_exp %>% 
+  left_join(E_Words, by = "Word") %>% 
+  left_join(E_Primes, by = "Prime") %>% 
+  left_join(E_Part, by = "Part") %>% 
+  as_tbl_obs()
+```
+
+
+<!-- `R_quest` contains  the item responses in the classic matrix form. This does not comply with the idea observation being an encounter of participants and items. In particular, items  -->
+
+
+<!-- For table `D_quest` this was gathered into the long form, suitable for running a psychometric analysis with multi-level models.   -->
+
+
+```{r}
+detach(Hugme)
+```
+
+Now you know how Entity Relationship Modelling works. This paradigm came up with the second generation of data base systems in the 1990s (The first generation used strictly hierarchical data structures) and has been fully adopted by the packages Dplyr and Tidyr from the Tidyverse.
+
+
 
 ### CUE8 {#cue8}
 
@@ -309,6 +524,9 @@ load("external_Data/MathurRepl.Rda")
 load("external_Data/UV_PS.Rda")
 
 load("external_Data/UV_RK.Rda")
+
+Uncanny$RK_1 <- RK_1 %>% 
+  mutate(Session = repetition +1)
 
 Uncanny$DK_1 <-
   MathurRepl %>%
@@ -591,8 +809,7 @@ load("Cases/IPump.Rda")
 attach(IPump)
 IPump$D_agg %>% 
   ggplot(aes(x = Session, color = Design, y = ToT)) +
-  geom_smooth() +
-  geom_point()
+  geom_boxplot()
 detach(IPump)
 ```
 
@@ -666,7 +883,6 @@ new_syncenv("Egan")
 ```{r Egan_load_data, opts.label = "CE"}
 Egan$D_egan <- 
   read_sav("external_data/Data - universiteitswebsites - getagd - correctie.sav") %>% 
-  as_tibble() %>% 
   mutate(workload = rowMeans(select(., starts_with("TLX")))) %>% 
   select(Part = ParticipantID,
          Gender = ParticipantGender,
@@ -682,11 +898,12 @@ Egan$D_egan <-
   mutate_if(
     is.labelled, as_factor) %>% 
   mutate(Part = as.integer(Part),
+         Item = str_c(Design, Task, sep = "x"),
          trial = as.integer(trial),
          success = success == "succes",
          clicks = as.integer(clicks),
          returns_hp = as.integer(returns_hp),
-         return_links = as.integer(return_links)) %>% 
+         logToT = log(ToT)) %>% 
   as_tbl_obs()
 
 ```
@@ -705,7 +922,26 @@ write_csv(Egan$D_egan, "Data/Egan.csv")
 ```{r}
 load("Cases/Egan.Rda")
 attach(Egan)
-Egan$D_egan
+
+plot_Egan <- function(Level){
+  level <- enquo(Level)
+  out <- 
+    D_egan %>% 
+    group_by(!!level) %>% 
+    summarize(mean_ToT = mean(ToT)) %>% 
+    ggplot(aes(x = mean_ToT)) +
+    geom_histogram() +
+    labs(title = quo(!!level)) +
+    xlim(0, 300)
+}
+
+
+grid.arrange(plot_Egan(Part),
+             plot_Egan(Design),
+             plot_Egan(Task),
+             plot_Egan(Item))
+
+  
 detach(Egan)
 ```
   
@@ -718,9 +954,11 @@ detach(Egan)
 
 Miller's magic number says that the short term memory capacity is $7 \pm 2$. Later research by Baddeley & Hitch found that the so-called *working memory* is a multi-component system, that stores visual and verbal information separately. Following up on the experimental research by [Freudenthal], we were interested how differences in capacity of the verbal and visual subsystem explain performance differences in a real web search tasks.
 
+
 #### Research Design
 
 We selected five municipal websites and five search tasks. For creating the trials, websites and tasks were paired in ush c way, that all participants see every website and every task exactly once.
+
 
 #### Measures
 
@@ -786,7 +1024,16 @@ write_csv(MMN$MMN_2, "Data/MMN_2.csv")
 ```{r}
 load("Cases/MMN.Rda")
 attach(MMN)
-MMN_2
+
+MMN_2 %>% 
+  ggplot(aes(x = Ospan.A, y = time)) +
+  geom_point() +
+  geom_smooth()
+
+MMN_2 %>% 
+  ggplot(aes(x = as.factor(Corsi), y = time)) +
+  geom_boxplot()
+
 detach(MMN)
 ```
 
@@ -872,218 +1119,19 @@ write_csv(AUP$AUP_1, "Data/AUP_1.csv")
 ```{r}
 load("Cases/AUP.Rda")
 attach(AUP)
-MMN$AUP_1
+
+AUP_1 %>% 
+  ggplot(aes(x = zgex, y = zresistance)) +
+  geom_point() +
+  geom_smooth(aes(color = "Gex"), method = "lm", se = F) +
+  geom_smooth(aes(x = zncs, color = "NCS"), method = "lm", se = F) +
+  labs(color = "Trait")
+
 detach(AUP)
 ```
 
 
-### Hugme {#hugme}
 
-<!--As fast word recognition is, given the high complexity of the task, once a word hits our mind, it breaks loose a heated debate on the meaning. Words can pull up memories from the deep and put you into a brief nostalgic state. Reportedly, some sentences can even make some people transit into a state of deep contemplation. At the same time, a bloody misunderstanding often happens in fractions of a second. And like in political debates, you can never be sure about the outcome and when it finally arrives.-->
-
-<!--What is almost impossible is to shut down any fraction of the parliament in our minds entirely. And that is precisely what the famous Stroop task tells participants to: do not read the word. And it is even worse: you are told to not read a colour word, while constantly being reminded of colours. With the Stroop task, we can create a double bind in the mind, which causes the delay in the reaction. But, it has been suggested that we can even read minds using this paradigm. The following data set is from a variation of the Stroop task, the *semantic Stroop task*. To stay with the parliament metaphor: the classic Stroop task entertains two main fractions, the *word shouters* and the *conformists*, who tell the word shouters to shut up. The semantic Stroop task removes this double bind, by not using colour words, but introduces a third fraction, the *nostalgics*, like in the `Hugme` case that follows.-->
-
-
-As swift and enthusiastic most people are with words, the more clumsy and desinterested many are with computers. Today's consumer computing devices are unmatched in usability and most people do not need to think harder than they like, when hunting for the best online prices, stream movies and enjoy their communications. However, there is a minority of computer users, who call themselves the geeks. The hypothetical geek personality feels attracted to the inner workings of a computer system itself, rather than the applications and media entertainment it delivers. A geek person seeing a computer is more likely to have certain memories or associations. For example, remembering how it was to build your first own computer, or the intellectual joy of learning a new programming language. If this were true, we thought, then showing a word that is related to how geeks perceive computers (e.g. "explore", "play", "create") should create a brief nostalgic moment, resulting in a delayed response. 
-
-#### Measures
-
-Before the experiment, participants filled out teh multi-item NCS and Geekism questionnaires. The geekism questionknaire was given a second time after the experiment, originally to assess test-retest reliability.
-
-As response we had chosen recation time in a Stroop task, where participants were first primed by a picture shown before the Stroop task. These pictures were from two conditions: either showing computers in a geek-ish way (for example, an open case or programming code on the screen) or as regular product images. Furthermore, we presumed that geeks like to think hard and used the need-for-cognition scale as a second predictor. It was expected that participants with high NCS scores would recognize computers as a source of delightful hard thinking and hence have slower reaction times, when priming image and target word are both from the category Geek.
-
-
-
-
-#### Stimuli
-
-Stimuli were composed of a priming picture and the word presented in the Stroop task, with prime/word pairs generated randomly for each observation.
-
-Ninety words were selected, 30 for each of the following three categories and translated into English, German and Dutch:
-
-1. hedonism (stylish, braging, wanting, ...)
-2. utilitarianism (useful, assisting, optimizing)
-3. geekism (configuring, technology, exploring)
-
-Seventy-two prime pictures were selected, with 24 for each of the following categories:
-
-1. control (pictures unrelated to technology)
-2. geek (pictures showing computers in a geekish setting, e.g. an open computer case or a terminal console)
-
-
-```{r Hugme_create, opts.label = "CE"}
-new_syncenv("Hugme")
-```
-
-
-```{r hugme_simfunc, opts.label = "CE"}
-
-
-## reading the data
-
-```
-
-```{r hugme_load_data, opts.label = "CE"}
-load("external_data/HUG3/HUG3.Rda")
-load("external_data/HUG3/Q3.Rda")
-
-Hugme$E_Words <- 
-  readxl::read_excel("Data/Hugme/Trials.xlsx") %>% 
-  distinct(text_EN, text_DE, text_NL, HUGword) %>% 
-  mutate(WordCat = case_when(
-    HUGword  == "h" ~ "hedo",
-    HUGword  == "u" ~ "util",
-    HUGword  == "g" ~ "geek")) %>% 
-  select(Word = text_EN, Word_DE = text_DE, Word_NL = text_NL, WordCat)
-
-Hugme$D_hugme <- 
-  HUG3 %>% 
-  left_join(Hugme$E_Words, by = c("Target" = "Word_DE")) %>% 
-  filter(!is.na(Word)) %>% 
-  rename(Part = Subj) %>% 
-  mutate(RT = RT/1000,
-         WordGeek = WordCat == "geek",
-         PrimeGeek = primeCat == "geek") %>% 
-  select(Part, Gender, Age, GeekField = geekField, starts_with("z"), 
-         Word, WordCat, WordGeek, Prime, PrimeCat = primeCat, PrimeGeek, correct, RT) %>%
-  mascutils:::as_tbl_obs()
-
-```
-
-```{r opts.label = "CE"}
-Hugme$R_exp <- 
-  Hugme$D_hugme %>% 
-  select(Part, Word, Prime, correct, RT)
-
-Hugme$R_quest <- 
-  Q3 %>%
-  select(UserID = Subj,
-         Gender, Age, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>% 
-  as.tibble()
-
-```
-
-
-```{r opts.label = "CE"}
-
-Hugme$D_quest <-
-  Hugme$R_quest %>%
-  select(Part = UserID, Geek01:Geek32, GeekR01:GeekR32, NCS01:NCS18) %>%
-  gather(Item, rating, -Part) %>%
-  mutate(session = ifelse(str_detect(Item, "GeekR"), 2, 1)) %>%
-  mutate(Item = str_replace(Item, "GeekR", "Geek")) %>%
-  mutate(Scale = str_match(Item, "^[a-zA-Z]+")[,1]) %>%
-  arrange(Part, Scale, Item) %>%
-  mascutils:::as_tbl_obs.tbl_df()
-
-```
-
-
-
-
-```{r opts.label = "CE"}
-## Extracting remaining entities
-
-Hugme$E_Part <- 
-  Hugme$R_quest %>% 
-  as.tibble() %>% 
-  select(Part = UserID, gender = Gender, age = Age) %>% 
-  mutate(Part = as.integer(Part),
-         age = as.integer(age))
-
-Hugme$E_Items <- readxl::read_excel("Data/Hugme/Items.xlsx")
-
-Hugme$E_Primes <- 
-  Hugme$D_hugme %>% 
-  distinct(Prime, PrimeCat)
-
-openxlsx::write.xlsx(Hugme$E_Words, file = "Data/Hugme/Words.xlsx")
-openxlsx::write.xlsx(Hugme$E_Part, file = "Data/Hugme/Parts.xlsx")
-openxlsx::write.xlsx(Hugme$E_Primes, file = "Data/Hugme/Primes.xlsx")
-
-```
-
-
-
-```{r opts.label = "CE"}
-## reverse creating raw data files
-
-Hugme$R_exp %>% 
-  group_by(Part) %>% 
-  nest() %>% 
-  purrr::pmap(~write_csv(..2, path = paste0("Data/Hugme/P_",..1,".csv")))
-
-```
-
-  
-
-```{r hugme_export, opts.label = "CE"}
-save(Hugme, file = "Cases/Hugme.Rda")
-write_sav(Hugme$D_hugme, "Data/Hugme.sav")
-write_csv(Hugme$D_hugme, "Data/Hugme.csv")
-write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
-write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
-write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
-write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
-```
-
-
-
-#### Data modelling in a nutshell
-
-The Hugme experiment is a multi-population study: participants, pictures, words and items (from two scales) all provide information that is relevant for the statistical model. For analyzing the relationship between geekism, NCS on te one hand and the difference in reaction times between word and picture categories, we need the table `D_hugme`, which provides the predictor data for every observation from the experiment. The way this table was constructed is an instructive example of how researchers can logically structure and efficiently  transform data from complex studies.
-
-The Table `R_exp` is the raw data that we got from the experiment. It contains the encounter of participants with primes and words, but misses the classification of words and primes, as well as participant-level variables. The classification of words and primes is stored separately in three *entity tables*: `E_Words`, `E_Primes`, whereas a `E_part` contains demographic data:
-
-```{r}
-load("Cases/Hugme.Rda")
-attach(Hugme)
-```
-
-```{r opts.label = "invisible"}
-Hugme$E_Primes <- as_tibble(Hugme$E_Primes)
-```
-
-
-```{r}
-E_Part %>% sample_n(8)
-E_Words %>% sample_n(8)
-E_Primes %>% sample_n(8)
-```
-
-All entity tables capture the information in the sample of precisely one population, with one row per member and a unique identifier. This identifier is called a *key* and is crucial for putting all the information together, using *joins*. Any response measure, like RT, is something that happens at every encounter. More abstractly, we could say, that this encounter is a *relation* between participants, words and primes, and the response is an *attribute* of the relation. `R_exp` is a relationship table which stores responses together with the encounter. 
-
-In fact, the encounters between Part, Word and Prime can be called a key, because the combination truly identifies every observation:
-
-```{r}
-R_exp %>% as_tbl_obs()
-
-cat("The number of unique encounters is", 
-    dim(distinct(R_exp, Part, Word, Prime))[1])
-```
-
-What is still missing in the table are all the variables that further describe or classify  members of any of the three samples. Think of the püredictors you need for running group-means analysis or linear regression on the data. Table `R_exp` provides the scaffold and the other variables we can pull in from the entity tables by using *join* operations. A join always operates on two tables that share at least one key variable. The following code takes the `R_exp` the relationship table to the left and merges in additional data from the entity table, picking on the key variable. This works successively on the three entity tables:
-
-
-```{r}
-R_exp %>% 
-  left_join(E_Words, by = "Word") %>% 
-  left_join(E_Primes, by = "Prime") %>% 
-  left_join(E_Part, by = "Part")
-```
-
-
-<!-- `R_quest` contains  the item responses in the classic matrix form. This does not comply with the idea observation being an encounter of participants and items. In particular, items  -->
-
-
-<!-- For table `D_quest` this was gathered into the long form, suitable for running a psychometric analysis with multi-level models.   -->
-
-
-```{r}
-detach(Hugme)
-```
-
-Now you know how Entity Relationship Modelling works. This paradigm came up with the second generation of data base systems in the 1990s (The first generation used strictly hierarchical data structures) and has been fully adopted by the packages Dplyr and Tidyr from the Tidyverse.
 
 
 ## Synthetic data sets  {#synthetic-data}
@@ -1116,7 +1164,7 @@ Rainfall$simulate <-
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
       mutate(cloudy = as.logical(cloudy),
              rain = as.logical(rain)) %>% 
-      mascutils::as_tbl_obs()
+      as_tbl_obs()
   }
 
 ```
@@ -1277,7 +1325,7 @@ Rational$simulate <-
                  scale = scale,
                  Euro = rgamma(n_Part, shape = shape, scale = scale)) %>% 
       as_tbl_obs()
-    RD  %>% as_tbl_obs()
+    RD
   }
 
 ```
@@ -1754,6 +1802,7 @@ Sleep$simulate <-
       as_tbl_obs()
   }
 
+S <- simulate()
 ```
 
 
