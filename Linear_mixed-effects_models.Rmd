@@ -5,9 +5,11 @@
 source("RMDR.R")
 
 
-CE <- c("CUE8", "Egan", "IPump", "Hugme", "Uncanny", "Sleepstudy")
+CE <- c("CUE8", "Egan", "IPump", "Hugme", "Uncanny", "Sleepstudy", "Chapter_MLM")
 
 load_CE_(CE)
+
+attach(Chapter_MLM)
 ```
 In the previous chapters we have seen several examples of conditional effects: groups of users responding differently to design conditions, such as font size, noise and emerging technology. Dealing with differential design effects seems straight forward: identify the relevant property, record it and add an conditional effect to the model. 
 
@@ -1149,7 +1151,7 @@ P_1 %>%
 ```
 
 
-Such a chance can count as good evidence in favor of Egan's claim, although it certainly does not match the "much more" in the original quote. However, if we take the strong and certain Item effect (Design x Task) into account, the claim could even be reversed (Table \@ref(tab:egan-5)). Apparently, the difficulty of a task depends on the design, that means, it depends on where this particular designer has placed an item in the navigation structure. These are clearly design choices and if we formulate it this way, the data provides very strong counter-evidence for Egan's claim:
+Such a chance can count as good evidence in favor of Egan's claim, although it certainly does not match the "much more" in the original quote. However, if we take the strong and certain Item effect (Design x Task) into account, the claim could even be reversed. Apparently, the difficulty of a task depends on the design, that means, it depends on where this particular designer has placed an item in the navigation structure. These are clearly design choices and if we see it this way, evidence for Egan's claim is practically zero (.0005, Table \@ref(tab:egan-5)).
 
 ```{r egan-5}
 P_1 %>% 
@@ -1158,7 +1160,7 @@ P_1 %>%
   spread(re_factor, value) %>% 
   mutate(Egan_is_right = Part > Design & Part > `Design:Task`) %>% 
   summarize(prob_Egan_is_right = mean(Egan_is_right)) %>% 
-  kable(caption = "The probability that Egan's claim is right, also regarding the Item effects (Design x Task)")
+  kable(caption = "The probability that Egan's claim is right, including the Item effects (Design x Task)", digits = 5)
 ```
 
 
@@ -1470,14 +1472,14 @@ D_CTT
 
 
 
-With that many measures at our hand, how can we arrive at a single score to compare participants.  The approach known as *Classical Test Theory (CTT)* solves this by simply taking the average as a measure for processing speed (Table \@ref(tab:ctt-1)).
+With that many measures at our hand, how can we arrive at a single score to compare participants.  The approach known as *Classical Test Theory (CTT)* solves this by simply taking the average score as a measure for a person's processing speed (Table \@ref(tab:ctt-1a)).
 
-```{r}
+```{r ctt-1a}
  D_CTT %>% 
   group_by(Part) %>% 
   summarize(proc_speed = mean(RT)) %>% 
   arrange(proc_speed) %>% 
-  as_tbl_obs()
+  kable(caption = "CTT test scores for processing speed")
 ```
 
 The observed test score $y_i$ for participant $i$ is composed of the true score of participant $i$, $\mu_i$, and a Gaussian measurement error $\epsilon_{ij}$. By adding more (exchangeable) trials to the test, the measurement error can be reduced.
@@ -1489,7 +1491,7 @@ $$
 
 The following model implements CTT as a multi-level absolute group means model \@ref(amm), with the only difference that the participant-level means are estimated as random effects, i.e. it assumes a Gaussian distribution of person scores (Table \@ref(tab:ctt-3)).
 
-```{r ctt-2}
+```{r ctt-2, opts.label = "mcmc"}
 M_CTT <- brm(RT ~ 1 + (1|Part), data = D_CTT)
 ```
 
@@ -1501,11 +1503,16 @@ posterior(M_CTT) %>%
   arrange(center)
 ```
 
+```{r opts.label = 'mcsync'}
+sync_CE(Chapter_MLM, D_CTT, M_CTT)
+```
+
+
 
 What makes CTT models too simplistic, is that they assume items to be completely exchangeable. For a set of experimental RTs it only sometimes is true that they are exchangeable. Actually, for a mental rotation task, they usually are not, because trials differ by rotation angle. For all rating scales, item equality is rarely the case, and also not desired. Two items from the same scale can differ in several aspects, one of which is how hard (or strong) an item is. Consider the following two items from a fictional user experience scale; most likely, the second item would get lower ratings on average, because it is stronger ("awesome" compared to "nice"):
 
-1. The interface is nice.
-1. The interface is awesome.
+1. The user interface is nice.
+1. The user interface is awesome.
 
 One problem with CTT is that by averaging scores, the CTT swallows any information on item functioning. More advanced psychometric models are constructed based on either *Item Response Theory (IRT)* or *Factor Analysis (FA)*. With such models, different characteristics of items can be  accounted for. As diverse and elaborated these models can be today, they all have in common, that items are modeled explicitly and get their own estimates. Discussing these models in more depth would require a separate book. Still, a simple item response model is nothing but an encounter of persons and test items, a simple two-way cross over (\@ref(non-human-populations)).
 
@@ -1795,6 +1802,12 @@ In many cases, a purportedly design-o-metric study has been conducted on a sampl
 1. Multi-level models for psycholinguistic studies have been used by [@Baayen2008b].
 1. In [@Schmettow2016], we evaluated whether we can predict by the method of card sorting, how quickly users find a specific information on a website. A multi-level model showed that this is *not* so. This serves as an example, that you can prove the (practical) absence of effects with New Statistics, and publish.
 1. [@Ho2017a] is one of many examples of falling for the psychometric fallacy.
+
+
+
+```{r}
+detach(Chapter_MLM)
+```
 
 
 <!--[semantic Stroop]

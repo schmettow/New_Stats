@@ -31,7 +31,7 @@ attach(Uncanny)
 
 *Real data* cases contain one or more data sets as data frames (tibbles), such as:
 
-```{r}
+```{r uv-rk-1}
 RK_1
 ```
 
@@ -502,7 +502,7 @@ The central predictor in these experiments is the human-likeness of a robot face
 
 #### Measures
 
-The Eeriness scale of Ho & MacDorman [REF] has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur & Reichling, responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
+The Eeriness scale of @Ho2017a has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of @mathur2016 , responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
 
 ```{r opts.label = "CE"}
 summary(RK_1)
