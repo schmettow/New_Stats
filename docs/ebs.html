@@ -2,57 +2,62 @@
 <html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="3 Elements of Bayesian statistics | New statistics for design researchers" />
-<meta property="og:type" content="book" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Elements of Bayesian statistics | New statistics for design researchers</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
+  <meta property="og:title" content="3 Elements of Bayesian statistics | New statistics for design researchers" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
 
-<meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
-<meta name="github-repo" content="schmettow/New_Stats" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Elements of Bayesian statistics | New statistics for design researchers" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  
 
 <meta name="author" content="Martin Schmettow" />
 
+
 <meta name="date" content="2021-03-16" />
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place.">
-
-<title>3 Elements of Bayesian statistics | New statistics for design researchers</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="gsr.html"/>
+<link rel="next" href="lm.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="libs/jquery-1.11.3/jquery.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
-<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+
+
+
+
+
+
+
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -111,266 +116,256 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
-
 
 <link rel="stylesheet" href="NewStats.css" type="text/css" />
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-img {
-  max-width:100%;
-  height: auto;
-}
-</style>
 </head>
 
 <body>
 
-<div class="container-fluid main-container">
 
 
-<div class="row">
-<div class="col-sm-12">
-<div id="TOC">
-<ul>
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
 <li class="part"><span><b>I Preparations</b></span></li>
-<li><a href="index.html#intro"><span class="toc-section-number">1</span> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li><a href="index.html#whom-for"><span class="toc-section-number">1.1</span> Whom this book is for</a></li>
-<li><a href="index.html#quant-design-research"><span class="toc-section-number">1.2</span> Quantitative design research</a></li>
-<li><a href="index.html#what-new-stats"><span class="toc-section-number">1.3</span> What is New Statistics?</a></li>
-<li><a href="index.html#how-to-use"><span class="toc-section-number">1.4</span> How to use this book</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.2</b> Quantitative design research</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.3</b> What is New Statistics?</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.4</b> How to use this book</a>
 <ul>
-<li><a href="index.html#routes"><span class="toc-section-number">1.4.1</span> Routes</a></li>
-<li><a href="index.html#classroom"><span class="toc-section-number">1.4.2</span> In the classroom</a></li>
-<li><a href="index.html#rosetta"><span class="toc-section-number">1.4.3</span> The stone of Rosetta</a></li>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#routes"><i class="fa fa-check"></i><b>1.4.1</b> Routes</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.4.2</b> In the classroom</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.4.3</b> The stone of Rosetta</a></li>
 </ul></li>
-<li><a href="index.html#thank-you-and-supplementary-readings"><span class="toc-section-number">1.5</span> Thank you and supplementary readings</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#thank-you-and-supplementary-readings"><i class="fa fa-check"></i><b>1.5</b> Thank you and supplementary readings</a></li>
 </ul></li>
-<li><a href="gsr.html#gsr"><span class="toc-section-number">2</span> Getting started with R</a>
+<li class="chapter" data-level="2" data-path="gsr.html"><a href="gsr.html"><i class="fa fa-check"></i><b>2</b> Getting started with R</a>
 <ul>
-<li><a href="gsr.html#setting-up-r"><span class="toc-section-number">2.1</span> Setting up the R environment</a>
+<li class="chapter" data-level="2.1" data-path="gsr.html"><a href="gsr.html#setting-up-r"><i class="fa fa-check"></i><b>2.1</b> Setting up the R environment</a>
 <ul>
-<li><a href="gsr.html#install-cran"><span class="toc-section-number">2.1.1</span> Installing CRAN packages</a></li>
-<li><a href="gsr.html#install-github"><span class="toc-section-number">2.1.2</span> Installing packages from Github</a></li>
-<li><a href="gsr.html#first-program"><span class="toc-section-number">2.1.3</span> A first statistical program</a></li>
-<li><a href="gsr.html#bibliographic-notes"><span class="toc-section-number">2.1.4</span> Bibliographic notes</a></li>
+<li class="chapter" data-level="2.1.1" data-path="gsr.html"><a href="gsr.html#install-cran"><i class="fa fa-check"></i><b>2.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="2.1.2" data-path="gsr.html"><a href="gsr.html#install-github"><i class="fa fa-check"></i><b>2.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="2.1.3" data-path="gsr.html"><a href="gsr.html#first-program"><i class="fa fa-check"></i><b>2.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="2.1.4" data-path="gsr.html"><a href="gsr.html#bibliographic-notes"><i class="fa fa-check"></i><b>2.1.4</b> Bibliographic notes</a></li>
 </ul></li>
-<li><a href="gsr.html#r-primer"><span class="toc-section-number">2.2</span> Learning R: a primer</a>
+<li class="chapter" data-level="2.2" data-path="gsr.html"><a href="gsr.html#r-primer"><i class="fa fa-check"></i><b>2.2</b> Learning R: a primer</a>
 <ul>
-<li><a href="gsr.html#objects"><span class="toc-section-number">2.2.1</span> Assigning and calling Objects</a></li>
-<li><a href="gsr.html#vectors"><span class="toc-section-number">2.2.2</span> Vectors</a></li>
-<li><a href="gsr.html#object-types"><span class="toc-section-number">2.2.3</span> Basic object types</a></li>
-<li><a href="gsr.html#operators-functions"><span class="toc-section-number">2.2.4</span> Operators and functions</a></li>
-<li><a href="gsr.html#data-frames"><span class="toc-section-number">2.2.5</span> Storing data in data frames</a></li>
-<li><a href="gsr.html#import-export"><span class="toc-section-number">2.2.6</span> Import, export and archiving</a></li>
-<li><a href="gsr.html#case-env"><span class="toc-section-number">2.2.7</span> Case environments</a></li>
-<li><a href="gsr.html#structuring-data"><span class="toc-section-number">2.2.8</span> Structuring data</a></li>
-<li><a href="gsr.html#data-transformation"><span class="toc-section-number">2.2.9</span> Data transformation</a></li>
-<li><a href="gsr.html#plotting"><span class="toc-section-number">2.2.10</span> Plotting data</a></li>
-<li><a href="gsr.html#fitting"><span class="toc-section-number">2.2.11</span> Fitting regression models</a></li>
-<li><a href="gsr.html#knitting"><span class="toc-section-number">2.2.12</span> Knitting statistical reports</a></li>
+<li class="chapter" data-level="2.2.1" data-path="gsr.html"><a href="gsr.html#objects"><i class="fa fa-check"></i><b>2.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="2.2.2" data-path="gsr.html"><a href="gsr.html#vectors"><i class="fa fa-check"></i><b>2.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="2.2.3" data-path="gsr.html"><a href="gsr.html#object-types"><i class="fa fa-check"></i><b>2.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="2.2.4" data-path="gsr.html"><a href="gsr.html#operators-functions"><i class="fa fa-check"></i><b>2.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="2.2.5" data-path="gsr.html"><a href="gsr.html#data-frames"><i class="fa fa-check"></i><b>2.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="2.2.6" data-path="gsr.html"><a href="gsr.html#import-export"><i class="fa fa-check"></i><b>2.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="2.2.7" data-path="gsr.html"><a href="gsr.html#case-env"><i class="fa fa-check"></i><b>2.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="2.2.8" data-path="gsr.html"><a href="gsr.html#structuring-data"><i class="fa fa-check"></i><b>2.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="2.2.9" data-path="gsr.html"><a href="gsr.html#data-transformation"><i class="fa fa-check"></i><b>2.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="2.2.10" data-path="gsr.html"><a href="gsr.html#plotting"><i class="fa fa-check"></i><b>2.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="2.2.11" data-path="gsr.html"><a href="gsr.html#fitting"><i class="fa fa-check"></i><b>2.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="2.2.12" data-path="gsr.html"><a href="gsr.html#knitting"><i class="fa fa-check"></i><b>2.2.12</b> Knitting statistical reports</a></li>
 </ul></li>
-<li><a href="gsr.html#lib_gsr"><span class="toc-section-number">2.3</span> Further reading</a></li>
+<li class="chapter" data-level="2.3" data-path="gsr.html"><a href="gsr.html#lib_gsr"><i class="fa fa-check"></i><b>2.3</b> Further reading</a></li>
 </ul></li>
-<li><a href="ebs.html#ebs"><span class="toc-section-number">3</span> Elements of Bayesian statistics</a>
+<li class="chapter" data-level="3" data-path="ebs.html"><a href="ebs.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a>
 <ul>
-<li><a href="ebs.html#decision-making"><span class="toc-section-number">3.1</span> Rational decision making in design research</a>
+<li class="chapter" data-level="3.1" data-path="ebs.html"><a href="ebs.html#decision-making"><i class="fa fa-check"></i><b>3.1</b> Rational decision making in design research</a>
 <ul>
-<li><a href="ebs.html#measuring-uncertainty"><span class="toc-section-number">3.1.1</span> Measuring uncertainty</a></li>
-<li><a href="ebs.html#benchmarking-designs"><span class="toc-section-number">3.1.2</span> Benchmarking designs</a></li>
-<li><a href="ebs.html#comparing-designs"><span class="toc-section-number">3.1.3</span> Comparison of designs</a></li>
-<li><a href="ebs.html#prior-knowledge"><span class="toc-section-number">3.1.4</span> Prior knowledge</a></li>
+<li class="chapter" data-level="3.1.1" data-path="ebs.html"><a href="ebs.html#measuring-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="3.1.2" data-path="ebs.html"><a href="ebs.html#benchmarking-designs"><i class="fa fa-check"></i><b>3.1.2</b> Benchmarking designs</a></li>
+<li class="chapter" data-level="3.1.3" data-path="ebs.html"><a href="ebs.html#comparing-designs"><i class="fa fa-check"></i><b>3.1.3</b> Comparison of designs</a></li>
+<li class="chapter" data-level="3.1.4" data-path="ebs.html"><a href="ebs.html#prior-knowledge"><i class="fa fa-check"></i><b>3.1.4</b> Prior knowledge</a></li>
 </ul></li>
-<li><a href="ebs.html#observations-measures"><span class="toc-section-number">3.2</span> Observations and measures</a>
+<li class="chapter" data-level="3.2" data-path="ebs.html"><a href="ebs.html#observations-measures"><i class="fa fa-check"></i><b>3.2</b> Observations and measures</a>
 <ul>
-<li><a href="ebs.html#interaction-seq"><span class="toc-section-number">3.2.1</span> Interaction sequences</a></li>
-<li><a href="ebs.html#perf-measures"><span class="toc-section-number">3.2.2</span> Performance measures</a></li>
-<li><a href="ebs.html#satisfaction-and-other-feelings"><span class="toc-section-number">3.2.3</span> Satisfaction and other feelings</a></li>
+<li class="chapter" data-level="3.2.1" data-path="ebs.html"><a href="ebs.html#interaction-seq"><i class="fa fa-check"></i><b>3.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ebs.html"><a href="ebs.html#perf-measures"><i class="fa fa-check"></i><b>3.2.2</b> Performance measures</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ebs.html"><a href="ebs.html#satisfaction-and-other-feelings"><i class="fa fa-check"></i><b>3.2.3</b> Satisfaction and other feelings</a></li>
 </ul></li>
-<li><a href="ebs.html#descriptive-stats"><span class="toc-section-number">3.3</span> Descriptive statistics</a>
+<li class="chapter" data-level="3.3" data-path="ebs.html"><a href="ebs.html#descriptive-stats"><i class="fa fa-check"></i><b>3.3</b> Descriptive statistics</a>
 <ul>
-<li><a href="ebs.html#frequencies"><span class="toc-section-number">3.3.1</span> Frequencies</a></li>
-<li><a href="ebs.html#central-tendency"><span class="toc-section-number">3.3.2</span> Central tendency</a></li>
-<li><a href="ebs.html#dispersion"><span class="toc-section-number">3.3.3</span> Dispersion</a></li>
-<li><a href="ebs.html#associations"><span class="toc-section-number">3.3.4</span> Associations</a></li>
+<li class="chapter" data-level="3.3.1" data-path="ebs.html"><a href="ebs.html#frequencies"><i class="fa fa-check"></i><b>3.3.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ebs.html"><a href="ebs.html#central-tendency"><i class="fa fa-check"></i><b>3.3.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ebs.html"><a href="ebs.html#dispersion"><i class="fa fa-check"></i><b>3.3.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.3.4" data-path="ebs.html"><a href="ebs.html#associations"><i class="fa fa-check"></i><b>3.3.4</b> Associations</a></li>
 </ul></li>
-<li><a href="ebs.html#bayes-prob-theory"><span class="toc-section-number">3.4</span> Bayesian probability theory</a>
+<li class="chapter" data-level="3.4" data-path="ebs.html"><a href="ebs.html#bayes-prob-theory"><i class="fa fa-check"></i><b>3.4</b> Bayesian probability theory</a>
 <ul>
-<li><a href="ebs.html#set-theory"><span class="toc-section-number">3.4.1</span> Some set theory</a></li>
-<li><a href="ebs.html#probability"><span class="toc-section-number">3.4.2</span> Probability</a></li>
-<li><a href="ebs.html#likelihood"><span class="toc-section-number">3.4.3</span> Likelihood</a></li>
-<li><a href="ebs.html#bayes-freq-prob"><span class="toc-section-number">3.4.4</span> Bayesian and frequentist probability</a></li>
-<li><a href="ebs.html#bayes-theorem"><span class="toc-section-number">3.4.5</span> Bayes theorem</a></li>
-<li><a href="ebs.html#dynamics-belief"><span class="toc-section-number">3.4.6</span> Bayesian dynamics of belief</a></li>
+<li class="chapter" data-level="3.4.1" data-path="ebs.html"><a href="ebs.html#set-theory"><i class="fa fa-check"></i><b>3.4.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ebs.html"><a href="ebs.html#probability"><i class="fa fa-check"></i><b>3.4.2</b> Probability</a></li>
+<li class="chapter" data-level="3.4.3" data-path="ebs.html"><a href="ebs.html#likelihood"><i class="fa fa-check"></i><b>3.4.3</b> Likelihood</a></li>
+<li class="chapter" data-level="3.4.4" data-path="ebs.html"><a href="ebs.html#bayes-freq-prob"><i class="fa fa-check"></i><b>3.4.4</b> Bayesian and frequentist probability</a></li>
+<li class="chapter" data-level="3.4.5" data-path="ebs.html"><a href="ebs.html#bayes-theorem"><i class="fa fa-check"></i><b>3.4.5</b> Bayes theorem</a></li>
+<li class="chapter" data-level="3.4.6" data-path="ebs.html"><a href="ebs.html#dynamics-belief"><i class="fa fa-check"></i><b>3.4.6</b> Bayesian dynamics of belief</a></li>
 </ul></li>
-<li><a href="ebs.html#statmod"><span class="toc-section-number">3.5</span> Statistical models</a>
+<li class="chapter" data-level="3.5" data-path="ebs.html"><a href="ebs.html#statmod"><i class="fa fa-check"></i><b>3.5</b> Statistical models</a>
 <ul>
-<li><a href="ebs.html#structural-part"><span class="toc-section-number">3.5.1</span> The structural part</a></li>
-<li><a href="ebs.html#distributions"><span class="toc-section-number">3.5.2</span> Distributions: shapes of randomness</a></li>
+<li class="chapter" data-level="3.5.1" data-path="ebs.html"><a href="ebs.html#structural-part"><i class="fa fa-check"></i><b>3.5.1</b> The structural part</a></li>
+<li class="chapter" data-level="3.5.2" data-path="ebs.html"><a href="ebs.html#distributions"><i class="fa fa-check"></i><b>3.5.2</b> Distributions: shapes of randomness</a></li>
 </ul></li>
-<li><a href="ebs.html#bayes-estimation"><span class="toc-section-number">3.6</span> Towards Bayesian estimation</a></li>
-<li><a href="ebs.html#priors-defaults"><span class="toc-section-number">3.7</span> On priors and defaults</a></li>
-<li><a href="ebs.html#further-readings"><span class="toc-section-number">3.8</span> Further readings</a></li>
+<li class="chapter" data-level="3.6" data-path="ebs.html"><a href="ebs.html#bayes-estimation"><i class="fa fa-check"></i><b>3.6</b> Towards Bayesian estimation</a></li>
+<li class="chapter" data-level="3.7" data-path="ebs.html"><a href="ebs.html#priors-defaults"><i class="fa fa-check"></i><b>3.7</b> On priors and defaults</a></li>
+<li class="chapter" data-level="3.8" data-path="ebs.html"><a href="ebs.html#further-readings"><i class="fa fa-check"></i><b>3.8</b> Further readings</a></li>
 </ul></li>
 <li class="part"><span><b>II Models</b></span></li>
-<li><a href="lm.html#lm"><span class="toc-section-number">4</span> Basic Linear models</a>
+<li class="chapter" data-level="4" data-path="lm.html"><a href="lm.html"><i class="fa fa-check"></i><b>4</b> Basic Linear models</a>
 <ul>
-<li><a href="lm.html#gmm"><span class="toc-section-number">4.1</span> Quantification at work: grand mean models</a>
+<li class="chapter" data-level="4.1" data-path="lm.html"><a href="lm.html#gmm"><i class="fa fa-check"></i><b>4.1</b> Quantification at work: grand mean models</a>
 <ul>
-<li><a href="lm.html#random-walk"><span class="toc-section-number">4.1.1</span> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
-<li><a href="lm.html#likelihood-random-term"><span class="toc-section-number">4.1.2</span> Likelihood and random term</a></li>
-<li><a href="lm.html#posterior-dist"><span class="toc-section-number">4.1.3</span> Working with the posterior distribution</a></li>
-<li><a href="lm.html#clu"><span class="toc-section-number">4.1.4</span> Center and interval estimates</a></li>
+<li class="chapter" data-level="4.1.1" data-path="lm.html"><a href="lm.html#random-walk"><i class="fa fa-check"></i><b>4.1.1</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="lm.html"><a href="lm.html#likelihood-random-term"><i class="fa fa-check"></i><b>4.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="4.1.3" data-path="lm.html"><a href="lm.html#posterior-dist"><i class="fa fa-check"></i><b>4.1.3</b> Working with the posterior distribution</a></li>
+<li class="chapter" data-level="4.1.4" data-path="lm.html"><a href="lm.html#clu"><i class="fa fa-check"></i><b>4.1.4</b> Center and interval estimates</a></li>
 </ul></li>
-<li><a href="lm.html#lrm"><span class="toc-section-number">4.2</span> Walk the line: linear regression</a>
+<li class="chapter" data-level="4.2" data-path="lm.html"><a href="lm.html#lrm"><i class="fa fa-check"></i><b>4.2</b> Walk the line: linear regression</a>
 <ul>
-<li><a href="lm.html#transform-measures"><span class="toc-section-number">4.2.1</span> Transforming measures</a></li>
-<li><a href="lm.html#correlations"><span class="toc-section-number">4.2.2</span> Correlations</a></li>
-<li><a href="lm.html#endless-linear"><span class="toc-section-number">4.2.3</span> Endlessly linear</a></li>
+<li class="chapter" data-level="4.2.1" data-path="lm.html"><a href="lm.html#transform-measures"><i class="fa fa-check"></i><b>4.2.1</b> Transforming measures</a></li>
+<li class="chapter" data-level="4.2.2" data-path="lm.html"><a href="lm.html#correlations"><i class="fa fa-check"></i><b>4.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="4.2.3" data-path="lm.html"><a href="lm.html#endless-linear"><i class="fa fa-check"></i><b>4.2.3</b> Endlessly linear</a></li>
 </ul></li>
-<li><a href="lm.html#factorial-models"><span class="toc-section-number">4.3</span> Factorial Models</a>
+<li class="chapter" data-level="4.3" data-path="lm.html"><a href="lm.html#factorial-models"><i class="fa fa-check"></i><b>4.3</b> Factorial Models</a>
 <ul>
-<li><a href="lm.html#cgm"><span class="toc-section-number">4.3.1</span> A versus B: Comparison of groups</a></li>
-<li><a href="lm.html#dummy"><span class="toc-section-number">4.3.2</span> Not stupid: dummy variables</a></li>
-<li><a href="lm.html#treatment-contrasts"><span class="toc-section-number">4.3.3</span> Treatment contrast coding</a></li>
-<li><a href="lm.html#amm"><span class="toc-section-number">4.3.4</span> Absolute Means Model</a></li>
-<li><a href="lm.html#ofm"><span class="toc-section-number">4.3.5</span> Ordered Factorial Models</a></li>
+<li class="chapter" data-level="4.3.1" data-path="lm.html"><a href="lm.html#cgm"><i class="fa fa-check"></i><b>4.3.1</b> A versus B: Comparison of groups</a></li>
+<li class="chapter" data-level="4.3.2" data-path="lm.html"><a href="lm.html#dummy"><i class="fa fa-check"></i><b>4.3.2</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="lm.html"><a href="lm.html#treatment-contrasts"><i class="fa fa-check"></i><b>4.3.3</b> Treatment contrast coding</a></li>
+<li class="chapter" data-level="4.3.4" data-path="lm.html"><a href="lm.html#amm"><i class="fa fa-check"></i><b>4.3.4</b> Absolute Means Model</a></li>
+<li class="chapter" data-level="4.3.5" data-path="lm.html"><a href="lm.html#ofm"><i class="fa fa-check"></i><b>4.3.5</b> Ordered Factorial Models</a></li>
 </ul></li>
 </ul></li>
-<li><a href="mpm.html#mpm"><span class="toc-section-number">5</span> Multi-predictor models</a>
+<li class="chapter" data-level="5" data-path="mpm.html"><a href="mpm.html"><i class="fa fa-check"></i><b>5</b> Multi-predictor models</a>
 <ul>
-<li><a href="mpm.html#mrm"><span class="toc-section-number">5.1</span> On surface: multiple regression models</a></li>
-<li><a href="mpm.html#mfm"><span class="toc-section-number">5.2</span> Crossover: multifactorial models</a></li>
-<li><a href="mpm.html#grm"><span class="toc-section-number">5.3</span> Line-by-line: grouped regression models</a></li>
-<li><a href="mpm.html#cfxm"><span class="toc-section-number">5.4</span> Conditional effects models</a>
+<li class="chapter" data-level="5.1" data-path="mpm.html"><a href="mpm.html#mrm"><i class="fa fa-check"></i><b>5.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="5.2" data-path="mpm.html"><a href="mpm.html#mfm"><i class="fa fa-check"></i><b>5.2</b> Crossover: multifactorial models</a></li>
+<li class="chapter" data-level="5.3" data-path="mpm.html"><a href="mpm.html#grm"><i class="fa fa-check"></i><b>5.3</b> Line-by-line: grouped regression models</a></li>
+<li class="chapter" data-level="5.4" data-path="mpm.html"><a href="mpm.html#cfxm"><i class="fa fa-check"></i><b>5.4</b> Conditional effects models</a>
 <ul>
-<li><a href="mpm.html#cmrm"><span class="toc-section-number">5.4.1</span> Conditional multiple regression</a></li>
-<li><a href="mpm.html#cmfm"><span class="toc-section-number">5.4.2</span> Conditional multifactorial models</a></li>
-<li><a href="mpm.html#saturation"><span class="toc-section-number">5.4.3</span> Saturation: hitting the boundaries</a></li>
-<li><a href="mpm.html#amplification"><span class="toc-section-number">5.4.4</span> Amplification: more than the sum</a></li>
-<li><a href="mpm.html#cfx-theory"><span class="toc-section-number">5.4.5</span> Conditional effects and design theory</a></li>
+<li class="chapter" data-level="5.4.1" data-path="mpm.html"><a href="mpm.html#cmrm"><i class="fa fa-check"></i><b>5.4.1</b> Conditional multiple regression</a></li>
+<li class="chapter" data-level="5.4.2" data-path="mpm.html"><a href="mpm.html#cmfm"><i class="fa fa-check"></i><b>5.4.2</b> Conditional multifactorial models</a></li>
+<li class="chapter" data-level="5.4.3" data-path="mpm.html"><a href="mpm.html#saturation"><i class="fa fa-check"></i><b>5.4.3</b> Saturation: hitting the boundaries</a></li>
+<li class="chapter" data-level="5.4.4" data-path="mpm.html"><a href="mpm.html#amplification"><i class="fa fa-check"></i><b>5.4.4</b> Amplification: more than the sum</a></li>
+<li class="chapter" data-level="5.4.5" data-path="mpm.html"><a href="mpm.html#cfx-theory"><i class="fa fa-check"></i><b>5.4.5</b> Conditional effects and design theory</a></li>
 </ul></li>
-<li><a href="mpm.html#prm"><span class="toc-section-number">5.5</span> Doing the rollercoaster: polynomial regression models</a>
+<li class="chapter" data-level="5.5" data-path="mpm.html"><a href="mpm.html#prm"><i class="fa fa-check"></i><b>5.5</b> Doing the rollercoaster: polynomial regression models</a>
 <ul>
-<li><a href="mpm.html#test-stat"><span class="toc-section-number">5.5.1</span> Make yourself a test statistic</a></li>
+<li class="chapter" data-level="5.5.1" data-path="mpm.html"><a href="mpm.html#test-stat"><i class="fa fa-check"></i><b>5.5.1</b> Make yourself a test statistic</a></li>
 </ul></li>
-<li><a href="mpm.html#further-readings-1"><span class="toc-section-number">5.6</span> Further readings</a></li>
+<li class="chapter" data-level="5.6" data-path="mpm.html"><a href="mpm.html#further-readings-1"><i class="fa fa-check"></i><b>5.6</b> Further readings</a></li>
 </ul></li>
-<li><a href="mlm.html#mlm"><span class="toc-section-number">6</span> Multilevel models</a>
+<li class="chapter" data-level="6" data-path="mlm.html"><a href="mlm.html"><i class="fa fa-check"></i><b>6</b> Multilevel models</a>
 <ul>
-<li><a href="mlm.html#intercept-re"><span class="toc-section-number">6.1</span> The Human Factor: Intercept random effects</a></li>
-<li><a href="mlm.html#slope-re"><span class="toc-section-number">6.2</span> Multi-level linear regression: variance in change</a></li>
-<li><a href="mlm.html#thinking-multi-level"><span class="toc-section-number">6.3</span> Thinking multi-level</a></li>
-<li><a href="mlm.html#universality"><span class="toc-section-number">6.4</span> Testing universality of theories</a></li>
-<li><a href="mlm.html#non-human-populations"><span class="toc-section-number">6.5</span> Non-human populations and cross-overs</a></li>
-<li><a href="mlm.html#nested-re"><span class="toc-section-number">6.6</span> Nested random effects</a></li>
-<li><a href="mlm.html#pool-shrink"><span class="toc-section-number">6.7</span> What are random effects? On pooling and shrinkage</a></li>
-<li><a href="mlm.html#psychometrics"><span class="toc-section-number">6.8</span> Psychometrics and design-o-metric models</a>
+<li class="chapter" data-level="6.1" data-path="mlm.html"><a href="mlm.html#intercept-re"><i class="fa fa-check"></i><b>6.1</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="6.2" data-path="mlm.html"><a href="mlm.html#slope-re"><i class="fa fa-check"></i><b>6.2</b> Multi-level linear regression: variance in change</a></li>
+<li class="chapter" data-level="6.3" data-path="mlm.html"><a href="mlm.html#thinking-multi-level"><i class="fa fa-check"></i><b>6.3</b> Thinking multi-level</a></li>
+<li class="chapter" data-level="6.4" data-path="mlm.html"><a href="mlm.html#universality"><i class="fa fa-check"></i><b>6.4</b> Testing universality of theories</a></li>
+<li class="chapter" data-level="6.5" data-path="mlm.html"><a href="mlm.html#non-human-populations"><i class="fa fa-check"></i><b>6.5</b> Non-human populations and cross-overs</a></li>
+<li class="chapter" data-level="6.6" data-path="mlm.html"><a href="mlm.html#nested-re"><i class="fa fa-check"></i><b>6.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="6.7" data-path="mlm.html"><a href="mlm.html#pool-shrink"><i class="fa fa-check"></i><b>6.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="6.8" data-path="mlm.html"><a href="mlm.html#psychometrics"><i class="fa fa-check"></i><b>6.8</b> Psychometrics and design-o-metric models</a>
 <ul>
-<li><a href="mlm.html#coverage"><span class="toc-section-number">6.8.1</span> Coverage</a></li>
-<li><a href="mlm.html#reliability"><span class="toc-section-number">6.8.2</span> Reliability</a></li>
-<li><a href="mlm.html#validity"><span class="toc-section-number">6.8.3</span> Validity</a></li>
-<li><a href="mlm.html#designometrix"><span class="toc-section-number">6.8.4</span> Towards Design-o-metrix</a></li>
+<li class="chapter" data-level="6.8.1" data-path="mlm.html"><a href="mlm.html#coverage"><i class="fa fa-check"></i><b>6.8.1</b> Coverage</a></li>
+<li class="chapter" data-level="6.8.2" data-path="mlm.html"><a href="mlm.html#reliability"><i class="fa fa-check"></i><b>6.8.2</b> Reliability</a></li>
+<li class="chapter" data-level="6.8.3" data-path="mlm.html"><a href="mlm.html#validity"><i class="fa fa-check"></i><b>6.8.3</b> Validity</a></li>
+<li class="chapter" data-level="6.8.4" data-path="mlm.html"><a href="mlm.html#designometrix"><i class="fa fa-check"></i><b>6.8.4</b> Towards Design-o-metrix</a></li>
 </ul></li>
-<li><a href="mlm.html#further-readings-2"><span class="toc-section-number">6.9</span> Further readings</a></li>
+<li class="chapter" data-level="6.9" data-path="mlm.html"><a href="mlm.html#further-readings-2"><i class="fa fa-check"></i><b>6.9</b> Further readings</a></li>
 </ul></li>
-<li><a href="glm.html#glm"><span class="toc-section-number">7</span> Generalized Linear Models</a>
+<li class="chapter" data-level="7" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Models</a>
 <ul>
-<li><a href="glm.html#elements-glm"><span class="toc-section-number">7.1</span> Elements of Generalized Linear Models</a>
+<li class="chapter" data-level="7.1" data-path="glm.html"><a href="glm.html#elements-glm"><i class="fa fa-check"></i><b>7.1</b> Elements of Generalized Linear Models</a>
 <ul>
-<li><a href="glm.html#relinking-linearity"><span class="toc-section-number">7.1.1</span> Re-linking linearity</a></li>
-<li><a href="glm.html#choosing-randomness"><span class="toc-section-number">7.1.2</span> Choosing patterns of randomness</a></li>
-<li><a href="glm.html#mean-var-rel"><span class="toc-section-number">7.1.3</span> Mean-variance relationship</a></li>
+<li class="chapter" data-level="7.1.1" data-path="glm.html"><a href="glm.html#relinking-linearity"><i class="fa fa-check"></i><b>7.1.1</b> Re-linking linearity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="glm.html"><a href="glm.html#choosing-randomness"><i class="fa fa-check"></i><b>7.1.2</b> Choosing patterns of randomness</a></li>
+<li class="chapter" data-level="7.1.3" data-path="glm.html"><a href="glm.html#mean-var-rel"><i class="fa fa-check"></i><b>7.1.3</b> Mean-variance relationship</a></li>
 </ul></li>
-<li><a href="glm.html#count-data"><span class="toc-section-number">7.2</span> Count data</a>
+<li class="chapter" data-level="7.2" data-path="glm.html"><a href="glm.html#count-data"><i class="fa fa-check"></i><b>7.2</b> Count data</a>
 <ul>
-<li><a href="glm.html#pois-reg"><span class="toc-section-number">7.2.1</span> Poisson regression</a></li>
-<li><a href="glm.html#logistic-reg"><span class="toc-section-number">7.2.2</span> Logistic (aka Binomial) regression</a></li>
-<li><a href="glm.html#overdispersion"><span class="toc-section-number">7.2.3</span> Modelling overdispersion</a></li>
+<li class="chapter" data-level="7.2.1" data-path="glm.html"><a href="glm.html#pois-reg"><i class="fa fa-check"></i><b>7.2.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="7.2.2" data-path="glm.html"><a href="glm.html#logistic-reg"><i class="fa fa-check"></i><b>7.2.2</b> Logistic (aka Binomial) regression</a></li>
+<li class="chapter" data-level="7.2.3" data-path="glm.html"><a href="glm.html#overdispersion"><i class="fa fa-check"></i><b>7.2.3</b> Modelling overdispersion</a></li>
 </ul></li>
-<li><a href="glm.html#duration-measures"><span class="toc-section-number">7.3</span> Duration measures</a>
+<li class="chapter" data-level="7.3" data-path="glm.html"><a href="glm.html#duration-measures"><i class="fa fa-check"></i><b>7.3</b> Duration measures</a>
 <ul>
-<li><a href="glm.html#exp-gam-reg"><span class="toc-section-number">7.3.1</span> Exponential and Gamma regression</a></li>
-<li><a href="glm.html#exgauss-reg"><span class="toc-section-number">7.3.2</span> ExGaussian regression</a></li>
+<li class="chapter" data-level="7.3.1" data-path="glm.html"><a href="glm.html#exp-gam-reg"><i class="fa fa-check"></i><b>7.3.1</b> Exponential and Gamma regression</a></li>
+<li class="chapter" data-level="7.3.2" data-path="glm.html"><a href="glm.html#exgauss-reg"><i class="fa fa-check"></i><b>7.3.2</b> ExGaussian regression</a></li>
 </ul></li>
-<li><a href="glm.html#rating-scales"><span class="toc-section-number">7.4</span> Rating scales</a>
+<li class="chapter" data-level="7.4" data-path="glm.html"><a href="glm.html#rating-scales"><i class="fa fa-check"></i><b>7.4</b> Rating scales</a>
 <ul>
-<li><a href="glm.html#ord-logist-reg"><span class="toc-section-number">7.4.1</span> Ordered logistic regression</a></li>
-<li><a href="glm.html#beta-reg"><span class="toc-section-number">7.4.2</span> Beta regression</a></li>
+<li class="chapter" data-level="7.4.1" data-path="glm.html"><a href="glm.html#ord-logist-reg"><i class="fa fa-check"></i><b>7.4.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="glm.html"><a href="glm.html#beta-reg"><i class="fa fa-check"></i><b>7.4.2</b> Beta regression</a></li>
 </ul></li>
-<li><a href="glm.html#distributional-models"><span class="toc-section-number">7.5</span> Beyond mean: distributional models</a>
+<li class="chapter" data-level="7.5" data-path="glm.html"><a href="glm.html#distributional-models"><i class="fa fa-check"></i><b>7.5</b> Beyond mean: distributional models</a>
 <ul>
-<li><a href="glm.html#item-anchoring"><span class="toc-section-number">7.5.1</span> Item-level anchoring in rating scales</a></li>
-<li><a href="glm.html#part-employment"><span class="toc-section-number">7.5.2</span> Participant-level employment of scale</a></li>
-<li><a href="glm.html#part-skew"><span class="toc-section-number">7.5.3</span> Participant-level skew in reaction times</a></li>
+<li class="chapter" data-level="7.5.1" data-path="glm.html"><a href="glm.html#item-anchoring"><i class="fa fa-check"></i><b>7.5.1</b> Item-level anchoring in rating scales</a></li>
+<li class="chapter" data-level="7.5.2" data-path="glm.html"><a href="glm.html#part-employment"><i class="fa fa-check"></i><b>7.5.2</b> Participant-level employment of scale</a></li>
+<li class="chapter" data-level="7.5.3" data-path="glm.html"><a href="glm.html#part-skew"><i class="fa fa-check"></i><b>7.5.3</b> Participant-level skew in reaction times</a></li>
 </ul></li>
-<li><a href="glm.html#further-readings-3"><span class="toc-section-number">7.6</span> Further readings</a></li>
+<li class="chapter" data-level="7.6" data-path="glm.html"><a href="glm.html#further-readings-3"><i class="fa fa-check"></i><b>7.6</b> Further readings</a></li>
 </ul></li>
-<li><a href="wwm.html#wwm"><span class="toc-section-number">8</span> Working with models</a>
+<li class="chapter" data-level="8" data-path="wwm.html"><a href="wwm.html"><i class="fa fa-check"></i><b>8</b> Working with models</a>
 <ul>
-<li><a href="wwm.html#model-criticism"><span class="toc-section-number">8.1</span> Model criticism</a>
+<li class="chapter" data-level="8.1" data-path="wwm.html"><a href="wwm.html#model-criticism"><i class="fa fa-check"></i><b>8.1</b> Model criticism</a>
 <ul>
-<li><a href="wwm.html#residual-analysis"><span class="toc-section-number">8.1.1</span> Residual analysis</a></li>
-<li><a href="wwm.html#fitted-responses"><span class="toc-section-number">8.1.2</span> Fitted responses analysis</a></li>
+<li class="chapter" data-level="8.1.1" data-path="wwm.html"><a href="wwm.html#residual-analysis"><i class="fa fa-check"></i><b>8.1.1</b> Residual analysis</a></li>
+<li class="chapter" data-level="8.1.2" data-path="wwm.html"><a href="wwm.html#fitted-responses"><i class="fa fa-check"></i><b>8.1.2</b> Fitted responses analysis</a></li>
 </ul></li>
-<li><a href="wwm.html#model-comp"><span class="toc-section-number">8.2</span> Model comparison</a>
+<li class="chapter" data-level="8.2" data-path="wwm.html"><a href="wwm.html#model-comp"><i class="fa fa-check"></i><b>8.2</b> Model comparison</a>
 <ul>
-<li><a href="wwm.html#overfitting"><span class="toc-section-number">8.2.1</span> The problem of over-fitting</a></li>
-<li><a href="wwm.html#cross-validation"><span class="toc-section-number">8.2.2</span> Cross validation and LOO</a></li>
-<li><a href="wwm.html#ic"><span class="toc-section-number">8.2.3</span> Information Criteria</a></li>
-<li><a href="wwm.html#model-selection"><span class="toc-section-number">8.2.4</span> Model selection</a></li>
-<li><a href="wwm.html#choose-dist"><span class="toc-section-number">8.2.5</span> Comparing response distributions</a></li>
-<li><a href="wwm.html#testing-theories"><span class="toc-section-number">8.2.6</span> Testing hypotheses</a></li>
-<li><a href="wwm.html#bayes-factor"><span class="toc-section-number">8.2.7</span> A note on Bayes Factor</a></li>
+<li class="chapter" data-level="8.2.1" data-path="wwm.html"><a href="wwm.html#overfitting"><i class="fa fa-check"></i><b>8.2.1</b> The problem of over-fitting</a></li>
+<li class="chapter" data-level="8.2.2" data-path="wwm.html"><a href="wwm.html#cross-validation"><i class="fa fa-check"></i><b>8.2.2</b> Cross validation and LOO</a></li>
+<li class="chapter" data-level="8.2.3" data-path="wwm.html"><a href="wwm.html#ic"><i class="fa fa-check"></i><b>8.2.3</b> Information Criteria</a></li>
+<li class="chapter" data-level="8.2.4" data-path="wwm.html"><a href="wwm.html#model-selection"><i class="fa fa-check"></i><b>8.2.4</b> Model selection</a></li>
+<li class="chapter" data-level="8.2.5" data-path="wwm.html"><a href="wwm.html#choose-dist"><i class="fa fa-check"></i><b>8.2.5</b> Comparing response distributions</a></li>
+<li class="chapter" data-level="8.2.6" data-path="wwm.html"><a href="wwm.html#testing-theories"><i class="fa fa-check"></i><b>8.2.6</b> Testing hypotheses</a></li>
+<li class="chapter" data-level="8.2.7" data-path="wwm.html"><a href="wwm.html#bayes-factor"><i class="fa fa-check"></i><b>8.2.7</b> A note on Bayes Factor</a></li>
 </ul></li>
-<li><a href="wwm.html#further-readings-4"><span class="toc-section-number">8.3</span> Further readings</a></li>
+<li class="chapter" data-level="8.3" data-path="wwm.html"><a href="wwm.html#further-readings-4"><i class="fa fa-check"></i><b>8.3</b> Further readings</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li><a href="cases.html#cases"><span class="toc-section-number">A</span> Cases</a>
+<li class="chapter" data-level="A" data-path="cases.html"><a href="cases.html"><i class="fa fa-check"></i><b>A</b> Cases</a>
 <ul>
-<li><a href="cases.html#real-cases"><span class="toc-section-number">A.1</span> Real cases</a>
+<li class="chapter" data-level="A.1" data-path="cases.html"><a href="cases.html#real-cases"><i class="fa fa-check"></i><b>A.1</b> Real cases</a>
 <ul>
-<li><a href="cases.html#hugme"><span class="toc-section-number">A.1.1</span> Hugme</a></li>
-<li><a href="cases.html#cue8"><span class="toc-section-number">A.1.2</span> CUE8</a></li>
-<li><a href="cases.html#uncanny"><span class="toc-section-number">A.1.3</span> Uncanny Valley</a></li>
-<li><a href="cases.html#ipump"><span class="toc-section-number">A.1.4</span> IPump</a></li>
-<li><a href="cases.html#sleepstudy"><span class="toc-section-number">A.1.5</span> Case Sleepstudy</a></li>
-<li><a href="cases.html#egan"><span class="toc-section-number">A.1.6</span> Egan</a></li>
-<li><a href="cases.html#mmn"><span class="toc-section-number">A.1.7</span> Case: Millers Magic Number</a></li>
-<li><a href="cases.html#aup"><span class="toc-section-number">A.1.8</span> AUP</a></li>
+<li class="chapter" data-level="A.1.1" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.1</b> Hugme</a></li>
+<li class="chapter" data-level="A.1.2" data-path="cases.html"><a href="cases.html#cue8"><i class="fa fa-check"></i><b>A.1.2</b> CUE8</a></li>
+<li class="chapter" data-level="A.1.3" data-path="cases.html"><a href="cases.html#uncanny"><i class="fa fa-check"></i><b>A.1.3</b> Uncanny Valley</a></li>
+<li class="chapter" data-level="A.1.4" data-path="cases.html"><a href="cases.html#ipump"><i class="fa fa-check"></i><b>A.1.4</b> IPump</a></li>
+<li class="chapter" data-level="A.1.5" data-path="cases.html"><a href="cases.html#sleepstudy"><i class="fa fa-check"></i><b>A.1.5</b> Case Sleepstudy</a></li>
+<li class="chapter" data-level="A.1.6" data-path="cases.html"><a href="cases.html#egan"><i class="fa fa-check"></i><b>A.1.6</b> Egan</a></li>
+<li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#mmn"><i class="fa fa-check"></i><b>A.1.7</b> Case: Millers Magic Number</a></li>
+<li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.8</b> AUP</a></li>
 </ul></li>
-<li><a href="cases.html#synthetic-data"><span class="toc-section-number">A.2</span> Synthetic data sets</a>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a>
 <ul>
-<li><a href="cases.html#rainfall"><span class="toc-section-number">A.2.1</span> Rainfall</a></li>
-<li><a href="cases.html#sec99"><span class="toc-section-number">A.2.2</span> 99 seconds</a></li>
-<li><a href="cases.html#rational"><span class="toc-section-number">A.2.3</span> Rational</a></li>
-<li><a href="cases.html#browsingab"><span class="toc-section-number">A.2.4</span> BrowsingAB</a></li>
-<li><a href="cases.html#headache"><span class="toc-section-number">A.2.5</span> Headache</a></li>
-<li><a href="cases.html#reading"><span class="toc-section-number">A.2.6</span> Reading time</a></li>
-<li><a href="cases.html#argame"><span class="toc-section-number">A.2.7</span> AR_game</a></li>
-<li><a href="cases.html#sleep"><span class="toc-section-number">A.2.8</span> Sleep</a></li>
+<li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
+<li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
+<li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
+<li class="chapter" data-level="A.2.4" data-path="cases.html"><a href="cases.html#browsingab"><i class="fa fa-check"></i><b>A.2.4</b> BrowsingAB</a></li>
+<li class="chapter" data-level="A.2.5" data-path="cases.html"><a href="cases.html#headache"><i class="fa fa-check"></i><b>A.2.5</b> Headache</a></li>
+<li class="chapter" data-level="A.2.6" data-path="cases.html"><a href="cases.html#reading"><i class="fa fa-check"></i><b>A.2.6</b> Reading time</a></li>
+<li class="chapter" data-level="A.2.7" data-path="cases.html"><a href="cases.html#argame"><i class="fa fa-check"></i><b>A.2.7</b> AR_game</a></li>
+<li class="chapter" data-level="A.2.8" data-path="cases.html"><a href="cases.html#sleep"><i class="fa fa-check"></i><b>A.2.8</b> Sleep</a></li>
 </ul></li>
 </ul></li>
 </ul>
-</div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for design researchers</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 <div id="ebs" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Elements of Bayesian statistics</h1>
 <p>As human beings we make our decisions on what has happened to us in the past. For example, we trust a person or a company more, when we can look back at a series of successful transactions. And we have remarkable capability to recall what has just happened, but also what happened yesterday or years ago. By integrating over all the evidence, we form a view of the world we forage. When evidence is abundant, we vigorously experience a feeling of certainty, or lack of doubt. That is not to deny, that in a variety of situations, the boundedness of the human mind kicks in and we become terrible decision makers. This is for a variety of psychological reasons, to name just a few:</p>
@@ -556,37 +551,37 @@ img {
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
+<td align="right">5</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="right">3</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
 <td align="right">6</td>
 <td align="left">FALSE</td>
 <td align="left">FALSE</td>
 </tr>
-<tr class="odd">
-<td align="right">9</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
 <tr class="even">
-<td align="right">11</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
+<td align="right">7</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="right">12</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
+<td align="right">13</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="right">15</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="right">16</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
 <td align="left">FALSE</td>
 <td align="left">TRUE</td>
 </tr>
@@ -708,7 +703,7 @@ img {
 </tbody>
 </table>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"></code></pre></div>
-<p>These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter <span class="math inline">\(P(rain|cloudy) = 60\)</span>%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the <em>true</em> parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, <span class="math inline">\(P(rain|cloudy) = 64.341\)</span>%.</p>
+<p>These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter <span class="math inline">\(P(rain|cloudy) = 60\)</span>%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the <em>true</em> parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, <span class="math inline">\(P(rain|cloudy) = 59.635\)</span>%.</p>
 <p>The trust you put in your estimation is called <em>level of certainty</em> or <em>belief</em> or <em>confidence</em>. It is the primary aim of statistics to rationally deal with uncertainty, which involves to <em>measure the level of certainty</em> associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding <span class="math inline">\(P(rain|cloudy)\)</span>?</p>
 <p>Maybe, the conversation would be as follows:</p>
 <blockquote>
@@ -763,7 +758,7 @@ img {
 <span id="cb139-2"><a href="ebs.html#cb139-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ToT)) <span class="sc">+</span></span>
 <span id="cb139-3"><a href="ebs.html#cb139-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:sec99-1"></span>
-<img src="Production/figures/sec99-1-1.png" alt="Distribution of ToT" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-1-1.png" alt="Distribution of ToT" width="90%" />
 <p class="caption">
 Figure 3.1: Distribution of ToT
 </p>
@@ -830,7 +825,7 @@ Figure 3.1: Distribution of ToT
 <span id="cb144-10"><a href="ebs.html#cb144-10" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
 <span id="cb144-11"><a href="ebs.html#cb144-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">2</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:sec99-4"></span>
-<img src="Production/figures/sec99-4-1.png" alt="A histogram of MCMC results split by the 111-seconds criterion" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-4-1.png" alt="A histogram of MCMC results split by the 111-seconds criterion" width="90%" />
 <p class="caption">
 Figure 3.2: A histogram of MCMC results split by the 111-seconds criterion
 </p>
@@ -867,7 +862,7 @@ Figure 3.2: A histogram of MCMC results split by the 111-seconds criterion
 <span id="cb148-2"><a href="ebs.html#cb148-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Euro, <span class="at">fill =</span> Design)) <span class="sc">+</span></span>
 <span id="cb148-3"><a href="ebs.html#cb148-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> .<span class="dv">5</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:rational-1"></span>
-<img src="Production/figures/rational-1-1.png" alt="Density plot comparing the revenue of two designs" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-1-1.png" alt="Density plot comparing the revenue of two designs" width="90%" />
 <p class="caption">
 Figure 3.3: Density plot comparing the revenue of two designs
 </p>
@@ -1061,7 +1056,7 @@ Figure 3.3: Density plot comparing the revenue of two designs
 <span id="cb159-5"><a href="ebs.html#cb159-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
 <span id="cb159-6"><a href="ebs.html#cb159-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Strength of prior belief&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:rational-prior-5"></span>
-<img src="Production/figures/rational-prior-5-1.png" alt="Prior knowledge about a parameter is expressed as a distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-prior-5-1.png" alt="Prior knowledge about a parameter is expressed as a distribution" width="90%" />
 <p class="caption">
 Figure 3.4: Prior knowledge about a parameter is expressed as a distribution
 </p>
@@ -1120,7 +1115,7 @@ Figure 3.4: Prior knowledge about a parameter is expressed as a distribution
 <span id="cb161-7"><a href="ebs.html#cb161-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> .<span class="dv">05</span></span>
 <span id="cb161-8"><a href="ebs.html#cb161-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span id="fig:rational-prior-8"></span>
-<img src="Production/figures/rational-prior-8-1.png" alt="Comparison of expected revenue increase with and without prior information" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-prior-8-1.png" alt="Comparison of expected revenue increase with and without prior information" width="90%" />
 <p class="caption">
 Figure 3.5: Comparison of expected revenue increase with and without prior information
 </p>
@@ -1324,7 +1319,7 @@ Figure 3.5: Comparison of expected revenue increase with and without prior infor
 <span id="cb175-8"><a href="ebs.html#cb175-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bin, <span class="at">y =</span> rel_freq)) <span class="sc">+</span></span>
 <span id="cb175-9"><a href="ebs.html#cb175-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:sec99-8"></span>
-<img src="Production/figures/sec99-8-1.png" alt="Histogram showing relative frequencies" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-8-1.png" alt="Histogram showing relative frequencies" width="90%" />
 <p class="caption">
 Figure 3.6: Histogram showing relative frequencies
 </p>
@@ -1388,7 +1383,7 @@ Figure 3.6: Histogram showing relative frequencies
 </table>
 <p>The table above shows the three statistics for central tendency side-by-side. Mean and median are close together. This is frequently the case, but not always. Only if a distribution of measures is completely symmetric, mean and median perfectly coincide. In section <a href="ebs.html#distributions">3.5.2</a> we will encounter distributions that are not symmetric. The more a distribution is skewed, the stronger the difference between mean and median increases (Figure <a href="ebs.html#fig:dist-skew">3.7</a>).</p>
 <div class="figure"><span id="fig:dist-skew"></span>
-<img src="Production/figures/dist-skew-1.png" alt="Left-skewed, right-skewed and symmetric distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-skew-1.png" alt="Left-skewed, right-skewed and symmetric distributions" width="90%" />
 <p class="caption">
 Figure 3.7: Left-skewed, right-skewed and symmetric distributions
 </p>
@@ -1419,7 +1414,7 @@ Figure 3.7: Left-skewed, right-skewed and symmetric distributions
 <span id="cb185-18"><a href="ebs.html#cb185-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Distribution <span class="sc">~</span> .) <span class="sc">+</span></span>
 <span id="cb185-19"><a href="ebs.html#cb185-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:dispersion-1"></span>
-<img src="Production/figures/dispersion-1-1.png" alt="Narrow and wide distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dispersion-1-1.png" alt="Narrow and wide distributions" width="90%" />
 <p class="caption">
 Figure 3.8: Narrow and wide distributions
 </p>
@@ -1430,7 +1425,7 @@ Figure 3.8: Narrow and wide distributions
 <span id="cb186-2"><a href="ebs.html#cb186-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT)) <span class="sc">+</span></span>
 <span id="cb186-3"><a href="ebs.html#cb186-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:sec99-10"></span>
-<img src="Production/figures/sec99-10-1.png" alt="A boxplot shows quartiles of a distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-10-1.png" alt="A boxplot shows quartiles of a distribution" width="90%" />
 <p class="caption">
 Figure 3.9: A boxplot shows quartiles of a distribution
 </p>
@@ -1577,7 +1572,7 @@ Figure 3.9: A boxplot shows quartiles of a distribution
 <span id="cb192-2"><a href="ebs.html#cb192-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Design, <span class="at">fill =</span> completion)) <span class="sc">+</span></span>
 <span id="cb192-3"><a href="ebs.html#cb192-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:ipump-3"></span>
-<img src="Production/figures/ipump-3-1.png" alt="A stacked bar plot with absolute frequencies" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/ipump-3-1.png" alt="A stacked bar plot with absolute frequencies" width="90%" />
 <p class="caption">
 Figure 3.10: A stacked bar plot with absolute frequencies
 </p>
@@ -1620,7 +1615,7 @@ Figure 3.10: A stacked bar plot with absolute frequencies
 <span id="cb194-2"><a href="ebs.html#cb194-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Design, <span class="at">y =</span> ToT)) <span class="sc">+</span></span>
 <span id="cb194-3"><a href="ebs.html#cb194-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:ipump-5"></span>
-<img src="Production/figures/ipump-5-1.png" alt="Boxplot comparison of two groups" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/ipump-5-1.png" alt="Boxplot comparison of two groups" width="90%" />
 <p class="caption">
 Figure 3.11: Boxplot comparison of two groups
 </p>
@@ -1748,7 +1743,7 @@ Figure 3.11: Boxplot comparison of two groups
 <p>Covariance essentially arises by the multiplication of differences to the mean, <span class="math inline">\((x_i - E(X)) (y_i - E(Y)\)</span>. When for one observation both factors go into the same direction, be it positive or negative, this term gets positive. If the association is strong, this will happen a lot, and the whole sum gets largely positive. When the deviations systematically move in opposite direction, such that one factor is always positive and the other negative, we get a large negative covariance. When the picture is mixed, i.e. no clear tendency, covariance will stay close to zero.</p>
 <p>Figure <a href="ebs.html#fig:covariance-2">3.12</a> is an attempt at a geometric illustration of the multiplication as the area of rectangles. Rectangles with equal directions (blue) are in the upper-right and lower-left quadrant. They overwhelm the opposite direction rectangles (red), which speaks for a strong positive association. The associations between MRT_1 and Corsi, as well as between Corsi and ToT seem to have a slight overhead in same direction, so the covariance is positive, but less strong. A clear negative association exists between MRS_1 and Corsi. It seems these two tests have some common ground.</p>
 <div class="figure"><span id="fig:covariance-2"></span>
-<img src="Production/figures/covariance-2-1.png" alt="Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance." width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-2-1.png" alt="Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance." width="90%" />
 <p class="caption">
 Figure 3.12: Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.
 </p>
@@ -1889,7 +1884,7 @@ r_XY = \frac{\textrm{cov}_{XY}}{\textrm{sd}_X \textrm{sd}_Y}
 <div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="ebs.html#cb203-1" aria-hidden="true" tabindex="-1"></a>D_tests <span class="sc">%&gt;%</span></span>
 <span id="cb203-2"><a href="ebs.html#cb203-2" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">ggpairs</span>(<span class="at">upper =</span> )</span></code></pre></div>
 <div class="figure"><span id="fig:covariance-6"></span>
-<img src="Production/figures/covariance-6-1.png" alt="A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-6-1.png" alt="A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)" width="90%" />
 <p class="caption">
 Figure 3.13: A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)
 </p>
@@ -1903,7 +1898,7 @@ Figure 3.13: A pairs plot showing raw data (left triangle), correlations (right)
 <span id="cb204-5"><a href="ebs.html#cb204-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
 <span id="cb204-6"><a href="ebs.html#cb204-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggpairs</span>(<span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">&quot;smooth&quot;</span>))</span></code></pre></div>
 <div class="figure"><span id="fig:covariance-7"></span>
-<img src="Production/figures/covariance-7-1.png" alt="Some shapes of associations where correlation is not adequate" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-7-1.png" alt="Some shapes of associations where correlation is not adequate" width="90%" />
 <p class="caption">
 Figure 3.14: Some shapes of associations where correlation is not adequate
 </p>
@@ -2539,7 +2534,7 @@ P(y_1 = \textrm{Four} \textrm{ and } y_2 = \textrm{Five} \textrm{ and } y_3 = \t
 <span id="cb246-2"><a href="ebs.html#cb246-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Result)) <span class="sc">+</span></span>
 <span id="cb246-3"><a href="ebs.html#cb246-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:rolls-2"></span>
-<img src="Production/figures/rolls-2-1.png" alt="A bar chart showing the frequencies of dice roll outcomes" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rolls-2-1.png" alt="A bar chart showing the frequencies of dice roll outcomes" width="90%" />
 <p class="caption">
 Figure 3.15: A bar chart showing the frequencies of dice roll outcomes
 </p>
@@ -2631,7 +2626,7 @@ LR = \exp(LL_\text{Bern}(\text{Rolls}, .147) - LL_\text{Bern}(\text{Rolls}, \fra
 <span id="cb252-12"><a href="ebs.html#cb252-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">filter</span>(LL_grid, MLE), <span class="at">color =</span> <span class="st">&quot;Red&quot;</span>) <span class="sc">+</span></span>
 <span id="cb252-13"><a href="ebs.html#cb252-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">filter</span>(LL_grid, MLE), <span class="at">label =</span> <span class="st">&quot;MLE&quot;</span>, <span class="at">color =</span> <span class="st">&quot;Red&quot;</span>, <span class="at">nudge_y =</span> <span class="sc">-</span><span class="dv">500</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:likely-1"></span>
-<img src="Production/figures/likely-1-1.png" alt="Estimating parameter pi by maximum likelihood estimation" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/likely-1-1.png" alt="Estimating parameter pi by maximum likelihood estimation" width="90%" />
 <p class="caption">
 Figure 3.16: Estimating parameter pi by maximum likelihood estimation
 </p>
@@ -2939,7 +2934,7 @@ For frequentist thinkers the idea of the sample is central and the mathematical 
 <span id="cb257-4"><a href="ebs.html#cb257-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F, <span class="at">fullrange =</span> T) <span class="sc">+</span></span>
 <span id="cb257-5"><a href="ebs.html#cb257-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">60</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:sec99-13"></span>
-<img src="Production/figures/sec99-13-1.png" alt="A linear association between Age and ToT" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-13-1.png" alt="A linear association between Age and ToT" width="90%" />
 <p class="caption">
 Figure 3.17: A linear association between Age and ToT
 </p>
@@ -3008,7 +3003,7 @@ P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
 <span id="cb258-13"><a href="ebs.html#cb258-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb258-14"><a href="ebs.html#cb258-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-1"></span>
-<img src="Production/figures/dist-1-1.png" alt="Binomial distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-1-1.png" alt="Binomial distributions" width="90%" />
 <p class="caption">
 Figure 3.18: Binomial distributions
 </p>
@@ -3035,7 +3030,7 @@ Figure 3.18: Binomial distributions
 <span id="cb259-16"><a href="ebs.html#cb259-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
 <span id="cb259-17"><a href="ebs.html#cb259-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-2"></span>
-<img src="Production/figures/dist-2-1.png" alt="Gaussian distribution of hypothetical IQ scores" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-2-1.png" alt="Gaussian distribution of hypothetical IQ scores" width="90%" />
 <p class="caption">
 Figure 3.19: Gaussian distribution of hypothetical IQ scores
 </p>
@@ -3048,7 +3043,7 @@ Figure 3.19: Gaussian distribution of hypothetical IQ scores
 <span id="cb260-4"><a href="ebs.html#cb260-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb260-5"><a href="ebs.html#cb260-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">4</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-3"></span>
-<img src="Production/figures/dist-3-1.png" alt="The CDF of a discrete outcome is a step function" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-3-1.png" alt="The CDF of a discrete outcome is a step function" width="90%" />
 <p class="caption">
 Figure 3.20: The CDF of a discrete outcome is a step function
 </p>
@@ -3069,7 +3064,7 @@ Figure 3.20: The CDF of a discrete outcome is a step function
 <span id="cb265-3"><a href="ebs.html#cb265-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb265-4"><a href="ebs.html#cb265-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">y =</span> around_100))</span></code></pre></div>
 <div class="figure"><span id="fig:dist-4"></span>
-<img src="Production/figures/dist-4-1.png" alt="The area around 100 has a small, but positive mass" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-4-1.png" alt="The area around 100 has a small, but positive mass" width="90%" />
 <p class="caption">
 Figure 3.21: The area around 100 has a small, but positive mass
 </p>
@@ -3096,7 +3091,7 @@ Figure 3.21: The area around 100 has a small, but positive mass
 <span id="cb266-19"><a href="ebs.html#cb266-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb266-20"><a href="ebs.html#cb266-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">250</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-5"></span>
-<img src="Production/figures/dist-5-1.png" alt="Continuous distributions have smooth cummulative functions, which can be reduced to a step function" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-5-1.png" alt="Continuous distributions have smooth cummulative functions, which can be reduced to a step function" width="90%" />
 <p class="caption">
 Figure 3.22: Continuous distributions have smooth cummulative functions, which can be reduced to a step function
 </p>
@@ -3157,7 +3152,7 @@ Figure 3.22: Continuous distributions have smooth cummulative functions, which c
 <span id="cb267-21"><a href="ebs.html#cb267-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;outcome&quot;</span>, <span class="at">y =</span> <span class="st">&quot;density&quot;</span></span>
 <span id="cb267-22"><a href="ebs.html#cb267-22" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span id="fig:dist-6"></span>
-<img src="Production/figures/dist-6-1.png" alt="Three location-shifted Gaussian distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-6-1.png" alt="Three location-shifted Gaussian distributions" width="90%" />
 <p class="caption">
 Figure 3.23: Three location-shifted Gaussian distributions
 </p>
@@ -3181,7 +3176,7 @@ Figure 3.23: Three location-shifted Gaussian distributions
 <span id="cb268-16"><a href="ebs.html#cb268-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;outcome&quot;</span>, <span class="at">y =</span> <span class="st">&quot;density&quot;</span></span>
 <span id="cb268-17"><a href="ebs.html#cb268-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span id="fig:dist-7"></span>
-<img src="Production/figures/dist-7-1.png" alt="Two Gaussian distributions with different variance" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-7-1.png" alt="Two Gaussian distributions with different variance" width="90%" />
 <p class="caption">
 Figure 3.24: Two Gaussian distributions with different variance
 </p>
@@ -3211,7 +3206,7 @@ Figure 3.24: Two Gaussian distributions with different variance
 <span id="cb269-18"><a href="ebs.html#cb269-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb269-19"><a href="ebs.html#cb269-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour =</span> <span class="st">&quot;Distribution&quot;</span>, <span class="at">x =</span> <span class="st">&quot;outcome&quot;</span>, <span class="at">y =</span> <span class="st">&quot;density&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-8"></span>
-<img src="Production/figures/dist-8-1.png" alt="Beta distributions have smaller variance when approaching either boundary" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-8-1.png" alt="Beta distributions have smaller variance when approaching either boundary" width="90%" />
 <p class="caption">
 Figure 3.25: Beta distributions have smaller variance when approaching either boundary
 </p>
@@ -3251,7 +3246,7 @@ Random distributions:
 <span id="cb270-5"><a href="ebs.html#cb270-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb270-6"><a href="ebs.html#cb270-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">11</span>))</span></code></pre></div>
 <div class="figure"><span id="fig:dist-9"></span>
-<img src="Production/figures/dist-9-1.png" alt="Successes in a set of equal tasks folows a Binomial distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-9-1.png" alt="Successes in a set of equal tasks folows a Binomial distribution" width="90%" />
 <p class="caption">
 Figure 3.26: Successes in a set of equal tasks folows a Binomial distribution
 </p>
@@ -3269,7 +3264,7 @@ Figure 3.26: Successes in a set of equal tasks folows a Binomial distribution
 <span id="cb271-9"><a href="ebs.html#cb271-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(k <span class="sc">~</span> p) <span class="sc">+</span></span>
 <span id="cb271-10"><a href="ebs.html#cb271-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;number of successes&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-10"></span>
-<img src="Production/figures/dist-10-1.png" alt="Binomial distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-10-1.png" alt="Binomial distributions" width="90%" />
 <p class="caption">
 Figure 3.27: Binomial distributions
 </p>
@@ -3284,7 +3279,7 @@ Figure 3.27: Binomial distributions
 <span id="cb272-6"><a href="ebs.html#cb272-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> rentals_per_year)) <span class="sc">+</span></span>
 <span id="cb272-7"><a href="ebs.html#cb272-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:dist-11"></span>
-<img src="Production/figures/dist-11-1.png" alt="Binomial distribution with a very small p and a very large number of attempts" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-11-1.png" alt="Binomial distribution with a very small p and a very large number of attempts" width="90%" />
 <p class="caption">
 Figure 3.28: Binomial distribution with a very small p and a very large number of attempts
 </p>
@@ -3316,7 +3311,7 @@ Y \mathrel{\dot\sim} \textrm{Gaus}(\mu = \lambda, \sigma = \sqrt \lambda)
 <span id="cb273-7"><a href="ebs.html#cb273-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>() <span class="sc">+</span></span>
 <span id="cb273-8"><a href="ebs.html#cb273-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(lambda <span class="sc">~</span> .)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-12"></span>
-<img src="Production/figures/dist-12-1.png" alt="Poisson distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-12-1.png" alt="Poisson distributions" width="90%" />
 <p class="caption">
 Figure 3.29: Poisson distributions
 </p>
@@ -3353,7 +3348,7 @@ Figure 3.29: Poisson distributions
 <span id="cb274-28"><a href="ebs.html#cb274-28" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb274-29"><a href="ebs.html#cb274-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-13"></span>
-<img src="Production/figures/dist-13-1.png" alt="When lambda varies, the distribution becomes over-dispersed" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-13-1.png" alt="When lambda varies, the distribution becomes over-dispersed" width="90%" />
 <p class="caption">
 Figure 3.30: When lambda varies, the distribution becomes over-dispersed
 </p>
@@ -3370,7 +3365,7 @@ Figure 3.30: When lambda varies, the distribution becomes over-dispersed
 <span id="cb275-5"><a href="ebs.html#cb275-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bus_rides)) <span class="sc">+</span></span>
 <span id="cb275-6"><a href="ebs.html#cb275-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:dist-14"></span>
-<img src="Production/figures/dist-14-1.png" alt="Hidden classes can produce zero inflated distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-14-1.png" alt="Hidden classes can produce zero inflated distribution" width="90%" />
 <p class="caption">
 Figure 3.31: Hidden classes can produce zero inflated distribution
 </p>
@@ -3402,7 +3397,7 @@ Figure 3.31: Hidden classes can produce zero inflated distribution
 <span id="cb276-19"><a href="ebs.html#cb276-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;outcome&quot;</span>, <span class="at">y =</span> <span class="st">&quot;density&quot;</span></span>
 <span id="cb276-20"><a href="ebs.html#cb276-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span id="fig:dist-15"></span>
-<img src="Production/figures/dist-15-1.png" alt="Exponential distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-15-1.png" alt="Exponential distributions" width="90%" />
 <p class="caption">
 Figure 3.32: Exponential distributions
 </p>
@@ -3428,7 +3423,7 @@ Figure 3.32: Exponential distributions
 <span id="cb277-13"><a href="ebs.html#cb277-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> travel)) <span class="sc">+</span></span>
 <span id="cb277-14"><a href="ebs.html#cb277-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">stat =</span> <span class="st">&quot;density&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:dist-16"></span>
-<img src="Production/figures/dist-16-1.png" alt="Gaussian distribution emerging from travel by bumps" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-16-1.png" alt="Gaussian distribution emerging from travel by bumps" width="90%" />
 <p class="caption">
 Figure 3.33: Gaussian distribution emerging from travel by bumps
 </p>
@@ -3455,7 +3450,7 @@ Figure 3.33: Gaussian distribution emerging from travel by bumps
 <span id="cb278-19"><a href="ebs.html#cb278-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;outcome&quot;</span>, <span class="at">y =</span> <span class="st">&quot;density&quot;</span></span>
 <span id="cb278-20"><a href="ebs.html#cb278-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span id="fig:dist-17"></span>
-<img src="Production/figures/dist-17-1.png" alt="Gaussian distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-17-1.png" alt="Gaussian distributions" width="90%" />
 <p class="caption">
 Figure 3.34: Gaussian distributions
 </p>
@@ -3497,7 +3492,7 @@ Figure 3.34: Gaussian distributions
 <span id="cb281-9"><a href="ebs.html#cb281-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
 <span id="cb281-10"><a href="ebs.html#cb281-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:umbrella-8"></span>
-<img src="Production/figures/umbrella-8-1.png" alt="Posterior distribution of two parameters" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/umbrella-8-1.png" alt="Posterior distribution of two parameters" width="90%" />
 <p class="caption">
 Figure 3.35: Posterior distribution of two parameters
 </p>
@@ -3520,7 +3515,7 @@ Figure 3.35: Posterior distribution of two parameters
 <span id="cb282-8"><a href="ebs.html#cb282-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb282-9"><a href="ebs.html#cb282-9" aria-hidden="true" tabindex="-1"></a>ggExtra<span class="sc">::</span><span class="fu">ggMarginal</span>(G_mcmc, <span class="at">type =</span> <span class="st">&quot;histogram&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:umbrella-9"></span>
-<img src="Production/figures/umbrella-9-1.png" alt="Marginal posterior distributions emerging from a two-dimensional paremeter space" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/umbrella-9-1.png" alt="Marginal posterior distributions emerging from a two-dimensional paremeter space" width="90%" />
 <p class="caption">
 Figure 3.36: Marginal posterior distributions emerging from a two-dimensional paremeter space
 </p>
@@ -3560,24 +3555,76 @@ Figure 3.36: Marginal posterior distributions emerging from a two-dimensional pa
 
 
 
-<p style="text-align: center;">
-<a href="gsr.html"><button class="btn btn-default">Previous</button></a>
-<a href="lm.html"><button class="btn btn-default">Next</button></a>
-</p>
-</div>
-</div>
+            </section>
 
-
-</div>
-
+          </div>
+        </div>
+      </div>
+<a href="gsr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
-
-// add bootstrap table styles to pandoc tables
-$(document).ready(function () {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsubsection"
+}
 });
-
+});
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
+
 </html>

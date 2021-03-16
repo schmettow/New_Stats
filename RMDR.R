@@ -142,7 +142,7 @@ knitr::knit_hooks$set(source = function(x, options) {
 opts <- options(knitr.kable.NA = "")
 
 # knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
-opts_chunk$set(fig.path="Production/figures/")
+# opts_chunk$set(fig.path="figures/")
 
 opts_chunk$set(echo = T, 
                warning = purp.debg, 

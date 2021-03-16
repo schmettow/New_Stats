@@ -30,7 +30,7 @@ You are an Human Factors researcher, thirty-three years old, leading a small tea
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
-You are working together with two engineers and a student from industrial design.
+You are working together with two engineers and a student of industrial design.
 Your plan is to put a light color device into a prototype car.
 Two workstation are stuffed into the boot of the car for record physiological signals and driving performance.
 This all is very expensive and someone is paying for it.
