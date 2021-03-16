@@ -919,9 +919,9 @@ $$
 <!--   nrow = 1) -->
 <!-- ``` -->
 
-In  GMM, $\eta_i = \beta_0$ and we can directly obtain the estimated proportion by applying the logistic function to the Intercept. The `clu` command lets you pass on a mean function.
+In  GMM, $\eta_i = \beta_0$ and we can directly obtain the estimated proportion by applying the logistic function to the Intercept. The `clu` command lets you pass on a mean function, resulting in Table \@ref(tab:logreg-3).
 
-```{r}
+```{r logreg-3}
 posterior(M_web) %>% clu(mean.func = inv_logit)
 ```
 
@@ -1253,9 +1253,9 @@ In real data, we often see similar relationships between variance and mean, exce
 
 Let me give you an example to illustrate the two methods. It is common saying that some people attract mosquito bites more than others. But is that really true? A simple lab experiment could be done to test the "Sweet Blood" theory. A sample of participants are exposed to a pack of mosquitoes under carefully controlled conditions (time of day, environmental condition, hungriness of mosquitoes). We don't know the mechanisms that makes the blood sweeter, and hence cannot measure it. In the simulation below, it is just assumed that there is a such a property, but in a real study we would not know.
 
-The following simulation function works by using a two-parameter distribution, that have the same properties as Poisson (or binomial) distributions. Negative-binomial distributions are discrete distributions with a lower bound of zero, just like Poisson distributions. They also have the same location parameter $\mu$, but a new parameter `size`, which re-scales the scale of measurement. When the scale of measurement is down-scaled, the distribution becomes relatively wider. When size approaches infinity, we are left with a plain Poisson variance. The following data simulation samples Sweet-blood data from a negative-binomial distribution with a size of 3. 
+The following simulation function works by using a two-parameter distribution, that have the same properties as Poisson (or binomial) distributions. Negative-binomial distributions are discrete distributions with a lower bound of zero, just like Poisson distributions. They also have the same location parameter $\mu$, but a new parameter `size`, which re-scales the scale of measurement. When the scale of measurement is down-scaled, the distribution becomes relatively wider. When size approaches infinity, we are left with a plain Poisson variance. The following data simulation samples Sweet-blood data from a negative-binomial distribution with a size of 3 (Table \@ref(tab:logreg-10a)).
 
-```{r}
+```{r logreg-10a}
 set.seed(42)
 N = 400
 avg_sweet <- 6
@@ -1485,9 +1485,12 @@ To summarize: one-parameter distributions usually cannot be used to model count 
 Another technique to model over-dispersion does not require to find (or define) a two-parametric distribution. Instead, *observation-level random effects* borrow concepts from multi-level modeling and allow to keep the one-parameter distributions.
 
 
-```{r opts.label = "mcsync"}
+```{r echo = F}
 detach(Chapter_GLM)
+```
 
+
+```{r opts.label = "mcsync"}
 sync_CE(Chapter_GLM, beta_binomial2, bb_stan_funs, M_bin, M_betabin, D_betabin)
 ```
 
@@ -1751,14 +1754,14 @@ Analog situations can be found in service design and logistics. Take the example
 
 ### ExGaussian regression {#exgauss-reg}
 
-The problem with RT and ToT data is that Zero is not a possible outcome, as any task uses up a minimum time to complete. For example, the table below shows the minimum ToT for finding the academic calendar on ten university websites (case Egan). This varies a lot between designs, but is never even close to zero. The last column puts the minimum observed ToT in relation to the observed range. On two of the websites, the offset was even larger than the observed range itself, hence the problem of positive lower boundaries is real in user studies.
+The problem with RT and ToT data is that Zero is not a possible outcome, as any task uses up a minimum time to complete. For example, Table \@ref(tab:exgreg-0) shows the minimum ToT for finding the academic calendar on ten university websites (case Egan). This varies a lot between designs, but is never even close to zero. The last column puts the minimum observed ToT in relation to the observed range. On two of the websites, the offset was even larger than the observed range itself, hence the problem of positive lower boundaries is real in user studies.
 
 ```{r}
 attach(Egan)
 ```
 
 
-```{r}
+```{r exgreg-0}
 D_egan %>% 
   filter(success,
          Task == "academic calendar") %>% 
@@ -1767,7 +1770,7 @@ D_egan %>%
             range = max(ToT) - min_time,
             min_time/range) %>% 
   arrange(min_time) %>% 
-  kable(caption = "")
+  kable(caption = "The lower boundaries of ToT are not Zero")
 ```
 
 ```{r}
@@ -2420,8 +2423,7 @@ D_pumps %>%
             median = median(workload)) %>%
   mutate(Part_ord = rank(max, ties.method = "first")) %>% 
   ggplot(aes(x = Part_ord, ymax = max, ymin = min, y = median)) +
-  geom_errorbar() +
-  geom_point(size = 3) +
+  geom_crossbar() +
   labs(x = "Part(ordered)",y = "workload")
   
 detach(IPump)

@@ -801,7 +801,7 @@ sync_CE(BrowsingAB, M_age_shft, M_age_cntr)
 We combine the posterior distributions into one multi-model posterior and read the *multi-model coefficient table*:
 
 
-```{r }
+```{r shift-2}
 P_age <- 
   bind_rows(posterior(M_age), 
             posterior(M_age_shft), 
@@ -1007,9 +1007,18 @@ $$
 
 For the sole purpose of demonstration, we here resort to the built-in non-Bayesian command `lm` for doing the regression.
 
-```{r}
-M_cor <- stan_glm(y ~ x, data = D_cor)
+```{r opts.label = "inv"}
+attach(Chapter_LM)
+```
 
+
+```{r opts.label = "mcmc"}
+M_cor <- stan_glm(y ~ x, data = D_cor)
+```
+
+
+
+```{r}
 beta_1 <- coef(M_cor)$center[2]
 
 r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
@@ -1023,7 +1032,7 @@ The clue with Pearson's $r$ is that it normalized the slope coefficient by the v
 This resembles z-transformation as was introduced in \@ref(transform-measures).
 In fact, when both, predictor and outcome, are z-transformed before estimation, the coefficient equals Pearson's $r$ almost precisely. The minor deviation stems from the relatively short MCMC chains.
 
-```{r results = "markup"}
+```{r opts.label = "mcmc"}
 M_z <-
   D_cor %>% 
   mutate(x_z = (x - mean(x))/sd(x),
@@ -1031,10 +1040,23 @@ M_z <-
   stan_glm(y_z ~ x_z, 
            data = .)
 
+```
+
+
+```{r}
 beta_1 <- coef(M_z)$center[2]
 
 cat("On z standardized outcomes the coefficient is", beta_1)
 ```
+
+```{r opts.label = "inv"}
+detach(Chapter_LM)
+```
+
+```{r opts.label = "mcsync"}
+sync_CE(Chapter_LM, D_cor, M_cor, M_z)
+```
+
 
 
 Pearson's $r$ spawns from a different school of thinking than Bayesian parameter estimation: analysis of variance (ANOVA). Roughly, this family of methods draws on the idea of dividing the *total variance* of the outcome variable into two components: *explained variance* and *residual variance*. The very formula of the variance parameter reveals its connection to covariance (it is even allowed to say, that variance is the covariance of a variable with itself):
@@ -1368,7 +1390,7 @@ This works well in all situations where a default situation exists and the other
 We have seen how to create dummy variables ourselves by means of mututally exclusive on-off switches, which results in absolute means coefficients.
 Regression engines quietly assume that treatment effects is what the user wants and expand dummy variables in a different way: For a factor with levels A and B, the dummy for B is an on-off switch, whereas the reference level A is set *always on*. This way of creating dummy variables is called *treatment contrast coding*:
 
-```{r }
+```{r treatment-1}
 BAB1_treat <-  
   BAB1_dum %>% 
   mutate(Intercept = 1,
@@ -1383,7 +1405,7 @@ BAB1_treat
 
 <!-- $$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$ -->
 
-<!-- In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models @ref(multilevel-models)). With expanded dummy variables, the likelihood can become unduly long. -->
+<!-- In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models @ref(mlm)). With expanded dummy variables, the likelihood can become unduly long. -->
 
 <!-- Up to this point, I have introduced dummy variables at the example of AGMs, where at any moment only one factor level is switched on. A more common CGMs  would have a the following likelihood specification (with a factor of $k$ levels): -->
 
@@ -1462,8 +1484,8 @@ coef(M_AMM_1) %>%
   rename(Task = fixef ) %>% 
   ggplot(aes(x = Task, 
              y = center, ymin = lower, ymax = upper)) +
-  geom_point(size = 2) +
-  geom_errorbar()
+  geom_crossbar()
+
 ```
 
 In Figure \@ref(fig:amm-1) we can easily discover that Task 2 is by far the longest and that tasks differ a lot, overall.
@@ -1884,9 +1906,9 @@ We did a study, where we explored the impact of two user traits *need-for-cognit
 To measure AUP resistance we observed users while they were doing drawing tasks with a graphics software.
 User actions were noted down and classified by a behavioral coding scheme. From the frequencies of exploration and elaboration actions an individual AUP resistance score was derived. So, are users with high need-for-cognition and geekism more resistant to the AUP?
 
-We first look at the two predictors, separately:
+In Figure \@ref(fig:mrm-1) we first look at the two predictors, separately:
 
-```{r fig.show="hold", out.width="50%", fig.cap = "Linear associations of Gex and NCS with Resistance"}
+```{r mrm-1, fig.show="hold", out.width="50%", fig.cap = "Linear associations of NCS and Gex with Resistance"}
 attach(AUP)
 
 AUP_1 %>% 
@@ -3702,7 +3724,7 @@ But, there is no single coefficient telling us directly that there actually are 
 
 <!-- Wouldn't it be very bold if we could just say: "With a probability of ... there is a trough and a shoulder". -->
 
-<!-- Recall how we If it does not exist, we would see no mini  In the Uncanny Valley case, we have estimated a cubic polynomial and found the stationary points in the first (cubic) derivative and identified the valley in the second (straight) derivative @ref(PRM). Then, we applied the valley-finding procedure on the level of individual MCMC draws and added credibility limits  to population average trough. -->
+<!-- Recall how we If it does not exist, we would see no mini  In the Uncanny Valley case, we have estimated a cubic polynomial and found the stationary points in the first (cubic) derivative and identified the valley in the second (straight) derivative @ref(prm). Then, we applied the valley-finding procedure on the level of individual MCMC draws and added credibility limits  to population average trough. -->
 
 Polynomial theory tells us that a cubic function *can* have two stationary points, but it can also just have one or zero.
 After all, straight line is a cubic, too, if we set the quadratic and cubic coefficients to zero. But that would mean that teh UNcanny Valley effect does not exist. If we run our MCMC chains long enough, they will visit spots in parameter space, where  $\beta_2$ and $\beta_3$ are close to zero, or: areas where the cubic coefficient dominates, and there is just is a saddle.

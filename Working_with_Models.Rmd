@@ -997,11 +997,18 @@ From the coefficients it seemed that the leanest model `M_pois_lzrm` produced ab
 attach(IPump)
 ```
 
-```{r modsel-1}
+```{r opts.label = "mcmc"}
 L_pois_cozfm <-  loo(M_pois_cozfm)
 L_pois_clzrm <-  loo(M_pois_clzrm)
 L_pois_lzrm <-  loo(M_pois_lzrm)
+```
 
+```{r opts.label = "mcsync"}
+sync_CE(IPump, L_pois_cozfm, L_pois_clzrm, L_pois_lzrm)
+```
+
+
+```{r modsel-1}
 list(L_pois_lzrm, 
      L_pois_clzrm, 
      L_pois_cozfm) %>% 

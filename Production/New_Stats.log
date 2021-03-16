@@ -1,0 +1,4993 @@
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2021.3.13)  14 MAR 2021 19:16
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**New_Stats.tex
+(./New_Stats.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo
+File: bk10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count175
+\c@chapter=\count176
+\c@section=\count177
+\c@subsection=\count178
+\c@subsubsection=\count179
+\c@paragraph=\count180
+\c@subparagraph=\count181
+\c@figure=\count182
+\c@table=\count183
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/lmodern.sty
+Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.s
+ty
+Package: amsmath 2020/09/23 v2.17i AMS math features
+\@mathmargin=\skip49
+
+For additional information on amsmath, use the `?' option.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.s
+ty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.st
+y
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks15
+\ex@=\dimen139
+))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.st
+y
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen140
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.st
+y
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count184
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count185
+\leftroot@=\count186
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count187
+\DOTSCASE@=\count188
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box47
+\strutbox@=\box48
+\big@size=\dimen141
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count189
+\c@MaxMatrixCols=\count190
+\dotsspace@=\muskip16
+\c@parentequation=\count191
+\dspbrk@lvl=\count192
+\tag@help=\toks16
+\row@=\count193
+\column@=\count194
+\maxfields@=\count195
+\andhelp@=\toks17
+\eqnshift@=\dimen142
+\alignsep@=\dimen143
+\tagshift@=\dimen144
+\tagwidth@=\dimen145
+\totwidth@=\dimen146
+\lineht@=\dimen147
+\@envbody=\toks18
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifxetex.s
+ty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.
+sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unic
+ode-math.sty
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.st
+y
+Package: expl3 2021-02-18 L3 programming layer (loader) 
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backe
+nd-xetex.def
+File: l3backend-xetex.def 2021-03-02 L3 backend support: XeTeX
+ (|extractbb --version)
+\c__kernel_sys_dvipdfmx_version_int=\count196
+\l__color_backend_stack_int=\count197
+\g__color_backend_stack_int=\count198
+\g__graphics_track_int=\count199
+\l__pdf_internal_box=\box49
+\g__pdf_backend_object_int=\count266
+\g__pdf_backend_annotation_int=\count267
+\g__pdf_backend_link_int=\count268
+))
+Package: unicode-math 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLaTeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unic
+ode-math-xetex.sty
+Package: unicode-math-xetex 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLa
+TeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse
+/xparse.sty
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse
+/xparse-2020-10-01.sty
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse
+/xparse-generic.tex)))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/l3keys
+2e/l3keys2e.sty
+Package: l3keys2e 2021-03-12 LaTeX2e option processing using LaTeX3 keys
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec
+.sty
+Package: fontspec 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec
+-xetex.sty
+Package: fontspec-xetex 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count269
+\l__fontspec_language_int=\count270
+\l__fontspec_strnum_int=\count271
+\l__fontspec_tmp_int=\count272
+\l__fontspec_tmpa_int=\count273
+\l__fontspec_tmpb_int=\count274
+\l__fontspec_tmpc_int=\count275
+\l__fontspec_em_int=\count276
+\l__fontspec_emdef_int=\count277
+\l__fontspec_strong_int=\count278
+\l__fontspec_strongdef_int=\count279
+\l__fontspec_tmpa_dim=\dimen148
+\l__fontspec_tmpb_dim=\dimen149
+\l__fontspec_tmpc_dim=\dimen150
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec
+.cfg)))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fix-cm.sty
+Package: fix-cm 2015/01/14 v1.1t fixes to LaTeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
+))
+\g__um_fam_int=\count280
+\g__um_fonts_used_int=\count281
+\l__um_primecount_int=\count282
+\g__um_primekern_muskip=\muskip17
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unic
+ode-math-table.tex)))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/colo
+r.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: xetex.def on input line 225.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/xete
+x.def
+File: xetex.def 2020/08/26 v5.0i Graphics/color driver for xetex
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref
+.sty
+Package: hyperref 2021-02-27 v7.00k Hypertext links for LaTeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds
+.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdft
+excmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwa
+rerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.s
+ty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvset
+keys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kv
+definekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfes
+cape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.s
+ty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letlt
+xmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.s
+ty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptio
+ns.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen151
+\Hy@linkcounter=\count283
+\Hy@pagecounter=\count284
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.d
+ef
+File: pd1enc.def 2021-02-27 v7.00k Hyperref: PDFDocEncoding definition (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref
+-langpatches.def
+File: hyperref-langpatches.def 2021-02-27 v7.00k Hyperref: patches for babel la
+nguages
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc
+.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcm
+ds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count285
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.de
+f
+File: puenc.def 2021-02-27 v7.00k Hyperref: PDF Unicode definition (HO)
+)
+Package hyperref Info: Option `unicode' set `true' on input line 4073.
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4445.
+\c@Hy@tempcnt=\count286
+ (c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip18
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen152
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.s
+ty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigi
+ntcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count287
+\Field@Width=\dimen153
+\Fld@charsize=\dimen154
+Package hyperref Info: Hyper figures OFF on input line 6075.
+Package hyperref Info: Link nesting OFF on input line 6080.
+Package hyperref Info: Hyper index ON on input line 6083.
+Package hyperref Info: backreferencing OFF on input line 6090.
+Package hyperref Info: Link coloring OFF on input line 6095.
+Package hyperref Info: Link coloring with OCG OFF on input line 6100.
+Package hyperref Info: PDF/A mode OFF on input line 6105.
+LaTeX Info: Redefining \ref on input line 6145.
+LaTeX Info: Redefining \pageref on input line 6149.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx
+.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
+)
+\Hy@abspage=\count288
+\c@Item=\count289
+\c@Hfootnote=\count290
+)
+Package hyperref Info: Driver (autodetected): hxetex.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hxetex.d
+ef
+File: hxetex.def 2021-02-27 v7.00k Hyperref driver for XeTeX
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/strin
+genc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box50
+\c@Hy@AnnotLevel=\count291
+\HyField@AnnotCount=\count292
+\Fld@listcount=\count293
+\c@bookmark@seq@number=\count294
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/re
+runfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-lt
+x.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/u
+niquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip52
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry
+.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.st
+y
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count295
+\Gm@cntv=\count296
+\c@Gm@tempcnt=\count297
+\Gm@bindingoffset=\dimen155
+\Gm@wd@mp=\dimen156
+\Gm@odd@mp=\dimen157
+\Gm@even@mp=\dimen158
+\Gm@layoutwidth=\dimen159
+\Gm@layoutheight=\dimen160
+\Gm@layouthoffset=\dimen161
+\Gm@layoutvoffset=\dimen162
+\Gm@dimlist=\toks21
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb
+.sty
+Package: fancyvrb 2021/01/20 v3.7 verbatim text (tvz,hv)
+\FV@CodeLineNo=\count298
+\FV@InFile=\read2
+\FV@TabBox=\box51
+\c@FancyVerbLine=\count299
+\FV@StepNumber=\count300
+\FV@OutFile=\write3
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip53
+\fb@frw=\dimen163
+\fb@frh=\dimen164
+\FrameRule=\dimen165
+\FrameSep=\dimen166
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.s
+ty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip54
+\LTright=\skip55
+\LTpre=\skip56
+\LTpost=\skip57
+\LTchunksize=\count301
+\LTcapwidth=\dimen167
+\LT@head=\box52
+\LT@firsthead=\box53
+\LT@foot=\box54
+\LT@lastfoot=\box55
+\LT@cols=\count302
+\LT@rows=\count303
+\c@LT@tables=\count304
+\c@LT@chunks=\count305
+\LT@p@ftn=\toks22
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs
+.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen168
+\lightrulewidth=\dimen169
+\cmidrulewidth=\dimen170
+\belowrulesep=\dimen171
+\belowbottomsep=\dimen172
+\aboverulesep=\dimen173
+\abovetopsep=\dimen174
+\cmidrulesep=\dimen175
+\cmidrulekern=\dimen176
+\defaultaddspace=\dimen177
+\@cmidla=\count306
+\@cmidlb=\count307
+\@aboverulesep=\dimen178
+\@belowrulesep=\dimen179
+\@thisruleclass=\count308
+\@lastruleclass=\count309
+\@thisrulewidth=\dimen180
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count310
+\calc@Bcount=\count311
+\calc@Adimen=\dimen181
+\calc@Bdimen=\dimen182
+\calc@Askip=\skip58
+\calc@Bskip=\skip59
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count312
+\calc@Cskip=\skip60
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox
+.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count313
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/mdwtools/footnote
+.sty
+Package: footnote 1997/01/28 1.13 Save footnotes around boxes
+\fn@notes=\box56
+\fn@width=\dimen183
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx
+.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics
+.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/grap
+hics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 105.
+)
+\Gin@req@height=\dimen184
+\Gin@req@width=\dimen185
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+) (c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count314
+\float@exts=\toks23
+\float@box=\box57
+\@float@everytoks=\toks24
+\@floatcapt=\box58
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex
+.sty
+Package: biblatex 2020/12/31 v3.16 programmable bibliographies (PK/MW)
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count315
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@tabx@nest=\count316
+\c@listtotal=\count317
+\c@listcount=\count318
+\c@liststart=\count319
+\c@liststop=\count320
+\c@citecount=\count321
+\c@citetotal=\count322
+\c@multicitecount=\count323
+\c@multicitetotal=\count324
+\c@instcount=\count325
+\c@maxnames=\count326
+\c@minnames=\count327
+\c@maxitems=\count328
+\c@minitems=\count329
+\c@citecounter=\count330
+\c@maxcitecounter=\count331
+\c@savedcitecounter=\count332
+\c@uniquelist=\count333
+\c@uniquename=\count334
+\c@refsection=\count335
+\c@refsegment=\count336
+\c@maxextratitle=\count337
+\c@maxextratitleyear=\count338
+\c@maxextraname=\count339
+\c@maxextradate=\count340
+\c@maxextraalpha=\count341
+\c@abbrvpenalty=\count342
+\c@highnamepenalty=\count343
+\c@lownamepenalty=\count344
+\c@maxparens=\count345
+\c@parenlevel=\count346
+\blx@tempcnta=\count347
+\blx@tempcntb=\count348
+\blx@tempcntc=\count349
+\blx@maxsection=\count350
+\blx@maxsegment@0=\count351
+\blx@notetype=\count352
+\blx@parenlevel@text=\count353
+\blx@parenlevel@foot=\count354
+\blx@sectionciteorder@0=\count355
+\blx@entrysetcounter=\count356
+\blx@biblioinstance=\count357
+\labelnumberwidth=\skip61
+\labelalphawidth=\skip62
+\biblabelsep=\skip63
+\bibitemsep=\skip64
+\bibnamesep=\skip65
+\bibinitsep=\skip66
+\bibparsep=\skip67
+\bibhang=\skip68
+\blx@bcfin=\read3
+\blx@bcfout=\write4
+\blx@langwohyphens=\language3
+\c@mincomprange=\count358
+\c@maxcomprange=\count359
+\c@mincompwidth=\count360
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-dm.d
+ef
+File: blx-dm.def 2020/12/31 v3.16 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count361
+\c@savedafterword=\count362
+\c@annotator=\count363
+\c@savedannotator=\count364
+\c@author=\count365
+\c@savedauthor=\count366
+\c@bookauthor=\count367
+\c@savedbookauthor=\count368
+\c@commentator=\count369
+\c@savedcommentator=\count370
+\c@editor=\count371
+\c@savededitor=\count372
+\c@editora=\count373
+\c@savededitora=\count374
+\c@editorb=\count375
+\c@savededitorb=\count376
+\c@editorc=\count377
+\c@savededitorc=\count378
+\c@foreword=\count379
+\c@savedforeword=\count380
+\c@holder=\count381
+\c@savedholder=\count382
+\c@introduction=\count383
+\c@savedintroduction=\count384
+\c@namea=\count385
+\c@savednamea=\count386
+\c@nameb=\count387
+\c@savednameb=\count388
+\c@namec=\count389
+\c@savednamec=\count390
+\c@translator=\count391
+\c@savedtranslator=\count392
+\c@shortauthor=\count393
+\c@savedshortauthor=\count394
+\c@shorteditor=\count395
+\c@savedshorteditor=\count396
+\c@labelname=\count397
+\c@savedlabelname=\count398
+\c@institution=\count399
+\c@savedinstitution=\count400
+\c@lista=\count401
+\c@savedlista=\count402
+\c@listb=\count403
+\c@savedlistb=\count404
+\c@listc=\count405
+\c@savedlistc=\count406
+\c@listd=\count407
+\c@savedlistd=\count408
+\c@liste=\count409
+\c@savedliste=\count410
+\c@listf=\count411
+\c@savedlistf=\count412
+\c@location=\count413
+\c@savedlocation=\count414
+\c@organization=\count415
+\c@savedorganization=\count416
+\c@origlocation=\count417
+\c@savedoriglocation=\count418
+\c@origpublisher=\count419
+\c@savedorigpublisher=\count420
+\c@publisher=\count421
+\c@savedpublisher=\count422
+\c@language=\count423
+\c@savedlanguage=\count424
+\c@origlanguage=\count425
+\c@savedoriglanguage=\count426
+\c@pageref=\count427
+\c@savedpageref=\count428
+\shorthandwidth=\skip69
+\shortjournalwidth=\skip70
+\shortserieswidth=\skip71
+\shorttitlewidth=\skip72
+\shortauthorwidth=\skip73
+\shorteditorwidth=\skip74
+\locallabelnumberwidth=\skip75
+\locallabelalphawidth=\skip76
+\localshorthandwidth=\skip77
+\localshortjournalwidth=\skip78
+\localshortserieswidth=\skip79
+\localshorttitlewidth=\skip80
+\localshortauthorwidth=\skip81
+\localshorteditorwidth=\skip82
+Package biblatex Info: Trying to load enhanced support for Unicode engines...
+Package biblatex Info: ... file 'blx-unicode.def' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-unic
+ode.def)
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-comp
+at.def
+File: blx-compat.def 2020/12/31 v3.16 biblatex compatibility (PK/MW)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex
+.def
+File: biblatex.def 2020/12/31 v3.16 biblatex compatibility (PK/MW)
+\c@textcitecount=\count429
+\c@textcitetotal=\count430
+\c@textcitemaxnames=\count431
+\c@biburlbigbreakpenalty=\count432
+\c@biburlbreakpenalty=\count433
+\c@biburlnumpenalty=\count434
+\c@biburlucpenalty=\count435
+\c@biburllcpenalty=\count436
+\biburlbigskip=\muskip19
+\biburlnumskip=\muskip20
+\biburlucskip=\muskip21
+\biburllcskip=\muskip22
+\c@smartand=\count437
+)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/nume
+ric.bbx
+File: numeric.bbx 2020/12/31 v3.16 biblatex bibliography style (PK/MW)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/stan
+dard.bbx
+File: standard.bbx 2020/12/31 v3.16 biblatex bibliography style (PK/MW)
+\c@bbx:relatedcount=\count438
+\c@bbx:relatedtotal=\count439
+))
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/cbx/nume
+ric.cbx
+File: numeric.cbx 2020/12/31 v3.16 biblatex citation style (PK/MW)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex
+.cfg
+File: biblatex.cfg 
+))
+\@quotelevel=\count440
+\@quotereset=\count441
+LaTeX Font Info:    Trying to load font information for TU+ptm on input line 13
+3.
+LaTeX Font Info:    No file TUptm.fd. on input line 133.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 133.
+
+(./New_Stats.aux)
+\openout1 = `New_Stats.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 133.
+LaTeX Font Info:    ... okay on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
+(Font)                  OT1/lmr/m/n --> TU/ptm/m/n on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/lmr/m/it --> TU/ptm/m/it on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/lmr/bx/n --> TU/ptm/b/n on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/lmss/m/n --> TU/phv/m/n on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/lmss/bx/n --> TU/phv/b/n on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/lmtt/m/n --> TU/pcr/m/n on input line 133.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/lmtt/m/n --> TU/pcr/b/n on input line 133.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(0)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(0)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 133.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(1)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9999964596882403]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9999964596882403]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 133.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 133.
+
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/lmr/m/n --> TU/latinmodern-math.otf(1)/m/n on input
+ line 133.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 133.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/lmr/bx/n --> TU/latinmodern-math.otf(1)/b/n on inpu
+t line 133.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(2)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=1.0001,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =6.77pt\relax \fontdimen 9\font =3.94pt\relax
+(fontspec)             \fontdimen 10\font =4.44pt\relax \fontdimen 11\font
+(fontspec)             =6.86pt\relax \fontdimen 12\font =3.45pt\relax
+(fontspec)             \fontdimen 13\font =3.63pt\relax \fontdimen 14\font
+(fontspec)             =3.63pt\relax \fontdimen 15\font =2.89pt\relax
+(fontspec)             \fontdimen 16\font =2.47pt\relax \fontdimen 17\font
+(fontspec)             =2.47pt\relax \fontdimen 18\font =2.5pt\relax
+(fontspec)             \fontdimen 19\font =2.0pt\relax \fontdimen 22\font
+(fontspec)             =2.5pt\relax \fontdimen 20\font =0pt\relax \fontdimen
+(fontspec)             21\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[1.000096459334209]"[latinmodern-math.otf]/OT:sc
+ript=math;language=dflt;"<6-8.5>s*[1.000096459334209]"[latinmodern-math.otf]/OT
+:script=math;language=dflt;+ssty=0;"<-6>s*[1.000096459334209]"[latinmodern-math
+.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[1.000096459334209]"[latinmodern-math.otf]/OT:scrip
+t=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `normal' on input line 133.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/lmsy/m/n --> TU/latinmodern-math.otf(2)/m/n on inpu
+t line 133.
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `bold' on input line 133.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/lmsy/b/n --> TU/latinmodern-math.otf(2)/b/n on inpu
+t line 133.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(3)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=0.9999,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =0.4pt\relax \fontdimen 9\font =2.0pt\relax
+(fontspec)             \fontdimen 10\font =1.67pt\relax \fontdimen 11\font
+(fontspec)             =1.11pt\relax \fontdimen 12\font =6.0pt\relax
+(fontspec)             \fontdimen 13\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9998964600422715]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9998964600422715]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 1
+33.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/m/n on inpu
+t line 133.
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 133
+.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/b/n on inpu
+t line 133.
+Package hyperref Info: Link coloring OFF on input line 133.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.
+sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount
+.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/
+gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count442
+)
+LaTeX Info: Redefining \ref on input line 133.
+LaTeX Info: Redefining \pageref on input line 133.
+LaTeX Info: Redefining \nameref on input line 133.
+ (./New_Stats.out) (./New_Stats.out)
+\@outlinefile=\write5
+\openout5 = `New_Stats.out'.
+
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-30.06749pt
+* \headheight=12.0pt
+* \headsep=18.06749pt
+* \topskip=10.0pt
+* \footskip=25.29494pt
+* \marginparwidth=125.0pt
+* \marginparsep=7.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/lbx/engl
+ish.lbx
+File: english.lbx 2020/12/31 v3.16 biblatex localization (PK/MW)
+)
+Package biblatex Info: XeTeX detected.
+(biblatex)             Assuming input encoding 'utf8'.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+Package biblatex Info: Document encoding is UTF8 ....
+Package biblatex Info: ... and expl3
+(biblatex)             2021-02-18 L3 programming layer (loader) 
+(biblatex)             is new enough (at least 2020/04/06),
+(biblatex)             setting 'casechanger=expl3'.
+
+(c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case
+-expl3.sty
+Package: blx-case-expl3 2020/12/31 v3.16 expl3 case changing code for biblatex
+)
+\openout4 = `New_Stats.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'New_Stats.bbl' found.
+ (./New_Stats.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                Buerkner2018
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
+Package biblatex Info: Reference section=0 on input line 133.
+Package biblatex Info: Reference segment=0 on input line 133.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 12.0pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 135.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
+35.
+ (c:/Users/martin/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 12.0011pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 8.00073pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 6.00055pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 11.99872pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 7.99915pt on input line 135.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 5.99936pt on input line 135.
+
+[1
+
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 136.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/it' undefined
+(Font)              using `TU/ptm/m/n' instead on input line 136.
+
+[2
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 145.
+
+[1]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 145.
+
+[2
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
+(Font)              using `TU/ptm/m/n' instead on input line 150.
+
+(./New_Stats.toc
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 10.00092pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 7.00064pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 5.00046pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 9.99893pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 6.99925pt on input line 7.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 4.99947pt on input line 7.
+ [1
+
+])
+\tf@toc=\write6
+\openout6 = `New_Stats.toc'.
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 153.
+
+[2] [3
+
+] [4]
+Chapter 1.
+[5
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 262.
+
+[6]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 316.
+
+[7]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 380.
+
+[8]
+LaTeX Font Info:    Trying to load font information for TU+pcr on input line 42
+5.
+LaTeX Font Info:    No file TUpcr.fd. on input line 425.
+
+
+LaTeX Font Warning: Font shape `TU/pcr/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 425.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 440.
+
+[9]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 481.
+
+[10]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 529.
+
+[11]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 598.
+
+[12]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 662.
+
+[13]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 722.
+
+[14]
+File: figures/data-gaus-1-1.pdf Graphic file (type pdf)
+<use figures/data-gaus-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 799.
+
+[15]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 836.
+
+[16]
+File: figures/stepwise-3-1.pdf Graphic file (type pdf)
+<use figures/stepwise-3-1.pdf>
+File: figures/stepwise-4-1.pdf Graphic file (type pdf)
+<use figures/stepwise-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 902.
+
+[17]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 902.
+
+[18]
+File: figures/stepwise-5-1.pdf Graphic file (type pdf)
+<use figures/stepwise-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 935.
+
+[19]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 947.
+
+[20]
+Chapter 2.
+[21
+
+]
+
+LaTeX Font Warning: Font shape `TU/pcr/b/n' undefined
+(Font)              using `TU/pcr/m/n' instead on input line 1072.
+
+
+LaTeX Font Warning: Font shape `TU/pcr/b/it' undefined
+(Font)              using `TU/pcr/b/n' instead on input line 1072.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1086.
+
+[22]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1186.
+
+[23]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1252.
+
+[24]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1327.
+
+[25]
+File: figures/first-simulation-2-1.pdf Graphic file (type pdf)
+<use figures/first-simulation-2-1.pdf>
+File: figures/first-simulation-2-2.pdf Graphic file (type pdf)
+<use figures/first-simulation-2-2.pdf>
+
+Overfull \hbox (2.22322pt too wide) in paragraph at lines 1342--1342
+[][] []
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1392.
+
+[26]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1493.
+
+[27]
+Overfull \vbox (39.34087pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1578.
+
+[28]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1677.
+
+[29]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1766.
+
+[30]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1857.
+
+[31]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 1943.
+
+[32]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2042.
+
+[33]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2124.
+
+[34]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2214.
+
+[35]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2288.
+
+[36]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2371.
+
+[37]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2482.
+
+[38]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2570.
+
+[39]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 2643.
+
+[40]
+Overfull \hbox (1.8524pt too wide) in paragraph at lines 2688--2689
+ []\TU/pcr/b/it/10 Obs|
+ []
+
+
+Overfull \hbox (1.32108pt too wide) in paragraph at lines 2692--2693
+[]\TU/pcr/b/it/10 Task|  
+ []
+
+
+Overfull \hbox (6.21565pt too wide) in paragraph at lines 2694--2695
+[]\TU/pcr/b/it/10 Design|  
+ []
+
+
+Overfull \hbox (8.62566pt too wide) in paragraph at lines 2696--2697
+[]\TU/pcr/b/it/10 Gender|  
+ []
+
+
+Overfull \hbox (9.88347pt too wide) in paragraph at lines 2698--2699
+[]\TU/pcr/b/it/10 Education|  
+ []
+
+
+Overfull \hbox (10.57672pt too wide) in paragraph at lines 2702--2703
+[]\TU/pcr/b/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (10.60216pt too wide) in paragraph at lines 2704--2705
+[]\TU/pcr/b/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (4.22432pt too wide) in paragraph at lines 2710--2711
+ []\TU/pcr/b/it/10 returns|
+ []
+
+
+Overfull \hbox (3.00565pt too wide) in paragraph at lines 2712--2713
+ []\TU/pcr/b/it/10 rating|
+ []
+
+
+Overfull \hbox (7.5289pt too wide) in paragraph at lines 2714--2715
+ []\TU/pcr/b/it/10 age_shft|
+ []
+
+
+Overfull \hbox (8.6089pt too wide) in paragraph at lines 2716--2717
+ []\TU/pcr/b/it/10 age_cntr|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 2684--2719
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (1.8524pt too wide) in paragraph at lines 2722--2723
+ []\TU/pcr/b/it/10 Obs|
+ []
+
+
+Overfull \hbox (1.32108pt too wide) in paragraph at lines 2726--2727
+[]\TU/pcr/b/it/10 Task|  
+ []
+
+
+Overfull \hbox (6.21565pt too wide) in paragraph at lines 2728--2729
+[]\TU/pcr/b/it/10 Design|  
+ []
+
+
+Overfull \hbox (8.62566pt too wide) in paragraph at lines 2730--2731
+[]\TU/pcr/b/it/10 Gender|  
+ []
+
+
+Overfull \hbox (9.88347pt too wide) in paragraph at lines 2732--2733
+[]\TU/pcr/b/it/10 Education|  
+ []
+
+
+Overfull \hbox (10.57672pt too wide) in paragraph at lines 2736--2737
+[]\TU/pcr/b/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (10.60216pt too wide) in paragraph at lines 2738--2739
+[]\TU/pcr/b/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (4.22432pt too wide) in paragraph at lines 2744--2745
+ []\TU/pcr/b/it/10 returns|
+ []
+
+
+Overfull \hbox (3.00565pt too wide) in paragraph at lines 2746--2747
+ []\TU/pcr/b/it/10 rating|
+ []
+
+
+Overfull \hbox (7.5289pt too wide) in paragraph at lines 2748--2749
+ []\TU/pcr/b/it/10 age_shft|
+ []
+
+
+Overfull \hbox (8.6089pt too wide) in paragraph at lines 2750--2751
+ []\TU/pcr/b/it/10 age_cntr|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 2719--2753
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 2804--2805
+ []\TU/pcr/b/it/10 152.6|
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 2835--2836
+ []\TU/pcr/b/it/10 146.4|
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 2959--2960
+ []\TU/pcr/b/it/10 161.7|
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 2990--2991
+ []\TU/pcr/b/it/10 111.3|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 2753--3003
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 3021.
+
+[41]
+Overfull \hbox (1.37248pt too wide) in paragraph at lines 3041--3042
+ []\TU/pcr/b/it/10 Obs|
+ []
+
+
+Overfull \hbox (0.72104pt too wide) in paragraph at lines 3045--3046
+[]\TU/pcr/b/it/10 Task|  
+ []
+
+
+Overfull \hbox (0.84673pt too wide) in paragraph at lines 3051--3052
+[]\TU/pcr/b/it/10 Education|  
+ []
+
+
+Overfull \hbox (1.29991pt too wide) in paragraph at lines 3055--3056
+[]\TU/pcr/b/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (1.45135pt too wide) in paragraph at lines 3057--3058
+[]\TU/pcr/b/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (75.97545pt too wide) in alignment at lines 3037--3068
+ [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (1.37248pt too wide) in paragraph at lines 3071--3072
+ []\TU/pcr/b/it/10 Obs|
+ []
+
+
+Overfull \hbox (0.72104pt too wide) in paragraph at lines 3075--3076
+[]\TU/pcr/b/it/10 Task|  
+ []
+
+
+Overfull \hbox (0.84673pt too wide) in paragraph at lines 3081--3082
+[]\TU/pcr/b/it/10 Education|  
+ []
+
+
+Overfull \hbox (1.29991pt too wide) in paragraph at lines 3085--3086
+[]\TU/pcr/b/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (1.45135pt too wide) in paragraph at lines 3087--3088
+[]\TU/pcr/b/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (75.97545pt too wide) in alignment at lines 3068--3098
+ [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (75.97545pt too wide) in alignment at lines 3098--3316
+ [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 3373.
+
+[42]
+
+LaTeX Font Warning: Font shape `TU/pcr/m/it' undefined
+(Font)              using `TU/pcr/m/n' instead on input line 3376.
+
+
+Overfull \vbox (95.4308pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 3482.
+
+[43]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 3568.
+
+[44]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 3637.
+
+[45]
+Overfull \hbox (1.8524pt too wide) in paragraph at lines 3710--3711
+ []\TU/pcr/m/it/10 Obs|
+ []
+
+
+Overfull \hbox (1.32108pt too wide) in paragraph at lines 3714--3715
+[]\TU/pcr/m/it/10 Task|  
+ []
+
+
+Overfull \hbox (6.21565pt too wide) in paragraph at lines 3716--3717
+[]\TU/pcr/m/it/10 Design|  
+ []
+
+
+Overfull \hbox (8.62566pt too wide) in paragraph at lines 3718--3719
+[]\TU/pcr/m/it/10 Gender|  
+ []
+
+
+Overfull \hbox (9.88347pt too wide) in paragraph at lines 3720--3721
+[]\TU/pcr/m/it/10 Education|  
+ []
+
+
+Overfull \hbox (10.57672pt too wide) in paragraph at lines 3724--3725
+[]\TU/pcr/m/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (10.60216pt too wide) in paragraph at lines 3726--3727
+[]\TU/pcr/m/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (4.22432pt too wide) in paragraph at lines 3732--3733
+ []\TU/pcr/m/it/10 returns|
+ []
+
+
+Overfull \hbox (3.00565pt too wide) in paragraph at lines 3734--3735
+ []\TU/pcr/m/it/10 rating|
+ []
+
+
+Overfull \hbox (7.5289pt too wide) in paragraph at lines 3736--3737
+ []\TU/pcr/m/it/10 age_shft|
+ []
+
+
+Overfull \hbox (8.6089pt too wide) in paragraph at lines 3738--3739
+ []\TU/pcr/m/it/10 age_cntr|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 3706--3741
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (1.8524pt too wide) in paragraph at lines 3744--3745
+ []\TU/pcr/m/it/10 Obs|
+ []
+
+
+Overfull \hbox (1.32108pt too wide) in paragraph at lines 3748--3749
+[]\TU/pcr/m/it/10 Task|  
+ []
+
+
+Overfull \hbox (6.21565pt too wide) in paragraph at lines 3750--3751
+[]\TU/pcr/m/it/10 Design|  
+ []
+
+
+Overfull \hbox (8.62566pt too wide) in paragraph at lines 3752--3753
+[]\TU/pcr/m/it/10 Gender|  
+ []
+
+
+Overfull \hbox (9.88347pt too wide) in paragraph at lines 3754--3755
+[]\TU/pcr/m/it/10 Education|  
+ []
+
+
+Overfull \hbox (10.57672pt too wide) in paragraph at lines 3758--3759
+[]\TU/pcr/m/it/10 Far_sighted|  
+ []
+
+
+Overfull \hbox (10.60216pt too wide) in paragraph at lines 3760--3761
+[]\TU/pcr/m/it/10 Small_font|  
+ []
+
+
+Overfull \hbox (4.22432pt too wide) in paragraph at lines 3766--3767
+ []\TU/pcr/m/it/10 returns|
+ []
+
+
+Overfull \hbox (3.00565pt too wide) in paragraph at lines 3768--3769
+ []\TU/pcr/m/it/10 rating|
+ []
+
+
+Overfull \hbox (7.5289pt too wide) in paragraph at lines 3770--3771
+ []\TU/pcr/m/it/10 age_shft|
+ []
+
+
+Overfull \hbox (8.6089pt too wide) in paragraph at lines 3772--3773
+ []\TU/pcr/m/it/10 age_cntr|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 3741--3775
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 3795--3796
+ []\TU/pcr/m/it/10 186.9|
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 3857--3858
+ []\TU/pcr/m/it/10 137.7|
+ []
+
+
+Overfull \hbox (3.49107pt too wide) in paragraph at lines 3919--3920
+ []\TU/pcr/m/it/10 107.8|
+ []
+
+
+Overfull \hbox (84.0001pt too wide) in alignment at lines 3775--4025
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \vbox (26.05423pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4025.
+
+[46]
+File: figures/plotting-2-1.pdf Graphic file (type pdf)
+<use figures/plotting-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4079.
+
+[47]
+File: figures/plotting-4-1.pdf Graphic file (type pdf)
+<use figures/plotting-4-1.pdf>
+File: figures/plotting-5-1.pdf Graphic file (type pdf)
+<use figures/plotting-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4171.
+
+[48]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4171.
+
+[49]
+File: figures/plotting-6-1.pdf Graphic file (type pdf)
+<use figures/plotting-6-1.pdf>
+File: figures/plotting-7-1.pdf Graphic file (type pdf)
+<use figures/plotting-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4224.
+
+[50]
+File: figures/plotting-8-1.pdf Graphic file (type pdf)
+<use figures/plotting-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4267.
+
+[51]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4296.
+
+[52]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4393.
+
+[53]
+File: Illustrations/markup_minimal_report.png Graphic file (type bmp)
+<Illustrations/markup_minimal_report.png>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4507.
+
+[54]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4507.
+
+[55]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4557.
+
+[56]
+Chapter 3.
+[57
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4654.
+
+[58]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4754.
+
+[59]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4778.
+
+[60]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4873.
+
+[61]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4930.
+
+[62]
+File: figures/sec99-1-1.pdf Graphic file (type pdf)
+<use figures/sec99-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 4974.
+
+[63]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5033.
+
+[64]
+File: figures/sec99-4-1.pdf Graphic file (type pdf)
+<use figures/sec99-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5076.
+
+[65]
+File: figures/rational-1-1.pdf Graphic file (type pdf)
+<use figures/rational-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5115.
+
+[66]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5155.
+
+[67]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5224.
+
+[68]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5296.
+
+[69]
+File: figures/rational-prior-5-1.pdf Graphic file (type pdf)
+<use figures/rational-prior-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5335.
+
+[70]
+File: figures/rational-prior-8-1.pdf Graphic file (type pdf)
+<use figures/rational-prior-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5399.
+
+[71]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5423.
+
+[72]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5448.
+
+[73]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5479.
+
+[74]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5523.
+
+[75]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5556.
+
+[76]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5633.
+
+[77]
+File: figures/sec99-8-1.pdf Graphic file (type pdf)
+<use figures/sec99-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5679.
+
+[78]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5728.
+
+[79]
+File: figures/dist-skew-1.pdf Graphic file (type pdf)
+<use figures/dist-skew-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5809.
+
+[80]
+File: figures/dispersion-1-1.pdf Graphic file (type pdf)
+<use figures/dispersion-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5825.
+
+[81]
+File: figures/sec99-10-1.pdf Graphic file (type pdf)
+<use figures/sec99-10-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5865.
+
+[82]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5865.
+
+[83]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 5946.
+
+[84]
+File: figures/ipump-3-1.pdf Graphic file (type pdf)
+<use figures/ipump-3-1.pdf>
+
+
+LaTeX Warning: Reference `fig:ipump-5' on page 85 undefined on input line 6020.
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6022.
+
+[85]
+File: figures/ipump-5-1.pdf Graphic file (type pdf)
+<use figures/ipump-5-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6033.
+
+[86]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6065.
+
+[87]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6119.
+
+[88]
+File: figures/covariance-2-1.pdf Graphic file (type pdf)
+<use figures/covariance-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6156.
+
+[89]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6219.
+
+[90]
+File: figures/covariance-6-1.pdf Graphic file (type pdf)
+<use figures/covariance-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6244.
+
+[91]
+File: figures/covariance-7-1.pdf Graphic file (type pdf)
+<use figures/covariance-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6261.
+
+[92]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6301.
+
+[93]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6377.
+
+[94]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6449.
+
+[95]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6522.
+
+[96]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6592.
+
+[97]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6653.
+
+[98]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6711.
+
+[99]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6780.
+
+[100]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6852.
+
+[101]
+File: figures/rolls-2-1.pdf Graphic file (type pdf)
+<use figures/rolls-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6926.
+
+[102]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6926.
+
+[103]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 6987.
+
+[104]
+File: figures/likely-1-1.pdf Graphic file (type pdf)
+<use figures/likely-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7016.
+
+[105]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7092.
+
+[106]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7109.
+
+[107]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7153.
+
+[108]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7178.
+
+[109]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7195.
+
+[110]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7222.
+
+[111]
+File: figures/sec99-13-1.pdf Graphic file (type pdf)
+<use figures/sec99-13-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7251.
+
+[112]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7300.
+
+[113]
+
+Package amsmath Warning: Foreign command \atopwithdelims;
+(amsmath)                \frac or \genfrac should be used instead
+(amsmath)                 on input line 7304.
+
+File: figures/dist-1-1.pdf Graphic file (type pdf)
+<use figures/dist-1-1.pdf>
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7337.
+
+[114]
+File: figures/dist-2-1.pdf Graphic file (type pdf)
+<use figures/dist-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7367.
+
+[115]
+File: figures/dist-3-1.pdf Graphic file (type pdf)
+<use figures/dist-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7390.
+
+[116]
+File: figures/dist-4-1.pdf Graphic file (type pdf)
+<use figures/dist-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7430.
+
+[117]
+File: figures/dist-5-1.pdf Graphic file (type pdf)
+<use figures/dist-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7461.
+
+[118]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7488.
+
+[119]
+File: figures/dist-6-1.pdf Graphic file (type pdf)
+<use figures/dist-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7538.
+
+[120]
+Overfull \vbox (0.29723pt too high) detected at line 7559
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7559.
+
+[121]
+File: figures/dist-7-1.pdf Graphic file (type pdf)
+<use figures/dist-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7572.
+
+[122]
+File: figures/dist-8-1.pdf Graphic file (type pdf)
+<use figures/dist-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7603.
+
+[123]
+File: figures/dist-9-1.pdf Graphic file (type pdf)
+<use figures/dist-9-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7644.
+
+[124]
+File: figures/dist-10-1.pdf Graphic file (type pdf)
+<use figures/dist-10-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7664.
+
+[125]
+File: figures/dist-11-1.pdf Graphic file (type pdf)
+<use figures/dist-11-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7691.
+
+[126]
+File: figures/dist-12-1.pdf Graphic file (type pdf)
+<use figures/dist-12-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7719.
+
+[127]
+Overfull \vbox (0.29723pt too high) detected at line 7752
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7752.
+
+[128]
+File: figures/dist-13-1.pdf Graphic file (type pdf)
+<use figures/dist-13-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7766.
+
+[129]
+File: figures/dist-14-1.pdf Graphic file (type pdf)
+<use figures/dist-14-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7813.
+
+[130]
+File: figures/dist-15-1.pdf Graphic file (type pdf)
+<use figures/dist-15-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7821.
+
+[131]
+File: figures/dist-16-1.pdf Graphic file (type pdf)
+<use figures/dist-16-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7876.
+
+[132]
+File: figures/dist-17-1.pdf Graphic file (type pdf)
+<use figures/dist-17-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7885.
+
+[133]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7894.
+
+[134]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7907.
+
+[135]
+File: figures/umbrella-8-1.pdf Graphic file (type pdf)
+<use figures/umbrella-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7953.
+
+[136]
+File: figures/umbrella-9-1.pdf Graphic file (type pdf)
+<use figures/umbrella-9-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 7990.
+
+[137]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8006.
+
+[138]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8034.
+
+[139]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8034.
+
+[140
+
+] [141] [142]
+Chapter 4.
+[143
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8152.
+
+[144]
+Overfull \hbox (127.895pt too wide) in paragraph at lines 8215--8215
+[]\TU/pcr/m/it/10 ## The mean_ppd is the sample average posterior predictive di
+stribution of the outcome variable (for details see help(’summary.stanreg’)).[]
+ 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8215.
+
+[145]
+Overfull \hbox (374.34503pt too wide) in paragraph at lines 8215--8215
+[]\TU/pcr/m/it/10 ## For each parameter, mcse is Monte Carlo standard error, n_
+eff is a crude measure of effective sample size, and Rhat is the potential scal
+e reduction factor on split chains (at convergence Rhat=1).[] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8278.
+
+[146]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8350.
+
+[147]
+File: figures/sec99-23-1.pdf Graphic file (type pdf)
+<use figures/sec99-23-1.pdf>
+File: figures/sec99-23-2.pdf Graphic file (type pdf)
+<use figures/sec99-23-2.pdf>
+
+Overfull \hbox (2.22322pt too wide) in paragraph at lines 8410--8410
+[][] []
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8422.
+
+[148]
+File: figures/sec99-25-1.pdf Graphic file (type pdf)
+<use figures/sec99-25-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8467.
+
+[149]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8511.
+
+[150]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8564.
+
+[151]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8648.
+
+[152]
+Overfull \vbox (204.56165pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8761.
+
+[153]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8844.
+
+[154]
+File: figures/clu-2-1.pdf Graphic file (type pdf)
+<use figures/clu-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8876.
+
+[155]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 8939.
+
+[156]
+File: figures/walk-1-1.pdf Graphic file (type pdf)
+<use figures/walk-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9020.
+
+[157]
+File: figures/bab-1-1.pdf Graphic file (type pdf)
+<use figures/bab-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9055.
+
+[158]
+Overfull \vbox (311.41911pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9120.
+
+[159]
+File: figures/shift-1-1.pdf Graphic file (type pdf)
+<use figures/shift-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9171.
+
+[160]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9240.
+
+[161]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9302.
+
+[162]
+File: figures/rescale-3-1.pdf Graphic file (type pdf)
+<use figures/rescale-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9342.
+
+[163]
+File: figures/rescale-4-1.pdf Graphic file (type pdf)
+<use figures/rescale-4-1.pdf>
+File: figures/rescale-5-1.pdf Graphic file (type pdf)
+<use figures/rescale-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9377.
+
+[164]
+File: figures/rescale-6-1.pdf Graphic file (type pdf)
+<use figures/rescale-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9422.
+
+[165]
+File: figures/corr-1-1.pdf Graphic file (type pdf)
+<use figures/corr-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9454.
+
+[166]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9496.
+
+[167]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9546.
+
+[168]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9601.
+
+[169]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9678.
+
+[170]
+File: figures/eda-anova-1.pdf Graphic file (type pdf)
+<use figures/eda-anova-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9717.
+
+[171]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9803.
+
+[172]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9878.
+
+[173]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 9969.
+
+[174]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10017.
+
+[175]
+File: figures/amm-1-1.pdf Graphic file (type pdf)
+<use figures/amm-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10061.
+
+[176]
+File: figures/ofm-1-1.pdf Graphic file (type pdf)
+<use figures/ofm-1-1.pdf>
+File: figures/ofm-1-2.pdf Graphic file (type pdf)
+<use figures/ofm-1-2.pdf>
+
+Overfull \hbox (2.22322pt too wide) in paragraph at lines 10099--10099
+[][] []
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10133.
+
+[177]
+File: figures/ofm-3-1.pdf Graphic file (type pdf)
+<use figures/ofm-3-1.pdf>
+
+Overfull \vbox (188.25688pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10197.
+
+[178]
+File: figures/ofm-4-1.pdf Graphic file (type pdf)
+<use figures/ofm-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10233.
+
+[179]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10282.
+
+[180]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10360.
+
+[181]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10388.
+
+[182]
+Chapter 5.
+[183
+
+]
+File: figures/mrm-1-1.pdf Graphic file (type pdf)
+<use figures/mrm-1-1.pdf>
+File: figures/mrm-1-2.pdf Graphic file (type pdf)
+<use figures/mrm-1-2.pdf>
+
+Overfull \hbox (2.22322pt too wide) in paragraph at lines 10444--10444
+[][] []
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10475.
+
+[184]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10554.
+
+[185]
+File: figures/AUP-corr-predictors-1.pdf Graphic file (type pdf)
+<use figures/AUP-corr-predictors-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10591.
+
+[186]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10653.
+
+[187]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10731.
+
+[188]
+File: figures/mfm-4-1.pdf Graphic file (type pdf)
+<use figures/mfm-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10811.
+
+[189]
+Overfull \vbox (311.02896pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10908.
+
+[190]
+File: figures/grm-3-1.pdf Graphic file (type pdf)
+<use figures/grm-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10930.
+
+[191]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 10988.
+
+[192]
+File: figures/cmrm-1-1.pdf Graphic file (type pdf)
+<use figures/cmrm-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11070.
+
+[193]
+File: figures/cmfm-1-1.pdf Graphic file (type pdf)
+<use figures/cmfm-1-1.pdf>
+
+Overfull \vbox (292.25859pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11134.
+
+[194]
+File: figures/cmfm-2-1.pdf Graphic file (type pdf)
+<use figures/cmfm-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11164.
+
+[195]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11199.
+
+[196]
+File: figures/cmfm-3-1.pdf Graphic file (type pdf)
+<use figures/cmfm-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11233.
+
+[197]
+File: figures/cmfm-4-1.pdf Graphic file (type pdf)
+<use figures/cmfm-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11270.
+
+[198]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11335.
+
+[199]
+File: figures/interaction-effects-1.pdf Graphic file (type pdf)
+<use figures/interaction-effects-1.pdf>
+File: figures/interaction-effects-2.pdf Graphic file (type pdf)
+<use figures/interaction-effects-2.pdf>
+
+Overfull \hbox (2.22322pt too wide) in paragraph at lines 11359--11359
+[][] []
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11377.
+
+[200]
+File: figures/headache-1-1.pdf Graphic file (type pdf)
+<use figures/headache-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11411.
+
+[201]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11477.
+
+[202]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11555.
+
+[203]
+File: figures/read-2-1.pdf Graphic file (type pdf)
+<use figures/read-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11581.
+
+[204]
+Overfull \hbox (25.60492pt too wide) in alignment at lines 11604--11621
+ [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (25.60492pt too wide) in alignment at lines 11621--11637
+ [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (5.6488pt too wide) in paragraph at lines 11639--11640
+[]\TU/pcr/m/it/10 M_cmfm|  
+ []
+
+
+Overfull \hbox (5.6488pt too wide) in paragraph at lines 11652--11653
+[]\TU/pcr/m/it/10 M_cmfm|  
+ []
+
+
+Overfull \hbox (5.6488pt too wide) in paragraph at lines 11665--11666
+[]\TU/pcr/m/it/10 M_cmfm|  
+ []
+
+
+Overfull \hbox (5.6488pt too wide) in paragraph at lines 11678--11679
+[]\TU/pcr/m/it/10 M_cmfm|  
+ []
+
+
+Overfull \hbox (1.2088pt too wide) in paragraph at lines 11691--11692
+[]\TU/pcr/m/it/10 M_mfm|  
+ []
+
+
+Overfull \hbox (1.2088pt too wide) in paragraph at lines 11704--11705
+[]\TU/pcr/m/it/10 M_mfm|  
+ []
+
+
+Overfull \hbox (1.2088pt too wide) in paragraph at lines 11717--11718
+[]\TU/pcr/m/it/10 M_mfm|  
+ []
+
+
+Overfull \hbox (25.60492pt too wide) in alignment at lines 11637--11730
+ [] [] [] [] [] [] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11761.
+
+[205]
+File: figures/read-5-1.pdf Graphic file (type pdf)
+<use figures/read-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11827.
+
+[206]
+File: figures/read-6-1.pdf Graphic file (type pdf)
+<use figures/read-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11861.
+
+[207]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11892.
+
+[208]
+File: figures/ar-1-1.pdf Graphic file (type pdf)
+<use figures/ar-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 11959.
+
+[209]
+Overfull \vbox (294.25809pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12053.
+
+[210]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12099.
+
+[211]
+File: figures/sleep-1-1.pdf Graphic file (type pdf)
+<use figures/sleep-1-1.pdf>
+
+Overfull \hbox (28.45514pt too wide) in alignment at lines 12137--12152
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (28.45514pt too wide) in alignment at lines 12152--12166
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (28.45514pt too wide) in alignment at lines 12166--12212
+ [] [] [] [] [] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12212.
+
+[212]
+File: figures/Yerkes-Dodson-1-1.pdf Graphic file (type pdf)
+<use figures/Yerkes-Dodson-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12258.
+
+[213]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12282.
+
+[214]
+File: figures/uncanny-1-1.pdf Graphic file (type pdf)
+<use figures/uncanny-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12325.
+
+[215]
+File: figures/uncanny-2-1.pdf Graphic file (type pdf)
+<use figures/uncanny-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12362.
+
+[216]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12415.
+
+[217]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12518.
+
+[218]
+File: figures/uncanny-5-1.pdf Graphic file (type pdf)
+<use figures/uncanny-5-1.pdf>
+
+Underfull \vbox (badness 1028) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12527.
+
+[219]
+File: figures/uncanny-6-1.pdf Graphic file (type pdf)
+<use figures/uncanny-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12615.
+
+[220]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12627.
+
+[221]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12652.
+
+[222]
+Chapter 6.
+[223
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12733.
+
+[224]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12799.
+
+[225]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12864.
+
+[226]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12924.
+
+[227]
+File: figures/rescores-1-1.pdf Graphic file (type pdf)
+<use figures/rescores-1-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 12969.
+
+[228]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13029.
+
+[229]
+File: figures/slpstd-1-1.pdf Graphic file (type pdf)
+<use figures/slpstd-1-1.pdf>
+File: figures/slpstd-2-1.pdf Graphic file (type pdf)
+<use figures/slpstd-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13095.
+
+[230]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13095.
+
+[231]
+File: figures/slpstd-5-1.pdf Graphic file (type pdf)
+<use figures/slpstd-5-1.pdf>
+
+Overfull \vbox (306.28395pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13128.
+
+[232]
+File: figures/slpstd-6-1.pdf Graphic file (type pdf)
+<use figures/slpstd-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13157.
+
+[233]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13211.
+
+[234]
+File: figures/tml-2-1.pdf Graphic file (type pdf)
+<use figures/tml-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13269.
+
+[235]
+File: figures/tml-3-1.pdf Graphic file (type pdf)
+<use figures/tml-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13303.
+
+[236]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13335.
+
+[237]
+File: figures/tml-5-1.pdf Graphic file (type pdf)
+<use figures/tml-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13372.
+
+[238]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13413.
+
+[239]
+File: figures/uncanny-7-1.pdf Graphic file (type pdf)
+<use figures/uncanny-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13464.
+
+[240]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13496.
+
+[241]
+File: figures/uncanny-8-1.pdf Graphic file (type pdf)
+<use figures/uncanny-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13550.
+
+[242]
+File: figures/slpstd-7-1.pdf Graphic file (type pdf)
+<use figures/slpstd-7-1.pdf>
+File: figures/slpstd-8-1.pdf Graphic file (type pdf)
+<use figures/slpstd-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13588.
+
+[243]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13596.
+
+[244]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13639.
+
+[245]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13677.
+
+[246]
+File: figures/egan-1-1.pdf Graphic file (type pdf)
+<use figures/egan-1-1.pdf>
+File: figures/egan-3-1.pdf Graphic file (type pdf)
+<use figures/egan-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13726.
+
+[247]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13755.
+
+[248]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13799.
+
+[249]
+File: figures/cue8-2-1.pdf Graphic file (type pdf)
+<use figures/cue8-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13852.
+
+[250]
+Overfull \vbox (323.069pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13916.
+
+[251]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13966.
+
+[252]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 13984.
+
+[253]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14042.
+
+[254]
+File: figures/cue8-13-1.pdf Graphic file (type pdf)
+<use figures/cue8-13-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14068.
+
+[255]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14106.
+
+[256]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14200.
+
+[257]
+Overfull \vbox (161.62079pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14260.
+
+[258]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14353.
+
+[259]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14393.
+
+[260]
+File: figures/hugme-3-1.pdf Graphic file (type pdf)
+<use figures/hugme-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14428.
+
+[261]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14501.
+
+[262]
+File: figures/hugme-6-1.pdf Graphic file (type pdf)
+<use figures/hugme-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14513.
+
+[263]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14587.
+
+[264]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14644.
+
+[265]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14697.
+
+[266]
+Underfull \vbox (badness 1596) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14758.
+
+[267]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14774.
+
+[268]
+Chapter 7.
+[269
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 14800--14802
+
+ []
+
+File: Illustrations/GLM_decision_chart.png Graphic file (type bmp)
+<Illustrations/GLM_decision_chart.png>
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14832.
+
+[270]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14832.
+
+[271]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14865.
+
+[272]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14945.
+
+[273]
+File: figures/relink-2-1.pdf Graphic file (type pdf)
+<use figures/relink-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 14974.
+
+[274]
+File: figures/relink-3-1.pdf Graphic file (type pdf)
+<use figures/relink-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15033.
+
+[275]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15060.
+
+[276]
+File: figures/random-1-1.pdf Graphic file (type pdf)
+<use figures/random-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15074.
+
+[277]
+File: figures/mvr-1-1.pdf Graphic file (type pdf)
+<use figures/mvr-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15135.
+
+[278]
+File: figures/mvr-2-1.pdf Graphic file (type pdf)
+<use figures/mvr-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15165.
+
+[279]
+File: figures/mvr-3-1.pdf Graphic file (type pdf)
+<use figures/mvr-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15201.
+
+[280]
+File: figures/mvr-4-1.pdf Graphic file (type pdf)
+<use figures/mvr-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15223.
+
+[281]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15232.
+
+[282]
+File: figures/poisreg-1-1.pdf Graphic file (type pdf)
+<use figures/poisreg-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15304.
+
+[283]
+Overfull \vbox (278.30861pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15367.
+
+[284]
+Underfull \hbox (badness 10000) in paragraph at lines 15428--15430
+
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15445.
+
+[285]
+File: figures/poisreg-6-1.pdf Graphic file (type pdf)
+<use figures/poisreg-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15506.
+
+[286]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15536.
+
+[287]
+File: figures/poisreg-9-1.pdf Graphic file (type pdf)
+<use figures/poisreg-9-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15563.
+
+[288]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15618.
+
+[289]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15684.
+
+[290]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15749.
+
+[291]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15809.
+
+[292]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15856.
+
+[293]
+Overfull \vbox (18.61084pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 15925.
+
+[294]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16001.
+
+[295]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16050.
+
+[296]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16107.
+
+[297]
+File: figures/logreg-13-1.pdf Graphic file (type pdf)
+<use figures/logreg-13-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16152.
+
+[298]
+File: figures/negbinreg-1-1.pdf Graphic file (type pdf)
+<use figures/negbinreg-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16189.
+
+[299]
+File: figures/betabin-1-1.pdf Graphic file (type pdf)
+<use figures/betabin-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16218.
+
+[300]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16247.
+
+[301]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16306.
+
+[302]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16361.
+
+[303]
+File: figures/olre-4-1.pdf Graphic file (type pdf)
+<use figures/olre-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16428.
+
+[304]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16440.
+
+[305]
+File: figures/expreg-1-1.pdf Graphic file (type pdf)
+<use figures/expreg-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16505.
+
+[306]
+File: figures/expreg-3-1.pdf Graphic file (type pdf)
+<use figures/expreg-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16528.
+
+[307]
+Overfull \vbox (308.70859pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16589.
+
+[308]
+File: figures/exgreg-1-1.pdf Graphic file (type pdf)
+<use figures/exgreg-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16659.
+
+[309]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16696.
+
+[310]
+File: figures/exgreg-2-1.pdf Graphic file (type pdf)
+<use figures/exgreg-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16718.
+
+[311]
+File: figures/exgreg-4-1.pdf Graphic file (type pdf)
+<use figures/exgreg-4-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16760.
+
+[312]
+File: figures/rt-1-1.pdf Graphic file (type pdf)
+<use figures/rt-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16835.
+
+[313]
+Underfull \vbox (badness 10000) detected at line 16835
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 16835
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16835.
+
+[314]
+File: figures/rt-2-1.pdf Graphic file (type pdf)
+<use figures/rt-2-1.pdf>
+File: figures/rt-3-1.pdf Graphic file (type pdf)
+<use figures/rt-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16888.
+
+[315]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16888.
+
+[316]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16942.
+
+[317]
+File: figures/tot-2-1.pdf Graphic file (type pdf)
+<use figures/tot-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 16976.
+
+[318]
+File: figures/tot-3-1.pdf Graphic file (type pdf)
+<use figures/tot-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17025.
+
+[319]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17049.
+
+[320]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17117.
+
+[321]
+File: figures/rating-1-1.pdf Graphic file (type pdf)
+<use figures/rating-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17143.
+
+[322]
+File: figures/rating-2-1.pdf Graphic file (type pdf)
+<use figures/rating-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17174.
+
+[323]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17201.
+
+[324]
+File: figures/rating-4-1.pdf Graphic file (type pdf)
+<use figures/rating-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17256.
+
+[325]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17295.
+
+[326]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17346.
+
+[327]
+File: figures/rating-6-1.pdf Graphic file (type pdf)
+<use figures/rating-6-1.pdf>
+
+Overfull \vbox (4.5981pt too high) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17382.
+
+[328]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17441.
+
+[329]
+File: figures/distmod-1-1.pdf Graphic file (type pdf)
+<use figures/distmod-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17450.
+
+[330]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17508.
+
+[331]
+File: figures/distmod-4-1.pdf Graphic file (type pdf)
+<use figures/distmod-4-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17568.
+
+[332]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17601.
+
+[333]
+File: figures/distmod-5-1.pdf Graphic file (type pdf)
+<use figures/distmod-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17626.
+
+[334]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17687.
+
+[335]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17707.
+
+[336]
+Chapter 8.
+[337
+
+]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17775.
+
+[338]
+File: figures/resid_dist_1-1.pdf Graphic file (type pdf)
+<use figures/resid_dist_1-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17810.
+
+[339]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17869.
+
+[340]
+File: figures/resid-3-1.pdf Graphic file (type pdf)
+<use figures/resid-3-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17885.
+
+[341]
+File: figures/resid-5-1.pdf Graphic file (type pdf)
+<use figures/resid-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17928.
+
+[342]
+File: figures/resid-6-1.pdf Graphic file (type pdf)
+<use figures/resid-6-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 17975.
+
+[343]
+File: figures/resid-7-1.pdf Graphic file (type pdf)
+<use figures/resid-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18003.
+
+[344]
+File: figures/resid-9-1.pdf Graphic file (type pdf)
+<use figures/resid-9-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18031.
+
+[345]
+File: figures/constvar-1-1.pdf Graphic file (type pdf)
+<use figures/constvar-1-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18058.
+
+[346]
+File: figures/constvar-4-1.pdf Graphic file (type pdf)
+<use figures/constvar-4-1.pdf>
+File: figures/constvar-5-1.pdf Graphic file (type pdf)
+<use figures/constvar-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18093.
+
+[347]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18093.
+
+[348]
+File: figures/constvar-7-1.pdf Graphic file (type pdf)
+<use figures/constvar-7-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18148.
+
+[349]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18167.
+
+[350]
+File: figures/fitresp-2-1.pdf Graphic file (type pdf)
+<use figures/fitresp-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18238.
+
+[351]
+File: figures/fitresp-3-1.pdf Graphic file (type pdf)
+<use figures/fitresp-3-1.pdf>
+File: figures/fitresp-5-1.pdf Graphic file (type pdf)
+<use figures/fitresp-5-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18268.
+
+[352]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18268.
+
+[353]
+
+LaTeX Warning: Reference `(' on page 354 undefined on input line 18277.
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18285.
+
+[354]
+File: figures/fitresp-8-1.pdf Graphic file (type pdf)
+<use figures/fitresp-8-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18350.
+
+[355]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18374.
+
+[356]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18438.
+
+[357]
+File: figures/overfit-2-1.pdf Graphic file (type pdf)
+<use figures/overfit-2-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18488.
+
+[358]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18519.
+
+[359]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18588.
+
+[360]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18644.
+
+[361]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18687.
+
+[362]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18769.
+
+[363]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18810.
+
+[364]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18880.
+
+[365]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 18934.
+
+[366]
+Underfull \vbox (badness 5490) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19013.
+
+[367]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19065.
+
+[368]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19121.
+
+[369]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19145.
+
+[370]
+Appendix A.
+[371
+
+]
+Overfull \hbox (25.26445pt too wide) in paragraph at lines 19212--19213
+[]\TU/pcr/m/it/10 Experiment|  
+ []
+
+
+Overfull \hbox (6.2478pt too wide) in paragraph at lines 19214--19215
+ []\TU/pcr/m/it/10 Obs|
+ []
+
+
+Overfull \hbox (4.63228pt too wide) in paragraph at lines 19216--19217
+[]\TU/pcr/m/it/10 Part|  
+ []
+
+
+Overfull \hbox (9.23781pt too wide) in paragraph at lines 19218--19219
+[]\TU/pcr/m/it/10 Item|  
+ []
+
+
+Overfull \hbox (16.0556pt too wide) in paragraph at lines 19222--19223
+[]\TU/pcr/m/it/10 Stimulus|  
+ []
+
+
+Overfull \hbox (11.21114pt too wide) in paragraph at lines 19224--19225
+ []\TU/pcr/m/it/10 session|
+ []
+
+
+Overfull \hbox (12.83113pt too wide) in paragraph at lines 19226--19227
+[]\TU/pcr/m/it/10 Session|  
+ []
+
+
+Overfull \hbox (18.14445pt too wide) in paragraph at lines 19228--19229
+[]\TU/pcr/m/it/10 Collection|  
+ []
+
+
+Overfull \hbox (21.28561pt too wide) in paragraph at lines 19230--19231
+[]\TU/pcr/m/it/10 Condition|  
+ []
+
+
+Overfull \hbox (36.5112pt too wide) in paragraph at lines 19232--19233
+ []\TU/pcr/m/it/10 presentation_time|
+ []
+
+
+Overfull \hbox (15.01561pt too wide) in paragraph at lines 19234--19235
+ []\TU/pcr/m/it/10 response|
+ []
+
+
+Overfull \hbox (15.78113pt too wide) in paragraph at lines 19238--19239
+ []\TU/pcr/m/it/10 huMech|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19240--19241
+ []\TU/pcr/m/it/10 huMech0|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19242--19243
+ []\TU/pcr/m/it/10 huMech1|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19244--19245
+ []\TU/pcr/m/it/10 huMech2|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19246--19247
+ []\TU/pcr/m/it/10 huMech3|
+ []
+
+
+Overfull \hbox (98.32463pt too wide) in alignment at lines 19208--19249
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (25.26445pt too wide) in paragraph at lines 19252--19253
+[]\TU/pcr/m/it/10 Experiment|  
+ []
+
+
+Overfull \hbox (6.2478pt too wide) in paragraph at lines 19254--19255
+ []\TU/pcr/m/it/10 Obs|
+ []
+
+
+Overfull \hbox (4.63228pt too wide) in paragraph at lines 19256--19257
+[]\TU/pcr/m/it/10 Part|  
+ []
+
+
+Overfull \hbox (9.23781pt too wide) in paragraph at lines 19258--19259
+[]\TU/pcr/m/it/10 Item|  
+ []
+
+
+Overfull \hbox (16.0556pt too wide) in paragraph at lines 19262--19263
+[]\TU/pcr/m/it/10 Stimulus|  
+ []
+
+
+Overfull \hbox (11.21114pt too wide) in paragraph at lines 19264--19265
+ []\TU/pcr/m/it/10 session|
+ []
+
+
+Overfull \hbox (12.83113pt too wide) in paragraph at lines 19266--19267
+[]\TU/pcr/m/it/10 Session|  
+ []
+
+
+Overfull \hbox (18.14445pt too wide) in paragraph at lines 19268--19269
+[]\TU/pcr/m/it/10 Collection|  
+ []
+
+
+Overfull \hbox (21.28561pt too wide) in paragraph at lines 19270--19271
+[]\TU/pcr/m/it/10 Condition|  
+ []
+
+
+Overfull \hbox (36.5112pt too wide) in paragraph at lines 19272--19273
+ []\TU/pcr/m/it/10 presentation_time|
+ []
+
+
+Overfull \hbox (15.01561pt too wide) in paragraph at lines 19274--19275
+ []\TU/pcr/m/it/10 response|
+ []
+
+
+Overfull \hbox (15.78113pt too wide) in paragraph at lines 19278--19279
+ []\TU/pcr/m/it/10 huMech|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19280--19281
+ []\TU/pcr/m/it/10 huMech0|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19282--19283
+ []\TU/pcr/m/it/10 huMech1|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19284--19285
+ []\TU/pcr/m/it/10 huMech2|
+ []
+
+
+Overfull \hbox (20.78113pt too wide) in paragraph at lines 19286--19287
+ []\TU/pcr/m/it/10 huMech3|
+ []
+
+
+Overfull \hbox (98.32463pt too wide) in alignment at lines 19249--19289
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19297--19298
+[]\TU/pcr/m/it/10 nE7|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19299--19300
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19313--19314
+ \TU/pcr/m/it/10 0.093|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19315--19316
+ []\TU/pcr/m/it/10 1.94|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19317--19318
+ []\TU/pcr/m/it/10 0.425|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19321--19322
+ []\TU/pcr/m/it/10 0.425|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19323--19324
+ []\TU/pcr/m/it/10 0.181|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19325--19326
+ []\TU/pcr/m/it/10 0.077|
+ []
+
+
+Overfull \hbox (3.9678pt too wide) in paragraph at lines 19330--19331
+ []\TU/pcr/m/it/10 520|
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19334--19335
+[]\TU/pcr/m/it/10 nE8|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19336--19337
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19350--19351
+ \TU/pcr/m/it/10 0.578|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19352--19353
+ []\TU/pcr/m/it/10 2.13|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19354--19355
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19358--19359
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19360--19361
+ []\TU/pcr/m/it/10 0.031|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19362--19363
+ []\TU/pcr/m/it/10 0.005|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19367--19368
+ []\TU/pcr/m/it/10 2436|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19369--19370
+[]\TU/pcr/m/it/10 p1_09|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19371--19372
+[]\TU/pcr/m/it/10 nE4|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19373--19374
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19387--19388
+ \TU/pcr/m/it/10 0.802|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19389--19390
+ []\TU/pcr/m/it/10 1.17|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19391--19392
+ []\TU/pcr/m/it/10 0.425|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19395--19396
+ []\TU/pcr/m/it/10 0.425|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19397--19398
+ []\TU/pcr/m/it/10 0.181|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19399--19400
+ []\TU/pcr/m/it/10 0.077|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19404--19405
+ []\TU/pcr/m/it/10 3641|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19406--19407
+[]\TU/pcr/m/it/10 p1_13|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19408--19409
+[]\TU/pcr/m/it/10 nE1|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19410--19411
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19424--19425
+ \TU/pcr/m/it/10 0.507|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19426--19427
+ []\TU/pcr/m/it/10 2.10|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19428--19429
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19432--19433
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19434--19435
+ []\TU/pcr/m/it/10 0.031|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19436--19437
+ []\TU/pcr/m/it/10 0.005|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19441--19442
+ []\TU/pcr/m/it/10 4214|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19443--19444
+[]\TU/pcr/m/it/10 p2_02|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19445--19446
+[]\TU/pcr/m/it/10 nE6|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19447--19448
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19461--19462
+ \TU/pcr/m/it/10 0.683|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19463--19464
+ []\TU/pcr/m/it/10 2.45|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19465--19466
+ []\TU/pcr/m/it/10 0.850|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19469--19470
+ []\TU/pcr/m/it/10 0.850|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19471--19472
+ []\TU/pcr/m/it/10 0.722|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19473--19474
+ []\TU/pcr/m/it/10 0.614|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19478--19479
+ []\TU/pcr/m/it/10 5488|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19480--19481
+[]\TU/pcr/m/it/10 p2_07|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19482--19483
+[]\TU/pcr/m/it/10 nE8|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19484--19485
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19498--19499
+ \TU/pcr/m/it/10 0.500|
+ []
+
+
+Overfull \hbox (8.07228pt too wide) in paragraph at lines 19500--19501
+ []\TU/pcr/m/it/10 11.71|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19502--19503
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19506--19507
+ []\TU/pcr/m/it/10 0.175|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19508--19509
+ []\TU/pcr/m/it/10 0.031|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19510--19511
+ []\TU/pcr/m/it/10 0.005|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19515--19516
+ []\TU/pcr/m/it/10 6243|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19517--19518
+[]\TU/pcr/m/it/10 p2_09|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19519--19520
+[]\TU/pcr/m/it/10 nE3|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19521--19522
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19535--19536
+ \TU/pcr/m/it/10 0.560|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19537--19538
+ []\TU/pcr/m/it/10 1.55|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19539--19540
+ []\TU/pcr/m/it/10 0.825|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19543--19544
+ []\TU/pcr/m/it/10 0.825|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19545--19546
+ []\TU/pcr/m/it/10 0.681|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19547--19548
+ []\TU/pcr/m/it/10 0.562|
+ []
+
+
+Overfull \hbox (8.9678pt too wide) in paragraph at lines 19552--19553
+ []\TU/pcr/m/it/10 7068|
+ []
+
+
+Overfull \hbox (13.35228pt too wide) in paragraph at lines 19554--19555
+[]\TU/pcr/m/it/10 p2_12|  
+ []
+
+
+Overfull \hbox (6.3378pt too wide) in paragraph at lines 19556--19557
+[]\TU/pcr/m/it/10 nE4|  
+ []
+
+
+Overfull \hbox (19.3256pt too wide) in paragraph at lines 19558--19559
+[]\TU/pcr/m/it/10 nEeriness|  
+ []
+
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 19572--19573
+ \TU/pcr/m/it/10 0.568|
+ []
+
+
+Overfull \hbox (3.07228pt too wide) in paragraph at lines 19574--19575
+ []\TU/pcr/m/it/10 2.90|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19576--19577
+ []\TU/pcr/m/it/10 0.812|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19580--19581
+ []\TU/pcr/m/it/10 0.812|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19582--19583
+ []\TU/pcr/m/it/10 0.660|
+ []
+
+
+Overfull \hbox (4.39113pt too wide) in paragraph at lines 19584--19585
+ []\TU/pcr/m/it/10 0.536|
+ []
+
+
+Overfull \hbox (98.32463pt too wide) in alignment at lines 19289--19587
+ [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+File: figures/unnamed-chunk-7-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-7-1.pdf>
+
+Underfull \vbox (badness 1102) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19619.
+
+[372]
+File: figures/unnamed-chunk-8-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-8-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19632.
+
+[373]
+File: figures/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-9-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19645.
+
+[374]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19680.
+
+[375]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19734.
+
+[376]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19806.
+
+[377]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 19892.
+
+[378]
+Overfull \hbox (0.76672pt too wide) in paragraph at lines 19935--19936
+[]\TU/pcr/m/it/10 Word_NL|  
+ []
+
+
+Overfull \hbox (7.73888pt too wide) in paragraph at lines 19937--19938
+[]\TU/pcr/m/it/10 WordCat|  
+ []
+
+
+Overfull \hbox (6.05353pt too wide) in paragraph at lines 19939--19940
+[]\TU/pcr/m/it/10 PrimeCat|  
+ []
+
+
+Overfull \hbox (0.65419pt too wide) in paragraph at lines 19941--19942
+[]\TU/pcr/m/it/10 gender|  
+ []
+
+
+Overfull \hbox (70.03543pt too wide) in alignment at lines 19917--19946
+ [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (0.76672pt too wide) in paragraph at lines 19963--19964
+[]\TU/pcr/m/it/10 Word_NL|  
+ []
+
+
+Overfull \hbox (7.73888pt too wide) in paragraph at lines 19965--19966
+[]\TU/pcr/m/it/10 WordCat|  
+ []
+
+
+Overfull \hbox (6.05353pt too wide) in paragraph at lines 19967--19968
+[]\TU/pcr/m/it/10 PrimeCat|  
+ []
+
+
+Overfull \hbox (0.65419pt too wide) in paragraph at lines 19969--19970
+[]\TU/pcr/m/it/10 gender|  
+ []
+
+
+Overfull \hbox (70.03543pt too wide) in alignment at lines 19946--19974
+ [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (1.02455pt too wide) in paragraph at lines 19982--19983
+[]\TU/pcr/m/it/10 neutral09.jpg|  
+ []
+
+
+Overfull \hbox (0.75137pt too wide) in paragraph at lines 20005--20006
+[]\TU/pcr/m/it/10 appearance|  
+ []
+
+
+Overfull \hbox (1.02455pt too wide) in paragraph at lines 20007--20008
+[]\TU/pcr/m/it/10 neutral09.jpg|  
+ []
+
+
+Overfull \hbox (1.02455pt too wide) in paragraph at lines 20032--20033
+[]\TU/pcr/m/it/10 neutral24.jpg|  
+ []
+
+
+Overfull \hbox (1.02455pt too wide) in paragraph at lines 20132--20133
+[]\TU/pcr/m/it/10 neutral15.jpg|  
+ []
+
+
+Overfull \hbox (1.02455pt too wide) in paragraph at lines 20157--20158
+[]\TU/pcr/m/it/10 neutral02.jpg|  
+ []
+
+
+Overfull \hbox (70.03543pt too wide) in alignment at lines 19974--20176
+ [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20195.
+
+[379]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20248.
+
+[380]
+File: figures/unnamed-chunk-33-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-33-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20278.
+
+[381]
+File: figures/unnamed-chunk-34-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-34-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20353.
+
+[382]
+File: figures/unnamed-chunk-35-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-35-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20380.
+
+[383]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20438.
+
+[384]
+File: figures/unnamed-chunk-36-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-36-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20452.
+
+[385]
+File: figures/unnamed-chunk-37-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-37-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20483.
+
+[386]
+File: figures/unnamed-chunk-37-2.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-37-2.pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 20506--20508
+
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20522.
+
+[387]
+File: figures/unnamed-chunk-38-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-38-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20576.
+
+[388]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20616.
+
+[389]
+File: figures/unnamed-chunk-41-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-41-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20664.
+
+[390]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20792.
+
+[391]
+Underfull \vbox (badness 10000) detected at line 20792
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 20792
+ []
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20792.
+
+[392]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20822.
+
+[393]
+File: figures/unnamed-chunk-46-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-46-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20884.
+
+[394]
+File: figures/unnamed-chunk-48-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-48-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20902.
+
+[395]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20946.
+
+[396]
+File: figures/unnamed-chunk-50-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-50-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 20972.
+
+[397]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21029.
+
+[398]
+File: figures/unnamed-chunk-52-1.pdf Graphic file (type pdf)
+<use figures/unnamed-chunk-52-1.pdf>
+
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21040.
+
+[399]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21040.
+
+[400
+
+]
+Appendix B.
+[401]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21042.
+
+[402
+
+] [403]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21042.
+
+[404]
+
+LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
+(Font)              using `TU/ptm/m/it' instead on input line 21044.
+
+[405] (./New_Stats.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `New_Stats.out' has not changed.
+(rerunfilecheck)             Checksum: B9D47527B8E766813D2D8D232764E059;10435.
+Package logreq Info: Writing requests to 'New_Stats.run.xml'.
+\openout1 = `New_Stats.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 25387 strings out of 478968
+ 475785 string characters out of 5866837
+ 1416254 words of memory out of 5000000
+ 44757 multiletter control sequences out of 15000+600000
+ 407369 words of font info for 64 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 98i,9n,122p,2274b,4852s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on New_Stats.pdf (409 pages).

@@ -1,0 +1,385 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{I\hspace {1em}Preparations}{3}{part.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Whom this book is for}{5}{section.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.2}Quantitative design research}{6}{section.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.3}What is New Statistics?}{8}{section.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.4}How to use this book}{11}{section.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.4.1}Routes}{11}{subsection.1.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.4.2}In the classroom}{13}{subsection.1.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.4.3}The stone of Rosetta}{14}{subsection.1.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.5}Thank you and supplementary readings}{19}{section.1.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Getting started with R}{21}{chapter.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Setting up the R environment}{22}{section.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.1}Installing CRAN packages}{23}{subsection.2.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.2}Installing packages from Github}{25}{subsection.2.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.3}A first statistical program}{25}{subsection.2.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.4}Bibliographic notes}{27}{subsection.2.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Learning R: a primer}{27}{section.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.1}Assigning and calling Objects}{30}{subsection.2.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.2}Vectors}{31}{subsection.2.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.3}Basic object types}{31}{subsection.2.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.4}Operators and functions}{34}{subsection.2.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.5}Storing data in data frames}{36}{subsection.2.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.6}Import, export and archiving}{40}{subsection.2.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.7}Case environments}{41}{subsection.2.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.8}Structuring data}{42}{subsection.2.2.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.9}Data transformation}{44}{subsection.2.2.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.10}Plotting data}{46}{subsection.2.2.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.11}Fitting regression models}{51}{subsection.2.2.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.12}Knitting statistical reports}{54}{subsection.2.2.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Further reading}{56}{section.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Elements of Bayesian statistics}{57}{chapter.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Rational decision making in design research}{58}{section.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.1}Measuring uncertainty}{60}{subsection.3.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.2}Benchmarking designs}{62}{subsection.3.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.3}Comparison of designs}{66}{subsection.3.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.4}Prior knowledge}{68}{subsection.3.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Observations and measures}{72}{section.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.1}Interaction sequences}{72}{subsection.3.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.2}Performance measures}{74}{subsection.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.3}Satisfaction and other feelings}{74}{subsection.3.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}Descriptive statistics}{76}{section.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.1}Frequencies}{76}{subsection.3.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.2}Central tendency}{79}{subsection.3.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.3}Dispersion}{80}{subsection.3.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.4}Associations}{84}{subsection.3.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.3.4.1}Categorical associations}{84}{subsubsection.3.3.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.3.4.2}Categorical-metric associations}{85}{subsubsection.3.3.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.3.4.3}Covariance and correlation}{87}{subsubsection.3.3.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}Bayesian probability theory}{92}{section.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.1}Some set theory}{93}{subsection.3.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.2}Probability}{97}{subsection.3.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.3}Likelihood}{100}{subsection.3.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.4}Bayesian and frequentist probability}{106}{subsection.3.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.5}Bayes theorem}{107}{subsection.3.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.6}Bayesian dynamics of belief}{109}{subsection.3.4.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Statistical models}{110}{section.3.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.1}The structural part}{111}{subsection.3.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.5.2}Distributions: shapes of randomness}{113}{subsection.3.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.1}Probability mass and density}{114}{subsubsection.3.5.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.2}Features of shape}{119}{subsubsection.3.5.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.3}Binomial distributions}{124}{subsubsection.3.5.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.4}Poisson distributions}{126}{subsubsection.3.5.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.5}Exponential distribution}{130}{subsubsection.3.5.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {3.5.2.6}Gaussian distributions}{132}{subsubsection.3.5.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.6}Towards Bayesian estimation}{134}{section.3.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.7}On priors and defaults}{138}{section.3.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.8}Further readings}{139}{section.3.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{II\hspace {1em}Models}{141}{part.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Basic Linear models}{143}{chapter.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.1}Quantification at work: grand mean models}{143}{section.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1.1}Do the random walk: Markov Chain Monte Carlo sampling}{147}{subsection.4.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1.2}Likelihood and random term}{151}{subsection.4.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1.3}Working with the posterior distribution}{151}{subsection.4.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.1.4}Center and interval estimates}{154}{subsection.4.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.2}Walk the line: linear regression}{156}{section.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.1}Transforming measures}{159}{subsection.4.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.2.1.1}Shifting an centering}{159}{subsubsection.4.2.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {4.2.1.2}Rescaling}{161}{subsubsection.4.2.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.2}Correlations}{166}{subsection.4.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.3}Endlessly linear}{169}{subsection.4.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.3}Factorial Models}{169}{section.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.1}A versus B: Comparison of groups}{170}{subsection.4.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.2}Not stupid: dummy variables}{173}{subsection.4.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.3}Treatment contrast coding}{174}{subsection.4.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.4}Absolute Means Model}{175}{subsection.4.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.5}Ordered Factorial Models}{177}{subsection.4.3.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Multi-predictor models}{183}{chapter.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}On surface: multiple regression models}{183}{section.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.2}Crossover: multifactorial models}{188}{section.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.3}Line-by-line: grouped regression models}{189}{section.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.4}Conditional effects models}{192}{section.5.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4.1}Conditional multiple regression}{193}{subsection.5.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4.2}Conditional multifactorial models}{194}{subsection.5.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4.3}Saturation: hitting the boundaries}{200}{subsection.5.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4.4}Amplification: more than the sum}{208}{subsection.5.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.4.5}Conditional effects and design theory}{211}{subsection.5.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.5}Doing the rollercoaster: polynomial regression models}{214}{section.5.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.5.1}Make yourself a test statistic}{220}{subsection.5.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.6}Further readings}{222}{section.5.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Multilevel models}{223}{chapter.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.1}The Human Factor: Intercept random effects}{224}{section.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.2}Multi-level linear regression: variance in change}{229}{section.6.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.3}Thinking multi-level}{234}{section.6.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.4}Testing universality of theories}{239}{section.6.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.5}Non-human populations and cross-overs}{244}{section.6.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.6}Nested random effects}{249}{section.6.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.7}What are random effects? On pooling and shrinkage}{252}{section.6.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.8}Psychometrics and design-o-metric models}{256}{section.6.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.1}Coverage}{260}{subsection.6.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.2}Reliability}{262}{subsection.6.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.3}Validity}{265}{subsection.6.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.4}Towards Design-o-metrix}{265}{subsection.6.8.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.9}Further readings}{268}{section.6.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Generalized Linear Models}{269}{chapter.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.1}Elements of Generalized Linear Models}{270}{section.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.1}Re-linking linearity}{272}{subsection.7.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.2}Choosing patterns of randomness}{276}{subsection.7.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.3}Mean-variance relationship}{278}{subsection.7.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.2}Count data}{282}{section.7.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.1}Poisson regression}{283}{subsection.7.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.1.1}Speaking multipliers}{284}{subsubsection.7.2.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.1.2}Linearizing learning curves}{286}{subsubsection.7.2.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.2}Logistic (aka Binomial) regression}{289}{subsection.7.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.2.1}Dichotomous outcomes}{290}{subsubsection.7.2.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.2.2}Successes in a number of trials}{292}{subsubsection.7.2.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.2.3}Talking odds}{293}{subsubsection.7.2.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.3}Modelling overdispersion}{296}{subsection.7.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.3.1}Negative-binomial regression for overdispersed counts}{298}{subsubsection.7.2.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.3.2}Beta-binomial regression for successes in trials}{300}{subsubsection.7.2.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.3.3}Using observation-level random effects}{303}{subsubsection.7.2.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.3}Duration measures}{305}{section.7.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.3.1}Exponential and Gamma regression}{305}{subsection.7.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.3.2}ExGaussian regression}{308}{subsection.7.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.3.2.1}Reaction times}{313}{subsubsection.7.3.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.3.2.2}Time-on-task}{317}{subsubsection.7.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.4}Rating scales}{320}{section.7.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4.1}Ordered logistic regression}{324}{subsection.7.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4.2}Beta regression}{326}{subsection.7.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.5}Beyond mean: distributional models}{329}{section.7.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.5.1}Item-level anchoring in rating scales}{329}{subsection.7.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.5.2}Participant-level employment of scale}{331}{subsection.7.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.5.3}Participant-level skew in reaction times}{333}{subsection.7.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.6}Further readings}{336}{section.7.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Working with models}{337}{chapter.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.1}Model criticism}{337}{section.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.1.1}Residual analysis}{338}{subsection.8.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.1.1.1}Gaussian residual distribution}{339}{subsubsection.8.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.1.1.2}Constant variance}{345}{subsubsection.8.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.1.2}Fitted responses analysis}{349}{subsection.8.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.2}Model comparison}{356}{section.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.1}The problem of over-fitting}{357}{subsection.8.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.2}Cross validation and LOO}{359}{subsection.8.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.3}Information Criteria}{363}{subsection.8.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.4}Model selection}{365}{subsection.8.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.5}Comparing response distributions}{366}{subsection.8.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.6}Testing hypotheses}{368}{subsection.8.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.2.7}A note on Bayes Factor}{369}{subsection.8.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.3}Further readings}{370}{section.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}Cases}{371}{appendix.A}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {A.1}Real cases}{376}{section.A.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.1}Hugme}{376}{subsection.A.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.1.1}Measures}{376}{subsubsection.A.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.1.2}Stimuli}{377}{subsubsection.A.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.1.3}Data modelling in a nutshell}{377}{subsubsection.A.1.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.2}CUE8}{379}{subsection.A.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.2.1}Measures}{380}{subsubsection.A.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.3}Uncanny Valley}{380}{subsection.A.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.3.1}Experimental design}{380}{subsubsection.A.1.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.3.2}Stimuli}{380}{subsubsection.A.1.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.3.3}Measures}{381}{subsubsection.A.1.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.4}IPump}{381}{subsection.A.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.4.1}Experimental design}{382}{subsubsection.A.1.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.4.2}Measures}{382}{subsubsection.A.1.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.5}Case Sleepstudy}{383}{subsection.A.1.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.6}Egan}{384}{subsection.A.1.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.6.1}Research Design}{384}{subsubsection.A.1.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.6.2}Measures}{384}{subsubsection.A.1.6.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.7}Case: Millers Magic Number}{386}{subsection.A.1.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.7.1}Research Design}{386}{subsubsection.A.1.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.7.2}Measures}{386}{subsubsection.A.1.7.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.1.8}AUP}{387}{subsection.A.1.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {A.1.8.1}Measures}{387}{subsubsection.A.1.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {A.2}Synthetic data sets}{388}{section.A.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.1}Rainfall}{388}{subsection.A.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.2}99 seconds}{389}{subsection.A.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.3}Rational}{390}{subsection.A.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.4}BrowsingAB}{391}{subsection.A.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.5}Headache}{393}{subsection.A.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.6}Reading time}{394}{subsection.A.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.7}AR\_game}{396}{subsection.A.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {A.2.8}Sleep}{398}{subsection.A.2.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {B}Abstracts}{401}{appendix.B}%

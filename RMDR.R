@@ -134,13 +134,15 @@ knitr::knit_hooks$set(source = function(x, options) {
   #x <- xfun::split_lines(x)  # split into individual lines
   #x <- x[!grepl("kable\\(",x)]
   x <- gsub("%>%\\W*?kable(.*)", "", x, perl = T)
+  x <- gsub("detach(.*)", "", x, perl = T)
   #x <- paste(x, collapse = "\n")  # combine into a single string
   hook_source(x, options)
 })
 
 opts <- options(knitr.kable.NA = "")
 
-knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
+# knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
+opts_chunk$set(fig.path="Production/figures/")
 
 opts_chunk$set(echo = T, 
                warning = purp.debg, 

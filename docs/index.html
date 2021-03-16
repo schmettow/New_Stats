@@ -2,72 +2,64 @@
 <html lang="" xml:lang="">
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>New statistics for design researchers</title>
-  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="New statistics for design researchers" />
+<meta property="og:type" content="book" />
 
-  <meta property="og:title" content="New statistics for design researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
-  <meta name="github-repo" content="schmettow/New_Stats" />
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="New statistics for design researchers" />
-  
-  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works hard to make this world a better place." />
-  
+<meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+<meta name="github-repo" content="schmettow/New_Stats" />
 
 <meta name="author" content="Martin Schmettow" />
 
+<meta name="date" content="2021-03-16" />
 
-<meta name="date" content="2020-11-08" />
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
+<meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place.">
 
-<link rel="next" href="gsr.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+<title>New statistics for design researchers</title>
 
-
-
-
-
-
-
-
-
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -87,7 +79,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -119,240 +111,282 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
+
+<link rel="stylesheet" href="NewStats.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+</style>
 </head>
 
 <body>
 
+<div class="container-fluid main-container">
 
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
 <li class="part"><span><b>I Preparations</b></span></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.2</b> Quantitative design research</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.3</b> What is New Statistics?</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.4</b> How to use this book</a><ul>
-<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#routes"><i class="fa fa-check"></i><b>1.4.1</b> Routes</a></li>
-<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.4.2</b> In the classroom</a></li>
-<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.4.3</b> The stone of Rosetta</a></li>
+<li><a href="index.html#intro"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#whom-for"><span class="toc-section-number">1.1</span> Whom this book is for</a></li>
+<li><a href="index.html#quant-design-research"><span class="toc-section-number">1.2</span> Quantitative design research</a></li>
+<li><a href="index.html#what-new-stats"><span class="toc-section-number">1.3</span> What is New Statistics?</a></li>
+<li><a href="index.html#how-to-use"><span class="toc-section-number">1.4</span> How to use this book</a>
+<ul>
+<li><a href="index.html#routes"><span class="toc-section-number">1.4.1</span> Routes</a></li>
+<li><a href="index.html#classroom"><span class="toc-section-number">1.4.2</span> In the classroom</a></li>
+<li><a href="index.html#rosetta"><span class="toc-section-number">1.4.3</span> The stone of Rosetta</a></li>
 </ul></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#scoping-and-additional-readings"><i class="fa fa-check"></i><b>1.5</b> Scoping and additional readings</a></li>
+<li><a href="index.html#thank-you-and-supplementary-readings"><span class="toc-section-number">1.5</span> Thank you and supplementary readings</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="gsr.html"><a href="gsr.html"><i class="fa fa-check"></i><b>2</b> Getting started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="gsr.html"><a href="gsr.html#setting-up-r"><i class="fa fa-check"></i><b>2.1</b> Setting up the R environment</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="gsr.html"><a href="gsr.html#install-cran"><i class="fa fa-check"></i><b>2.1.1</b> Installing CRAN packages</a></li>
-<li class="chapter" data-level="2.1.2" data-path="gsr.html"><a href="gsr.html#install-github"><i class="fa fa-check"></i><b>2.1.2</b> Installing packages from Github</a></li>
-<li class="chapter" data-level="2.1.3" data-path="gsr.html"><a href="gsr.html#first-program"><i class="fa fa-check"></i><b>2.1.3</b> A first statistical program</a></li>
-<li class="chapter" data-level="2.1.4" data-path="gsr.html"><a href="gsr.html#bibliographic-notes"><i class="fa fa-check"></i><b>2.1.4</b> Bibliographic notes</a></li>
+<li><a href="gsr.html#gsr"><span class="toc-section-number">2</span> Getting started with R</a>
+<ul>
+<li><a href="gsr.html#setting-up-r"><span class="toc-section-number">2.1</span> Setting up the R environment</a>
+<ul>
+<li><a href="gsr.html#install-cran"><span class="toc-section-number">2.1.1</span> Installing CRAN packages</a></li>
+<li><a href="gsr.html#install-github"><span class="toc-section-number">2.1.2</span> Installing packages from Github</a></li>
+<li><a href="gsr.html#first-program"><span class="toc-section-number">2.1.3</span> A first statistical program</a></li>
+<li><a href="gsr.html#bibliographic-notes"><span class="toc-section-number">2.1.4</span> Bibliographic notes</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="gsr.html"><a href="gsr.html#r-primer"><i class="fa fa-check"></i><b>2.2</b> Learning R: a primer</a><ul>
-<li class="chapter" data-level="2.2.1" data-path="gsr.html"><a href="gsr.html#objects"><i class="fa fa-check"></i><b>2.2.1</b> Assigning and calling Objects</a></li>
-<li class="chapter" data-level="2.2.2" data-path="gsr.html"><a href="gsr.html#vectors"><i class="fa fa-check"></i><b>2.2.2</b> Vectors</a></li>
-<li class="chapter" data-level="2.2.3" data-path="gsr.html"><a href="gsr.html#object-types"><i class="fa fa-check"></i><b>2.2.3</b> Basic object types</a></li>
-<li class="chapter" data-level="2.2.4" data-path="gsr.html"><a href="gsr.html#operators-functions"><i class="fa fa-check"></i><b>2.2.4</b> Operators and functions</a></li>
-<li class="chapter" data-level="2.2.5" data-path="gsr.html"><a href="gsr.html#data-frames"><i class="fa fa-check"></i><b>2.2.5</b> Storing data in data frames</a></li>
-<li class="chapter" data-level="2.2.6" data-path="gsr.html"><a href="gsr.html#import-export"><i class="fa fa-check"></i><b>2.2.6</b> Import, export and archiving</a></li>
-<li class="chapter" data-level="2.2.7" data-path="gsr.html"><a href="gsr.html#case-env"><i class="fa fa-check"></i><b>2.2.7</b> Case environments</a></li>
-<li class="chapter" data-level="2.2.8" data-path="gsr.html"><a href="gsr.html#structuring-data"><i class="fa fa-check"></i><b>2.2.8</b> Structuring data</a></li>
-<li class="chapter" data-level="2.2.9" data-path="gsr.html"><a href="gsr.html#data-transformation"><i class="fa fa-check"></i><b>2.2.9</b> Data transformation</a></li>
-<li class="chapter" data-level="2.2.10" data-path="gsr.html"><a href="gsr.html#plotting"><i class="fa fa-check"></i><b>2.2.10</b> Plotting data</a></li>
-<li class="chapter" data-level="2.2.11" data-path="gsr.html"><a href="gsr.html#fitting"><i class="fa fa-check"></i><b>2.2.11</b> Fitting regression models</a></li>
-<li class="chapter" data-level="2.2.12" data-path="gsr.html"><a href="gsr.html#knitting"><i class="fa fa-check"></i><b>2.2.12</b> Knitting statistical reports</a></li>
+<li><a href="gsr.html#r-primer"><span class="toc-section-number">2.2</span> Learning R: a primer</a>
+<ul>
+<li><a href="gsr.html#objects"><span class="toc-section-number">2.2.1</span> Assigning and calling Objects</a></li>
+<li><a href="gsr.html#vectors"><span class="toc-section-number">2.2.2</span> Vectors</a></li>
+<li><a href="gsr.html#object-types"><span class="toc-section-number">2.2.3</span> Basic object types</a></li>
+<li><a href="gsr.html#operators-functions"><span class="toc-section-number">2.2.4</span> Operators and functions</a></li>
+<li><a href="gsr.html#data-frames"><span class="toc-section-number">2.2.5</span> Storing data in data frames</a></li>
+<li><a href="gsr.html#import-export"><span class="toc-section-number">2.2.6</span> Import, export and archiving</a></li>
+<li><a href="gsr.html#case-env"><span class="toc-section-number">2.2.7</span> Case environments</a></li>
+<li><a href="gsr.html#structuring-data"><span class="toc-section-number">2.2.8</span> Structuring data</a></li>
+<li><a href="gsr.html#data-transformation"><span class="toc-section-number">2.2.9</span> Data transformation</a></li>
+<li><a href="gsr.html#plotting"><span class="toc-section-number">2.2.10</span> Plotting data</a></li>
+<li><a href="gsr.html#fitting"><span class="toc-section-number">2.2.11</span> Fitting regression models</a></li>
+<li><a href="gsr.html#knitting"><span class="toc-section-number">2.2.12</span> Knitting statistical reports</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="gsr.html"><a href="gsr.html#lib_gsr"><i class="fa fa-check"></i><b>2.3</b> Further reading</a></li>
+<li><a href="gsr.html#lib_gsr"><span class="toc-section-number">2.3</span> Further reading</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ebs.html"><a href="ebs.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a><ul>
-<li class="chapter" data-level="3.1" data-path="ebs.html"><a href="ebs.html#decision-making"><i class="fa fa-check"></i><b>3.1</b> Rational decision making in design research</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="ebs.html"><a href="ebs.html#measuring-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Measuring uncertainty</a></li>
-<li class="chapter" data-level="3.1.2" data-path="ebs.html"><a href="ebs.html#benchmarking-designs"><i class="fa fa-check"></i><b>3.1.2</b> Benchmarking designs</a></li>
-<li class="chapter" data-level="3.1.3" data-path="ebs.html"><a href="ebs.html#comparing-designs"><i class="fa fa-check"></i><b>3.1.3</b> Comparison of designs</a></li>
-<li class="chapter" data-level="3.1.4" data-path="ebs.html"><a href="ebs.html#prior-knowledge"><i class="fa fa-check"></i><b>3.1.4</b> Prior knowledge</a></li>
+<li><a href="ebs.html#ebs"><span class="toc-section-number">3</span> Elements of Bayesian statistics</a>
+<ul>
+<li><a href="ebs.html#decision-making"><span class="toc-section-number">3.1</span> Rational decision making in design research</a>
+<ul>
+<li><a href="ebs.html#measuring-uncertainty"><span class="toc-section-number">3.1.1</span> Measuring uncertainty</a></li>
+<li><a href="ebs.html#benchmarking-designs"><span class="toc-section-number">3.1.2</span> Benchmarking designs</a></li>
+<li><a href="ebs.html#comparing-designs"><span class="toc-section-number">3.1.3</span> Comparison of designs</a></li>
+<li><a href="ebs.html#prior-knowledge"><span class="toc-section-number">3.1.4</span> Prior knowledge</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="ebs.html"><a href="ebs.html#observations-measures"><i class="fa fa-check"></i><b>3.2</b> Observations and measures</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="ebs.html"><a href="ebs.html#interaction-seq"><i class="fa fa-check"></i><b>3.2.1</b> Interaction sequences</a></li>
-<li class="chapter" data-level="3.2.2" data-path="ebs.html"><a href="ebs.html#perf-measures"><i class="fa fa-check"></i><b>3.2.2</b> Performance measures</a></li>
-<li class="chapter" data-level="3.2.3" data-path="ebs.html"><a href="ebs.html#satisfaction-and-other-feelings"><i class="fa fa-check"></i><b>3.2.3</b> Satisfaction and other feelings</a></li>
+<li><a href="ebs.html#observations-measures"><span class="toc-section-number">3.2</span> Observations and measures</a>
+<ul>
+<li><a href="ebs.html#interaction-seq"><span class="toc-section-number">3.2.1</span> Interaction sequences</a></li>
+<li><a href="ebs.html#perf-measures"><span class="toc-section-number">3.2.2</span> Performance measures</a></li>
+<li><a href="ebs.html#satisfaction-and-other-feelings"><span class="toc-section-number">3.2.3</span> Satisfaction and other feelings</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="ebs.html"><a href="ebs.html#descriptive-stats"><i class="fa fa-check"></i><b>3.3</b> Descriptive statistics</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="ebs.html"><a href="ebs.html#frequencies"><i class="fa fa-check"></i><b>3.3.1</b> Frequencies</a></li>
-<li class="chapter" data-level="3.3.2" data-path="ebs.html"><a href="ebs.html#central-tendency"><i class="fa fa-check"></i><b>3.3.2</b> Central tendency</a></li>
-<li class="chapter" data-level="3.3.3" data-path="ebs.html"><a href="ebs.html#dispersion"><i class="fa fa-check"></i><b>3.3.3</b> Dispersion</a></li>
-<li class="chapter" data-level="3.3.4" data-path="ebs.html"><a href="ebs.html#associations"><i class="fa fa-check"></i><b>3.3.4</b> Associations</a></li>
+<li><a href="ebs.html#descriptive-stats"><span class="toc-section-number">3.3</span> Descriptive statistics</a>
+<ul>
+<li><a href="ebs.html#frequencies"><span class="toc-section-number">3.3.1</span> Frequencies</a></li>
+<li><a href="ebs.html#central-tendency"><span class="toc-section-number">3.3.2</span> Central tendency</a></li>
+<li><a href="ebs.html#dispersion"><span class="toc-section-number">3.3.3</span> Dispersion</a></li>
+<li><a href="ebs.html#associations"><span class="toc-section-number">3.3.4</span> Associations</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ebs.html"><a href="ebs.html#bayes-prob-theory"><i class="fa fa-check"></i><b>3.4</b> Bayesian probability theory</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="ebs.html"><a href="ebs.html#set-theory"><i class="fa fa-check"></i><b>3.4.1</b> Some set theory</a></li>
-<li class="chapter" data-level="3.4.2" data-path="ebs.html"><a href="ebs.html#probability"><i class="fa fa-check"></i><b>3.4.2</b> Probability</a></li>
-<li class="chapter" data-level="3.4.3" data-path="ebs.html"><a href="ebs.html#likelihood"><i class="fa fa-check"></i><b>3.4.3</b> Likelihood</a></li>
-<li class="chapter" data-level="3.4.4" data-path="ebs.html"><a href="ebs.html#bayes-freq-prob"><i class="fa fa-check"></i><b>3.4.4</b> Bayesian and frequentist probability</a></li>
-<li class="chapter" data-level="3.4.5" data-path="ebs.html"><a href="ebs.html#bayes-theorem"><i class="fa fa-check"></i><b>3.4.5</b> Bayes theorem</a></li>
-<li class="chapter" data-level="3.4.6" data-path="ebs.html"><a href="ebs.html#dynamics-belief"><i class="fa fa-check"></i><b>3.4.6</b> Bayesian dynamics of belief</a></li>
+<li><a href="ebs.html#bayes-prob-theory"><span class="toc-section-number">3.4</span> Bayesian probability theory</a>
+<ul>
+<li><a href="ebs.html#set-theory"><span class="toc-section-number">3.4.1</span> Some set theory</a></li>
+<li><a href="ebs.html#probability"><span class="toc-section-number">3.4.2</span> Probability</a></li>
+<li><a href="ebs.html#likelihood"><span class="toc-section-number">3.4.3</span> Likelihood</a></li>
+<li><a href="ebs.html#bayes-freq-prob"><span class="toc-section-number">3.4.4</span> Bayesian and frequentist probability</a></li>
+<li><a href="ebs.html#bayes-theorem"><span class="toc-section-number">3.4.5</span> Bayes theorem</a></li>
+<li><a href="ebs.html#dynamics-belief"><span class="toc-section-number">3.4.6</span> Bayesian dynamics of belief</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="ebs.html"><a href="ebs.html#statmod"><i class="fa fa-check"></i><b>3.5</b> Statistical models</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="ebs.html"><a href="ebs.html#structural-part"><i class="fa fa-check"></i><b>3.5.1</b> The structural part</a></li>
-<li class="chapter" data-level="3.5.2" data-path="ebs.html"><a href="ebs.html#distributions"><i class="fa fa-check"></i><b>3.5.2</b> Distributions: shapes of randomness</a></li>
+<li><a href="ebs.html#statmod"><span class="toc-section-number">3.5</span> Statistical models</a>
+<ul>
+<li><a href="ebs.html#structural-part"><span class="toc-section-number">3.5.1</span> The structural part</a></li>
+<li><a href="ebs.html#distributions"><span class="toc-section-number">3.5.2</span> Distributions: shapes of randomness</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="ebs.html"><a href="ebs.html#bayes-estimation"><i class="fa fa-check"></i><b>3.6</b> Towards Bayesian estimation</a></li>
-<li class="chapter" data-level="3.7" data-path="ebs.html"><a href="ebs.html#priors-defaults"><i class="fa fa-check"></i><b>3.7</b> On priors and defaults</a></li>
-<li class="chapter" data-level="3.8" data-path="ebs.html"><a href="ebs.html#further-readings"><i class="fa fa-check"></i><b>3.8</b> Further readings</a></li>
+<li><a href="ebs.html#bayes-estimation"><span class="toc-section-number">3.6</span> Towards Bayesian estimation</a></li>
+<li><a href="ebs.html#priors-defaults"><span class="toc-section-number">3.7</span> On priors and defaults</a></li>
+<li><a href="ebs.html#further-readings"><span class="toc-section-number">3.8</span> Further readings</a></li>
 </ul></li>
 <li class="part"><span><b>II Models</b></span></li>
-<li class="chapter" data-level="4" data-path="lm.html"><a href="lm.html"><i class="fa fa-check"></i><b>4</b> Linear models</a><ul>
-<li class="chapter" data-level="4.1" data-path="lm.html"><a href="lm.html#gmm"><i class="fa fa-check"></i><b>4.1</b> Quantification at work: grand mean models</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="lm.html"><a href="lm.html#random-walk"><i class="fa fa-check"></i><b>4.1.1</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
-<li class="chapter" data-level="4.1.2" data-path="lm.html"><a href="lm.html#likelihood-random-term"><i class="fa fa-check"></i><b>4.1.2</b> Likelihood and random term</a></li>
-<li class="chapter" data-level="4.1.3" data-path="lm.html"><a href="lm.html#posterior-dist"><i class="fa fa-check"></i><b>4.1.3</b> Working with the posterior distribution</a></li>
-<li class="chapter" data-level="4.1.4" data-path="lm.html"><a href="lm.html#clu"><i class="fa fa-check"></i><b>4.1.4</b> Center and interval estimates</a></li>
+<li><a href="lm.html#lm"><span class="toc-section-number">4</span> Basic Linear models</a>
+<ul>
+<li><a href="lm.html#gmm"><span class="toc-section-number">4.1</span> Quantification at work: grand mean models</a>
+<ul>
+<li><a href="lm.html#random-walk"><span class="toc-section-number">4.1.1</span> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+<li><a href="lm.html#likelihood-random-term"><span class="toc-section-number">4.1.2</span> Likelihood and random term</a></li>
+<li><a href="lm.html#posterior-dist"><span class="toc-section-number">4.1.3</span> Working with the posterior distribution</a></li>
+<li><a href="lm.html#clu"><span class="toc-section-number">4.1.4</span> Center and interval estimates</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="lm.html"><a href="lm.html#lrm"><i class="fa fa-check"></i><b>4.2</b> Walk the line: linear regression</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="lm.html"><a href="lm.html#transform-measures"><i class="fa fa-check"></i><b>4.2.1</b> Transforming measures</a></li>
-<li class="chapter" data-level="4.2.2" data-path="lm.html"><a href="lm.html#correlations"><i class="fa fa-check"></i><b>4.2.2</b> Correlations</a></li>
-<li class="chapter" data-level="4.2.3" data-path="lm.html"><a href="lm.html#endless-linear"><i class="fa fa-check"></i><b>4.2.3</b> Endlessly linear</a></li>
+<li><a href="lm.html#lrm"><span class="toc-section-number">4.2</span> Walk the line: linear regression</a>
+<ul>
+<li><a href="lm.html#transform-measures"><span class="toc-section-number">4.2.1</span> Transforming measures</a></li>
+<li><a href="lm.html#correlations"><span class="toc-section-number">4.2.2</span> Correlations</a></li>
+<li><a href="lm.html#endless-linear"><span class="toc-section-number">4.2.3</span> Endlessly linear</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="lm.html"><a href="lm.html#factorial-models"><i class="fa fa-check"></i><b>4.3</b> Factorial Models</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="lm.html"><a href="lm.html#cgm"><i class="fa fa-check"></i><b>4.3.1</b> A versus B: Comparison of groups</a></li>
-<li class="chapter" data-level="4.3.2" data-path="lm.html"><a href="lm.html#dummy"><i class="fa fa-check"></i><b>4.3.2</b> Not stupid: dummy variables</a></li>
-<li class="chapter" data-level="4.3.3" data-path="lm.html"><a href="lm.html#treatment-contrasts"><i class="fa fa-check"></i><b>4.3.3</b> Treatment contrast</a></li>
-<li class="chapter" data-level="4.3.4" data-path="lm.html"><a href="lm.html#amm"><i class="fa fa-check"></i><b>4.3.4</b> Absolute Means Model</a></li>
-<li class="chapter" data-level="4.3.5" data-path="lm.html"><a href="lm.html#ofm"><i class="fa fa-check"></i><b>4.3.5</b> Ordered Factors Models</a></li>
+<li><a href="lm.html#factorial-models"><span class="toc-section-number">4.3</span> Factorial Models</a>
+<ul>
+<li><a href="lm.html#cgm"><span class="toc-section-number">4.3.1</span> A versus B: Comparison of groups</a></li>
+<li><a href="lm.html#dummy"><span class="toc-section-number">4.3.2</span> Not stupid: dummy variables</a></li>
+<li><a href="lm.html#treatment-contrasts"><span class="toc-section-number">4.3.3</span> Treatment contrast coding</a></li>
+<li><a href="lm.html#amm"><span class="toc-section-number">4.3.4</span> Absolute Means Model</a></li>
+<li><a href="lm.html#ofm"><span class="toc-section-number">4.3.5</span> Ordered Factorial Models</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="lm.html"><a href="lm.html#mpm"><i class="fa fa-check"></i><b>4.4</b> Putting it all together: multi predictor models</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="lm.html"><a href="lm.html#mrm"><i class="fa fa-check"></i><b>4.4.1</b> On surface: multiple regression models</a></li>
-<li class="chapter" data-level="4.4.2" data-path="lm.html"><a href="lm.html#mfm"><i class="fa fa-check"></i><b>4.4.2</b> Crossover: multifactorial models</a></li>
-<li class="chapter" data-level="4.4.3" data-path="lm.html"><a href="lm.html#grm"><i class="fa fa-check"></i><b>4.4.3</b> Line-by-line: grouped regression models</a></li>
-<li class="chapter" data-level="4.4.4" data-path="lm.html"><a href="lm.html#emp-stat-control"><i class="fa fa-check"></i><b>4.4.4</b> Empirical versus statistical control</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="lm.html"><a href="lm.html#cfxm"><i class="fa fa-check"></i><b>4.5</b> Conditional effects models</a><ul>
-<li class="chapter" data-level="4.5.1" data-path="lm.html"><a href="lm.html#cmrm"><i class="fa fa-check"></i><b>4.5.1</b> Conditional multiple regression</a></li>
-<li class="chapter" data-level="4.5.2" data-path="lm.html"><a href="lm.html#cmfm"><i class="fa fa-check"></i><b>4.5.2</b> Conditional multifactorial models</a></li>
-<li class="chapter" data-level="4.5.3" data-path="lm.html"><a href="lm.html#saturation"><i class="fa fa-check"></i><b>4.5.3</b> Saturation: hitting the boundaries</a></li>
-<li class="chapter" data-level="4.5.4" data-path="lm.html"><a href="lm.html#amplification"><i class="fa fa-check"></i><b>4.5.4</b> Amplification: more than the sum</a></li>
-<li class="chapter" data-level="4.5.5" data-path="lm.html"><a href="lm.html#cfx-theory"><i class="fa fa-check"></i><b>4.5.5</b> Conditional effects and design theory</a></li>
+<li><a href="mpm.html#mpm"><span class="toc-section-number">5</span> Multi-predictor models</a>
+<ul>
+<li><a href="mpm.html#mrm"><span class="toc-section-number">5.1</span> On surface: multiple regression models</a></li>
+<li><a href="mpm.html#mfm"><span class="toc-section-number">5.2</span> Crossover: multifactorial models</a></li>
+<li><a href="mpm.html#grm"><span class="toc-section-number">5.3</span> Line-by-line: grouped regression models</a></li>
+<li><a href="mpm.html#cfxm"><span class="toc-section-number">5.4</span> Conditional effects models</a>
+<ul>
+<li><a href="mpm.html#cmrm"><span class="toc-section-number">5.4.1</span> Conditional multiple regression</a></li>
+<li><a href="mpm.html#cmfm"><span class="toc-section-number">5.4.2</span> Conditional multifactorial models</a></li>
+<li><a href="mpm.html#saturation"><span class="toc-section-number">5.4.3</span> Saturation: hitting the boundaries</a></li>
+<li><a href="mpm.html#amplification"><span class="toc-section-number">5.4.4</span> Amplification: more than the sum</a></li>
+<li><a href="mpm.html#cfx-theory"><span class="toc-section-number">5.4.5</span> Conditional effects and design theory</a></li>
 </ul></li>
-<li class="chapter" data-level="4.6" data-path="lm.html"><a href="lm.html#prm"><i class="fa fa-check"></i><b>4.6</b> Doing the rollercoaster: polynomial regression models</a><ul>
-<li class="chapter" data-level="4.6.1" data-path="lm.html"><a href="lm.html#test-stat"><i class="fa fa-check"></i><b>4.6.1</b> Make yourself a test statistic</a></li>
+<li><a href="mpm.html#prm"><span class="toc-section-number">5.5</span> Doing the rollercoaster: polynomial regression models</a>
+<ul>
+<li><a href="mpm.html#test-stat"><span class="toc-section-number">5.5.1</span> Make yourself a test statistic</a></li>
 </ul></li>
-<li class="chapter" data-level="4.7" data-path="lm.html"><a href="lm.html#further-readings-1"><i class="fa fa-check"></i><b>4.7</b> Further readings</a></li>
+<li><a href="mpm.html#further-readings-1"><span class="toc-section-number">5.6</span> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="mlm.html"><a href="mlm.html"><i class="fa fa-check"></i><b>5</b> Multilevel models</a><ul>
-<li class="chapter" data-level="5.1" data-path="mlm.html"><a href="mlm.html#intercept-re"><i class="fa fa-check"></i><b>5.1</b> The Human Factor: Intercept random effects</a></li>
-<li class="chapter" data-level="5.2" data-path="mlm.html"><a href="mlm.html#slope-re"><i class="fa fa-check"></i><b>5.2</b> Slope random effects: variance in change</a></li>
-<li class="chapter" data-level="5.3" data-path="mlm.html"><a href="mlm.html#thinking-multi-level"><i class="fa fa-check"></i><b>5.3</b> Thinking multi-level</a></li>
-<li class="chapter" data-level="5.4" data-path="mlm.html"><a href="mlm.html#universality"><i class="fa fa-check"></i><b>5.4</b> Testing universality of theories</a></li>
-<li class="chapter" data-level="5.5" data-path="mlm.html"><a href="mlm.html#non-human-populations"><i class="fa fa-check"></i><b>5.5</b> Non-human populations and cross-overs</a></li>
-<li class="chapter" data-level="5.6" data-path="mlm.html"><a href="mlm.html#nested-re"><i class="fa fa-check"></i><b>5.6</b> Nested random effects</a></li>
-<li class="chapter" data-level="5.7" data-path="mlm.html"><a href="mlm.html#pool-shrink"><i class="fa fa-check"></i><b>5.7</b> What are random effects? On pooling and shrinkage</a></li>
-<li class="chapter" data-level="5.8" data-path="mlm.html"><a href="mlm.html#psychometrics"><i class="fa fa-check"></i><b>5.8</b> Psychometrics and design-o-metric models</a><ul>
-<li class="chapter" data-level="5.8.1" data-path="mlm.html"><a href="mlm.html#coverage"><i class="fa fa-check"></i><b>5.8.1</b> Coverage</a></li>
-<li class="chapter" data-level="5.8.2" data-path="mlm.html"><a href="mlm.html#reliability"><i class="fa fa-check"></i><b>5.8.2</b> Reliability</a></li>
-<li class="chapter" data-level="5.8.3" data-path="mlm.html"><a href="mlm.html#validity"><i class="fa fa-check"></i><b>5.8.3</b> Validity</a></li>
-<li class="chapter" data-level="5.8.4" data-path="mlm.html"><a href="mlm.html#designometrix"><i class="fa fa-check"></i><b>5.8.4</b> Towards Design-o-metrix</a></li>
+<li><a href="mlm.html#mlm"><span class="toc-section-number">6</span> Multilevel models</a>
+<ul>
+<li><a href="mlm.html#intercept-re"><span class="toc-section-number">6.1</span> The Human Factor: Intercept random effects</a></li>
+<li><a href="mlm.html#slope-re"><span class="toc-section-number">6.2</span> Multi-level linear regression: variance in change</a></li>
+<li><a href="mlm.html#thinking-multi-level"><span class="toc-section-number">6.3</span> Thinking multi-level</a></li>
+<li><a href="mlm.html#universality"><span class="toc-section-number">6.4</span> Testing universality of theories</a></li>
+<li><a href="mlm.html#non-human-populations"><span class="toc-section-number">6.5</span> Non-human populations and cross-overs</a></li>
+<li><a href="mlm.html#nested-re"><span class="toc-section-number">6.6</span> Nested random effects</a></li>
+<li><a href="mlm.html#pool-shrink"><span class="toc-section-number">6.7</span> What are random effects? On pooling and shrinkage</a></li>
+<li><a href="mlm.html#psychometrics"><span class="toc-section-number">6.8</span> Psychometrics and design-o-metric models</a>
+<ul>
+<li><a href="mlm.html#coverage"><span class="toc-section-number">6.8.1</span> Coverage</a></li>
+<li><a href="mlm.html#reliability"><span class="toc-section-number">6.8.2</span> Reliability</a></li>
+<li><a href="mlm.html#validity"><span class="toc-section-number">6.8.3</span> Validity</a></li>
+<li><a href="mlm.html#designometrix"><span class="toc-section-number">6.8.4</span> Towards Design-o-metrix</a></li>
 </ul></li>
-<li class="chapter" data-level="5.9" data-path="mlm.html"><a href="mlm.html#further-readings-2"><i class="fa fa-check"></i><b>5.9</b> Further readings</a></li>
+<li><a href="mlm.html#further-readings-2"><span class="toc-section-number">6.9</span> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>6</b> Generalized Linear Models</a><ul>
-<li class="chapter" data-level="6.1" data-path="glm.html"><a href="glm.html#elements-glm"><i class="fa fa-check"></i><b>6.1</b> Elements of Generalized Linear Models</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="glm.html"><a href="glm.html#relinking-linearity"><i class="fa fa-check"></i><b>6.1.1</b> Re-linking linearity</a></li>
-<li class="chapter" data-level="6.1.2" data-path="glm.html"><a href="glm.html#choosing-randomness"><i class="fa fa-check"></i><b>6.1.2</b> Choosing patterns of randomness</a></li>
-<li class="chapter" data-level="6.1.3" data-path="glm.html"><a href="glm.html#mean-var-rel"><i class="fa fa-check"></i><b>6.1.3</b> Mean-variance relationship</a></li>
+<li><a href="glm.html#glm"><span class="toc-section-number">7</span> Generalized Linear Models</a>
+<ul>
+<li><a href="glm.html#elements-glm"><span class="toc-section-number">7.1</span> Elements of Generalized Linear Models</a>
+<ul>
+<li><a href="glm.html#relinking-linearity"><span class="toc-section-number">7.1.1</span> Re-linking linearity</a></li>
+<li><a href="glm.html#choosing-randomness"><span class="toc-section-number">7.1.2</span> Choosing patterns of randomness</a></li>
+<li><a href="glm.html#mean-var-rel"><span class="toc-section-number">7.1.3</span> Mean-variance relationship</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="glm.html"><a href="glm.html#count-data"><i class="fa fa-check"></i><b>6.2</b> Count data</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="glm.html"><a href="glm.html#pois-reg"><i class="fa fa-check"></i><b>6.2.1</b> Poisson regression</a></li>
-<li class="chapter" data-level="6.2.2" data-path="glm.html"><a href="glm.html#logistic-reg"><i class="fa fa-check"></i><b>6.2.2</b> Logistic (aka Binomial) regression</a></li>
-<li class="chapter" data-level="6.2.3" data-path="glm.html"><a href="glm.html#overdispersion"><i class="fa fa-check"></i><b>6.2.3</b> Modelling overdispersion</a></li>
+<li><a href="glm.html#count-data"><span class="toc-section-number">7.2</span> Count data</a>
+<ul>
+<li><a href="glm.html#pois-reg"><span class="toc-section-number">7.2.1</span> Poisson regression</a></li>
+<li><a href="glm.html#logistic-reg"><span class="toc-section-number">7.2.2</span> Logistic (aka Binomial) regression</a></li>
+<li><a href="glm.html#overdispersion"><span class="toc-section-number">7.2.3</span> Modelling overdispersion</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="glm.html"><a href="glm.html#duration-measures"><i class="fa fa-check"></i><b>6.3</b> Duration measures</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="glm.html"><a href="glm.html#exp-gam-reg"><i class="fa fa-check"></i><b>6.3.1</b> Exponential and Gamma regression</a></li>
-<li class="chapter" data-level="6.3.2" data-path="glm.html"><a href="glm.html#exgauss-reg"><i class="fa fa-check"></i><b>6.3.2</b> ExGaussian regression</a></li>
+<li><a href="glm.html#duration-measures"><span class="toc-section-number">7.3</span> Duration measures</a>
+<ul>
+<li><a href="glm.html#exp-gam-reg"><span class="toc-section-number">7.3.1</span> Exponential and Gamma regression</a></li>
+<li><a href="glm.html#exgauss-reg"><span class="toc-section-number">7.3.2</span> ExGaussian regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.4" data-path="glm.html"><a href="glm.html#rating-scales"><i class="fa fa-check"></i><b>6.4</b> Rating scales</a><ul>
-<li class="chapter" data-level="6.4.1" data-path="glm.html"><a href="glm.html#ord-logist-reg"><i class="fa fa-check"></i><b>6.4.1</b> Ordered logistic regression</a></li>
-<li class="chapter" data-level="6.4.2" data-path="glm.html"><a href="glm.html#beta-reg"><i class="fa fa-check"></i><b>6.4.2</b> Beta regression</a></li>
+<li><a href="glm.html#rating-scales"><span class="toc-section-number">7.4</span> Rating scales</a>
+<ul>
+<li><a href="glm.html#ord-logist-reg"><span class="toc-section-number">7.4.1</span> Ordered logistic regression</a></li>
+<li><a href="glm.html#beta-reg"><span class="toc-section-number">7.4.2</span> Beta regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="glm.html"><a href="glm.html#distributional-models"><i class="fa fa-check"></i><b>6.5</b> Beyond mean: distributional models</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="glm.html"><a href="glm.html#item-anchoring"><i class="fa fa-check"></i><b>6.5.1</b> Item-level anchoring in rating scales</a></li>
-<li class="chapter" data-level="6.5.2" data-path="glm.html"><a href="glm.html#part-employment"><i class="fa fa-check"></i><b>6.5.2</b> Participant-level employment of scale</a></li>
-<li class="chapter" data-level="6.5.3" data-path="glm.html"><a href="glm.html#part-skew"><i class="fa fa-check"></i><b>6.5.3</b> Participant-level skew in reaction times</a></li>
+<li><a href="glm.html#distributional-models"><span class="toc-section-number">7.5</span> Beyond mean: distributional models</a>
+<ul>
+<li><a href="glm.html#item-anchoring"><span class="toc-section-number">7.5.1</span> Item-level anchoring in rating scales</a></li>
+<li><a href="glm.html#part-employment"><span class="toc-section-number">7.5.2</span> Participant-level employment of scale</a></li>
+<li><a href="glm.html#part-skew"><span class="toc-section-number">7.5.3</span> Participant-level skew in reaction times</a></li>
 </ul></li>
-<li class="chapter" data-level="6.6" data-path="glm.html"><a href="glm.html#further-readings-3"><i class="fa fa-check"></i><b>6.6</b> Further readings</a></li>
+<li><a href="glm.html#further-readings-3"><span class="toc-section-number">7.6</span> Further readings</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="wwm.html"><a href="wwm.html"><i class="fa fa-check"></i><b>7</b> Working with models</a><ul>
-<li class="chapter" data-level="7.1" data-path="wwm.html"><a href="wwm.html#model-criticism"><i class="fa fa-check"></i><b>7.1</b> Model criticism</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="wwm.html"><a href="wwm.html#residual-analysis"><i class="fa fa-check"></i><b>7.1.1</b> Residual analysis</a></li>
-<li class="chapter" data-level="7.1.2" data-path="wwm.html"><a href="wwm.html#fitted-responses"><i class="fa fa-check"></i><b>7.1.2</b> Fitted responses analysis</a></li>
+<li><a href="wwm.html#wwm"><span class="toc-section-number">8</span> Working with models</a>
+<ul>
+<li><a href="wwm.html#model-criticism"><span class="toc-section-number">8.1</span> Model criticism</a>
+<ul>
+<li><a href="wwm.html#residual-analysis"><span class="toc-section-number">8.1.1</span> Residual analysis</a></li>
+<li><a href="wwm.html#fitted-responses"><span class="toc-section-number">8.1.2</span> Fitted responses analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="wwm.html"><a href="wwm.html#model-selection"><i class="fa fa-check"></i><b>7.2</b> Model selection</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="wwm.html"><a href="wwm.html#overfitting"><i class="fa fa-check"></i><b>7.2.1</b> The problem of over-fitting</a></li>
-<li class="chapter" data-level="7.2.2" data-path="wwm.html"><a href="wwm.html#cross-validation"><i class="fa fa-check"></i><b>7.2.2</b> Cross validation and LOO</a></li>
-<li class="chapter" data-level="7.2.3" data-path="wwm.html"><a href="wwm.html#ic"><i class="fa fa-check"></i><b>7.2.3</b> Information Criteria</a></li>
-<li class="chapter" data-level="7.2.4" data-path="wwm.html"><a href="wwm.html#model-selection-1"><i class="fa fa-check"></i><b>7.2.4</b> Model selection</a></li>
-<li class="chapter" data-level="7.2.5" data-path="wwm.html"><a href="wwm.html#choose-dist"><i class="fa fa-check"></i><b>7.2.5</b> Comparing response distributions</a></li>
-<li class="chapter" data-level="7.2.6" data-path="wwm.html"><a href="wwm.html#testing-theories"><i class="fa fa-check"></i><b>7.2.6</b> Testing hypotheses</a></li>
-<li class="chapter" data-level="7.2.7" data-path="wwm.html"><a href="wwm.html#a-note-on-bayes-factor"><i class="fa fa-check"></i><b>7.2.7</b> A note on Bayes Factor</a></li>
+<li><a href="wwm.html#model-comp"><span class="toc-section-number">8.2</span> Model comparison</a>
+<ul>
+<li><a href="wwm.html#overfitting"><span class="toc-section-number">8.2.1</span> The problem of over-fitting</a></li>
+<li><a href="wwm.html#cross-validation"><span class="toc-section-number">8.2.2</span> Cross validation and LOO</a></li>
+<li><a href="wwm.html#ic"><span class="toc-section-number">8.2.3</span> Information Criteria</a></li>
+<li><a href="wwm.html#model-selection"><span class="toc-section-number">8.2.4</span> Model selection</a></li>
+<li><a href="wwm.html#choose-dist"><span class="toc-section-number">8.2.5</span> Comparing response distributions</a></li>
+<li><a href="wwm.html#testing-theories"><span class="toc-section-number">8.2.6</span> Testing hypotheses</a></li>
+<li><a href="wwm.html#bayes-factor"><span class="toc-section-number">8.2.7</span> A note on Bayes Factor</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="wwm.html"><a href="wwm.html#further-readings-4"><i class="fa fa-check"></i><b>7.3</b> Further readings</a></li>
+<li><a href="wwm.html#further-readings-4"><span class="toc-section-number">8.3</span> Further readings</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="cases.html"><a href="cases.html"><i class="fa fa-check"></i><b>A</b> Cases</a><ul>
-<li class="chapter" data-level="A.1" data-path="cases.html"><a href="cases.html#real-cases"><i class="fa fa-check"></i><b>A.1</b> Real cases</a><ul>
-<li class="chapter" data-level="A.1.1" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.1</b> Hugme</a></li>
-<li class="chapter" data-level="A.1.2" data-path="cases.html"><a href="cases.html#cue8"><i class="fa fa-check"></i><b>A.1.2</b> CUE8</a></li>
-<li class="chapter" data-level="A.1.3" data-path="cases.html"><a href="cases.html#uncanny"><i class="fa fa-check"></i><b>A.1.3</b> Uncanny Valley</a></li>
-<li class="chapter" data-level="A.1.4" data-path="cases.html"><a href="cases.html#ipump"><i class="fa fa-check"></i><b>A.1.4</b> IPump</a></li>
-<li class="chapter" data-level="A.1.5" data-path="cases.html"><a href="cases.html#sleepstudy"><i class="fa fa-check"></i><b>A.1.5</b> Case Sleepstudy</a></li>
-<li class="chapter" data-level="A.1.6" data-path="cases.html"><a href="cases.html#egan"><i class="fa fa-check"></i><b>A.1.6</b> Egan</a></li>
-<li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#mmn"><i class="fa fa-check"></i><b>A.1.7</b> Case: Millers Magic Number</a></li>
-<li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.8</b> AUP</a></li>
+<li><a href="cases.html#cases"><span class="toc-section-number">A</span> Cases</a>
+<ul>
+<li><a href="cases.html#real-cases"><span class="toc-section-number">A.1</span> Real cases</a>
+<ul>
+<li><a href="cases.html#hugme"><span class="toc-section-number">A.1.1</span> Hugme</a></li>
+<li><a href="cases.html#cue8"><span class="toc-section-number">A.1.2</span> CUE8</a></li>
+<li><a href="cases.html#uncanny"><span class="toc-section-number">A.1.3</span> Uncanny Valley</a></li>
+<li><a href="cases.html#ipump"><span class="toc-section-number">A.1.4</span> IPump</a></li>
+<li><a href="cases.html#sleepstudy"><span class="toc-section-number">A.1.5</span> Case Sleepstudy</a></li>
+<li><a href="cases.html#egan"><span class="toc-section-number">A.1.6</span> Egan</a></li>
+<li><a href="cases.html#mmn"><span class="toc-section-number">A.1.7</span> Case: Millers Magic Number</a></li>
+<li><a href="cases.html#aup"><span class="toc-section-number">A.1.8</span> AUP</a></li>
 </ul></li>
-<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a><ul>
-<li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
-<li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
-<li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
-<li class="chapter" data-level="A.2.4" data-path="cases.html"><a href="cases.html#browsingab"><i class="fa fa-check"></i><b>A.2.4</b> BrowsingAB</a></li>
-<li class="chapter" data-level="A.2.5" data-path="cases.html"><a href="cases.html#headache"><i class="fa fa-check"></i><b>A.2.5</b> Headache</a></li>
-<li class="chapter" data-level="A.2.6" data-path="cases.html"><a href="cases.html#reading"><i class="fa fa-check"></i><b>A.2.6</b> Reading time</a></li>
-<li class="chapter" data-level="A.2.7" data-path="cases.html"><a href="cases.html#argame"><i class="fa fa-check"></i><b>A.2.7</b> AR_game</a></li>
-<li class="chapter" data-level="A.2.8" data-path="cases.html"><a href="cases.html#sleep"><i class="fa fa-check"></i><b>A.2.8</b> Sleep</a></li>
+<li><a href="cases.html#synthetic-data"><span class="toc-section-number">A.2</span> Synthetic data sets</a>
+<ul>
+<li><a href="cases.html#rainfall"><span class="toc-section-number">A.2.1</span> Rainfall</a></li>
+<li><a href="cases.html#sec99"><span class="toc-section-number">A.2.2</span> 99 seconds</a></li>
+<li><a href="cases.html#rational"><span class="toc-section-number">A.2.3</span> Rational</a></li>
+<li><a href="cases.html#browsingab"><span class="toc-section-number">A.2.4</span> BrowsingAB</a></li>
+<li><a href="cases.html#headache"><span class="toc-section-number">A.2.5</span> Headache</a></li>
+<li><a href="cases.html#reading"><span class="toc-section-number">A.2.6</span> Reading time</a></li>
+<li><a href="cases.html#argame"><span class="toc-section-number">A.2.7</span> AR_game</a></li>
+<li><a href="cases.html#sleep"><span class="toc-section-number">A.2.8</span> Sleep</a></li>
 </ul></li>
 </ul></li>
 </ul>
-
-      </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for design researchers</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
 <div id="header">
 <h1 class="title">New statistics for design researchers</h1>
-<h2 class="subtitle"><em>A Bayesian workflow in tidy R</em></h2>
-<p class="author"><em>Martin Schmettow</em></p>
-<p class="date"><em>2020-11-08</em></p>
+<h3 class="subtitle"><em>A Bayesian workflow in tidy R</em></h3>
+<h4 class="author"><em>Martin Schmettow</em></h4>
+<h4 class="date"><em>2021-03-16</em></h4>
 </div>
-<div id="intro" class="section level1">
+<div id="intro" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<div id="whom-for" class="section level2">
+<div id="whom-for" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Whom this book is for</h2>
 <p>Are you a design researcher?
 Is your work about improving computer software, cars, medical devices, services or trainings?
 Are you using data for your work, in order to measure or compare how well a design works?
 Welcome to the club!</p>
 <p>Of course, I have no idea who you are, personally, but I figure you as one of the following types:</p>
-<p>You are an Human Factors researcher, thirty-three years old, leading a small team in the center for research of a car maker.
+<p>You are an Human Factors researcher, thirty-three years old, leading a small team in the center for research of a German car manufacturer.
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
@@ -390,7 +424,7 @@ In a design experiment, if users can work faster with one interface compared to 
 <!-- Tongue-in-cheek, applied researchers take real problems to get their questions, but rarely solve them. Why not? It is legitimate, almost natural, to ask what causes the Uncanny Valley effect, for instance. You do a series of experimental study and also throw personality scales into the  game. Maybe, the effect is not unversal. Why? Just that. -->
 <!-- 43 -->
 </div>
-<div id="quant-design-research" class="section level2">
+<div id="quant-design-research" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Quantitative design research</h2>
 <p>A <em>design</em> is the structure of an artifact (or a process) that someone conceived for a purpose.
 This definition is extremely broad as it covers everything, tea kettles, software, cockpits, training programs and complex human-machine systems.
@@ -495,7 +529,7 @@ This is what I call a <em>design experiment</em>.</p>
 <ol style="list-style-type: decimal">
 <li>The design features under scrunity must be under control of the researcher. It does not suffice to collect some websites with varying font sizes, but every website needs to undergo the test at various font sizes.</li>
 <li>The design feature must undergo a full range of manipulations. You will not find the laws of readability by just comparing 10pt versus 12pt.</li>
-<li>Design features usually do not stand on their own. Readability is influenced by other factors, such as contrast and comprehensibility. Deriving a model from just one design will only generalize to this one design. Hence, the researcher must run the experiment on a sample of designs, with one of two strategies (or a mix of both): the <em>randomization strategy</em> takes a representative sample of designs, hoping that other impact factors average out. As we will see in <a href="lm.html#cfxm">4.5</a>, this is a daring assumption. Therefore, the preferred way is <em>statistical control</em>, where potential impact factors are recorded and added as control variables to the regression model.</li>
+<li>Design features usually do not stand on their own. Readability is influenced by other factors, such as contrast and comprehensibility. Deriving a model from just one design will only generalize to this one design. Hence, the researcher must run the experiment on a sample of designs, with one of two strategies (or a mix of both): the <em>randomization strategy</em> takes a representative sample of designs, hoping that other impact factors average out. As we will see in <a href="mpm.html#cfxm">5.4</a>, this is a daring assumption. Therefore, the preferred way is <em>statistical control</em>, where potential impact factors are recorded and added as control variables to the regression model.</li>
 </ol>
 <p>The parameters for decision making vary with the purpose.
 In an admission test for astronaut training, a decision is raised on individuals.
@@ -531,7 +565,7 @@ Experimental design will not explicitly being addressed, but all real case studi
 <!-- + experimental/fundamental studies -->
 <!-- + qualitative vs quantitative -->
 </div>
-<div id="what-new-stats" class="section level2">
+<div id="what-new-stats" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> What is New Statistics?</h2>
 <p>New Statistics is neither novel, nor are the contained methods truly bleeding-edge.
 The term has been coined by <span class="citation">(Cumming 2013)</span> and it is new in two respects: first, what can be subsumed as Classic Statistics is a zoo of crude tools from the first half of the 20th century.
@@ -589,12 +623,12 @@ The most powerful building block is the combination of linear terms.
 A linear model for the effect of blue light would be written as <code>RT ~ Light</code>.
 To simultaneously address the age effect, we had to write just <code>RT ~ Light + age</code>.
 In New Statistics, statistical models are not pulled off the shelf, but are designed in a thoughtful manner, based on an analysis of the <em>data-generating process</em>.</p>
-<p>I wouldn’t go so far as to say, we are only scratching the surface with the family of GLMM, but there definitely are more building blocks, that further expand the family of models, for example, also allowing non-linear relationships (see <a href="lm.html#prm">4.6</a> and <a href="glm.html#learning-curves">6.2.1.2</a>).
+<p>I wouldn’t go so far as to say, we are only scratching the surface with the family of GLMM, but there definitely are more building blocks, that further expand the family of models, for example, also allowing non-linear relationships (see <a href="mpm.html#prm">5.5</a> and <a href="glm.html#learning-curves">7.2.1.2</a>).
 New Statistics does not require the GLMM family per se, it only requires that models have a <em>quantitative interpretation</em>.
 That includes the whole set of models commonly referred to as <em>parametric models</em>, of which GLMM is one class.</p>
 <p>If there are parametric models, what about <em>non-parametric models</em>? In ClassicStats, non-parametric tests are routinely used as a fall-back for when none of the few available parametric models sits well.
 Non-parametric methods are banned from NewStats, for two reasons: first, they don’t give quantitative answers. Second, they are not needed.
-When reaction times are not “distributed Normal”, the researcher can simply swap the building block that defines the shape of randomness.
+When reaction times are not “distributed Normal,” the researcher can simply swap the building block that defines the shape of randomness.
 Or even better: the researcher knows that reaction times are not Normal and selects an appropriate response distribution right away.
 Infamously in ClassicStats, non-parametric tests are often misused to check the assumptions of a model, like the Normality assumption.
 New Statistics does not require such crude tricks.
@@ -621,7 +655,7 @@ However, the Bayesian approach has a number of advantages, that makes it a perfe
 <li>The Bayesian school of thinking does not require you to imagine infinite series of replication. Parameters and uncertainty have a <em>straight-forward interpretation</em>: There is a best guess for the true value and there is an interval within which it lies with a given certainty. Even stronger, Bayesian models produce posterior distributions, which contain the full information on uncertainty and can be used in multiple ways. That means, we can practically always create an certainty statement that precisely matches whatever is at stake.</li>
 <li>In classic models, the level of uncertainty is only given for a subset of parameters, called population-level coefficients. A Bayesian model generates information on <em>uncertainty for every parameter</em> in the model. As a result, Bayesian models can be used to compare variance parameters between groups, or individuals within a group (so called random effects), and even correlations between individual traits. This may sound unusual and complicated, but we will see several examples of when this is very useful.</li>
 <li>The classic p-value also is a trick in the sense of: you can only pull it a number of times. Null hypothesis tests are available only for a very limited class of models. Bayesian tools covers a <em>much broader class of models</em>. For example, modelling reaction times correctly, requires a response distribution that is skewed and has an offset. Classic tools have few options for skewed response distributions, but not with an offset. Modern Bayesian engines even give you the choice out of three such distributions (such as the Ex Gaussian, see @exgaus-reg.</li>
-<li>Sometimes it is fully legit to ask Yes/No questions, such as: does an effect contribute to making predictions, or not? Modern Bayesian Statistics has developed a powerful toolset for what is called, <em>model selection</em> (<a href="wwm.html#model-selection">7.2</a>). This can either be used to test hypotheses, or to harness the shear variety of models, that can be build.</li>
+<li>Sometimes it is fully legit to ask Yes/No questions, such as: does an effect contribute to making predictions, or not? Modern Bayesian Statistics has developed a powerful toolset for what is called, <em>model selection</em> (<a href="wwm.html#model-selection">8.2.4</a>). This can either be used to test hypotheses, or to harness the shear variety of models, that can be build.</li>
 </ol>
 <!-- ##### HERE -->
 <!-- Furthermore, the whole idea is very lofty. There are some experimental results from the labs, but it is totally unclear whether blue light would have an effect in the situation of driving. So, you better  -->
@@ -643,7 +677,7 @@ However, the Bayesian approach has a number of advantages, that makes it a perfe
 <!-- 9. R is the statisticians preferred toolbox. 80% of statistical analysis can be done with 20% of R’s full capabilities. -->
 <!-- A New Statistics report looks like this: -->
 </div>
-<div id="how-to-use" class="section level2">
+<div id="how-to-use" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> How to use this book</h2>
 <p>Chapter <a href="index.html#quant-design-research">1.2</a> introduces a framework for quantitative design research.
 It carves out the basic elements of empirical design research, such as users, designs and performance and links them to typical research problems.
@@ -669,11 +703,11 @@ While this chapter can only serve as a stepping stone, the reader will encounter
 The first chapter <a href="lm.html#lm">4</a> introduces basic elements of linear models, which are factors, covariates and interaction effects.
 A number of additional sections cover under-the-hood concepts, such as dummy variables or contrasts. Working through this chapter is essential for beginners as it develops the jargon.</p>
 <p>However, for most readers, the first chapter is not sufficient to get to do some real work, as it does not cover models for more complex research designs, such as repeated measures.
-This is treated extensively in chapter <a href="mlm.html#mlm">5</a>.
+This is treated extensively in chapter <a href="mlm.html#mlm">6</a>.
 It proceeds from simple repeated measures designs to complex designs, where human and multiple non-human populations encounter each other. It culminates in a re-build of psychometric models, consisting entirely of GLMM building blocks. The chapter ends with a completely novel, yet over-due, definition of designometrics, statistical models for comparing designs (not humans).</p>
 <!-- After working through this chapter, the reader is prepared to design highly effective studies. -->
 <!-- As long as the patterns of randomness are not off by to much from the linear model assumptions, it also suffices to get to work, seriously. -->
-<p>The third chapter <a href="glm.html#glm">6</a> opens up a plethora of possibilities to analyze all kinds of performance variables, that are usually considered “non-Normal” in Classic Statistics. In fact, the first part of the chapter is dedicated to convince the reader that there is no such thing as a Normal distribution in reality.
+<p>The third chapter <a href="glm.html#glm">7</a> opens up a plethora of possibilities to analyze all kinds of performance variables, that are usually considered “non-Normal” in Classic Statistics. In fact, the first part of the chapter is dedicated to convince the reader that there is no such thing as a Normal distribution in reality.
 Standard models are introduces to deal with counts, chances, temporal variables and rating scales.
 It is also meant as an eye opener for reseachers who routinely resorted to non-parametric procedures.
 After working through this chapter, I would consider anyone a sincere data analyst.</p>
@@ -688,7 +722,7 @@ re-organize the reading guide into three learning routes:
 
 for all routes, distinguish between reader types, perhaps make a cross table
 -->
-<div id="routes" class="section level3">
+<div id="routes" class="section level3" number="1.4.1">
 <h3><span class="header-section-number">1.4.1</span> Routes</h3>
 <p>If you use this book for self study, two considerations play a role for finding the optimal route through this book.
 what is your <em>background in Statistics?</em> For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
@@ -703,44 +737,44 @@ Chapters <a href="gsr.html#structuring-data">2.2.8</a> to <a href="gsr.html#knit
 If this is the first time, you learn a programming language, your mileage may vary.
 Chapter <a href="gsr.html#gsr">2</a> can at least provide you with an overview of all that you have to know, but some other books provide a more gentle and detailed introduction to R.
 In any case, learning your first programming language by one book alone may turn out difficult.</p>
-<p>All of chapters <a href="lm.html#lm">4</a> through <a href="glm.html#glm">6</a> have a similar structure. The first half adds a few essential techniques, whereas the remaining sections explore the depths and possibilities.
+<p>All of chapters <a href="lm.html#lm">4</a> through <a href="glm.html#glm">7</a> have a similar structure. The first half adds a few essential techniques, whereas the remaining sections explore the depths and possibilities.
 If you read this book to get an overview at the first read, the recommended route is as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Section <a href="lm.html#gmm">4.1</a> introduces the regression engine and basic reporting techniques, such as coefficient tables</li>
 <li>Section <a href="lm.html#cgm">4.3.1</a> introduces the principles of factorial models, just enough to analyse data from an experimental design comparison.</li>
-<li>Section <a href="mlm.html#thinking-multi-level">5.3</a> introduces just enough multi-level thinking to get you started.</li>
-<li>Section <a href="glm.html#elements-glm">6.1</a> explains the three limitations of linear models, and introduces link functions and choice of random distribution.</li>
+<li>Section <a href="mlm.html#thinking-multi-level">6.3</a> introduces just enough multi-level thinking to get you started.</li>
+<li>Section <a href="glm.html#elements-glm">7.1</a> explains the three limitations of linear models, and introduces link functions and choice of random distribution.</li>
 <li>Section <a href="ebs.html#poisson-dist">3.5.2.4</a> introduces Poisson distribution as one common shape of randomness, that many people have not yet heard of.</li>
-<li>Section <a href="glm.html#pois-reg">6.2.1</a> puts Poisson distribution and link function to practical use on the response variable deviations</li>
+<li>Section <a href="glm.html#pois-reg">7.2.1</a> puts Poisson distribution and link function to practical use on the response variable deviations</li>
 </ol>
 <p>Readers approaching this book with a specific class of problems in mind, can also drill into it, like in the following examples:</p>
 <p>Experimenters in Cognitive Psychology often use reaction time measures to test their hypotheses.
-The suggested vertical route matches the above up to <a href="glm.html#elements-glm">6.1</a>.
-Then, section <a href="glm.html#duration-measures">6.3</a> introduces Exponential-Gaussian distribution as plug-in-and-use alternative to the “Normal” error term.
-Section <a href="wwm.html#model-selection">7.2</a>, and <a href="wwm.html#testing-theories">7.2.6</a>in particular, show how hypothesis testing (and more) can be done in a Bayesian framework.</p>
+The suggested vertical route matches the above up to <a href="glm.html#elements-glm">7.1</a>.
+Then, section <a href="glm.html#duration-measures">7.3</a> introduces Exponential-Gaussian distribution as plug-in-and-use alternative to the “Normal” error term.
+Section <a href="wwm.html#model-selection">8.2.4</a>, and <a href="wwm.html#testing-theories">8.2.6</a>in particular, show how hypothesis testing (and more) can be done in a Bayesian framework.</p>
 <p>User Experience researchers (and Social Psychologists) make abundant use of rating scales.
 The vertical route in such a case is</p>
 <ol style="list-style-type: decimal">
-<li>Section <a href="lm.html#gmm">4.1</a>, <a href="lm.html#cgm">4.3.1</a> and <a href="mlm.html#thinking-multi-level">5.3</a>.</li>
-<li>Section <a href="mlm.html#non-human-populations">5.5</a> introduces items of a rating scale as non-human populations.</li>
-<li>Section <a href="mlm.html#psychometrics">5.8</a> shows how basic psychometric analysis can be done by using multi-level models.</li>
-<li>Section <a href="glm.html#rating-scales">6.4</a> elaborates on the randomness pattern of rating scales and suggests Beta regression (<a href="glm.html#beta-reg">6.4.2</a>)</li>
+<li>Section <a href="lm.html#gmm">4.1</a>, <a href="lm.html#cgm">4.3.1</a> and <a href="mlm.html#thinking-multi-level">6.3</a>.</li>
+<li>Section <a href="mlm.html#non-human-populations">6.5</a> introduces items of a rating scale as non-human populations.</li>
+<li>Section <a href="mlm.html#psychometrics">6.8</a> shows how basic psychometric analysis can be done by using multi-level models.</li>
+<li>Section <a href="glm.html#rating-scales">7.4</a> elaborates on the randomness pattern of rating scales and suggests Beta regression (<a href="glm.html#beta-reg">7.4.2</a>)</li>
 </ol>
-<p>That being said, if you are in the process of <em>developing a design-oriented rating scale</em>, start by reading the last paragraph of section <a href="mlm.html#designometrix">5.8.4</a>!</p>
+<p>That being said, if you are in the process of <em>developing a design-oriented rating scale</em>, start by reading the last paragraph of section <a href="mlm.html#designometrix">6.8.4</a>!</p>
 <p>There can also be reasons to take a more horizontal route.
 For example, market research often involves an insane amount of possible predictors (for when and why someone is buying a product or using a service).
-Sections <a href="lm.html#mpm">4.4</a> and <a href="lm.html#cfxm">4.5</a> explore a broad set of multi-predictor models.
-Section <a href="wwm.html#model-selection">7.2</a> introduces techniques to find just-the-right set of predictors.
-Experimentalists, in turn, can learn more efficient ways of designing their studies by working through chapter <a href="mlm.html#mlm">5</a>, entirely.
+Sections <a href="mpm.html#mpm">5</a> and <a href="mpm.html#cfxm">5.4</a> explore a broad set of multi-predictor models.
+Section <a href="wwm.html#model-selection">8.2.4</a> introduces techniques to find just-the-right set of predictors.
+Experimentalists, in turn, can learn more efficient ways of designing their studies by working through chapter <a href="mlm.html#mlm">6</a>, entirely.
 Researchers in Human Factors routinely collect multiple performance variables, such as time-on-task, number of errors and cognitive workload ratings.
-All these measures deserve their special way of being treated, which is emphasized in chapter <a href="glm.html#glm">6</a>.</p>
+All these measures deserve their special way of being treated, which is emphasized in chapter <a href="glm.html#glm">7</a>.</p>
 <!-- #### Make knowledge graph -->
 <!-- #### END -->
 </div>
-<div id="classroom" class="section level3">
+<div id="classroom" class="section level3" number="1.4.2">
 <h3><span class="header-section-number">1.4.2</span> In the classroom</h3>
 <p>Content-wise, this book covers roughly 200% of a typical Social Sciences Statistics curriculum.
-At least at my university, students roughly learn the equivalent of the first 50% of chapters <a href="ebs.html#ebs">3</a>, <a href="lm.html#lm">4</a>, <a href="mlm.html#mlm">5</a>, <a href="glm.html#glm">6</a> and <a href="wwm.html#wwm">7</a>, before they graduate.
+At least at my university, students roughly learn the equivalent of the first 50% of chapters <a href="ebs.html#ebs">3</a>, <a href="lm.html#lm">4</a>, <a href="mlm.html#mlm">6</a>, <a href="glm.html#glm">7</a> and <a href="wwm.html#wwm">8</a>, before they graduate.
 However, only occasionally have I been in the situation myself, to teach a whole statistics curriculum to a cohort of students.
 Instead, this book emerged from statistics workshops, which I have given inside and outside universities, for professionals, colleagues and groups of master students.</p>
 <p>If you are a docent in the <em>Social Sciences</em>, this book certainly can back an entry-level Statistics course.
@@ -787,9 +821,9 @@ Every participant completed a set of eight tasks under the following conditions:
 <li><p>Produce summary tables and graphs that reflect the research question</p></li>
 <li><p>Build a model and interpret the parameter estimates.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Start with a linear model that reflects your research question. Use sections <a href="lm.html#grm">4.4.3</a>, <a href="lm.html#mfm">4.4.2</a> and <a href="lm.html#saturation">4.5.3</a></li>
-<li>Select a GLM family that matches your chosen response variable. Use sections <a href="glm.html#exgauss-reg">6.3.2</a>, <a href="glm.html#pois-reg">6.2.1</a> or <a href="glm.html#beta-reg">6.4.2</a>.</li>
-<li>Build a multi-level model. Use sections <a href="mlm.html#thinking-multi-level">5.3</a>, <a href="mlm.html#intercept-re">5.1</a> and <a href="mlm.html#slope-re">5.2</a></li>
+<li>Start with a linear model that reflects your research question. Use sections <a href="mpm.html#grm">5.3</a>, <a href="mpm.html#mfm">5.2</a> and <a href="mpm.html#saturation">5.4.3</a></li>
+<li>Select a GLM family that matches your chosen response variable. Use sections <a href="glm.html#exgauss-reg">7.3.2</a>, <a href="glm.html#pois-reg">7.2.1</a> or <a href="glm.html#beta-reg">7.4.2</a>.</li>
+<li>Build a multi-level model. Use sections <a href="mlm.html#thinking-multi-level">6.3</a>, <a href="mlm.html#intercept-re">6.1</a> and <a href="mlm.html#slope-re">6.2</a></li>
 </ol></li>
 </ol>
 <hr />
@@ -809,18 +843,15 @@ If you prefer written exams, I advise against let students produce code on paper
 <li>Customer waiting times have been measured in several customer service hotlines. What would be an appropriate distribution family?</li>
 </ul>
 </div>
-<div id="rosetta" class="section level3">
+<div id="rosetta" class="section level3" number="1.4.3">
 <h3><span class="header-section-number">1.4.3</span> The stone of Rosetta</h3>
-<p>After I started working as a university teacher in the Netherlands, I followed a one-week language course to learn Dutch.
-Attendees of the course were of mixed cultures from three continents, including people from China, Ghana, Turkey and Bulgaria. As a consequence, the teacher spoke English to expolain Dutch. I learned very little Dutch in this course.
-Only after one day I decided to just fully expose myself to and start speaking Dutch, no matter what, I learned to speak it quite fluently.</p>
 <p>Next to my favorite hobby of writing books on Statistics, I am giving programming courses to Psychology students.
-I have long held the belief, that the skill of coding grounds on abstract thinking (similar to learning math) and computer enthusiasm.
+Long have I held the belief, that the skill of coding grounds on abstract thinking (similar to learning math) and computer enthusiasm.
 Being a formal thinker and a nerd, are not the first things that come to mind for psychology students. Almost surprisingly, almost all of them can learn this skill within three months.</p>
-<p>Only recently, a study revealed, that learning a programming language is just that: learning a second language <span class="citation">(Prat et al. 2020)</span>. If that is true, the best way to learn it is to create a closed feedback loop. Taken to the extreme that means, as much as the Dutch language teacher has wasted my time by every English word, every moment a programming teacher distracts a student from writing and reading code is lost.</p>
+<p>Shortly after I started working in the Netherlands, a Dutch teacher wasted my time by explaining Dutch language in English words. Only recently, a study revealed, that learning a programming language is just that: learning a second language <span class="citation">(Prat et al. 2020)</span>. If that is true, the best way to learn it is to create a closed feedback loop. Taken to the extreme that means, every moment a programming teacher distracts a student from writing and reading code is lost.</p>
 <p>You learn a language by being exposed to it, and that is what I will do to you in this book.
 Following the brief introduction to the programming language R, I will show to you every single line of code that I used to produce data, statistical models, tables and graphics.
-Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a skill, repetition is essential.</p>
+Some may find this a bit repetitive to see code for producing, say a boxplot, over and over again. I beg to differ: for learning a language, repetition is essential.</p>
 <p>Before I came to the Netherlands I lived about ten years in a southern part of Germany where many people speak a strong dialect, Bayrisch.
 Surprisingly, I am better at speaking Dutch than I ever were at this dialect.
 Maybe, this is because Dutch people react cheerful when you try in their language, whereas people from Bayern hate it, when you imitate their way of speaking.
@@ -842,13 +873,18 @@ Y &amp;\sim \textrm{Gauss}(\mu, \sigma)\\
 \end{aligned}
 \]</span></p>
 <p>Or, you can <em>produce</em> such a variable in R:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a>Data_gaus &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">mean =</span> <span class="dv">3</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>Data_gaus <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
 <p>The math expression requires that the recipient of the message can imagine how a Gaussian distribution looks like.
-In R, you can simply show, how it looks like:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1"></a>Data_gaus <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-2"><a href="index.html#cb2-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
-<span id="cb2-3"><a href="index.html#cb2-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+In R, you can simply show, how it looks like (Figure @ref(fig:data_gaus_1)):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>Data_gaus <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:data-gaus-1"></span>
+<img src="Production/figures/data-gaus-1-1.png" alt="A Gaussian distribution" width="90%" />
+<p class="caption">
+Figure 1.1: A Gaussian distribution
+</p>
+</div>
 <p>In many other books on statistics, math is used to precisely specify a model or any other data transformation.
 Specifying how data has been processed is essential for <em>transparency of research</em>.
 In the ideal case, data processing is given as a recipe so precise, that every other researcher would obtain the exact same results. That is called <em>re-producability</em>.
@@ -859,7 +895,7 @@ P(x) = \frac{1}
 {{\sigma \sqrt {2\pi } }}
 e^{{{ - \left( {x - \mu } \right)^2 / 2\sigma^2}}}
 \]</span></p>
-<p>Because math is such an inaccessible language, in practice, math notation is hardly re-producable, whereas R code is.
+<p>Because math is such an inaccessible language, in practice, math notation is hardly reproducable, whereas R code is.
 If anyone gives me their R code and the data, I can expect to get the exact same results.
 If I apply the code to my own data, I am doing an exact replication of a study.
 On top of that, I will always be able to check the validity of every single step in the analysis, as I will demonstrate below.</p>
@@ -881,10 +917,11 @@ From a didactic point of view, I am deliberately taking away the convenience tha
 All R code in this book has been crafted to specifically serve this purpose.
 In particular, all code snippets are written as data processing chains, with one operation per line.
 The best way to understand the code at first, is to run it starting at the top, examine what the first transformation did and then include the next step:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb3-2"><a href="index.html#cb3-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
-<span id="cb3-3"><a href="index.html#cb3-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>()</span></code></pre></div>
 <table>
+<caption><span id="tab:stepwise-1">Table 1.1: </span>Data set with 2 variables, showing 8 of 20 observations.</caption>
 <thead>
 <tr class="header">
 <th align="right">Obs</th>
@@ -894,51 +931,44 @@ The best way to understand the code at first, is to run it starting at the top, 
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">11.973</td>
+<td align="right">11.97</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">5.556</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">2.927</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">0.591</td>
-</tr>
-<tr class="odd">
 <td align="right">5</td>
-<td align="right">2.544</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="right">-3.429</td>
+<td align="right">2.54</td>
 </tr>
 <tr class="odd">
-<td align="right">7</td>
-<td align="right">-2.927</td>
-</tr>
-<tr class="even">
 <td align="right">8</td>
-<td align="right">2.076</td>
-</tr>
-<tr class="odd">
-<td align="right">9</td>
-<td align="right">0.740</td>
+<td align="right">2.08</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="right">-5.329</td>
+<td align="right">-5.33</td>
+</tr>
+<tr class="odd">
+<td align="right">14</td>
+<td align="right">-7.14</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="right">5.35</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="right">-1.52</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="right">1.80</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb4-2"><a href="index.html#cb4-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
-<span id="cb4-3"><a href="index.html#cb4-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-4"><a href="index.html#cb4-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb4-2"><a href="index.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="index.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="index.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(y <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code></pre></div>
 <table>
+<caption><span id="tab:stepwise-2">Table 1.2: </span>Data set with 2 variables, showing 8 of 14 observations.</caption>
 <thead>
 <tr class="header">
 <th align="right">Obs</th>
@@ -948,69 +978,87 @@ The best way to understand the code at first, is to run it starting at the top, 
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">11.973</td>
+<td align="right">11.97</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">5.556</td>
-</tr>
-<tr class="odd">
 <td align="right">3</td>
-<td align="right">2.927</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">0.591</td>
+<td align="right">2.93</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">2.544</td>
+<td align="right">2.54</td>
 </tr>
 <tr class="even">
-<td align="right">8</td>
-<td align="right">2.076</td>
+<td align="right">12</td>
+<td align="right">2.20</td>
 </tr>
 <tr class="odd">
-<td align="right">9</td>
-<td align="right">0.740</td>
+<td align="right">13</td>
+<td align="right">4.47</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="right">5.35</td>
+</tr>
+<tr class="odd">
+<td align="right">18</td>
+<td align="right">8.32</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="right">1.80</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb5-2"><a href="index.html#cb5-2"></a><span class="kw">tibble</span>(<span class="dt">Obs =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,</span>
-<span id="cb5-3"><a href="index.html#cb5-3"></a>       <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-4"><a href="index.html#cb5-4"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-5"><a href="index.html#cb5-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y))</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb6-2"><a href="index.html#cb6-2"></a><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-3"><a href="index.html#cb6-3"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-4"><a href="index.html#cb6-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
-<span id="cb6-5"><a href="index.html#cb6-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
-<p>End this is not the end of the story.
-Rather, it is the beginning of another phase in programming, where you modify another person’s code, after you understood how it works.
-This understanding does not have to be completely right from the beginning.
-For example, it is almost obvious that changing <code>mean = 2</code> changes the mean of the distribution.
-It may require a closer look to see that <code>filter(y &gt; 0)</code> removes non-positive values.
-The real fun starts, when you understand that the ggplot graphics engine can produce multiple layers and provides a huge set of geometries and with some googling you find a recipe to add a properly scaled density line to the plot:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb7-2"><a href="index.html#cb7-2"></a><span class="kw">tibble</span>(<span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-3"><a href="index.html#cb7-3"></a><span class="st">  </span><span class="kw">filter</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-4"><a href="index.html#cb7-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> y)) <span class="op">+</span></span>
-<span id="cb7-5"><a href="index.html#cb7-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">2</span>) <span class="op">+</span></span>
-<span id="cb7-6"><a href="index.html#cb7-6"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>..count..))</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb5-2"><a href="index.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="index.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="index.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(y <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="index.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> y))</span></code></pre></div>
+<div class="figure"><span id="fig:stepwise-3"></span>
+<img src="Production/figures/stepwise-3-1.png" alt="Piping data into the plotting engine" width="90%" />
+<p class="caption">
+Figure 1.2: Piping data into the plotting engine
+</p>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb6-2"><a href="index.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="index.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="index.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(y <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="index.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="index.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stepwise-4"></span>
+<img src="Production/figures/stepwise-4-1.png" alt="Plotting a histogram" width="90%" />
+<p class="caption">
+Figure 1.3: Plotting a histogram
+</p>
+</div>
+<p>It is almost obvious that changing <code>mean = 2</code> changes the mean (Table <a href="index.html#tab:stepwise-1">1.1</a>) of the distribution ß, and that <code>filter(y &gt; 0)</code> removes non-positive values (Table <a href="index.html#tab:stepwise-2">1.2</a>). The real fun starts when the Ggplot graphics engine is loaded with data. In Figure <a href="index.html#fig:stepwise-3">1.2</a> you only see an empty coordinate system. In Figure <a href="index.html#fig:stepwise-4">1.3</a> a so called geometry is added, creating a histogram.</p>
+<p>And this is not the end of the story.
+Rather, it is the beginning of another phase in learning to programming, where you start working with existing code and modify it to your needs.
+The ggplot graphics engine in particular is easy to learn and, yet, provides almost endless possibilities to express yourself in a report. It is also very well documented. With some googling you will quickly find a recipe to add a properly scaled density line to the plot (Figure <a href="index.html#fig:stepwise-5">1.4</a>):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb7-2"><a href="index.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">y =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="index.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(y <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="index.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="index.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="index.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="dv">2</span> <span class="sc">*</span> ..count..))</span></code></pre></div>
+<div class="figure"><span id="fig:stepwise-5"></span>
+<img src="Production/figures/stepwise-5-1.png" alt="Adding another layer" width="90%" />
+<p class="caption">
+Figure 1.4: Adding another layer
+</p>
+</div>
 <p>In contrast to math notation, R is productive and that opens new ways for learning statistics.
 Several chapters will make use of a technique best described as generation-and-recovery, where a data generating process is expressed as a simulation function and the result is recovered by a matching model. Loop closed!</p>
 <!-- ## Observations and measures  -->
 </div>
 </div>
-<div id="scoping-and-additional-readings" class="section level2">
-<h2><span class="header-section-number">1.5</span> Scoping and additional readings</h2>
+<div id="thank-you-and-supplementary-readings" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Thank you and supplementary readings</h2>
 <p>To keep the book lean, I refrained to use citations a lot.
-That does not mean I am independent.
-The opposite is the case and the following authors greatly influenced my way of thinking and I admire every single one of them so much that I certainly copy-catted more than I am aware of.</p>
+That does not mean I was independent.
+The opposite is the case and the following authors greatly influenced my way of thinking and I certainly copy-catted more than I am aware of. Thank them for the inspiration!</p>
 <p><span class="citation">(Gelman and Hill 2006)</span> is the oldest Statistics textbook I still have in use.
 Not only was it the first one of its kind to promote the programming language R, it also develops a similar framework of models and already introduces a few Bayesian</p>
 <p><span class="citation">(McElreath 2018)</span> is targeted at statistical users, who are so deeply stuck in the Classic Statistics paradigm that they need a proper therapy.
@@ -1022,6 +1070,7 @@ For professional academic researchers, this book is a valuable addition, as it i
 Like no other book it demonstrates the knowledge-driven process of translating research question into statistical models.</p>
 <p><span class="citation">(Gelman et al. 2013)</span> simply is the reference in Bayesian applied statistics.
 Many aspects of Bayesian analysis, that the present book and others in its league rather illustrate than justify, are explained and discussed with exquisite detail.</p>
+<p>Then, I want to thank all former students who have collected the data sets I am using: Jop Havinga, Cornelia Schmidt, Lea Echelmeyer, Marc Danielski, Robin Koopmans, Frauke van Beek, Raphaela Schnittker, Jan Sommer, Julian Keil, Franziska Geesen and Nicolas Sander.</p>
 <!-- Readers who are interested to follow-up on   -->
 <!-- Andrew Gelman and his team have like no other group in the world  -->
 <!-- + NewStats textbooks -->
@@ -1033,76 +1082,23 @@ Many aspects of Bayesian analysis, that the present book and others in its leagu
 
 </div>
 </div>
-            </section>
+<p style="text-align: center;">
+<a href="gsr.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
 
-          </div>
-        </div>
-      </div>
 
-<a href="gsr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+</div>
+
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-}
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
-});
+
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
-
 </html>

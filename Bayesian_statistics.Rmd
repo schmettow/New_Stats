@@ -948,7 +948,7 @@ D_agg %>%
 
 For the illustration of categorical-metric associations case, *boxplots* haven proven useful. Boxplots show differences in central tendency (median) and dispersion (other quartiles) simultaneously. In Figure \@ref(fig:ipump-5), we observe that Novel produces shorter ToT and also seems to be less dispersed.
 
-```{r  ipump-5, fig.caption = "Boxplot comparison of two groups"}
+```{r ipump-5, fig.cap = "Boxplot comparison of two groups"}
 D_agg %>% 
   ggplot(aes(x = Design, y = ToT)) +
   geom_boxplot()

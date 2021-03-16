@@ -5,8 +5,7 @@ author: "Martin Schmettow"
 date: "`r Sys.Date()`"
 github-repo: schmettow/New_Stats
 site: bookdown::bookdown_site
-description: A statistics book for designers, human factors specialists, UX researchers,  applied psychologists and everyone else who works hard to make this world a better  place.
-documentclass: book
+description: A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place.
 bibliography: references.bib
 ---
 
@@ -27,7 +26,7 @@ Welcome to the club!
 
 Of course, I have no idea who you are, personally, but I figure you as one of the following types:
 
-You are an Human Factors researcher, thirty-three years old, leading a small team in the center for research of a car maker.
+You are an Human Factors researcher, thirty-three years old, leading a small team in the center for research of a German car manufacturer.
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
