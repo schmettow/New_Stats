@@ -146,7 +146,7 @@ predict(M_LRM_1,
 ```
 
 <div class="figure">
-<img src="Production/figures/relink-2-1.png" alt="Trying to predict future performance by a linear model produces inpossible predictions" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/relink-2-1.png" alt="Trying to predict future performance by a linear model produces inpossible predictions" width="90%" />
 <p class="caption">(\#fig:relink-2)Trying to predict future performance by a linear model produces inpossible predictions</p>
 </div>
 
@@ -213,7 +213,7 @@ The logarithm has the *exponential* function as a counterpart, which bends the l
 
 
 <div class="figure">
-<img src="Production/figures/relink-3-1.png" alt="Log and logit link functions expand the bounded range of measures. Mean functions do the reverse." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/relink-3-1.png" alt="Log and logit link functions expand the bounded range of measures. Mean functions do the reverse." width="90%" />
 <p class="caption">(\#fig:relink-3)Log and logit link functions expand the bounded range of measures. Mean functions do the reverse.</p>
 </div>
 
@@ -259,7 +259,7 @@ D_pumps_sim %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/random-1-1.png" alt="Simulation with Gaussian error terms produces impossible values." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/random-1-1.png" alt="Simulation with Gaussian error terms produces impossible values." width="90%" />
 <p class="caption">(\#fig:random-1)Simulation with Gaussian error terms produces impossible values.</p>
 </div>
 
@@ -314,7 +314,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/mvr-1-1.png" alt="A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/mvr-1-1.png" alt="A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship." width="90%" />
 <p class="caption">(\#fig:mvr-1)A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship.</p>
 </div>
 
@@ -345,7 +345,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/mvr-2-1.png" alt="A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/mvr-2-1.png" alt="A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship." width="90%" />
 <p class="caption">(\#fig:mvr-2)A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship.</p>
 </div>
 
@@ -376,7 +376,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/mvr-3-1.png" alt="Mean-variance relationship of Poisson distributed data  with two groups" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/mvr-3-1.png" alt="Mean-variance relationship of Poisson distributed data  with two groups" width="90%" />
 <p class="caption">(\#fig:mvr-3)Mean-variance relationship of Poisson distributed data  with two groups</p>
 </div>
 
@@ -404,7 +404,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/mvr-4-1.png" alt="Cigar shaped mean-variance relationship of Binomial data" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/mvr-4-1.png" alt="Cigar shaped mean-variance relationship of Binomial data" width="90%" />
 <p class="caption">(\#fig:mvr-4)Cigar shaped mean-variance relationship of Binomial data</p>
 </div>
 
@@ -455,7 +455,7 @@ D_Pois %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/poisreg-1-1.png" alt="Data sampled from a Poisson distribution" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/poisreg-1-1.png" alt="Data sampled from a Poisson distribution" width="90%" />
 <p class="caption">(\#fig:poisreg-1)Data sampled from a Poisson distribution</p>
 </div>
 
@@ -640,7 +640,7 @@ ToT = $100  \times .8^n$
 Exponential functions make pretty good learning curves and they happen to be the mean function of Poisson regression. This leads to the following  simulation of a learning experiment. This simulation takes a constant step size of $\log(.8) = -0.223$ on the log-linearized scale, resulting in a reduction of 20% per session.
 
 <div class="figure">
-<img src="Production/figures/poisreg-6-1.png" alt="Exponential learning curve becoming linear under the log link function" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/poisreg-6-1.png" alt="Exponential learning curve becoming linear under the log link function" width="90%" />
 <p class="caption">(\#fig:poisreg-6)Exponential learning curve becoming linear under the log link function</p>
 </div>
 
@@ -713,7 +713,7 @@ T_fixef %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/poisreg-9-1.png" alt="Learning rate estimates from a log-linearized continuous model and an OFM." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/poisreg-9-1.png" alt="Learning rate estimates from a log-linearized continuous model and an OFM." width="90%" />
 <p class="caption">(\#fig:poisreg-9)Learning rate estimates from a log-linearized continuous model and an OFM.</p>
 </div>
 
@@ -1475,7 +1475,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/logreg-13-1.png" alt="Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/logreg-13-1.png" alt="Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average." width="90%" />
 <p class="caption">(\#fig:logreg-13)Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average.</p>
 </div>
 
@@ -1561,7 +1561,7 @@ bind_rows(
 ```
 
 <div class="figure">
-<img src="Production/figures/negbinreg-1-1.png" alt="Comparing credibility intervals of a Poisson and Neg-Binomial models" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/negbinreg-1-1.png" alt="Comparing credibility intervals of a Poisson and Neg-Binomial models" width="90%" />
 <p class="caption">(\#fig:negbinreg-1)Comparing credibility intervals of a Poisson and Neg-Binomial models</p>
 </div>
 
@@ -1607,7 +1607,7 @@ rbetabinom(1000, 10, 1, 2) %>% qplot()
 ```
 
 <div class="figure">
-<img src="Production/figures/betabin-1-1.png" alt="Sampling from a Beta-Bionomial distribution" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/betabin-1-1.png" alt="Sampling from a Beta-Bionomial distribution" width="90%" />
 <p class="caption">(\#fig:betabin-1)Sampling from a Beta-Bionomial distribution</p>
 </div>
 
@@ -1821,7 +1821,7 @@ D_ovdsp %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/olre-4-1.png" alt="Recovery of observation-level random effects" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/olre-4-1.png" alt="Recovery of observation-level random effects" width="90%" />
 <p class="caption">(\#fig:olre-4)Recovery of observation-level random effects</p>
 </div>
 
@@ -1909,7 +1909,7 @@ D_exp %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/expreg-1-1.png" alt="Data sampled from an Exponential distribution." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/expreg-1-1.png" alt="Data sampled from an Exponential distribution." width="90%" />
 <p class="caption">(\#fig:expreg-1)Data sampled from an Exponential distribution.</p>
 </div>
 
@@ -1962,7 +1962,7 @@ D_gam %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/expreg-3-1.png" alt="Data sampled from a Gamma distribution." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/expreg-3-1.png" alt="Data sampled from a Gamma distribution." width="90%" />
 <p class="caption">(\#fig:expreg-3)Data sampled from a Gamma distribution.</p>
 </div>
 
@@ -2081,7 +2081,7 @@ ggplot(data.frame(x = c(0, 3000)), aes(x = x)) +
 ```
 
 <div class="figure">
-<img src="Production/figures/exgreg-1-1.png" alt="Gamma distributions loose their left-skewness, when moving away from the boundary." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/exgreg-1-1.png" alt="Gamma distributions loose their left-skewness, when moving away from the boundary." width="90%" />
 <p class="caption">(\#fig:exgreg-1)Gamma distributions loose their left-skewness, when moving away from the boundary.</p>
 </div>
 
@@ -2125,7 +2125,7 @@ ggplot(data.frame(x = c(0, 800)), aes(x = x)) +
 ```
 
 <div class="figure">
-<img src="Production/figures/exgreg-2-1.png" alt="Exgaussian distributions can be far from zero and still be left skewed" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/exgreg-2-1.png" alt="Exgaussian distributions can be far from zero and still be left skewed" width="90%" />
 <p class="caption">(\#fig:exgreg-2)Exgaussian distributions can be far from zero and still be left skewed</p>
 </div>
 
@@ -2146,7 +2146,7 @@ qplot(D_exg$Y) + xlim(0, 300)
 ```
 
 <div class="figure">
-<img src="Production/figures/exgreg-4-1.png" alt="Sampling from an Exgaussian distribution" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/exgreg-4-1.png" alt="Sampling from an Exgaussian distribution" width="90%" />
 <p class="caption">(\#fig:exgreg-4)Sampling from an Exgaussian distribution</p>
 </div>
 
@@ -2226,7 +2226,7 @@ D_hugme %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rt-1-1.png" alt="Participant-level RT distributions" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rt-1-1.png" alt="Participant-level RT distributions" width="90%" />
 <p class="caption">(\#fig:rt-1)Participant-level RT distributions</p>
 </div>
 
@@ -2291,7 +2291,7 @@ fixef(P_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rt-2-1.png" alt="Comparing CLU estimates of Exgaussian, Gamma and Gaussian models" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rt-2-1.png" alt="Comparing CLU estimates of Exgaussian, Gamma and Gaussian models" width="90%" />
 <p class="caption">(\#fig:rt-2)Comparing CLU estimates of Exgaussian, Gamma and Gaussian models</p>
 </div>
 
@@ -2313,7 +2313,7 @@ D_hugme %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rt-3-1.png" alt="Comparing residuals of Exgaussian, Gamma and Gaussian models" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rt-3-1.png" alt="Comparing residuals of Exgaussian, Gamma and Gaussian models" width="90%" />
 <p class="caption">(\#fig:rt-3)Comparing residuals of Exgaussian, Gamma and Gaussian models</p>
 </div>
 
@@ -2409,7 +2409,7 @@ fixef(P_4, mean.func = exp) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/tot-2-1.png" alt="Comparing CLU estimates of Exgaussian, Gamma and Gaussian models" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/tot-2-1.png" alt="Comparing CLU estimates of Exgaussian, Gamma and Gaussian models" width="90%" />
 <p class="caption">(\#fig:tot-2)Comparing CLU estimates of Exgaussian, Gamma and Gaussian models</p>
 </div>
 
@@ -2428,7 +2428,7 @@ left_join(T_4_predict, D_cue8_mod, by = "Obs") %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/tot-3-1.png" alt="Comparing residuals of Exgaussian, Gamma and Gaussian models" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/tot-3-1.png" alt="Comparing residuals of Exgaussian, Gamma and Gaussian models" width="90%" />
 <p class="caption">(\#fig:tot-3)Comparing residuals of Exgaussian, Gamma and Gaussian models</p>
 </div>
 
@@ -2699,7 +2699,7 @@ As the outcome of anchoring, introspection and binning are not under the control
 
 
 <div class="figure">
-<img src="Production/figures/rating-1-1.png" alt="Five participants with different response styles" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rating-1-1.png" alt="Five participants with different response styles" width="90%" />
 <p class="caption">(\#fig:rating-1)Five participants with different response styles</p>
 </div>
 
@@ -2728,7 +2728,7 @@ D_pumps %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rating-2-1.png" alt="In the IPump study participants vary greatly in how they exploit the range of a mental workload scale." width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rating-2-1.png" alt="In the IPump study participants vary greatly in how they exploit the range of a mental workload scale." width="90%" />
 <p class="caption">(\#fig:rating-2)In the IPump study participants vary greatly in how they exploit the range of a mental workload scale.</p>
 </div>
 
@@ -2791,7 +2791,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rating-4-1.png" alt="Designs A and B rated on a sevel-point scale" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rating-4-1.png" alt="Designs A and B rated on a sevel-point scale" width="90%" />
 <p class="caption">(\#fig:rating-4)Designs A and B rated on a sevel-point scale</p>
 </div>
 
@@ -2947,7 +2947,7 @@ D_cue8_SUS %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rating-6-1.png" alt="Response distribution of SUS ratings across teams and conditions" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/rating-6-1.png" alt="Response distribution of SUS ratings across teams and conditions" width="90%" />
 <p class="caption">(\#fig:rating-6)Response distribution of SUS ratings across teams and conditions</p>
 </div>
 
@@ -3049,7 +3049,7 @@ D_Anchor %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/distmod-1-1.png" alt="Extreme and moderate anchoring produce differently varied response distributions" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/distmod-1-1.png" alt="Extreme and moderate anchoring produce differently varied response distributions" width="90%" />
 <p class="caption">(\#fig:distmod-1)Extreme and moderate anchoring produce differently varied response distributions</p>
 </div>
 
@@ -3181,7 +3181,7 @@ ranef(M_poly_3_beta_dist) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/distmod-4-1.png" alt="Participant-level random effects for scale parameter phi" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/distmod-4-1.png" alt="Participant-level random effects for scale parameter phi" width="90%" />
 <p class="caption">(\#fig:distmod-4)Participant-level random effects for scale parameter phi</p>
 </div>
 
@@ -3251,7 +3251,7 @@ ranef(P_1_exg_dist) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/distmod-5-1.png" alt="Participant-level random effects for sigma in beta" width="90%" />
+<img src="Generalized_Linear_Models_files/figure-html/distmod-5-1.png" alt="Participant-level random effects for sigma in beta" width="90%" />
 <p class="caption">(\#fig:distmod-5)Participant-level random effects for sigma in beta</p>
 </div>
 

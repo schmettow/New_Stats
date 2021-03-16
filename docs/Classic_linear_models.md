@@ -371,7 +371,7 @@ P_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-23-1.png" alt="Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk." width="50%" /><img src="Production/figures/sec99-23-2.png" alt="Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk." width="50%" />
+<img src="Classic_linear_models_files/figure-html/sec99-23-1.png" alt="Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk." width="50%" /><img src="Classic_linear_models_files/figure-html/sec99-23-2.png" alt="Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk." width="50%" />
 <p class="caption">(\#fig:sec99-23)Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk.</p>
 </div>
 
@@ -411,7 +411,7 @@ P_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-25-1.png" alt="Violin plots for (marginal) posterior density" width="90%" />
+<img src="Classic_linear_models_files/figure-html/sec99-25-1.png" alt="Violin plots for (marginal) posterior density" width="90%" />
 <p class="caption">(\#fig:sec99-25)Violin plots for (marginal) posterior density</p>
 </div>
 
@@ -739,7 +739,7 @@ P_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/clu-2-1.png" alt="Comparing mean, median and mode of marginal posterior distributions" width="90%" />
+<img src="Classic_linear_models_files/figure-html/clu-2-1.png" alt="Comparing mean, median and mode of marginal posterior distributions" width="90%" />
 <p class="caption">(\#fig:clu-2)Comparing mean, median and mode of marginal posterior distributions</p>
 </div>
 
@@ -855,7 +855,7 @@ expand_grid(
 ```
 
 <div class="figure">
-<img src="Production/figures/walk-1-1.png" alt="Linear terms differing by intercepts and slopes" width="90%" />
+<img src="Classic_linear_models_files/figure-html/walk-1-1.png" alt="Linear terms differing by intercepts and slopes" width="90%" />
 <p class="caption">(\#fig:walk-1)Linear terms differing by intercepts and slopes</p>
 </div>
 
@@ -918,7 +918,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/bab-1-1.png" alt="Using a scatterplot and smoother to check for linear trends" width="90%" />
+<img src="Classic_linear_models_files/figure-html/bab-1-1.png" alt="Using a scatterplot and smoother to check for linear trends" width="90%" />
 <p class="caption">(\#fig:bab-1)Using a scatterplot and smoother to check for linear trends</p>
 </div>
 
@@ -1000,7 +1000,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/shift-1-1.png" alt="Shifting and centering of variable Age" width="90%" />
+<img src="Classic_linear_models_files/figure-html/shift-1-1.png" alt="Shifting and centering of variable Age" width="90%" />
 <p class="caption">(\#fig:shift-1)Shifting and centering of variable Age</p>
 </div>
 
@@ -1167,7 +1167,7 @@ D_ratings %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rescale-3-1.png" alt="Distribution of three rating scale items" width="90%" />
+<img src="Classic_linear_models_files/figure-html/rescale-3-1.png" alt="Distribution of three rating scale items" width="90%" />
 <p class="caption">(\#fig:rescale-3)Distribution of three rating scale items</p>
 </div>
 
@@ -1199,7 +1199,7 @@ D_standard %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rescale-4-1.png" alt="Distribution of three rating scale items with standardized boundaries" width="90%" />
+<img src="Classic_linear_models_files/figure-html/rescale-4-1.png" alt="Distribution of three rating scale items with standardized boundaries" width="90%" />
 <p class="caption">(\#fig:rescale-4)Distribution of three rating scale items with standardized boundaries</p>
 </div>
 
@@ -1223,7 +1223,7 @@ D_ratings %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rescale-5-1.png" alt="Z-transformation removes differences in location and dispersion" width="90%" />
+<img src="Classic_linear_models_files/figure-html/rescale-5-1.png" alt="Z-transformation removes differences in location and dispersion" width="90%" />
 <p class="caption">(\#fig:rescale-5)Z-transformation removes differences in location and dispersion</p>
 </div>
 
@@ -1255,7 +1255,7 @@ D_pumps %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rescale-6-1.png" alt="Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape" width="90%" />
+<img src="Classic_linear_models_files/figure-html/rescale-6-1.png" alt="Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape" width="90%" />
 <p class="caption">(\#fig:rescale-6)Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape</p>
 </div>
 
@@ -1298,7 +1298,7 @@ D_cor %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/corr-1-1.png" alt="A linear association between X and Y" width="90%" />
+<img src="Classic_linear_models_files/figure-html/corr-1-1.png" alt="A linear association between X and Y" width="90%" />
 <p class="caption">(\#fig:corr-1)A linear association between X and Y</p>
 </div>
 
@@ -1563,7 +1563,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/eda-anova-1.png" alt="Histogram showing ToT distributions in two groups" width="90%" />
+<img src="Classic_linear_models_files/figure-html/eda-anova-1.png" alt="Histogram showing ToT distributions in two groups" width="90%" />
 <p class="caption">(\#fig:eda-anova)Histogram showing ToT distributions in two groups</p>
 </div>
 
@@ -1903,7 +1903,7 @@ coef(M_AMM_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/amm-1-1.png" alt="ToT on five tasks, center estimates and 95 percent credibility interval" width="90%" />
+<img src="Classic_linear_models_files/figure-html/amm-1-1.png" alt="ToT on five tasks, center estimates and 95 percent credibility interval" width="90%" />
 <p class="caption">(\#fig:amm-1)ToT on five tasks, center estimates and 95 percent credibility interval</p>
 </div>
 
@@ -1997,7 +1997,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ofm-1-1.png" alt="A boxplot and a step chart showing differences in ToT by level of education" width="50%" /><img src="Production/figures/ofm-1-2.png" alt="A boxplot and a step chart showing differences in ToT by level of education" width="50%" />
+<img src="Classic_linear_models_files/figure-html/ofm-1-1.png" alt="A boxplot and a step chart showing differences in ToT by level of education" width="50%" /><img src="Classic_linear_models_files/figure-html/ofm-1-2.png" alt="A boxplot and a step chart showing differences in ToT by level of education" width="50%" />
 <p class="caption">(\#fig:ofm-1)A boxplot and a step chart showing differences in ToT by level of education</p>
 </div>
 
@@ -2069,7 +2069,7 @@ tibble(session = as.integer(1:12)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ofm-3-1.png" alt="A learning curve" width="90%" />
+<img src="Classic_linear_models_files/figure-html/ofm-3-1.png" alt="A learning curve" width="90%" />
 <p class="caption">(\#fig:ofm-3)A learning curve</p>
 </div>
 
@@ -2093,7 +2093,7 @@ D_Novel %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ofm-4-1.png" alt="Learning to execute a task faster over three sessions." width="90%" />
+<img src="Classic_linear_models_files/figure-html/ofm-4-1.png" alt="Learning to execute a task faster over three sessions." width="90%" />
 <p class="caption">(\#fig:ofm-4)Learning to execute a task faster over three sessions.</p>
 </div>
 
@@ -2417,7 +2417,7 @@ AUP_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/mrm-1-1.png" alt="Linear associations of NCS and Gex with Resistance" width="50%" /><img src="Production/figures/mrm-1-2.png" alt="Linear associations of NCS and Gex with Resistance" width="50%" />
+<img src="Classic_linear_models_files/figure-html/mrm-1-1.png" alt="Linear associations of NCS and Gex with Resistance" width="50%" /><img src="Classic_linear_models_files/figure-html/mrm-1-2.png" alt="Linear associations of NCS and Gex with Resistance" width="50%" />
 <p class="caption">(\#fig:mrm-1)Linear associations of NCS and Gex with Resistance</p>
 </div>
 
@@ -2540,7 +2540,7 @@ AUP_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/AUP-corr-predictors-1.png" alt="Correlated predictors Gex and NCS" width="90%" />
+<img src="Classic_linear_models_files/figure-html/AUP-corr-predictors-1.png" alt="Correlated predictors Gex and NCS" width="90%" />
 <p class="caption">(\#fig:AUP-corr-predictors)Correlated predictors Gex and NCS</p>
 </div>
 
@@ -2741,7 +2741,7 @@ coef(M_amfm_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/mfm-4-1.png" alt="Line graph showing conditional effects in a tow-factorial model" width="90%" />
+<img src="Classic_linear_models_files/figure-html/mfm-4-1.png" alt="Line graph showing conditional effects in a tow-factorial model" width="90%" />
 <p class="caption">(\#fig:mfm-4)Line graph showing conditional effects in a tow-factorial model</p>
 </div>
 
@@ -2867,7 +2867,7 @@ coef(M_ampm_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/grm-3-1.png" alt="Creating a conditional plot from intercept and slope effects" width="90%" />
+<img src="Classic_linear_models_files/figure-html/grm-3-1.png" alt="Creating a conditional plot from intercept and slope effects" width="90%" />
 <p class="caption">(\#fig:grm-3)Creating a conditional plot from intercept and slope effects</p>
 </div>
 
@@ -3052,7 +3052,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/cmrm-1-1.png" alt="The effect of  age, combined and conditional on Design" width="90%" />
+<img src="Classic_linear_models_files/figure-html/cmrm-1-1.png" alt="The effect of  age, combined and conditional on Design" width="90%" />
 <p class="caption">(\#fig:cmrm-1)The effect of  age, combined and conditional on Design</p>
 </div>
 
@@ -3145,7 +3145,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/cmfm-1-1.png" alt="Comparing satisfaction ratings by design and gender" width="90%" />
+<img src="Classic_linear_models_files/figure-html/cmfm-1-1.png" alt="Comparing satisfaction ratings by design and gender" width="90%" />
 <p class="caption">(\#fig:cmfm-1)Comparing satisfaction ratings by design and gender</p>
 </div>
 
@@ -3188,7 +3188,7 @@ bind_rows(
 ```
 
 <div class="figure">
-<img src="Production/figures/cmfm-2-1.png" alt="Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals" width="90%" />
+<img src="Classic_linear_models_files/figure-html/cmfm-2-1.png" alt="Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals" width="90%" />
 <p class="caption">(\#fig:cmfm-2)Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals</p>
 </div>
 
@@ -3241,7 +3241,7 @@ tribble(
 ```
 
 <div class="figure">
-<img src="Production/figures/cmfm-3-1.png" alt="Total versus conditional effects in a factorial model" width="90%" />
+<img src="Classic_linear_models_files/figure-html/cmfm-3-1.png" alt="Total versus conditional effects in a factorial model" width="90%" />
 <p class="caption">(\#fig:cmfm-3)Total versus conditional effects in a factorial model</p>
 </div>
 
@@ -3274,7 +3274,7 @@ D_agg %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/cmfm-4-1.png" alt="ToT by design and session" width="90%" />
+<img src="Classic_linear_models_files/figure-html/cmfm-4-1.png" alt="ToT by design and session" width="90%" />
 <p class="caption">(\#fig:cmfm-4)ToT by design and session</p>
 </div>
 
@@ -3473,7 +3473,7 @@ We can distinguish between *saturation effects*, which are more common, and *amp
 <!-- #68 -->
 
 <div class="figure">
-<img src="Production/figures/interaction-effects-1.png" alt="Two forms of conditional effects: amplification and saturation" width="50%" /><img src="Production/figures/interaction-effects-2.png" alt="Two forms of conditional effects: amplification and saturation" width="50%" />
+<img src="Classic_linear_models_files/figure-html/interaction-effects-1.png" alt="Two forms of conditional effects: amplification and saturation" width="50%" /><img src="Classic_linear_models_files/figure-html/interaction-effects-2.png" alt="Two forms of conditional effects: amplification and saturation" width="50%" />
 <p class="caption">(\#fig:interaction-effects)Two forms of conditional effects: amplification and saturation</p>
 </div>
 
@@ -3517,7 +3517,7 @@ T_means %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/headache-1-1.png" alt="Group means of a two-factorial model" width="90%" />
+<img src="Classic_linear_models_files/figure-html/headache-1-1.png" alt="Group means of a two-factorial model" width="90%" />
 <p class="caption">(\#fig:headache-1)Group means of a two-factorial model</p>
 </div>
 
@@ -3675,7 +3675,7 @@ D_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/read-2-1.png" alt="A boxplot showing groups in a 2x2 experiment." width="90%" />
+<img src="Classic_linear_models_files/figure-html/read-2-1.png" alt="A boxplot showing groups in a 2x2 experiment." width="90%" />
 <p class="caption">(\#fig:read-2)A boxplot showing groups in a 2x2 experiment.</p>
 </div>
 
@@ -3822,7 +3822,7 @@ G_amm +
 ```
 
 <div class="figure">
-<img src="Production/figures/read-5-1.png" alt="Conditional effects of font size and font color" width="90%" />
+<img src="Classic_linear_models_files/figure-html/read-5-1.png" alt="Conditional effects of font size and font color" width="90%" />
 <p class="caption">(\#fig:read-5)Conditional effects of font size and font color</p>
 </div>
 
@@ -3862,7 +3862,7 @@ G_amm +
 ```
 
 <div class="figure">
-<img src="Production/figures/read-6-1.png" alt="Another way to plot conditional effects from an AMM includes posterior distributions" width="90%" />
+<img src="Classic_linear_models_files/figure-html/read-6-1.png" alt="Another way to plot conditional effects from an AMM includes posterior distributions" width="90%" />
 <p class="caption">(\#fig:read-6)Another way to plot conditional effects from an AMM includes posterior distributions</p>
 </div>
 Note how we just add one alternative layer to the original line plot object `G_amm` to get the violin plot. The violin layer here gets its own data set, which is another feature of the GGplot engine.
@@ -3949,7 +3949,7 @@ D_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ar-1-1.png" alt="Visualizing continuous conditional effects as factors" width="90%" />
+<img src="Classic_linear_models_files/figure-html/ar-1-1.png" alt="Visualizing continuous conditional effects as factors" width="90%" />
 <p class="caption">(\#fig:ar-1)Visualizing continuous conditional effects as factors</p>
 </div>
 
@@ -4155,7 +4155,7 @@ D_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sleep-1-1.png" alt="Conditional effects of environmental noise and sleep deprivation" width="90%" />
+<img src="Classic_linear_models_files/figure-html/sleep-1-1.png" alt="Conditional effects of environmental noise and sleep deprivation" width="90%" />
 <p class="caption">(\#fig:sleep-1)Conditional effects of environmental noise and sleep deprivation</p>
 </div>
 
@@ -4208,7 +4208,7 @@ There is the slight possibility, that Corcona has hit a sweet spot: if we assume
 <!-- #76 -->
 
 <div class="figure">
-<img src="Production/figures/Yerkes-Dodson-1-1.png" alt="Conditional effects explained by the Yerkes-Dodson law" width="90%" />
+<img src="Classic_linear_models_files/figure-html/Yerkes-Dodson-1-1.png" alt="Conditional effects explained by the Yerkes-Dodson law" width="90%" />
 <p class="caption">(\#fig:Yerkes-Dodson-1)Conditional effects explained by the Yerkes-Dodson law</p>
 </div>
 
@@ -4272,7 +4272,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-1-1.png" alt="The Uncanny Valley phenomenon is a non-linear emotional response to robot faces" width="90%" />
+<img src="Classic_linear_models_files/figure-html/uncanny-1-1.png" alt="The Uncanny Valley phenomenon is a non-linear emotional response to robot faces" width="90%" />
 <p class="caption">(\#fig:uncanny-1)The Uncanny Valley phenomenon is a non-linear emotional response to robot faces</p>
 </div>
 
@@ -4315,7 +4315,7 @@ D_poly %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-2-1.png" alt="The higher the degree of a polynomial, the more complex the association." width="90%" />
+<img src="Classic_linear_models_files/figure-html/uncanny-2-1.png" alt="The higher the degree of a polynomial, the more complex the association." width="90%" />
 <p class="caption">(\#fig:uncanny-2)The higher the degree of a polynomial, the more complex the association.</p>
 </div>
 
@@ -4496,7 +4496,7 @@ gridExtra::grid.arrange(
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-5-1.png" alt="Estimated Uncanny Valley curve and position of trough" width="90%" />
+<img src="Classic_linear_models_files/figure-html/uncanny-5-1.png" alt="Estimated Uncanny Valley curve and position of trough" width="90%" />
 <p class="caption">(\#fig:uncanny-5)Estimated Uncanny Valley curve and position of trough</p>
 </div>
 
@@ -4559,7 +4559,7 @@ post_pred(M_poly_3, thin = 100) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-6-1.png" alt="MCMC estimation produces one polynomial per sample (40 shown)" width="90%" />
+<img src="Classic_linear_models_files/figure-html/uncanny-6-1.png" alt="MCMC estimation produces one polynomial per sample (40 shown)" width="90%" />
 <p class="caption">(\#fig:uncanny-6)MCMC estimation produces one polynomial per sample (40 shown)</p>
 </div>
 

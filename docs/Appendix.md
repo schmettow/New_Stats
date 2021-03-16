@@ -69,14 +69,14 @@ Table: (\#tab:uv-rk-1)Data set with 18 variables, showing 8 of 7488 observations
 
 |Experiment |  Obs|Part  |Item |Scale     |Stimulus | session|Session |Collection |Condition | presentation_time| response|   RT| huMech| huMech0| huMech1| huMech2| huMech3|
 |:----------|----:|:-----|:----|:---------|:--------|-------:|:-------|:----------|:---------|-----------------:|--------:|----:|------:|-------:|-------:|-------:|-------:|
-|RK         |  877|p1_04 |nE5  |nEeriness |74       |       0|1       |MR         |2         |               Inf|   -0.663| 4.21|  0.925|       1|   0.925|   0.856|   0.791|
-|RK         | 1017|p1_04 |nE1  |nEeriness |71       |       1|2       |MR         |2         |               Inf|   -0.332| 1.94|  0.887|       1|   0.887|   0.788|   0.699|
-|RK         | 1300|p1_05 |nE4  |nEeriness |18       |       1|2       |MR         |2         |               Inf|   -0.053| 2.03|  0.225|       1|   0.225|   0.051|   0.011|
-|RK         | 1420|p1_05 |nE4  |nEeriness |61       |       2|3       |MR         |2         |               Inf|   -0.493| 2.00|  0.762|       1|   0.762|   0.581|   0.443|
-|RK         | 2393|p1_09 |nE1  |nEeriness |45       |       0|1       |MR         |2         |               Inf|   -0.732| 1.44|  0.562|       1|   0.562|   0.316|   0.178|
-|RK         | 3717|p1_13 |nE5  |nEeriness |77       |       2|3       |MR         |2         |               Inf|   -0.502| 1.63|  0.963|       1|   0.963|   0.926|   0.892|
-|RK         | 3826|p2_01 |nE2  |nEeriness |30       |       0|1       |MR         |2         |               Inf|   -0.483| 1.24|  0.375|       1|   0.375|   0.141|   0.053|
-|RK         | 6168|p2_09 |nE8  |nEeriness |57       |       1|2       |MR         |2         |               Inf|   -0.407| 2.14|  0.713|       1|   0.713|   0.508|   0.362|
+|RK         |   99|1     |nE3  |nEeriness |74.1     |       1|2       |MR         |2         |               Inf|   -0.633| 2.97|  0.926|       1|   0.926|   0.858|   0.795|
+|RK         | 1818|p1_07 |nE2  |nEeriness |16       |       0|1       |MR         |2         |               Inf|   -0.157| 1.36|  0.200|       1|   0.200|   0.040|   0.008|
+|RK         | 2691|p1_10 |nE3  |nEeriness |71.2     |       1|2       |MR         |2         |               Inf|   -0.620| 2.33|  0.890|       1|   0.890|   0.792|   0.705|
+|RK         | 2771|p1_10 |nE3  |nEeriness |55       |       1|2       |MR         |2         |               Inf|   -0.595| 3.35|  0.688|       1|   0.688|   0.473|   0.325|
+|RK         | 2996|p1_11 |nE4  |nEeriness |55       |       1|2       |MR         |2         |               Inf|   -0.100| 1.47|  0.688|       1|   0.688|   0.473|   0.325|
+|RK         | 4182|p2_02 |nE6  |nEeriness |28       |       1|2       |MR         |2         |               Inf|   -0.507| 3.02|  0.350|       1|   0.350|   0.122|   0.043|
+|RK         | 7271|p2_13 |nE7  |nEeriness |38       |       0|1       |MR         |2         |               Inf|   -0.315| 2.66|  0.475|       1|   0.475|   0.226|   0.107|
+|RK         | 7334|p2_13 |nE6  |nEeriness |5        |       1|2       |MR         |2         |               Inf|   -0.177| 2.58|  0.062|       1|   0.062|   0.004|   0.000|
 
 Before switching to a different case environment, it is recommended to detach the present environment:
 
@@ -103,7 +103,7 @@ simulate() %>%
   geom_smooth()
 ```
 
-<img src="Production/figures/unnamed-chunk-7-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-7-1.png" width="90%" />
 
 All simulation functions provide the argument `seed`, which sets the random number generator(s) to a specific value. Using a different seed value produces a data set with the same structure, but different values.
 
@@ -115,7 +115,7 @@ simulate(seed = 1317) %>%
   geom_smooth()
 ```
 
-<img src="Production/figures/unnamed-chunk-8-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-8-1.png" width="90%" />
 
 Additional arguments can be used to change the structure of the data set. In the present example, the amplification effect can be turned into a [saturation] effect, by changing the beta argument:
 
@@ -127,7 +127,7 @@ simulate(beta = c(-1, 1, .4, -3)) %>%
   geom_smooth()
 ```
 
-<img src="Production/figures/unnamed-chunk-9-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-9-1.png" width="90%" />
 
 If you want to understand how a simulation function works and how it can be controlled, you can display the code of the function, just by calling it without parentheses:
 
@@ -161,8 +161,8 @@ simulate
 ##     # 
 ##     out
 ##     }
-## <bytecode: 0x000000007f2a8180>
-## <environment: 0x00000000728cbee8>
+## <bytecode: 0x0000000081951c00>
+## <environment: 0x0000000074f675a8>
 ```
 
 Real and synthetic case environments provide all data used in this book, but also all models are included that have been estimated. When working through this book, this saves you the effort to run the models by yourself.
@@ -561,7 +561,7 @@ Uncanny$RK_2 %>%
   geom_point()
 ```
 
-<img src="Production/figures/unnamed-chunk-33-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-33-1.png" width="90%" />
 
 ```r
 
@@ -645,7 +645,7 @@ IPump$D_agg %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-34-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-34-1.png" width="90%" />
 
 ```r
 
@@ -674,7 +674,7 @@ D_slpstd %>%
   labs(color = "Smoothing function")
 ```
 
-<img src="Production/figures/unnamed-chunk-35-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-35-1.png" width="90%" />
 
 ```r
 
@@ -740,7 +740,7 @@ grid.arrange(
 )
 ```
 
-<img src="Production/figures/unnamed-chunk-36-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-36-1.png" width="90%" />
 
 ```r
 
@@ -789,7 +789,7 @@ MMN_2 %>%
   geom_smooth()
 ```
 
-<img src="Production/figures/unnamed-chunk-37-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-37-1.png" width="90%" />
 
 ```r
 MMN_2 %>%
@@ -797,7 +797,7 @@ MMN_2 %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-37-2.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-37-2.png" width="90%" />
 
 ```r
 
@@ -855,7 +855,7 @@ AUP_1 %>%
   labs(color = "Trait")
 ```
 
-<img src="Production/figures/unnamed-chunk-38-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-38-1.png" width="90%" />
 
 ```r
 
@@ -959,7 +959,7 @@ Ver20 %>%
   geom_point()
 ```
 
-<img src="Production/figures/unnamed-chunk-41-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-41-1.png" width="90%" />
 
 ```r
 
@@ -1202,7 +1202,7 @@ simulate() %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-46-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-46-1.png" width="90%" />
 
 ```r
 
@@ -1279,7 +1279,7 @@ simulate() %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-48-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-48-1.png" width="90%" />
 
 ```r
 
@@ -1352,7 +1352,7 @@ simulate() %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-50-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-50-1.png" width="90%" />
 
 ```r
 
@@ -1426,7 +1426,7 @@ simulate() %>%
   geom_boxplot()
 ```
 
-<img src="Production/figures/unnamed-chunk-52-1.png" width="90%" />
+<img src="Appendix_files/figure-html/unnamed-chunk-52-1.png" width="90%" />
 
 ```r
 

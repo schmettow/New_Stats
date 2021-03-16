@@ -653,7 +653,7 @@ Data_gaus %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/data-gaus-1-1.png" alt="A Gaussian distribution" width="90%" />
+<img src="index_files/figure-html/data-gaus-1-1.png" alt="A Gaussian distribution" width="90%" />
 <p class="caption">(\#fig:data-gaus-1)A Gaussian distribution</p>
 </div>
 
@@ -749,7 +749,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/stepwise-3-1.png" alt="Piping data into the plotting engine" width="90%" />
+<img src="index_files/figure-html/stepwise-3-1.png" alt="Piping data into the plotting engine" width="90%" />
 <p class="caption">(\#fig:stepwise-3)Piping data into the plotting engine</p>
 </div>
 
@@ -765,7 +765,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/stepwise-4-1.png" alt="Plotting a histogram" width="90%" />
+<img src="index_files/figure-html/stepwise-4-1.png" alt="Plotting a histogram" width="90%" />
 <p class="caption">(\#fig:stepwise-4)Plotting a histogram</p>
 </div>
 
@@ -787,7 +787,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/stepwise-5-1.png" alt="Adding another layer" width="90%" />
+<img src="index_files/figure-html/stepwise-5-1.png" alt="Adding another layer" width="90%" />
 <p class="caption">(\#fig:stepwise-5)Adding another layer</p>
 </div>
 

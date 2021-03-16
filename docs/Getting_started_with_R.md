@@ -343,7 +343,7 @@ Experiment %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/first-simulation-2-1.png" alt="Density of simulated data" width="50%" /><img src="Production/figures/first-simulation-2-2.png" alt="Density of simulated data" width="50%" />
+<img src="Getting_started_with_R_files/figure-html/first-simulation-2-1.png" alt="Density of simulated data" width="50%" /><img src="Getting_started_with_R_files/figure-html/first-simulation-2-2.png" alt="Density of simulated data" width="50%" />
 <p class="caption">(\#fig:first-simulation-2)Density of simulated data</p>
 </div>
 
@@ -761,7 +761,7 @@ tracemem(N_Obs / N_Part)
 ```
 
 ```
-## [1] "<000000009AEB68D0>"
+## [1] "<00000000B1FB2908>"
 ```
 
 ```r
@@ -769,7 +769,7 @@ tracemem(N_Obs / N_Part)
 ```
 
 ```
-## [1] "<000000009AFEA018>"
+## [1] "<00000000B20109A0>"
 ```
 
 ### Vectors {#vectors}
@@ -2036,7 +2036,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-2-1.png" alt="Scatterplot showing the assiciation between age and ToT" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-2-1.png" alt="Scatterplot showing the assiciation between age and ToT" width="90%" />
 <p class="caption">(\#fig:plotting-2)Scatterplot showing the assiciation between age and ToT</p>
 </div>
 
@@ -2115,7 +2115,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-4-1.png" alt="A boxplot" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-4-1.png" alt="A boxplot" width="90%" />
 <p class="caption">(\#fig:plotting-4)A boxplot</p>
 </div>
 
@@ -2144,7 +2144,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-5-1.png" alt="A grouped scatterplot" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-5-1.png" alt="A grouped scatterplot" width="90%" />
 <p class="caption">(\#fig:plotting-5)A grouped scatterplot</p>
 </div>
 
@@ -2166,7 +2166,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-6-1.png" alt="A scatterplot with smoothed lines" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-6-1.png" alt="A scatterplot with smoothed lines" width="90%" />
 <p class="caption">(\#fig:plotting-6)A scatterplot with smoothed lines</p>
 </div>
 
@@ -2193,7 +2193,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-7-1.png" alt="With facets groups can be distinguished" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-7-1.png" alt="With facets groups can be distinguished" width="90%" />
 <p class="caption">(\#fig:plotting-7)With facets groups can be distinguished</p>
 </div>
 
@@ -2213,7 +2213,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/plotting-8-1.png" alt="Facetting by two factors (or more) results in a grid" width="90%" />
+<img src="Getting_started_with_R_files/figure-html/plotting-8-1.png" alt="Facetting by two factors (or more) results in a grid" width="90%" />
 <p class="caption">(\#fig:plotting-8)Facetting by two factors (or more) results in a grid</p>
 </div>
 

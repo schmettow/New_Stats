@@ -87,11 +87,11 @@ Table: (\#tab:part-mean)Participant-level mean ToT
 
 |Part | mean_Part|
 |:----|---------:|
-|7    |      9.24|
-|5    |     15.97|
-|24   |     11.84|
-|16   |     15.88|
-|2    |     16.70|
+|15   |      17.2|
+|5    |      16.0|
+|9    |      19.4|
+|20   |      19.1|
+|2    |      16.7|
 
 Such a grouped summary can be useful for situations where we want  to directly compare individuals, like in performance tests. In experimental research, individual participants are of lesser interest, as they are exchangeable entities. What matters is the total variation within the sample, representing the population of users. Once we have participant-level effects, the amount of variation can be summarized by the standard deviation (Table \@ref(tab:part-sd)):
 
@@ -206,11 +206,11 @@ Table: (\#tab:ml-ranef)Coefficient estimates with 95% credibility limits
 
 |re_entity | center| lower| upper|
 |:---------|------:|-----:|-----:|
-|1         |  1.091| -1.10|  6.38|
+|3         | -0.155| -4.10|  2.85|
+|10        | -0.160| -3.86|  2.77|
 |12        |  0.304| -2.29|  4.51|
-|23        | -0.440| -4.53|  1.99|
-|24        | -0.497| -5.07|  1.87|
-|25        | -0.037| -3.56|  3.18|
+|1         |  1.091| -1.10|  6.38|
+|4         |  0.782| -1.38|  5.89|
 
 
 ```r
@@ -248,7 +248,7 @@ tibble(mu_i = ranef(P_hf)$center +
 ```
 
 <div class="figure">
-<img src="Production/figures/rescores-1-1.png" alt="Absolute random effect scores" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/rescores-1-1.png" alt="Absolute random effect scores" width="90%" />
 <p class="caption">(\#fig:rescores-1)Absolute random effect scores</p>
 </div>
 
@@ -268,14 +268,14 @@ Table: (\#tab:rescores-2)Parameter estimates with 95% credibility limits
 
 |parameter            |re_entity | center| lower| upper|
 |:--------------------|:---------|------:|-----:|-----:|
-|r_Part[12,Intercept] |12        |   16.4| 13.45|  20.4|
-|r_Part[6,Intercept]  |6         |   15.4| 11.22|  18.1|
-|r_Part[10,Intercept] |10        |   15.7| 11.98|  18.9|
-|r_Part[13,Intercept] |13        |   16.3| 13.25|  20.3|
-|r_Part[2,Intercept]  |2         |   16.1| 12.99|  19.6|
-|r_Part[17,Intercept] |17        |   15.6| 11.66|  18.5|
-|r_Part[7,Intercept]  |7         |   15.0|  9.97|  17.5|
-|r_Part[18,Intercept] |18        |   15.6| 11.68|  18.5|
+|r_Part[2,Intercept]  |2         |   16.1|  13.0|  19.6|
+|r_Part[23,Intercept] |23        |   15.4|  11.3|  18.2|
+|r_Part[19,Intercept] |19        |   16.1|  12.9|  19.4|
+|r_Part[20,Intercept] |20        |   16.4|  13.7|  20.3|
+|r_Part[1,Intercept]  |1         |   17.1|  14.5|  22.4|
+|r_Part[5,Intercept]  |5         |   16.0|  12.7|  19.3|
+|r_Part[15,Intercept] |15        |   16.2|  12.9|  19.7|
+|r_Part[16,Intercept] |16        |   15.9|  12.5|  19.2|
 
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. Two useful heuristics are to compare group-level variation to the fixed effects estimate (Intercept) and against the standard error:
 
@@ -348,7 +348,7 @@ D_slpstd %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-1-1.png" alt="Participant-level association between sleep deprivation and RT" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-1-1.png" alt="Participant-level association between sleep deprivation and RT" width="90%" />
 <p class="caption">(\#fig:slpstd-1)Participant-level association between sleep deprivation and RT</p>
 </div>
 
@@ -372,7 +372,7 @@ D_slpstd %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-2-1.png" alt="(Uncooked) Spaghetti plot showing population and participant-level effects" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-2-1.png" alt="(Uncooked) Spaghetti plot showing population and participant-level effects" width="90%" />
 <p class="caption">(\#fig:slpstd-2)(Uncooked) Spaghetti plot showing population and participant-level effects</p>
 </div>
 
@@ -429,7 +429,7 @@ ranef(M_slpsty_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-5-1.png" alt="Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-5-1.png" alt="Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation" width="90%" />
 <p class="caption">(\#fig:slpstd-5)Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation</p>
 </div>
 
@@ -472,7 +472,7 @@ posterior(M_slpsty_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-6-1.png" alt="Sleep deprivation projected " width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-6-1.png" alt="Sleep deprivation projected " width="90%" />
 <p class="caption">(\#fig:slpstd-6)Sleep deprivation projected </p>
 </div>
 
@@ -578,7 +578,7 @@ gridExtra::grid.arrange(
 ```
 
 <div class="figure">
-<img src="Production/figures/tml-2-1.png" alt="Exploratory multi-level plot of population-level and participant-level change" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/tml-2-1.png" alt="Exploratory multi-level plot of population-level and participant-level change" width="90%" />
 <p class="caption">(\#fig:tml-2)Exploratory multi-level plot of population-level and participant-level change</p>
 </div>
 
@@ -622,7 +622,7 @@ T_amm %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/tml-3-1.png" alt="Spaghetti plot combining the results of a population-level with a participant-level model" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/tml-3-1.png" alt="Spaghetti plot combining the results of a population-level with a participant-level model" width="90%" />
 <p class="caption">(\#fig:tml-3)Spaghetti plot combining the results of a population-level with a participant-level model</p>
 </div>
 
@@ -662,7 +662,7 @@ ranef(M_mlcgm) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/tml-5-1.png" alt="Participant-level random effects in a CGM" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/tml-5-1.png" alt="Participant-level random effects in a CGM" width="90%" />
 <p class="caption">(\#fig:tml-5)Participant-level random effects in a CGM</p>
 </div>
 
@@ -896,7 +896,7 @@ T_pred %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-7-1.png" alt="Participant-level associations between human likeness and " width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/uncanny-7-1.png" alt="Participant-level associations between human likeness and " width="90%" />
 <p class="caption">(\#fig:uncanny-7)Participant-level associations between human likeness and </p>
 </div>
 
@@ -950,7 +950,7 @@ P_univ_uncanny %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/uncanny-8-1.png" alt="Participant-level certainty that the Uncanny Valley phenomenon happened" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/uncanny-8-1.png" alt="Participant-level certainty that the Uncanny Valley phenomenon happened" width="90%" />
 <p class="caption">(\#fig:uncanny-8)Participant-level certainty that the Uncanny Valley phenomenon happened</p>
 </div>
 
@@ -990,7 +990,7 @@ P_scores %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-7-1.png" alt="Participant-level certainty that the Uncanny Valley phenomenon happened" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-7-1.png" alt="Participant-level certainty that the Uncanny Valley phenomenon happened" width="90%" />
 <p class="caption">(\#fig:slpstd-7)Participant-level certainty that the Uncanny Valley phenomenon happened</p>
 </div>
 
@@ -1010,7 +1010,7 @@ P_scores %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/slpstd-8-1.png" alt="Visualizing the uncertainty in Days for two pareticipants" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/slpstd-8-1.png" alt="Visualizing the uncertainty in Days for two pareticipants" width="90%" />
 <p class="caption">(\#fig:slpstd-8)Visualizing the uncertainty in Days for two pareticipants</p>
 </div>
 
@@ -1192,7 +1192,7 @@ D_egan %>%
 
 
 <div class="figure">
-<img src="Production/figures/egan-1-1.png" alt="Distribution of human and non-human populations in the Egan experiment (scale log(ToT))" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/egan-1-1.png" alt="Distribution of human and non-human populations in the Egan experiment (scale log(ToT))" width="90%" />
 <p class="caption">(\#fig:egan-1)Distribution of human and non-human populations in the Egan experiment (scale log(ToT))</p>
 </div>
 
@@ -1251,7 +1251,7 @@ P_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/egan-3-1.png" alt="Density plot of random effects standard deviations." width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/egan-3-1.png" alt="Density plot of random effects standard deviations." width="90%" />
 <p class="caption">(\#fig:egan-3)Density plot of random effects standard deviations.</p>
 </div>
 
@@ -1347,16 +1347,16 @@ D_cue8
 
 Table: (\#tab:cue8-1)Data set with 8 variables, showing 8 of 2620 observations.
 
-|  Obs|Team |Part |Condition |  SUS|Task | ToT| logToT|
-|----:|:----|:----|:---------|----:|:----|---:|------:|
-|  609|H3   |122  |remote    |     |4    |    |       |
-|  646|H3   |130  |remote    | 50.0|1    |   5|   1.61|
-|  724|H3   |145  |remote    |     |4    |    |       |
-|  767|H3   |154  |remote    | 48.0|2    |   3|   1.10|
-| 1120|L3   |224  |remote    | 85.0|5    | 274|   5.61|
-| 2195|L3   |439  |remote    | 53.0|5    |  63|   4.14|
-| 2335|M3   |467  |remote    | 32.5|5    | 241|   5.49|
-| 2546|O3   |510  |moderated |     |1    | 180|   5.19|
+|  Obs|Team |Part |Condition | SUS|Task | ToT| logToT|
+|----:|:----|:----|:---------|---:|:----|---:|------:|
+|  521|G3   |105  |moderated |    |1    | 347|   5.85|
+|  818|H3   |164  |remote    |  95|3    | 121|   4.80|
+|  882|J3   |177  |remote    |    |2    |    |       |
+|  886|J3   |178  |remote    |    |1    | 196|   5.28|
+| 1177|L3   |236  |remote    |  80|2    | 123|   4.81|
+| 1230|L3   |246  |remote    |  98|5    |  99|   4.59|
+| 1879|L3   |376  |remote    |  98|4    | 105|   4.65|
+| 2605|O3   |521  |moderated |    |5    |  44|   3.78|
 
 
 An analysis can performed on three levels: the population level would tell us the average performance on this website. That could be interesting for the company running it. Below that are the teams and their variation is what the original research question is about.  Participants  make the third level for a nested multi-level model. It is nested, because every participant is assigned to exactly one team. If that weren't the case, say there is one sample of participants shared by the teams, that would be cross-classification.
@@ -1367,7 +1367,7 @@ Under this perspective, we examine the data. This time, we have real time-on-tas
 
 
 <div class="figure">
-<img src="Production/figures/cue8-2-1.png" alt="Distribution of mean scores on three levels" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/cue8-2-1.png" alt="Distribution of mean scores on three levels" width="90%" />
 <p class="caption">(\#fig:cue8-2)Distribution of mean scores on three levels</p>
 </div>
 
@@ -1429,14 +1429,14 @@ Table: (\#tab:cue8-5)Data set with 8 variables, showing 8 of 2620 observations.
 
 |  Obs|Part   |Team |Condition | SUS|Task | ToT| logToT|
 |----:|:------|:----|:---------|---:|:----|---:|------:|
-|  407|F3_82  |F3   |remote    |    |2    | 258|   5.55|
-|  480|G3_96  |G3   |moderated |    |5    |  76|   4.33|
-|  691|H3_139 |H3   |remote    |    |1    | 164|   5.10|
-|  791|H3_159 |H3   |remote    |  65|1    | 412|   6.02|
-| 1217|L3_244 |L3   |remote    |  93|2    | 121|   4.80|
-| 1546|L3_310 |L3   |remote    | 100|1    | 164|   5.10|
-| 1685|L3_337 |L3   |remote    |  73|5    |  70|   4.25|
-| 1895|L3_379 |L3   |remote    |  75|5    |  99|   4.59|
+|  399|F3_80  |F3   |remote    |    |4    | 225|   5.42|
+|  408|F3_82  |F3   |remote    |    |3    |  70|   4.25|
+|  522|G3_105 |G3   |moderated |    |2    | 153|   5.03|
+| 1538|L3_308 |L3   |remote    |  58|3    |  69|   4.23|
+| 1544|L3_309 |L3   |remote    |  70|4    | 145|   4.98|
+| 1986|L3_398 |L3   |remote    |  85|1    |  40|   3.69|
+| 2271|L3_455 |L3   |remote    |  60|1    | 111|   4.71|
+| 2308|M3_462 |M3   |remote    |   5|3    | 139|   4.93|
 
 
 Let's take a closer look at the results regarding consistency of ToT measures across teams (Table \@ref(tab:cue8-6)). We would always expect participants to show variation, but if team averages show strong variation, then we can suspect that there are biases. It turns out that the variation by team is  by a factor of 1.5 larger than individual differences. And it is on par with the measurement error (sigma).
@@ -1589,7 +1589,7 @@ T_shrinkage %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/cue8-13-1.png" alt="Shrinkage shown as disparity of fixed effects and random effects" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/cue8-13-1.png" alt="Shrinkage shown as disparity of fixed effects and random effects" width="90%" />
 <p class="caption">(\#fig:cue8-13)Shrinkage shown as disparity of fixed effects and random effects</p>
 </div>
 
@@ -1891,7 +1891,7 @@ T_ranef %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/hugme-3-1.png" alt="Comparing distributions of item-level and participant-level scores" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/hugme-3-1.png" alt="Comparing distributions of item-level and participant-level scores" width="90%" />
 <p class="caption">(\#fig:hugme-3)Comparing distributions of item-level and participant-level scores</p>
 </div>
 
@@ -1967,7 +1967,7 @@ T_ranef %>% plot_stability()
 ```
 
 <div class="figure">
-<img src="Production/figures/hugme-6-1.png" alt="Test-retest stability for item and participant scores" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/hugme-6-1.png" alt="Test-retest stability for item and participant scores" width="90%" />
 <p class="caption">(\#fig:hugme-6)Test-retest stability for item and participant scores</p>
 </div>
 
@@ -2210,7 +2210,7 @@ ranef(P_1) %>%
   theme(axis.text.x = element_text(angle = 45))
 ```
 
-<img src="Production/figures/unnamed-chunk-46-1.png" width="90%" />
+<img src="Linear_mixed-effects_models_files/figure-html/unnamed-chunk-46-1.png" width="90%" />
 
 
 The most simple form is the Rasch model in item response theory (IRT), where participants respond to a set of items and the response is either correct or incorrect. The outcome variable response is usually coded as 0 = incorrect and 1 = correct. Apparently, such a variable does nowhere near satisfy the assumption of linear models. It turns out that the Rasch model can be interpreted as cross-classified random effects in a *logistic regression* \@ref(logistic_regression). Logistic regression is a member of the General*ized* Linear family of models, which will be introduced in the next chapter.

@@ -164,13 +164,13 @@ Table: (\#tab:umbrella-5)Data set with 3 variables, showing 8 of 20 observations
 | Obs|cloudy |rain  |
 |---:|:------|:-----|
 |   1|TRUE   |FALSE |
-|   2|TRUE   |TRUE  |
-|   3|TRUE   |FALSE |
+|   5|TRUE   |TRUE  |
 |   6|FALSE  |FALSE |
-|   9|FALSE  |TRUE  |
-|  11|TRUE   |TRUE  |
-|  12|TRUE   |TRUE  |
+|   7|FALSE  |FALSE |
+|  13|FALSE  |FALSE |
 |  15|FALSE  |TRUE  |
+|  16|TRUE   |FALSE |
+|  17|FALSE  |TRUE  |
 
 Intuitively, you would use the average to estimate the probability of rain under every condition (Table \@ref(tab:umbrella-6)).
 
@@ -214,7 +214,7 @@ Table: (\#tab:umbrella-6)Chance of rain depending on cloudiness of the sky
 
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 64.341$%.
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 59.635$%.
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -271,7 +271,7 @@ Ver20 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-1-1.png" alt="Distribution of ToT" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-1-1.png" alt="Distribution of ToT" width="90%" />
 <p class="caption">(\#fig:sec99-1)Distribution of ToT</p>
 </div>
 
@@ -347,7 +347,7 @@ P_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-4-1.png" alt="A histogram of MCMC results split by the 111-seconds criterion" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-4-1.png" alt="A histogram of MCMC results split by the 111-seconds criterion" width="90%" />
 <p class="caption">(\#fig:sec99-4)A histogram of MCMC results split by the 111-seconds criterion</p>
 </div>
 
@@ -402,7 +402,7 @@ RD %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rational-1-1.png" alt="Density plot comparing the revenue of two designs" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-1-1.png" alt="Density plot comparing the revenue of two designs" width="90%" />
 <p class="caption">(\#fig:rational-1)Density plot comparing the revenue of two designs</p>
 </div>
 
@@ -577,7 +577,7 @@ P_prior %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rational-prior-5-1.png" alt="Prior knowledge about a parameter is expressed as a distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-prior-5-1.png" alt="Prior knowledge about a parameter is expressed as a distribution" width="90%" />
 <p class="caption">(\#fig:rational-prior-5)Prior knowledge about a parameter is expressed as a distribution</p>
 </div>
 
@@ -629,7 +629,7 @@ P_comb %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rational-prior-8-1.png" alt="Comparison of expected revenue increase with and without prior information" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rational-prior-8-1.png" alt="Comparison of expected revenue increase with and without prior information" width="90%" />
 <p class="caption">(\#fig:rational-prior-8)Comparison of expected revenue increase with and without prior information</p>
 </div>
 
@@ -912,7 +912,7 @@ Ver20 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-8-1.png" alt="Histogram showing relative frequencies" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-8-1.png" alt="Histogram showing relative frequencies" width="90%" />
 <p class="caption">(\#fig:sec99-8)Histogram showing relative frequencies</p>
 </div>
 
@@ -1006,7 +1006,7 @@ Table: (\#tab:sec99-9)Summary of central tendency statistics
 The table above shows the three statistics for central tendency side-by-side. Mean and median are close together. This is frequently the case, but not always. Only if a distribution of measures is completely symmetric, mean and median perfectly coincide. In section \@ref(distributions) we will encounter distributions that are not symmetric. The more a distribution is skewed, the stronger the difference between mean and median increases (Figure \@ref(fig:dist-skew)).
 
 <div class="figure">
-<img src="Production/figures/dist-skew-1.png" alt="Left-skewed, right-skewed and symmetric distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-skew-1.png" alt="Left-skewed, right-skewed and symmetric distributions" width="90%" />
 <p class="caption">(\#fig:dist-skew)Left-skewed, right-skewed and symmetric distributions</p>
 </div>
 
@@ -1042,7 +1042,7 @@ D_disp %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dispersion-1-1.png" alt="Narrow and wide distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dispersion-1-1.png" alt="Narrow and wide distributions" width="90%" />
 <p class="caption">(\#fig:dispersion-1)Narrow and wide distributions</p>
 </div>
 
@@ -1058,7 +1058,7 @@ Ver20 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-10-1.png" alt="A boxplot shows quartiles of a distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-10-1.png" alt="A boxplot shows quartiles of a distribution" width="90%" />
 <p class="caption">(\#fig:sec99-10)A boxplot shows quartiles of a distribution</p>
 </div>
 
@@ -1181,7 +1181,7 @@ D_agg %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ipump-3-1.png" alt="A stacked bar plot with absolute frequencies" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/ipump-3-1.png" alt="A stacked bar plot with absolute frequencies" width="90%" />
 <p class="caption">(\#fig:ipump-3)A stacked bar plot with absolute frequencies</p>
 </div>
 
@@ -1219,7 +1219,7 @@ D_agg %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/ipump-5-1.png" alt="Boxplot comparison of two groups" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/ipump-5-1.png" alt="Boxplot comparison of two groups" width="90%" />
 <p class="caption">(\#fig:ipump-5)Boxplot comparison of two groups</p>
 </div>
 
@@ -1326,7 +1326,7 @@ Covariance essentially arises by the multiplication of differences to the mean, 
 Figure \@ref(fig:covariance-2) is an attempt at a geometric illustration of the multiplication as the area of rectangles. Rectangles with equal directions (blue) are in the upper-right and lower-left quadrant. They overwhelm the opposite direction rectangles (red), which speaks for a strong positive association. The associations between MRT_1 and Corsi, as well as between Corsi and ToT seem to have a slight overhead in same direction, so the covariance is positive, but less strong. A clear negative association exists between MRS_1 and Corsi. It seems these two tests have some common ground.
 
 <div class="figure">
-<img src="Production/figures/covariance-2-1.png" alt="Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance." width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-2-1.png" alt="Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance." width="90%" />
 <p class="caption">(\#fig:covariance-2)Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.</p>
 </div>
 
@@ -1407,7 +1407,7 @@ D_tests %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/covariance-6-1.png" alt="A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-6-1.png" alt="A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)" width="90%" />
 <p class="caption">(\#fig:covariance-6)A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)</p>
 </div>
 
@@ -1426,7 +1426,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/covariance-7-1.png" alt="Some shapes of associations where correlation is not adequate" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/covariance-7-1.png" alt="Some shapes of associations where correlation is not adequate" width="90%" />
 <p class="caption">(\#fig:covariance-7)Some shapes of associations where correlation is not adequate</p>
 </div>
 
@@ -2119,7 +2119,7 @@ Rolls %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/rolls-2-1.png" alt="A bar chart showing the frequencies of dice roll outcomes" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/rolls-2-1.png" alt="A bar chart showing the frequencies of dice roll outcomes" width="90%" />
 <p class="caption">(\#fig:rolls-2)A bar chart showing the frequencies of dice roll outcomes</p>
 </div>
 
@@ -2225,7 +2225,7 @@ LL_grid %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/likely-1-1.png" alt="Estimating parameter pi by maximum likelihood estimation" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/likely-1-1.png" alt="Estimating parameter pi by maximum likelihood estimation" width="90%" />
 <p class="caption">(\#fig:likely-1)Estimating parameter pi by maximum likelihood estimation</p>
 </div>
 
@@ -2652,7 +2652,7 @@ Sec99$Ver20 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/sec99-13-1.png" alt="A linear association between Age and ToT" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/sec99-13-1.png" alt="A linear association between Age and ToT" width="90%" />
 <p class="caption">(\#fig:sec99-13)A linear association between Age and ToT</p>
 </div>
 
@@ -2737,7 +2737,7 @@ D_three_tasks %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-1-1.png" alt="Binomial distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-1-1.png" alt="Binomial distributions" width="90%" />
 <p class="caption">(\#fig:dist-1)Binomial distributions</p>
 </div>
 
@@ -2771,7 +2771,7 @@ D_IQ %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-2-1.png" alt="Gaussian distribution of hypothetical IQ scores" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-2-1.png" alt="Gaussian distribution of hypothetical IQ scores" width="90%" />
 <p class="caption">(\#fig:dist-2)Gaussian distribution of hypothetical IQ scores</p>
 </div>
 
@@ -2789,7 +2789,7 @@ D_three_tasks %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-3-1.png" alt="The CDF of a discrete outcome is a step function" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-3-1.png" alt="The CDF of a discrete outcome is a step function" width="90%" />
 <p class="caption">(\#fig:dist-3)The CDF of a discrete outcome is a step function</p>
 </div>
 
@@ -2834,7 +2834,7 @@ D_IQ %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-4-1.png" alt="The area around 100 has a small, but positive mass" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-4-1.png" alt="The area around 100 has a small, but positive mass" width="90%" />
 <p class="caption">(\#fig:dist-4)The area around 100 has a small, but positive mass</p>
 </div>
 
@@ -2865,7 +2865,7 @@ D_IQ %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-5-1.png" alt="Continuous distributions have smooth cummulative functions, which can be reduced to a step function" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-5-1.png" alt="Continuous distributions have smooth cummulative functions, which can be reduced to a step function" width="90%" />
 <p class="caption">(\#fig:dist-5)Continuous distributions have smooth cummulative functions, which can be reduced to a step function</p>
 </div>
 
@@ -2938,7 +2938,7 @@ tibble(location = c(90, 91.5, 120), sd = 10) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-6-1.png" alt="Three location-shifted Gaussian distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-6-1.png" alt="Three location-shifted Gaussian distributions" width="90%" />
 <p class="caption">(\#fig:dist-6)Three location-shifted Gaussian distributions</p>
 </div>
 
@@ -2966,7 +2966,7 @@ tibble(location = 100) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-7-1.png" alt="Two Gaussian distributions with different variance" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-7-1.png" alt="Two Gaussian distributions with different variance" width="90%" />
 <p class="caption">(\#fig:dist-7)Two Gaussian distributions with different variance</p>
 </div>
 
@@ -3004,7 +3004,7 @@ tibble(location = c(.25, .5, .75)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-8-1.png" alt="Beta distributions have smaller variance when approaching either boundary" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-8-1.png" alt="Beta distributions have smaller variance when approaching either boundary" width="90%" />
 <p class="caption">(\#fig:dist-8)Beta distributions have smaller variance when approaching either boundary</p>
 </div>
 
@@ -3052,7 +3052,7 @@ tibble(succs = rbinom(30, 10, .9)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-9-1.png" alt="Successes in a set of equal tasks folows a Binomial distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-9-1.png" alt="Successes in a set of equal tasks folows a Binomial distribution" width="90%" />
 <p class="caption">(\#fig:dist-9)Successes in a set of equal tasks folows a Binomial distribution</p>
 </div>
 
@@ -3075,7 +3075,7 @@ mascutils::expand_grid(
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-10-1.png" alt="Binomial distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-10-1.png" alt="Binomial distributions" width="90%" />
 <p class="caption">(\#fig:dist-10)Binomial distributions</p>
 </div>
 
@@ -3095,7 +3095,7 @@ tibble(rentals_per_year = rbinom(1000,
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-11-1.png" alt="Binomial distribution with a very small p and a very large number of attempts" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-11-1.png" alt="Binomial distribution with a very small p and a very large number of attempts" width="90%" />
 <p class="caption">(\#fig:dist-11)Binomial distribution with a very small p and a very large number of attempts</p>
 </div>
 
@@ -3133,7 +3133,7 @@ mascutils::expand_grid(
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-12-1.png" alt="Poisson distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-12-1.png" alt="Poisson distributions" width="90%" />
 <p class="caption">(\#fig:dist-12)Poisson distributions</p>
 </div>
 
@@ -3175,7 +3175,7 @@ grid.arrange(
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-13-1.png" alt="When lambda varies, the distribution becomes over-dispersed" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-13-1.png" alt="When lambda varies, the distribution becomes over-dispersed" width="90%" />
 <p class="caption">(\#fig:dist-13)When lambda varies, the distribution becomes over-dispersed</p>
 </div>
 
@@ -3200,7 +3200,7 @@ tibble(
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-14-1.png" alt="Hidden classes can produce zero inflated distribution" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-14-1.png" alt="Hidden classes can produce zero inflated distribution" width="90%" />
 <p class="caption">(\#fig:dist-14)Hidden classes can produce zero inflated distribution</p>
 </div>
 
@@ -3237,7 +3237,7 @@ ggplot(tibble(x = c(0, 20)), aes(x = x)) +
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-15-1.png" alt="Exponential distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-15-1.png" alt="Exponential distributions" width="90%" />
 <p class="caption">(\#fig:dist-15)Exponential distributions</p>
 </div>
 
@@ -3270,7 +3270,7 @@ D_Tunnel %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-16-1.png" alt="Gaussian distribution emerging from travel by bumps" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-16-1.png" alt="Gaussian distribution emerging from travel by bumps" width="90%" />
 <p class="caption">(\#fig:dist-16)Gaussian distribution emerging from travel by bumps</p>
 </div>
 
@@ -3301,7 +3301,7 @@ ggplot(tibble(x = c(-4, 4)), aes(x = x)) +
 ```
 
 <div class="figure">
-<img src="Production/figures/dist-17-1.png" alt="Gaussian distributions" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/dist-17-1.png" alt="Gaussian distributions" width="90%" />
 <p class="caption">(\#fig:dist-17)Gaussian distributions</p>
 </div>
 
@@ -3367,7 +3367,7 @@ posterior(M_1) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/umbrella-8-1.png" alt="Posterior distribution of two parameters" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/umbrella-8-1.png" alt="Posterior distribution of two parameters" width="90%" />
 <p class="caption">(\#fig:umbrella-8)Posterior distribution of two parameters</p>
 </div>
 
@@ -3395,7 +3395,7 @@ ggExtra::ggMarginal(G_mcmc, type = "histogram")
 ```
 
 <div class="figure">
-<img src="Production/figures/umbrella-9-1.png" alt="Marginal posterior distributions emerging from a two-dimensional paremeter space" width="90%" />
+<img src="Bayesian_statistics_files/figure-html/umbrella-9-1.png" alt="Marginal posterior distributions emerging from a two-dimensional paremeter space" width="90%" />
 <p class="caption">(\#fig:umbrella-9)Marginal posterior distributions emerging from a two-dimensional paremeter space</p>
 </div>
 

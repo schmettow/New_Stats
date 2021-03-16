@@ -146,7 +146,7 @@ tibble(resid = residuals(M_age_shft)) %>%
   )
 ```
 
-<img src="Production/figures/resid_dist_1-1.png" width="90%" />
+<img src="Working_with_Models_files/figure-html/resid_dist_1-1.png" width="90%" />
   
 The match of residual distribution with the theoretical distribution is not perfect, but overall this model seems to sufficiently satisfy the normality assumption. To give a counter example, we estimate the same model using the outcome variable `returns`, which captures the number of times a participant had (disparately) returned to the homepage.
 
@@ -204,7 +204,7 @@ tibble(resid = residuals(M_age_rtrn)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/resid-3-1.png" alt="Visual assessment of Gaussian distribution of errors" width="90%" />
+<img src="Working_with_Models_files/figure-html/resid-3-1.png" alt="Visual assessment of Gaussian distribution of errors" width="90%" />
 <p class="caption">(\#fig:resid-3)Visual assessment of Gaussian distribution of errors</p>
 </div>
 
@@ -255,7 +255,7 @@ D_bimod %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/resid-5-1.png" alt="A bimodal distribution indicates a strong unknown factor" width="90%" />
+<img src="Working_with_Models_files/figure-html/resid-5-1.png" alt="A bimodal distribution indicates a strong unknown factor" width="90%" />
 <p class="caption">(\#fig:resid-5)A bimodal distribution indicates a strong unknown factor</p>
 </div>
 
@@ -303,7 +303,7 @@ D_t %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/resid-6-1.png" alt="Symmetric residual distribution with different curvature" width="90%" />
+<img src="Working_with_Models_files/figure-html/resid-6-1.png" alt="Symmetric residual distribution with different curvature" width="90%" />
 <p class="caption">(\#fig:resid-6)Symmetric residual distribution with different curvature</p>
 </div>
 
@@ -325,7 +325,7 @@ D_QQ %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/resid-7-1.png" alt="A qq-plot reveals the heavier tails of the observed distribution." width="90%" />
+<img src="Working_with_Models_files/figure-html/resid-7-1.png" alt="A qq-plot reveals the heavier tails of the observed distribution." width="90%" />
 <p class="caption">(\#fig:resid-7)A qq-plot reveals the heavier tails of the observed distribution.</p>
 </div>
 
@@ -356,7 +356,7 @@ tibble(resid = residuals(BrowsingAB$M_age_rtrn)) %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/resid-9-1.png" alt="Residual analysis with qq-plots" width="90%" />
+<img src="Working_with_Models_files/figure-html/resid-9-1.png" alt="Residual analysis with qq-plots" width="90%" />
 <p class="caption">(\#fig:resid-9)Residual analysis with qq-plots</p>
 </div>
 
@@ -396,7 +396,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/constvar-1-1.png" alt="Checking constant variance of residuals in factorial models" width="90%" />
+<img src="Working_with_Models_files/figure-html/constvar-1-1.png" alt="Checking constant variance of residuals in factorial models" width="90%" />
 <p class="caption">(\#fig:constvar-1)Checking constant variance of residuals in factorial models</p>
 </div>
 
@@ -416,7 +416,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/constvar-4-1.png" alt="Checking constant variance of residuals in continuous models" width="90%" />
+<img src="Working_with_Models_files/figure-html/constvar-4-1.png" alt="Checking constant variance of residuals in continuous models" width="90%" />
 <p class="caption">(\#fig:constvar-4)Checking constant variance of residuals in continuous models</p>
 </div>
 
@@ -433,7 +433,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/constvar-5-1.png" alt="Checking residuals in a grouped continuous model" width="90%" />
+<img src="Working_with_Models_files/figure-html/constvar-5-1.png" alt="Checking residuals in a grouped continuous model" width="90%" />
 <p class="caption">(\#fig:constvar-5)Checking residuals in a grouped continuous model</p>
 </div>
 
@@ -466,7 +466,7 @@ AUP_1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/constvar-7-1.png" alt="Yet another violation of constant distribution" width="90%" />
+<img src="Working_with_Models_files/figure-html/constvar-7-1.png" alt="Yet another violation of constant distribution" width="90%" />
 <p class="caption">(\#fig:constvar-7)Yet another violation of constant distribution</p>
 </div>
 
@@ -619,7 +619,7 @@ BAB1 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/fitresp-2-1.png" alt="A close match between the linear models predictions and LOESS indicates good linearity." width="90%" />
+<img src="Working_with_Models_files/figure-html/fitresp-2-1.png" alt="A close match between the linear models predictions and LOESS indicates good linearity." width="90%" />
 <p class="caption">(\#fig:fitresp-2)A close match between the linear models predictions and LOESS indicates good linearity.</p>
 </div>
 
@@ -647,7 +647,7 @@ G_Design_age + geom_smooth(aes(
 ```
 
 <div class="figure">
-<img src="Production/figures/fitresp-3-1.png" alt="Fitted response analysis per design reveals that the unconditional LRM fits poorly." width="90%" />
+<img src="Working_with_Models_files/figure-html/fitresp-3-1.png" alt="Fitted response analysis per design reveals that the unconditional LRM fits poorly." width="90%" />
 <p class="caption">(\#fig:fitresp-3)Fitted response analysis per design reveals that the unconditional LRM fits poorly.</p>
 </div>
 
@@ -671,7 +671,7 @@ G_Design_age %+%
 ```
 
 <div class="figure">
-<img src="Production/figures/fitresp-5-1.png" alt="A conditional regression model sitting snug on the LOESS." width="90%" />
+<img src="Working_with_Models_files/figure-html/fitresp-5-1.png" alt="A conditional regression model sitting snug on the LOESS." width="90%" />
 <p class="caption">(\#fig:fitresp-5)A conditional regression model sitting snug on the LOESS.</p>
 </div>
 
@@ -742,7 +742,7 @@ RK_2 %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/fitresp-8-1.png" alt="Comparing fitted responses of three polynomial models of different degree" width="90%" />
+<img src="Working_with_Models_files/figure-html/fitresp-8-1.png" alt="Comparing fitted responses of three polynomial models of different degree" width="90%" />
 <p class="caption">(\#fig:fitresp-8)Comparing fitted responses of three polynomial models of different degree</p>
 </div>
 
@@ -859,7 +859,7 @@ P_overfit %>%
 ```
 
 <div class="figure">
-<img src="Production/figures/overfit-2-1.png" alt="Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty." width="90%" />
+<img src="Working_with_Models_files/figure-html/overfit-2-1.png" alt="Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty." width="90%" />
 <p class="caption">(\#fig:overfit-2)Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty.</p>
 </div>
 
