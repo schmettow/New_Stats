@@ -1447,8 +1447,7 @@ data set in the wide legacy format.
 Using identifiers is good practice for several reasons. First, it
 reduces problems during manual data entry. Second, it allows to
 efficiently record data in multi-method experiments and join them
-automatically. An example is given in Appendix \@ref(hugme). Lastly,
-the identifiers will become statistically interesting by themselves when
+automatically. Lastly, the identifiers will become statistically interesting by themselves when
 we turn to linear mixed-effects models and the notion of *members of a
 population* \@ref(non-human-populations). Throughout the book I will use
 standard names for recurring identifier variables in design research:
