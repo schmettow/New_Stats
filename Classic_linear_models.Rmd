@@ -494,14 +494,14 @@ P_1_long %>%
   
 ```
 
-With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter*.
+With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter* (Table \@ref(tab:sec99-30a)).
 
-```{r 99-seconds-2, opts.label = "rtut"}
+```{r sec99-30a, opts.label = "rtut"}
 P_1 <- bayr::posterior(M_1)
 P_1
 ```
 
-The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31)
+The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a population-level coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31).
 
 <!-- #120 -->
 
