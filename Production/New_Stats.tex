@@ -49,40 +49,38 @@
 \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
 % Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textbf{#1}}
+\newcommand{\AnnotationTok}[1]{\textit{#1}}
+\newcommand{\AttributeTok}[1]{#1}
+\newcommand{\BaseNTok}[1]{#1}
 \newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\CharTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textit{#1}}
+\newcommand{\CommentVarTok}[1]{\textit{#1}}
+\newcommand{\ConstantTok}[1]{#1}
+\newcommand{\ControlFlowTok}[1]{\textbf{#1}}
+\newcommand{\DataTypeTok}[1]{\underline{#1}}
+\newcommand{\DecValTok}[1]{#1}
+\newcommand{\DocumentationTok}[1]{\textit{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{#1}}
 \newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\FloatTok}[1]{#1}
+\newcommand{\FunctionTok}[1]{#1}
 \newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textit{#1}}
+\newcommand{\KeywordTok}[1]{\textbf{#1}}
 \newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\OperatorTok}[1]{#1}
+\newcommand{\OtherTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textbf{#1}}
 \newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\SpecialCharTok}[1]{#1}
+\newcommand{\SpecialStringTok}[1]{#1}
+\newcommand{\StringTok}[1]{#1}
+\newcommand{\VariableTok}[1]{#1}
+\newcommand{\VerbatimStringTok}[1]{#1}
+\newcommand{\WarningTok}[1]{\textit{#1}}
 \usepackage{longtable,booktabs}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
@@ -128,7 +126,7 @@
 \makeatother
 \subtitle{A Bayesian workflow in tidy R}
 \author{Martin Schmettow}
-\date{2021-03-14}
+\date{2021-03-29}
 
 \begin{document}
 \maketitle
@@ -169,7 +167,7 @@ You are an Human Factors researcher, thirty-three years old, leading a small tea
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
-You are working together with two engineers and a student from industrial design.
+You are working together with two engineers and a student of industrial design.
 Your plan is to put a light color device into a prototype car.
 Two workstation are stuffed into the boot of the car for record physiological signals and driving performance.
 This all is very expensive and someone is paying for it.
@@ -523,7 +521,7 @@ After working through this chapter, I would consider anyone a sincere data analy
 If you use this book for self study, two considerations play a role for finding the optimal route through this book.
 what is your \emph{background in Statistics?} For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
 As such, it may be a while ago and a refresher is on order.
-Chapter \ref{rational} is a quick-read, if you are feeling confident.
+Chapter \ref{decision-making} is a quick-read, if you are feeling confident.
 If you lack any background in statistics, \ref{ebs} should be studied, first.
 If your background is Social Sciences, then you probably know quite something about probabilities and Statistics. If you wonder what all this new ``Bayesian'' is all about and how compatible it is to you, \ref{bayes-freq-prob} is a small bridge.
 
@@ -677,7 +675,7 @@ The following measures were taken:
 
 If you use this book for teaching, that means you will have to come up with some data sets.
 Unless you are a seasoned researcher who can pull data out of the drawer, this might be a problem. A solution is to simulate data, like I have done multiple times in this book.
-While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be either be found inline or in the electronic case environments that come with the book (\ref{synthetic-data}).
+While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be found in electronic resources accompanying this book.
 
 During my workshops I often use the method of \emph{live programming}. This is best pictured as think-aloud live demonstration - you talk while you are writing the code.
 This requires that you speak R natively, such that you can write valid code, while you talk and think.
@@ -755,7 +753,7 @@ In R, you can simply show, how it looks like (Figure @ref(fig:data\_gaus\_1)):
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/data-gaus-1-1} \caption{A Gaussian distribution}\label{fig:data-gaus-1}
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/data-gaus-1-1} \caption{A Gaussian distribution}\label{fig:data-gaus-1}
 \end{figure}
 
 In many other books on statistics, math is used to precisely specify a model or any other data transformation.
@@ -876,7 +874,7 @@ Obs & y\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-3-1} \caption{Piping data into the plotting engine}\label{fig:stepwise-3}
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-3-1} \caption{Piping data into the plotting engine}\label{fig:stepwise-3}
 \end{figure}
 
 \begin{Shaded}
@@ -891,7 +889,7 @@ Obs & y\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-4-1} \caption{Plotting a histogram}\label{fig:stepwise-4}
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-4-1} \caption{Plotting a histogram}\label{fig:stepwise-4}
 \end{figure}
 
 It is almost obvious that changing \texttt{mean\ =\ 2} changes the mean (Table \ref{tab:stepwise-1}) of the distribution ß, and that \texttt{filter(y\ \textgreater{}\ 0)} removes non-positive values (Table \ref{tab:stepwise-2}). The real fun starts when the Ggplot graphics engine is loaded with data. In Figure \ref{fig:stepwise-3} you only see an empty coordinate system. In Figure \ref{fig:stepwise-4} a so called geometry is added, creating a histogram.
@@ -912,7 +910,7 @@ The ggplot graphics engine in particular is easy to learn and, yet, provides alm
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-5-1} \caption{Adding another layer}\label{fig:stepwise-5}
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-5-1} \caption{Adding another layer}\label{fig:stepwise-5}
 \end{figure}
 
 In contrast to math notation, R is productive and that opens new ways for learning statistics.
@@ -1339,7 +1337,7 @@ With seven lines of code you have simulated the data for an experiment with two 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/first-simulation-2-1} \includegraphics[width=0.5\linewidth]{Production/figures/first-simulation-2-2} \caption{Density of simulated data}\label{fig:first-simulation-2}
+\includegraphics[width=0.5\linewidth]{Getting_started_with_R_files/figure-latex/first-simulation-2-1} \includegraphics[width=0.5\linewidth]{Getting_started_with_R_files/figure-latex/first-simulation-2-2} \caption{Density of simulated data}\label{fig:first-simulation-2}
 \end{figure}
 
 Then, we move on to estimating a statistical model and produce a summary of the estimation in Table \ref{tab:first-simulation-3}
@@ -1766,7 +1764,7 @@ everyday programming tasks:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "<00000000B44F32F0>"
+## [1] "<00000000B45F1AB8>"
 \end{verbatim}
 
 \begin{Shaded}
@@ -1776,7 +1774,7 @@ everyday programming tasks:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "<00000000B454F788>"
+## [1] "<00000000B464DF50>"
 \end{verbatim}
 
 \hypertarget{vectors}{%
@@ -3448,8 +3446,7 @@ data set in the wide legacy format.
 Using identifiers is good practice for several reasons. First, it
 reduces problems during manual data entry. Second, it allows to
 efficiently record data in multi-method experiments and join them
-automatically. An example is given in Appendix \ref{hugme}. Lastly,
-the identifiers will become statistically interesting by themselves when
+automatically. Lastly, the identifiers will become statistically interesting by themselves when
 we turn to linear mixed-effects models and the notion of \emph{members of a
 population} \ref{non-human-populations}. Throughout the book I will use
 standard names for recurring identifier variables in design research:
@@ -4044,7 +4041,7 @@ be put on a 2D plane, with coordinates x and y, a \emph{scatter plot} (Figure \r
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-2-1} \caption{Scatterplot showing the assiciation between age and ToT}\label{fig:plotting-2}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-2-1} \caption{Scatterplot showing the assiciation between age and ToT}\label{fig:plotting-2}
 \end{figure}
 
 Let's take a look at the elements of the command chain: The first two
@@ -4127,7 +4124,7 @@ grouping variable, factor. The box plot does the job (Figure \ref{fig:plotting-4
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-4-1} \caption{A boxplot}\label{fig:plotting-4}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-4-1} \caption{A boxplot}\label{fig:plotting-4}
 \end{figure}
 
 The box plot maps ToT to y (again). The factor Design is represented as
@@ -4156,7 +4153,7 @@ British or American way of writing (colour vs.~color).
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-5-1} \caption{A grouped scatterplot}\label{fig:plotting-5}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-5-1} \caption{A grouped scatterplot}\label{fig:plotting-5}
 \end{figure}
 
 Now, we can distinguish the groups visually, but there is too much
@@ -4178,7 +4175,7 @@ applied to all geometry layers (Figure \ref{fig:plotting-6})
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-6-1} \caption{A scatterplot with smoothed lines}\label{fig:plotting-6}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-6-1} \caption{A scatterplot with smoothed lines}\label{fig:plotting-6}
 \end{figure}
 
 We see a highly interesting pattern: the association between age and ToT
@@ -4204,7 +4201,7 @@ data by a grouping variable and creates one single plot for every group (Figure 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-7-1} \caption{With facets groups can be distinguished}\label{fig:plotting-7}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-7-1} \caption{With facets groups can be distinguished}\label{fig:plotting-7}
 \end{figure}
 
 See, how the \texttt{facet\_grid} command takes a formula, instead of just a
@@ -4224,7 +4221,7 @@ represent both factors, Design and education by facets (Figure \ref{fig:plotting
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-8-1} \caption{Facetting by two factors (or more) results in a grid}\label{fig:plotting-8}
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-8-1} \caption{Facetting by two factors (or more) results in a grid}\label{fig:plotting-8}
 \end{figure}
 
 Note how the color aesthetic, although unnecessary, is kept. It is
@@ -4792,11 +4789,11 @@ Obs & cloudy & rain\tabularnewline
 \midrule
 \endhead
 1 & TRUE & FALSE\tabularnewline
-4 & FALSE & FALSE\tabularnewline
-5 & TRUE & TRUE\tabularnewline
-7 & FALSE & FALSE\tabularnewline
-16 & TRUE & FALSE\tabularnewline
-18 & FALSE & FALSE\tabularnewline
+2 & TRUE & TRUE\tabularnewline
+9 & FALSE & TRUE\tabularnewline
+10 & TRUE & TRUE\tabularnewline
+12 & TRUE & TRUE\tabularnewline
+14 & TRUE & TRUE\tabularnewline
 19 & TRUE & FALSE\tabularnewline
 20 & FALSE & FALSE\tabularnewline
 \bottomrule
@@ -4868,7 +4865,7 @@ Obs & cloudy & rain\\
 \end{Highlighting}
 \end{Shaded}
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter \(P(rain|cloudy) = 60\)\%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the \emph{true} parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, \(P(rain|cloudy) = 62.568\)\%.
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter \(P(rain|cloudy) = 60\)\%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the \emph{true} parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, \(P(rain|cloudy) = 55.872\)\%.
 
 The trust you put in your estimation is called \emph{level of certainty} or \emph{belief} or \emph{confidence}. It is the primary aim of statistics to rationally deal with uncertainty, which involves to \emph{measure the level of certainty} associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding \(P(rain|cloudy)\)?
 
@@ -4954,7 +4951,7 @@ Jane takes another look at the performance of users in the smartr car v2.0 condi
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-1-1} \caption{Distribution of ToT}\label{fig:sec99-1}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-1-1} \caption{Distribution of ToT}\label{fig:sec99-1}
 \end{figure}
 
 The performance is not completely off the 99 seconds, many users are even faster. Jane figures out that she has to ask a more precise question, first, as teh slogan can mean different things, like:
@@ -5047,7 +5044,7 @@ Luckily, Jane had the idea that the slogan could be changed to \emph{``rent a ca
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-4-1} \caption{A histogram of MCMC results split by the 111-seconds criterion}\label{fig:sec99-4}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-4-1} \caption{A histogram of MCMC results split by the 111-seconds criterion}\label{fig:sec99-4}
 \end{figure}
 
 In a similar manner to how the graph above was produced, a precise certainty level can be estimated from the MCMC frequency distribution contained in the posterior object. Table \ref{tab:sec99-5} shows that the 111 seconds holds with much better certainty.
@@ -5107,7 +5104,7 @@ Violet is a manager of an e-commerce website and at present, a major overhaul of
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-1-1} \caption{Density plot comparing the revenue of two designs}\label{fig:rational-1}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-1-1} \caption{Density plot comparing the revenue of two designs}\label{fig:rational-1}
 \end{figure}
 
 There seems to be a slight benefit for the prototype condition. But, is it a 10\% increase? The following calculation shows Violet that it could be the case (Table \ref{tab:rational-2})
@@ -5309,7 +5306,7 @@ Or graphically, we can depict the belief as in Figure \ref{fig:rational-prior-5}
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-prior-5-1} \caption{Prior knowledge about a parameter is expressed as a distribution}\label{fig:rational-prior-5}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-prior-5-1} \caption{Prior knowledge about a parameter is expressed as a distribution}\label{fig:rational-prior-5}
 \end{figure}
 
 The population average (of projects) is less favorable than what Violet saw in her present experiment. If the estimated revenue on the experimental data is correct, it would be a rather extreme outcome. And that is a potential problem, because extreme outcomes are rare. Possibly, the present results are overly optimistic (which can happen by chance) and do not represent the true change revenue, i.e.~on the whole population of users. In Bayesian Statistics, mixing present results with prior knowledge is a standard procedure to correct this problem. In the following step, she uses the (posterior) certainty from M\_prior and employs it as prior information (by means of a Gaussian distribution). Model M\_2 has the same formula as M\_1 before, but combines the information of both sources, data and prior certainty.
@@ -5365,7 +5362,7 @@ M\_2 & Designproto & 1.10 & 1.02 & 1.19\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-prior-8-1} \caption{Comparison of expected revenue increase with and without prior information}\label{fig:rational-prior-8}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-prior-8-1} \caption{Comparison of expected revenue increase with and without prior information}\label{fig:rational-prior-8}
 \end{figure}
 
 Model M\_2 reduces the estimated expected revenue by a small amount. But, remember that Violet has to meet the criterion of 110\% in revenue. In the following she extracts the risk of failure (revenue smaller than 110\%) from the posterior distribution (Table \ref{tab:rational-prior-9}) .
@@ -5667,7 +5664,7 @@ The answer to this problem is \emph{binning}: the scale of measurement is divide
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-8-1} \caption{Histogram showing relative frequencies}\label{fig:sec99-8}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-8-1} \caption{Histogram showing relative frequencies}\label{fig:sec99-8}
 \end{figure}
 
 Strictly spoken, grouped and binned frequencies are not one statistic, but a vector of statistics. It approximates what we will later get to know more closely as a \emph{distribution} \ref{distributions}.
@@ -5675,7 +5672,7 @@ Strictly spoken, grouped and binned frequencies are not one statistic, but a vec
 \hypertarget{central-tendency}{%
 \subsection{Central tendency}\label{central-tendency}}
 
-Reconsider the rational design researcher Jane \ref{sec99}. When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the \emph{(arithmetic) mean}. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: \emph{median} and \emph{mode}.
+Reconsider the rational design researcher Jane \ref{benchmarking-designs}. When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the \emph{(arithmetic) mean}. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: \emph{median} and \emph{mode}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5772,7 +5769,7 @@ mean\_ToT & median\_ToT & mode\_ToT\\
 The table above shows the three statistics for central tendency side-by-side. Mean and median are close together. This is frequently the case, but not always. Only if a distribution of measures is completely symmetric, mean and median perfectly coincide. In section \ref{distributions} we will encounter distributions that are not symmetric. The more a distribution is skewed, the stronger the difference between mean and median increases (Figure \ref{fig:dist-skew}).
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-skew-1} \caption{Left-skewed, right-skewed and symmetric distributions}\label{fig:dist-skew}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-skew-1} \caption{Left-skewed, right-skewed and symmetric distributions}\label{fig:dist-skew}
 \end{figure}
 
 To be more precise: for left skewed distributions the mean is strongly influenced by few, but extreme, values in the left tail of the distribution. The median only counts the number of observations to both sides and is not influenced by how extreme these values are. Therefore, it is located more to the right. The mode does not regard any values other than those in the densest region and just marks that peak. The same principles hold in reversed order for right-skewed distributions.
@@ -5809,7 +5806,7 @@ In a symmetric distribution with exactly one peak, mean and mode coincide and th
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dispersion-1-1} \caption{Narrow and wide distributions}\label{fig:dispersion-1}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dispersion-1-1} \caption{Narrow and wide distributions}\label{fig:dispersion-1}
 \end{figure}
 
 A very basic way to describe dispersion of a distribution is to report the \emph{range} between the two extreme values, \emph{minimum} and \emph{maximum}. These are easily computed by sorting all values and selecting the first and the last element. Coincidentally, they are also special cases of quantiles, namely the 0\% and 100\% quantiles.
@@ -5825,7 +5822,7 @@ A \emph{boxplot} is a commonly used geometry to examine the shape of dispersion.
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-10-1} \caption{A boxplot shows quartiles of a distribution}\label{fig:sec99-10}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-10-1} \caption{A boxplot shows quartiles of a distribution}\label{fig:sec99-10}
 \end{figure}
 
 The min/max statistics only uses just these two values and therefore does not fully represent the amount of dispersion. A statistic for dispersion that exploits the full data is the \emph{variance}, which is the mean of squared deviations from the mean. Squaring the deviations makes variance difficult to interpret, as it no longer is on the same scale as the measures. The \emph{standard deviation} solves this problem by taking the square root of variance. By reversing the square the standard deviation is on the same scale as the original measures and can easily be compared to the mean (Table \ref{tab:sec99-11}) .
@@ -5982,7 +5979,7 @@ In addition, absolute or relative frequencies can be shown in a stacked \emph{ba
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ipump-3-1} \caption{A stacked bar plot with absolute frequencies}\label{fig:ipump-3}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/ipump-3-1} \caption{A stacked bar plot with absolute frequencies}\label{fig:ipump-3}
 \end{figure}
 
 \hypertarget{cat-metric-associations}{%
@@ -6027,7 +6024,9 @@ For the illustration of categorical-metric associations case, \emph{boxplots} ha
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/ipump-5-1}
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/ipump-5-1} \caption{Boxplot comparison of two groups}\label{fig:ipump-5}
+\end{figure}
 
 \hypertarget{cov-corr}{%
 \subsubsection{Covariance and correlation}\label{cov-corr}}
@@ -6118,7 +6117,7 @@ Covariance essentially arises by the multiplication of differences to the mean, 
 Figure \ref{fig:covariance-2} is an attempt at a geometric illustration of the multiplication as the area of rectangles. Rectangles with equal directions (blue) are in the upper-right and lower-left quadrant. They overwhelm the opposite direction rectangles (red), which speaks for a strong positive association. The associations between MRT\_1 and Corsi, as well as between Corsi and ToT seem to have a slight overhead in same direction, so the covariance is positive, but less strong. A clear negative association exists between MRS\_1 and Corsi. It seems these two tests have some common ground.
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-2-1} \caption{Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.}\label{fig:covariance-2}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-2-1} \caption{Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.}\label{fig:covariance-2}
 \end{figure}
 
 If we compare the formulas of covariance and variance, it is apparent that variance is just covariance of a variable with itself (\((x_i - E(X))^2 = (x_i - E(X))(x_i - E(X))\):
@@ -6225,7 +6224,7 @@ Another way to illustrate a bunch of correlations is shown in Figure \ref{fig:co
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-6-1} \caption{A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)}\label{fig:covariance-6}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-6-1} \caption{A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)}\label{fig:covariance-6}
 \end{figure}
 
 Correlations give psychometricians a comparable standard for the quality of measures, irrespective on what scale they are. In exploratory analysis, one often seeks to get a broad overview of how a bunch of variables is associated. Creating a correlation table of all variables is no hassle and allows to get a broad picture of the situation.
@@ -6244,7 +6243,7 @@ While correlations are ubiquitous in data analysis, they do have limitations: Fi
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-7-1} \caption{Some shapes of associations where correlation is not adequate}\label{fig:covariance-7}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-7-1} \caption{Some shapes of associations where correlation is not adequate}\label{fig:covariance-7}
 \end{figure}
 
 As we have seen, for every combination of two categorical and metric variables, we can produce summary statistics for the association, as well as graphs.
@@ -6881,7 +6880,7 @@ Obs & Roll & Result\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rolls-2-1} \caption{A bar chart showing the frequencies of dice roll outcomes}\label{fig:rolls-2}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rolls-2-1} \caption{A bar chart showing the frequencies of dice roll outcomes}\label{fig:rolls-2}
 \end{figure}
 
 Figure \ref{fig:rolls-2} shows the frequencies for the six possible outcomes. For the reason of simplicity we focus on the events of rolling a Six, only. If we have no prior suspicion about the dice, the estimated probability is simply the relative frequency of Six Table \ref{tab:rolls-3} .
@@ -6987,7 +6986,7 @@ The probability function \(d_\text{Bern}(y_i, \pi)\) has two parameters that var
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/likely-1-1} \caption{Estimating parameter pi by maximum likelihood estimation}\label{fig:likely-1}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/likely-1-1} \caption{Estimating parameter pi by maximum likelihood estimation}\label{fig:likely-1}
 \end{figure}
 
 Figure \ref{fig:likely-1} shows the maximum likelihood, or rather its negative logarithm. Because we use the \emph{negative} log-likelihood, the value for \(\pi\) with maximum likelihood is the minimum of the likelihood curve (Table \ref{tab:likely-2}). . Here, \(\pi_\text{MLE} = 0.15\), which is very close to the relative frequency we obtained above. The slight deviation is due to the limited resolution of the grid, but it is always possible to be more accurate by using a finer grid.
@@ -7243,7 +7242,7 @@ In the guessing game, Violet could try to improve her guesses, by also taking ag
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-13-1} \caption{A linear association between Age and ToT}\label{fig:sec99-13}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-13-1} \caption{A linear association between Age and ToT}\label{fig:sec99-13}
 \end{figure}
 
 Violet can use this information to improve her chance of winning. Instead of stoically calling the population mean, she uses a linear function as predictor: \(45 + (\textrm{age} ) 1.5\). This is called a \emph{linear association} and the general notation is
@@ -7298,10 +7297,10 @@ Review the formula \(\text{Measure}_i = \text{structural part} + \text{random pa
 
 The random part of a statistical model contains all (small) unmeasured forces on the response \(y_i\). When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as either \emph{probability mass functions (PMF)} or \emph{probability density functions (PDF)}. The difference between PMF and CDF is that PMF only work for discrete measures, such as anything that is countable, whereas CDF also apply for continuous measures, such as ToT. In general, any PMF can also be called a CDF, but it is instructive to start with a case of discrete measures.
 
-In the case of discrete measaures, a PMF assigns \emph{probabilities to possible outcomes}. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of \(.3\) to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
+In the case of discrete measures, a PMF assigns \emph{probabilities to possible outcomes}. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of \(.3\) to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
 
 \[
-P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
+P(y|p,k) = \binom{k}{y} p^y(1-p)^{k-y}
 \]
 
 Binomial distributions with probabilities of success \(p = .3\) and \(k = 3\) tasks are shown in Figure \ref{fig:dist-1}:
@@ -7326,7 +7325,7 @@ Binomial distributions with probabilities of success \(p = .3\) and \(k = 3\) ta
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-1-1} \caption{Binomial distributions}\label{fig:dist-1}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-1-1} \caption{Binomial distributions}\label{fig:dist-1}
 \end{figure}
 
 As we can see, there exist four possible outcomes for a sequence of three tasks: zero, one, two and three tasks correct. We also see that the most likely outcome is one correct task, which occurs with a probability of \(P(y = 1) = 0.441\). At the same time, it is surprisingly likely to fail at all tasks, \(P(y = 0) = 0.343\). We may also look at \emph{combined events}, say the probability for less than two correct. That is precisely the sum \(P(y \leq 1) = P(y = 0) + P(y = 1) = 0.784\). We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: \(P(0 \leq y \leq 3) = 1\). Simply in order to comply with the third Kolmogorov axiom, all PMF have \emph{probability mass of One}. More precisely, the area covered by the function must be exactly One. Another extreme outcome is that four out of three tasks are correct, which is impossible, or \(P(y > 3) = 0\).
@@ -7360,7 +7359,7 @@ IQ scores are often \emph{designed to follow the Gaussian} distribution with a m
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-2-1} \caption{Gaussian distribution of hypothetical IQ scores}\label{fig:dist-2}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-2-1} \caption{Gaussian distribution of hypothetical IQ scores}\label{fig:dist-2}
 \end{figure}
 
 We observe that the most likely IQ is 100 and that almost nobody reaches scores higher than 150 or lower than 50. But, how likely is it to have an IQ of exactly 100? The answer is Zero. With continuous measures, we can no longer think in blocks that have a certain area. In fact, the probability of having an IQ of \emph{exactly} \(100.00...0\) is exactly zero. That is why continuous outcome variables cannot be stated to have a PMF, but a \emph{probability density distribution (PDF).} At the example of the above Gaussian distribution, we can still identify the point of highest density (IQ = 100), but the density scale is \emph{not probabilities}. What CDFs share with PDFs is that the area under the curve is always exactly One. In addition, probabilities still arise from density when taking intervals of values, which is nothing but combined events. Before we return to that, another way of specifying statistical distributions must be introduced.
@@ -7378,7 +7377,7 @@ A cumulative distribution function is the \emph{integral} of a PDF or CDF. \emph
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-3-1} \caption{The CDF of a discrete outcome is a step function}\label{fig:dist-3}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-3-1} \caption{The CDF of a discrete outcome is a step function}\label{fig:dist-3}
 \end{figure}
 
 Using the CDF, the probability for any outcome to be in a certain range can be written as the difference between the upper and the lower limit of cumulative probability. For example, the probability of having zero or one tasks correct is
@@ -7423,7 +7422,7 @@ With this method, we can also treat PDFs and obtain probabilities for intervals 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-4-1} \caption{The area around 100 has a small, but positive mass}\label{fig:dist-4}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-4-1} \caption{The area around 100 has a small, but positive mass}\label{fig:dist-4}
 \end{figure}
 
 The size of the area is precisely the probability of such an event (IQ between 85 and 115). But, how large is this area exactly? As the distribution is curved, we can no longer simply stack virtual blocks. It is the CDF giving the us probability mass up to a certain value, i.e.~the area under the curve up to a point. Continuous distributions have CDFs, too, and Figure \ref{fig:dist-5} shows the CDF for the IQs. We observe how the curve starts to rise from zero at around 50, has its steepest point at 100, just to slow down and run against 1.
@@ -7454,7 +7453,7 @@ The size of the area is precisely the probability of such an event (IQ between 8
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-5-1} \caption{Continuous distributions have smooth cummulative functions, which can be reduced to a step function}\label{fig:dist-5}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-5-1} \caption{Continuous distributions have smooth cummulative functions, which can be reduced to a step function}\label{fig:dist-5}
 \end{figure}
 
 Underneath the smooth CDF, a discrete probability function reduces the continuum into three horizontal intervals, that have a certain total height associated, as well as a stepsize. The height is the total probability up to this point, whereas stepsize is the probability for an IQ measure to fall within an interval. No that the functionb is block-ified, we can assign probabilities to intervals of values, by simple subtractions on the CDF:
@@ -7531,7 +7530,7 @@ In this book I advocate the thoughtful choice of density distributions rather th
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-6-1} \caption{Three location-shifted Gaussian distributions}\label{fig:dist-6}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-6-1} \caption{Three location-shifted Gaussian distributions}\label{fig:dist-6}
 \end{figure}
 
 \emph{Dispersion} represents the level of \emph{variation} around the center of the distribution. In Gaussian distributions, this is given by the standard deviation (or variance). The most significant impact of dispersion is that spreading out a distribution reduces its overall density at any point. In uni-modal distributions, we can think of the mode as the most typical value, the one you should place your bet on. With more variance, the density at this point is reduced, and you should not bet to hard on it any more. IQ measures usually have a mode at a value of 100, with a standard deviation of 15. The density of a usual IQ distribution at an IQ of 100 is 0.027. If IQs had a standard deviation of 30, the density at 100 would be reduced to 0.013. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when variance is low (Figure \ref{fig:dist-7}).
@@ -7559,7 +7558,7 @@ In this book I advocate the thoughtful choice of density distributions rather th
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-7-1} \caption{Two Gaussian distributions with different variance}\label{fig:dist-7}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-7-1} \caption{Two Gaussian distributions with different variance}\label{fig:dist-7}
 \end{figure}
 
 Large location shifts (between experimental conditions) are usually a delight for researchers, as most often research questions are about location changes. In contrast, large dispersion is often associated with uncertainty (or imperfect measures). In Gaussian models this uncertainty or error is directly represented as the standard deviation of residuals, also called the \emph{standard error}. We will re-encounter this idea when turning to model criticism \ref{model-criticism}.
@@ -7595,7 +7594,7 @@ As was said above, most statistical models use the mean of a distribution to ren
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-8-1} \caption{Beta distributions have smaller variance when approaching either boundary}\label{fig:dist-8}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-8-1} \caption{Beta distributions have smaller variance when approaching either boundary}\label{fig:dist-8}
 \end{figure}
 
 A common problem in statistical modeling is using a symmetric distribution, in particular the Gaussian, when the distribution really is highly skewed. This will be treated in more depth in chapter \ref{glm}.
@@ -7621,7 +7620,7 @@ A very basic performance variable in design research is task success. Think of d
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-9-1} \caption{Successes in a set of equal tasks folows a Binomial distribution}\label{fig:dist-9}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-9-1} \caption{Successes in a set of equal tasks folows a Binomial distribution}\label{fig:dist-9}
 \end{figure}
 
 Speaking about the Binomial distribution in terms of \emph{successes in a number of attempts} is common. As a matter of fact, \emph{any} binary classification of outcomes is amenable for Binomial modeling, like on/off, red/blue, male/female.
@@ -7644,7 +7643,7 @@ An example in web design research is the rate of visitor return, resulting in a 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-10-1} \caption{Binomial distributions}\label{fig:dist-10}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-10-1} \caption{Binomial distributions}\label{fig:dist-10}
 \end{figure}
 
 Binomial distributions have two parameters: \(p\) is the chance of success and \(k\) is the number of attempts. \(p\) is a probability and therefore can take values in the range from zero to one. Probability of success determines the location of a distribution in that With larger \(p\) the distribution moves to the right. The mean of Binomial distributions is the probability scaled by number of attempts, \(\textrm{Mean} = kp\). Logically, there cannot be more successes then \(k\), but with larger \(k\) the distribution gets wider, where the variance is the odds scaled by number of attempts, \(\textrm{Var} = kp(1-p)\). As mean and variance depend on the exact same parameters, they cannot be set independently. In fact, the relation is parabolic, so that variance is largest at \(p = .5\), but decreases towards both boundaries. A Binomial distribution with, say \(k=10\) and \(p = .4\) always has mean \(4\) and variance \(2.4\). This means, in turn, that an outcome with a mean of \(4\) and a variance of \(3\) is not Binomially distributed. This occurs frequently, when the success rate is not identical across trials. A common solution is to use plugin distributions, where the parameter \(p\) itself is distributed, rather than fixed. A common distribution for \(p\) is the \emph{beta} distribution and the \emph{logit-normal} distribution is an alternative.
@@ -7664,7 +7663,7 @@ The Binomial distribution has two boundaries, zero below and number of attempts 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-11-1} \caption{Binomial distribution with a very small p and a very large number of attempts}\label{fig:dist-11}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-11-1} \caption{Binomial distribution with a very small p and a very large number of attempts}\label{fig:dist-11}
 \end{figure}
 
 This is a workable solution to display the number of events per period, but it remains a little odd, because the question really is about events per timespan, not success per attempt. When events per timespan is the question, the process is better covered by \emph{Poisson distributions}.
@@ -7710,7 +7709,7 @@ Y \mathrel{\dot\sim} \textrm{Gaus}(\mu = \lambda, \sigma = \sqrt \lambda)
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-12-1} \caption{Poisson distributions}\label{fig:dist-12}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-12-1} \caption{Poisson distributions}\label{fig:dist-12}
 \end{figure}
 
 For an illustration, consider a video game, \emph{subway smurfer}, where the player jumps and runs a little blue avatar on the roof of a train and catches items passing by. Many items have been placed into the game, but catching a single one is very difficult. The developers are aware that a too low success rate would demotivate players as much as when the game is made to easy. In this experiment, only one player is recorded, and in wonderful ways this player never suffers from fatigue, or is getting better with training. The player plays a 100 times and records the catches after every run. In this idealized situation, the distribution of catches would, approximately, follow a Poisson distribution.
@@ -7752,7 +7751,7 @@ Because mean and variance are tightly linked, only a certain amount of randomnes
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-13-1} \caption{When lambda varies, the distribution becomes over-dispersed}\label{fig:dist-13}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-13-1} \caption{When lambda varies, the distribution becomes over-dispersed}\label{fig:dist-13}
 \end{figure}
 
 Another area for trouble can be Poisson distributions' lower boundary of exactly Zero. Often this works well, a person can perform a sequence with no errors, catch zero items or have no friends on social media. But, you cannot complete an interaction sequence in zero steps, have a conversation with less than two statements or be a customer with zero customer contacts. If the lower bound is obvious, such as the minimum necessary steps to complete a task. In such a case, a count that starts at zero can be created easily:
@@ -7775,7 +7774,7 @@ Another frequent problem at the lower bound bound is zero-inflation. In traffic 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-14-1} \caption{Hidden classes can produce zero inflated distribution}\label{fig:dist-14}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-14-1} \caption{Hidden classes can produce zero inflated distribution}\label{fig:dist-14}
 \end{figure}
 
 In this scenario, the population is not homogenous, but falls into two classes, those who use public transport and those who just never do. The result is a \emph{zero-inflated} distribution. A way to deal with this are hurdle models, which are called as such, because you first have to jump over the hurdle to use public transport, before you are in the game.
@@ -7813,7 +7812,7 @@ Just like Poisson distributions, Exponential distributions have one parameter, c
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-15-1} \caption{Exponential distributions}\label{fig:dist-15}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-15-1} \caption{Exponential distributions}\label{fig:dist-15}
 \end{figure}
 
 Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for three reasons: first, Exponential distributions have just one parameter, which means that mean and variance are tightly linked as \(\textrm{Mean} = 1/\lambda\) and \(\textrm{Var} = 1/\lambda^2\). Like with Poisson distributions, this it does not allow extra variance, e.g.~between participants. Second, the distribution always starts at zero, whereas human reactions always require some basic processing, and be this just the velocity of signals travelling nerve cells, which is far below speed of sound (in air). And third, the exponential process has one special property, which is called \emph{memoryless-ness}. That basically means, that the probability for an event to happen is completely independent of how long one has been waiting for it. In basic physical systems, like nucleus decay, this is the truly the case. But, if a person works on a task, the chance of task completion usually increases when time progresses.
@@ -7845,7 +7844,7 @@ The best known distributions are \emph{Gaussian distributions} or \emph{Normal d
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-16-1} \caption{Gaussian distribution emerging from travel by bumps}\label{fig:dist-16}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-16-1} \caption{Gaussian distribution emerging from travel by bumps}\label{fig:dist-16}
 \end{figure}
 
 Gaussian distributions take two parameters: \(\mu\) marks the location of the mean of the distribution (Figure \ref{fig:dist-17}). Because distributions are symmetric, the mean coincides with median and mode of the distribution. The second parameter \(\sigma\) represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get thicker (Figure \ref{fig:dist-17}) . Different to Poisson and Binomial distributions, mean and variance of the distribution can be set independently and therefore over-dispersion is never an issue.
@@ -7876,7 +7875,7 @@ Gaussian distributions take two parameters: \(\mu\) marks the location of the me
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-17-1} \caption{Gaussian distributions}\label{fig:dist-17}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-17-1} \caption{Gaussian distributions}\label{fig:dist-17}
 \end{figure}
 
 As illustrated by the Tunnel example, Gaussian distributions have the most compelling interpretation of summarizing the effect of SMURFs. Therefore, they are useful to capture randomness in a broad class of regression models and other statistical approaches.
@@ -7939,7 +7938,7 @@ What the estimation does, is to calculate the \emph{posterior distribution} from
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/umbrella-8-1} \caption{Posterior distribution of two parameters}\label{fig:umbrella-8}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/umbrella-8-1} \caption{Posterior distribution of two parameters}\label{fig:umbrella-8}
 \end{figure}
 
 From the posterior distribution, we can deduct all kinds of summary statistics, such as:
@@ -7974,7 +7973,7 @@ Coming back to MCMC random walk: how is the posterior distribution actually prod
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/umbrella-9-1} \caption{Marginal posterior distributions emerging from a two-dimensional paremeter space}\label{fig:umbrella-9}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/umbrella-9-1} \caption{Marginal posterior distributions emerging from a two-dimensional paremeter space}\label{fig:umbrella-9}
 \end{figure}
 
 \begin{Shaded}
@@ -8407,7 +8406,7 @@ Three dimensional plots are difficult to put on a surface, but for somewhat regu
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/sec99-23-1} \includegraphics[width=0.5\linewidth]{Production/figures/sec99-23-2} \caption{Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk.}\label{fig:sec99-23}
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/sec99-23-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/sec99-23-2} \caption{Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk.}\label{fig:sec99-23}
 \end{figure}
 
 Let's see how this landscape actually emerged from the random walk.
@@ -8444,7 +8443,7 @@ My preferred geometry for plotting many MPDs is the violin plot, which packs a b
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-25-1} \caption{Violin plots for (marginal) posterior density}\label{fig:sec99-25}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/sec99-25-1} \caption{Violin plots for (marginal) posterior density}\label{fig:sec99-25}
 \end{figure}
 
 In Figure \ref{fig:sec99-25} we can spot that the most likely value for average time-on-task is \(106.14\).
@@ -8703,7 +8702,7 @@ sigma & 31.4 & 27.5 & 36.1\\
 \end{tabular}
 \end{table}
 
-With the Bayr package, the \texttt{posterior} command produces such a long posterior object. When called, a Bayr posterior object (class \emph{Tbl\_post}) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by \emph{type of parameter}.
+With the Bayr package, the \texttt{posterior} command produces such a long posterior object. When called, a Bayr posterior object (class \emph{Tbl\_post}) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by \emph{type of parameter} (Table \ref{tab:sec99-30a}).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8713,7 +8712,7 @@ With the Bayr package, the \texttt{posterior} command produces such a long poste
 \end{Shaded}
 
 \begin{longtable}[]{@{}llllr@{}}
-\caption{\label{tab:99-seconds-2}MCMC posterior with 4000 samples of 2 parameters in 1 model(s)}\tabularnewline
+\caption{\label{tab:sec99-30a}MCMC posterior with 4000 samples of 2 parameters in 1 model(s)}\tabularnewline
 \toprule
 model & parameter & type & fixef & count\tabularnewline
 \midrule
@@ -8727,7 +8726,7 @@ M\_1 & sigma\_resid & disp & &\tabularnewline
 \bottomrule
 \end{longtable}
 
-The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters \texttt{Intercept} and \texttt{sigma} are assigned different parameter types: fixed effect (which is a coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \ref{tab:sec99-31}
+The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters \texttt{Intercept} and \texttt{sigma} are assigned different parameter types: fixed effect (which is a population-level coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \ref{tab:sec99-31}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8844,7 +8843,7 @@ We observe that for the Intercept it barely matters which center statistic we us
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/clu-2-1} \caption{Comparing mean, median and mode of marginal posterior distributions}\label{fig:clu-2}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/clu-2-1} \caption{Comparing mean, median and mode of marginal posterior distributions}\label{fig:clu-2}
 \end{figure}
 
 This example demonstrates how the long format posterior works together with the GGplot graphics engine.
@@ -8970,7 +8969,7 @@ Figure \ref{fig:walk-1} shows a variety of linear relations between two variable
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/walk-1-1} \caption{Linear terms differing by intercepts and slopes}\label{fig:walk-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/walk-1-1} \caption{Linear terms differing by intercepts and slopes}\label{fig:walk-1}
 \end{figure}
 
 A linear function is a straight line, which is specified by two parameters: \emph{intercept} \(\beta_0\) and \emph{slope} \(\beta_1\):
@@ -9034,7 +9033,7 @@ Actually, that does not look like a straight line, but at least there is steady 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/bab-1-1} \caption{Using a scatterplot and smoother to check for linear trends}\label{fig:bab-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/bab-1-1} \caption{Using a scatterplot and smoother to check for linear trends}\label{fig:bab-1}
 \end{figure}
 
 In fact, the BrowsingAB simulation contains what one could call a psychological model.
@@ -9120,7 +9119,7 @@ The following code produces a shift of -20 and a centering on the original varia
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/shift-1-1} \caption{Shifting and centering of variable Age}\label{fig:shift-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/shift-1-1} \caption{Shifting and centering of variable Age}\label{fig:shift-1}
 \end{figure}
 
 By shifting the age variable, the whole data cloud is moved to the left (Figure \ref{fig:shift-1}).
@@ -9310,7 +9309,7 @@ Obs & Part & Item & rating\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-3-1} \caption{Distribution of three rating scale items}\label{fig:rescale-3}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-3-1} \caption{Distribution of three rating scale items}\label{fig:rescale-3}
 \end{figure}
 
 The first problem is that rating scales have been designed with different end points.
@@ -9342,7 +9341,7 @@ Note how the following tidy code joins \texttt{D\_ratings} with a table \texttt{
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-4-1} \caption{Distribution of three rating scale items with standardized boundaries}\label{fig:rescale-4}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-4-1} \caption{Distribution of three rating scale items with standardized boundaries}\label{fig:rescale-4}
 \end{figure}
 
 This partly corrects the horizontal shift between scales.
@@ -9366,7 +9365,7 @@ A set of measures is z-transformed by centering it and scaling it by its own sta
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-5-1} \caption{Z-transformation removes differences in location and dispersion}\label{fig:rescale-5}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-5-1} \caption{Z-transformation removes differences in location and dispersion}\label{fig:rescale-5}
 \end{figure}
 
 By z-transformation, the three scales now exhibit the same mean location and the same dispersion Table \ref{fig:rescale-5}.
@@ -9399,7 +9398,7 @@ The following time-on-task data is from the IPump study, where nurses have teste
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-6-1} \caption{Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape}\label{fig:rescale-6}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-6-1} \caption{Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape}\label{fig:rescale-6}
 \end{figure}
 
 \begin{Shaded}
@@ -9441,7 +9440,7 @@ For a demonstration, we reproduce the steps on a simulated data set where X and 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/corr-1-1} \caption{A linear association between X and Y}\label{fig:corr-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/corr-1-1} \caption{A linear association between X and Y}\label{fig:corr-1}
 \end{figure}
 
 Recall, that \(r\) is covariance standardized for dispersion, not unsimilar to z-transformation \ref{transform-measures} and that a covariance is the mean squared deviance from the population mean.
@@ -9700,7 +9699,7 @@ The design team is interested in: \emph{Do the two web designs A and B differ in
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/eda-anova-1} \caption{Histogram showing ToT distributions in two groups}\label{fig:eda-anova}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/eda-anova-1} \caption{Histogram showing ToT distributions in two groups}\label{fig:eda-anova}
 \end{figure}
 
 The difference, if it exists, is not striking.
@@ -10041,7 +10040,7 @@ Instead we estimate the absolute group means, and visualize the CLU table as cen
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/amm-1-1} \caption{ToT on five tasks, center estimates and 95 percent credibility interval}\label{fig:amm-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/amm-1-1} \caption{ToT on five tasks, center estimates and 95 percent credibility interval}\label{fig:amm-1}
 \end{figure}
 
 In Figure \ref{fig:amm-1} we can easily discover that Task 2 is by far the longest and that tasks differ a lot, overall.
@@ -10096,7 +10095,7 @@ For level of education, we could use a CGM or AMM, but the graphics and regressi
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/ofm-1-1} \includegraphics[width=0.5\linewidth]{Production/figures/ofm-1-2} \caption{A boxplot and a step chart showing differences in ToT by level of education}\label{fig:ofm-1}
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/ofm-1-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/ofm-1-2} \caption{A boxplot and a step chart showing differences in ToT by level of education}\label{fig:ofm-1}
 \end{figure}
 
 Note that R also knows a separate variable type called ordered factors, which only seemingly is useful.
@@ -10173,7 +10172,7 @@ The following code defines an exponential learning curve function and renders th
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ofm-3-1} \caption{A learning curve}\label{fig:ofm-3}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ofm-3-1} \caption{A learning curve}\label{fig:ofm-3}
 \end{figure}
 
 LRMs can only do straight lines, which means constant effects, whereas learning curves have diminishing effects.
@@ -10197,7 +10196,7 @@ It is more natural to think of learning to take place incrementally, like \emph{
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ofm-4-1} \caption{Learning to execute a task faster over three sessions.}\label{fig:ofm-4}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ofm-4-1} \caption{Learning to execute a task faster over three sessions.}\label{fig:ofm-4}
 \end{figure}
 
 This is what a factorial model with \emph{stairways dummy coding} does.
@@ -10441,7 +10440,7 @@ In Figure \ref{fig:mrm-1} we first look at the two predictors, separately:
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/mrm-1-1} \includegraphics[width=0.5\linewidth]{Production/figures/mrm-1-2} \caption{Linear associations of NCS and Gex with Resistance}\label{fig:mrm-1}
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/mrm-1-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/mrm-1-2} \caption{Linear associations of NCS and Gex with Resistance}\label{fig:mrm-1}
 \end{figure}
 
 As we will see, it is preferable to build one model with two simultaneous predictors, and this is what the present section is all about.
@@ -10573,7 +10572,7 @@ In this study, participants who are high on NCS also tend to have more pronounce
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/AUP-corr-predictors-1} \caption{Correlated predictors Gex and NCS}\label{fig:AUP-corr-predictors}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/AUP-corr-predictors-1} \caption{Correlated predictors Gex and NCS}\label{fig:AUP-corr-predictors}
 \end{figure}
 
 \begin{Shaded}
@@ -10774,7 +10773,7 @@ DesignB:GenderM & DesignB:GenderM & 88.8 & 75.8 & 102\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mfm-4-1} \caption{Line graph showing conditional effects in a tow-factorial model}\label{fig:mfm-4}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/mfm-4-1} \caption{Line graph showing conditional effects in a tow-factorial model}\label{fig:mfm-4}
 \end{figure}
 
 If the two effects were truly independent, these two lines had to be parallel, because the effect of Gender had to be constant.
@@ -10908,7 +10907,7 @@ With these coefficients we can also produce a conditional plot, with one line pe
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/grm-3-1} \caption{Creating a conditional plot from intercept and slope effects}\label{fig:grm-3}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/grm-3-1} \caption{Creating a conditional plot from intercept and slope effects}\label{fig:grm-3}
 \end{figure}
 
 Note
@@ -11015,7 +11014,7 @@ In Figure \ref{fig:cmrm-1}, we take a first look at the situation.
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmrm-1-1} \caption{The effect of  age, combined and conditional on Design}\label{fig:cmrm-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmrm-1-1} \caption{The effect of  age, combined and conditional on Design}\label{fig:cmrm-1}
 \end{figure}
 
 The graph suggests that designs A and B differ in the effect of age.
@@ -11110,7 +11109,7 @@ Some claim that emotional experience is what makes the sexes different, so one c
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-1-1} \caption{Comparing satisfaction ratings by design and gender}\label{fig:cmfm-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-1-1} \caption{Comparing satisfaction ratings by design and gender}\label{fig:cmfm-1}
 \end{figure}
 
 In a first exploratory plot it looks like the ratings are pretty consistent across gender, but with a sensitive topic like that, we better run a model, or rather two, a plain MFM and a conditional MFM:
@@ -11150,7 +11149,7 @@ In a first exploratory plot it looks like the ratings are pretty consistent acro
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-2-1} \caption{Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals}\label{fig:cmfm-2}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-2-1} \caption{Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals}\label{fig:cmfm-2}
 \end{figure}
 
 The CLU plots above show both models in comparison.
@@ -11199,7 +11198,7 @@ If we would run an MFM in such a situation, we would get very similar coefficien
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-3-1} \caption{Total versus conditional effects in a factorial model}\label{fig:cmfm-3}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-3-1} \caption{Total versus conditional effects in a factorial model}\label{fig:cmfm-3}
 \end{figure}
 
 If something like this happens in a real design study, it may be a good idea to find out, why this difference appears and whether there is a way to make everyone equally happy.
@@ -11233,7 +11232,7 @@ Let's take a look at the raw data in Figure \ref{fig:cmfm-4}.
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-4-1} \caption{ToT by design and session}\label{fig:cmfm-4}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-4-1} \caption{ToT by design and session}\label{fig:cmfm-4}
 \end{figure}
 
 We note that the learning curves do not cross, but are not parallel either, which means the stairway coefficients will be different.
@@ -11356,7 +11355,7 @@ In this and the next section, we will use conditional effects to account for non
 We can distinguish between \emph{saturation effects}, which are more common, and \emph{amplification effects}. Figure \ref{fig:interaction-effects} shows two attempts at visualizing saturation (and amplification).
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/interaction-effects-1} \includegraphics[width=0.5\linewidth]{Production/figures/interaction-effects-2} \caption{Two forms of conditional effects: amplification and saturation}\label{fig:interaction-effects}
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/interaction-effects-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/interaction-effects-2} \caption{Two forms of conditional effects: amplification and saturation}\label{fig:interaction-effects}
 \end{figure}
 
 A major flaw with the linear model is that it presumes the regression line to rise or fall infinitely.
@@ -11400,7 +11399,7 @@ After 30 minutes, headache is measured again and the difference between both mea
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/headache-1-1} \caption{Group means of a two-factorial model}\label{fig:headache-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/headache-1-1} \caption{Group means of a two-factorial model}\label{fig:headache-1}
 \end{figure}
 
 When neither pill is given a slight spontaneous recovery seems to occur.
@@ -11567,7 +11566,7 @@ Obs & Part & font\_size & font\_color & mu & ToT\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-2-1} \caption{A boxplot showing groups in a 2x2 experiment.}\label{fig:read-2}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-2-1} \caption{A boxplot showing groups in a 2x2 experiment.}\label{fig:read-2}
 \end{figure}
 
 In Figure \ref{fig:read-2} we see , that both design choices have an impact: black letters, as well as larger letters are faster to read.
@@ -11813,7 +11812,7 @@ These limits belong to the group means, and generally cannot be used to tell abo
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-5-1} \caption{Conditional effects of font size and font color}\label{fig:read-5}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-5-1} \caption{Conditional effects of font size and font color}\label{fig:read-5}
 \end{figure}
 
 Still, it gives the reader of a report some sense of the overall level of certainty.
@@ -11853,7 +11852,7 @@ By pulling the estimated posterior distribution into the plot, we can produce a 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-6-1} \caption{Another way to plot conditional effects from an AMM includes posterior distributions}\label{fig:read-6}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-6-1} \caption{Another way to plot conditional effects from an AMM includes posterior distributions}\label{fig:read-6}
 \end{figure}
 
 Note how we just add one alternative layer to the original line plot object \texttt{G\_amm} to get the violin plot. The violin layer here gets its own data set, which is another feature of the GGplot engine.
@@ -11939,7 +11938,7 @@ The closest we can get to a good illustration is to artificially create groups a
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ar-1-1} \caption{Visualizing continuous conditional effects as factors}\label{fig:ar-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ar-1-1} \caption{Visualizing continuous conditional effects as factors}\label{fig:ar-1}
 \end{figure}
 
 From Figure \ref{fig:ar-1} it seems that both predictors have a positive effect on intention to play.
@@ -12115,7 +12114,7 @@ Here we just go with (simulated) reaction times, assuming that declining vigilan
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sleep-1-1} \caption{Conditional effects of environmental noise and sleep deprivation}\label{fig:sleep-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/sleep-1-1} \caption{Conditional effects of environmental noise and sleep deprivation}\label{fig:sleep-1}
 \end{figure}
 
 Using a 2x2 model including a conditional effect, we examine the conditional association between noise and sleepiness. Note that the \texttt{*} operator in the model formula is an abbreviation for a fully factorial model \texttt{1\ +\ Environment\ +\ Sleep\ +\ Environment:Sleep}. The results are shown in Table \ref{tab:sleep-2}
@@ -12227,7 +12226,7 @@ If we accept that noise has an arousing effect, the null effect of noise on rest
 There is the slight possibility, that Corcona has hit a sweet spot: if we assume that calm/rested participants were still below an optimal arousal level, noise could have pushed them right to the opposite point.
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/Yerkes-Dodson-1-1} \caption{Conditional effects explained by the Yerkes-Dodson law}\label{fig:Yerkes-Dodson-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/Yerkes-Dodson-1-1} \caption{Conditional effects explained by the Yerkes-Dodson law}\label{fig:Yerkes-Dodson-1}
 \end{figure}
 
 \begin{Shaded}
@@ -12282,7 +12281,7 @@ But, an almost anatomically correct robot face may provoke a very negative emoti
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-1-1} \caption{The Uncanny Valley phenomenon is a non-linear emotional response to robot faces}\label{fig:uncanny-1}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-1-1} \caption{The Uncanny Valley phenomenon is a non-linear emotional response to robot faces}\label{fig:uncanny-1}
 \end{figure}
 
 In \autocite{mathur2016}, the observation of Mori is put to a test: Is the relationship between human-likeness and emotional response really shaped like a valley?
@@ -12325,7 +12324,7 @@ By adding higher degrees we can introduce more complex curvature to the associat
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-2-1} \caption{The higher the degree of a polynomial, the more complex the association.}\label{fig:uncanny-2}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-2-1} \caption{The higher the degree of a polynomial, the more complex the association.}\label{fig:uncanny-2}
 \end{figure}
 
 Mathur et al.~argue that the Uncanny Valley curve possesses two stationary points, with a slope of zero: the valley is a local minimum and represents the deepest point in the valley, the other is a local maximum and marks the shoulder left of the valley.
@@ -12518,7 +12517,7 @@ The density function just smooths over the frequency distribution of trough draw
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-5-1} \caption{Estimated Uncanny Valley curve and position of trough}\label{fig:uncanny-5}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-5-1} \caption{Estimated Uncanny Valley curve and position of trough}\label{fig:uncanny-5}
 \end{figure}
 
 With reasonable certainty, we can say that the trough is at approximately two-thirds of the huMech score range.
@@ -12581,7 +12580,7 @@ Every iteration represents one possible polynomial, as is illustrated in Figure 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-6-1} \caption{MCMC estimation produces one polynomial per sample (40 shown)}\label{fig:uncanny-6}
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-6-1} \caption{MCMC estimation produces one polynomial per sample (40 shown)}\label{fig:uncanny-6}
 \end{figure}
 
 All we have to do is count the number of MCMC visits, that have a trough and a shoulder.
@@ -12751,13 +12750,13 @@ Part & mean\_Part\\
 \hline
 13 & 18.46\\
 \hline
-15 & 17.18\\
-\hline
-6 & 12.34\\
-\hline
-8 & 23.75\\
+18 & 13.30\\
 \hline
 7 & 9.24\\
+\hline
+25 & 15.75\\
+\hline
+14 & 15.47\\
 \hline
 \end{tabular}
 \end{table}
@@ -12879,9 +12878,9 @@ re\_entity & center & lower & upper\tabularnewline
 re\_entity & center & lower & upper\tabularnewline
 \midrule
 \endhead
-14 & -0.017 & -3.38 & 3.05\tabularnewline
-8 & 1.025 & -1.09 & 6.24\tabularnewline
+10 & -0.160 & -3.86 & 2.77\tabularnewline
 16 & -0.019 & -3.26 & 3.22\tabularnewline
+24 & -0.497 & -5.07 & 1.87\tabularnewline
 4 & 0.782 & -1.38 & 5.89\tabularnewline
 1 & 1.091 & -1.10 & 6.38\tabularnewline
 \bottomrule
@@ -12931,7 +12930,7 @@ The solution is to use a different contrast coding for random factors: \emph{dev
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescores-1-1} \caption{Absolute random effect scores}\label{fig:rescores-1}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/rescores-1-1} \caption{Absolute random effect scores}\label{fig:rescores-1}
 \end{figure}
 
 Note that first two lines in the above code only work correctly if there is just one population-level effect (i.e.~a GMM). Package Bayr contains the general \texttt{re\_score} to produce absolute random effects scores. This happens on the level of MCMC samples, from which CLUs can extracted, such as (Table \ref{tab:rescores-2}).
@@ -12954,14 +12953,14 @@ parameter & re\_entity & center & lower & upper\tabularnewline
 parameter & re\_entity & center & lower & upper\tabularnewline
 \midrule
 \endhead
-r\_Part{[}8,Intercept{]} & 8 & 17.1 & 14.41 & 22.3\tabularnewline
-r\_Part{[}13,Intercept{]} & 13 & 16.3 & 13.25 & 20.3\tabularnewline
-r\_Part{[}15,Intercept{]} & 15 & 16.2 & 12.88 & 19.7\tabularnewline
-r\_Part{[}1,Intercept{]} & 1 & 17.1 & 14.49 & 22.4\tabularnewline
-r\_Part{[}19,Intercept{]} & 19 & 16.1 & 12.89 & 19.4\tabularnewline
-r\_Part{[}3,Intercept{]} & 3 & 15.7 & 11.94 & 18.8\tabularnewline
-r\_Part{[}4,Intercept{]} & 4 & 16.9 & 14.22 & 22.0\tabularnewline
-r\_Part{[}7,Intercept{]} & 7 & 15.0 & 9.97 & 17.5\tabularnewline
+r\_Part{[}15,Intercept{]} & 15 & 16.2 & 12.9 & 19.7\tabularnewline
+r\_Part{[}2,Intercept{]} & 2 & 16.1 & 13.0 & 19.6\tabularnewline
+r\_Part{[}12,Intercept{]} & 12 & 16.4 & 13.4 & 20.4\tabularnewline
+r\_Part{[}1,Intercept{]} & 1 & 17.1 & 14.5 & 22.4\tabularnewline
+r\_Part{[}9,Intercept{]} & 9 & 16.5 & 13.7 & 20.6\tabularnewline
+r\_Part{[}4,Intercept{]} & 4 & 16.9 & 14.2 & 22.0\tabularnewline
+r\_Part{[}3,Intercept{]} & 3 & 15.7 & 11.9 & 18.8\tabularnewline
+r\_Part{[}21,Intercept{]} & 21 & 15.5 & 11.6 & 18.4\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -13029,7 +13028,7 @@ The participant-level plots in Figure \ref{fig:slpstd-1} shows the individual re
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-1-1} \caption{Participant-level association between sleep deprivation and RT}\label{fig:slpstd-1}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-1-1} \caption{Participant-level association between sleep deprivation and RT}\label{fig:slpstd-1}
 \end{figure}
 
 A more compact way of plotting multi-level slopes is the spaghetti plot below. By superimposing the population level effect, we can clearly see that participants vary in how sleep deprivation delays the reactions.
@@ -13053,7 +13052,7 @@ A more compact way of plotting multi-level slopes is the spaghetti plot below. B
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-2-1} \caption{(Uncooked) Spaghetti plot showing population and participant-level effects}\label{fig:slpstd-2}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-2-1} \caption{(Uncooked) Spaghetti plot showing population and participant-level effects}\label{fig:slpstd-2}
 \end{figure}
 
 For a single level model, the formula would be \texttt{RT\ \textasciitilde{}\ 1\ +\ days}, with the intercept being RT at day Zero and the coefficient \texttt{days} representing the change per day of sleep deprivation. The multi-level formula retains the population level and adds the participant-level term as a conditional statement: again, the effect depends on whom you are looking at.
@@ -13106,7 +13105,7 @@ days & 10.5 & 7.01 & 13.8 & 6.4\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-5-1} \caption{Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation}\label{fig:slpstd-5}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-5-1} \caption{Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation}\label{fig:slpstd-5}
 \end{figure}
 
 The multi-level regression model is mathematically specified as follows. Note how random coefficients \(\beta_{.(Part)}\) are drawn from a Gaussian distribution with their own standard deviation, very similar to the errors \(\epsilon_i\).
@@ -13147,7 +13146,7 @@ This underlines that random coefficients are additive correction terms to the po
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-6-1} \caption{Sleep deprivation projected }\label{fig:slpstd-6}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-6-1} \caption{Sleep deprivation projected }\label{fig:slpstd-6}
 \end{figure}
 
 \hypertarget{thinking-multi-level}{%
@@ -13250,7 +13249,7 @@ An average benefit sounds promising, but we should be clear what it precisely me
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-2-1} \caption{Exploratory multi-level plot of population-level and participant-level change}\label{fig:tml-2}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-2-1} \caption{Exploratory multi-level plot of population-level and participant-level change}\label{fig:tml-2}
 \end{figure}
 
 Note
@@ -13296,7 +13295,7 @@ If you look again at the participant-level \emph{spaghetti plot} (They are uncoo
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-3-1} \caption{Spaghetti plot combining the results of a population-level with a participant-level model}\label{fig:tml-3}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-3-1} \caption{Spaghetti plot combining the results of a population-level with a participant-level model}\label{fig:tml-3}
 \end{figure}
 
 The convenience of (true) multi-level models is that both (or more) levels are specified and estimated as one model. For the multi-level models that follow, we will use a specialized engine, \texttt{brm()} (generalized multi-level regression) that estimates both levels simultaneously and produce multi-level coefficients. The multi-level CGM we desire is written like this:
@@ -13345,7 +13344,7 @@ DesignNovel & -11.7 & -15.3 & -8.05\tabularnewline
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-5-1} \caption{Participant-level random effects in a CGM}\label{fig:tml-5}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-5-1} \caption{Participant-level random effects in a CGM}\label{fig:tml-5}
 \end{figure}
 
 The distribution of random effects should resemble a \emph{Gaussian distribution}. It is usually hard to tell with such small sample sizes, but it seems that the Intercept effects have a left skew. As we will see in chapter \ref{glm}, this problem is not surprising and can be resolved. The distributions are also centered at zero, which is not a coincidence, but the way random effects are designed: deviations from the population mean. That opens up two interesting perspectives: first, random effects look a lot like residuals \ref{likelihood-random-term}, and like those we can summarize a random effects vector by its \emph{standard deviation}, using the \texttt{grpef} command from package Bayr (Table \ref{tab:tml-6}).
@@ -13453,7 +13452,7 @@ One method for testing universality is to extract the fitted responses (\texttt{
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-7-1} \caption{Participant-level associations between human likeness and }\label{fig:uncanny-7}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/uncanny-7-1} \caption{Participant-level associations between human likeness and }\label{fig:uncanny-7}
 \end{figure}
 
 This spaghetti plot broadly confirms, that all participants experience the Uncanny Valley. For a more detailed analysis, a facetted plot would be better suited, allowing to inspect the curves case-by-case.
@@ -13511,7 +13510,7 @@ To produce Figure \ref{fig:uncanny-8}, the probability that the participant expe
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-8-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}\label{fig:uncanny-8}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/uncanny-8-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}\label{fig:uncanny-8}
 \end{figure}
 
 Figure \ref{fig:uncanny-8} gives strong support to the universality of the Uncanny Valley. What may raise suspicion is rather that for most participants the probability is 100\%. If this is all based on a random walk, we should at least see a few deviations, shouldn't we. The reason for that is that MCMC samples approximate the posterior distribution by frequency. As their is a limited number of samples (here: 4000), the resolution is limited. If we increase the number of iterations enough, we would eventually see few ``deviant'' samples appear and measure the tiny chance that a participant does not fall for the Uncanny Valley.
@@ -13550,7 +13549,7 @@ This is great news for all scientists who believe that the Uncanny Valley effect
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-7-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}\label{fig:slpstd-7}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-7-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}\label{fig:slpstd-7}
 \end{figure}
 
 All, but participants 309 and 335, almost certainly have positive slopes. Participant 335 we had identified earlier by visual inspection. Now, that we account for the full posterior distribution, it seems less suspicious. There is almost a 50\% chance that the participant is suffering from sleep deprivation, too. Figure \ref{fig:slpstd-8} is an attempt at illustrating the uncertainty. It shows all the possible slopes the MCMC random walk has explored from (unsuspicious) participant 308 and participant 335. While the latter has a distinctly different distribution, there is no compelling reason to get too excited and call 335 a true counter-example from the rule that sleep deprivation reduces cognitive performance.
@@ -13570,7 +13569,7 @@ All, but participants 309 and 335, almost certainly have positive slopes. Partic
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-8-1} \caption{Visualizing the uncertainty in Days for two pareticipants}\label{fig:slpstd-8}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-8-1} \caption{Visualizing the uncertainty in Days for two pareticipants}\label{fig:slpstd-8}
 \end{figure}
 
 \begin{Shaded}
@@ -13677,7 +13676,7 @@ Egan's claim is a two-way encounter to which we added the tasks, which makes it 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/egan-1-1} \caption{Distribution of human and non-human populations in the Egan experiment (scale log(ToT))}\label{fig:egan-1}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/egan-1-1} \caption{Distribution of human and non-human populations in the Egan experiment (scale log(ToT))}\label{fig:egan-1}
 \end{figure}
 
 There seems to be substantial variation between participants, tasks and items, but very little variation in designs. We build a GMM for the encounter of the four populations.
@@ -13719,7 +13718,7 @@ A Bayesian multi-level model estimates the standard deviation alongside with coe
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/egan-3-1} \caption{Density plot of random effects standard deviations.}\label{fig:egan-3}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/egan-3-1} \caption{Density plot of random effects standard deviations.}\label{fig:egan-3}
 \end{figure}
 
 The outcomes of our study are indecisive regarding Egan's claim. Variance of participants is stronger than variance of designs, but the posterior distributions overlap a good deal. Both factors also produce much less variability in measures than does the remaining noise. Tasks seem to have the overall strongest effect, but this comes with huge uncertainty. The strongest variability is found in the sample of items (Design x Task), which is an interesting observation. How easy a task is, largely depends on the website where it is carried out. That makes sense, as all pieces of information somehow compete for space. For example, one university website could present the library on the homepage, whereas another websites hides it deep in its navigation structure.
@@ -13816,14 +13815,14 @@ Obs & Team & Part & Condition & SUS & Task & ToT & logToT\tabularnewline
 Obs & Team & Part & Condition & SUS & Task & ToT & logToT\tabularnewline
 \midrule
 \endhead
-644 & H3 & 129 & remote & 53 & 4 & 1 & 0.00\tabularnewline
-1244 & L3 & 249 & remote & 33 & 4 & 107 & 4.67\tabularnewline
-1271 & L3 & 255 & remote & 58 & 1 & 129 & 4.86\tabularnewline
-1855 & L3 & 371 & remote & 93 & 5 & 148 & 5.00\tabularnewline
-2153 & L3 & 431 & remote & 85 & 3 & 225 & 5.42\tabularnewline
-2155 & L3 & 431 & remote & 85 & 5 & 198 & 5.29\tabularnewline
-2297 & M3 & 460 & remote & 60 & 2 & 199 & 5.29\tabularnewline
-2423 & M3 & 485 & remote & 45 & 3 & 106 & 4.66\tabularnewline
+1113 & L3 & 223 & remote & 83.0 & 3 & 89 & 4.49\tabularnewline
+1169 & L3 & 234 & remote & 80.0 & 4 & 102 & 4.62\tabularnewline
+1264 & L3 & 253 & remote & 25.0 & 4 & 102 & 4.62\tabularnewline
+1589 & L3 & 318 & remote & 85.0 & 4 & 127 & 4.84\tabularnewline
+2052 & L3 & 411 & remote & 68.0 & 2 & 90 & 4.50\tabularnewline
+2135 & L3 & 427 & remote & 75.0 & 5 & 82 & 4.41\tabularnewline
+2390 & M3 & 478 & remote & 92.5 & 5 & 48 & 3.87\tabularnewline
+2569 & O3 & 514 & moderated & & 4 & 707 & 6.56\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -13834,7 +13833,7 @@ As the original research question is on the consistency across teams, we can rea
 Under this perspective, we examine the data. This time, we have real time-on-task data and as so often, it is highly skewed. Again, we use the trick of logarithmic transformation to obtain a more symmetric distribution of residuals. The downside is that the outcome variable may not be zero. For time-on-task data this is not an issue. Before proceeding to the model, we explore the original variable \texttt{ToT} on the two levels (Participant and Team). In the following code the mean ToT is computed for the two levels of analysis, participants and teams and shown in ascending order (Figure \ref{fig:cue8-2}).
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cue8-2-1} \caption{Distribution of mean scores on three levels}\label{fig:cue8-2}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/cue8-2-1} \caption{Distribution of mean scores on three levels}\label{fig:cue8-2}
 \end{figure}
 
 It seems there is ample variation in ToT for participants, with mean ToT ranging from below 100 to almost 500 seconds. There also is considerable variation on team level, but the overall range seems to be a little smaller. Note, however, that the participant level contains all the variation that is due to teams. A model with nested random effects can separate the sources of variation. When two (or more) levels are nested, a special syntax applies for specifying nested random effects. \texttt{1\textbar{}Team/Part}.
@@ -13904,14 +13903,14 @@ Obs & Part & Team & Condition & SUS & Task & ToT & logToT\tabularnewline
 Obs & Part & Team & Condition & SUS & Task & ToT & logToT\tabularnewline
 \midrule
 \endhead
-684 & H3\_137 & H3 & remote & 43.0 & 4 & 13 & 2.56\tabularnewline
-1205 & L3\_241 & L3 & remote & 68.0 & 5 & 53 & 3.97\tabularnewline
-1367 & L3\_274 & L3 & remote & 83.0 & 2 & 158 & 5.06\tabularnewline
-1818 & L3\_364 & L3 & remote & 78.0 & 3 & 73 & 4.29\tabularnewline
-1973 & L3\_395 & L3 & remote & 93.0 & 3 & 44 & 3.78\tabularnewline
-2372 & M3\_475 & M3 & remote & 72.5 & 2 & 119 & 4.78\tabularnewline
-2475 & M3\_495 & M3 & remote & 52.5 & 5 & 66 & 4.19\tabularnewline
-2525 & N3\_505 & N3 & moderated & 48.3 & 5 & 283 & 5.64\tabularnewline
+568 & H3\_114 & H3 & remote & & 3 & 49 & 3.89\tabularnewline
+977 & K3\_196 & K3 & moderated & 67.5 & 2 & 92 & 4.52\tabularnewline
+1152 & L3\_231 & L3 & remote & 50.0 & 2 & 329 & 5.80\tabularnewline
+1442 & L3\_289 & L3 & remote & 100.0 & 2 & 148 & 5.00\tabularnewline
+2144 & L3\_429 & L3 & remote & 100.0 & 4 & 157 & 5.06\tabularnewline
+2260 & L3\_452 & L3 & remote & 90.0 & 5 & 59 & 4.08\tabularnewline
+2520 & N3\_504 & N3 & moderated & 33.3 & 5 & 220 & 5.39\tabularnewline
+2543 & N3\_509 & N3 & moderated & 53.3 & 3 & 230 & 5.44\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -14053,7 +14052,7 @@ To see the effect, we compare the team-level group means as fixed factor versus 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cue8-13-1} \caption{Shrinkage shown as disparity of fixed effects and random effects}\label{fig:cue8-13}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/cue8-13-1} \caption{Shrinkage shown as disparity of fixed effects and random effects}\label{fig:cue8-13}
 \end{figure}
 
 \begin{Shaded}
@@ -14419,7 +14418,7 @@ We have a linear model, where the rating is weighted sums of person tendency and
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/hugme-3-1} \caption{Comparing distributions of item-level and participant-level scores}\label{fig:hugme-3}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/hugme-3-1} \caption{Comparing distributions of item-level and participant-level scores}\label{fig:hugme-3}
 \end{figure}
 
 Figure \ref{fig:hugme-3} shows that the 32 items of the test cover the range of very low to moderately high geekism fairly well. The upper 20 percent are not represented so well, as it seems. If we were to use the scale to discriminate between geeks and super-geeks, more strong item should be added, such as: `I rather express myself in a programming language, rather than natural language'.
@@ -14501,7 +14500,7 @@ Part & 5 & -1.119 & -1.014\\
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/hugme-6-1} \caption{Test-retest stability for item and participant scores}\label{fig:hugme-6}
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/hugme-6-1} \caption{Test-retest stability for item and participant scores}\label{fig:hugme-6}
 \end{figure}
 
 The participant scores are highly correlated, indicating a very good reliability. If you measure the score of a person, you almost precisely know the result of another measure a few hours later. At least in short terms, the Geekism construct - whatever it truly is - can be measured with almost no error. Only ever so slightly is there a trend that lower scores get higher the second time and higher get lower, which could be called a trend towards the average. Perhaps, some experience during the experiment has led participants to report a more mediocre image of themselves.
@@ -14945,7 +14944,7 @@ Obs & session & range\\
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/relink-2-1} \caption{Trying to predict future performance by a linear model produces inpossible predictions}\label{fig:relink-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/relink-2-1} \caption{Trying to predict future performance by a linear model produces inpossible predictions}\label{fig:relink-2}
 \end{figure}
 
 \begin{Shaded}
@@ -15019,7 +15018,7 @@ A typical case is count variables with a lower boundary of zero and no upper bou
 The logarithm has the \emph{exponential} function as a counterpart, which bends the linear range back into the boundaries. Other measures, like success rates or rating scales, have lower and upper boundaries. A suitable pair of functions is the \emph{logit} link function and the \emph{logistic} mean function (Figure \ref{fig:relink-3}).
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/relink-3-1} \caption{Log and logit link functions expand the bounded range of measures. Mean functions do the reverse.}\label{fig:relink-3}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/relink-3-1} \caption{Log and logit link functions expand the bounded range of measures. Mean functions do the reverse.}\label{fig:relink-3}
 \end{figure}
 
 Using the link function comes at a cost: the linear coefficients \(\beta_i\) is losing its interpretation as increment-per-unit and no longer has a natural interpretation. Later, we will see that logarithmic and logit scales gain an intuitive interpretation when parameters are exponentiated, \(\textrm{exp}(\beta_i)\) (@ref(speaking-multipliers and \ref{talking-odds}).
@@ -15060,7 +15059,7 @@ The problem can be demonstrated by simulating observations, using a Gaussian pat
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/random-1-1} \caption{Simulation with Gaussian error terms produces impossible values.}\label{fig:random-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/random-1-1} \caption{Simulation with Gaussian error terms produces impossible values.}\label{fig:random-1}
 \end{figure}
 
 We immediately see, that simulation with Gaussian distributions is inappropriate: a substantial number of simulated observations is \emph{negative}, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution as Gaussian distributions support the full range of real numbers, no matter how small the variance is (but not zero). There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until \texttt{pumps} contains exclusively positive numbers (and zero), would compromise the idea of random numbers itself. We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
@@ -15128,7 +15127,7 @@ If we simulate such data from a linear model, the relationship between length of
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-1-1} \caption{A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship.}\label{fig:mvr-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-1-1} \caption{A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship.}\label{fig:mvr-1}
 \end{figure}
 
 What is unrealistic is that persons who live right around the corner experience the same range of possible travel times than people who drive dozens of kilometers. That does not seem right.
@@ -15157,7 +15156,7 @@ E(Y) &= \alpha \theta\\
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-2-1} \caption{A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship.}\label{fig:mvr-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-2-1} \caption{A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship.}\label{fig:mvr-2}
 \end{figure}
 
 A similar situation arises for count data. When counting user errors, we would expect a larger variance for complex tasks and interfaces, e.g.~writing an article in a word processor, as compared to the rather simple situation like operating a medical infusion pump. For count data, the Poisson distribution is often a starting point and for Poisson distributed variables, mean and variance are both exactly determined by the Poisson rate parameter \(\lambda\), and therefore strictly connected to each other. Figure \ref{fig:mvr-3} shows hypothetical data from two tasks with very different error rates.
@@ -15186,7 +15185,7 @@ Y &\sim \textrm{Poisson}(\lambda)\\
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-3-1} \caption{Mean-variance relationship of Poisson distributed data  with two groups}\label{fig:mvr-3}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-3-1} \caption{Mean-variance relationship of Poisson distributed data  with two groups}\label{fig:mvr-3}
 \end{figure}
 
 Not by coincidence, practically all distributions with a lower boundary have variance increase with the mean. Distributions that have two boundaries, like binomial or beta distributions also have a mean-variance relationship, but a different one. For binomial distributed variables, mean and variance are determined as follows:
@@ -15214,7 +15213,7 @@ To see this, imagine a study that examines the relationship between user experti
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-4-1} \caption{Cigar shaped mean-variance relationship of Binomial data}\label{fig:mvr-4}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-4-1} \caption{Cigar shaped mean-variance relationship of Binomial data}\label{fig:mvr-4}
 \end{figure}
 
 In conclusion, real distributions are typically asymmetric and have mean and variance linked. Both phenomena are tightly linked to the presence of boundaries. Broadly, the deviation from symmetry gets worse when observations are close to the boundaries (e.g.~low error rates), whereas differences in variance is more pronounced when the means are far apart from each other.
@@ -15267,7 +15266,7 @@ The link function is the logarithm, as it transforms from the non-negative range
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-1-1} \caption{Data sampled from a Poisson distribution}\label{fig:poisreg-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-1-1} \caption{Data sampled from a Poisson distribution}\label{fig:poisreg-1}
 \end{figure}
 
 \begin{Shaded}
@@ -15456,7 +15455,7 @@ ToT = \(100 \times .8^n\)
 Exponential functions make pretty good learning curves and they happen to be the mean function of Poisson regression. This leads to the following simulation of a learning experiment. This simulation takes a constant step size of \(\log(.8) = -0.223\) on the log-linearized scale, resulting in a reduction of 20\% per session.
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-6-1} \caption{Exponential learning curve becoming linear under the log link function}\label{fig:poisreg-6}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-6-1} \caption{Exponential learning curve becoming linear under the log link function}\label{fig:poisreg-6}
 \end{figure}
 
 While the linear predictor scale is a straight line, the response scale clearly is a curve-of-diminishing returns. That opens up the possibility that learning the novel pump design also has a constant difference on the linearized scale, which would mena a constant rate on the original scale. In the following, we estimate two Poisson models, one linearized OFM (OzFM) (with stairway dummies \ref{ofm}) and one LzRM. Then we will assess the model fit (using fitted responses). If the learning process is linear on the log scale, we can expect to see the following:
@@ -15536,7 +15535,7 @@ For the question of a constant rate of learning, we compare the one linear coeff
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-9-1} \caption{Learning rate estimates from a log-linearized continuous model and an OFM.}\label{fig:poisreg-9}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-9-1} \caption{Learning rate estimates from a log-linearized continuous model and an OFM.}\label{fig:poisreg-9}
 \end{figure}
 
 With the Poisson OFM the learning rates are very similar for both steps, which means the learning rate is almost constant and taking one learning step as a unit is justified. Furthermore, the learning rate appears to also be almost constant across designs. If that is true, one implication is that the novel design is superior in many aspects, accelerated learning may not be one of them. The other implication is that we no longer need two learning rate parameters (session). The final model in this section is the most simple one, it even no longer contains conditional effects. Table \ref{tab:poisreg-10} can now be summarized in three simple sentences:
@@ -16136,7 +16135,7 @@ mean(bites) & var(bites)\\
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/logreg-13-1} \caption{Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average.}\label{fig:logreg-13}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/logreg-13-1} \caption{Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average.}\label{fig:logreg-13}
 \end{figure}
 
 When building a model for over-dispersed count data, the process of simulating it is simply reversed, for both methods. Either we choose a more flexible distribution, or we estimate the residuals on the linearized scale. The first method has the advantage of being leaner. Only one parameter is added, whereas OLRE results in one linearized residual for every observation. The advantage of OLRE is more of a conceptual kind. Not only is it appealing for researchers who are familiar with multi-level models, it also produces estimates similar to the well-known residuals. Furthermore, it also works with regression engines that do not cover the two-parameter distribution. In fact, the beta-binomial family is the matching two-parameter distribution for Binomial variables, but is not supported out-of-the-box by any regression engine I am aware of. In \ref{betabin-reg}, we will see how user-defined distributions can be added to the Brm engine.
@@ -16181,7 +16180,7 @@ In \ref{learning-curves} we have seen how log-linearization can accommodate lear
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/negbinreg-1-1} \caption{Comparing credibility intervals of a Poisson and Neg-Binomial models}\label{fig:negbinreg-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/negbinreg-1-1} \caption{Comparing credibility intervals of a Poisson and Neg-Binomial models}\label{fig:negbinreg-1}
 \end{figure}
 
 We observe that the center estimates are precisely the same. Over-dispersion usually does not bias the location of an estimate. But, credibility limits are much wider with an underlying negative-binomial distribution. A full parameter table would also show the Neg-Binomial model additional parameter \texttt{phi}, controlling over-dispersion relative to a Poisson distribution as:
@@ -16214,7 +16213,7 @@ Beta-binomial regression follows a similar pattern as negative-binomial. A two p
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/betabin-1-1} \caption{Sampling from a Beta-Bionomial distribution}\label{fig:betabin-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/betabin-1-1} \caption{Sampling from a Beta-Bionomial distribution}\label{fig:betabin-1}
 \end{figure}
 
 The Brms regression engine currently does not implement the beta-binomial family. That is a good opportunity to applaud the author of the Brms package for his ingenious architecture, which allows custom families to be defined by the user. The only requirement is that the distribution type is implemented in Stan \autocite{Carpenter2017}, which is the underlying general-purpose engine behind Brms. The following code is taken directly from the Brms documentation and adds the beta-binomial family.
@@ -16410,7 +16409,7 @@ Let's first take a look at the two random effect standard errors above. It seems
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/olre-4-1} \caption{Recovery of observation-level random effects}\label{fig:olre-4}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/olre-4-1} \caption{Recovery of observation-level random effects}\label{fig:olre-4}
 \end{figure}
 
 Figure \ref{fig:olre-4} shows that the observation-level deviations can be recovered not perfectly, but to some extent. An OLRE can be seen as generalized residual, or \emph{linearized residuals}.
@@ -16465,7 +16464,7 @@ In the following, data is simulated from an exponential distribution (Figure \re
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/expreg-1-1} \caption{Data sampled from an Exponential distribution.}\label{fig:expreg-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/expreg-1-1} \caption{Data sampled from an Exponential distribution.}\label{fig:expreg-1}
 \end{figure}
 
 \begin{Shaded}
@@ -16520,7 +16519,7 @@ The canonical form of Gamma distribution uses two parameters rate and shape, whi
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/expreg-3-1} \caption{Data sampled from a Gamma distribution.}\label{fig:expreg-3}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/expreg-3-1} \caption{Data sampled from a Gamma distribution.}\label{fig:expreg-3}
 \end{figure}
 
 In comparison to the exponential distribution (Figure \ref{fig:expreg-1}), a significant difference is that the mode of the gamma distribution (its peak) is not fixed at zero, but can move along the x-axis. That makes it appear a much more realistic choice for temporal data in behavioral research. We estimate a simple gamma GMM on the simulated data. For historical reasons, \texttt{brm} uses the inverse link function (\(\theta = 1/\mu\)) for Gamma regression per default, but that does not actually serve the purpose of link functions to stretch \(\mu\) into the range of real numbers. Instead, we explicitly demand a log link, which creates a multiplicative model (Table \ref{tab:expreg-4}).
@@ -16652,7 +16651,7 @@ On the first glance, that does not seem to pose a major problem for Gamma distri
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-1-1} \caption{Gamma distributions loose their left-skewness, when moving away from the boundary.}\label{fig:exgreg-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-1-1} \caption{Gamma distributions loose their left-skewness, when moving away from the boundary.}\label{fig:exgreg-1}
 \end{figure}
 
 So far in this chapter, we have seen that distributions with one parameter (Poisson, binomial, exponential) have a fixed relationship between mean and variance. In order to vary location and dispersion independently, a second parameter is needed (neg-binomial, beta-binomial, Gamma, Gaussian). However, only a three-parameter distributions can do the trick of setting skew separately. So called \emph{exponentially modified Gaussian} (Exgaussian) distributions are convolutions of a Gaussian distribution and exponential distribution and have three parameters, \(\mu\), \(\sigma\) (as usual) and rate \(\beta\). Very roughly, the Gaussian component controls location and dispersion whereas the exponential part adjusts the skew. When \(\beta\) is large in comparison to \(\mu\), the distribution is more left skewed. With this additional degree of freedom we can simulate (and estimate) distributions that are far to the right, have strong dispersion \emph{and} strong skew. Figure \ref{fig:exgreg-2} shows Gamma, Gaussian and Exgaussian distributions with exact same mean and variance.
@@ -16696,7 +16695,7 @@ So far in this chapter, we have seen that distributions with one parameter (Pois
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-2-1} \caption{Exgaussian distributions can be far from zero and still be left skewed}\label{fig:exgreg-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-2-1} \caption{Exgaussian distributions can be far from zero and still be left skewed}\label{fig:exgreg-2}
 \end{figure}
 
 The Gamma distribution in this example starts approaching a the perfect bell curve of the Gaussian distribution. In contrast, the Exgaussian distribution takes a steep left climb followed by a long right tail, which is caused by its pronounced exponential component. We do the usual exercise to simulate a grand mean model (Figure \ref{fig:exgreg-4}) and recover the parameters with the help of the \texttt{brm} engine (Table \ref{tab:exgreg-5}))
@@ -16718,7 +16717,7 @@ The Gamma distribution in this example starts approaching a the perfect bell cur
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-4-1} \caption{Sampling from an Exgaussian distribution}\label{fig:exgreg-4}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-4-1} \caption{Sampling from an Exgaussian distribution}\label{fig:exgreg-4}
 \end{figure}
 
 \begin{Shaded}
@@ -16789,7 +16788,7 @@ Most of the participant-level frequency distributions of RT have a clear cut-off
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-1-1} \caption{Participant-level RT distributions}\label{fig:rt-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-1-1} \caption{Participant-level RT distributions}\label{fig:rt-1}
 \end{figure}
 
 Even the effect of geek primes is barely visible, but we clearly observe a left skew in most of the participants. In the following, we run three CGM models with Exgaussian, Gamma or Gaussian response distributions. For the subsequent analysis, multi-model posterior distributions and posterior predictive distributions are extracted and merged into one multi-model posterior object \texttt{P\_1}.
@@ -16851,7 +16850,7 @@ The below plot shows the population-level effects for the three models. The cent
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}\label{fig:rt-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}\label{fig:rt-2}
 \end{figure}
 
 If the Exgaussian model has a better fit, we should primarily see that in how the residuals are shaped. The Exgaussian distribution has one more degree of freedom, which can be used to set an arbitrary skew. The following reveals that the extra flexibility of the Exgaussian has been employed. Both, Gaussian and Gamma are almost symmetric, whereas the Exgaussian takes a steeper left climb. The three distributions have almost the same right tail, but the left tail of the Exgaussian is consistently shorter.
@@ -16870,7 +16869,7 @@ If the Exgaussian model has a better fit, we should primarily see that in how th
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}\label{fig:rt-3}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}\label{fig:rt-3}
 \end{figure}
 
 We can carefully conclude that the Exgaussian may be very useful for analyzing psychological experiments as it seems to better accommodate reaction times. Given the novelty of Exgaussian models, it is recommended that researchers carry out a careful multi-model analysis. In \ref{choose-dist} we will come back to this case with a more formal approach and confirm that from the three response distributions, the Exgaussian has the best predictive accuracy.
@@ -16957,7 +16956,7 @@ We compare the three patterns of randomness on the CUE8 data set, which contains
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tot-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}\label{fig:tot-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/tot-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}\label{fig:tot-2}
 \end{figure}
 
 In the previous section \ref{rt}, we have seen for RT data, that the three models agreed on the center estimates. As shown in Figure \ref{fig:tot-2}, for ToT data the three families produce rather different coefficients. It seems that the models disagree on all but Task 1. It is not more than an observation, but the Exgaussian model produces the smallest variance between tasks. A recurring observation is that Exgaussian regression also produced the tightest credibility intervals.
@@ -16976,7 +16975,7 @@ Inspecting the residual distributions yields a similar pattern as with RT data: 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tot-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}\label{fig:tot-3}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/tot-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}\label{fig:tot-3}
 \end{figure}
 
 \begin{Shaded}
@@ -17133,7 +17132,7 @@ As the outcome of anchoring, introspection and binning are not under the control
 \end{enumerate}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-1-1} \caption{Five participants with different response styles}\label{fig:rating-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-1-1} \caption{Five participants with different response styles}\label{fig:rating-1}
 \end{figure}
 
 Many unknowns are in the game. Only one special case we can alleviate with the multilevel modeling tools in our hands. Anchoring can (but not necessarily does) result in a constant \emph{shift} between participants. Compare participants A and B: A collects almost all stimuli in categories 2, 3 and 4, whereas B uses 3, 4 and 5. This is not much else than a participant-level intercept random effect. Unfortunately, the situation can be more difficult than that. When participants differ in how extreme they set their endpoints, like C and D, their responses will differ in variance. The maximum variance, however, will be found in participant D.
@@ -17159,7 +17158,7 @@ To speak of a real case: In the IPump study, a single-item rating scale was used
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-2-1} \caption{In the IPump study participants vary greatly in how they exploit the range of a mental workload scale.}\label{fig:rating-2}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-2-1} \caption{In the IPump study participants vary greatly in how they exploit the range of a mental workload scale.}\label{fig:rating-2}
 \end{figure}
 
 \begin{Shaded}
@@ -17215,7 +17214,7 @@ Let's see this at the example of the BrowsingAB case, first. User ratings have b
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-4-1} \caption{Designs A and B rated on a sevel-point scale}\label{fig:rating-4}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-4-1} \caption{Designs A and B rated on a sevel-point scale}\label{fig:rating-4}
 \end{figure}
 
 The brms regression engine implements ordinal regression by the family \texttt{cratio} (cumulative odds ratio ) with a default logit link function.
@@ -17346,7 +17345,7 @@ You may find it inappropriate to mangle a response variable in such an arbitrary
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-6-1} \caption{Response distribution of SUS ratings across teams and conditions}\label{fig:rating-6}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-6-1} \caption{Response distribution of SUS ratings across teams and conditions}\label{fig:rating-6}
 \end{figure}
 
 \begin{Shaded}
@@ -17441,7 +17440,7 @@ For the sake of simplicity (not for a strong research design), let us assume tha
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-1-1} \caption{Extreme and moderate anchoring produce differently varied response distributions}\label{fig:distmod-1}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-1-1} \caption{Extreme and moderate anchoring produce differently varied response distributions}\label{fig:distmod-1}
 \end{figure}
 
 \emph{Note} that the \texttt{rbeta} command uses a different parametrization of beta distribution, with parameters \texttt{a} and \texttt{b}, which have are linked to the distribution mean and variance in rather convoluted ways.
@@ -17560,7 +17559,7 @@ In the previous section, we have seen how to discover differences in anchoring o
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-4-1} \caption{Participant-level random effects for scale parameter phi}\label{fig:distmod-4}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-4-1} \caption{Participant-level random effects for scale parameter phi}\label{fig:distmod-4}
 \end{figure}
 
 As Figure \ref{fig:distmod-4} shows (on the linearized scale), that participants vary considerably around the population-level value of \texttt{phi} (\(\approx 1.4\)). While a regular Beta model adjusts the variance according to the usual mean-variance relationship, the distributional model also accounts for overall broader and narrower distributions. We would probably see some subtle adjustments in predictive plots, but this model is too complex for visual analysis (as every participant get their own \texttt{phi}). Therefore, we defer a deeper inspection to @ref(choos\_resp), where we demonstrate the superiority of the distributional model using information criteria.
@@ -17618,7 +17617,7 @@ First, we extract the fixed effects, as well as the group-level standard deviati
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-5-1} \caption{Participant-level random effects for sigma in beta}\label{fig:distmod-5}
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-5-1} \caption{Participant-level random effects for sigma in beta}\label{fig:distmod-5}
 \end{figure}
 
 Figure \ref{fig:distmod-5} confirms, that participants vary significantly in how there RTs are dispersed (\texttt{sigma}), as well as how skewed they are (\texttt{beta}). Finally, we can also examine whether there are any associations between location, variance and skew. Recall that parameter \texttt{beta} gives the model the flexibility to add extra skew for when the location is far from the left boundary. If that were the case, we would see a correlation between participant-level random effects between location and skew.
@@ -17805,7 +17804,7 @@ For a rough evaluation of this assumption, it suffices to extract the residuals 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/resid_dist_1-1}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid_dist_1-1}
 
 The match of residual distribution with the theoretical distribution is not perfect, but overall this model seems to sufficiently satisfy the normality assumption. To give a counter example, we estimate the same model using the outcome variable \texttt{returns}, which captures the number of times a participant had (disparately) returned to the homepage.
 
@@ -17869,7 +17868,7 @@ We now graphically compare the distribution of estimated residuals against the G
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-3-1} \caption{Visual assessment of Gaussian distribution of errors}\label{fig:resid-3}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-3-1} \caption{Visual assessment of Gaussian distribution of errors}\label{fig:resid-3}
 \end{figure}
 
 \begin{Shaded}
@@ -17920,7 +17919,7 @@ How about unimodality? We have not discussed any multimodal theoretical distribu
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-5-1} \caption{A bimodal distribution indicates a strong unknown factor}\label{fig:resid-5}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-5-1} \caption{A bimodal distribution indicates a strong unknown factor}\label{fig:resid-5}
 \end{figure}
 
 These two deviations from Gaussian distribution have very different causes: asymmetry is caused by scales with boundaries. This is an often arising situation and it is gracefully solved by Generalized Linear Models \ref{glm}. This is a family of models, where each member covers a certain type of measurement scale. In the above example, Poisson regression, applies, taking care of count measures.
@@ -17967,7 +17966,7 @@ We obtain the following residual and theoretical distributions. It is approximat
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-6-1} \caption{Symmetric residual distribution with different curvature}\label{fig:resid-6}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-6-1} \caption{Symmetric residual distribution with different curvature}\label{fig:resid-6}
 \end{figure}
 
 The example shown in Figure \ref{fig:resid-6} is rather pronounced. More subtle deviations would be hard to spot in the histogram. For the qq-plot, we calculate the quantiles of observed and theoretical distributions. Quantiles are produced in fixed steps, say 1\%, 2\%, \ldots{} 99\%\%. Finally, theoretical and observed quantiles are put against each other in a scatterplot like Figure \ref{fig:resid-7}.
@@ -17988,7 +17987,7 @@ The example shown in Figure \ref{fig:resid-6} is rather pronounced. More subtle 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-7-1} \caption{A qq-plot reveals the heavier tails of the observed distribution.}\label{fig:resid-7}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-7-1} \caption{A qq-plot reveals the heavier tails of the observed distribution.}\label{fig:resid-7}
 \end{figure}
 
 In the ideal case, they match perfectly and the quantiles are on a straight line. Instead, we see a rotated sigmoid shape and this is typical for fat-tailed distributions such as t. The shape is symmetric with turning points at around -4 and 4 on the theoretical scale. In the middle part the relation is almost linear, however, not matching a 1-by-1. The t distribution loses probability mass rather quickly when moving from the center to the turning points. From these points on the theoretical quantiles start to lag behind. The lower and upper 1\% sampled quantiles go to much more extreme values, ranging from -10 to almost 20, whereas the Gaussian distribution renders such events practically impossible. Generally, a rotated sigmoid shape is typical for fat tailed distributions. The problem of misusing a Gaussian distribution is that it dramatically underestimates extreme events. Have you ever asked yourself, why in the 1990s, the risk for a nuclear meltdown were estimated to be one in 10.000 years, in face of two such tragic events in the past 40 years? Rumor tells, researchers used the Gaussian distribution for the risk models, under-estimating the risk of extreme events.
@@ -18011,7 +18010,7 @@ Once mastered, the qq-plot is the swiss knife of distribution check. Next to the
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-9-1} \caption{Residual analysis with qq-plots}\label{fig:resid-9}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-9-1} \caption{Residual analysis with qq-plots}\label{fig:resid-9}
 \end{figure}
 
 To the left, extreme values have a lower probability than predicted by the Gaussian distribution, but the right tail is much fatter, once again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified, neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is Poisson regression, which will enter the stage in chapter \ref{pois-reg}.
@@ -18051,7 +18050,7 @@ In a similar way, we can ask: can it be taken for granted that residual variance
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-1-1} \caption{Checking constant variance of residuals in factorial models}\label{fig:constvar-1}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-1-1} \caption{Checking constant variance of residuals in factorial models}\label{fig:constvar-1}
 \end{figure}
 
 Both sets of residuals are reasonably symmetric, but it appears that design B produces more widely spread residuals. Something in the design causes individual performance to vary stronger from the population mean. The cause of this effect has been disclosed in \ref{cmfm}. (In essence, design B is rather efficient to use for younger users, whereas older users seem to have severe issues.)
@@ -18069,7 +18068,7 @@ Visual checks of constant variance for factors is straight forward using common 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-4-1} \caption{Checking constant variance of residuals in continuous models}\label{fig:constvar-4}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-4-1} \caption{Checking constant variance of residuals in continuous models}\label{fig:constvar-4}
 \end{figure}
 
 The quantile plot uses a smoothing algorithm to picture the trend of quantiles (25\%, 50\% and 75\%). Here, the quantiles run almost horizontal and parallel, which confirms constant variance. Taking this as a starting point, we can evaluate more complex models, too. The grouped regression model on age and design just requires to create a grouped quantile plot. This looks best using faceting, rather than separating by color (Figure \ref{fig:constvar-5}):
@@ -18086,7 +18085,7 @@ The quantile plot uses a smoothing algorithm to picture the trend of quantiles (
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-5-1} \caption{Checking residuals in a grouped continuous model}\label{fig:constvar-5}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-5-1} \caption{Checking residuals in a grouped continuous model}\label{fig:constvar-5}
 \end{figure}
 
 This looks rather worrying. Especially with Design A, the residuals are not constant, but increase with age. In addition, we observe that residuals are not even centered at zero across the whole range. For design A, the residual distribution moves from positive centered to negative centered, design B vice versa. That also casts doubts on the validity of the LRM on age: these contrariwise trends seem to mix into an almost even distribution. It seems that a lot more has been going on in this (simulated) study, than would be captured by any of these models.
@@ -18119,7 +18118,7 @@ Another model type we may want to check with quantile plots is the MRM. With two
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-7-1} \caption{Yet another violation of constant distribution}\label{fig:constvar-7}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-7-1} \caption{Yet another violation of constant distribution}\label{fig:constvar-7}
 \end{figure}
 
 We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespective of the number and types of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, Generalized Linear Models \ref{glm}, provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising issues, such as conditional effects or heterogeneity in groups.
@@ -18211,7 +18210,7 @@ The evaluation of model fit is a visual task (at this stage). We start with a pl
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-2-1} \caption{A close match between the linear models predictions and LOESS indicates good linearity.}\label{fig:fitresp-2}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-2-1} \caption{A close match between the linear models predictions and LOESS indicates good linearity.}\label{fig:fitresp-2}
 \end{figure}
 
 Note that the sequence of smooth geometries all use different sources for the y coordinate. The literal values for the color aesthetic produce the legend; the legend title is created by \texttt{labs()}.
@@ -18238,7 +18237,7 @@ In conclusion, LOESS and LRM tell different stories and we cannot tell which one
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-3-1} \caption{Fitted response analysis per design reveals that the unconditional LRM fits poorly.}\label{fig:fitresp-3}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-3-1} \caption{Fitted response analysis per design reveals that the unconditional LRM fits poorly.}\label{fig:fitresp-3}
 \end{figure}
 
 As Figure \ref{fig:fitresp-3} shows, once we look at two designs separately, the LRM fits poorly. For design A, the intercept estimate is too low and slope is too steep, vice versa for design B. The model clearly requires a conditional term, like in the following conditional GRM.
@@ -18261,7 +18260,7 @@ As Figure \ref{fig:fitresp-3} shows, once we look at two designs separately, the
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-5-1} \caption{A conditional regression model sitting snug on the LOESS.}\label{fig:fitresp-5}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-5-1} \caption{A conditional regression model sitting snug on the LOESS.}\label{fig:fitresp-5}
 \end{figure}
 
 As Figure \ref{fig:fitresp-5} shows, the improved model now captures the overall increment by age in both conditions. Apart from the age-50 dip, the DesignA condition is reasonably fitted. The model also predicts a cross-over point at age of 73, where both designs are equal. In contrast, the model cannot adequately render the association in design B, which appears inverse-sigmoid. These non-linear associations stem from a fancy psychological model I have put together over a long night and totally forgot how it went. Let us instead look at some wobbles that are eerily real.
@@ -18274,7 +18273,7 @@ As Figure \ref{fig:fitresp-5} shows, the improved model now captures the overall
 
 The Uncanny Valley effect is all about non-linearity and we have seen in \ref{prm} how a complex curves can be captured by higher-degree polynomials. With every degree added to a polynomial, the model gets one more coefficient. It should be clear by now that models with more coefficients are more flexible. As another example, adding a conditional term to a multi-factorial model lets all group means move freely. The flexibility of a polynomial can be measured by how many stationary points are possible, shoulders and troughs. Higher degree polynomials can do even more tricks, such as saddle points, that have a local slope of zero without changing direction.
 
-Mathur \& Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models.
+Mathur \& Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \ref{testing-theories}, whereas here we use visualizations of fitted responses to evaluate the possible models.
 
 In the following, the cubic model is compared to the simpler quadratic model. It could be, after all, that a parable is sufficient to render the valley. On the other side of things, a polynomial model with the ridiculous degree 9 is estimated, just to see whether there is any chance a more complex model would sit more snug on the data.
 
@@ -18327,7 +18326,7 @@ In the following, the cubic model is compared to the simpler quadratic model. It
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-8-1} \caption{Comparing fitted responses of three polynomial models of different degree}\label{fig:fitresp-8}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-8-1} \caption{Comparing fitted responses of three polynomial models of different degree}\label{fig:fitresp-8}
 \end{figure}
 
 Note that:
@@ -18457,7 +18456,7 @@ Figure \ref{fig:overfit-2} illustrates the mechanism behind over-fitting. It is 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/overfit-2-1} \caption{Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty.}\label{fig:overfit-2}
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/overfit-2-1} \caption{Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty.}\label{fig:overfit-2}
 \end{figure}
 
 \begin{Shaded}
@@ -19290,52 +19289,15 @@ huMech3\strut
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-2113\strut
+70\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p1\_08\strut
+1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE1\strut
+nE6\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-32\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
-2\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
-MR\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-2\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
-Inf\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.090\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-2.23\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.400\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.400\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.160\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.064\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
-RK\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-3495\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p1\_13\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE7\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-nEeriness\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-20\strut
+65\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 0\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
@@ -19347,36 +19309,36 @@ MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
 Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.495\strut
+-0.832\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-1.88\strut
+2.00\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.250\strut
+0.812\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.250\strut
+0.812\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.062\strut
+0.660\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.016\strut
+0.536\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-3529\strut
+712\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p1\_13\strut
+3\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE1\strut
+nE8\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-12\strut
+79\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
 1\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
+2\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
@@ -19384,32 +19346,69 @@ MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
 Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.500\strut
+-0.223\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-3.36\strut
+1.81\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.150\strut
+0.988\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.150\strut
+0.988\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.022\strut
+0.975\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.003\strut
+0.963\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-5425\strut
+1337\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p2\_06\strut
+p1\_05\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
 nE1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-67\strut
+60\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+1\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
+2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
+MR\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
+Inf\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
+-0.880\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
+1.67\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.750\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+1\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.750\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.562\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.422\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
+RK\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
+3451\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
+p1\_12\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
+nE3\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+nEeriness\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+61\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 2\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
@@ -19421,32 +19420,32 @@ MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
 Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.823\strut
+-0.008\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-1.13\strut
+4.20\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.838\strut
+0.762\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.838\strut
+0.762\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.701\strut
+0.581\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.587\strut
+0.443\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-5952\strut
+3585\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p2\_08\strut
+p1\_13\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE8\strut
+nE1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-21\strut
+26\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
@@ -19458,36 +19457,73 @@ MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
 Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.490\strut
+-0.498\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-2.49\strut
+3.50\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.262\strut
+0.325\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.262\strut
+0.325\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.069\strut
+0.106\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.018\strut
+0.034\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-6787\strut
+3901\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p2\_11\strut
+p2\_01\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE3\strut
+nE5\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-45\strut
+34\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
 2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
+MR\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
+Inf\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
+-0.672\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
+2.72\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.425\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+1\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.425\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.181\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+0.077\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
+RK\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
+5982\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
+p2\_08\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
+nE6\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+nEeriness\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
+39\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
+2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
+3\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
@@ -19497,34 +19533,34 @@ Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
 -0.667\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-1.14\strut
+1.66\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.562\strut
+0.488\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.562\strut
+0.488\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.316\strut
+0.238\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.178\strut
+0.116\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 RK\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-7096\strut
+6264\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p2\_12\strut
+p2\_09\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
 nE8\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
 nEeriness\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-52\strut
+57\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
 2\strut
+\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
+3\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
 MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
@@ -19532,56 +19568,19 @@ MR\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
 Inf\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.500\strut
+-0.380\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-2.33\strut
+1.94\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.650\strut
+0.713\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
 1\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.650\strut
+0.713\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.423\strut
+0.508\strut
 \end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.275\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
-RK\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-7326\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.04}}\raggedright
-p2\_13\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedright
-nE6\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-nEeriness\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-54\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedright
-2\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.07}}\raggedright
-MR\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedright
-2\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.12}}\raggedleft
-Inf\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.06}}\raggedleft
--0.172\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.03}}\raggedleft
-2.44\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.675\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.675\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.456\strut
-\end{minipage} & \begin{minipage}[t]{(\columnwidth - 17\tabcolsep) * \real{0.05}}\raggedleft
-0.308\strut
+0.362\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
@@ -19614,7 +19613,7 @@ The following simulates the AR\_game data set, exactly as it was used in section
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-7-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-7-1}
 
 All simulation functions provide the argument \texttt{seed}, which sets the random number generator(s) to a specific value. Using a different seed value produces a data set with the same structure, but different values.
 
@@ -19627,7 +19626,7 @@ All simulation functions provide the argument \texttt{seed}, which sets the rand
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-8-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-8-1}
 
 Additional arguments can be used to change the structure of the data set. In the present example, the amplification effect can be turned into a {[}saturation{]} effect, by changing the beta argument:
 
@@ -19640,7 +19639,7 @@ Additional arguments can be used to change the structure of the data set. In the
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-9-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-9-1}
 
 If you want to understand how a simulation function works and how it can be controlled, you can display the code of the function, just by calling it without parentheses:
 
@@ -19675,8 +19674,8 @@ If you want to understand how a simulation function works and how it can be cont
 ##     # 
 ##     out
 ##     }
-## <bytecode: 0x000000007f0328e8>
-## <environment: 0x0000000072644668>
+## <bytecode: 0x00000000817b8f08>
+## <environment: 0x0000000074dbb340>
 \end{verbatim}
 
 Real and synthetic case environments provide all data used in this book, but also all models are included that have been estimated. When working through this book, this saves you the effort to run the models by yourself.
@@ -20250,7 +20249,7 @@ The central predictor in these experiments is the human-likeness of a robot face
 \hypertarget{measures-2}{%
 \subsubsection{Measures}\label{measures-2}}
 
-The Eeriness scale of Ho \& MacDorman {[}REF{]} has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur \& Reichling, responses have been reversed (negative Eeriness) and normalized to the interval \([-1; 0]\). In addition, reaction times have been recorded.
+The Eeriness scale of \textcite{Ho2017a} has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of \textcite{mathur2016} , responses have been reversed (negative Eeriness) and normalized to the interval \([-1; 0]\). In addition, reaction times have been recorded.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20263,7 +20262,7 @@ The Eeriness scale of Ho \& MacDorman {[}REF{]} has been used to measure the emo
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-33-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-33-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20348,7 +20347,7 @@ Furthermore, several participant-level variables have been recorded:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-34-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-34-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20375,7 +20374,7 @@ This data set ships with the lme4 package and has only been converted to the cod
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-35-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-35-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20437,7 +20436,7 @@ Four usability measures were taken per trial:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-36-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-36-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20472,7 +20471,7 @@ For visual working memory capacity, we used the Corsi block tapping task. For ve
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-37-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-37-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20482,7 +20481,7 @@ For visual working memory capacity, we used the Corsi block tapping task. For ve
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-37-2}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-37-2}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20538,7 +20537,7 @@ By combining these two scales, we created a total score for \emph{resistance to 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-38-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-38-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20623,7 +20622,7 @@ The maerketing department of a car rental website claims that ``You can rent a c
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-41-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-41-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20831,7 +20830,7 @@ This simulation takes perceived headache measured on 16 participants before and 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-46-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-46-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20897,7 +20896,7 @@ This simulation covers an experiment where participants got to read a text on sc
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-48-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-48-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -20963,7 +20962,7 @@ A company seeks their customer profile for a novel Augmented Reality game. 200 p
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-50-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-50-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -21028,7 +21027,7 @@ These results can be explained by the Yerkes-Dodson law, which states that perfo
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-52-1}
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-52-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -21036,8 +21035,6 @@ These results can be explained by the Yerkes-Dodson law, which states that perfo
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{abstracts}{%
-\chapter{Abstracts}\label{abstracts}}
 
 \printbibliography
 

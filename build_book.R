@@ -15,7 +15,7 @@ bookdown::render_book("_bookdown.yml",
                       output_format = "bookdown::epub_book", 
                       clean = TRUE, 
                       new_session = T,
-                      output_dir = "docs/Epub", 
+                      output_dir = "docs", 
                       encoding = "UTF-8")
 
 ### DOC
@@ -31,12 +31,12 @@ bookdown::render_book("_bookdown.yml",
 
 ### PDF
 
+file.remove("New_Stats.md")
 
 bookdown::render_book("_bookdown.yml", 
                       output_format = "bookdown::pdf_book", 
                       clean = F,
                       new_session = T,
-                      output_dir = "../../../../previews",
                       encoding = "UTF-8")
 
 

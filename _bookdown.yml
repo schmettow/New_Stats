@@ -1,5 +1,5 @@
 book_filename: New_Stats
-output_dir: docs
+output_dir: Production
 #rmd_files: ["test_tables.Rmd"]
 #rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd"]
 #rmd_files: ["index.Rmd", "Generalized_Linear_Models.Rmd"]
@@ -7,7 +7,7 @@ output_dir: docs
 #rmd_files: ["index.Rmd"]
 #rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd"]
 #rmd_files: ["index.Rmd", "Working_with_Models.Rmd"]
-#rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd", "Appendix.Rmd", "Abstracts.Rmd"]
+#rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd"]
 rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd", "Appendix.Rmd"]
 new_session: yes
 graphics: yes

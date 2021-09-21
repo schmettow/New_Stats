@@ -2,7 +2,7 @@
 title: "New statistics for design researchers"
 subtitle: A Bayesian workflow in tidy R
 author: "Martin Schmettow"
-date: "2021-03-14"
+date: "2021-03-29"
 github-repo: schmettow/New_Stats
 site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place.
@@ -28,7 +28,7 @@ You are an Human Factors researcher, thirty-three years old, leading a small tea
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
-You are working together with two engineers and a student from industrial design.
+You are working together with two engineers and a student of industrial design.
 Your plan is to put a light color device into a prototype car.
 Two workstation are stuffed into the boot of the car for record physiological signals and driving performance.
 This all is very expensive and someone is paying for it.
@@ -462,7 +462,7 @@ for all routes, distinguish between reader types, perhaps make a cross table
 If you use this book for self study, two considerations play a role for finding the optimal route through this book.
 what is your *background in Statistics?* For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
 As such, it may be a while ago and a refresher is on order.
-Chapter \@ref(rational) is a quick-read, if you are feeling confident.
+Chapter \@ref(decision-making) is a quick-read, if you are feeling confident.
 If you lack any background in statistics, \@ref(ebs) should be studied, first.
 If your background is Social Sciences, then you probably know quite something about probabilities and Statistics. If you wonder what all this new "Bayesian" is all about and how compatible it is to you, \@ref(bayes-freq-prob) is a small bridge.
 
@@ -582,7 +582,7 @@ The following measures were taken:
 
 If you use this book for teaching, that means you will have to come up with some data sets.
 Unless you are a seasoned researcher who can pull data out of the drawer, this might be a problem. A solution is to simulate data, like I have done multiple times in this book.
-While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be either be found inline or in the electronic case environments that come with the book (\@ref(synthetic-data)).
+While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be found in electronic resources accompanying this book. 
 
 During my workshops I often use the method  of *live programming*. This is best pictured as think-aloud live demonstration - you talk while you are writing the code.
 This requires that you speak R natively, such that you can write valid code, while you talk and think. 
@@ -653,7 +653,7 @@ Data_gaus %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/data-gaus-1-1} \caption{A Gaussian distribution}(\#fig:data-gaus-1)
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/data-gaus-1-1} \caption{A Gaussian distribution}(\#fig:data-gaus-1)
 \end{figure}
 
 In many other books on statistics, math is used to precisely specify a model or any other data transformation.
@@ -748,7 +748,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-3-1} \caption{Piping data into the plotting engine}(\#fig:stepwise-3)
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-3-1} \caption{Piping data into the plotting engine}(\#fig:stepwise-3)
 \end{figure}
 
 
@@ -763,7 +763,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-4-1} \caption{Plotting a histogram}(\#fig:stepwise-4)
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-4-1} \caption{Plotting a histogram}(\#fig:stepwise-4)
 \end{figure}
 
 
@@ -784,7 +784,7 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/stepwise-5-1} \caption{Adding another layer}(\#fig:stepwise-5)
+\includegraphics[width=0.9\linewidth]{index_files/figure-latex/stepwise-5-1} \caption{Adding another layer}(\#fig:stepwise-5)
 \end{figure}
 
 In contrast to math notation, R is productive and that opens new ways for learning statistics.

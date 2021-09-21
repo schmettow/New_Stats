@@ -371,7 +371,7 @@ P_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/sec99-23-1} \includegraphics[width=0.5\linewidth]{Production/figures/sec99-23-2} \caption{Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk.}(\#fig:sec99-23)
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/sec99-23-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/sec99-23-2} \caption{Left: The sampled posterior distribution of a GMM. Right: 50 iterations of the MCMC random walk.}(\#fig:sec99-23)
 \end{figure}
 
 
@@ -410,7 +410,7 @@ P_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-25-1} \caption{Violin plots for (marginal) posterior density}(\#fig:sec99-25)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/sec99-25-1} \caption{Violin plots for (marginal) posterior density}(\#fig:sec99-25)
 \end{figure}
 
 In Figure \@ref(fig:sec99-25) we can spot that the most likely value for average time-on-task is $106.14$.
@@ -664,7 +664,7 @@ sigma & 31.4 & 27.5 & 36.1\\
 \end{tabular}
 \end{table}
 
-With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter*.
+With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter* (Table \@ref(tab:sec99-30a)).
 
 
 ```r
@@ -674,14 +674,14 @@ P_1
 
 
 
-Table: (\#tab:99-seconds-2)MCMC posterior with 4000 samples of 2 parameters in 1 model(s)
+Table: (\#tab:sec99-30a)MCMC posterior with 4000 samples of 2 parameters in 1 model(s)
 
 |model |parameter   |type  |fixef     | count|
 |:-----|:-----------|:-----|:---------|-----:|
 |M_1   |Intercept   |fixef |Intercept |     1|
 |M_1   |sigma_resid |disp  |          |      |
 
-The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31)
+The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a population-level coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31).
 
 <!-- #120 -->
 
@@ -783,7 +783,7 @@ P_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/clu-2-1} \caption{Comparing mean, median and mode of marginal posterior distributions}(\#fig:clu-2)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/clu-2-1} \caption{Comparing mean, median and mode of marginal posterior distributions}(\#fig:clu-2)
 \end{figure}
 
 This example demonstrates how the long format posterior works together with the GGplot graphics engine.
@@ -904,7 +904,7 @@ expand_grid(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/walk-1-1} \caption{Linear terms differing by intercepts and slopes}(\#fig:walk-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/walk-1-1} \caption{Linear terms differing by intercepts and slopes}(\#fig:walk-1)
 \end{figure}
 
 A linear function is a straight line, which is specified by two parameters: *intercept* $\beta_0$ and *slope* $\beta_1$:
@@ -966,7 +966,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/bab-1-1} \caption{Using a scatterplot and smoother to check for linear trends}(\#fig:bab-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/bab-1-1} \caption{Using a scatterplot and smoother to check for linear trends}(\#fig:bab-1)
 \end{figure}
 
 In fact, the BrowsingAB simulation contains what one could call a psychological model.
@@ -1047,7 +1047,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/shift-1-1} \caption{Shifting and centering of variable Age}(\#fig:shift-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/shift-1-1} \caption{Shifting and centering of variable Age}(\#fig:shift-1)
 \end{figure}
 
 By shifting the age variable, the whole data cloud is moved to the left (Figure \@ref(fig:shift-1)).
@@ -1213,7 +1213,7 @@ D_ratings %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-3-1} \caption{Distribution of three rating scale items}(\#fig:rescale-3)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-3-1} \caption{Distribution of three rating scale items}(\#fig:rescale-3)
 \end{figure}
 
 The first problem is that rating scales have been designed with different end points.
@@ -1244,7 +1244,7 @@ D_standard %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-4-1} \caption{Distribution of three rating scale items with standardized boundaries}(\#fig:rescale-4)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-4-1} \caption{Distribution of three rating scale items with standardized boundaries}(\#fig:rescale-4)
 \end{figure}
 
 This partly corrects the horizontal shift between scales.
@@ -1267,7 +1267,7 @@ D_ratings %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-5-1} \caption{Z-transformation removes differences in location and dispersion}(\#fig:rescale-5)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-5-1} \caption{Z-transformation removes differences in location and dispersion}(\#fig:rescale-5)
 \end{figure}
 
 By z-transformation, the three scales now exhibit the same mean location and the same dispersion Table \@ref(fig:rescale-5).
@@ -1298,7 +1298,7 @@ D_pumps %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescale-6-1} \caption{Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape}(\#fig:rescale-6)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/rescale-6-1} \caption{Log transformation cam be used to bend highly left skewed distributions into a more symmetric shape}(\#fig:rescale-6)
 \end{figure}
 
 
@@ -1340,7 +1340,7 @@ D_cor %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/corr-1-1} \caption{A linear association between X and Y}(\#fig:corr-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/corr-1-1} \caption{A linear association between X and Y}(\#fig:corr-1)
 \end{figure}
 
 Recall, that $r$ is covariance standardized for dispersion, not unsimilar to z-transformation \@ref(transform-measures) and that a covariance is the mean squared deviance from the population mean.
@@ -1604,7 +1604,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/eda-anova-1} \caption{Histogram showing ToT distributions in two groups}(\#fig:eda-anova)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/eda-anova-1} \caption{Histogram showing ToT distributions in two groups}(\#fig:eda-anova)
 \end{figure}
 
 The difference, if it exists, is not striking.
@@ -1853,7 +1853,7 @@ Table: (\#tab:treatment-1)Data set with 5 variables, showing 8 of 200 observatio
 
 <!-- $$\mu_i=d_1 \beta_{1[1]}+...+d_k \beta_{1[k]}$$ -->
 
-<!-- In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models @ref(multilevel-models)). With expanded dummy variables, the likelihood can become unduly long. -->
+<!-- In the remainder of the book, we are dealing with more complex models (e.g., multifactorial models in the next section), as well as factors with many levels (random effects in multi-level models @ref(mlm)). With expanded dummy variables, the likelihood can become unduly long. -->
 
 <!-- Up to this point, I have introduced dummy variables at the example of AGMs, where at any moment only one factor level is switched on. A more common CGMs  would have a the following likelihood specification (with a factor of $k$ levels): -->
 
@@ -1943,7 +1943,7 @@ coef(M_AMM_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/amm-1-1} \caption{ToT on five tasks, center estimates and 95 percent credibility interval}(\#fig:amm-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/amm-1-1} \caption{ToT on five tasks, center estimates and 95 percent credibility interval}(\#fig:amm-1)
 \end{figure}
 
 In Figure \@ref(fig:amm-1) we can easily discover that Task 2 is by far the longest and that tasks differ a lot, overall.
@@ -2036,7 +2036,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/ofm-1-1} \includegraphics[width=0.5\linewidth]{Production/figures/ofm-1-2} \caption{A boxplot and a step chart showing differences in ToT by level of education}(\#fig:ofm-1)
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/ofm-1-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/ofm-1-2} \caption{A boxplot and a step chart showing differences in ToT by level of education}(\#fig:ofm-1)
 \end{figure}
 
 
@@ -2107,7 +2107,7 @@ tibble(session = as.integer(1:12)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ofm-3-1} \caption{A learning curve}(\#fig:ofm-3)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ofm-3-1} \caption{A learning curve}(\#fig:ofm-3)
 \end{figure}
 
 LRMs can only do straight lines, which means constant effects, whereas learning curves have diminishing effects.
@@ -2130,7 +2130,7 @@ D_Novel %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ofm-4-1} \caption{Learning to execute a task faster over three sessions.}(\#fig:ofm-4)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ofm-4-1} \caption{Learning to execute a task faster over three sessions.}(\#fig:ofm-4)
 \end{figure}
 
 This is what a factorial model with *stairways dummy coding* does.
@@ -2467,7 +2467,7 @@ AUP_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/mrm-1-1} \includegraphics[width=0.5\linewidth]{Production/figures/mrm-1-2} \caption{Linear associations of NCS and Gex with Resistance}(\#fig:mrm-1)
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/mrm-1-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/mrm-1-2} \caption{Linear associations of NCS and Gex with Resistance}(\#fig:mrm-1)
 \end{figure}
 
 As we will see, it is preferable to build one model with two simultaneous predictors, and this is what the present section is all about.
@@ -2589,7 +2589,7 @@ AUP_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/AUP-corr-predictors-1} \caption{Correlated predictors Gex and NCS}(\#fig:AUP-corr-predictors)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/AUP-corr-predictors-1} \caption{Correlated predictors Gex and NCS}(\#fig:AUP-corr-predictors)
 \end{figure}
 
 ```r
@@ -2795,7 +2795,7 @@ coef(M_amfm_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mfm-4-1} \caption{Line graph showing conditional effects in a tow-factorial model}(\#fig:mfm-4)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/mfm-4-1} \caption{Line graph showing conditional effects in a tow-factorial model}(\#fig:mfm-4)
 \end{figure}
 
 If the two effects were truly independent, these two lines had to be parallel, because the effect of Gender had to be constant.
@@ -2920,7 +2920,7 @@ coef(M_ampm_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/grm-3-1} \caption{Creating a conditional plot from intercept and slope effects}(\#fig:grm-3)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/grm-3-1} \caption{Creating a conditional plot from intercept and slope effects}(\#fig:grm-3)
 \end{figure}
 
 Note 
@@ -3104,7 +3104,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmrm-1-1} \caption{The effect of  age, combined and conditional on Design}(\#fig:cmrm-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmrm-1-1} \caption{The effect of  age, combined and conditional on Design}(\#fig:cmrm-1)
 \end{figure}
 
 The graph suggests that designs A and B differ in the effect of age.
@@ -3196,7 +3196,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-1-1} \caption{Comparing satisfaction ratings by design and gender}(\#fig:cmfm-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-1-1} \caption{Comparing satisfaction ratings by design and gender}(\#fig:cmfm-1)
 \end{figure}
 
 In a first exploratory plot it looks like the ratings are pretty consistent across gender, but with a sensitive topic like that, we better run a model, or rather two, a plain MFM and a conditional MFM:
@@ -3238,7 +3238,7 @@ bind_rows(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-2-1} \caption{Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals}(\#fig:cmfm-2)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-2-1} \caption{Comparison of non-conditional and conditionbal two-factorial models, center estimates and 95 percent credibility intervals}(\#fig:cmfm-2)
 \end{figure}
 
 The CLU plots above show both models in comparison.
@@ -3290,7 +3290,7 @@ tribble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-3-1} \caption{Total versus conditional effects in a factorial model}(\#fig:cmfm-3)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-3-1} \caption{Total versus conditional effects in a factorial model}(\#fig:cmfm-3)
 \end{figure}
 
 If something like this happens in a real design study, it may be a good idea to find out, why this difference appears and whether there is a way to make everyone equally happy.
@@ -3322,7 +3322,7 @@ D_agg %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cmfm-4-1} \caption{ToT by design and session}(\#fig:cmfm-4)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/cmfm-4-1} \caption{ToT by design and session}(\#fig:cmfm-4)
 \end{figure}
 
 We note that the learning curves do not cross, but are not parallel either, which means the stairway coefficients will be different.
@@ -3520,7 +3520,7 @@ We can distinguish between *saturation effects*, which are more common, and *amp
 <!-- #68 -->
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/interaction-effects-1} \includegraphics[width=0.5\linewidth]{Production/figures/interaction-effects-2} \caption{Two forms of conditional effects: amplification and saturation}(\#fig:interaction-effects)
+\includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/interaction-effects-1} \includegraphics[width=0.5\linewidth]{Classic_linear_models_files/figure-latex/interaction-effects-2} \caption{Two forms of conditional effects: amplification and saturation}(\#fig:interaction-effects)
 \end{figure}
 
 A major flaw with the linear model is that it presumes the regression line to rise or fall infinitely.
@@ -3563,7 +3563,7 @@ T_means %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/headache-1-1} \caption{Group means of a two-factorial model}(\#fig:headache-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/headache-1-1} \caption{Group means of a two-factorial model}(\#fig:headache-1)
 \end{figure}
 
 When neither pill is given a slight spontaneous recovery seems to occur.
@@ -3735,7 +3735,7 @@ D_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-2-1} \caption{A boxplot showing groups in a 2x2 experiment.}(\#fig:read-2)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-2-1} \caption{A boxplot showing groups in a 2x2 experiment.}(\#fig:read-2)
 \end{figure}
 
 In Figure \@ref(fig:read-2) we see , that both design choices have an impact: black letters, as well as larger letters are faster to read.
@@ -3881,7 +3881,7 @@ G_amm +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-5-1} \caption{Conditional effects of font size and font color}(\#fig:read-5)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-5-1} \caption{Conditional effects of font size and font color}(\#fig:read-5)
 \end{figure}
 
 Still, it gives the reader of a report some sense of the overall level of certainty.
@@ -3920,7 +3920,7 @@ G_amm +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/read-6-1} \caption{Another way to plot conditional effects from an AMM includes posterior distributions}(\#fig:read-6)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/read-6-1} \caption{Another way to plot conditional effects from an AMM includes posterior distributions}(\#fig:read-6)
 \end{figure}
 Note how we just add one alternative layer to the original line plot object `G_amm` to get the violin plot. The violin layer here gets its own data set, which is another feature of the GGplot engine.
 
@@ -4006,7 +4006,7 @@ D_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ar-1-1} \caption{Visualizing continuous conditional effects as factors}(\#fig:ar-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/ar-1-1} \caption{Visualizing continuous conditional effects as factors}(\#fig:ar-1)
 \end{figure}
 
 From Figure \@ref(fig:ar-1) it seems that both predictors have a positive effect on intention to play.
@@ -4219,7 +4219,7 @@ D_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sleep-1-1} \caption{Conditional effects of environmental noise and sleep deprivation}(\#fig:sleep-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/sleep-1-1} \caption{Conditional effects of environmental noise and sleep deprivation}(\#fig:sleep-1)
 \end{figure}
 
 Using a 2x2 model including a conditional effect, we examine the conditional association between noise and sleepiness. Note that the `*` operator in the model formula is an abbreviation for a fully factorial model `1 + Environment + Sleep + Environment:Sleep`. The results are shown in Table \@ref(tab:sleep-2)
@@ -4271,7 +4271,7 @@ There is the slight possibility, that Corcona has hit a sweet spot: if we assume
 <!-- #76 -->
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/Yerkes-Dodson-1-1} \caption{Conditional effects explained by the Yerkes-Dodson law}(\#fig:Yerkes-Dodson-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/Yerkes-Dodson-1-1} \caption{Conditional effects explained by the Yerkes-Dodson law}(\#fig:Yerkes-Dodson-1)
 \end{figure}
 
 
@@ -4334,7 +4334,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-1-1} \caption{The Uncanny Valley phenomenon is a non-linear emotional response to robot faces}(\#fig:uncanny-1)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-1-1} \caption{The Uncanny Valley phenomenon is a non-linear emotional response to robot faces}(\#fig:uncanny-1)
 \end{figure}
 
 In [@mathur2016], the observation of Mori is put to a test: Is the relationship between human-likeness and emotional response really shaped like a valley? 
@@ -4376,7 +4376,7 @@ D_poly %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-2-1} \caption{The higher the degree of a polynomial, the more complex the association.}(\#fig:uncanny-2)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-2-1} \caption{The higher the degree of a polynomial, the more complex the association.}(\#fig:uncanny-2)
 \end{figure}
 
 Mathur et al. argue that the Uncanny Valley curve possesses two stationary points, with a slope of zero: the valley is a local minimum and represents the deepest point in the valley, the other is a local maximum and marks the shoulder left of the valley.
@@ -4565,7 +4565,7 @@ gridExtra::grid.arrange(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-5-1} \caption{Estimated Uncanny Valley curve and position of trough}(\#fig:uncanny-5)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-5-1} \caption{Estimated Uncanny Valley curve and position of trough}(\#fig:uncanny-5)
 \end{figure}
 
 With reasonable certainty, we can say that the trough is at approximately two-thirds of the huMech score range.
@@ -4604,7 +4604,7 @@ But, there is no single coefficient telling us directly that there actually are 
 
 <!-- Wouldn't it be very bold if we could just say: "With a probability of ... there is a trough and a shoulder". -->
 
-<!-- Recall how we If it does not exist, we would see no mini  In the Uncanny Valley case, we have estimated a cubic polynomial and found the stationary points in the first (cubic) derivative and identified the valley in the second (straight) derivative @ref(PRM). Then, we applied the valley-finding procedure on the level of individual MCMC draws and added credibility limits  to population average trough. -->
+<!-- Recall how we If it does not exist, we would see no mini  In the Uncanny Valley case, we have estimated a cubic polynomial and found the stationary points in the first (cubic) derivative and identified the valley in the second (straight) derivative @ref(prm). Then, we applied the valley-finding procedure on the level of individual MCMC draws and added credibility limits  to population average trough. -->
 
 Polynomial theory tells us that a cubic function *can* have two stationary points, but it can also just have one or zero.
 After all, straight line is a cubic, too, if we set the quadratic and cubic coefficients to zero. But that would mean that teh UNcanny Valley effect does not exist. If we run our MCMC chains long enough, they will visit spots in parameter space, where  $\beta_2$ and $\beta_3$ are close to zero, or: areas where the cubic coefficient dominates, and there is just is a saddle.
@@ -4627,7 +4627,7 @@ post_pred(M_poly_3, thin = 100) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-6-1} \caption{MCMC estimation produces one polynomial per sample (40 shown)}(\#fig:uncanny-6)
+\includegraphics[width=0.9\linewidth]{Classic_linear_models_files/figure-latex/uncanny-6-1} \caption{MCMC estimation produces one polynomial per sample (40 shown)}(\#fig:uncanny-6)
 \end{figure}
 
 <!-- Note that -->

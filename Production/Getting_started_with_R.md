@@ -343,7 +343,7 @@ Experiment %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.5\linewidth]{Production/figures/first-simulation-2-1} \includegraphics[width=0.5\linewidth]{Production/figures/first-simulation-2-2} \caption{Density of simulated data}(\#fig:first-simulation-2)
+\includegraphics[width=0.5\linewidth]{Getting_started_with_R_files/figure-latex/first-simulation-2-1} \includegraphics[width=0.5\linewidth]{Getting_started_with_R_files/figure-latex/first-simulation-2-2} \caption{Density of simulated data}(\#fig:first-simulation-2)
 \end{figure}
 
 Then, we move on to estimating a statistical model and produce a summary of the estimation in Table \@ref(tab:first-simulation-3)
@@ -760,7 +760,7 @@ tracemem(N_Obs / N_Part)
 ```
 
 ```
-## [1] "<00000000B44F32F0>"
+## [1] "<00000000B45F1AB8>"
 ```
 
 ```r
@@ -768,7 +768,7 @@ tracemem(N_Obs / N_Part)
 ```
 
 ```
-## [1] "<00000000B454F788>"
+## [1] "<00000000B464DF50>"
 ```
 
 ### Vectors {#vectors}
@@ -1803,8 +1803,7 @@ data set in the wide legacy format.
 Using identifiers is good practice for several reasons. First, it
 reduces problems during manual data entry. Second, it allows to
 efficiently record data in multi-method experiments and join them
-automatically. An example is given in Appendix \@ref(hugme). Lastly,
-the identifiers will become statistically interesting by themselves when
+automatically. Lastly, the identifiers will become statistically interesting by themselves when
 we turn to linear mixed-effects models and the notion of *members of a
 population* \@ref(non-human-populations). Throughout the book I will use
 standard names for recurring identifier variables in design research:
@@ -2053,7 +2052,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-2-1} \caption{Scatterplot showing the assiciation between age and ToT}(\#fig:plotting-2)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-2-1} \caption{Scatterplot showing the assiciation between age and ToT}(\#fig:plotting-2)
 \end{figure}
 
 Let's take a look at the elements of the command chain: The first two
@@ -2131,7 +2130,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-4-1} \caption{A boxplot}(\#fig:plotting-4)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-4-1} \caption{A boxplot}(\#fig:plotting-4)
 \end{figure}
 
 The box plot maps ToT to y (again). The factor Design is represented as
@@ -2159,7 +2158,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-5-1} \caption{A grouped scatterplot}(\#fig:plotting-5)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-5-1} \caption{A grouped scatterplot}(\#fig:plotting-5)
 \end{figure}
 
 Now, we can distinguish the groups visually, but there is too much
@@ -2180,7 +2179,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-6-1} \caption{A scatterplot with smoothed lines}(\#fig:plotting-6)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-6-1} \caption{A scatterplot with smoothed lines}(\#fig:plotting-6)
 \end{figure}
 
 We see a highly interesting pattern: the association between age and ToT
@@ -2206,7 +2205,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-7-1} \caption{With facets groups can be distinguished}(\#fig:plotting-7)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-7-1} \caption{With facets groups can be distinguished}(\#fig:plotting-7)
 \end{figure}
 
 See, how the `facet_grid` command takes a formula, instead of just a
@@ -2225,7 +2224,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/plotting-8-1} \caption{Facetting by two factors (or more) results in a grid}(\#fig:plotting-8)
+\includegraphics[width=0.9\linewidth]{Getting_started_with_R_files/figure-latex/plotting-8-1} \caption{Facetting by two factors (or more) results in a grid}(\#fig:plotting-8)
 \end{figure}
 
 Note how the color aesthetic, although unnecessary, is kept. It is

@@ -184,11 +184,11 @@ Table: (\#tab:umbrella-5)Data set with 3 variables, showing 8 of 20 observations
 | Obs|cloudy |rain  |
 |---:|:------|:-----|
 |   1|TRUE   |FALSE |
-|   4|FALSE  |FALSE |
-|   5|TRUE   |TRUE  |
-|   7|FALSE  |FALSE |
-|  16|TRUE   |FALSE |
-|  18|FALSE  |FALSE |
+|   2|TRUE   |TRUE  |
+|   9|FALSE  |TRUE  |
+|  10|TRUE   |TRUE  |
+|  12|TRUE   |TRUE  |
+|  14|TRUE   |TRUE  |
 |  19|TRUE   |FALSE |
 |  20|FALSE  |FALSE |
 
@@ -258,7 +258,7 @@ Obs & cloudy & rain\\
 
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 62.568$%.
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 55.872$%.
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -315,7 +315,7 @@ Ver20 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-1-1} \caption{Distribution of ToT}(\#fig:sec99-1)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-1-1} \caption{Distribution of ToT}(\#fig:sec99-1)
 \end{figure}
 
 The performance is not completely off the 99 seconds, many users are even faster. Jane figures out that she has to ask a more precise question, first, as teh slogan can mean different things, like:
@@ -390,7 +390,7 @@ P_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-4-1} \caption{A histogram of MCMC results split by the 111-seconds criterion}(\#fig:sec99-4)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-4-1} \caption{A histogram of MCMC results split by the 111-seconds criterion}(\#fig:sec99-4)
 \end{figure}
 
 <!-- In the present case, we can derive the chance that the true average of the customer population is lower than the target of 111: -->
@@ -449,7 +449,7 @@ RD %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-1-1} \caption{Density plot comparing the revenue of two designs}(\#fig:rational-1)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-1-1} \caption{Density plot comparing the revenue of two designs}(\#fig:rational-1)
 \end{figure}
 
 There seems to be a slight benefit for the prototype condition. But, is it a 10% increase? The following calculation shows Violet that it could be the case (Table \@ref(tab:rational-2))
@@ -629,7 +629,7 @@ P_prior %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-prior-5-1} \caption{Prior knowledge about a parameter is expressed as a distribution}(\#fig:rational-prior-5)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-prior-5-1} \caption{Prior knowledge about a parameter is expressed as a distribution}(\#fig:rational-prior-5)
 \end{figure}
 
 The population average (of projects) is less favorable than what Violet saw in her present experiment. If the estimated revenue on the experimental data is correct, it would be a rather extreme outcome. And that is a potential problem, because extreme outcomes are rare. Possibly, the present results are overly optimistic (which can happen by chance) and do not represent the true change revenue, i.e. on the whole population of users. In Bayesian Statistics, mixing present results with prior knowledge is a standard procedure to correct this problem. In the following step, she uses the (posterior) certainty from M_prior and employs it as prior information (by means of a Gaussian distribution). Model M_2 has the same formula as M_1 before, but combines the information of both sources, data and prior certainty.
@@ -680,7 +680,7 @@ P_comb %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rational-prior-8-1} \caption{Comparison of expected revenue increase with and without prior information}(\#fig:rational-prior-8)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rational-prior-8-1} \caption{Comparison of expected revenue increase with and without prior information}(\#fig:rational-prior-8)
 \end{figure}
 
 Model M_2 reduces the estimated expected revenue by a small amount. But, remember that Violet has to meet the criterion of 110% in revenue. In the following she extracts the risk of failure (revenue smaller than 110%) from the posterior distribution (Table \@ref(tab:rational-prior-9)) .
@@ -980,14 +980,14 @@ Ver20 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-8-1} \caption{Histogram showing relative frequencies}(\#fig:sec99-8)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-8-1} \caption{Histogram showing relative frequencies}(\#fig:sec99-8)
 \end{figure}
 
 Strictly spoken, grouped and binned frequencies are not one statistic, but a vector of statistics. It approximates what we will later get to know more closely as a *distribution* \@ref(distributions).
 
 ### Central tendency {#central-tendency}
 
-Reconsider the rational design researcher Jane \@ref(sec99). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
+Reconsider the rational design researcher Jane \@ref(benchmarking-designs). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
 
 
 ```r
@@ -1078,7 +1078,7 @@ mean\_ToT & median\_ToT & mode\_ToT\\
 The table above shows the three statistics for central tendency side-by-side. Mean and median are close together. This is frequently the case, but not always. Only if a distribution of measures is completely symmetric, mean and median perfectly coincide. In section \@ref(distributions) we will encounter distributions that are not symmetric. The more a distribution is skewed, the stronger the difference between mean and median increases (Figure \@ref(fig:dist-skew)).
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-skew-1} \caption{Left-skewed, right-skewed and symmetric distributions}(\#fig:dist-skew)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-skew-1} \caption{Left-skewed, right-skewed and symmetric distributions}(\#fig:dist-skew)
 \end{figure}
 
 To be more precise: for left skewed distributions the mean is strongly influenced by few, but extreme, values in the left tail of the distribution. The median only counts the number of observations to both sides and is not influenced by how extreme these values are. Therefore, it is located more to the right. The mode does not regard any values other than those in the densest region and just marks that peak. The same principles hold in reversed order for right-skewed distributions.
@@ -1113,7 +1113,7 @@ D_disp %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dispersion-1-1} \caption{Narrow and wide distributions}(\#fig:dispersion-1)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dispersion-1-1} \caption{Narrow and wide distributions}(\#fig:dispersion-1)
 \end{figure}
 
 A very basic way to describe dispersion of a distribution is to report the *range* between the two extreme values, *minimum* and *maximum*. These are easily computed by sorting all values and selecting the first and the last element. Coincidentally, they are also special cases of quantiles, namely the 0% and 100% quantiles.
@@ -1128,7 +1128,7 @@ Ver20 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-10-1} \caption{A boxplot shows quartiles of a distribution}(\#fig:sec99-10)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-10-1} \caption{A boxplot shows quartiles of a distribution}(\#fig:sec99-10)
 \end{figure}
 
 The min/max statistics only uses just these two values and therefore does not fully represent the amount of dispersion. A statistic for dispersion that exploits the full data is the *variance*, which is the mean of squared deviations from the mean. Squaring the deviations makes variance difficult to interpret, as it no longer is on the same scale as the measures. The *standard deviation* solves this problem by taking the square root of variance. By reversing the square the standard deviation is on the same scale as the original measures and can easily be compared to the mean (Table \@ref(tab:sec99-11)) .
@@ -1273,7 +1273,7 @@ D_agg %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/ipump-3-1} \caption{A stacked bar plot with absolute frequencies}(\#fig:ipump-3)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/ipump-3-1} \caption{A stacked bar plot with absolute frequencies}(\#fig:ipump-3)
 \end{figure}
 
 #### Categorical-metric associations {#cat-metric-associations}
@@ -1315,8 +1315,9 @@ D_agg %>%
   geom_boxplot()
 ```
 
-
-\includegraphics[width=0.9\linewidth]{Production/figures/ipump-5-1} 
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/ipump-5-1} \caption{Boxplot comparison of two groups}(\#fig:ipump-5)
+\end{figure}
 
 <!-- ########## HERE ########### -->
 
@@ -1421,7 +1422,7 @@ Covariance essentially arises by the multiplication of differences to the mean, 
 Figure \@ref(fig:covariance-2) is an attempt at a geometric illustration of the multiplication as the area of rectangles. Rectangles with equal directions (blue) are in the upper-right and lower-left quadrant. They overwhelm the opposite direction rectangles (red), which speaks for a strong positive association. The associations between MRT_1 and Corsi, as well as between Corsi and ToT seem to have a slight overhead in same direction, so the covariance is positive, but less strong. A clear negative association exists between MRS_1 and Corsi. It seems these two tests have some common ground.
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-2-1} \caption{Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.}(\#fig:covariance-2)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-2-1} \caption{Illustration of covariance. Every rectangle represents a product of two measures. Same-direction rectangles have a positive area, opposite-direction rectangles a negative. The sum of all rectangles is the covariance.}(\#fig:covariance-2)
 \end{figure}
 
 If we compare the formulas of covariance and variance, it is apparent that variance is just covariance of a variable with itself ($(x_i - E(X))^2 = (x_i - E(X))(x_i - E(X))$:
@@ -1519,7 +1520,7 @@ D_tests %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-6-1} \caption{A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)}(\#fig:covariance-6)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-6-1} \caption{A pairs plot showing raw data (left triangle), correlations (right) and individual distribution (diagonal)}(\#fig:covariance-6)
 \end{figure}
 
 Correlations give psychometricians a comparable standard for the quality of measures, irrespective on what scale they are. In exploratory analysis, one often seeks to get a broad overview of how a bunch of variables is associated. Creating a correlation table of all variables is no hassle and allows to get a broad picture of the situation.
@@ -1537,7 +1538,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/covariance-7-1} \caption{Some shapes of associations where correlation is not adequate}(\#fig:covariance-7)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/covariance-7-1} \caption{Some shapes of associations where correlation is not adequate}(\#fig:covariance-7)
 \end{figure}
 
 As we have seen, for every combination of two categorical and metric variables, we can produce summary statistics for the association, as well as graphs.
@@ -2269,7 +2270,7 @@ Rolls %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rolls-2-1} \caption{A bar chart showing the frequencies of dice roll outcomes}(\#fig:rolls-2)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/rolls-2-1} \caption{A bar chart showing the frequencies of dice roll outcomes}(\#fig:rolls-2)
 \end{figure}
 
 Figure \@ref(fig:rolls-2) shows the frequencies for the six possible outcomes. For the reason of simplicity we focus on the events of rolling a Six, only. If we have no prior suspicion about the dice, the estimated probability is simply the relative frequency of Six Table \@ref(tab:rolls-3) .
@@ -2384,7 +2385,7 @@ LL_grid %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/likely-1-1} \caption{Estimating parameter pi by maximum likelihood estimation}(\#fig:likely-1)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/likely-1-1} \caption{Estimating parameter pi by maximum likelihood estimation}(\#fig:likely-1)
 \end{figure}
 
 Figure \@ref(fig:likely-1) shows the maximum likelihood, or rather its negative logarithm. Because we use the *negative* log-likelihood, the value for $\pi$ with maximum likelihood is the minimum of the likelihood curve (Table \@ref(tab:likely-2)). . Here, $\pi_\text{MLE} = 0.15$, which is very close to the relative frequency we obtained above. The slight deviation is due to the limited resolution of the grid, but it is always possible to be more accurate by using a finer grid.
@@ -2820,7 +2821,7 @@ Sec99$Ver20 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/sec99-13-1} \caption{A linear association between Age and ToT}(\#fig:sec99-13)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/sec99-13-1} \caption{A linear association between Age and ToT}(\#fig:sec99-13)
 \end{figure}
 
 Violet can use this information to improve her chance of winning. Instead of stoically calling the population mean, she uses a linear function as predictor: $45 + (\textrm{age} ) 1.5$. This is called a *linear association* and the general notation is
@@ -2877,11 +2878,12 @@ Review the formula $\text{Measure}_i = \text{structural part} + \text{random par
 
 The random part of a statistical model contains all (small) unmeasured forces on the response $y_i$. When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as either *probability mass functions (PMF)* or *probability density functions (PDF)*. The difference between PMF and CDF is that PMF only work for discrete measures, such as anything that is countable, whereas CDF also apply for continuous measures, such as ToT. In general, any PMF can also be called a CDF, but it is instructive to start with a case of discrete measures.
 
-In the case of discrete measaures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
+In the case of discrete measures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
 
 $$
-P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
+P(y|p,k) = \binom{k}{y} p^y(1-p)^{k-y}
 $$
+
 
 Binomial distributions with probabilities of success $p = .3$ and $k = 3$ tasks are shown in Figure \@ref(fig:dist-1):
 
@@ -2904,7 +2906,7 @@ D_three_tasks %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-1-1} \caption{Binomial distributions}(\#fig:dist-1)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-1-1} \caption{Binomial distributions}(\#fig:dist-1)
 \end{figure}
 
 As we can see, there exist four possible outcomes for a sequence of three tasks: zero, one, two and three tasks correct. We also see that the most likely outcome is one correct task, which occurs with a probability of $P(y = 1) = 0.441$. At the same time, it is surprisingly likely to fail at all tasks, $P(y = 0) = 0.343$. We may also look at *combined events*, say the probability for less than two correct. That is precisely the sum $P(y \leq 1) = P(y = 0) + P(y = 1) = 0.784$. We can bundle basic events by adding up the probabilities. An extreme case of that is the universal event that includes all possible outcomes. You can say with absolute certainty that the outcome is, indeed, within zero and three and certainty means the probability is 1, or: $P(0 \leq y \leq 3) = 1$. Simply in order to comply with the third Kolmogorov axiom, all PMF have *probability mass of One*. More precisely, the area covered by the function must be exactly One. Another extreme outcome is that four out of three tasks are correct, which is impossible, or $P(y > 3) = 0$.
@@ -2937,7 +2939,7 @@ D_IQ %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-2-1} \caption{Gaussian distribution of hypothetical IQ scores}(\#fig:dist-2)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-2-1} \caption{Gaussian distribution of hypothetical IQ scores}(\#fig:dist-2)
 \end{figure}
 
 We observe that the most likely IQ is 100 and that almost nobody reaches scores higher than 150 or lower than 50. But, how likely is it to have an IQ of exactly 100? The answer is Zero. With continuous measures, we can no longer think in blocks that have a certain area. In fact, the probability of having an IQ of *exactly* $100.00...0$ is exactly zero. That is why continuous outcome variables cannot be stated to have a PMF, but a *probability density distribution (PDF).* At the example of the above Gaussian distribution, we can still identify the point of highest density (IQ = 100), but the density scale is *not probabilities*. What CDFs share with PDFs is that the area under the curve is always exactly One. In addition, probabilities still arise from density when taking intervals of values, which is nothing but combined events. Before we return to that, another way of specifying statistical distributions must be introduced.
@@ -2954,7 +2956,7 @@ D_three_tasks %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-3-1} \caption{The CDF of a discrete outcome is a step function}(\#fig:dist-3)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-3-1} \caption{The CDF of a discrete outcome is a step function}(\#fig:dist-3)
 \end{figure}
 
 Using the CDF, the probability for any outcome to be in a certain range can be written as the difference between the upper and the lower limit of cumulative probability. For example, the probability of having zero or one tasks correct is
@@ -2998,7 +3000,7 @@ D_IQ %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-4-1} \caption{The area around 100 has a small, but positive mass}(\#fig:dist-4)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-4-1} \caption{The area around 100 has a small, but positive mass}(\#fig:dist-4)
 \end{figure}
 
 The size of the area is precisely the probability of such an event (IQ between 85 and 115). But, how large is this area exactly? As the distribution is curved, we can no longer simply stack virtual blocks. It is the CDF giving the us probability mass up to a certain value, i.e. the area under the curve up to a point. Continuous distributions have CDFs, too, and Figure \@ref(fig:dist-5) shows the CDF for the IQs. We observe how the curve starts to rise from zero at around 50, has its steepest point at 100, just to slow down and run against 1.
@@ -3028,7 +3030,7 @@ D_IQ %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-5-1} \caption{Continuous distributions have smooth cummulative functions, which can be reduced to a step function}(\#fig:dist-5)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-5-1} \caption{Continuous distributions have smooth cummulative functions, which can be reduced to a step function}(\#fig:dist-5)
 \end{figure}
 
 Underneath the smooth CDF, a discrete probability function reduces the continuum into three horizontal intervals, that have a certain total height associated, as well as a stepsize. The height is the total probability up to this point, whereas stepsize is the probability for an IQ measure to fall within an interval. No that the functionb is block-ified, we can assign probabilities to intervals of values, by simple subtractions on the CDF:
@@ -3100,7 +3102,7 @@ tibble(location = c(90, 91.5, 120), sd = 10) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-6-1} \caption{Three location-shifted Gaussian distributions}(\#fig:dist-6)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-6-1} \caption{Three location-shifted Gaussian distributions}(\#fig:dist-6)
 \end{figure}
 
 *Dispersion* represents the level of *variation* around the center of the distribution. In Gaussian distributions, this is given by the standard deviation (or variance). The most significant impact of dispersion is that spreading out a distribution reduces its overall density at any point. In uni-modal distributions, we can think of the mode as the most typical value, the one you should place your bet on. With more variance, the density at this point is reduced, and you should not bet to hard on it any more. IQ measures usually have a mode at a value of 100, with a standard deviation of 15. The density of a usual IQ distribution at an IQ of 100 is 0.027. If IQs had a standard deviation of 30, the density at 100 would be reduced to 0.013. If you were in game to guess an unfamiliar persons IQ, in both cases 100 would be the best guess, but you had a considerable higher chance of being right, when variance is low (Figure \@ref(fig:dist-7)).
@@ -3127,7 +3129,7 @@ tibble(location = 100) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-7-1} \caption{Two Gaussian distributions with different variance}(\#fig:dist-7)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-7-1} \caption{Two Gaussian distributions with different variance}(\#fig:dist-7)
 \end{figure}
 
 <!-- The perspective of uncertainty routinely occurs in the experimental comparison of conditions, e.g. design A compared to design B. What causes experimenters worry is when the *residual distributions* in their models is widely spread, which means that measures compose into a small structural part and a large random part. The source of this variation is unknown and usually called *measurement error*.  -->
@@ -3164,7 +3166,7 @@ tibble(location = c(.25, .5, .75)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-8-1} \caption{Beta distributions have smaller variance when approaching either boundary}(\#fig:dist-8)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-8-1} \caption{Beta distributions have smaller variance when approaching either boundary}(\#fig:dist-8)
 \end{figure}
 
 A common problem in statistical modeling is using a symmetric distribution, in particular the Gaussian, when the distribution really is highly skewed. This will be treated in more depth in chapter \@ref(glm).
@@ -3211,7 +3213,7 @@ tibble(succs = rbinom(30, 10, .9)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-9-1} \caption{Successes in a set of equal tasks folows a Binomial distribution}(\#fig:dist-9)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-9-1} \caption{Successes in a set of equal tasks folows a Binomial distribution}(\#fig:dist-9)
 \end{figure}
 
 Speaking about the Binomial distribution in terms of *successes in a number of attempts* is common. As a matter of fact, *any* binary classification of outcomes is amenable for Binomial modeling, like on/off, red/blue, male/female.
@@ -3233,7 +3235,7 @@ mascutils::expand_grid(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-10-1} \caption{Binomial distributions}(\#fig:dist-10)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-10-1} \caption{Binomial distributions}(\#fig:dist-10)
 \end{figure}
 
 Binomial distributions have two parameters: $p$ is the chance of success and $k$ is the number of attempts. $p$ is a probability and therefore can take values in the range from zero to one. Probability of success determines the location of a distribution in that With larger $p$ the distribution moves to the right. The mean of Binomial distributions is the probability scaled by number of attempts, $\textrm{Mean} = kp$. Logically, there cannot be more successes then $k$, but with larger $k$ the distribution gets wider, where the variance is the odds scaled by number of attempts, $\textrm{Var} = kp(1-p)$. As mean and variance depend on the exact same parameters, they cannot be set independently. In fact, the relation is parabolic, so that variance is largest at $p = .5$, but decreases towards both boundaries. A Binomial distribution with, say $k=10$ and $p = .4$ always has mean $4$ and variance $2.4$. This means, in turn, that an outcome with a mean of $4$ and a variance of $3$ is not Binomially distributed. This occurs frequently, when the success rate is not identical across trials. A common solution is to use plugin distributions, where the parameter $p$ itself is distributed, rather than fixed. A common distribution for $p$ is the *beta* distribution and the *logit-normal* distribution is an alternative.
@@ -3252,7 +3254,7 @@ tibble(rentals_per_year = rbinom(1000,
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-11-1} \caption{Binomial distribution with a very small p and a very large number of attempts}(\#fig:dist-11)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-11-1} \caption{Binomial distribution with a very small p and a very large number of attempts}(\#fig:dist-11)
 \end{figure}
 
 This is a workable solution to display the number of events per period, but it remains a little odd, because the question really is about events per timespan, not success per attempt. When events per timespan is the question, the process is better covered by *Poisson distributions*.
@@ -3289,7 +3291,7 @@ mascutils::expand_grid(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-12-1} \caption{Poisson distributions}(\#fig:dist-12)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-12-1} \caption{Poisson distributions}(\#fig:dist-12)
 \end{figure}
 
 For an illustration, consider a video game, *subway smurfer*, where the player jumps and runs a little blue avatar on the roof of a train and catches items passing by. Many items have been placed into the game, but catching a single one is very difficult. The developers are aware that a too low success rate would demotivate players as much as when the game is made to easy. In this experiment, only one player is recorded, and in wonderful ways this player never suffers from fatigue, or is getting better with training. The player plays a 100 times and records the catches after every run. In this idealized situation, the distribution of catches would, approximately, follow a Poisson distribution.
@@ -3330,7 +3332,7 @@ grid.arrange(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-13-1} \caption{When lambda varies, the distribution becomes over-dispersed}(\#fig:dist-13)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-13-1} \caption{When lambda varies, the distribution becomes over-dispersed}(\#fig:dist-13)
 \end{figure}
 
 
@@ -3354,7 +3356,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-14-1} \caption{Hidden classes can produce zero inflated distribution}(\#fig:dist-14)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-14-1} \caption{Hidden classes can produce zero inflated distribution}(\#fig:dist-14)
 \end{figure}
 
 In this scenario, the population is not homogenous, but falls into two classes, those who use public transport and those who just never do. The result is a *zero-inflated* distribution. A way to deal with this are hurdle models, which are called as such, because you first have to jump over the hurdle to use public transport, before you are in the game.
@@ -3390,7 +3392,7 @@ ggplot(tibble(x = c(0, 20)), aes(x = x)) +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-15-1} \caption{Exponential distributions}(\#fig:dist-15)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-15-1} \caption{Exponential distributions}(\#fig:dist-15)
 \end{figure}
 
 Durations are common measures in design research, most importantly, time-on-task and reaction time. Unfortunately, the exponential distribution is a poor approximation of the random pattern found in duration measures. That is for three reasons: first, Exponential distributions have just one parameter, which means that mean and variance are tightly linked as $\textrm{Mean} = 1/\lambda$ and $\textrm{Var} = 1/\lambda^2$. Like with Poisson distributions, this it does not allow extra variance, e.g. between participants. Second, the distribution always starts at zero, whereas human reactions always require some basic processing, and be this just the velocity of signals travelling nerve cells, which is far below speed of sound (in air). And third, the exponential process has one special property, which is called *memoryless-ness*. That basically means, that the probability for an event to happen is completely independent of how long one has been waiting for it. In basic physical systems, like nucleus decay, this is the truly the case. But, if a person works on a task, the chance of task completion usually increases when time progresses.
@@ -3422,7 +3424,7 @@ D_Tunnel %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-16-1} \caption{Gaussian distribution emerging from travel by bumps}(\#fig:dist-16)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-16-1} \caption{Gaussian distribution emerging from travel by bumps}(\#fig:dist-16)
 \end{figure}
 
 Gaussian distributions take two parameters: $\mu$ marks the location of the mean of the distribution (Figure \@ref(fig:dist-17)). Because distributions are symmetric, the mean coincides with median and mode of the distribution. The second parameter $\sigma$ represents the dispersion of the random pattern. When randomness is pronounced, the center of the distribution gets less mass assigned, as the tails get thicker (Figure \@ref(fig:dist-17)) . Different to Poisson and Binomial distributions, mean and variance of the distribution can be set independently and therefore over-dispersion is never an issue.
@@ -3452,7 +3454,7 @@ ggplot(tibble(x = c(-4, 4)), aes(x = x)) +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/dist-17-1} \caption{Gaussian distributions}(\#fig:dist-17)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/dist-17-1} \caption{Gaussian distributions}(\#fig:dist-17)
 \end{figure}
 
 As illustrated by the Tunnel example, Gaussian distributions have the most compelling interpretation of summarizing the effect of SMURFs. Therefore, they are useful to capture randomness in a broad class of regression models and other statistical approaches.
@@ -3517,7 +3519,7 @@ posterior(M_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/umbrella-8-1} \caption{Posterior distribution of two parameters}(\#fig:umbrella-8)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/umbrella-8-1} \caption{Posterior distribution of two parameters}(\#fig:umbrella-8)
 \end{figure}
 
 From the posterior distribution, we can deduct all kinds of summary statistics, such as:
@@ -3544,7 +3546,7 @@ ggExtra::ggMarginal(G_mcmc, type = "histogram")
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/umbrella-9-1} \caption{Marginal posterior distributions emerging from a two-dimensional paremeter space}(\#fig:umbrella-9)
+\includegraphics[width=0.9\linewidth]{Bayesian_statistics_files/figure-latex/umbrella-9-1} \caption{Marginal posterior distributions emerging from a two-dimensional paremeter space}(\#fig:umbrella-9)
 \end{figure}
 
 

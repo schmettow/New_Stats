@@ -147,7 +147,7 @@ tibble(resid = residuals(M_age_shft)) %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/resid_dist_1-1} 
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid_dist_1-1} 
   
 The match of residual distribution with the theoretical distribution is not perfect, but overall this model seems to sufficiently satisfy the normality assumption. To give a counter example, we estimate the same model using the outcome variable `returns`, which captures the number of times a participant had (disparately) returned to the homepage.
 
@@ -205,7 +205,7 @@ tibble(resid = residuals(M_age_rtrn)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-3-1} \caption{Visual assessment of Gaussian distribution of errors}(\#fig:resid-3)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-3-1} \caption{Visual assessment of Gaussian distribution of errors}(\#fig:resid-3)
 \end{figure}
 
 
@@ -255,7 +255,7 @@ D_bimod %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-5-1} \caption{A bimodal distribution indicates a strong unknown factor}(\#fig:resid-5)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-5-1} \caption{A bimodal distribution indicates a strong unknown factor}(\#fig:resid-5)
 \end{figure}
 
 
@@ -302,7 +302,7 @@ D_t %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-6-1} \caption{Symmetric residual distribution with different curvature}(\#fig:resid-6)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-6-1} \caption{Symmetric residual distribution with different curvature}(\#fig:resid-6)
 \end{figure}
 
 The example shown in Figure \@ref(fig:resid-6) is rather pronounced. More subtle deviations would be hard to spot in the histogram. For the qq-plot, we calculate the quantiles of observed and theoretical distributions. Quantiles are produced in fixed steps, say 1%, 2%, ... 99%%. Finally, theoretical and observed quantiles are put against each other in a scatterplot like Figure \@ref(fig:resid-7).
@@ -323,7 +323,7 @@ D_QQ %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-7-1} \caption{A qq-plot reveals the heavier tails of the observed distribution.}(\#fig:resid-7)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-7-1} \caption{A qq-plot reveals the heavier tails of the observed distribution.}(\#fig:resid-7)
 \end{figure}
 
 
@@ -353,7 +353,7 @@ tibble(resid = residuals(BrowsingAB$M_age_rtrn)) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/resid-9-1} \caption{Residual analysis with qq-plots}(\#fig:resid-9)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/resid-9-1} \caption{Residual analysis with qq-plots}(\#fig:resid-9)
 \end{figure}
 
 To the left, extreme values have a lower probability than predicted by the Gaussian distribution, but the right tail is much fatter, once again. We also see how residuals are clumped, which is characteristic for discrete (as compared to continuous) outcome measures. This is poor behaviour of the model and, generally, when a model is severely mis-specified,  neither predictions nor estimates, nor certainty statements can be fully trusted. A model that frequently fits in case of count numbers is  Poisson regression, which will enter the stage in chapter \@ref(pois-reg). 
@@ -392,7 +392,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-1-1} \caption{Checking constant variance of residuals in factorial models}(\#fig:constvar-1)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-1-1} \caption{Checking constant variance of residuals in factorial models}(\#fig:constvar-1)
 \end{figure}
 
 
@@ -411,7 +411,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-4-1} \caption{Checking constant variance of residuals in continuous models}(\#fig:constvar-4)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-4-1} \caption{Checking constant variance of residuals in continuous models}(\#fig:constvar-4)
 \end{figure}
 
 The quantile plot uses a smoothing algorithm to picture the trend of quantiles (25%, 50% and 75%). Here, the quantiles run almost horizontal and parallel, which confirms constant variance. Taking this as a starting point, we can evaluate more complex models, too. The grouped regression model on age and design just requires to create a grouped quantile plot. This looks best using faceting, rather than separating by color (Figure \@ref(fig:constvar-5)):
@@ -427,7 +427,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-5-1} \caption{Checking residuals in a grouped continuous model}(\#fig:constvar-5)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-5-1} \caption{Checking residuals in a grouped continuous model}(\#fig:constvar-5)
 \end{figure}
 
 This looks rather worrying. Especially with Design A, the residuals are not constant, but increase with age. In addition, we observe that residuals are not even centered at zero across the whole range. For design A, the residual distribution moves from positive centered to negative centered, design B vice versa. That also casts doubts on the validity of the LRM on age: these contrariwise trends seem to mix into an almost even distribution. It seems that a lot more has been going on in this (simulated) study, than would be captured by any of these models.
@@ -459,7 +459,7 @@ AUP_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/constvar-7-1} \caption{Yet another violation of constant distribution}(\#fig:constvar-7)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/constvar-7-1} \caption{Yet another violation of constant distribution}(\#fig:constvar-7)
 \end{figure}
 
 We observe a clear trend in quantiles, with residual dispersion increasing with predicted values. Generally, plotting residuals against predicted values can be done with any model, irrespective of the number and types  of predictors. However, interpretation is more limited than when plotting them against predictors directly. In fact, interpretation boils down to the intuition we introduced at the beginning of the section, that larger outcomes typically have larger dispersion. This is almost always a compelling assumption, or even a matter of underlying physics and, once again, a linear model may or may not be a reasonable approximation. Fortunately, Generalized Linear Models \@ref(glm), provide more reasonable defaults for the relationship between predicted values and dispersion. In contrast, residual variance per predictor allows to discover more surprising  issues, such as conditional effects or heterogeneity in groups.
@@ -611,7 +611,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-2-1} \caption{A close match between the linear models predictions and LOESS indicates good linearity.}(\#fig:fitresp-2)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-2-1} \caption{A close match between the linear models predictions and LOESS indicates good linearity.}(\#fig:fitresp-2)
 \end{figure}
 
 Note that the sequence of smooth geometries all use different sources for the y coordinate. The literal values for the color aesthetic produce the legend; the legend title is created by `labs()`.
@@ -638,7 +638,7 @@ G_Design_age + geom_smooth(aes(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-3-1} \caption{Fitted response analysis per design reveals that the unconditional LRM fits poorly.}(\#fig:fitresp-3)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-3-1} \caption{Fitted response analysis per design reveals that the unconditional LRM fits poorly.}(\#fig:fitresp-3)
 \end{figure}
 
 As Figure \@ref(fig:fitresp-3) shows, once we look at two designs separately, the LRM fits poorly. For design A, the intercept estimate is too low and  slope is too steep, vice versa for design B. The model clearly requires a conditional term, like in the following conditional GRM.
@@ -661,7 +661,7 @@ G_Design_age %+%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-5-1} \caption{A conditional regression model sitting snug on the LOESS.}(\#fig:fitresp-5)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-5-1} \caption{A conditional regression model sitting snug on the LOESS.}(\#fig:fitresp-5)
 \end{figure}
 
 As Figure \@ref(fig:fitresp-5) shows, the improved model now captures the overall increment by age in both conditions. Apart from the age-50 dip, the DesignA condition is reasonably fitted. The model also predicts a cross-over point at age of 73, where both designs are equal. In contrast, the model cannot adequately render the association in design B, which appears inverse-sigmoid. These non-linear associations stem from a fancy psychological model I have put together over a long night and totally forgot how it went. Let us instead look at some wobbles that are eerily real.
@@ -675,7 +675,7 @@ As Figure \@ref(fig:fitresp-5) shows, the improved model now captures the overal
 
 The Uncanny Valley effect is all about non-linearity and we have seen in \@ref(prm) how a complex curves can be captured by higher-degree polynomials. With every degree added to a polynomial, the model gets one more coefficient. It should be clear by now that models with more coefficients are more flexible. As another example, adding a conditional term to a multi-factorial model lets all group means move freely. The flexibility of a polynomial can be measured by how many stationary points are possible, shoulders and troughs. Higher degree polynomials can do even more tricks, such as saddle points, that have a local slope of zero without changing direction.
 
-Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models. 
+Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \@ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models. 
 
 In the following, the cubic model is compared to the simpler quadratic model. It could be, after all, that a parable is sufficient to render the valley. On the other side of things, a polynomial model with the ridiculous degree 9 is estimated, just to see whether there is any chance a more complex model would sit more snug on the data.
 
@@ -731,7 +731,7 @@ RK_2 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/fitresp-8-1} \caption{Comparing fitted responses of three polynomial models of different degree}(\#fig:fitresp-8)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/fitresp-8-1} \caption{Comparing fitted responses of three polynomial models of different degree}(\#fig:fitresp-8)
 \end{figure}
 
 Note that:
@@ -847,7 +847,7 @@ P_overfit %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/overfit-2-1} \caption{Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty.}(\#fig:overfit-2)
+\includegraphics[width=0.9\linewidth]{Working_with_Models_files/figure-latex/overfit-2-1} \caption{Every line is one MCMC sample. The unneccessary slope parameter of the LRM model produces extra uncertainty.}(\#fig:overfit-2)
 \end{figure}
 
 

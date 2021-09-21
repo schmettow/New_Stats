@@ -159,7 +159,7 @@ predict(M_LRM_1,
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/relink-2-1} \caption{Trying to predict future performance by a linear model produces inpossible predictions}(\#fig:relink-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/relink-2-1} \caption{Trying to predict future performance by a linear model produces inpossible predictions}(\#fig:relink-2)
 \end{figure}
 
 
@@ -225,7 +225,7 @@ The logarithm has the *exponential* function as a counterpart, which bends the l
 
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/relink-3-1} \caption{Log and logit link functions expand the bounded range of measures. Mean functions do the reverse.}(\#fig:relink-3)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/relink-3-1} \caption{Log and logit link functions expand the bounded range of measures. Mean functions do the reverse.}(\#fig:relink-3)
 \end{figure}
 
 Using the link function comes at a cost: the linear coefficients $\beta_i$ is losing its interpretation as increment-per-unit and no longer has a natural interpretation. Later, we will see that logarithmic and logit scales gain an intuitive interpretation when parameters are exponentiated, $\textrm{exp}(\beta_i)$ (\@ref(speaking-multipliers and \@ref(talking-odds)).
@@ -270,7 +270,7 @@ D_pumps_sim %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/random-1-1} \caption{Simulation with Gaussian error terms produces impossible values.}(\#fig:random-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/random-1-1} \caption{Simulation with Gaussian error terms produces impossible values.}(\#fig:random-1)
 \end{figure}
 
 We immediately see, that simulation with Gaussian distributions is  inappropriate: a substantial number of simulated observations is *negative*, which strictly makes no sense for error counts. The pragmatic and impatient reader may suggest to adjust the standard deviation (or move the averages up) to make negative values less unlikely. That would be a poor solution as Gaussian distributions support the full range of real numbers, no matter how small the variance is (but not zero). There is always a chance of negative simulations, as tiny as it may be. Repeatedly running the simulation until `pumps` contains exclusively positive numbers (and zero), would compromise the idea of random numbers itself. We can simply conclude that any model that assumes normally distributed errors must be wrong when the outcome is bounded below or above, which means: always.
@@ -332,7 +332,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-1-1} \caption{A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship.}(\#fig:mvr-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-1-1} \caption{A Gaussian linear simulation of travel times (min) depending on distance (km) results in an unrealistic mean-variance relationship.}(\#fig:mvr-1)
 \end{figure}
 
 What is unrealistic is that persons who live right around the corner experience the same range of possible travel times than people who drive dozens of kilometers. That does not seem right.
@@ -362,7 +362,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-2-1} \caption{A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship.}(\#fig:mvr-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-2-1} \caption{A Gamma simulation of travel times (min) depending on distance (km) results in a realistic mean-variance relationship.}(\#fig:mvr-2)
 \end{figure}
 
 A similar situation arises for count data. When counting user errors, we would expect a larger variance for complex tasks and interfaces, e.g. writing an article in a word processor,  as compared to the rather simple situation like operating a medical infusion pump. For count data, the Poisson distribution is often a starting point and for Poisson distributed variables, mean and variance are both exactly determined by the Poisson rate parameter $\lambda$, and therefore strictly connected to each other. Figure \@ref(fig:mvr-3) shows hypothetical data from two tasks with very different error rates.
@@ -392,7 +392,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-3-1} \caption{Mean-variance relationship of Poisson distributed data  with two groups}(\#fig:mvr-3)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-3-1} \caption{Mean-variance relationship of Poisson distributed data  with two groups}(\#fig:mvr-3)
 \end{figure}
 
 Not by coincidence, practically all distributions with a lower boundary have variance increase with the mean. Distributions that have two boundaries, like binomial or beta distributions also have a mean-variance relationship, but a different one. For binomial distributed variables, mean and variance are determined as follows:
@@ -419,7 +419,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/mvr-4-1} \caption{Cigar shaped mean-variance relationship of Binomial data}(\#fig:mvr-4)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/mvr-4-1} \caption{Cigar shaped mean-variance relationship of Binomial data}(\#fig:mvr-4)
 \end{figure}
 
 In conclusion, real distributions are typically asymmetric and have mean and variance linked. Both phenomena are tightly linked to the presence of boundaries. Broadly, the deviation from symmetry gets worse when observations are close to the boundaries (e.g. low error rates), whereas differences in variance is more pronounced when the means are far apart from each other. 
@@ -469,7 +469,7 @@ D_Pois %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-1-1} \caption{Data sampled from a Poisson distribution}(\#fig:poisreg-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-1-1} \caption{Data sampled from a Poisson distribution}(\#fig:poisreg-1)
 \end{figure}
 
 ```r
@@ -653,7 +653,7 @@ ToT = $100  \times .8^n$
 Exponential functions make pretty good learning curves and they happen to be the mean function of Poisson regression. This leads to the following  simulation of a learning experiment. This simulation takes a constant step size of $\log(.8) = -0.223$ on the log-linearized scale, resulting in a reduction of 20% per session.
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-6-1} \caption{Exponential learning curve becoming linear under the log link function}(\#fig:poisreg-6)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-6-1} \caption{Exponential learning curve becoming linear under the log link function}(\#fig:poisreg-6)
 \end{figure}
 
 While the linear predictor scale is a straight line, the response scale clearly is a curve-of-diminishing returns. That opens up the possibility that learning the novel pump design also has a constant difference on the linearized scale, which would mena a constant rate on the original scale. In the following, we estimate two Poisson models, one linearized OFM (OzFM) (with stairway dummies \@ref(ofm)) and one LzRM. Then we will assess the model fit (using fitted responses). If the learning process is linear on the log scale, we can expect to see the following:
@@ -725,7 +725,7 @@ T_fixef %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/poisreg-9-1} \caption{Learning rate estimates from a log-linearized continuous model and an OFM.}(\#fig:poisreg-9)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/poisreg-9-1} \caption{Learning rate estimates from a log-linearized continuous model and an OFM.}(\#fig:poisreg-9)
 \end{figure}
 
 With the Poisson OFM the learning rates are very similar for both steps, which means the learning rate is almost constant and taking one learning step as a unit is justified. Furthermore, the learning rate appears to also be almost constant across designs. If that is true, one implication is that the  novel design is superior in many aspects, accelerated learning may not be one of them. The other implication is that we no longer need two learning rate parameters (session). The final model in this section is the most simple one, it even no longer contains conditional effects. Table \@ref(tab:poisreg-10) can now be summarized in three simple sentences:
@@ -1496,7 +1496,7 @@ tibble(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/logreg-13-1} \caption{Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average.}(\#fig:logreg-13)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/logreg-13-1} \caption{Overdispersed samples (Negbinomial, OLRE) compared to Poisson samples of same average.}(\#fig:logreg-13)
 \end{figure}
 
 
@@ -1581,7 +1581,7 @@ bind_rows(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/negbinreg-1-1} \caption{Comparing credibility intervals of a Poisson and Neg-Binomial models}(\#fig:negbinreg-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/negbinreg-1-1} \caption{Comparing credibility intervals of a Poisson and Neg-Binomial models}(\#fig:negbinreg-1)
 \end{figure}
 
 We observe that the center estimates are precisely the same. Over-dispersion usually does not bias the location of an estimate. But, credibility limits are much wider with an underlying negative-binomial distribution. A full parameter table would also show the Neg-Binomial model additional parameter `phi`, controlling over-dispersion relative to a Poisson distribution as:
@@ -1626,7 +1626,7 @@ rbetabinom(1000, 10, 1, 2) %>% qplot()
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/betabin-1-1} \caption{Sampling from a Beta-Bionomial distribution}(\#fig:betabin-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/betabin-1-1} \caption{Sampling from a Beta-Bionomial distribution}(\#fig:betabin-1)
 \end{figure}
 
 
@@ -1839,7 +1839,7 @@ D_ovdsp %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/olre-4-1} \caption{Recovery of observation-level random effects}(\#fig:olre-4)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/olre-4-1} \caption{Recovery of observation-level random effects}(\#fig:olre-4)
 \end{figure}
 
 Figure \@ref(fig:olre-4) shows that the observation-level deviations can be recovered not perfectly, but to some extent. An OLRE can be seen as generalized residual, or *linearized residuals*. 
@@ -1926,7 +1926,7 @@ D_exp %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/expreg-1-1} \caption{Data sampled from an Exponential distribution.}(\#fig:expreg-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/expreg-1-1} \caption{Data sampled from an Exponential distribution.}(\#fig:expreg-1)
 \end{figure}
 
 
@@ -1978,7 +1978,7 @@ D_gam %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/expreg-3-1} \caption{Data sampled from a Gamma distribution.}(\#fig:expreg-3)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/expreg-3-1} \caption{Data sampled from a Gamma distribution.}(\#fig:expreg-3)
 \end{figure}
 
 In comparison to the exponential distribution (Figure \@ref(fig:expreg-1)), a significant difference is that the mode of the gamma distribution (its peak) is not fixed at zero, but can move along the x-axis. That makes it appear a much more realistic choice for temporal data in behavioral research. We estimate a simple gamma GMM on the simulated data. For historical reasons, `brm` uses the inverse link function ($\theta = 1/\mu$) for Gamma regression per default, but that does not actually serve the purpose of link functions to stretch $\mu$ into the range of real numbers. Instead, we explicitly demand a log link, which creates a multiplicative model (Table \@ref(tab:expreg-4)).
@@ -2109,7 +2109,7 @@ ggplot(data.frame(x = c(0, 3000)), aes(x = x)) +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-1-1} \caption{Gamma distributions loose their left-skewness, when moving away from the boundary.}(\#fig:exgreg-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-1-1} \caption{Gamma distributions loose their left-skewness, when moving away from the boundary.}(\#fig:exgreg-1)
 \end{figure}
 
 So far in this chapter, we have seen that distributions with one parameter (Poisson, binomial, exponential) have a fixed relationship between mean and variance. In order to vary location and dispersion independently, a second parameter is needed (neg-binomial, beta-binomial, Gamma, Gaussian). However, only a three-parameter distributions can do the trick of setting skew separately. So called *exponentially modified Gaussian* (Exgaussian) distributions are convolutions of a Gaussian distribution and exponential distribution and have three parameters, $\mu$, $\sigma$ (as usual) and rate $\beta$. Very roughly, the Gaussian component controls location and dispersion whereas the exponential part adjusts the skew.  When $\beta$ is large in comparison to $\mu$, the distribution is more left skewed. With this additional degree of freedom we can simulate (and estimate) distributions that are far to the right, have strong dispersion *and* strong skew. Figure \@ref(fig:exgreg-2) shows Gamma, Gaussian and Exgaussian distributions with exact same mean and variance.
@@ -2152,7 +2152,7 @@ ggplot(data.frame(x = c(0, 800)), aes(x = x)) +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-2-1} \caption{Exgaussian distributions can be far from zero and still be left skewed}(\#fig:exgreg-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-2-1} \caption{Exgaussian distributions can be far from zero and still be left skewed}(\#fig:exgreg-2)
 \end{figure}
 
 The Gamma distribution in this example starts approaching a the perfect bell curve of the Gaussian distribution. In contrast, the Exgaussian distribution takes a steep left climb followed by a long right tail, which is caused by its pronounced exponential component. We do the usual exercise to simulate a grand mean model (Figure \@ref(fig:exgreg-4)) and recover the parameters with the help of the `brm` engine (Table \@ref(tab:exgreg-5)))
@@ -2172,7 +2172,7 @@ qplot(D_exg$Y) + xlim(0, 300)
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/exgreg-4-1} \caption{Sampling from an Exgaussian distribution}(\#fig:exgreg-4)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/exgreg-4-1} \caption{Sampling from an Exgaussian distribution}(\#fig:exgreg-4)
 \end{figure}
 
 
@@ -2251,7 +2251,7 @@ D_hugme %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-1-1} \caption{Participant-level RT distributions}(\#fig:rt-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-1-1} \caption{Participant-level RT distributions}(\#fig:rt-1)
 \end{figure}
 
 Even the effect of geek primes is barely visible, but we clearly observe a left skew in most of the participants. In the following, we run three CGM models with Exgaussian, Gamma or Gaussian response distributions. For the subsequent analysis, multi-model posterior distributions and posterior predictive distributions  are extracted and merged into one multi-model posterior object `P_1`.
@@ -2315,7 +2315,7 @@ fixef(P_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}(\#fig:rt-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}(\#fig:rt-2)
 \end{figure}
 
 <!-- The following residual plot give us a hint why this might be so: Apparently, the Exgaussian model takes a much steeper left climb, whereas  -->
@@ -2336,7 +2336,7 @@ D_hugme %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rt-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}(\#fig:rt-3)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rt-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}(\#fig:rt-3)
 \end{figure}
 
 We can carefully conclude that the Exgaussian may be very useful for analyzing psychological experiments as it seems to better accommodate reaction times. Given the novelty of Exgaussian models, it is recommended that researchers carry out a careful multi-model analysis. In \@ref(choose-dist) we will come back to this case with a more formal approach and confirm that from the three response distributions, the Exgaussian has the best predictive accuracy.
@@ -2431,7 +2431,7 @@ fixef(P_4, mean.func = exp) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tot-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}(\#fig:tot-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/tot-2-1} \caption{Comparing CLU estimates of Exgaussian, Gamma and Gaussian models}(\#fig:tot-2)
 \end{figure}
 
 In the previous section \@ref(rt), we have seen for RT data, that the three models agreed on the center estimates. As shown in Figure \@ref(fig:tot-2), for ToT data the three families produce rather different coefficients. It seems that the models disagree on all but Task 1. It is not more than an observation, but the Exgaussian model produces the smallest variance between tasks. A recurring observation is that Exgaussian regression also produced the tightest credibility intervals. 
@@ -2449,7 +2449,7 @@ left_join(T_4_predict, D_cue8_mod, by = "Obs") %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tot-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}(\#fig:tot-3)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/tot-3-1} \caption{Comparing residuals of Exgaussian, Gamma and Gaussian models}(\#fig:tot-3)
 \end{figure}
 
 
@@ -2729,7 +2729,7 @@ As the outcome of anchoring, introspection and binning are not under the control
 
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-1-1} \caption{Five participants with different response styles}(\#fig:rating-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-1-1} \caption{Five participants with different response styles}(\#fig:rating-1)
 \end{figure}
 
 
@@ -2757,7 +2757,7 @@ D_pumps %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-2-1} \caption{In the IPump study participants vary greatly in how they exploit the range of a mental workload scale.}(\#fig:rating-2)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-2-1} \caption{In the IPump study participants vary greatly in how they exploit the range of a mental workload scale.}(\#fig:rating-2)
 \end{figure}
 
 ```r
@@ -2819,7 +2819,7 @@ BAB1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-4-1} \caption{Designs A and B rated on a sevel-point scale}(\#fig:rating-4)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-4-1} \caption{Designs A and B rated on a sevel-point scale}(\#fig:rating-4)
 \end{figure}
 
 The brms regression engine implements ordinal regression by the family `cratio` (cumulative odds ratio <!-- #116 -->) with a default logit link function.
@@ -2974,7 +2974,7 @@ D_cue8_SUS %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rating-6-1} \caption{Response distribution of SUS ratings across teams and conditions}(\#fig:rating-6)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/rating-6-1} \caption{Response distribution of SUS ratings across teams and conditions}(\#fig:rating-6)
 \end{figure}
 
 
@@ -3075,7 +3075,7 @@ D_Anchor %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-1-1} \caption{Extreme and moderate anchoring produce differently varied response distributions}(\#fig:distmod-1)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-1-1} \caption{Extreme and moderate anchoring produce differently varied response distributions}(\#fig:distmod-1)
 \end{figure}
 
 *Note* that the `rbeta` command uses a different parametrization of beta distribution, with parameters `a` and `b`, which have are linked to the distribution mean and variance in rather convoluted ways.
@@ -3206,7 +3206,7 @@ ranef(M_poly_3_beta_dist) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-4-1} \caption{Participant-level random effects for scale parameter phi}(\#fig:distmod-4)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-4-1} \caption{Participant-level random effects for scale parameter phi}(\#fig:distmod-4)
 \end{figure}
 
 
@@ -3275,7 +3275,7 @@ ranef(P_1_exg_dist) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/distmod-5-1} \caption{Participant-level random effects for sigma in beta}(\#fig:distmod-5)
+\includegraphics[width=0.9\linewidth]{Generalized_Linear_Models_files/figure-latex/distmod-5-1} \caption{Participant-level random effects for sigma in beta}(\#fig:distmod-5)
 \end{figure}
 
 

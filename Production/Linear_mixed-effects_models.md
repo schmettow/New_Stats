@@ -96,13 +96,13 @@ Part & mean\_Part\\
 \hline
 13 & 18.46\\
 \hline
-15 & 17.18\\
-\hline
-6 & 12.34\\
-\hline
-8 & 23.75\\
+18 & 13.30\\
 \hline
 7 & 9.24\\
+\hline
+25 & 15.75\\
+\hline
+14 & 15.47\\
 \hline
 \end{tabular}
 \end{table}
@@ -225,9 +225,9 @@ Table: (\#tab:ml-ranef)Coefficient estimates with 95% credibility limits
 
 |re_entity | center| lower| upper|
 |:---------|------:|-----:|-----:|
-|14        | -0.017| -3.38|  3.05|
-|8         |  1.025| -1.09|  6.24|
+|10        | -0.160| -3.86|  2.77|
 |16        | -0.019| -3.26|  3.22|
+|24        | -0.497| -5.07|  1.87|
 |4         |  0.782| -1.38|  5.89|
 |1         |  1.091| -1.10|  6.38|
 
@@ -267,7 +267,7 @@ tibble(mu_i = ranef(P_hf)$center +
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/rescores-1-1} \caption{Absolute random effect scores}(\#fig:rescores-1)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/rescores-1-1} \caption{Absolute random effect scores}(\#fig:rescores-1)
 \end{figure}
 
 Note that first two lines in the above code only work correctly if there is just one population-level effect (i.e. a GMM). Package Bayr contains the general `re_score` to produce absolute random effects scores. This happens on the level of MCMC samples, from which CLUs can extracted, such as (Table \@ref(tab:rescores-2)).
@@ -286,14 +286,14 @@ Table: (\#tab:rescores-2)Parameter estimates with 95% credibility limits
 
 |parameter            |re_entity | center| lower| upper|
 |:--------------------|:---------|------:|-----:|-----:|
-|r_Part[8,Intercept]  |8         |   17.1| 14.41|  22.3|
-|r_Part[13,Intercept] |13        |   16.3| 13.25|  20.3|
-|r_Part[15,Intercept] |15        |   16.2| 12.88|  19.7|
-|r_Part[1,Intercept]  |1         |   17.1| 14.49|  22.4|
-|r_Part[19,Intercept] |19        |   16.1| 12.89|  19.4|
-|r_Part[3,Intercept]  |3         |   15.7| 11.94|  18.8|
-|r_Part[4,Intercept]  |4         |   16.9| 14.22|  22.0|
-|r_Part[7,Intercept]  |7         |   15.0|  9.97|  17.5|
+|r_Part[15,Intercept] |15        |   16.2|  12.9|  19.7|
+|r_Part[2,Intercept]  |2         |   16.1|  13.0|  19.6|
+|r_Part[12,Intercept] |12        |   16.4|  13.4|  20.4|
+|r_Part[1,Intercept]  |1         |   17.1|  14.5|  22.4|
+|r_Part[9,Intercept]  |9         |   16.5|  13.7|  20.6|
+|r_Part[4,Intercept]  |4         |   16.9|  14.2|  22.0|
+|r_Part[3,Intercept]  |3         |   15.7|  11.9|  18.8|
+|r_Part[21,Intercept] |21        |   15.5|  11.6|  18.4|
 
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. Two useful heuristics are to compare group-level variation to the fixed effects estimate (Intercept) and against the standard error:
 
@@ -366,7 +366,7 @@ D_slpstd %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-1-1} \caption{Participant-level association between sleep deprivation and RT}(\#fig:slpstd-1)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-1-1} \caption{Participant-level association between sleep deprivation and RT}(\#fig:slpstd-1)
 \end{figure}
 
 A more compact way of plotting multi-level slopes is the spaghetti plot below. By superimposing the population level effect, we can clearly see that participants vary in how sleep deprivation delays the reactions.
@@ -389,7 +389,7 @@ D_slpstd %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-2-1} \caption{(Uncooked) Spaghetti plot showing population and participant-level effects}(\#fig:slpstd-2)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-2-1} \caption{(Uncooked) Spaghetti plot showing population and participant-level effects}(\#fig:slpstd-2)
 \end{figure}
 
 For a single level model, the formula would be `RT ~ 1 + days`, with the intercept being RT at day Zero and the coefficient `days` representing the change per day of sleep deprivation. The multi-level formula retains the population level and adds the participant-level term as a conditional statement: again, the effect depends on whom you are looking at.
@@ -445,7 +445,7 @@ ranef(M_slpsty_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-5-1} \caption{Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation}(\#fig:slpstd-5)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-5-1} \caption{Caterpillar plot showing individual absolute scores for effect of one day of sleep deprivation}(\#fig:slpstd-5)
 \end{figure}
 
 The multi-level regression model is mathematically specified as follows. Note how random coefficients $\beta_{.(Part)}$ are drawn from a Gaussian distribution with their own standard deviation, very similar to the errors $\epsilon_i$.
@@ -487,7 +487,7 @@ posterior(M_slpsty_1) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-6-1} \caption{Sleep deprivation projected }(\#fig:slpstd-6)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-6-1} \caption{Sleep deprivation projected }(\#fig:slpstd-6)
 \end{figure}
 
 
@@ -592,7 +592,7 @@ gridExtra::grid.arrange(
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-2-1} \caption{Exploratory multi-level plot of population-level and participant-level change}(\#fig:tml-2)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-2-1} \caption{Exploratory multi-level plot of population-level and participant-level change}(\#fig:tml-2)
 \end{figure}
 
 Note
@@ -635,7 +635,7 @@ T_amm %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-3-1} \caption{Spaghetti plot combining the results of a population-level with a participant-level model}(\#fig:tml-3)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-3-1} \caption{Spaghetti plot combining the results of a population-level with a participant-level model}(\#fig:tml-3)
 \end{figure}
 
 The convenience of (true) multi-level models is that  both (or more) levels are specified and estimated as one model. For the multi-level models that follow, we will use a specialized engine, `brm()` (generalized multi-level regression) that estimates both levels simultaneously and produce multi-level coefficients. The multi-level CGM we desire is written like this:
@@ -674,7 +674,7 @@ ranef(M_mlcgm) %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/tml-5-1} \caption{Participant-level random effects in a CGM}(\#fig:tml-5)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/tml-5-1} \caption{Participant-level random effects in a CGM}(\#fig:tml-5)
 \end{figure}
 
 
@@ -907,7 +907,7 @@ T_pred %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-7-1} \caption{Participant-level associations between human likeness and }(\#fig:uncanny-7)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/uncanny-7-1} \caption{Participant-level associations between human likeness and }(\#fig:uncanny-7)
 \end{figure}
 
 This spaghetti plot broadly confirms, that all participants experience the Uncanny Valley. For a more detailed analysis, a facetted plot would be better suited, allowing to inspect the curves case-by-case. 
@@ -960,7 +960,7 @@ P_univ_uncanny %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/uncanny-8-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}(\#fig:uncanny-8)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/uncanny-8-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}(\#fig:uncanny-8)
 \end{figure}
 
 Figure \@ref(fig:uncanny-8) gives strong support to the universality of the Uncanny Valley. What may raise suspicion is rather that for most participants the probability is 100%. If this is all based on a random walk, we should at least see a few deviations, shouldn't we. The reason for that is that MCMC samples approximate the posterior distribution by frequency. As their is a limited number of samples (here: 4000), the resolution is limited. If we increase the number of iterations enough, we would eventually see few "deviant" samples appear and measure the tiny chance that a participant does not fall for the Uncanny Valley.
@@ -999,7 +999,7 @@ P_scores %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-7-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}(\#fig:slpstd-7)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-7-1} \caption{Participant-level certainty that the Uncanny Valley phenomenon happened}(\#fig:slpstd-7)
 \end{figure}
 
 All, but participants 309 and 335, almost certainly have positive slopes. Participant 335 we had identified earlier by visual inspection. Now, that we account for the full posterior distribution, it seems less suspicious. There is almost a 50% chance that the participant is suffering from sleep deprivation, too.  Figure \@ref(fig:slpstd-8) is an attempt at illustrating the uncertainty. It shows  all the possible slopes the MCMC random walk has explored from (unsuspicious) participant 308 and participant 335. While the latter  has a distinctly different distribution, there is no compelling reason to get too excited and call  335 a true counter-example from the rule that sleep deprivation reduces cognitive performance.
@@ -1018,7 +1018,7 @@ P_scores %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/slpstd-8-1} \caption{Visualizing the uncertainty in Days for two pareticipants}(\#fig:slpstd-8)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/slpstd-8-1} \caption{Visualizing the uncertainty in Days for two pareticipants}(\#fig:slpstd-8)
 \end{figure}
 
 
@@ -1199,7 +1199,7 @@ D_egan %>%
 
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/egan-1-1} \caption{Distribution of human and non-human populations in the Egan experiment (scale log(ToT))}(\#fig:egan-1)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/egan-1-1} \caption{Distribution of human and non-human populations in the Egan experiment (scale log(ToT))}(\#fig:egan-1)
 \end{figure}
 
 There seems to be substantial variation between participants, tasks and items, but very little variation in designs. We build a GMM for the encounter of the four populations.
@@ -1257,7 +1257,7 @@ P_1 %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/egan-3-1} \caption{Density plot of random effects standard deviations.}(\#fig:egan-3)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/egan-3-1} \caption{Density plot of random effects standard deviations.}(\#fig:egan-3)
 \end{figure}
 
 <!-- Before we formally evaluate Egan's claim, there are a few noteworthy remarks on how to read the posteriors, when the parameter is a group-level standard deviation. First, standard deviation is on the same scale as the measured variable. Usually, this makes standard deviations  rather intuitive to interpret. This is, *unless* you have obscured your variable by log transformation, which is the major disadvantage of this procedure.  -->
@@ -1362,16 +1362,16 @@ D_cue8
 
 Table: (\#tab:cue8-1)Data set with 8 variables, showing 8 of 2620 observations.
 
-|  Obs|Team |Part |Condition | SUS|Task | ToT| logToT|
-|----:|:----|:----|:---------|---:|:----|---:|------:|
-|  644|H3   |129  |remote    |  53|4    |   1|   0.00|
-| 1244|L3   |249  |remote    |  33|4    | 107|   4.67|
-| 1271|L3   |255  |remote    |  58|1    | 129|   4.86|
-| 1855|L3   |371  |remote    |  93|5    | 148|   5.00|
-| 2153|L3   |431  |remote    |  85|3    | 225|   5.42|
-| 2155|L3   |431  |remote    |  85|5    | 198|   5.29|
-| 2297|M3   |460  |remote    |  60|2    | 199|   5.29|
-| 2423|M3   |485  |remote    |  45|3    | 106|   4.66|
+|  Obs|Team |Part |Condition |  SUS|Task | ToT| logToT|
+|----:|:----|:----|:---------|----:|:----|---:|------:|
+| 1113|L3   |223  |remote    | 83.0|3    |  89|   4.49|
+| 1169|L3   |234  |remote    | 80.0|4    | 102|   4.62|
+| 1264|L3   |253  |remote    | 25.0|4    | 102|   4.62|
+| 1589|L3   |318  |remote    | 85.0|4    | 127|   4.84|
+| 2052|L3   |411  |remote    | 68.0|2    |  90|   4.50|
+| 2135|L3   |427  |remote    | 75.0|5    |  82|   4.41|
+| 2390|M3   |478  |remote    | 92.5|5    |  48|   3.87|
+| 2569|O3   |514  |moderated |     |4    | 707|   6.56|
 
 
 An analysis can performed on three levels: the population level would tell us the average performance on this website. That could be interesting for the company running it. Below that are the teams and their variation is what the original research question is about.  Participants  make the third level for a nested multi-level model. It is nested, because every participant is assigned to exactly one team. If that weren't the case, say there is one sample of participants shared by the teams, that would be cross-classification.
@@ -1382,7 +1382,7 @@ Under this perspective, we examine the data. This time, we have real time-on-tas
 
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cue8-2-1} \caption{Distribution of mean scores on three levels}(\#fig:cue8-2)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/cue8-2-1} \caption{Distribution of mean scores on three levels}(\#fig:cue8-2)
 \end{figure}
 
 It seems there is ample variation in ToT for participants, with mean ToT ranging from below 100 to almost 500 seconds. There also is considerable variation on team level, but the overall range seems to be a little smaller. Note, however, that the participant level contains all the variation that is due to teams. A model with nested random effects can separate the sources of variation. When two (or more) levels are nested, a special syntax applies for specifying nested random effects.  `1|Team/Part`.
@@ -1441,16 +1441,16 @@ D_cue8_x
 
 Table: (\#tab:cue8-5)Data set with 8 variables, showing 8 of 2620 observations.
 
-|  Obs|Part   |Team |Condition |  SUS|Task | ToT| logToT|
-|----:|:------|:----|:---------|----:|:----|---:|------:|
-|  684|H3_137 |H3   |remote    | 43.0|4    |  13|   2.56|
-| 1205|L3_241 |L3   |remote    | 68.0|5    |  53|   3.97|
-| 1367|L3_274 |L3   |remote    | 83.0|2    | 158|   5.06|
-| 1818|L3_364 |L3   |remote    | 78.0|3    |  73|   4.29|
-| 1973|L3_395 |L3   |remote    | 93.0|3    |  44|   3.78|
-| 2372|M3_475 |M3   |remote    | 72.5|2    | 119|   4.78|
-| 2475|M3_495 |M3   |remote    | 52.5|5    |  66|   4.19|
-| 2525|N3_505 |N3   |moderated | 48.3|5    | 283|   5.64|
+|  Obs|Part   |Team |Condition |   SUS|Task | ToT| logToT|
+|----:|:------|:----|:---------|-----:|:----|---:|------:|
+|  568|H3_114 |H3   |remote    |      |3    |  49|   3.89|
+|  977|K3_196 |K3   |moderated |  67.5|2    |  92|   4.52|
+| 1152|L3_231 |L3   |remote    |  50.0|2    | 329|   5.80|
+| 1442|L3_289 |L3   |remote    | 100.0|2    | 148|   5.00|
+| 2144|L3_429 |L3   |remote    | 100.0|4    | 157|   5.06|
+| 2260|L3_452 |L3   |remote    |  90.0|5    |  59|   4.08|
+| 2520|N3_504 |N3   |moderated |  33.3|5    | 220|   5.39|
+| 2543|N3_509 |N3   |moderated |  53.3|3    | 230|   5.44|
 
 
 Let's take a closer look at the results regarding consistency of ToT measures across teams (Table \@ref(tab:cue8-6)). We would always expect participants to show variation, but if team averages show strong variation, then we can suspect that there are biases. It turns out that the variation by team is  by a factor of 1.5 larger than individual differences. And it is on par with the measurement error (sigma).
@@ -1603,7 +1603,7 @@ T_shrinkage %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/cue8-13-1} \caption{Shrinkage shown as disparity of fixed effects and random effects}(\#fig:cue8-13)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/cue8-13-1} \caption{Shrinkage shown as disparity of fixed effects and random effects}(\#fig:cue8-13)
 \end{figure}
 
 
@@ -1930,7 +1930,7 @@ T_ranef %>%
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/hugme-3-1} \caption{Comparing distributions of item-level and participant-level scores}(\#fig:hugme-3)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/hugme-3-1} \caption{Comparing distributions of item-level and participant-level scores}(\#fig:hugme-3)
 \end{figure}
 
 Figure \@ref(fig:hugme-3) shows that the 32 items of the test cover the range of very low to moderately high geekism fairly well. The upper 20 percent are not represented so well, as it seems. If we were to use the scale to discriminate between geeks and super-geeks, more strong item should be added, such as: 'I rather express myself in a programming language, rather than natural language'.
@@ -2017,7 +2017,7 @@ T_ranef %>% plot_stability()
 ```
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{Production/figures/hugme-6-1} \caption{Test-retest stability for item and participant scores}(\#fig:hugme-6)
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/hugme-6-1} \caption{Test-retest stability for item and participant scores}(\#fig:hugme-6)
 \end{figure}
 
 The participant scores are highly correlated, indicating a very good reliability. If you measure the score of a person, you almost precisely know the result of another measure a few hours later. At least in short terms, the Geekism construct - whatever it truly is - can be measured with almost no error. Only ever so slightly is there a trend that lower scores get higher the second time and higher get lower, which could be called a trend towards the average. Perhaps, some experience during the experiment has led participants to report a more mediocre image of themselves.
@@ -2290,7 +2290,7 @@ ranef(P_1) %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-46-1} 
+\includegraphics[width=0.9\linewidth]{Linear_mixed-effects_models_files/figure-latex/unnamed-chunk-46-1} 
 
 
 The most simple form is the Rasch model in item response theory (IRT), where participants respond to a set of items and the response is either correct or incorrect. The outcome variable response is usually coded as 0 = incorrect and 1 = correct. Apparently, such a variable does nowhere near satisfy the assumption of linear models. It turns out that the Rasch model can be interpreted as cross-classified random effects in a *logistic regression* \@ref(logistic_regression). Logistic regression is a member of the General*ized* Linear family of models, which will be introduced in the next chapter.

@@ -69,14 +69,14 @@ Table: (\#tab:uv-rk-1)Data set with 18 variables, showing 8 of 7488 observations
 
 |Experiment |  Obs|Part  |Item |Scale     |Stimulus | session|Session |Collection |Condition | presentation_time| response|   RT| huMech| huMech0| huMech1| huMech2| huMech3|
 |:----------|----:|:-----|:----|:---------|:--------|-------:|:-------|:----------|:---------|-----------------:|--------:|----:|------:|-------:|-------:|-------:|-------:|
-|RK         | 2113|p1_08 |nE1  |nEeriness |32       |       1|2       |MR         |2         |               Inf|   -0.090| 2.23|  0.400|       1|   0.400|   0.160|   0.064|
-|RK         | 3495|p1_13 |nE7  |nEeriness |20       |       0|1       |MR         |2         |               Inf|   -0.495| 1.88|  0.250|       1|   0.250|   0.062|   0.016|
-|RK         | 3529|p1_13 |nE1  |nEeriness |12       |       0|1       |MR         |2         |               Inf|   -0.500| 3.36|  0.150|       1|   0.150|   0.022|   0.003|
-|RK         | 5425|p2_06 |nE1  |nEeriness |67       |       2|3       |MR         |2         |               Inf|   -0.823| 1.13|  0.838|       1|   0.838|   0.701|   0.587|
-|RK         | 5952|p2_08 |nE8  |nEeriness |21       |       1|2       |MR         |2         |               Inf|   -0.490| 2.49|  0.262|       1|   0.262|   0.069|   0.018|
-|RK         | 6787|p2_11 |nE3  |nEeriness |45       |       1|2       |MR         |2         |               Inf|   -0.667| 1.14|  0.562|       1|   0.562|   0.316|   0.178|
-|RK         | 7096|p2_12 |nE8  |nEeriness |52       |       1|2       |MR         |2         |               Inf|   -0.500| 2.33|  0.650|       1|   0.650|   0.423|   0.275|
-|RK         | 7326|p2_13 |nE6  |nEeriness |54       |       1|2       |MR         |2         |               Inf|   -0.172| 2.44|  0.675|       1|   0.675|   0.456|   0.308|
+|RK         |   70|1     |nE6  |nEeriness |65       |       0|1       |MR         |2         |               Inf|   -0.832| 2.00|  0.812|       1|   0.812|   0.660|   0.536|
+|RK         |  712|3     |nE8  |nEeriness |79       |       1|2       |MR         |2         |               Inf|   -0.223| 1.81|  0.988|       1|   0.988|   0.975|   0.963|
+|RK         | 1337|p1_05 |nE1  |nEeriness |60       |       1|2       |MR         |2         |               Inf|   -0.880| 1.67|  0.750|       1|   0.750|   0.562|   0.422|
+|RK         | 3451|p1_12 |nE3  |nEeriness |61       |       2|3       |MR         |2         |               Inf|   -0.008| 4.20|  0.762|       1|   0.762|   0.581|   0.443|
+|RK         | 3585|p1_13 |nE1  |nEeriness |26       |       1|2       |MR         |2         |               Inf|   -0.498| 3.50|  0.325|       1|   0.325|   0.106|   0.034|
+|RK         | 3901|p2_01 |nE5  |nEeriness |34       |       1|2       |MR         |2         |               Inf|   -0.672| 2.72|  0.425|       1|   0.425|   0.181|   0.077|
+|RK         | 5982|p2_08 |nE6  |nEeriness |39       |       2|3       |MR         |2         |               Inf|   -0.667| 1.66|  0.488|       1|   0.488|   0.238|   0.116|
+|RK         | 6264|p2_09 |nE8  |nEeriness |57       |       2|3       |MR         |2         |               Inf|   -0.380| 1.94|  0.713|       1|   0.713|   0.508|   0.362|
 
 Before switching to a different case environment, it is recommended to detach the present environment:
 
@@ -104,7 +104,7 @@ simulate() %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-7-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-7-1} 
 
 All simulation functions provide the argument `seed`, which sets the random number generator(s) to a specific value. Using a different seed value produces a data set with the same structure, but different values.
 
@@ -117,7 +117,7 @@ simulate(seed = 1317) %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-8-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-8-1} 
 
 Additional arguments can be used to change the structure of the data set. In the present example, the amplification effect can be turned into a [saturation] effect, by changing the beta argument:
 
@@ -130,7 +130,7 @@ simulate(beta = c(-1, 1, .4, -3)) %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-9-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-9-1} 
 
 If you want to understand how a simulation function works and how it can be controlled, you can display the code of the function, just by calling it without parentheses:
 
@@ -164,8 +164,8 @@ simulate
 ##     # 
 ##     out
 ##     }
-## <bytecode: 0x000000007f0328e8>
-## <environment: 0x0000000072644668>
+## <bytecode: 0x00000000817b8f08>
+## <environment: 0x0000000074dbb340>
 ```
 
 Real and synthetic case environments provide all data used in this book, but also all models are included that have been estimated. When working through this book, this saves you the effort to run the models by yourself.
@@ -557,7 +557,7 @@ The central predictor in these experiments is the human-likeness of a robot face
 
 #### Measures
 
-The Eeriness scale of Ho & MacDorman [REF] has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur & Reichling, responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
+The Eeriness scale of @Ho2017a has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of @mathur2016 , responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
 
 
 
@@ -589,7 +589,7 @@ Uncanny$RK_2 %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-33-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-33-1} 
 
 ```r
 
@@ -674,7 +674,7 @@ IPump$D_agg %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-34-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-34-1} 
 
 ```r
 
@@ -704,7 +704,7 @@ D_slpstd %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-35-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-35-1} 
 
 ```r
 
@@ -771,7 +771,7 @@ grid.arrange(
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-36-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-36-1} 
 
 ```r
 
@@ -821,7 +821,7 @@ MMN_2 %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-37-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-37-1} 
 
 ```r
 MMN_2 %>%
@@ -830,7 +830,7 @@ MMN_2 %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-37-2} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-37-2} 
 
 ```r
 
@@ -889,7 +889,7 @@ AUP_1 %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-38-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-38-1} 
 
 ```r
 
@@ -994,7 +994,7 @@ Ver20 %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-41-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-41-1} 
 
 ```r
 
@@ -1238,7 +1238,7 @@ simulate() %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-46-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-46-1} 
 
 ```r
 
@@ -1316,7 +1316,7 @@ simulate() %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-48-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-48-1} 
 
 ```r
 
@@ -1390,7 +1390,7 @@ simulate() %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-50-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-50-1} 
 
 ```r
 
@@ -1465,7 +1465,7 @@ simulate() %>%
 ```
 
 
-\includegraphics[width=0.9\linewidth]{Production/figures/unnamed-chunk-52-1} 
+\includegraphics[width=0.9\linewidth]{Appendix_files/figure-latex/unnamed-chunk-52-1} 
 
 ```r
 
