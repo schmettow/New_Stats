@@ -730,7 +730,7 @@ Strictly spoken, grouped and binned frequencies are not one statistic, but a vec
 
 ### Central tendency {#central-tendency}
 
-Reconsider the rational design researcher Jane \@ref(sec99). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
+Reconsider the rational design researcher Jane \@ref(benchmarking-designs). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
 
 ```{r}
 my_mean <- function(x) sum(x)/N_obs(x) ## not length()
@@ -2177,11 +2177,12 @@ Review the formula $\text{Measure}_i = \text{structural part} + \text{random par
 
 The random part of a statistical model contains all (small) unmeasured forces on the response $y_i$. When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as either *probability mass functions (PMF)* or *probability density functions (PDF)*. The difference between PMF and CDF is that PMF only work for discrete measures, such as anything that is countable, whereas CDF also apply for continuous measures, such as ToT. In general, any PMF can also be called a CDF, but it is instructive to start with a case of discrete measures.
 
-In the case of discrete measaures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
+In the case of discrete measures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
 
 $$
-P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
+P(y|p,k) = \binom{k}{y} p^y(1-p)^{k-y}
 $$
+
 
 Binomial distributions with probabilities of success $p = .3$ and $k = 3$ tasks are shown in Figure \@ref(fig:dist-1):
 

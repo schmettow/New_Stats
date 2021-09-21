@@ -8,11 +8,14 @@ source("RMDR.R")
 This book entertains six research cases with real data and eight siumulated cases. They will be provided as loadable R environments with this book. To use these environments, just load the Rda file and attach the environment with the same name:
 
 ```{r include = F}
-load_CE("Uncanny.Rda")
+load_CE(Uncanny)
 ```
 
 ```{r eval = F}
-load("Uncanny.Rda")
+load("Cases/Uncanny.Rda")
+```
+```{r}
+attach(Uncanny)
 ```
 
 Then you can list the objects inside the environment:
@@ -167,7 +170,7 @@ summary(CUE8$D_cue8)
 
 
 
-```{r CUE8_simfunc, opts.label = "sim"}
+```{r CUE8_simfunc, opts.label = "sim", eval = F}
 
 
 
@@ -208,7 +211,7 @@ CUE8$simulate <-
   }    
 ```
 
-```{r CUE8_load_sim_data, opts.label = "sim"}
+```{r CUE8_load_sim_data, opts.label = "sim", eval = F}
 
 CUE8$D_sim_1 <- 
   CUE8$simulate()
@@ -224,10 +227,10 @@ CUE8$D_cue8
 
 ```{r CUE8_export}
 save(CUE8, file = "Cases/CUE8.Rda")
-write_sav(CUE8$D_study, "Data/CUE8_study.sav")
-write_csv(CUE8$D_study, "Data/CUE8_study.csv")
-write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
-write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
+write_sav(CUE8$D_cue8, "Data/CUE8_study.sav")
+write_csv(CUE8$D_cue8, "Data/CUE8_study.csv")
+#write_sav(CUE8$D_sim_1, "Data/CUE8_sim_1.sav")
+#write_csv(CUE8$D_sim_1, "Data/CUE8_sim_1.csv")
 
 ```
 
@@ -253,7 +256,7 @@ The central predictor in these experiments is the human-likeness of a robot face
 
 The Eeriness scale of Ho & MacDorman [REF] has been used to measure the emotional response. This scale contains eight items and has specifically been designed to observe the UV effect. The scale was implemented as a visual analog scale. Because the Eeriness scales direction is reverse to the original Likeability scale of Mathur & Reichling, responses have been reversed (negative Eeriness) and normalized to the interval $[-1; 0]$. In addition, reaction times have been recorded.
 
-```{r}
+```{r eval = F}
 summary(RK_1)
 ```
 
@@ -273,6 +276,16 @@ load("external_Data/MathurRepl.Rda")
 load("external_Data/UV_PS.Rda")
 
 load("external_Data/UV_RK.Rda")
+
+Uncanny$RK_1 <- RK_1 %>% 
+  rename(session = repetition) %>% 
+  mutate(Session = as.factor(session + 1),
+         Experiment = "RK",
+         Collection = "MR",
+         presentation_time = Inf) %>% 
+  select(Experiment, Obs, Part, Item, Scale, Stimulus, session, Session, Collection,
+         Condition, presentation_time, response, RT, starts_with("huMech"))
+
 
 Uncanny$DK_1 <-
   MathurRepl %>%
@@ -318,6 +331,7 @@ Uncanny$PS_1 <-
          session, Session, Collection,
          Condition, presentation_time, response, RT, starts_with("huMech"))
 
+
 Uncanny$D_UV <- bind_rows(Uncanny$DK_1, Uncanny$RK_1)
 
 
@@ -341,13 +355,6 @@ Uncanny$UV_1 <-
 
 ```
 ```{r}
-Uncanny$D_UV %>% 
-  group_by(Experiment, Stimulus, huMech) %>% 
-  mutate(avg_like = mean(response)) %>% 
-  ggplot(aes(x = huMech, y = avg_like, color = Experiment)) +
-  geom_smooth() +
-  geom_point()
-
 Uncanny$RK_2 %>% 
   ggplot(aes(x = huMech, y = avg_like)) +
   geom_smooth() +
@@ -569,6 +576,11 @@ write_csv(IPump$D_agg, "Data/Pumps_agg.csv")
 
 This data set ships with the lme4 package and has only been converted to the coding standards used throughout. Eighteen participants underwent sleep deprivation on ten successive days and the average reaction time on a set of tests has been recorded per day and participant. For further information on the data set, consult the documentation (`?lme4::sleepstudy`).
 
+```{r}
+new_syncenv("Sleepstudy")
+```
+
+
 ```{r Sleepstudy_load_data, opts.label = "sim"}
 Sleepstudy$D_slpstd <-
   lme4::sleepstudy %>% 
@@ -649,11 +661,12 @@ Egan$D_egan <-
   mutate_if(
     is.labelled, as_factor) %>% 
   mutate(Part = as.integer(Part),
+         Item = str_c(Design, Task, sep = "x"),
          trial = as.integer(trial),
          success = success == "succes",
          clicks = as.integer(clicks),
          returns_hp = as.integer(returns_hp),
-         return_links = as.integer(return_links)) %>% 
+         logToT = log(ToT)) %>% 
   as_tbl_obs()
 
 
@@ -857,13 +870,13 @@ The Hugme experiment is a multi-population study: participants, pictures, words 
 
 The Table `R_exp` is the raw data that we got from the experiment. It contains the encounter of participants with primes and words, but misses the classification of words and primes, as well as participant-level variables. The classification of words and primes is stored separately in three *entity tables*: `E_Words`, `E_Primes`, whereas a `E_part` contains demographic data:
 
-```{r}
+```{r eval = F}
 Hugme$E_Part
 ```
 
 All entity tables capture the information in the sample of precisely one population, with one row per member and a unique identifier. This identifier is called a *key* and is crucial for putting all the information together, using *joins*. Table `R_exp` provides teh scaffold for the join operations, in that it contains all identifier variables. In fact, the combination of Part, Word and Prime is a key by itself, as it uniquely identifies every observation:
 
-```{r}
+```{r eval = F}
 Hugme$R_exp
 
 cat("The number of unique combinations also is", 
@@ -873,7 +886,7 @@ cat("The number of unique combinations also is",
 In multi-level modelling, we called this an encounter or crossing of samples. In data modelling, this is called a *relationship table*. A join always operates on two tables that share at least one key variable. The following code takes the `R_exp` the relationship table to the left and merges in additional data from the entity table, picking on the key variable. This works successively:
 
 
-```{r}
+```{r eval = F}
 Hugme$R_exp %>% 
   left_join(Hugme$E_Words, by = "Word") %>% 
   left_join(Hugme$E_Prime, by = "Prime") %>% 
@@ -999,10 +1012,10 @@ Hugme$R_exp %>%
 save(Hugme, file = "Cases/Hugme.Rda")
 write_sav(Hugme$D_hugme, "Data/Hugme.sav")
 write_csv(Hugme$D_hugme, "Data/Hugme.csv")
-write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
-write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
-write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
-write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
+#write_sav(Hugme$HUG_resp, "Data/HUG_resp.sav")
+#write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
+#write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
+#write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
 ```
 
 
@@ -1029,10 +1042,10 @@ new_syncenv("Rainfall")
 Rainfall$simulate <-
   function(
     n_Days = 20,
-    set.seed = 1,
+    seed = 1,
     debug = F){
     
-    if (!is.na(set.seed)) set.seed()
+    if (!is.na(set.seed)) set.seed(seed)
     ## number of observations
     tibble(cloudy = rbinom(n_Days, 1, .6)) %>%
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
@@ -1550,13 +1563,13 @@ AR_game$simulate <-
                 beta[4] * technophile * sociophile,
               intention = mascutils::inv_logit(rnorm(N,  eta, sigma))) %>% 
       as_tbl_obs()
-    
-    class(out) <- append(class(out), "sim_tbl")
-    attr(out, "coef") <- list(beta = beta,
-                              sigma = sigma)
-    attr(out, "seed") <- seed
-    
-    out %>% as_tbl_obs()
+    # 
+    # class(out) <- append(class(out), "sim_tbl")
+    # attr(out, "coef") <- list(beta = beta,
+    #                          sigma = sigma)
+    # attr(out, "seed") <- seed
+    # 
+    out
     }
 
 AR_game$D_1 <- AR_game$simulate(N = 40)
@@ -1800,7 +1813,7 @@ load("external_data/Lap15.Rda")
 
 LapTrain$D_laptrain <- Lap15$D %>% 
   mutate(Obs = row_number()) %>% 
-  mascutils::go_first(~Obs) %>% 
+  mascutils::go_first(Obs) %>% 
   as_tbl_obs()
 LapTrain$D_laptrain
 
@@ -1862,7 +1875,7 @@ new_syncenv("StroopMW")
 thisdir <- "external_data/OSF - Stroop Mind Wandering/"
 
 StroopMW$D_stroopmw <-
-  dir(pattern = "*.csv", path = thisdir, full.names = T) %>>%
+  dir(pattern = "*.csv", path = thisdir, full.names = T) %>%
   ldply(read_csv, skip = 1) %>% 
   mutate(Obs = row_number(),
          trial = trial + 1,
@@ -1890,9 +1903,9 @@ write_csv(StroopMW$D_stroopmw, "Data/StroopMW.csv")
 
 ### Case: Joystick
 
-With the emerge of automation in automotives, there are opportunities to  thoroughly redesign the cockpit of cars. In particular, the steering wheel is a rather clunky control. A automotive research team has developed an alternative joystick control that sits right in the middle console.
+With the emerge of automation in automotives, there are opportunities to  thoroughly redesign the cockpit of cars. In particular, the steering wheel is a rather clunky control. A automotive research team has developed an alternative joystick control that fits right into the middle console.
 
-The following study was undertaken to examine driving performance with the novel design, in direct comparison to the classic steering wheel. Participants drove five rounds on a test track with either control and performance was measured by the number of steering correction responses (SCR), with lower numbers indicating better performance.
+The following study was undertaken to examine driving performance with the novel design, in direct comparison to the classic steering wheel. Participants drove five rounds on a test track with either control and performance was measured by the number of steering reversals (SR), with lower numbers indicating better performance.
 
 ```{r joystick_create, opts.label = "simulate"}
 new_syncenv("Joystick")
@@ -1901,64 +1914,129 @@ new_syncenv("Joystick")
 
 ```{r joystick_simfunc, opts.label = "sim"}
 Joystick$simulate <- 
-  function(N_Part = 30,
-           N_round = 4, 
-           seed = 42){
-    set.seed(42)
-    N_Obs <- N_Part * N_round * 2
+  function(
+      N_Part = 30,
+      N_Sections = 9,
+      N_rounds = 3, 
+      min_ToT = 200,
+      seed = 42)
+    {
+    set.seed(seed)
+    N_Obs <- N_Part * N_rounds * N_Sections * 2
     
     Parts <- 
       tibble(
         Part = 1:N_Part,
         age = round(runif(N_Part, 20, 60), 0),
         experience = (age - 18) * rbeta(N_Part, 45, 5)) %>% 
-      mutate(part_asym = rbeta(N_Part, 45, 5), ## scales, not additive
-             part_rate = rbeta(N_Part, 20, experience),
+      mutate(part_asym = 0, ## scales, not additive
+             part_rate = rbeta(N_Part, 20, age),
              part_ampl = rbeta(N_Part, 45, 5))
     
     Conditions <-
-      frame_data(~Control, ~ampl, ~rate, ~asym,
+      tribble(~Control, ~ampl, ~rate, ~asym,
                  "joystick", 100, .5, 30,
                  "classic",    30, .9, 40)
     
-    Exp <- expand_grid(Part = Parts$Part, 
+    Sections <- 
+      tibble(Section = as.factor(1:N_Sections)) %>% 
+      mutate(weight = .2 + runif(N_Sections),
+             prop_Section = weight/sum(weight)) ## proportions of full round
+    
+    Exp <- 
+      expand_grid(Part = Parts$Part, 
                        Control = Conditions$Control, 
+                       Section = Sections$Section,
                        round = as.integer(0:(N_round - 1))) %>% 
       left_join(Parts) %>% 
       left_join(Conditions) %>% 
+      left_join(Sections) %>% 
       mutate(
         Round = as.factor(round + 1),
-        ampl = ampl * part_ampl,
+        ampl = ampl * part_ampl * prop_Section,
         rate = rate / part_rate,
         asym = asym * part_asym,
         mu = asymptote::ary(ampl, rate, asym, round),
-        SCR =rpois(N_Obs, mu)) %>% 
-      as_tbl_obs()
-  }
+        reversals = rpois(N_Obs, mu),
+        ToT = brms::rexgaussian(N_Obs, mu * 3 + min_ToT, 
+                                sigma = 20, 
+                                beta = 20)) %>% 
+      as_tbl_obs()}
 
 Joystick$D_joy <- 
   Joystick$simulate() %>% 
-  select(Obs, Part, age, experience, Control, round, Round, SCR)
+  select(Obs, Part, age, experience, Control, 
+         round, Round, Section, reversals, ToT)
 
 Joystick$D_joy
 
-Joystick$D_joy$SCR[c(5, 12, 56)] <- 0
+Joystick$D_joy_agg <- 
+  Joystick$D_joy %>% 
+  group_by(Part, Round, Control) %>% 
+  summarize(reversals = sum(reversals),
+            ToT = sum(ToT)) %>% 
+  left_join(Parts)
 
-Joystick$D_joy %>% 
-  ggplot(aes(x = Round, y = SCR, color = Control)) +
-  geom_jitter()
+```
 
-Joystick$D_joy %>% 
-  ggplot(aes(x = Round, y = SCR, color = Control)) +
+
+```{r}
+Joystick$D_joy_agg %>% 
+  ggplot(aes(x = Round, y = reversals, color = Control)) +
   geom_point() +
   geom_line(aes(group = Control)) +
   facet_wrap(~Part)
 
-M_1 <- stan_glm(SCR ~ Control*experience + Control * Round,
-                data = Joystick$D_joy, iter = 500, family = "poisson")
+```
 
-fixef(M_1)
+```{r}
+Joystick$D_joy_agg %>% 
+  ggplot(aes(x = Round, y = ToT, color = Control)) +
+  geom_point() +
+  geom_line(aes(group = Control)) +
+  facet_wrap(~Part)
+```
 
+```{r}
+Joystick$D_joy_agg %>% 
+  ggplot(aes(x = age, y = reversals, color = Control)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+```
+
+
+```{r}
+M_1 <- stan_glmer(reversals ~ Control * Round + 
+                    (1 + Control * Round|Part),
+                data = Joystick$D_joy, family = "poisson")
+
+M_2 <- stan_glmer(reversals ~ 1 + age + 
+                    Control * round + 
+                  (1 + Control * round|Part),
+                data = Joystick$D_joy, family = "poisson")
+
+M_3 <- stan_glmer(ToT ~ 1 + age + 
+                    Control * Round + 
+                    (1 + Control * Round|Part) +
+                    (1|Section),
+                data = Joystick$D_joy)
+
+
+bind_rows(posterior(M_1),
+          posterior(M_2),
+          posterior(M_3)) %>% 
+fixef_ml(mean.func = exp) %>% 
+  arrange(fixef)
+
+fixef(M_3)
+
+bind_rows(predict(M_3),
+          Joystick$D_joy) %>% 
+  ggplot(aes(x = Round,
+             fill = Control,
+             y = ToT)) +
+  geom_boxplot()
 
 ```
 
@@ -2270,19 +2348,16 @@ Note that:
 
 
 
-```{r L2Drive_create, opts.label = "simulate"}
+```{r L2Drive_create, opts.label = "simulate", eval = F}
 new_syncenv("L2Drive")
 ```
 
-```{r L2Drive_simfunc, opts.label = "sim"}
+```{r L2Drive_simfunc, opts.label = "sim", eval = F}
 
-#L2Drive$sim_L2Drive <- function(){
-  
-  
-  n_Part = 200
-  seed = 42
+L2Drive$sim_L2Drive <- function(n_Part = 200,
+                                seed = 42,
+                                n_Exp = n_Part * 36){
   set.seed(seed)
-  n_Exp = n_Part * 36
   
   Parts <- tibble(Part = 1:n_Part,
                   Gamer = rbinom(n_Part, 1, .1),
@@ -2300,7 +2375,7 @@ new_syncenv("L2Drive")
   
   Parts %>% 
     select(starts_with("asym")) %>% 
-  GGally::ggpairs()
+    GGally::ggpairs()
   
   
   
@@ -2309,7 +2384,7 @@ new_syncenv("L2Drive")
     print()
   
   
-  Exp <-
+  Experiment <-
     crossing(Parts, Conditions) %>% 
     #gather(key = "Effect", value = "value", -Task) %>% 
     crossing() %>% 
@@ -2348,16 +2423,13 @@ new_syncenv("L2Drive")
     as_tbl_obs() 
   
   Exp
-#}
+}
 
-
-D_L2Drive <- L2Drive$sim_L2Drive()
-
-L2Drive$D_L2Drive <- D_L2Drive
+L2Drive$D_L2Drive <- L2Drive$sim_L2Drive()
 
 ```
 
-```{r}
+```{r eval = F}
 
 D_L2Drive %>% 
   select(SRR:wkl) %>% 
@@ -2445,7 +2517,7 @@ fixef_ml()
 
 
 
-```{r L2Drive_export}
+```{r L2Drive_export, eval= F}
 save(D_L2Drive, file = "Cases/L2Drive.Rda")
 write_sav(D_L2Drive, "Data/L2Drive.sav")
 write_csv(D_L2Drive, "Data/L2Drive.csv")
@@ -2653,7 +2725,7 @@ new_syncenv("Stroop_comp")
 ```
 
 
-```{r Stroop_comp_simfunc, opts.label = "sim"}
+```{r Stroop_comp_simfunc, opts.label = "sim", eval = F}
 library(retimes)
 
 ## simulating the data set
@@ -2704,6 +2776,9 @@ Stroop_comp$D_1 <-
   Stroop_comp$simulate() %>% 
   
 
+
+```
+```{r eval = F}
 Stroop_comp$G_1 <-
   Stroop_comp$D_1 %>%
   ggplot(aes(x = RT, col = Cond)) +
@@ -2731,14 +2806,13 @@ Stroop_comp$G_3
 
 Stroop_comp$M_1 <- lme4::lmer(RT ~ Cond + (1 + Cond|Part), data = Stroop_comp$D_1)
 summary(M_1)
-
 ```
 
 
 
 
 
-```{r Stroop_comp_export}
+```{r Stroop_comp_export, eval = F}
 save(Stroop_comp, file = "Cases/Stroop_comp.Rda")
 write_sav(Stroop_comp$D_1, "Data/Stroop_comp_1.sav")
 write_csv(Stroop_comp$D_1, "Data/Stroop_comp_1.csv")
