@@ -464,7 +464,7 @@ for all routes, distinguish between reader types, perhaps make a cross table
 If you use this book for self study, two considerations play a role for finding the optimal route through this book.
 what is your *background in Statistics?* For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
 As such, it may be a while ago and a refresher is on order.
-Chapter \@ref(rational) is a quick-read, if you are feeling confident.
+Chapter \@ref(decision-making) is a quick-read, if you are feeling confident.
 If you lack any background in statistics, \@ref(ebs) should be studied, first.
 If your background is Social Sciences, then you probably know quite something about probabilities and Statistics. If you wonder what all this new "Bayesian" is all about and how compatible it is to you, \@ref(bayes-freq-prob) is a small bridge.
 
@@ -584,7 +584,7 @@ The following measures were taken:
 
 If you use this book for teaching, that means you will have to come up with some data sets.
 Unless you are a seasoned researcher who can pull data out of the drawer, this might be a problem. A solution is to simulate data, like I have done multiple times in this book.
-While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be either be found inline or in the electronic case environments that come with the book (\@ref(synthetic-data)).
+While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be found in electronic resources accompanying this book. 
 
 During my workshops I often use the method  of *live programming*. This is best pictured as think-aloud live demonstration - you talk while you are writing the code.
 This requires that you speak R natively, such that you can write valid code, while you talk and think. 
