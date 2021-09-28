@@ -57,13 +57,11 @@ and chances are rather low that 100 is the perfect guess.
 # random IQ sample, rounded to whole numbers
 set.seed(42)
 N <- 1000
-D_IQ <- tibble(
-  score = rnorm(N, mean = 100, sd = 15),
-  IQ = round(score, 0)
-)
+D_IQ <-   tibble(score = rnorm(N, mean = 100, sd = 15),
+                 IQ = round(score, 0))
 
 # proportion of correct guesses
-pi_100 <- sum(D_IQ$IQ == 100) / N
+pi_100 <- sum(D_IQ$IQ == 100)/N
 str_c("Proportion of correct guesses (IQ = 100): ", pi_100)
 ```
 
@@ -332,7 +330,7 @@ attach(Sec99)
 
 
 ```r
-P_1 <- posterior(M_1)
+P_1 <-  posterior(M_1)
 P_1
 ```
 
@@ -351,23 +349,21 @@ Three dimensional plots are difficult to put on a surface, but for somewhat regu
 
 
 ```r
-P_1 %>%
-  select(chain, iter, parameter, value) %>%
-  spread(parameter, value) %>%
+P_1 %>% 
+  select(chain, iter, parameter, value) %>% 
+  spread(parameter, value) %>% 
   ggplot(aes(x = Intercept, y = sigma_resid)) +
   stat_density_2d(geom = "point", aes(size = after_stat(density)), n = 20, contour = F) +
-  xlim(95, 115) +
-  ylim(25, 40)
+  xlim(95, 115) + ylim(25, 40)
 
-P_1 %>%
-  filter(iter <= 50) %>%
-  select(iter, parameter, value) %>%
-  spread(parameter, value) %>%
+P_1 %>% 
+  filter(iter <= 50) %>% 
+  select(iter, parameter, value) %>% 
+  spread(parameter, value) %>% 
   ggplot(aes(x = Intercept, y = sigma_resid, label = iter)) +
   geom_text() +
   geom_path(alpha = .3) +
-  xlim(95, 115) +
-  ylim(25, 40)
+  xlim(95, 115) + ylim(25, 40)
 ```
 
 <div class="figure">
@@ -404,7 +400,7 @@ My preferred geometry for plotting many MPDs is the violin plot, which packs a b
 
 
 ```r
-P_1 %>%
+P_1 %>% 
   ggplot(aes(x = parameter, y = value)) +
   geom_violin() +
   ylim(0, NA)
@@ -436,12 +432,10 @@ And once we have understood the MCMC chain as a frequency distribution, the answ
 
 
 ```r
-P_1 %>%
+P_1 %>% 
   filter(parameter == "Intercept") %>%
-  summarize(
-    p_99 = mean(value >= 99),
-    p_111 = mean(value >= 111)
-  ) 
+  summarize(p_99  = mean(value >= 99),
+            p_111 = mean(value >= 111)) 
 ```
 
 
@@ -525,14 +519,13 @@ With package Rstanarm, the posterior distribution is extracted as follows (Table
 
 
 ```r
-P_1_wide <-
-  as_tibble(M_1) %>%
-  rename(Intercept = `(Intercept)`) %>%
-  mutate(Iter = row_number()) %>%
+P_1_wide <- 
+  as_tibble(M_1) %>% 
+  rename(Intercept = `(Intercept)`) %>% 
+  mutate(Iter = row_number()) %>% 
   mascutils::go_first(Iter)
 
-P_1_wide %>%
-  sample_n(8) 
+P_1_wide %>% sample_n(8) 
 ```
 
 
@@ -555,15 +548,13 @@ For the purpose of reporting parameter estimates, we could create a CLU table as
 
 
 ```r
-P_1_wide %>%
-  summarize(
-    c_Intercept = median(Intercept),
-    l_Intercept = quantile(Intercept, .025),
-    u_Intercept = quantile(Intercept, .975),
-    c_sigma = median(sigma),
-    l_sigma = quantile(sigma, .025),
-    u_sigma = quantile(sigma, .975)
-  ) 
+P_1_wide %>% 
+  summarize(c_Intercept = median(Intercept),
+            l_Intercept = quantile(Intercept, .025),
+            u_Intercept = quantile(Intercept, .975),
+            c_sigma = median(sigma),
+            l_sigma = quantile(sigma, .025),
+            u_sigma = quantile(sigma, .975)) 
 ```
 
 
@@ -581,7 +572,7 @@ This works approximately like can be seen in the following code, which employs `
 
 
 ```r
-P_1_long <-
+P_1_long <- 
   P_1_wide %>%
   pivot_longer(!Iter, names_to = "parameter")
 
@@ -608,13 +599,11 @@ With long posterior objects, summarizing over the parameters is more straight-fo
 
 
 ```r
-P_1_long %>%
-  group_by(parameter) %>%
-  summarize(
-    center = median(value),
-    lower = quantile(value, .025),
-    upper = quantile(value, .975)
-  ) 
+P_1_long %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value),
+            lower = quantile(value, .025),
+            upper = quantile(value, .975)) 
 ```
 
 
@@ -626,7 +615,7 @@ Table: (\#tab:sec99-30)A long CLU table extracted from a long posterior table.
 |Intercept |  106.0|  99.7| 112.2|
 |sigma     |   31.4|  27.5|  36.1|
 
-With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter*.
+With the Bayr package, the `posterior` command produces such a long posterior object. When called, a Bayr posterior object (class *Tbl_post*) identifies itself by telling the number of MCMC samples, and the estimates contained in the model, grouped by *type of parameter* (Table \@ref(tab:sec99-30a)).
 
 
 ```r
@@ -636,21 +625,21 @@ P_1
 
 
 
-Table: (\#tab:99-seconds-2)MCMC posterior with 4000 samples of 2 parameters in 1 model(s)
+Table: (\#tab:sec99-30a)MCMC posterior with 4000 samples of 2 parameters in 1 model(s)
 
 |model |parameter   |type  |fixef     | count|
 |:-----|:-----------|:-----|:---------|-----:|
 |M_1   |Intercept   |fixef |Intercept |     1|
 |M_1   |sigma_resid |disp  |          |      |
 
-The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31)
+The most important benefit of posterior extraction with Bayr is that parameters are classified. Note how the two parameters `Intercept` and `sigma` are assigned different parameter types: fixed effect (which is a population-level coefficient) and dispersion. This classification allows us to filter by type of parameter and produce CLU tables, such as Table \@ref(tab:sec99-31).
 
 <!-- #120 -->
 
 
 ```r
-P_1 %>%
-  filter(type == "fixef") %>%
+P_1 %>% 
+  filter(type == "fixef") %>% 
   clu()
 ```
 
@@ -696,16 +685,14 @@ attach(Sec99)
 
 
 ```r
-T_1 <-
-  P_1 %>%
-  group_by(parameter) %>%
-  summarize(
-    mean = mean(value),
-    median = median(value),
-    mode = mascutils::mode(value),
-    q_025 = quantile(value, .025),
-    q_975 = quantile(value, .975)
-  )
+T_1 <- 
+  P_1 %>% 
+  group_by(parameter) %>% 
+  summarize(mean   = mean(value),
+            median = median(value),
+            mode   = mascutils::mode(value),
+            q_025 = quantile(value, .025),
+            q_975 = quantile(value, .975))
 kable(T_1, caption = "Various center statistics and 95 percent quantiles")
 ```
 
@@ -722,20 +709,17 @@ We observe that for the Intercept it barely matters which center statistic we us
 
 
 ```r
-T_1_long <-
-  T_1 %>%
+T_1_long <- 
+  T_1 %>% 
   gather(key = center, value = value, -parameter)
 
-P_1 %>%
+P_1 %>% 
   ggplot(aes(x = value)) +
   facet_wrap(~parameter, scales = "free_x") +
-  geom_density() +
-  geom_vline(aes(
-    xintercept = value,
-    col = center
-  ),
-  data = T_1_long
-  )
+  geom_density()  + 
+  geom_vline(aes(xintercept = value, 
+                 col = center), 
+             data  = T_1_long)
 ```
 
 <div class="figure">
@@ -793,12 +777,10 @@ To demystify the `clu`, here is how you can make a basic coefficient table yours
 
 ```r
 P_1 %>%
-  group_by(parameter) %>%
-  summarize(
-    center = quantile(value, 0.5),
-    lower = quantile(value, 0.025),
-    upper = quantile(value, 0.975)
-  ) %>%
+  group_by(parameter) %>% 
+  summarize(center = quantile(value, 0.5),
+         lower  = quantile(value, 0.025),
+         upper  = quantile(value, 0.975)) %>% 
   ungroup() 
 ```
 
@@ -838,17 +820,13 @@ Figure \@ref(fig:walk-1) shows a variety of linear relations between two variabl
 
 
 ```r
-expand_grid(
-  intercept = c(0, 1, 2),
-  slope = c(-.5, 0, 1.5),
-  x = -3:3
-) %>%
-  arrange(x) %>%
-  mutate(
-    y = intercept + x * slope,
-    slope = as.factor(slope),
-    intercept = as.factor(intercept)
-  ) %>%
+expand_grid(intercept = c(0, 1, 2),
+            slope = c(-.5, 0, 1.5),
+            x = -3:3) %>%
+  arrange(x) %>% 
+  mutate(y = intercept + x * slope,
+         slope = as.factor(slope),
+         intercept = as.factor(intercept)) %>% 
   ggplot(aes(x = x, y = y, color = slope)) +
   geom_line() +
   facet_grid(~intercept)
@@ -913,7 +891,7 @@ attach(BrowsingAB)
 ```r
 BAB1 %>%
   ggplot(aes(x = age, y = ToT)) +
-  geom_point() +
+  geom_point()+
   geom_smooth(se = F, fullrange = F)
 ```
 
@@ -932,10 +910,9 @@ Therefore, it is treated as a *metric predictor* (sometimes also called covariat
 
 ```r
 M_age <-
-  BAB1 %>%
-  stan_glm(ToT ~ 1 + age,
-    data = .
-  )
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + age, 
+           data = .)
 ```
 
 
@@ -944,7 +921,7 @@ M_age <-
 
 
 ```r
-coef(M_age)
+coef(T_age)
 ```
 
 
@@ -955,6 +932,10 @@ Table: (\#tab:BAB-age)Coefficient estimates with 95% credibility limits
 |:---------|:---------|------:|------:|-----:|
 |Intercept |Intercept |  57.17| 34.053| 79.53|
 |age       |age       |   0.82|  0.401|  1.24|
+
+
+
+
 
 Is age associated with ToT?
 Table \@ref(tab:BAB-age) tells us that with every year of age, users get $0.82$ seconds slower, which is considerable.
@@ -971,6 +952,7 @@ We also realize that over the whole life span of a typical web user, say 12 year
 Generally, with linear models, one should avoid making statements about a range that has not been observed.
 Linearity, as we will see in \@ref(relinking-linearity), always is just an approximation for a process that truly is non-linear.
 
+
 Placing the intercept where there is no data has another consequence: the estimate is rather uncertain, with a wide 95% CI, $57.17 [34.05, 79.54]_{CI95}$.
 As a metaphor, think of the data as a hand that holds the a stick, the regression line and tries to push a light switch.
 The longer the stick, the more difficult is becomes to hit the target.
@@ -985,16 +967,14 @@ The following code produces a shift of -20 and a centering on the original varia
 
 ```r
 BAB1 <-
-  BAB1 %>%
-  mutate(
-    age_shft = age - 20,
-    age_cntr = age - mean(age)
-  )
+  BAB1 %>% 
+  mutate(age_shft = age - 20,
+         age_cntr = age - mean(age))
 
-BAB1 %>%
-  tidyr::gather("predictor", "age", starts_with("age")) %>%
+BAB1 %>% 
+  tidyr::gather("predictor", "age", starts_with("age")) %>% 
   ggplot(aes(x = age, y = ToT)) +
-  facet_grid(predictor ~ .) +
+  facet_grid(predictor~.) +
   geom_point() +
   geom_smooth(se = F, method = "lm", fullrange = T)
 ```
@@ -1009,10 +989,10 @@ To see what happens on the inferential level, we repeat the LRM estimation with 
 
 
 ```r
-M_age_shft <-
+M_age_shft <- 
   stan_glm(ToT ~ 1 + age_shft, data = BAB1)
 
-M_age_cntr <-
+M_age_cntr <- 
   stan_glm(ToT ~ 1 + age_cntr, data = BAB1)
 ```
 
@@ -1023,12 +1003,10 @@ We combine the posterior distributions into one multi-model posterior and read t
 
 
 ```r
-P_age <-
-  bind_rows(
-    posterior(M_age),
-    posterior(M_age_shft),
-    posterior(M_age_cntr)
-  )
+P_age <- 
+  bind_rows(posterior(M_age), 
+            posterior(M_age_shft), 
+            posterior(M_age_cntr))
 
 coef(P_age)
 ```
@@ -1091,20 +1069,15 @@ If you would employ these three scales to assess one and the same product. Using
 library(mascutils)
 
 set.seed(42)
-Raw_ratings <-
-  tibble(
-    Part = 1:100,
-    easy_difficult = rrating_scale(100, 0, .5,
-      ends = c(1, 7)
-    ),
-    heavenly_hellish = rrating_scale(100, 0, .2,
-      ends = c(0, 10),
-      bin = F
-    ),
-    neutral_uncanny = rrating_scale(100, -.5, .5,
-      ends = c(1, 5)
-    )
-  ) %>%
+Raw_ratings <- 
+  tibble(Part = 1:100,
+         easy_difficult   = rrating_scale(100, 0, .5, 
+                                         ends = c(1,7)),
+         heavenly_hellish = rrating_scale(100, 0, .2, 
+                                         ends = c(0,10), 
+                                         bin = F),
+         neutral_uncanny  = rrating_scale(100, -.5, .5, 
+                                         ends = c(1,5))) %>% 
   as_tbl_obs()
 
 Raw_ratings
@@ -1133,10 +1106,10 @@ From this we can produce a grid histogram (Figure \@ref(fig:rescale-3)).
 
 
 ```r
-D_ratings <-
+D_ratings <- 
   Raw_ratings %>%
-  select(-Obs) %>%
-  pivot_longer(!Part, 1:3, names_to = "Item", values_to = "rating") %>%
+  select(-Obs) %>% 
+  pivot_longer(!Part, 1:3, names_to = "Item", values_to = "rating") %>% 
   as_tbl_obs()
 
 D_ratings
@@ -1159,11 +1132,10 @@ Table: (\#tab:rescale-2)Data set with 4 variables, showing 8 of 300 observations
 
 
 ```r
-D_ratings %>%
+D_ratings %>% 
   ggplot(aes(x = rating)) +
   facet_grid(Item ~ .) +
-  geom_histogram() +
-  xlim(0, 10)
+  geom_histogram() + xlim(0, 10)
 ```
 
 <div class="figure">
@@ -1178,24 +1150,22 @@ Note how the following tidy code joins `D_ratings` with a table  `D_Items`. That
 
 
 ```r
-D_Items <- tribble(
-  ~Item, ~lower, ~upper,
-  "easy_difficult", 1, 7,
-  "heavenly_hellish", 0, 10,
-  "neutral_uncanny", 1, 5
-)
+D_Items <- tribble(~Item,              ~lower, ~upper,
+                   "easy_difficult",   1,      7,
+                   "heavenly_hellish", 0,     10,
+                   "neutral_uncanny",  1,      5)
 
 
 D_standard <-
-  D_ratings %>%
-  left_join(D_Items, by = "Item") %>%
-  mutate(scaled = (rating - lower) / (upper - lower))
-
-D_standard %>%
+  D_ratings %>% 
+  left_join(D_Items, by = "Item") %>% 
+  mutate(scaled = (rating - lower)/(upper - lower))
+  
+D_standard %>% 
   ggplot(aes(x = scaled)) +
   facet_grid(Item ~ .) +
   geom_histogram(bins = 20) +
-  xlim(0, 1)
+  xlim(0,1)
 ```
 
 <div class="figure">
@@ -1213,13 +1183,13 @@ A set of measures is z-transformed by centering it and scaling it by its own sta
 
 
 ```r
-D_ratings %>%
-  group_by(Item) %>%
-  mutate(zrating = (rating - mean(rating)) / sd(rating)) %>%
-  ungroup() %>%
+D_ratings %>% 
+  group_by(Item) %>% 
+  mutate(zrating = (rating - mean(rating))/sd(rating)) %>% 
+  ungroup() %>% 
   ggplot(aes(x = zrating)) +
-  facet_grid(Item ~ .) +
-  geom_histogram(bins = 10)
+   facet_grid(Item ~ .) +
+   geom_histogram(bins = 10)
 ```
 
 <div class="figure">
@@ -1245,12 +1215,12 @@ attach(IPump)
 
 
 ```r
-D_pumps %>%
-  mutate(log_ToT = log(ToT)) %>%
-  select(Design, ToT, log_ToT) %>%
-  gather(key = Measure, value = value, -Design) %>%
+D_pumps %>% 
+  mutate(log_ToT = log(ToT)) %>% 
+  select(Design, ToT, log_ToT) %>% 
+  gather(key = Measure, value = value, -Design) %>% 
   ggplot(aes(x = value, color = Design)) +
-  facet_wrap(Measure ~ ., scale = "free") +
+  facet_wrap(Measure~., scale = "free") +
   geom_density()
 ```
 
@@ -1283,15 +1253,13 @@ For a demonstration, we reproduce the steps on a simulated data set where X and 
 ```r
 set.seed(42)
 D_cor <-
-  tibble(
-    x = runif(50, 0, 50),
-    y = rnorm(50, x * .2, 3)
-  )
+  tibble(x = runif(50, 0, 50),
+         y = rnorm(50, x *.2, 3))
 ```
 
 
 ```r
-D_cor %>%
+D_cor %>% 
   ggplot(aes(x = x, y = y)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)
@@ -1331,7 +1299,7 @@ M_cor <- stan_glm(y ~ x, data = D_cor)
 beta_1 <- coef(M_cor)$center[2]
 
 r <- beta_1 * sd(D_cor$x) / sd(D_cor$y)
-cat("the correlation is: ", r)
+cat("the correlation is: ",r)
 ```
 
 ```
@@ -1348,14 +1316,11 @@ In fact, when both, predictor and outcome, are z-transformed before estimation, 
 
 ```r
 M_z <-
-  D_cor %>%
-  mutate(
-    x_z = (x - mean(x)) / sd(x),
-    y_z = (y - mean(y)) / sd(y)
-  ) %>%
-  stan_glm(y_z ~ x_z,
-    data = .
-  )
+  D_cor %>% 
+  mutate(x_z = (x - mean(x))/sd(x),
+         y_z = (y - mean(y))/sd(y)) %>% 
+  stan_glm(y_z ~ x_z, 
+           data = .)
 ```
 
 
@@ -1478,7 +1443,7 @@ However, in many research situations, the predictor variable carries not a measu
 ```r
 attach(BrowsingAB)
 
-BAB5 %>%
+BAB5 %>% 
   select(Obs, Part, Task, Design, Gender, Education, Far_sighted)
 ```
 
@@ -1559,7 +1524,7 @@ attach(BrowsingAB)
 BAB1 %>%
   ggplot(aes(x = ToT)) +
   geom_histogram() +
-  facet_grid(Design ~ .)
+	facet_grid(Design~.)
 ```
 
 <div class="figure">
@@ -1578,10 +1543,9 @@ Again, this is a two-step procedure:
 
 ```r
 M_CGM <-
-  BAB1 %>%
-  stan_glm(ToT ~ 1 + Design,
-    data = .
-  )
+  BAB1 %>% 
+  stan_glm(ToT ~ 1 + Design, 
+           data = .)
 ```
 
 
@@ -1633,7 +1597,7 @@ The tidy Foracts package provides further commands to set the order of a factor 
 
 
 ```r
-Gender <- sample(c("v", "m"), 4, replace = T)
+Gender <- sample(c("v","m"), 4, replace = T)
 
 factor(Gender)
 ```
@@ -1683,12 +1647,10 @@ attach(BrowsingAB)
 
 
 ```r
-BAB1_dum <-
-  BAB1 %>%
-  mutate(
-    Design_A = if_else(Design == "A", 1, 0),
-    Design_B = if_else(Design == "B", 1, 0)
-  ) %>%
+BAB1_dum <-  
+  BAB1 %>% 
+  mutate(Design_A = if_else(Design == "A", 1, 0),
+         Design_B = if_else(Design == "B", 1, 0)) %>% 
   select(Obs, Design, Design_A, Design_B, ToT)
 
 BAB1_dum
@@ -1734,9 +1696,8 @@ An observation of group A gets the predicted value: $\mu_i = \beta_A$, vice vers
 
 ```r
 M_dummy_1 <-
-  stan_glm(ToT ~ 0 + Design_A + Design_B,
-    data = BAB1_dum
-  )
+  stan_glm(ToT ~ 0 + Design_A + Design_B, 
+     data = BAB1_dum)
 ```
 
 
@@ -1782,12 +1743,10 @@ Regression engines quietly assume that treatment effects is what the user wants 
 
 
 ```r
-BAB1_treat <-
-  BAB1_dum %>%
-  mutate(
-    Intercept = 1,
-    Design_B = if_else(Design == "B", 1, 0)
-  ) %>%
+BAB1_treat <-  
+  BAB1_dum %>% 
+  mutate(Intercept = 1,
+         Design_B = if_else(Design == "B", 1, 0)) %>% 
   select(Obs, Design, Intercept, Design_B, ToT)
 BAB1_treat
 ```
@@ -1886,19 +1845,16 @@ attach(IPump)
 
 
 ```r
-M_AMM_1 <- stan_glm(ToT ~ 0 + Task,
-  data = D_Novel
-)
+M_AMM_1 <- stan_glm(ToT ~ 0 + Task, 
+                    data = D_Novel)
 ```
 
 
 ```r
-coef(M_AMM_1) %>%
-  rename(Task = fixef) %>%
-  ggplot(aes(
-    x = Task,
-    y = center, ymin = lower, ymax = upper
-  )) +
+coef(M_AMM_1) %>% 
+  rename(Task = fixef ) %>% 
+  ggplot(aes(x = Task, 
+             y = center, ymin = lower, ymax = upper)) +
   geom_crossbar()
 ```
 
@@ -1978,21 +1934,20 @@ For level of education, we could use a CGM or AMM, but the graphics and regressi
 ```r
 attach(BrowsingAB)
 
-BAB1$Education <- factor(as.character(BAB1$Education),
-  levels = c("Low", "Middle", "High")
-)
+BAB1$Education <- factor(as.character(BAB1$Education), 
+                         levels = c("Low", "Middle", "High"))
 
-BAB1 %>%
+BAB1 %>% 
   ggplot(aes(x = Education, y = ToT)) +
   geom_boxplot() +
   ylim(0, 250)
 
-BAB1 %>%
-  group_by(Education) %>%
-  summarize(mean_ToT = mean(ToT)) %>%
+BAB1 %>% 
+  group_by(Education) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
   ggplot(aes(x = as.integer(Education), y = mean_ToT)) +
   geom_step() +
-  scale_x_continuous(breaks = 1:3) +
+  scale_x_continuous(breaks=1:3) +
   ylim(0, 250)
 ```
 
@@ -2008,8 +1963,8 @@ At least, if we run a linear model with an officially ordered factor as predicto
 
 
 ```r
-M_OFM_1 <-
-  BAB1 %>%
+M_OFM_1 <- 
+  BAB1 %>% 
   stan_glm(ToT ~ 1 + Education, data = .)
 ```
 
@@ -2056,16 +2011,15 @@ The following code defines an exponential learning curve function and renders th
 
 
 ```r
-learning_curve <-
-  function(session, amplitude, rate, asymptote) {
+learning_curve <- 
+  function(session, amplitude, rate, asymptote) 
     amplitude * exp(-rate * session) + asymptote
-  }
 
-tibble(session = as.integer(1:12)) %>%
-  mutate(ToT = learning_curve(session, 10, .3, 2)) %>%
+tibble(session = as.integer(1:12)) %>% 
+  mutate(ToT = learning_curve(session, 10, .3, 2)) %>% 
   ggplot(aes(x = session, y = ToT)) +
   geom_step() +
-  scale_x_continuous(breaks = 1:12)
+  scale_x_continuous(breaks=1:12)
 ```
 
 <div class="figure">
@@ -2084,12 +2038,12 @@ It is more natural to think of learning to take place incrementally, like *walki
 ```r
 attach(IPump)
 
-D_Novel %>%
-  group_by(Session, session) %>%
-  summarize(mean_ToT = mean(ToT)) %>%
+D_Novel %>% 
+  group_by(Session, session) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
   ggplot(aes(x = as.integer(Session), y = mean_ToT)) +
   geom_step() +
-  scale_x_continuous(breaks = 1:3)
+  scale_x_continuous(breaks=1:3)
 ```
 
 <div class="figure">
@@ -2115,16 +2069,14 @@ Stairways dummies are like a *incremental switches*: when switch $K$ is on, this
 
 
 ```r
-D_Novel <-
-  D_Novel %>%
-  mutate(
-    Session_1 = 1,
-    Step_1 = as.integer(session >= 1),
-    Step_2 = as.integer(session >= 2)
-  )
+D_Novel <- 
+  D_Novel %>% 
+  mutate(Session_1 = 1,
+         Step_1 = as.integer(session >= 1),
+         Step_2 = as.integer(session >= 2))
 
-D_Novel %>%
-  distinct(session, Session_1, Step_1, Step_2) %>%
+D_Novel %>% 
+  distinct(session, Session_1, Step_1, Step_2) %>% 
   arrange(session) 
 ```
 
@@ -2142,9 +2094,8 @@ Now we can run a factorial model using these stairway-down dummies, where the in
 
 
 ```r
-M_OFM_2 <- stan_glm(ToT ~ Session_1 + Step_1 + Step_2,
-  data = D_Novel
-)
+M_OFM_2 <- stan_glm(ToT ~ Session_1 + Step_1 + Step_2, 
+                    data = D_Novel)
 ```
 
 
@@ -2178,17 +2129,15 @@ With a *stairway-up model* model, the Intercept is the basement an we walk up st
 
 
 ```r
-D_Novel <-
-  D_Novel %>%
-  mutate(
-    Session_3 = 1,
-    Step_1 = as.integer(session <= 1),
-    Step_2 = as.integer(session <= 0)
-  )
+D_Novel <- 
+  D_Novel %>% 
+  mutate(Session_3 = 1,
+         Step_1 = as.integer(session <= 1),
+         Step_2 = as.integer(session <= 0))
 
-D_Novel %>%
-  distinct(session, Session_3, Step_1, Step_2) %>%
-  arrange(desc(session)) %>%
+D_Novel %>% 
+  distinct(session, Session_3, Step_1, Step_2) %>% 
+  arrange(desc(session)) %>% 
   as_tibble()
 ```
 
@@ -2202,9 +2151,8 @@ D_Novel %>%
 
 
 ```r
-M_OFM_3 <- stan_glm(ToT ~ Session_3 + Step_1 + Step_2,
-  data = D_Novel
-)
+M_OFM_3 <- stan_glm(ToT ~ Session_3 + Step_1 + Step_2, 
+                    data = D_Novel)
 ```
 
 
@@ -2405,14 +2353,14 @@ In Figure \@ref(fig:mrm-1) we first look at the two predictors, separately:
 ```r
 attach(AUP)
 
-AUP_1 %>%
+AUP_1 %>% 
   ggplot(aes(x = ncs, y = resistance)) +
-  geom_point() +
+  geom_point()+
   geom_smooth(method = "lm", se = F)
 
-AUP_1 %>%
+AUP_1 %>% 
   ggplot(aes(x = gex, y = resistance)) +
-  geom_point() +
+  geom_point()+
   geom_smooth(method = "lm", se = F)
 ```
 
@@ -2433,12 +2381,12 @@ $$
 
 
 ```r
-M_1 <-
-  AUP_1 %>%
+M_1 <- 
+  AUP_1 %>% 
   stan_glm(zresistance ~ zncs, data = .)
 
-M_2 <-
-  AUP_1 %>%
+M_2 <- 
+  AUP_1 %>% 
   stan_glm(zresistance ~ zgex, data = .)
 ```
 
@@ -2458,8 +2406,8 @@ The `+` operator directly corresponds with the `+` in the likelihood formula.
 
 
 ```r
-M_3 <-
-  AUP_1 %>%
+M_3 <- 
+  AUP_1 %>% 
   stan_glm(zresistance ~ zncs + zgex, data = .) # <--
 ```
 
@@ -2469,11 +2417,9 @@ For the comparison of the three models we make use of a feature of package Bayr:
 
 
 ```r
-P_multi <- bind_rows(
-  posterior(M_1),
-  posterior(M_2),
-  posterior(M_3)
-)
+P_multi <- bind_rows(posterior(M_1),
+                     posterior(M_2),
+                     posterior(M_3))
 
 P_multi
 ```
@@ -2529,14 +2475,12 @@ In this study, participants who are high on NCS also tend to have more pronounce
 
 
 ```r
-AUP_1 %>%
+AUP_1 %>% 
   ggplot(aes(x = zncs, y = zgex)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
-  labs(title = str_c(
-    "Correlation between ncs and gex: ",
-    round(cor(AUP_1$zncs, AUP_1$zgex), 2)
-  ))
+  labs(title = str_c("Correlation between ncs and gex: ", 
+              round(cor(AUP_1$zncs, AUP_1$zgex), 2)))
 ```
 
 <div class="figure">
@@ -2633,8 +2577,8 @@ attach(BrowsingAB)
 
 
 ```r
-M_mfm_1 <-
-  BAB1 %>%
+M_mfm_1 <- 
+  BAB1 %>% 
   stan_glm(ToT ~ 1 + Design + Gender, data = .)
 ```
 
@@ -2664,11 +2608,9 @@ Consider that both factors have two levels, forming a $2 x 2$ matrix, like Table
 
 
 ```r
-tribble(
-  ~Condition, ~F, ~M,
-  "A", "reference", "difference",
-  "B", "difference", ""
-) 
+tribble(~Condition, ~F, ~M,
+        "A", "reference","difference",
+        "B", "difference", "") 
 ```
 
 
@@ -2733,8 +2675,8 @@ Table: (\#tab:mfm-3)Coefficient estimates with 95% credibility limits
 
 
 ```r
-coef(M_amfm_1) %>%
-  separate(parameter, into = c("Design", "Gender")) %>%
+coef(M_amfm_1) %>% 
+  separate(parameter, into = c("Design", "Gender")) %>% 
   ggplot(aes(x = Design, col = Gender, y = center)) +
   geom_point(size = 2) +
   geom_line(aes(group = Gender))
@@ -2774,8 +2716,8 @@ attach(BrowsingAB)
 
 
 ```r
-M_grm_1 <-
-  BAB1 %>%
+M_grm_1 <- 
+  BAB1 %>% 
   stan_glm(ToT ~ 1 + Design + age_shft, data = .)
 ```
 
@@ -2813,9 +2755,8 @@ The following formula produces such a model and results are shown in Table \@ref
 
 
 ```r
-M_ampm_1 <- stan_glm(ToT ~ (0 + Design + Design:age_shft),
-  data = BAB1
-)
+M_ampm_1 <- stan_glm(ToT ~ (0 + Design + Design:age_shft) , 
+                     data = BAB1)
 ```
 
 
@@ -2842,28 +2783,21 @@ With these coefficients we can also produce a conditional plot, with one line pe
 
 
 ```r
-coef(M_ampm_1) %>%
-  select(fixef, center) %>%
-  mutate(
-    Design = str_extract(fixef, "[AB]"),
-    Coef = if_else(str_detect(fixef, "age"),
-      "Slope",
-      "Intercept"
-    )
-  ) %>%
-  select(Design, Coef, center) %>%
-  spread(key = Coef, value = center) %>%
+coef(M_ampm_1) %>% 
+  select(fixef, center) %>% 
+  mutate(Design = str_extract(fixef, "[AB]"),
+         Coef = if_else(str_detect(fixef, "age"), 
+                        "Slope", 
+                        "Intercept")) %>% 
+  select(Design, Coef, center) %>% 
+  spread(key = Coef, value = center) %>% 
   ggplot() +
-  geom_abline(aes(
-    color = Design,
-    intercept = Intercept,
-    slope = Slope
-  )) +
-  geom_point(data = BAB1, aes(
-    x = age,
-    col = Design,
-    y = ToT
-  ))
+  geom_abline(aes(color = Design, 
+                  intercept = Intercept, 
+                  slope = Slope)) +
+  geom_point(data = BAB1, aes(x = age, 
+                              col = Design, 
+                              y = ToT))
 ```
 
 <div class="figure">
@@ -3041,11 +2975,9 @@ In Figure \@ref(fig:cmrm-1), we take a first look at the situation.
 attach(BrowsingAB)
 
 BAB1 %>%
-  ggplot(aes(
-    x = age,
-    col = Design,
-    y = ToT
-  )) +
+  ggplot(aes(x = age,
+             col = Design,
+             y = ToT)) +
   geom_point() +
   geom_smooth(se = F) +
   geom_smooth(aes(col = "combined"), se = F)
@@ -3067,11 +2999,10 @@ The following conditional model uses treatment contrasts, like the GRM, and we c
 
 
 ```r
-M_cmrm <-
-  BAB1 %>%
+M_cmrm <- 
+  BAB1 %>% 
   stan_glm(ToT ~ Design + age_shft + Design:age_shft,
-    data = .
-  )
+				 data = .)
 ```
 
 
@@ -3081,8 +3012,7 @@ M_cmrm <-
 P_comb <-
   bind_rows(
     posterior(M_grm_1),
-    posterior(M_cmrm)
-  )
+    posterior(M_cmrm))
 
 coef(P_comb)
 ```
@@ -3139,7 +3069,7 @@ attach(BrowsingAB)
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   ggplot(aes(y = rating, x = Gender, color = Design)) +
   geom_boxplot()
 ```
@@ -3153,17 +3083,15 @@ In a first exploratory plot it looks like the ratings are pretty consistent acro
 
 
 ```r
-M_mfm_2 <-
-  BAB1 %>%
+M_mfm_2 <- 
+  BAB1 %>% 
   stan_glm(rating ~ Design + Gender,
-    data = .
-  )
+				 data = .)
 
-M_cmfm_1 <-
-  BAB1 %>%
+M_cmfm_1 <- 
+  BAB1 %>% 
   stan_glm(rating ~ Design + Gender + Design:Gender,
-    data = .
-  )
+				 data = .)
 
 # T_resid <- mutate(T_resid, M_ia2 = residuals(M_ia2))
 ```
@@ -3174,15 +3102,12 @@ M_cmfm_1 <-
 
 
 ```r
-bind_rows(
-  posterior(M_mfm_2),
-  posterior(M_cmfm_1)
-) %>%
-  coef() %>%
-  ggplot(aes(
-    y = parameter, col = model,
-    xmin = lower, xmax = upper, x = center
-  )) +
+  bind_rows(
+    posterior(M_mfm_2),
+    posterior(M_cmfm_1)) %>% 
+  coef() %>% 
+  ggplot(aes(y = parameter, col = model,
+             xmin = lower, xmax = upper, x = center)) +
   geom_crossbar(position = "dodge") +
   labs(x = "effect")
 ```
@@ -3226,15 +3151,13 @@ If we would run an MFM in such a situation, we would get very similar coefficien
 
 
 ```r
-tribble(
-  ~Design, ~Gender, ~mean_rating,
-  "A", "F", 5.6,
-  "A", "M", 5.6 + .4,
-  "A", "Total", mean(c(5.6, 6.0)),
-  "B", "F", 5.6 - .3,
-  "B", "M", 5.6 + .4 - .3 - .6,
-  "B", "Total", mean(c(5.3, 5.1))
-) %>%
+tribble(~Design,     ~Gender, ~mean_rating,
+        "A",         "F",     5.6,
+        "A",         "M",     5.6 + .4,
+        "A",         "Total", mean(c(5.6, 6.0)),
+        "B",         "F",     5.6 - .3,
+        "B",         "M",     5.6 + .4 -.3 -.6,
+        "B",         "Total", mean(c(5.3, 5.1))) %>% 
   ggplot(aes(x = Design, col = Gender, y = mean_rating)) +
   geom_point(size = 2) +
   geom_line(aes(group = Gender))
@@ -3264,13 +3187,13 @@ attach(IPump)
 
 
 ```r
-D_agg %>%
-  group_by(Design, Session) %>%
-  summarize(mean_ToT = mean(ToT)) %>%
+D_agg %>% 
+  group_by(Design, Session) %>% 
+  summarize(mean_ToT = mean(ToT)) %>% 
   ggplot(aes(x = Session, y = mean_ToT, color = Design)) +
   geom_point() +
   geom_line(aes(group = Design)) +
-  ylim(0, 350)
+  ylim(0,350)
 ```
 
 <div class="figure">
@@ -3294,19 +3217,16 @@ We create stairway dummies for session and make this conditional on Design. The 
 
 ```r
 T_dummy <-
-  tribble(
-    ~Session, ~Session_3, ~Step3_2, ~Step2_1,
-    "1", 1, 1, 1,
-    "2", 1, 1, 0,
-    "3", 1, 0, 0
-  )
+  tribble(~Session, ~Session_3, ~Step3_2, ~Step2_1,
+          "1", 1, 1, 1,
+          "2", 1, 1, 0,
+          "3", 1, 0, 0) 
 
-D_agg <-
-  left_join(D_agg,
-    T_dummy,
-    by = "Session",
-    copy = T
-  ) %>%
+D_agg <- 
+  left_join(D_agg, 
+            T_dummy, 
+            by = "Session",
+            copy = T) %>% 
   select(Obs, Design, Session, Session_3, Step3_2, Step2_1, ToT)
 ```
 
@@ -3316,7 +3236,7 @@ D_agg <-
 ```r
 M_cmfm_2 <-
   stan_glm(ToT ~ 1 + Design + Step3_2 + Step2_1 +
-    Design:(Step3_2 + Step2_1), data = D_agg)
+             Design:(Step3_2 + Step2_1), data = D_agg)
 ```
 
 
@@ -3504,16 +3424,16 @@ After 30 minutes, headache is measured again and the difference between both mea
 ```r
 attach(Headache)
 
-T_means <-
-  Pills %>%
-  group_by(PillA, PillB) %>%
-  summarise(mean_reduction = round(mean(reduction), 1))
+T_means <-  
+  Pills %>% 
+  group_by(PillA, PillB) %>% 
+  summarise(mean_reduction = round(mean(reduction),1))
 
-T_means %>%
+T_means %>% 
   ggplot(aes(x = PillA, col = PillB, mean_reduction)) +
-  geom_point() +
+	geom_point() +
   geom_line(aes(group = PillB)) +
-  ylim(0, 2.5)
+  ylim(0,2.5)
 ```
 
 <div class="figure">
@@ -3538,16 +3458,13 @@ We estimate both models: a factorial unconditional MFM and a conditional MFM. Ta
 
 
 ```r
-M_mfm <- stan_glm(reduction ~ 1 + PillA + PillB,
-  data = Pills
-)
-M_cmfm <- stan_glm(reduction ~ 1 + PillA + PillB + PillA:PillB,
-  data = Pills
-)
+M_mfm <- stan_glm(reduction ~ 1 + PillA + PillB, 
+                  data = Pills)
+M_cmfm <- stan_glm(reduction ~ 1 + PillA + PillB + PillA:PillB, 
+                   data = Pills)
 
-P_1 <- bind_rows(
-  posterior(M_mfm),
-  posterior(M_cmfm)
+P_1 <- bind_rows(posterior(M_mfm),
+                 posterior(M_cmfm)
 )
 ```
 
@@ -3556,9 +3473,9 @@ P_1 <- bind_rows(
 
 
 ```r
-coef(P_1) %>%
-  select(model, fixef, center) %>%
-  spread(key = model, value = center) %>%
+coef(P_1) %>% 
+  select(model, fixef, center) %>% 
+  spread(key = model, value = center) %>% 
   # mutate(diff = M_cmfm - M_mfm) 
 ```
 
@@ -3600,11 +3517,9 @@ In a first experiment, the researcher found that 12pt font effectively reduces r
 
 ```r
 D_reading_time <-
-  tibble(
-    font_size = c(4, 10, 12, 14, 16, 18),
-    observed_time = c(NA, 40, 30, NA, NA, NA),
-    predicted_time = 60 - font_size / 4 * 10
-  )
+  tibble(font_size = c(4, 10, 12, 14, 16, 18),
+           observed_time = c(NA, 40, 30, NA, NA, NA),
+           predicted_time = 60 - font_size/4 * 10)
 
 D_reading_time
 ```
@@ -3665,12 +3580,10 @@ Table: (\#tab:reading-data)Data set with 6 variables, showing 8 of 40 observatio
 
 
 ```r
-D_1 %>%
-  ggplot(aes(
-    col = font_color,
-    x = font_size,
-    y = ToT
-  )) +
+D_1 %>% 
+  ggplot(aes(col = font_color,
+             x = font_size,
+             y = ToT)) +
   geom_boxplot()
 ```
 
@@ -3689,24 +3602,20 @@ We extract the coefficients from both models and view them side-by-side:
 
 
 ```r
-M_mfm <- stan_glm(ToT ~ 1 + font_size + font_color,
-  data = D_1
-)
+M_mfm  <- stan_glm(ToT ~ 1 + font_size + font_color, 
+                    data = D_1)
 
-M_cmfm <- stan_glm(ToT ~ 1 + font_size + font_color +
-  font_size:font_color,
-data = D_1
-)
+M_cmfm <- stan_glm(ToT ~ 1 + font_size + font_color + 
+                     font_size:font_color, 
+           data = D_1)
 ```
 
 
 
 
 ```r
-bind_rows(
-  posterior(M_mfm),
-  posterior(M_cmfm)
-) %>%
+bind_rows(posterior(M_mfm),
+          posterior(M_cmfm)) %>% 
   coef()
 ```
 
@@ -3764,10 +3673,9 @@ These can be computed from the linear model coefficients, but often it easier to
 
 ```r
 M_amm <-
-  D_1 %>%
-  stan_glm(ToT ~ 0 + font_size:font_color,
-    data = .
-  )
+  D_1 %>% 
+  stan_glm(ToT ~ 0 + font_size : font_color,
+           data = .)
 ```
 
 
@@ -3790,20 +3698,16 @@ Table: (\#tab:read-4)Coefficient estimates with 95% credibility limits
 
 
 ```r
-T_amm <-
-  coef(M_amm) %>%
-  separate(fixef, c("font_size", "font_color"), sep = ":") %>%
-  mutate(
-    font_size = str_remove(font_size, "font_size"),
-    font_color = str_remove(font_color, "font_color")
-  )
+T_amm <- 
+  coef(M_amm) %>% 
+  separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
+  mutate(font_size = str_remove(font_size, "font_size"),
+         font_color = str_remove(font_color, "font_color")) 
 
-G_amm <- T_amm %>%
-  ggplot(aes(
-    x = font_color,
-    color = font_size, shape = font_size,
-    y = center
-  )) +
+G_amm <- T_amm %>% 
+  ggplot(aes(x = font_color, 
+             color = font_size, shape = font_size,
+             y = center)) +
   geom_point() +
   geom_line(aes(group = font_size))
 ```
@@ -3814,10 +3718,9 @@ These limits belong to the group means, and generally cannot be used to tell abo
 
 
 ```r
-G_amm +
-  geom_crossbar(aes(ymin = lower, ymax = upper),
-    width = .1
-  ) +
+G_amm + 
+  geom_crossbar(aes(ymin = lower, ymax = upper), 
+                width = .1) +
   labs(y = "ToT")
 ```
 
@@ -3838,26 +3741,20 @@ By pulling the estimated posterior distribution into the plot, we can produce a 
 ```r
 P_amm <-
   posterior(M_amm) %>%
-  filter(type == "fixef") %>%
-  select(fixef, value) %>%
-  separate(fixef, c("font_size", "font_color"), sep = ":") %>%
-  mutate(
-    font_size = str_replace(font_size, "font_size", ""),
-    font_color = str_replace(font_color, "font_color", "")
-  )
-
+  filter(type == "fixef") %>% 
+  select(fixef, value) %>% 
+  separate(fixef, c("font_size", "font_color"), sep = ":") %>% 
+  mutate(font_size = str_replace(font_size, "font_size", ""),
+         font_color = str_replace(font_color, "font_color", ""))
+  
 
 G_amm +
-  geom_violin(
-    data = P_amm,
-    aes(
-      y = value,
-      fill = font_size
-    ),
-    alpha = 0.5,
-    position = position_identity(),
-    width = .2
-  ) +
+  geom_violin(data = P_amm, 
+              aes(y = value, 
+                  fill = font_size), 
+              alpha = 0.5, 
+              position = position_identity(),
+              width = .2) +
   labs(y = "ToT")
 ```
 
@@ -3933,16 +3830,12 @@ attach(AR_game)
 library(forcats) # fct_rev
 
 D_1 %>%
-  mutate(
-    Sociophile =
-      fct_rev(if_else(sociophile > median(sociophile),
-        "high", "low"
-      )),
-    Technophile =
-      fct_rev(if_else(technophile > median(technophile),
-        "high", "low"
-      ))
-  ) %>%
+  mutate(Sociophile = 
+           fct_rev(if_else(sociophile > median(sociophile),
+                           "high", "low")),
+         Technophile = 
+           fct_rev(if_else(technophile > median(technophile),
+                           "high", "low"))) %>%
   ggplot(aes(y = intention, x = Technophile, col = Sociophile)) +
   geom_boxplot() +
   ylim(0, 0.5)
@@ -3960,10 +3853,9 @@ In absence of a better visualization, we have to rely fully on the numerical est
 
 ```r
 M_cmrm <-
-  stan_glm(intention ~ 1 + sociophile + technophile +
-    sociophile:technophile,
-  data = D_1
-  )
+  stan_glm(intention ~ 1 + sociophile + technophile + 
+             sociophile:technophile,
+           data = D_1)
 ```
 
 
@@ -4065,12 +3957,10 @@ If A is already `TRUE`, B no longer matters.
 
 
 ```r
-tibble(
-  A = c(F, F, T, T),
-  B = c(F, T, F, T)
-) %>%
-  as_tibble() %>%
-  mutate("A OR B" = A | B) %>%
+tibble(A = c(F, F, T, T),
+           B = c(F, T, F, T)) %>%
+  as_tibble() %>% 
+  mutate("A OR B" = A | B) %>% 
   mutate("A AND B" = A & B) 
 ```
 
@@ -4145,12 +4035,10 @@ attach(Sleep)
 
 
 ```r
-D_1 %>%
-  ggplot(aes(
-    x = Environment,
-    color = Sleep,
-    y = RT
-  )) +
+D_1 %>% 
+  ggplot(aes(x = Environment,
+             color = Sleep,
+             y = RT)) +
   geom_boxplot()
 ```
 
@@ -4164,8 +4052,8 @@ Using a 2x2 model including a conditional effect, we examine the conditional ass
 
 
 ```r
-M_1 <-
-  D_1 %>%
+M_1 <- 
+  D_1 %>% 
   stan_glm(RT ~ Environment * Sleep, data = .)
 ```
 
@@ -4262,11 +4150,9 @@ But, an almost anatomically correct robot face may provoke a very negative emoti
 
 
 ```r
-tibble(
-  hl = seq(-1, 1, length.out = 100),
-  emotional_valence = -.5 * hl + .6 * hl^3 + .2 * hl^4
-) %>%
-  mutate(human_likeness = (hl + 1) / 2) %>%
+tibble(hl = seq(-1, 1, length.out = 100),
+       emotional_valence = -.5 * hl + .6 * hl^3 + .2 * hl^4) %>% 
+  mutate(human_likeness = (hl + 1)/2) %>% 
   ggplot(aes(x = human_likeness, y = emotional_valence)) +
   geom_line()
 ```
@@ -4296,19 +4182,17 @@ By adding higher degrees we can introduce more complex curvature to the associat
 
 ```r
 D_poly <-
-  tibble(
-    x = seq(-2, 3, by = .1),
-    degree_0 = 2,
-    degree_1 = 1 * degree_0 + 3 * x,
-    degree_2 = 0.5 * (degree_1 + 2 * x^2),
-    degree_3 = 0.5 * (degree_2 + -1 * x^3),
-    degree_4 = 0.4 * (degree_3 + 0.5 * x^4),
-    degree_5 = 0.3 * (degree_4 + -0.3 * x^5)
-  ) %>%
-  gather(polynomial, y, degree_0:degree_5) %>%
+  tibble(x = seq(-2, 3, by = .1),
+             degree_0 = 2,
+             degree_1 = 1   *  degree_0 + 3 * x,
+             degree_2 = 0.5 * (degree_1 + 2 * x^2),
+             degree_3 = 0.5 * (degree_2 + -1 * x^3),
+             degree_4 = 0.4 * (degree_3 + 0.5 * x^4),
+             degree_5 = 0.3 * (degree_4 + -0.3 * x^5)) %>% 
+  gather(polynomial, y, degree_0:degree_5) %>% 
   arrange(polynomial, y, x)
 
-D_poly %>%
+D_poly %>% 
   ggplot(aes(x, y)) +
   geom_line() +
   facet_wrap(~polynomial)
@@ -4337,16 +4221,13 @@ attach(Uncanny)
 
 ```r
 M_poly_3 <-
-  RK_2 %>%
-  mutate(
-    huMech_0 = 1,
-    huMech_1 = huMech,
-    huMech_2 = huMech^2,
-    huMech_3 = huMech^3
-  ) %>%
+  RK_2 %>% 
+  mutate(huMech_0 = 1,
+         huMech_1 = huMech,
+         huMech_2 = huMech^2,
+         huMech_3 = huMech^3) %>%
   stan_glm(avg_like ~ 1 + huMech_1 + huMech_2 + huMech_3,
-    data = ., iter = 2500
-  )
+           data = ., iter = 2500)
 
 P_poly_3 <- posterior(M_poly_3)
 ```
@@ -4403,12 +4284,12 @@ We will apply the polynomial operations on the posterior distribution which resu
 ```r
 library(polynom)
 
-poly <- polynomial(T_coef$center) # UC function on center
-dpoly <- deriv(poly) # 1st derivative
-ddpoly <- deriv(dpoly) # 2nd derivative
-stat_pts <- solve(dpoly) # finding stat points
-slopes <- as.function(ddpoly)(stat_pts) # slope at stat points
-trough <- stat_pts[slopes > 0] # local minimum
+poly     <- polynomial(T_coef$center) # UC function on center
+dpoly    <- deriv(poly)                  # 1st derivative
+ddpoly   <- deriv(dpoly)                 # 2nd derivative
+stat_pts <- solve(dpoly)                 # finding stat points
+slopes   <- as.function(ddpoly)(stat_pts)# slope at stat points
+trough   <- stat_pts[slopes > 0]         # local minimum
 
 cat("The trough is most likely at a huMech score of ", round(trough, 2))
 ```
@@ -4438,10 +4319,10 @@ devtools::install_github("schmettow/uncanny")
 P_trough <-
   P_poly_3 %>%
   filter(type == "fixef") %>%
-  select(chain, iter, fixef, value) %>%
-  spread(fixef, value) %>%
-  select(Intercept, starts_with("huMech")) %>%
-  mutate(trough = uncanny::trough(.)) %>%
+  select(chain, iter, fixef, value) %>% 
+  spread(fixef, value) %>% 
+  select(Intercept, starts_with("huMech")) %>% 
+  mutate(trough = uncanny::trough(.)) %>% 
   gather(key = parameter)
 ```
 
@@ -4449,13 +4330,11 @@ This derived posterior distribution we can put it into a CLU form (Table \@ref(t
 
 
 ```r
-P_trough %>%
-  group_by(parameter) %>%
-  summarize(
-    center = median(value, na.rm = T),
-    lower = quantile(value, .025, na.rm = T),
-    upper = quantile(value, .975, na.rm = T)
-  ) 
+P_trough %>% 
+  group_by(parameter) %>% 
+  summarize(center = median(value, na.rm = T),
+            lower = quantile(value, .025, na.rm = T),
+            upper = quantile(value, .975, na.rm = T)) 
 ```
 
 
@@ -4481,18 +4360,17 @@ The density function just smooths over the frequency distribution of trough draw
 RK_2$M_poly_3 <- predict(M_poly_3)$center
 
 gridExtra::grid.arrange(
-  RK_2 %>%
+  RK_2 %>% 
     ggplot(aes(x = huMech, y = avg_like)) +
     geom_point(size = .3) +
     geom_smooth(aes(y = M_poly_3), se = F),
-
-  P_trough %>%
-    filter(parameter == "trough") %>%
+  
+  P_trough %>% 
+    filter(parameter == "trough") %>% 
     ggplot(aes(x = value)) +
     geom_density() +
     xlim(0, 1),
-  heights = c(.7, .3)
-)
+    heights = c(.7, .3))
 ```
 
 <div class="figure">
@@ -4552,10 +4430,10 @@ attach(Uncanny)
 
 
 ```r
-post_pred(M_poly_3, thin = 100) %>%
+post_pred(M_poly_3, thin = 100) %>% 
   left_join(RK_2, by = "Obs") %>%
   ggplot(aes(x = huMech, y = value, group = iter)) +
-  stat_smooth(geom = "line", se = FALSE)
+  stat_smooth(geom='line', se=FALSE)
 ```
 
 <div class="figure">
@@ -4581,17 +4459,15 @@ With these two functions, we can create a test statistics, by counting how many 
 library(uncanny)
 
 P_wide <-
-  P_poly_3 %>%
-  filter(type == "fixef") %>%
-  # as_tibble() %>%
-  select(iter, parameter, value) %>%
-  spread(key = parameter, value = value) %>%
-  select(Intercept, starts_with("huMech")) %>%
-  mutate(
-    trough = uncanny::trough(.),
-    shoulder = uncanny::shoulder(.),
-    is_Uncanny = !is.na(trough) & !is.na(shoulder)
-  )
+  P_poly_3 %>% 
+  filter(type == "fixef") %>% 
+  #as_tibble() %>% 
+  select(iter, parameter, value) %>% 
+  spread(key = parameter, value = value) %>% 
+  select(Intercept, starts_with("huMech")) %>% 
+  mutate(trough     = uncanny::trough(.),
+         shoulder   = uncanny::shoulder(.),
+         is_Uncanny = !is.na(trough) & !is.na(shoulder) )
 
 cert_Uncanny <- mean(P_wide$is_Uncanny)
 

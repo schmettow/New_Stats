@@ -2,7 +2,7 @@
 title: "New statistics for design researchers"
 subtitle: A Bayesian workflow in tidy R
 author: "Martin Schmettow"
-date: "2021-03-16"
+date: "2021-09-28"
 github-repo: schmettow/New_Stats
 site: bookdown::bookdown_site
 description: A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place.
@@ -28,7 +28,7 @@ You are an Human Factors researcher, thirty-three years old, leading a small tea
 Your task is to evaluate emerging technologies, like augmented reality, car-to-car communication and smart light.
 Downstream research relies on your competent assessment of what is feasible.
 For example, you have just been asked to evaluate whether blue light can make for safer driving: Blue light makes people wake up easier. Could this also be used to let car drivers not fall asleep?
-You are working together with two engineers and a student from industrial design.
+You are working together with two engineers and a student of industrial design.
 Your plan is to put a light color device into a prototype car.
 Two workstation are stuffed into the boot of the car for record physiological signals and driving performance.
 This all is very expensive and someone is paying for it.
@@ -462,7 +462,7 @@ for all routes, distinguish between reader types, perhaps make a cross table
 If you use this book for self study, two considerations play a role for finding the optimal route through this book.
 what is your *background in Statistics?* For using this book, effectively, you need a little bit of understanding of probabilities and basic statistics, most of which is high-school math.
 As such, it may be a while ago and a refresher is on order.
-Chapter \@ref(rational) is a quick-read, if you are feeling confident.
+Chapter \@ref(decision-making) is a quick-read, if you are feeling confident.
 If you lack any background in statistics, \@ref(ebs) should be studied, first.
 If your background is Social Sciences, then you probably know quite something about probabilities and Statistics. If you wonder what all this new "Bayesian" is all about and how compatible it is to you, \@ref(bayes-freq-prob) is a small bridge.
 
@@ -582,7 +582,7 @@ The following measures were taken:
 
 If you use this book for teaching, that means you will have to come up with some data sets.
 Unless you are a seasoned researcher who can pull data out of the drawer, this might be a problem. A solution is to simulate data, like I have done multiple times in this book.
-While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be either be found inline or in the electronic case environments that come with the book (\@ref(synthetic-data)).
+While I haven't gone to the lengths of systematically introducing data simulation, the code for all simulated data can be found in electronic resources accompanying this book. 
 
 During my workshops I often use the method  of *live programming*. This is best pictured as think-aloud live demonstration - you talk while you are writing the code.
 This requires that you speak R natively, such that you can write valid code, while you talk and think. 
@@ -647,7 +647,7 @@ In R, you can simply show, how it looks like (Figure \@ref(fig:data_gaus_1)):
 
 
 ```r
-Data_gaus %>%
+Data_gaus %>% 
   ggplot(aes(x = y)) +
   geom_histogram(bins = 12)
 ```
@@ -696,7 +696,7 @@ The best way to understand the code at first, is to run it starting at the top, 
 
 ```r
 set.seed(47)
-tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
   as_tbl_obs()
 ```
 
@@ -718,8 +718,8 @@ Table: (\#tab:stepwise-1)Data set with 2 variables, showing 8 of 20 observations
 
 ```r
 set.seed(47)
-tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
-  as_tbl_obs() %>%
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
   filter(y > 0)
 ```
 
@@ -742,9 +742,9 @@ Table: (\#tab:stepwise-2)Data set with 2 variables, showing 8 of 14 observations
 
 ```r
 set.seed(47)
-tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
-  as_tbl_obs() %>%
-  filter(y > 0) %>%
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
+  filter(y > 0) %>% 
   ggplot(aes(x = y))
 ```
 
@@ -757,9 +757,9 @@ tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
 
 ```r
 set.seed(47)
-tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
-  as_tbl_obs() %>%
-  filter(y > 0) %>%
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  as_tbl_obs() %>% 
+  filter(y > 0) %>% 
   ggplot(aes(x = y)) +
   geom_histogram(binwidth = 2)
 ```
@@ -779,8 +779,8 @@ The ggplot graphics engine in particular is easy to learn and, yet, provides alm
 
 ```r
 set.seed(47)
-tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>%
-  filter(y > 0) %>%
+tibble(y = rnorm(n = 20, mean = 2, sd = 5)) %>% 
+  filter(y > 0) %>% 
   ggplot(aes(x = y)) +
   geom_histogram(binwidth = 2) +
   geom_density(aes(y = 2 * ..count..))

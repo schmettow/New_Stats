@@ -67,11 +67,9 @@ attach(Rainfall)
 
 
 ```r
-Outcomes <-
-  tibble(
-    outcome = c("rain", "no rain"),
-    prob = c(0.6, 0.4)
-  )
+Outcomes  <-
+  tibble(outcome  = c("rain", "no rain"),
+                     prob   = c(0.6, 0.4))
 Outcomes 
 ```
 
@@ -90,11 +88,9 @@ Actions <-
   tibble(action = c("umbrella", "no umbrella"))
 
 
-Losses <-
-  expand.grid(
-    action = Actions$action,
-    outcome = Outcomes$outcome
-  ) %>%
+Losses  <- 
+  expand.grid(action = Actions$action, 
+              outcome = Outcomes$outcome) %>%
   join(Outcomes) %>%
   mutate(loss = c(2, 4, 2, 0))
 Losses 
@@ -113,7 +109,7 @@ Table: (\#tab:umbrella-3)Losses conditional on outcome and action
 
 
 ```r
-Utility <-
+Utility <- 
   Losses %>%
   mutate(conditional_loss = prob * loss) %>%
   group_by(action) %>%
@@ -165,18 +161,18 @@ Table: (\#tab:umbrella-5)Data set with 3 variables, showing 8 of 20 observations
 |---:|:------|:-----|
 |   1|TRUE   |FALSE |
 |   5|TRUE   |TRUE  |
-|   6|FALSE  |FALSE |
 |   7|FALSE  |FALSE |
-|  13|FALSE  |FALSE |
-|  15|FALSE  |TRUE  |
-|  16|TRUE   |FALSE |
-|  17|FALSE  |TRUE  |
+|   8|FALSE  |FALSE |
+|  11|TRUE   |TRUE  |
+|  12|TRUE   |TRUE  |
+|  14|TRUE   |TRUE  |
+|  20|FALSE  |FALSE |
 
 Intuitively, you would use the average to estimate the probability of rain under every condition (Table \@ref(tab:umbrella-6)).
 
 
 ```r
-Rain %>%
+Rain %>% 
   group_by(cloudy) 
 ```
 
@@ -214,7 +210,7 @@ Table: (\#tab:umbrella-6)Chance of rain depending on cloudiness of the sky
 
 ```
 
-These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 59.635$%.
+These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter $P(rain|cloudy) = 60$%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the *true* parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, $P(rain|cloudy) = 57.882$%.
 
 The trust you put in your estimation is called *level of certainty* or *belief* or *confidence*. It is the primary aim of statistics to rationally deal with uncertainty, which involves to *measure the level of certainty* associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding $P(rain|cloudy)$?
 
@@ -265,7 +261,7 @@ attach(Sec99)
 
 
 ```r
-Ver20 %>%
+Ver20 %>%   
   ggplot(aes(x = ToT)) +
   geom_histogram()
 ```
@@ -296,8 +292,8 @@ Because the sample average is an uncertain, Jane is afraid, Marketing could use 
 
 
 ```r
-M_1 <-
-  Ver20 %>%
+M_1 <- 
+  Ver20 %>%    
   stan_glm(ToT ~ 1, data = .)
 
 P_1 <-
@@ -335,14 +331,11 @@ Luckily, Jane had the idea that the slogan could be changed to *"rent a card in 
 ```r
 P_1 %>%
   filter(parameter == "Intercept") %>%
-  mutate(outcome = ifelse(value <= 111,
-    "111 seconds or shorter",
-    "longer than 111 seconds"
-  )) %>%
-  ggplot(aes(
-    x = value,
-    fill = outcome
-  )) +
+  mutate(outcome = ifelse(value <= 111, 
+                          "111 seconds or shorter", 
+                          "longer than 111 seconds")) %>%
+  ggplot(aes(x = value, 
+             fill = outcome)) +
   geom_histogram(binwidth = 2)
 ```
 
@@ -359,8 +352,8 @@ In a similar manner to how the graph above was produced, a precise certainty lev
 
 
 ```r
-P_1 %>%
-  filter(parameter == "Intercept") %>%
+P_1 %>% 
+  filter(parameter == "Intercept") %>% 
   summarise(certainty = mean(value <= 111)) 
 ```
 
@@ -396,7 +389,7 @@ attach(Rational)
 
 
 ```r
-RD %>%
+RD  %>% 
   ggplot(aes(x = Euro, fill = Design)) +
   geom_density(alpha = .5)
 ```
@@ -410,8 +403,8 @@ There seems to be a slight benefit for the prototype condition. But, is it a 10%
 
 
 ```r
-RD %>%
-  group_by(Design) %>%
+RD %>% 
+  group_by(Design) %>% 
   summarize(mean_revenue = mean(Euro)) 
 ```
 
@@ -432,14 +425,13 @@ library(rstanarm)
 library(tidyverse)
 library(bayr)
 
-M_1 <-
-  RD %>%
-  stan_glm(Euro ~ Design,
-    family = Gamma(link = "log"),
-    data = .
-  )
+M_1 <- 
+  RD %>% 
+  stan_glm(Euro ~ Design, 
+           family = Gamma(link="log"),
+      data = .)
 
-P_1 <- posterior(M_1)
+P_1 <-  posterior(M_1)
 ```
 
 
@@ -468,7 +460,7 @@ The results tell Violet that, most likely, the average user spends 49.904 Euro w
 ```r
 N_risk_of_failure <-
   P_1 %>%
-  filter(parameter == "Designproto") %>%
+  filter(parameter == "Designproto") %>% 
   summarize(risk_of_failure = mean(exp(value) < 1.1))
 
 paste0("risk of failure is ", c(N_risk_of_failure))
@@ -533,12 +525,11 @@ On this data set, Violet estimates another grand mean model that essentially cap
 
 ```r
 M_prior <-
-  D_prior %>%
-  stan_glm(revenue_increase ~ 1,
-    family = Gamma(link = "log"),
-    data = .,
-    iter = 5000
-  )
+  D_prior %>% 
+  stan_glm(revenue_increase ~ 1, 
+           family = Gamma(link = "log"),
+           data = .,
+           iter = 5000)
 
 P_prior <- posterior(M_prior)
 ```
@@ -568,9 +559,9 @@ Or graphically, we can depict the belief as in Figure \@ref(fig:rational-prior-5
 
 
 ```r
-P_prior %>%
-  filter(parameter == "Intercept") %>%
-  mutate(value = exp(value)) %>%
+P_prior %>% 
+  filter(parameter == "Intercept") %>% 
+  mutate(value = exp(value)) %>% 
   ggplot(aes(x = value)) +
   geom_density() +
   xlab("Strength of prior belief")
@@ -585,19 +576,17 @@ The population average (of projects) is less favorable than what Violet saw in h
 
 
 ```r
-T_prior <-
+T_prior <- 
   P_prior %>%
-  filter(parameter == "Intercept") %>%
+  filter(parameter == "Intercept") %>% 
   summarize(mean = mean(value), sd = sd(value))
 
 M_2 <-
-  stan_glm(
-    formula = Euro ~ Design,
-    prior_intercept = normal(0, 100),
-    prior = normal(T_prior[[1, 1]], T_prior[[1, 2]]),
-    family = Gamma(link = "log"),
-    data = RD
-  )
+  stan_glm(formula = Euro ~ Design, 
+      prior_intercept = normal(0, 100),
+      prior = normal(T_prior[[1,1]], T_prior[[1,2]]),
+      family = Gamma(link = "log"),
+      data = RD)
 
 P_2 <- posterior(M_2)
 ```
@@ -621,11 +610,9 @@ Table: (\#tab:rational-prior-7)Coefficient estimates with 95% credibility limits
 P_comb %>%
   ggplot(aes(x = model, y = value)) +
   geom_violin() +
-  geom_crossbar(
-    data = coef(P_comb),
-    aes(y = center, ymin = lower, ymax = upper),
-    width = .05
-  )
+  geom_crossbar(data = coef(P_comb),
+                aes(y = center, ymin = lower, ymax = upper),
+                width = .05)
 ```
 
 <div class="figure">
@@ -639,7 +626,7 @@ Model M_2 reduces the estimated expected revenue by a small amount. But, remembe
 ```r
 P_comb %>%
   mutate(outcome = value < 1.1) %>%
-  group_by(model) %>%
+  group_by(model) %>% 
   summarize(risk_to_fail = mean(outcome)) 
 ```
 
@@ -843,8 +830,8 @@ Another important issue is the distribution of observations across groups (Table
 
 
 ```r
-Ver20 %>%
-  group_by(Gender) %>%
+Ver20 %>% 
+  group_by(Gender) %>% 
   summarize(n()) 
 ```
 
@@ -864,8 +851,8 @@ The table above shows so called *absolute frequencies*. Often, we have to compar
 n_Gender <- N_obs(Ver20$Gender)
 
 Ver20 %>%
-  group_by(Gender) %>%
-  summarize(rel_freq = n() / n_Gender) 
+  group_by(Gender) %>% 
+  summarize(rel_freq = n()/n_Gender) 
 ```
 
 
@@ -900,13 +887,13 @@ The answer to this problem is *binning*: the scale of measurement is divided int
 
 
 ```r
-bin <- function(x, bin_width = 10) floor(x / bin_width) * bin_width
+bin <- function(x, bin_width = 10) floor(x/bin_width) * bin_width
 n_ToT <- N_obs(Ver20$ToT)
 
-Ver20 %>%
-  mutate(bin = bin(ToT)) %>%
-  group_by(bin) %>%
-  summarize(rel_freq = n() / n_ToT) %>%
+Ver20 %>% 
+  mutate(bin = bin(ToT)) %>% 
+  group_by(bin) %>% 
+  summarize(rel_freq = n()/n_ToT) %>% 
   ggplot(aes(x = bin, y = rel_freq)) +
   geom_col()
 ```
@@ -920,11 +907,11 @@ Strictly spoken, grouped and binned frequencies are not one statistic, but a vec
 
 ### Central tendency {#central-tendency}
 
-Reconsider the rational design researcher Jane \@ref(sec99). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
+Reconsider the rational design researcher Jane \@ref(benchmarking-designs). When asked about whether users can complete a transaction within 99, she looked at the population average of her measures. The population average is what we call the *(arithmetic) mean*. The mean is computed by summing over all measures and divide by the number of observations. The mean is probably the most often used measure of central tendency, but two more are being used and have their own advantages: *median* and *mode*.
 
 
 ```r
-my_mean <- function(x) sum(x) / N_obs(x) ## not length()
+my_mean <- function(x) sum(x)/N_obs(x) ## not length()
 my_mean(Ver20$ToT)
 ```
 
@@ -940,14 +927,12 @@ Imagine a competitor of the car rental company goes to court to fight the 99-sec
 
 
 ```r
-my_median <- function(x) {
+my_median <- function(x){ 
   n <- length(x)
-  center <- (n + 1) %/% 2
-  if (n %% 2 == 1) {
+  center <- (n + 1)%/%2
+  if (n%%2 == 1) 
     sort(x, partial = center)[center]
-  } else {
-    mean(sort(x, partial = center + 0:1)[center + 0:1])
-  }
+  else mean(sort(x, partial = center + 0:1)[center + 0:1])
 }
 
 my_median(Ver20$ToT)
@@ -971,7 +956,7 @@ A common pattern to be found in distributions of measures is that a majority of 
 ```r
 mode <- function(x, bin_width = 10) {
   bins <- bin(x, bin_width)
-  bins[which.max(tabulate(match(x, bins)))] + bin_width / 2
+  bins[which.max(tabulate(match(x, bins)))] + bin_width/2
 }
 ```
 
@@ -986,13 +971,12 @@ mode(Ver20$ToT)
 
 
 ```r
-Ver20 %>%
-  group_by() %>%
+Ver20 %>% 
+  group_by() %>% 
   summarize(
-    mean_ToT = mean(ToT),
+    mean_ToT   = mean(ToT),
     median_ToT = median(ToT),
-    mode_ToT = mode(ToT)
-  ) 
+    mode_ToT = mode(ToT)) 
 ```
 
 
@@ -1021,22 +1005,18 @@ In a symmetric distribution with exactly one peak, mean and mode coincide and th
 
 ```r
 D_disp <-
-  tribble(
-    ~y, ~narrow, ~wide,
-    1, 0, 1,
-    2, 2, 2,
-    3, 6, 4,
-    4, 2, 2,
-    5, 0, 1
-  ) %>%
-  gather(Distribution, frequency, -y)
+  tribble(~y, ~narrow, ~wide,
+        1, 0, 1,
+        2, 2, 2,
+        3, 6, 4,
+        4, 2, 2,
+        5, 0, 1) %>% 
+  gather(Distribution, frequency, -y) 
 
 
-D_disp %>%
-  ggplot(aes(
-    x = y,
-    y = frequency
-  )) +
+D_disp %>% 
+  ggplot(aes(x = y, 
+             y = frequency)) +
   facet_grid(Distribution ~ .) +
   geom_col()
 ```
@@ -1052,7 +1032,7 @@ A *boxplot* is a commonly used geometry to examine the shape of dispersion. Simi
 
 
 ```r
-Ver20 %>%
+Ver20 %>% 
   ggplot(aes(y = ToT)) +
   geom_boxplot()
 ```
@@ -1070,16 +1050,14 @@ min <- function(x) sort(x)[1]
 max <- function(x) quantile(x, 1)
 range <- function(x) max(x) - min(x)
 var <- function(x) mean((mean(x) - x)^2)
-sd <- function(x) sqrt(var(x))
+sd  <- function(x) sqrt(var(x))
 
-Ver20 %>%
-  summarize(
-    min(ToT),
-    max(ToT),
-    range(ToT),
-    var(ToT),
-    sd(ToT)
-  ) 
+Ver20 %>% 
+  summarize(min(ToT),
+            max(ToT),
+            range(ToT),
+            var(ToT),
+            sd(ToT)) 
 ```
 
 
@@ -1107,11 +1085,9 @@ In the previous section we have seen how all individual variables can be describ
 
 
 ```r
-tribble(
-  ~between, ~categorical, ~metric,
-  "categorical", "frequency cross tables", "differences in mean",
-  "metric", "", "correlations"
-) 
+tribble(~between, ~categorical, ~metric,
+        "categorical", "frequency cross tables", "differences in mean",
+        "metric", "", "correlations") 
 ```
 
 
@@ -1131,11 +1107,11 @@ Categorical variables group observations, and when they are *both categorical*, 
 ```r
 attach(IPump)
 
-D_agg %>%
-  filter(Session == 3) %>%
-  group_by(Design, completion) %>%
+D_agg %>% 
+  filter(Session == 3) %>% 
+  group_by(Design, completion) %>% 
   summarize(frequency = n()) %>%
-  ungroup() %>%
+  ungroup() %>% 
   spread(completion, frequency) 
 ```
 
@@ -1152,13 +1128,13 @@ Besides the troubling result that incorrect completion is the rule, not the exce
 
 
 ```r
-D_agg %>%
-  filter(Session == 3) %>%
-  group_by(Design, completion) %>%
-  summarize(frequency = n()) %>%
+D_agg %>% 
+  filter(Session == 3) %>% 
+  group_by(Design, completion) %>% 
+  summarize(frequency = n()) %>% 
   group_by(Design) %>%
-  mutate(frequency = frequency / sum(frequency)) %>%
-  ungroup() %>%
+  mutate(frequency = frequency/sum(frequency)) %>% 
+  ungroup() %>% 
   spread(completion, frequency) 
 ```
 
@@ -1175,7 +1151,7 @@ In addition, absolute or relative frequencies can be shown in a stacked *bar plo
 
 
 ```r
-D_agg %>%
+D_agg %>% 
   ggplot(aes(x = Design, fill = completion)) +
   geom_bar()
 ```
@@ -1191,13 +1167,11 @@ Associations between *categorical and metric* variables are reported by *grouped
 
 
 ```r
-D_agg %>%
-  filter(Session == 3) %>%
-  group_by(Design) %>%
-  summarize(
-    mean_ToT = mean(ToT),
-    sd_ToT = sd(ToT)
-  ) 
+D_agg %>% 
+  filter(Session == 3) %>% 
+  group_by(Design) %>% 
+  summarize(mean_ToT = mean(ToT),
+            sd_ToT = sd(ToT)) 
 ```
 
 
@@ -1213,7 +1187,7 @@ For the illustration of categorical-metric associations case, *boxplots* haven p
 
 
 ```r
-D_agg %>%
+D_agg %>% 
   ggplot(aes(x = Design, y = ToT)) +
   geom_boxplot()
 ```
@@ -1261,22 +1235,19 @@ The following code simulates such a set of measures from a multivariate-normal d
 ```r
 cor2cov <- function(cor, sd) diag(sd) %*% cor %*% t(diag(sd))
 
-cor_mat <- matrix(c(
-  1, .95, -.5, .2,
-  .95, 1, -.5, .2,
-  -.5, -.5, 1, .15,
-  .2, .2, .15, 1
-), ncol = 4)
-sd_vec <- c(.2, .2, 40, 2)
+cor_mat <- matrix(c(1, .95, -.5, .2,
+                    .95, 1, -.5, .2,
+                    -.5, -.5,  1, .15,
+                    .2, .2, .15, 1), ncol = 4)
+sd_vec  <- c(.2, .2, 40, 2)
 mean_vec <- c(2, 2, 180, 6)
 
 D_tests <-
-  mvtnorm::rmvnorm(300,
-    mean = mean_vec,
-    sigma = cor2cov(cor_mat, sd_vec)
-  ) %>%
+  mvtnorm::rmvnorm(300, 
+                   mean = mean_vec, 
+                   sigma = cor2cov(cor_mat, sd_vec)) %>%
   as_tibble() %>%
-  rename(MRS_1 = V1, MRS_2 = V2, ToT = V3, Corsi = V4) %>%
+  rename(MRS_1 = V1, MRS_2 = V2, ToT = V3, Corsi = V4) %>% 
   as_tbl_obs()
 ```
 
@@ -1304,9 +1275,8 @@ The following function computes the covariance of two variables. The covariance 
 
 
 ```r
-my_cov <- function(x, y) {
+my_cov <- function(x, y)
   mean((x - mean(x)) * (y - mean(y)))
-}
 
 my_cov(D_tests$MRS_1, D_tests$MRS_2)
 ```
@@ -1359,9 +1329,8 @@ $$
 
 
 ```r
-my_cor <- function(x, y) {
-  cov(x, y) / (sd(x, na.rm = T) * sd(y, na.rm = T))
-}
+my_cor <- function(x, y)
+  cov(x, y)/(sd(x, na.rm = T) * sd(y, na.rm = T))
 
 my_cor(D_tests$MRS_1, D_tests$MRS_2)
 ```
@@ -1402,7 +1371,7 @@ Another way to illustrate a bunch of correlations is shown in Figure \@ref(fig:c
 
 
 ```r
-D_tests %>%
+D_tests %>% 
   GGally::ggpairs(upper = )
 ```
 
@@ -1417,12 +1386,10 @@ While correlations are ubiquitous in data analysis, they do have limitations: Fi
 
 
 ```r
-tibble(
-  x = (0:100) / 10,
-  y_1 = rnorm(101, exp(x) / 100, x * 2),
-  y_2 = rnorm(101, (x - 5)^2, 3)
-) %>%
-  ggpairs(lower = list(continuous = "smooth"))
+tibble(x =  (0:100)/10,
+           y_1 = rnorm(101, exp(x)/100, x * 2),
+           y_2 = rnorm(101, (x - 5)^2, 3)) %>% 
+  ggpairs(lower=list(continuous="smooth"))
 ```
 
 <div class="figure">
@@ -1585,10 +1552,10 @@ library(sets)
 
 
 ```r
-All <- as.set(D_sets$Obs)
-Success <- as.set(filter(D_sets, Success)$Obs)
-Harmful <- as.set(filter(D_sets, Harmful)$Obs)
-Timely <- as.set(filter(D_sets, Timely)$Obs)
+All      <- as.set(D_sets$Obs)
+Success  <- as.set(filter(D_sets, Success)$Obs)
+Harmful  <- as.set(filter(D_sets, Harmful)$Obs)
+Timely   <- as.set(filter(D_sets, Timely)$Obs)
 ```
 
 <!-- 33 -->
@@ -1610,9 +1577,9 @@ Using the set difference, we can produce *complementary set* which include all e
 
 
 ```r
-Failure <- All - Success
+Failure  <- All - Success
 Harmless <- All - Harmful
-Delayed <- All - Timely
+Delayed  <- All - Timely
 ```
 
 In probability theory this corresponds with the probability of an event (Success) and its *counter-event* (Failure). A set and its complementary set taken together produce the *universal set*, which in probability theory is the *sure event* with a probability of One. To show that we can use *set union*, which collects the elements of two separate sets into one new set, for example re-uniting a set with its complementary,
@@ -1760,16 +1727,15 @@ In the following I will outline the formal theory of probability and use the sam
 N_sets <- nrow(D_sets)
 
 D_freq <-
-  D_sets %>%
-  group_by(Success, Harmful, Timely) %>%
+  D_sets %>% 
+  group_by(Success, Harmful, Timely) %>% 
   summarize(n = n()) %>%
-  ungroup() %>%
-  complete(Success,
-    Harmful,
-    Timely,
-    fill = list(n = 0)
-  ) %>% # adds empty events
-  mutate(pi = n / sum(n))
+  ungroup() %>% 
+  complete(Success, 
+           Harmful, 
+           Timely, 
+           fill = list(n = 0)) %>% # adds empty events
+  mutate(pi = n/sum(n))
 
 D_freq 
 ```
@@ -1818,7 +1784,7 @@ The first axiom defines a lower border of Zero for a probability measure, the *s
 ```r
 D_sets %>%
   # no group_by
-  summarize(pi = n() / N_sets) %>%
+  summarize(pi = n()/N_sets) %>% 
   c()
 ```
 
@@ -1833,10 +1799,10 @@ So far, the theory only cared for assigning numbers to events (subsets), but pro
 
 
 ```r
-D_sets %>%
-  group_by(Success) %>%
-  summarize(n = n()) %>%
-  mutate(pi = n / sum(n)) 
+D_sets %>% 
+  group_by(Success) %>% 
+  summarize(n = n()) %>% 
+  mutate(pi = n/sum(n)) 
 ```
 
 
@@ -1868,9 +1834,9 @@ The third axiom tells us how to deal with probabilities, when events are disjunc
 
 
 ```r
-D_sets %>%
-  group_by(Success, Timely) %>%
-  summarize(pi = n() / N_sets) %>%
+D_sets %>% 
+  group_by(Success, Timely) %>% 
+  summarize(pi = n()/N_sets) %>% 
   ungroup() 
 ```
 
@@ -1892,9 +1858,9 @@ $P(\textrm{Harmful}|\textrm{Success})$
 
 ```r
 D_sets %>%
-  group_by(Harmful) %>%
-  summarize(n = n()) %>%
-  mutate(pi = n / sum(n)) 
+  group_by(Harmful) %>% 
+  summarize(n = n()) %>% 
+  mutate(pi = n/sum(n)) 
 ```
 
 
@@ -1911,9 +1877,9 @@ In the manner of a speed-accuracy trade-off, there could be a relationship betwe
 
 ```r
 D_sets %>%
-  group_by(Timely, Harmful) %>%
-  summarize(n = n()) %>%
-  mutate(pi = n / sum(n)) %>%
+  group_by(Timely, Harmful) %>% 
+  summarize(n = n()) %>% 
+  mutate(pi = n/sum(n)) %>% 
   ungroup() 
 ```
 
@@ -2021,7 +1987,7 @@ Notice how the likelihood gets smaller in the second example. In fact, likelihoo
 set.seed(42)
 Events <- c("One", "Two", "Three", "Four", "Five", "Six")
 Result <- sample(Events, 16, replace = T)
-pi <- 1 / 6
+pi = 1/6
 Likelihood <- pi^length(Result)
 ```
 
@@ -2074,23 +2040,18 @@ Imagine we have been called in to uncover fraud with biased dices in a casino. T
 ```r
 n_Rolls <- 6000
 
-Biased_dice <-
-  tibble(
-    Side = as_factor(Events),
-    pi = c(1 / 6 + .02, rep(1 / 6, 4), 1 / 6 - .02)
-  )
-
-
-
+Biased_dice <- 
+  tibble(Side = as_factor(Events),
+         pi = c(1/6 + .02, rep(1/6, 4), 1/6 - .02))
+  
+  
+  
 set.seed(41)
-Rolls <- tibble(
-  Roll = 1:n_Rolls,
-  Result = sample(Biased_dice$Side,
-    prob = Biased_dice$pi,
-    size = n_Rolls,
-    replace = T
-  )
-) %>%
+Rolls <- tibble(Roll = 1:n_Rolls,
+                   Result = sample(Biased_dice$Side, 
+                                   prob    = Biased_dice$pi, 
+                                   size    = n_Rolls, 
+                                   replace = T)) %>% 
   as_tbl_obs()
 
 Rolls
@@ -2113,7 +2074,7 @@ Table: (\#tab:rolls-1)Data set with 3 variables, showing 8 of 6000 observations.
 
 
 ```r
-Rolls %>%
+Rolls %>% 
   ggplot(aes(x = Result)) +
   geom_bar()
 ```
@@ -2127,9 +2088,9 @@ Figure \@ref(fig:rolls-2) shows the frequencies for the six possible outcomes. F
 
 
 ```r
-Rolls %>%
-  group_by(Result) %>%
-  summarize(pi = n() / n_Rolls) 
+Rolls %>% 
+  group_by(Result) %>% 
+  summarize(pi = n()/n_Rolls) 
 ```
 
 
@@ -2175,14 +2136,14 @@ $$
 
 
 ```r
-Rolls <- Rolls %>%
+Rolls <-  Rolls %>%
   mutate(Six = (Result == "Six"))
 
 dbern <- function(y, pi) if_else(y, pi, 1 - pi)
 LL_bern <- function(pi) sum(log(dbern(Rolls$Six, pi)))
 
-pi_fair <- 1 / 6
-pi_est <- .147
+pi_fair = 1/6
+pi_est  = .147
 
 exp(LL_bern(pi_est) - LL_bern(pi_fair))
 ```
@@ -2209,15 +2170,13 @@ LL_bern(c(.1, .2))
 ```
 
 ```r
-LL_grid <-
-  tibble(pi = seq(.01, .99, by = .01)) %>%
-  mutate(
-    nlogLik = -LL_bern(pi),
-    rank = min_rank(nlogLik),
-    MLE = (rank == 1)
-  )
+LL_grid <- 
+  tibble(pi = seq(.01, .99, by = .01)) %>% 
+  mutate(nlogLik = -LL_bern(pi),
+         rank = min_rank(nlogLik),
+         MLE = (rank == 1))
 
-LL_grid %>%
+LL_grid  %>%          
   ggplot(aes(x = pi, y = nlogLik)) +
   geom_line() +
   geom_point(data = filter(LL_grid, MLE), color = "Red") +
@@ -2233,8 +2192,7 @@ Figure \@ref(fig:likely-1) shows the maximum likelihood, or rather its negative 
 
 
 ```r
-LL_grid %>%
-  filter(rank == 1) 
+LL_grid  %>%  filter(rank == 1) 
 ```
 
 
@@ -2288,8 +2246,8 @@ attach(Sec99)
 
 
 ```r
-Ver20 %>%
-  lm(ToT ~ 1, data = .) %>%
+Ver20 %>% 
+  lm(ToT ~ 1, data = .) %>% 
   confint() 
 ```
 
@@ -2644,11 +2602,11 @@ In the guessing game, Violet could try to improve her guesses, by also taking ag
 
 
 ```r
-Sec99$Ver20 %>%
+Sec99$Ver20 %>% 
   ggplot(aes(x = age, y = ToT)) +
   geom_point() +
   geom_smooth(method = "lm", se = F, fullrange = T) +
-  xlim(0, 60)
+  xlim(0,60)
 ```
 
 <div class="figure">
@@ -2710,30 +2668,29 @@ Review the formula $\text{Measure}_i = \text{structural part} + \text{random par
 
 The random part of a statistical model contains all (small) unmeasured forces on the response $y_i$. When using the grand mean model, the only information we are using is that the person is from the target population. Everything else is left to the unobserved SMURFs and that goes into the random part of the model. Fortunately, SMURFs don't work completely arbitrary and in practice there is just a small number of recognizable shapes randomness can take. These patterns can be formulated mathematically as either *probability mass functions (PMF)* or *probability density functions (PDF)*. The difference between PMF and CDF is that PMF only work for discrete measures, such as anything that is countable, whereas CDF also apply for continuous measures, such as ToT. In general, any PMF can also be called a CDF, but it is instructive to start with a case of discrete measures.
 
-In the case of discrete measaures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
+In the case of discrete measures, a PMF assigns *probabilities to possible outcomes*. Let's see an example: A participant is asked to complete three tasks of constant difficulty, that is a chance of $.3$ to be solved. The outcome variable of interest is the number of correct results, which can take the values 0, 1, 2 or 3. Under idealized conditions (but not removing randomness), a Binomial distribution assigns every possible outcome a probability to occur, it is given as:
 
 $$
-P(y|p,k) = {k  \choose y}p^y(1-p)^{k-y}
+P(y|p,k) = \binom{k}{y} p^y(1-p)^{k-y}
 $$
+
 
 Binomial distributions with probabilities of success $p = .3$ and $k = 3$ tasks are shown in Figure \@ref(fig:dist-1):
 
 
 ```r
-D_three_tasks <-
-  tibble(
-    y = -1:4,
-    outcome = as.character(y),
-    probability = dbinom(y, size = 3, prob = 0.3),
-    cumul_prob = pbinom(y, size = 3, prob = 0.3)
-  )
+D_three_tasks <- 
+  tibble(y = -1:4,
+             outcome = as.character(y),
+             probability = dbinom(y, size = 3, prob = 0.3),
+             cumul_prob     = pbinom(y, size = 3, prob = 0.3))
 
 
-D_three_tasks %>%
+D_three_tasks %>% 
   ggplot(aes(x = outcome, y = probability)) +
   geom_col(fill = 1) +
-  ylim(0, 1) +
-  theme(legend.position = "none")
+  ylim(0,1) +
+  theme(legend.position="none")
 ```
 
 <div class="figure">
@@ -2751,18 +2708,16 @@ IQ scores are often *designed to follow the Gaussian* distribution with a mean o
 
 
 ```r
-D_IQ <- tibble(
-  IQ = 0:2000 / 10,
-  density = dnorm(IQ, 100, 15),
-  cdf = pnorm(IQ, 100, 15),
-  SE = (IQ > 85) * (IQ <= 115) * density,
-  around_100 = (IQ >= 99) * (IQ <= 101) * density,
-  PDF_85 = (IQ < 85) * density,
-  PDF_115 = (IQ < 115) * density,
-  label = str_c("P(IQ < ", IQ, ")")
-)
+D_IQ <- tibble(IQ = 0:2000/10,
+               density = dnorm(IQ, 100, 15),
+               cdf = pnorm(IQ, 100, 15),
+               SE = (IQ > 85 ) * (IQ <= 115) * density,
+               around_100 = (IQ >= 99 ) * (IQ <= 101) * density,
+               PDF_85 = (IQ < 85 ) * density,
+               PDF_115 = (IQ < 115) * density,
+               label = str_c("P(IQ < ", IQ, ")"))
 
-D_IQ %>%
+D_IQ %>% 
   ggplot(aes(x = IQ, y = density)) +
   geom_area(fill = NA, color = 1) +
   geom_vline(aes(xintercept = 100, color = "Prob(IQ = 100.00) = 0")) +
@@ -2781,11 +2736,10 @@ A cumulative distribution function is the *integral* of a PDF or CDF. *Cumulativ
 
 
 ```r
-D_three_tasks %>%
+D_three_tasks %>% 
   ggplot(aes(x = y, y = cumul_prob)) +
   geom_step() +
-  ylim(0, 1) +
-  xlim(0, 4)
+  ylim(0,1) + xlim(0,4)
 ```
 
 <div class="figure">
@@ -2827,7 +2781,7 @@ With this method, we can also treat PDFs and obtain probabilities for intervals 
 
 
 ```r
-D_IQ %>%
+D_IQ %>% 
   ggplot(aes(x = IQ, y = density)) +
   geom_line() +
   geom_area(aes(y = around_100))
@@ -2842,25 +2796,17 @@ The size of the area is precisely the probability of such an event (IQ between 8
 
 
 ```r
-D_IQ %>%
+D_IQ %>% 
   ggplot(aes(x = IQ, y = cdf)) +
   geom_line(size = 2) +
-  geom_step(
-    data = filter(
-      D_IQ,
-      IQ %in% c(0, 85, 115, 200)
-    ),
-    color = "red"
-  ) +
-  geom_label(
-    data = filter(
-      D_IQ,
-      IQ %in% c(0, 85, 115, 200)
-    ),
-    aes(label = label),
-    color = "red",
-    hjust = "left"
-  ) +
+  geom_step(data = filter(D_IQ, 
+                          IQ %in% c(0, 85, 115, 200)), 
+            color = "red") +
+  geom_label(data = filter(D_IQ, 
+                           IQ %in% c(0, 85, 115, 200)), 
+             aes(label = label), 
+             color = "red", 
+             hjust = "left") +
   xlim(0, 250)
 ```
 
@@ -2913,28 +2859,20 @@ In this book I advocate the thoughtful choice of density distributions rather th
 
 
 ```r
-tibble(location = c(90, 91.5, 120), sd = 10) %>%
+tibble(location = c(90, 91.5, 120), sd = 10) %>% 
   ggplot(aes(x = location)) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 90, sd = 10),
-    mapping = aes(colour = "Gaus(mean=90, sd=10)")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 91.5, sd = 10),
-    mapping = aes(colour = "Gaus(mean=91.5, sd=10)")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 120, sd = 10),
-    mapping = aes(colour = "Gaus(mean=120, sd=10)")
-  ) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 90, sd = 10),
+            mapping = aes(colour = "Gaus(mean=90, sd=10)")) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 91.5, sd = 10), 
+            mapping = aes(colour = "Gaus(mean=91.5, sd=10)")) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 120, sd = 10), 
+            mapping = aes(colour = "Gaus(mean=120, sd=10)")) +
   xlim(40, 150) +
-  labs(
-    colour = "Location shift of Gaussian distributions",
-    x = "outcome", y = "density"
-  )
+  labs(colour="Location shift of Gaussian distributions", 
+       x = "outcome", y = "density")
 ```
 
 <div class="figure">
@@ -2946,23 +2884,17 @@ tibble(location = c(90, 91.5, 120), sd = 10) %>%
 
 
 ```r
-tibble(location = 100) %>%
-  ggplot(aes(x = location)) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 100, sd = 15),
-    mapping = aes(colour = "Gaus(mean=100, sd=15)")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 100, sd = 30),
-    mapping = aes(colour = "Gaus(mean=100, sd=30)")
-  ) +
+tibble(location = 100) %>% 
+ggplot(aes(x = location)) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 100, sd = 15), 
+            mapping = aes(colour = "Gaus(mean=100, sd=15)")) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 100, sd = 30), 
+            mapping = aes(colour = "Gaus(mean=100, sd=30)")) +
   xlim(0, 200) +
-  labs(
-    colour = "Dispersion of Gaussian distributions",
-    x = "outcome", y = "density"
-  )
+  labs(colour="Dispersion of Gaussian distributions", 
+       x = "outcome", y = "density")
 ```
 
 <div class="figure">
@@ -2982,25 +2914,19 @@ As was said above, most statistical models use the mean of a distribution to ren
 
 
 ```r
-tibble(location = c(.25, .5, .75)) %>%
-  ggplot(aes(x = location)) +
-  stat_function(
-    fun = dbeta,
-    args = list(shape1 = 2, shape2 = 8),
-    mapping = aes(colour = "Beta(mean = .25)")
-  ) +
-  stat_function(
-    fun = dbeta,
-    args = list(shape1 = 5, shape2 = 5),
-    mapping = aes(colour = "Beta(mean = .5)")
-  ) +
-  stat_function(
-    fun = dbeta,
-    args = list(shape1 = 8, shape2 = 2),
-    mapping = aes(colour = "Beta(mean = .75)")
-  ) +
+tibble(location = c(.25, .5, .75)) %>% 
+ggplot(aes(x = location)) +
+  stat_function(fun = dbeta, 
+               args = list(shape1 = 2, shape2 = 8),
+            mapping = aes(colour = "Beta(mean = .25)")) +
+    stat_function(fun = dbeta, 
+                 args = list(shape1 = 5, shape2 = 5),
+              mapping = aes(colour = "Beta(mean = .5)")) +
+    stat_function(fun = dbeta, 
+                 args = list(shape1 = 8, shape2 = 2),
+              mapping = aes(colour = "Beta(mean = .75)")) +
   xlim(0, 1) +
-  labs(colour = "Distribution", x = "outcome", y = "density")
+  labs(colour="Distribution", x = "outcome", y = "density")
 ```
 
 <div class="figure">
@@ -3045,10 +2971,10 @@ A very basic performance variable in design research is task success. Think of d
 ```r
 set.seed(1)
 
-tibble(succs = rbinom(30, 10, .9)) %>%
+tibble(succs = rbinom(30, 10, .9)) %>% 
   ggplot(aes(x = succs)) +
   geom_histogram(binwidth = 1) +
-  scale_x_continuous(breaks = 0:10, limits = c(0, 11))
+  scale_x_continuous(breaks = 0:10, limits = c(0,11))
 ```
 
 <div class="figure">
@@ -3062,12 +2988,10 @@ An example in web design research is the rate of visitor return, resulting in a 
 
 
 ```r
-mascutils::expand_grid(
-  k = c(1, 10, 20),
-  p = c(0.2, 0.5, 0.9),
-  succs = 0:20
-) %>%
-  mutate(probability = dbinom(succs, k, p)) %>%
+mascutils::expand_grid(k = c(1, 10, 20), 
+                       p = c(0.2, 0.5, 0.9), 
+                       succs = 0:20) %>%
+  mutate(probability = dbinom(succs, k, p)) %>% 
   ggplot(aes(x = succs, y = probability)) +
   geom_step() +
   facet_grid(k ~ p) +
@@ -3086,10 +3010,9 @@ The Binomial distribution has two boundaries, zero below and number of attempts 
 
 ```r
 set.seed(42)
-tibble(rentals_per_year = rbinom(1000,
-  size = 365,
-  prob = 1.5 / 365
-)) %>%
+tibble(rentals_per_year = rbinom(1000, 
+                                 size = 365, 
+                                 prob = 1.5/365)) %>% 
   ggplot(aes(x = rentals_per_year)) +
   geom_histogram()
 ```
@@ -3122,14 +3045,12 @@ $$
 
 
 ```r
-mascutils::expand_grid(
-  lambda = c(2, 4, 8),
-  count = 0:20
-) %>%
-  mutate(probability = dpois(count, lambda)) %>%
+mascutils::expand_grid(lambda = c(2, 4, 8),
+                       count = 0:20) %>%
+  mutate(probability = dpois(count, lambda)) %>% 
   ggplot(aes(x = count, y = probability)) +
   geom_step() +
-  facet_grid(lambda ~ .)
+  facet_grid(lambda~.)
 ```
 
 <div class="figure">
@@ -3144,34 +3065,26 @@ Because mean and variance are tightly linked, only a certain amount of randomnes
 
 ```r
 set.seed(42)
-N_obs <- 200
+N_obs = 200
 
-D_single <-
-  tibble(
-    Part = 1,
-    lambda = 20,
-    catches = rpois(N_obs, lambda)
-  )
+D_single <- 
+  tibble(Part = 1,
+         lambda = 20,
+         catches = rpois(N_obs, lambda))
 
 
 D_multi <-
-  tibble(
-    Part = c(1:N_obs) + 1,
-    part_variation = log(rnorm(N_obs, 0, 5)),
-    lambda = 20,
-    catches = rpois(N_obs, lambda * part_variation)
-  )
+  tibble(Part = c(1:N_obs) + 1,
+         part_variation = log(rnorm(N_obs, 0, 5)),
+         lambda = 20,
+         catches = rpois(N_obs, lambda * part_variation))
 
-grid.arrange(
-  qplot(D_single$catches,
-    xlab = "Catches of single participant, constant lambda",
-    xlim = c(0, 100)
-  ),
-  qplot(D_multi$catches,
-    xlab = "Catches of multiple participants, varying lambda",
-    xlim = c(0, 100)
-  )
-)
+grid.arrange(qplot(D_single$catches, 
+                   xlab = "Catches of single participant, constant lambda",
+                   xlim = c(0,100)),
+             qplot(D_multi$catches, 
+                   xlab = "Catches of multiple participants, varying lambda",
+                   xlim = c(0,100)))
 ```
 
 <div class="figure">
@@ -3191,10 +3104,8 @@ Another frequent problem at the lower bound bound is zero-inflation. In traffic 
 
 
 ```r
-tibble(
-  uses_public_transport = rbernoulli(1000, .8),
-  bus_rides = rpois(1000, uses_public_transport * 4)
-) %>%
+tibble(uses_public_transport = rbernoulli(1000, .8),
+       bus_rides = rpois(1000, uses_public_transport * 4)) %>% 
   ggplot(aes(x = bus_rides)) +
   geom_histogram()
 ```
@@ -3215,25 +3126,17 @@ Just like Poisson distributions, Exponential distributions have one parameter, c
 
 ```r
 ggplot(tibble(x = c(0, 20)), aes(x = x)) +
-  stat_function(
-    fun = dexp,
-    args = list(rate = 1 / 2),
-    mapping = aes(colour = "Exp(1/2)")
-  ) +
-  stat_function(
-    fun = dexp,
-    args = list(rate = 1 / 4),
-    mapping = aes(colour = "Exp(1/4)")
-  ) +
-  stat_function(
-    fun = dexp,
-    args = list(rate = 1 / 8),
-    mapping = aes(colour = "Exp(1/8)")
-  ) +
-  labs(
-    colour = "Exponential distributions",
-    x = "outcome", y = "density"
-  )
+  stat_function(fun = dexp, 
+               args = list(rate = 1/2), 
+            mapping = aes(colour = "Exp(1/2)")) +
+  stat_function(fun = dexp, 
+               args = list(rate = 1/4), 
+            mapping = aes(colour = "Exp(1/4)")) +
+  stat_function(fun = dexp, 
+               args = list(rate = 1/8), 
+            mapping = aes(colour = "Exp(1/8)")) +
+  labs(colour="Exponential distributions", 
+       x = "outcome", y = "density")
 ```
 
 <div class="figure">
@@ -3255,15 +3158,12 @@ The best known distributions are *Gaussian distributions* or *Normal distributio
 ```r
 set.seed(2)
 
-rtravel <- function(n, bumps = 100) {
+rtravel <- function(n, bumps = 100)
   map_int(1:n, function(x) as.integer(sum(sample(c(-1, 1), x, replace = T))))
-}
 
 D_Tunnel <-
-  tibble(
-    Part = 1:1000,
-    travel = rtravel(n = 1000)
-  )
+  tibble(Part = 1:1000,
+         travel = rtravel(n = 1000))
 D_Tunnel %>%
   ggplot(aes(x = travel)) +
   geom_histogram(stat = "density")
@@ -3279,25 +3179,17 @@ Gaussian distributions take two parameters: $\mu$ marks the location of the mean
 
 ```r
 ggplot(tibble(x = c(-4, 4)), aes(x = x)) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 0, sd = 1),
-    mapping = aes(colour = "Gaus(0, 1)")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = -1.5, sd = 0.5),
-    mapping = aes(colour = "Gaus(-1.5, 0.5)")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = 0.5, sd = 2),
-    mapping = aes(colour = "Gaus(0.5,1.5)")
-  ) +
-  labs(
-    colour = "Gaussian distributions",
-    x = "outcome", y = "density"
-  )
+  stat_function(fun = dnorm, 
+               args = list(mean = 0, sd = 1), 
+            mapping = aes(colour = "Gaus(0, 1)")) +
+  stat_function(fun = dnorm, 
+               args = list(mean = -1.5, sd = 0.5), 
+            mapping = aes(colour = "Gaus(-1.5, 0.5)")) +
+  stat_function(fun = dnorm, 
+               args = list(mean = 0.5, sd = 2), 
+            mapping = aes(colour = "Gaus(0.5,1.5)")) +
+  labs(colour="Gaussian distributions", 
+       x = "outcome", y = "density")
 ```
 
 <div class="figure">
@@ -3340,12 +3232,11 @@ attach(Rainfall)
 
 
 ```r
-M_1 <-
+M_1 <- 
   Rain %>%
-  stan_glm(rain ~ cloudy - 1,
-    family = binomial,
-    data = .
-  )
+  stan_glm(rain ~ cloudy -1, 
+           family = binomial,
+           data = .)
 ```
 
 
@@ -3355,15 +3246,13 @@ What the estimation does, is to calculate the *posterior distribution* from the 
 
 ```r
 posterior(M_1) %>%
-  filter(type == "fixef") %>%
-  mutate(chance_of_rain = plogis(value)) %>%
-  ggplot(aes(
-    x = chance_of_rain,
-    fill = parameter,
-    col = parameter
-  )) +
+  filter(type == "fixef") %>% 
+  mutate(chance_of_rain = plogis(value)) %>% 
+  ggplot(aes(x = chance_of_rain, 
+          fill = parameter, 
+           col = parameter)) +
   geom_density(alpha = .5) +
-  xlim(0, 1)
+  xlim(0,1)
 ```
 
 <div class="figure">
@@ -3384,9 +3273,9 @@ Coming back to MCMC random walk: how is the posterior distribution actually prod
 
 ```r
 G_mcmc <-
-  posterior(M_1) %>%
-  select(iter, chain, fixef, value) %>%
-  spread(fixef, value) %>%
+  posterior(M_1) %>% 
+  select(iter, chain, fixef, value) %>% 
+  spread(fixef, value) %>% 
   ggplot(aes(x = cloudyFALSE, y = cloudyTRUE)) +
   geom_point(size = .1) +
   geom_line(alpha = .3)

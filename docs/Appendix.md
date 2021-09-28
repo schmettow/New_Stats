@@ -69,14 +69,14 @@ Table: (\#tab:uv-rk-1)Data set with 18 variables, showing 8 of 7488 observations
 
 |Experiment |  Obs|Part  |Item |Scale     |Stimulus | session|Session |Collection |Condition | presentation_time| response|   RT| huMech| huMech0| huMech1| huMech2| huMech3|
 |:----------|----:|:-----|:----|:---------|:--------|-------:|:-------|:----------|:---------|-----------------:|--------:|----:|------:|-------:|-------:|-------:|-------:|
-|RK         |   99|1     |nE3  |nEeriness |74.1     |       1|2       |MR         |2         |               Inf|   -0.633| 2.97|  0.926|       1|   0.926|   0.858|   0.795|
-|RK         | 1818|p1_07 |nE2  |nEeriness |16       |       0|1       |MR         |2         |               Inf|   -0.157| 1.36|  0.200|       1|   0.200|   0.040|   0.008|
-|RK         | 2691|p1_10 |nE3  |nEeriness |71.2     |       1|2       |MR         |2         |               Inf|   -0.620| 2.33|  0.890|       1|   0.890|   0.792|   0.705|
-|RK         | 2771|p1_10 |nE3  |nEeriness |55       |       1|2       |MR         |2         |               Inf|   -0.595| 3.35|  0.688|       1|   0.688|   0.473|   0.325|
-|RK         | 2996|p1_11 |nE4  |nEeriness |55       |       1|2       |MR         |2         |               Inf|   -0.100| 1.47|  0.688|       1|   0.688|   0.473|   0.325|
-|RK         | 4182|p2_02 |nE6  |nEeriness |28       |       1|2       |MR         |2         |               Inf|   -0.507| 3.02|  0.350|       1|   0.350|   0.122|   0.043|
-|RK         | 7271|p2_13 |nE7  |nEeriness |38       |       0|1       |MR         |2         |               Inf|   -0.315| 2.66|  0.475|       1|   0.475|   0.226|   0.107|
-|RK         | 7334|p2_13 |nE6  |nEeriness |5        |       1|2       |MR         |2         |               Inf|   -0.177| 2.58|  0.062|       1|   0.062|   0.004|   0.000|
+|RK         |  411|2     |nE3  |nEeriness |42       |       1|2       |MR         |2         |               Inf|   -0.418| 1.71|  0.525|       1|   0.525|   0.276|   0.145|
+|RK         | 1685|p1_06 |nE5  |nEeriness |75       |       2|3       |MR         |2         |               Inf|   -0.882| 1.41|  0.938|       1|   0.938|   0.879|   0.824|
+|RK         | 2360|p1_09 |nE8  |nEeriness |42       |       0|1       |MR         |2         |               Inf|   -0.255| 2.78|  0.525|       1|   0.525|   0.276|   0.145|
+|RK         | 3181|p1_12 |nE5  |nEeriness |74.1     |       0|1       |MR         |2         |               Inf|   -0.297| 4.94|  0.926|       1|   0.926|   0.858|   0.795|
+|RK         | 3395|p1_12 |nE3  |nEeriness |19       |       2|3       |MR         |2         |               Inf|   -0.663| 2.52|  0.238|       1|   0.238|   0.056|   0.013|
+|RK         | 3662|p1_13 |nE6  |nEeriness |61       |       2|3       |MR         |2         |               Inf|   -0.500| 1.89|  0.762|       1|   0.762|   0.581|   0.443|
+|RK         | 4357|p2_03 |nE5  |nEeriness |60       |       0|1       |MR         |2         |               Inf|   -0.408| 1.91|  0.750|       1|   0.750|   0.562|   0.422|
+|RK         | 6610|p2_10 |nE2  |nEeriness |24       |       2|3       |MR         |2         |               Inf|   -0.098| 2.46|  0.300|       1|   0.300|   0.090|   0.027|
 
 Before switching to a different case environment, it is recommended to detach the present environment:
 
@@ -97,7 +97,7 @@ The following simulates the AR_game data set, exactly as it was used in section 
 
 
 ```r
-simulate() %>%
+simulate() %>% 
   ggplot(aes(x = technophile, color = sociophile, y = intention)) +
   geom_point() +
   geom_smooth()
@@ -109,7 +109,7 @@ All simulation functions provide the argument `seed`, which sets the random numb
 
 
 ```r
-simulate(seed = 1317) %>%
+simulate(seed = 1317) %>% 
   ggplot(aes(x = technophile, color = sociophile, y = intention)) +
   geom_point() +
   geom_smooth()
@@ -121,7 +121,7 @@ Additional arguments can be used to change the structure of the data set. In the
 
 
 ```r
-simulate(beta = c(-1, 1, .4, -3)) %>%
+simulate(beta = c(-1, 1, .4, -3)) %>% 
   ggplot(aes(x = technophile, color = sociophile, y = intention)) +
   geom_point() +
   geom_smooth()
@@ -161,8 +161,8 @@ simulate
 ##     # 
 ##     out
 ##     }
-## <bytecode: 0x0000000081951c00>
-## <environment: 0x0000000074f675a8>
+## <bytecode: 0x0000000075748f20>
+## <environment: 0x0000000067ee4fc8>
 ```
 
 Real and synthetic case environments provide all data used in this book, but also all models are included that have been estimated. When working through this book, this saves you the effort to run the models by yourself.
@@ -409,10 +409,8 @@ Table: (\#tab:unnamed-chunk-26)Data set with 6 variables, showing 8 of 4027 obse
 | 2609|   53|admiring    |control06.jpg |TRUE    | 0.751|
 
 ```r
-cat(
-  "The number of unique encounters is",
-  nrow(distinct(R_exp, Part, Word, Prime))[1]
-)
+cat("The number of unique encounters is", 
+    nrow(distinct(R_exp, Part, Word, Prime))[1])
 ```
 
 ```
@@ -424,10 +422,10 @@ What is still missing in the table are all the variables that further describe o
 
 
 ```r
-R_exp %>%
-  left_join(E_Words, by = "Word") %>%
-  left_join(E_Primes, by = "Prime") %>%
-  left_join(E_Part, by = "Part") %>%
+R_exp %>% 
+  left_join(E_Words, by = "Word") %>% 
+  left_join(E_Primes, by = "Prime") %>% 
+  left_join(E_Part, by = "Part") %>% 
   as_tbl_obs()
 ```
 
@@ -555,7 +553,7 @@ The Eeriness scale of @Ho2017a has been used to measure the emotional response. 
 ```r
 load("Cases/Uncanny.Rda")
 attach(Uncanny)
-Uncanny$RK_2 %>%
+Uncanny$RK_2 %>% 
   ggplot(aes(x = huMech, y = avg_like)) +
   geom_smooth() +
   geom_point()
@@ -640,7 +638,7 @@ Furthermore, several participant-level variables have been recorded:
 ```r
 load("Cases/IPump.Rda")
 attach(IPump)
-IPump$D_agg %>%
+IPump$D_agg %>% 
   ggplot(aes(x = Session, color = Design, y = ToT)) +
   geom_boxplot()
 ```
@@ -665,7 +663,7 @@ This data set ships with the lme4 package and has only been converted to the cod
 ```r
 load("Cases/Sleepstudy.Rda")
 attach(Sleepstudy)
-D_slpstd %>%
+D_slpstd %>% 
   ggplot(aes(x = days, y = RT)) +
   facet_wrap(~Part) +
   geom_point() +
@@ -719,12 +717,12 @@ Four usability measures were taken per trial:
 load("Cases/Egan.Rda")
 attach(Egan)
 
-plot_Egan <- function(Level) {
+plot_Egan <- function(Level){
   level <- enquo(Level)
-  out <-
-    D_egan %>%
-    group_by(!!level) %>%
-    summarize(mean_ToT = mean(ToT)) %>%
+  out <- 
+    D_egan %>% 
+    group_by(!!level) %>% 
+    summarize(mean_ToT = mean(ToT)) %>% 
     ggplot(aes(x = mean_ToT)) +
     geom_histogram() +
     labs(title = quo(!!level)) +
@@ -732,12 +730,10 @@ plot_Egan <- function(Level) {
 }
 
 
-grid.arrange(
-  plot_Egan(Part),
-  plot_Egan(Design),
-  plot_Egan(Task),
-  plot_Egan(Item)
-)
+grid.arrange(plot_Egan(Part),
+             plot_Egan(Design),
+             plot_Egan(Task),
+             plot_Egan(Item))
 ```
 
 <img src="Appendix_files/figure-html/unnamed-chunk-36-1.png" width="90%" />
@@ -783,7 +779,7 @@ For visual working memory capacity, we used the Corsi block tapping task. For ve
 load("Cases/MMN.Rda")
 attach(MMN)
 
-MMN_2 %>%
+MMN_2 %>% 
   ggplot(aes(x = Ospan.A, y = time)) +
   geom_point() +
   geom_smooth()
@@ -792,7 +788,7 @@ MMN_2 %>%
 <img src="Appendix_files/figure-html/unnamed-chunk-37-1.png" width="90%" />
 
 ```r
-MMN_2 %>%
+MMN_2 %>% 
   ggplot(aes(x = as.factor(Corsi), y = time)) +
   geom_boxplot()
 ```
@@ -847,7 +843,7 @@ By combining these two scales, we created a total score for *resistance to the A
 load("Cases/AUP.Rda")
 attach(AUP)
 
-AUP_1 %>%
+AUP_1 %>% 
   ggplot(aes(x = zgex, y = zresistance)) +
   geom_point() +
   geom_smooth(aes(color = "Gex"), method = "lm", se = F) +
@@ -882,17 +878,16 @@ We don't want to get wet, which is why we use the weather forecast. If we want t
 ## simulating the data set
 Rainfall$simulate <-
   function(
-           n_Days = 20,
-           set.seed = 1,
-           debug = F) {
+    n_Days = 20,
+    set.seed = 1,
+    debug = F){
+    
     if (!is.na(set.seed)) set.seed()
     ## number of observations
     tibble(cloudy = rbinom(n_Days, 1, .6)) %>%
       mutate(rain = rbinom(20, 1, 0.3 + cloudy * 0.3)) %>%
-      mutate(
-        cloudy = as.logical(cloudy),
-        rain = as.logical(rain)
-      ) %>%
+      mutate(cloudy = as.logical(cloudy),
+             rain = as.logical(rain)) %>% 
       as_tbl_obs()
   }
 ```
@@ -918,26 +913,24 @@ The maerketing department of a car rental website claims that "You can rent a ca
 ```r
 ## simulating the data set
 Sec99$simulate <-
-  function(n_Part = 100,
-           mu_ToT = 105,
+  function(n_Part = 100, 
+           mu_ToT = 105, 
            sigma_ToT = 30,
            set.seed = 42,
-           debug = F) {
+           debug = F){
+    
     if (!is.na(set.seed)) set.seed(set.seed)
     ## number of observations
-    n_Obs <- n_Part
-
+    n_Obs = n_Part
+    
     ## OUT
-    Sec99 <- tibble(
-      Obs = 1:n_Part,
-      Part = 1:n_Part,
-      ToT = rnorm(n_Obs, mu_ToT, sigma_ToT)
-    ) %>%
+    Sec99 = tibble(Obs = 1:n_Part,
+                       Part = 1:n_Part,
+                       ToT = rnorm(n_Obs, mu_ToT, sigma_ToT)) %>% 
       ## dirty hack to create correlated age
-      mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT / 8, 2))) %>%
+      mutate(age = rpois(n_Part, rnorm(n_Part, 30 + ToT/8, 2))) %>% 
       mutate(Gender = if_else(rbinom(n_Part, 1, .4) == 1,
-        "male", "female"
-      ))
+                             "male", "female"))
     Sec99 %>% as_tbl_obs()
   }
 
@@ -954,8 +947,8 @@ Sec99$Ver20$age[c(6, 19, 73)] <- NA
 ```r
 load("Cases/Sec99.Rda")
 attach(Sec99)
-Ver20 %>%
-  ggplot(aes(x = age, y = ToT)) +
+Ver20 %>% 
+  ggplot(aes(x = age, y = ToT)) + 
   geom_point()
 ```
 
@@ -981,22 +974,22 @@ A project needs a predicted  increase in revenue by a factor of 1.1 for manageme
 ## simulating the data set
 Rational$simulate <-
   function(n_Part = 100,
-           mu_legacy = 50,
-           eta_proto = 1.1,
-           scale = 2,
-           set.seed = 1,
-           debug = F) {
-    if (!is.na(set.seed)) set.seed(set.seed)
+    mu_legacy = 50,
+    eta_proto = 1.1,
+    scale = 2,
+    set.seed = 1,
+    debug = F){
 
-    RD <-
-      tibble(
-        Part = 1:n_Part,
-        Design = rep(c("current", "proto"), n_Part / 2),
-        mu = mu_legacy * ifelse(Design == "proto", eta_proto, 1),
-        shape = mu / scale,
-        scale = scale,
-        Euro = rgamma(n_Part, shape = shape, scale = scale)
-      ) %>%
+    
+    if (!is.na(set.seed)) set.seed(set.seed)
+    
+    RD    <- 
+      tibble(Part = 1:n_Part,
+                 Design = rep(c("current", "proto"), n_Part/2),
+                 mu = mu_legacy * ifelse(Design == "proto", eta_proto, 1),
+                 shape = mu/scale,
+                 scale = scale,
+                 Euro = rgamma(n_Part, shape = shape, scale = scale)) %>% 
       as_tbl_obs()
     RD
   }
@@ -1023,87 +1016,85 @@ Rational$simulate <-
 ## simulating the data set
 BrowsingAB$simulate <-
   function(
-           n_Part = 100,
-           n_Task = 5,
-           ## within-subject design is default
-           within_Part = T,
-           ## Fixed effects
-           # intercept
-           beta_S0 = 120,
-           # male
-           beta_S1 = 2,
-           # edu low
-           beta_S2_1 = 20,
-           # edu middle
-           beta_S2_2 = 5,
-           # age
-           beta_S3 = .1,
-           # age:edu low
-           beta_S4_1 = .3,
-           # age:edu middle
-           beta_S4_2 = 0,
-           # age:designB
-           beta_S5 = .4,
-           # designB
-           beta_D1 = -60,
-
-           ## Random effects
-           # subject intercept
-           sd_S0 = 20,
-           # subject slope design
-           sd_S1 = 10,
-           # task intercept
-           sd_T0 = 50,
-           # Far_sightedness:Small_font
-           lambda_SD1 = 60,
-           # Residual
-           sd_epsilon = 30,
-           set.seed = 42,
-           debug = F) {
-    n_Design <- 2
-
+    n_Part = 100,
+    n_Task = 5,
+    ## within-subject design is default
+    within_Part = T,
+    ## Fixed effects
+    # intercept
+    beta_S0 = 120,
+    # male
+    beta_S1 = 2,
+    # edu low
+    beta_S2_1 = 20,
+    # edu middle
+    beta_S2_2 = 5,
+    # age
+    beta_S3 = .1,
+    # age:edu low
+    beta_S4_1 = .3,
+    # age:edu middle
+    beta_S4_2 = 0,
+    # age:designB
+    beta_S5 = .4,
+    # designB
+    beta_D1 = -60,
+    
+    ## Random effects
+    # subject intercept
+    sd_S0 = 20,
+    # subject slope design
+    sd_S1 = 10,
+    # task intercept
+    sd_T0 = 50,
+    # Far_sightedness:Small_font
+    lambda_SD1 = 60,
+    # Residual
+    sd_epsilon = 30,
+    set.seed = 42,
+    debug = F
+  ){
+    
+    n_Design = 2
+    
     if (!is.na(set.seed)) set.seed(set.seed)
     ## number of observations
-    n_Obs <- n_Part * n_Design * n_Task
-
+    n_Obs = n_Part * n_Design * n_Task
+    
     ## Subject frame
-    Part <- tibble(
+    Part = tibble(
       Part = as.factor(1:n_Part),
-      Gender = sample(c("F", "M"),
-        size = n_Part, replace = T
-      ),
-      Education = sample(c("Low", "Middle", "High"),
-        size = n_Part, replace = T
-      ),
+      Gender = sample(c("F", "M"), 
+                      size = n_Part, replace = T),
+      Education = sample(c("Low", "Middle", "High"), 
+                         size = n_Part, replace = T),
       theta_S0 = rnorm(n_Part, 0, sd_S0),
       theta_S1 = rnorm(n_Part, 0, sd_S1),
       age = as.integer(runif(n_Part, 20, 80))
     ) %>%
       # LVs
       # probability of far sightedness increases with age
-      mutate(
-        p_Far_sighted = age / 150
-        # p_Far_sighted = plogis(mu_Far_sighted)
-      ) %>%
+      mutate(p_Far_sighted = age / 150
+             #p_Far_sighted = plogis(mu_Far_sighted)
+             ) %>% 
       mutate(Far_sighted = as.logical(rbinom(n_Part, 1, p_Far_sighted)))
-
-    Task <-
-      tibble(
-        Task = as.factor(1:n_Task),
-        theta_T0 = rnorm(n_Task, 0, sd_T0)
-      )
-
-    Design <-
+    
+    
+    Task = 
+      tibble(Task = as.factor(1:n_Task),
+                      theta_T0 = rnorm(n_Task, 0, sd_T0))
+    
+    Design = 
       tibble(Design = factor(c("A", "B"))) %>% ## LVs
       mutate(Small_font = (Design == "B"))
-
-    BrowsingAB <-
+    
+    
+    BrowsingAB =
       ## creating a complete design
       expand_grid(
         Part = levels(Part$Part),
         Task = levels(Task$Task),
-        Design = levels(Design$Design)
-      ) %>%
+        Design = levels(Design$Design)) %>%
       ## joining in the sample tables
       inner_join(Part) %>%
       inner_join(Design) %>%
@@ -1125,19 +1116,14 @@ BrowsingAB$simulate <-
           theta_S0 +
           theta_S1 * (Design == "A") +
           theta_T0 +
-          lambda_SD1 * Far_sighted * Small_font
-      ) %>%
-      mutate(
-        ToT = rnorm(n_Obs, mu, sd_epsilon),
-        clicks = rpois(n_Obs, mu / 20),
-        returns = rpois(n_Obs, mu / 80),
-        rating = ceiling(inv_logit((mu - 150) / 50) * 7)
-      ) %>%
-      select(
-        Part, Task, Design,
-        Gender, Education, age, Far_sighted, Small_font,
-        ToT, clicks, returns, rating
-      ) %>%
+          lambda_SD1 * Far_sighted * Small_font) %>%
+      mutate(ToT = rnorm(n_Obs, mu, sd_epsilon),
+             clicks = rpois(n_Obs, mu/20),
+             returns = rpois(n_Obs, mu/80),
+             rating = ceiling(inv_logit((mu - 150)/50) * 7)) %>%
+      select(Part, Task, Design, 
+             Gender, Education, age, Far_sighted, Small_font, 
+             ToT, clicks, returns, rating) %>%
       as_tbl_obs()
   }
 ```
@@ -1168,24 +1154,17 @@ This simulation takes perceived headache measured on 16 participants before and 
 
 ```r
 Headache$simulate <-
-  function(N = 16,
-           seed = 42) {
+  function(N = 16, 
+           seed = 42){
     set.seed(seed)
-    tibble(
-      before = round(rbeta(N, 3, 2) * 4 + 3),
-      PillA = rep(c(TRUE, FALSE), N / 2),
-      PillB = c(rep(TRUE, N / 2), rep(FALSE, N / 2))
-    ) %>%
-      mutate(reduction = rnorm(
-        N,
-        before / 7 * log(2 + 8 * PillA + 6 * PillB),
-        0.5
-      )) %>%
-      mutate(
-        PillA = as.factor(PillA),
-        PillB = as.factor(PillB)
-      ) %>%
-      as_tbl_obs()
+    tibble(before = round(rbeta(N, 3, 2) * 4 + 3),
+               PillA = rep(c(TRUE, FALSE), N/2),
+               PillB = c(rep(TRUE, N/2), rep(FALSE, N/2))) %>%
+      mutate(reduction = rnorm(N, 
+                               before/7 * log(2 + 8 * PillA + 6 * PillB), 
+                               0.5)) %>%
+      mutate(PillA = as.factor(PillA),
+             PillB = as.factor(PillB)) %>% as_tbl_obs()
   }
 ```
 
@@ -1197,7 +1176,7 @@ Headache$simulate <-
 ```r
 load("Cases/Headache.Rda")
 attach(Headache)
-simulate() %>%
+simulate() %>% 
   ggplot(aes(x = PillA, color = PillB, y = reduction)) +
   geom_boxplot()
 ```
@@ -1224,38 +1203,31 @@ This simulation covers an experiment where participants got to read a text on sc
 ```r
 Reading$simulate <-
   function(N = 40,
-           beta = c(
-             Intercpt = 60,
-             fnt_size_12 = -12,
-             fnt_color_blk = -10,
-             ia_blk_12 = 8
-           ),
+           beta = c(Intercpt = 60, 
+                    fnt_size_12 = -12, 
+                    fnt_color_blk = -10, 
+                    ia_blk_12 = 8),
            sigma = 5,
-           seed = 42) {
+           seed = 42) 
+    {
     set.seed(seed)
     out <-
-      tibble(
-        Part = 1:N,
-        font_size = factor(rep(c(1, 2), N / 2),
-          levels = c(1, 2),
-          labels = c("10pt", "12pt")
-        ),
-        font_color = factor(c(rep(1, N / 2), rep(2, N / 2)),
-          levels = c(1, 2),
-          labels = c("gray", "black")
-        )
-      ) %>%
-      mutate(
-        mu = beta[1] +
-          beta[2] * (font_size == "12pt") +
-          beta[3] * (font_color == "black") +
-          beta[4] * (font_color == "black") * (font_size == "12pt"),
-        ToT = rnorm(N, mu, sigma)
-      ) %>%
-      as_tbl_obs()
+      tibble(Part = 1:N,
+                 font_size = factor(rep(c(1, 2), N/2), 
+                                    levels = c(1,2), 
+                                    labels = c("10pt", "12pt")),
+                 font_color = factor(c(rep(1, N/2), rep(2, N/2)),
+                                     levels = c(1,2), 
+                                     labels = c("gray", "black"))) %>%
+       mutate( mu = beta[1] + 
+                beta[2] * (font_size == "12pt") +
+                beta[3] * (font_color == "black") +
+                beta[4] * (font_color == "black") * (font_size == "12pt"),
+              ToT = rnorm(N,  mu, sigma)) %>% 
+    as_tbl_obs()
 
     out
-  }
+    }
 ```
 
 
@@ -1270,12 +1242,10 @@ Reading$simulate <-
 ```r
 load("Cases/Reading.Rda")
 attach(Reading)
-simulate() %>%
-  ggplot(aes(
-    col = font_color,
-    x = font_size,
-    y = ToT
-  )) +
+simulate() %>% 
+  ggplot(aes(col = font_color,
+             x = font_size,
+             y = ToT)) +
   geom_boxplot()
 ```
 
@@ -1298,32 +1268,27 @@ AR_game$simulate <-
   function(N = 200,
            beta = c(-1, 1, .4, .6),
            sigma = .2,
-           seed = 42) {
+           seed = 42) 
+    {
     set.seed(seed)
     out <-
-      tibble(
-        Part = 1:N,
-        technophile = rbeta(N, 2, 3) * 2 - 1,
-        sociophile = rbeta(N, 2, 2) * 2 - 1
-      ) %>%
-      mutate(
-        eta = beta[1] +
-          beta[2] * technophile +
-          beta[3] * sociophile +
-          beta[4] * technophile * sociophile,
-        intention = mascutils::inv_logit(rnorm(N, eta, sigma))
-      ) %>%
+      tibble(Part = 1:N,
+                 technophile = rbeta(N, 2, 3) * 2 - 1,
+                 sociophile = rbeta(N, 2, 2) * 2 - 1) %>%
+      mutate( eta = beta[1] + 
+                beta[2] * technophile +
+                beta[3] * sociophile +
+                beta[4] * technophile * sociophile,
+              intention = mascutils::inv_logit(rnorm(N,  eta, sigma))) %>% 
       as_tbl_obs()
-
-    # class(out) <- append(class(out), "sim_tbl")
-    attr(out, "coef") <- list(
-      beta = beta,
-      sigma = sigma
-    )
+    
+    #class(out) <- append(class(out), "sim_tbl")
+    attr(out, "coef") <- list(beta = beta,
+                              sigma = sigma)
     attr(out, "seed") <- seed
-
+    
     out %>% as_tbl_obs()
-  }
+    }
 ```
 
 
@@ -1339,16 +1304,12 @@ AR_game$simulate <-
 ```r
 load("Cases/AR_game.Rda")
 attach(AR_game)
-simulate() %>%
-  mutate(
-    technophile_grp = technophile > median(technophile),
-    sociophile_grp = sociophile > median(sociophile)
-  ) %>%
-  ggplot(aes(
-    x = sociophile_grp,
-    color = technophile_grp,
-    y = intention
-  )) +
+simulate() %>% 
+  mutate(technophile_grp = technophile > median(technophile),
+         sociophile_grp = sociophile > median(sociophile)) %>%
+  ggplot(aes(x = sociophile_grp,
+             color = technophile_grp,
+             y = intention)) +
   geom_boxplot()
 ```
 
@@ -1369,32 +1330,26 @@ This simulation is loosely modelled after an experiment Corcoran [%D. W. J. Corc
 
 ```r
 Sleep$simulate <-
-  function(N = 40,
-           beta = c(
-             Intcpt = 70,
-             noisy = 8,
-             deprived = 200,
-             n_d = -100
-           ),
-           sigma = 50,
-           seed = 42) {
+  function(N = 40, 
+           beta = c(Intcpt = 70, 
+                    noisy = 8,
+                    deprived = 200, 
+                    n_d = -100), 
+           sigma = 50, 
+           seed  = 42){
     set.seed(seed)
-    expand.grid(
-      .N = 1:(N / 4),
-      Environment = as.factor(c("Calm", "Noisy")),
-      Sleep = as.factor(c("Rested", "Sleepy"))
-    ) %>%
-      select(-.N) %>%
-      mutate(
-        Part = 1:N,
-        mu = beta[1] +
-          beta[2] * (Environment == "Noisy") +
-          beta[3] * (Sleep == "Sleepy") +
-          beta[4] * (Environment == "Noisy") * (Sleep == "Sleepy"),
-        RT = rnorm(N, mu, sigma)
-      ) %>%
-      mutate(RT = ifelse(RT > 0, RT, NA)) %>%
-      select(3, 1, 2, 4, 5) %>%
+    expand.grid(.N = 1:(N/4), 
+                Environment = as.factor(c("Calm", "Noisy")),
+                Sleep = as.factor(c("Rested", "Sleepy"))) %>%
+      select(-.N) %>% 
+      mutate(Part = 1:N,
+             mu = beta[1] + 
+               beta[2] * (Environment == "Noisy") +
+               beta[3] * (Sleep == "Sleepy") +
+               beta[4] * (Environment == "Noisy") * (Sleep == "Sleepy"),
+             RT = rnorm(N,mu,sigma)) %>% 
+      mutate(RT = ifelse(RT > 0, RT, NA)) %>% 
+      select(3,1,2,4,5)  %>% 
       as_tbl_obs()
   }
 
@@ -1417,12 +1372,10 @@ These results can be explained by the Yerkes-Dodson law, which states that  perf
 ```r
 load("Cases/Sleep.Rda")
 attach(Sleep)
-simulate() %>%
-  ggplot(aes(
-    x = Environment,
-    color = Sleep,
-    y = RT
-  )) +
+simulate() %>% 
+  ggplot(aes(x = Environment,
+             color = Sleep,
+             y = RT)) +
   geom_boxplot()
 ```
 

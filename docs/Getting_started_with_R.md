@@ -121,13 +121,13 @@ this directory is `D:/Users/YourName/`:
 
 options(stringsAsFactors = FALSE)
 
-.First <- function() {
+.First <- function(){
   RHOME <<- getwd()
-  cat("\nLoading .Rprofile in", getwd(), "\n")
-  .libPaths(c(paste0(RHOME, "Rlibrary"), .libPaths()))
+	cat("\nLoading .Rprofile in", getwd(), "\n")
+  .libPaths(c(paste0(RHOME,"Rlibrary"), .libPaths()))
 }
 
-.Last <- function() {
+.Last <- function(){ 
   cat("\nGoodbye at ", date(), "\n")
 }
 ```
@@ -300,15 +300,15 @@ proceed with this book, all will become clear):
 
 ```r
 set.seed(42)
-## Simulation of a data set with 100 participants
+## Simulation of a data set with 100 participants 
 ## in two between-subject conditions
-N <- 100
-levels <- c("control", "experimental")
-Group <- rep(levels, N / 2)
-age <- round(runif(N, 18, 35), 0)
-outcome <- rnorm(N, 200, 10) + (Group == "experimental") * 50
+N          <- 100
+levels     <- c("control","experimental")
+Group      <- rep(levels, N/2)
+age        <- round(runif(N, 18, 35),0)
+outcome    <- rnorm(N, 200, 10) + (Group == "experimental") * 50
 Experiment <- tibble(Group, age, outcome) %>% as_tbl_obs()
-Experiment
+Experiment 
 ```
 
 
@@ -332,13 +332,13 @@ With seven lines of code you have simulated the data for an experiment with two 
 
 ```r
 ## Plotting the distribution of outcome
-Experiment %>%
-  ggplot(aes(x = outcome)) +
+Experiment %>% 
+  ggplot( aes(x = outcome) ) + 
   geom_density(fill = 1)
 
 ## ... outcome by group
-Experiment %>%
-  ggplot(aes(fill = Group, x = outcome)) +
+Experiment %>% 
+  ggplot( aes(fill = Group, x = outcome) ) + 
   geom_density()
 ```
 
@@ -356,10 +356,8 @@ Then, we move on to estimating a statistical model and produce a summary of the 
 ```r
 ## ... statistical model comparing the groups
 
-model <- stan_glm(
-  formula = outcome ~ Group,
-  data = Experiment
-)
+model <- stan_glm(formula = outcome ~ Group,
+                  data = Experiment) 
 ```
 
 
@@ -514,8 +512,8 @@ data). The results are shown in Table \@ref(tab:out-removal).
 
 
 ```r
-D <- tibble(score = c(1, 2, 4, 3, 5, 6, 50, 800)) %>%
-  as_tbl_obs()
+D <- tibble(score = c(1, 2, 4, 3, 5, 6, 50, 800)) %>% 
+   as_tbl_obs()
 
 D %>% filter(score < mean(score))
 ```
@@ -718,7 +716,7 @@ another object `avg_N_Obs`
 ```r
 N_Obs <- 100
 N_Part <- 25
-avg_N_Obs <- N_Obs / N_Part
+avg_N_Obs <- N_Obs/N_Part
 avg_N_Obs
 ```
 
@@ -735,7 +733,7 @@ the same number. But, strictly, it is a different object.
 
 
 ```r
-N_Obs / N_Part ## gone after printing
+N_Obs/N_Part ## gone after printing
 ```
 
 ```
@@ -743,7 +741,7 @@ N_Obs / N_Part ## gone after printing
 ```
 
 ```r
-N_Obs / N_Part ## same value, different object
+N_Obs/N_Part ## same value, different object
 ```
 
 ```
@@ -757,19 +755,19 @@ everyday programming tasks:
 
 
 ```r
-tracemem(N_Obs / N_Part)
+tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<00000000B1FB2908>"
+## [1] "<00000000A999EE38>"
 ```
 
 ```r
-tracemem(N_Obs / N_Part)
+tracemem(N_Obs/N_Part)
 ```
 
 ```
-## [1] "<00000000B20109A0>"
+## [1] "<00000000A99FDBE0>"
 ```
 
 ### Vectors {#vectors}
@@ -819,7 +817,7 @@ With Boolean operators one can compute new logical values, for example:
 
 ```r
 Apple <- TRUE
-Pear <- FALSE
+Pear  <- FALSE
 
 Apple & Pear ## and
 ```
@@ -844,7 +842,7 @@ For example, gender is usually coded as a vector of characters
 
 ```r
 is_female <- c(FALSE, TRUE, TRUE)
-is_male <- c(T, F, F)
+is_male   <- c(T, F, F)
 ```
 
 Programmers are lazy folks when it comes to typing, therefore R allows
@@ -856,7 +854,7 @@ don't do one of the following:
 ```r
 ## never do this
 TRUE <- "All philosophers have beards"
-F <- "All gods existed before the big bang"
+F    <- "All gods existed before the big bang"
 42 * F
 ```
 
@@ -879,11 +877,9 @@ numbers, only. This often occurs as counts, ranks or indices.
 
 
 ```r
-friends <- c(
-  anton = 1,
-  berta = 3,
-  carlo = 2
-)
+friends <- c(anton = 1, 
+             berta = 3, 
+             carlo = 2)
 order(friends)
 ```
 
@@ -898,7 +894,7 @@ may no longer be `integer`, but `numeric`
 ```r
 N <- 3
 sum_of_scores <- 32
-mean_score <- 32 / 3
+mean_score <- 32/3
 mean_score
 ```
 
@@ -1103,18 +1099,16 @@ jargon! <!-- #10 -->
 
 
 ```r
-D_1 <- tibble(X = rnorm(20, 2, 1))
-M_1 <- stan_glm(X ~ 1,
-  data = D_1
-)
+D_1 = tibble(X = rnorm(20, 2, 1))
+M_1 = stan_glm(X ~ 1, 
+               data = D_1)
 
-D_2 <- tibble(X = rpois(20, 2))
-M_2 <- stan_glm(X ~ 1,
-  family = poisson,
-  seed = 42,
-  iter = 5000,
-  data = D_1
-)
+D_2 = tibble(X = rpois(20, 2))
+M_2 = stan_glm(X ~ 1,
+               family = poisson,
+               seed = 42,
+               iter = 5000,
+               data = D_1)
 ```
 
 R brings the usual set of arithmetic operators, like `+`, `-`, `*`, `/`
@@ -1131,7 +1125,7 @@ numbers can, indeed, be written in these two ways:
 ```
 
 ```r
-`+`(1, 2)
+`+`(1,2)
 ```
 
 ```
@@ -1319,9 +1313,9 @@ individual values by their addresses. The following commands produce three sub-t
 
 
 ```r
-Experiment[1, 3]
+Experiment[  1, 3]
 Experiment[1:3, 2]
-Experiment[1, ]
+Experiment[  1,  ]
 ```
 
 
@@ -1378,7 +1372,7 @@ result is a vector:
 
 ```r
 Exp_classic <- as.data.frame(Experiment)
-class(Exp_classic[1:2, 1:2]) ## data.frame
+class(Exp_classic[1:2,1:2])  ## data.frame
 ```
 
 ```
@@ -1386,7 +1380,7 @@ class(Exp_classic[1:2, 1:2]) ## data.frame
 ```
 
 ```r
-class(Exp_classic[1, ]) ## data.frame
+class(Exp_classic[1,])       ## data.frame
 ```
 
 ```
@@ -1394,7 +1388,7 @@ class(Exp_classic[1, ]) ## data.frame
 ```
 
 ```r
-class(Exp_classic[, 1]) ## vector
+class(Exp_classic[,1])       ## vector
 ```
 
 ```
@@ -1409,8 +1403,8 @@ returns classic data.frames, which can easily be converted as follows:
 
 
 ```r
-D_foo <-
-  read.xlsx("foo.xlsx") %>%
+D_foo <- 
+  read.xlsx("foo.xlsx") %>% 
   as_tibble()
 ```
 
@@ -1421,8 +1415,8 @@ using the `$` operator.
 
 
 ```r
-Experiment[[1]] ## vector
-Experiment$Group ## the same
+Experiment[[1]]       ## vector
+Experiment$Group      ## the same
 ```
 
 Sometimes, it may be necessary to change values in a data frame. For
@@ -1436,9 +1430,9 @@ these outliers by setting them all to `NA`.
 
 ```r
 ## injecting
-Experiment[2, "outcome"] <- 660
-Experiment[6, "outcome"] <- 987
-Experiment[c(1, 3), "age"] <- -99
+Experiment[2,      "outcome"] <- 660
+Experiment[6,      "outcome"] <- 987
+Experiment[c(1,3), "age"]     <- -99
 
 ## printing first few observations
 head(Experiment)
@@ -1459,8 +1453,8 @@ Table: (\#tab:df-injecting)Data set with 4 variables, showing 6 of 6 observation
 
 ```r
 ## setting to NA (by injection)
-Experiment[c(2, 6), "outcome"] <- NA
-Experiment[c(1, 3), "age"] <- NA
+Experiment[c(2, 6),"outcome"] <- NA
+Experiment[c(1, 3),"age"]     <- NA
 ```
 
 Besides injection, note two more features of addressing data frame
@@ -1481,7 +1475,7 @@ observations.
 
 
 ```r
-rnorm(20, mean = c(1, 2), sd = 1)
+rnorm(20, mean = c(1,2), sd = 1)
 ```
 
 The above example reuses the two mean values 50 times, creating an
@@ -1513,23 +1507,23 @@ All these files can be opened by the following commands:
 
 ```r
 ## Text files
-Experiment <-
-  read_csv("Data/Experiment.csv") %>%
+Experiment <- 
+  read_csv("Data/Experiment.csv") %>% 
   as_tbl_obs()
 
 ## Excel
-Experiment <-
-  read_excel("Data/Experiment.xlsx", sheet = 1) %>%
+Experiment <- 
+  read_excel("Data/Experiment.xlsx", sheet = 1)%>% 
   as_tbl_obs()
 
 ## SPSS (haven)
-Experiment <-
-  read_sav("Data/Experiment.sav") %>%
+Experiment <- 
+  read_sav("Data/Experiment.sav")%>% 
   as_tbl_obs()
 
 ## SPSS (foreign)
 Experiment <-
-  read.spss("Data/Experiment.sav", to.data.frame = TRUE) %>%
+  read.spss("Data/Experiment.sav", to.data.frame = TRUE)%>% 
   as_tbl_obs()
 ```
 
@@ -1734,10 +1728,10 @@ the interface?" Then, the *wrong way* of structuring the data would be as in Tab
 
 
 ```r
-ORPO %>%
-  # filter(Task == 1, Item == 1) %>%
-  # mascutils::discard_redundant() %>%
-  sample_n(8) %>%
+ORPO %>% 
+  #filter(Task == 1, Item == 1) %>% 
+  #mascutils::discard_redundant() %>% 
+  sample_n(8) %>% 
   spread(Design, response) 
 ```
 
@@ -1758,7 +1752,7 @@ Table: (\#tab:orpo-1)Wide format with multiple observations per row
 
 
 ```r
-ORPO %>% as_tbl_obs()
+ORPO %>%  as_tbl_obs()
 ```
 
 
@@ -1792,8 +1786,7 @@ data set in the wide legacy format.
 Using identifiers is good practice for several reasons. First, it
 reduces problems during manual data entry. Second, it allows to
 efficiently record data in multi-method experiments and join them
-automatically. An example is given in Appendix \@ref(hugme). Lastly,
-the identifiers will become statistically interesting by themselves when
+automatically. Lastly, the identifiers will become statistically interesting by themselves when
 we turn to linear mixed-effects models and the notion of *members of a
 population* \@ref(non-human-populations). Throughout the book I will use
 standard names for recurring identifier variables in design research:
@@ -1835,9 +1828,9 @@ other variables are discarded (Table \@ref(tab:data-trafo-1)).
 
 
 ```r
-Exp <-
-  Experiment %>%
-  select(Condition = Group, outcome) %>%
+Exp <-  
+  Experiment %>% 
+  select(Condition = Group, outcome) %>% 
   as_tbl_obs()
 Exp
 ```
@@ -1868,10 +1861,10 @@ steps (Table \@ref(tab:data-trafo-2)).
 
 ```r
 ## rename, then filtering
-Exp <-
-  Experiment %>%
-  select(Condition = Group, age, outcome) %>%
-  filter(outcome < 500) %>%
+Exp <-  
+  Experiment %>% 
+  select(Condition = Group, age, outcome) %>% 
+  filter(outcome < 500) %>% 
   filter(age != -99)
 Exp
 ```
@@ -1897,8 +1890,8 @@ before using linear regression (Table \@ref(tab:data-trafo-3)).
 
 
 ```r
-mean_age <- mean(Exp$age)
-Exp <- Exp %>%
+mean_age = mean(Exp$age)
+Exp <- Exp %>% 
   mutate(age_cntrd = age - mean_age)
 Exp
 ```
@@ -1928,12 +1921,10 @@ outputs a data frame (Table \@ref(tab:data-trafo-4))
 
 
 ```r
-Exp %>%
-  group_by(Condition) %>%
-  summarize(
-    mean = mean(outcome),
-    sd = sd(outcome)
-  )
+Exp %>% 
+  group_by(Condition) %>% 
+  summarize(mean = mean(outcome),
+           sd = sd(outcome) )
 ```
 
 
@@ -2030,8 +2021,8 @@ be put on a 2D plane, with coordinates x and y, a *scatter plot* (Figure \@ref(f
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT)) +
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT)) +
   geom_point()
 ```
 
@@ -2045,7 +2036,7 @@ lines pipe the data frame into the ggplot engine.
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   ggplot()
 ```
 
@@ -2057,7 +2048,7 @@ consider a basic (there exist more than 30) *geometry* and put it on a
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   ggplot() +
   geom_point()
 ```
@@ -2069,7 +2060,7 @@ x and y-positions:
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   ggplot(aes(x = age, y = ToT)) +
   geom_point()
 ```
@@ -2109,8 +2100,8 @@ grouping variable, factor. The box plot does the job (Figure \@ref(fig:plotting-
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = Design, y = ToT)) +
+BAB1 %>% 
+  ggplot(aes(x = Design,  y = ToT)) +
   geom_boxplot()
 ```
 
@@ -2138,8 +2129,8 @@ British or American way of writing (colour vs. color).
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT, color = Design)) +
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point()
 ```
 
@@ -2159,8 +2150,8 @@ applied to all geometry layers (Figure \@ref(fig:plotting-6))
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT, color = Design)) +
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point() +
   geom_smooth()
 ```
@@ -2185,8 +2176,8 @@ data by a grouping variable and creates one single plot for every group (Figure 
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT, color = Design)) +
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT, color = Design)) +
   geom_point() +
   geom_smooth() +
   facet_grid(Education ~ .)
@@ -2205,8 +2196,8 @@ represent both factors, Design and education by facets (Figure \@ref(fig:plottin
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT)) +
+BAB1 %>% 
+  ggplot(aes(x = age,  y = ToT)) +
   geom_point() +
   geom_smooth() +
   facet_grid(Education ~ Design)
@@ -2244,16 +2235,12 @@ with a mean of $mu$.
 N_Obs <- 20
 set.seed(42)
 Exp <-
-  tibble(
-    Obs = 1:N_Obs,
-    Condition = rep(
-      c("Experimental", "Control"),
-      N_Obs / 2
-    ),
-    age = runif(N_Obs, 18, 35),
-    mu = 200 + (Condition == "Control") * 50 + age * 1,
-    outcome = rnorm(N_Obs, mu, 10)
-  )
+  tibble(Obs = 1:N_Obs,
+             Condition = rep(c("Experimental", "Control"),
+                             N_Obs/2),
+             age = runif(N_Obs, 18, 35),
+             mu = 200 + (Condition == "Control") * 50 + age * 1,
+             outcome = rnorm(N_Obs, mu, 10))
 ```
 
 The experiment involves two groups, which in classic statistics would
@@ -2276,10 +2263,9 @@ answer the question (Table \@ref(tab:fitting-1)).
 
 
 ```r
-M_1 <-
-  stan_glm(outcome ~ Condition,
-    data = Exp
-  )
+M_1 <- 
+  stan_glm(outcome ~ Condition, 
+     data = Exp)
 ```
 
 
@@ -2303,10 +2289,9 @@ by a metric variable, say `age`. Estimating such a model with `stan_glm` looks l
 
 
 ```r
-M_2 <-
-  stan_glm(outcome ~ age,
-    data = Exp
-  )
+M_2 <- 
+  stan_glm(outcome ~ age, 
+     data = Exp)
 ```
 
 
@@ -2330,10 +2315,9 @@ one model by the following formula. As a result, Table \@ref(tab:fitting-3) now 
 
 
 ```r
-M_3 <-
-  stan_glm(outcome ~ Condition + age,
-    data = Exp
-  )
+M_3 <- 
+  stan_glm(outcome ~ Condition + age, 
+     data = Exp)
 ```
 
 

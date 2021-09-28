@@ -72,7 +72,7 @@ The parameters of a polynomial model usually don't have a direct interpretation.
 Linearity means that we increase the predictor by a fixed unit, the outcome will follow suit by a constant amount. In the chapter on Linear Models \@ref(lm), we encountered several situations where linearity was violated. 
 
 + In \@ref(ofm) increasing amount of training by one session did result in rather different amount of learning. In effect, we used not an LRM, but ordered factors to estimate the learning curves.
-+ In \@ref(saturation), two pills did not reduce headache by the sum of each oill alone. We used conditional effects when two or more interventions improve the same process in a non-linear way.
++ In \@ref(saturation), two pills did not reduce headache by the sum of each pill alone. We used conditional effects when two or more interventions improve the same process in a non-linear way.
 + and in \@ref(prm) we used polynomials to estimate wildly curved relationships
 
 The case of Polynomial regression is special in two ways: first, the curvature itself is of theoretical interest (e.g. finding the "trough" of the Uncanny Valley effect). Second, a polynomial curve (of second degree or more) is no longer monotonously increasing (or decreasing). In contrast, learning curves and saturation effects have in common that in both situations outcome steadily increases (or decreases) when we add more to the predictor side. There just is a limit to performance, which is reached asymptotically (which means the curve never really flattens).
@@ -90,22 +90,18 @@ attach(IPump)
 
 
 ```r
-M_LRM_1 <- stan_glm(deviations ~ 1 + session,
-  data = D_Novel
-)
+M_LRM_1 <- stan_glm(deviations ~ 1 + session, 
+                    data = D_Novel)
 ```
 
 
 
 
 ```r
-D_extra <-
-  tibble(
-    session = as.integer(c(0:9)),
-    range = if_else(session < 3,
-      "observed", "extrapolated"
-    )
-  ) %>%
+D_extra <- 
+  tibble(session = as.integer(c(0:9)),
+         range = if_else(session < 3, 
+                         "observed", "extrapolated")) %>% 
   as_tbl_obs()
 D_extra 
 ```
@@ -129,17 +125,14 @@ Table: (\#tab:relink-1)Virtual data for generating out-of-range predictions
 
 
 ```r
-predict(M_LRM_1,
-  newdata = D_extra
-) %>%
-  left_join(D_extra) %>%
-  ggplot(aes(
-    x = session, y = center,
-    ymin = lower, ymax = upper,
-    color = range
-  )) +
+predict(M_LRM_1, 
+        newdata = D_extra) %>% 
+  left_join(D_extra) %>% 
+  ggplot(aes(x = session, y = center, 
+             ymin = lower, ymax = upper,
+             color = range)) +
   geom_step() +
-  geom_hline(aes(yintercept = 0, color = "impossible predictions below"), linetype = 2) +
+  geom_hline(aes(yintercept = 0, color = "impossible predictions below"  ), linetype = 2) +
   scale_x_continuous(breaks = 0:10) +
   ylim(-1, 1) +
   labs(y = "deviations", col = NULL)
@@ -235,13 +228,11 @@ The problem can be demonstrated by simulating observations, using  a Gaussian pa
 
 ```r
 set.seed(84)
-N <- 80
-D_pumps_sim <-
-  tibble(
-    Design = rep(c("L", "N"), N / 2),
-    mu = if_else(Design == "L", 3, 1.2),
-    errors = rnorm(N, mu, sd = 1)
-  ) %>%
+N = 80
+D_pumps_sim <- 
+  tibble(Design = rep(c("L", "N"), N/2),
+             mu = if_else(Design == "L", 3, 1.2),
+         errors = rnorm(N, mu, sd = 1)) %>% 
   as_tbl_obs()
 ```
 
@@ -249,7 +240,7 @@ D_pumps_sim <-
 
 
 ```r
-D_pumps_sim %>%
+D_pumps_sim %>% 
   ggplot(aes(x = errors)) +
   facet_grid(~Design) +
   geom_histogram(bins = 20) +
@@ -302,12 +293,10 @@ If we simulate such data from a linear model, the relationship between length of
 
 
 ```r
-N <- 100
-tibble(
-  Obs = as.factor(1:N),
-  km = runif(N, 2, 40),
-  min = rnorm(N, km * 2, 10)
-) %>%
+N = 100
+tibble(Obs = as.factor(1:N),
+       km  = runif(N, 2, 40),
+       min = rnorm(N, km * 2, 10)) %>% 
   ggplot(aes(x = km, y = min)) +
   geom_point() +
   geom_quantile(quantiles = c(.25, .5, .75))
@@ -335,10 +324,8 @@ $$
 
 
 ```r
-tibble(
-  km = runif(100, 2, 40),
-  min = rgamma(100, shape = km * .5, scale = 4)
-) %>%
+tibble(km  = runif(100, 2, 40),
+       min = rgamma(100, shape = km * .5, scale = 4)) %>% 
   ggplot(aes(x = km, y = min)) +
   geom_point() +
   geom_quantile(quantiles = c(.25, .5, .75))
@@ -362,14 +349,10 @@ $$
 
 
 ```r
-tibble(
-  Task = rep(c("writing article", "using infusion pump"), 50),
-  errors = rpois(100,
-    lambda = if_else(Task == "writing article",
-      200, 8
-    )
-  )
-) %>%
+tibble(Task  = rep(c("writing article", "using infusion pump"), 50),
+       errors = rpois(100,
+                      lambda = if_else(Task == "writing article", 
+                                       200, 8))) %>%
   ggplot(aes(x = Task, y = errors)) +
   geom_boxplot() +
   geom_jitter()
@@ -395,10 +378,8 @@ To see this, imagine a study that examines the relationship between user experti
 
 
 ```r
-tibble(
-  expertise = runif(1000, 0, 1),
-  successes = rbinom(1000, 25, expertise)
-) %>%
+tibble(expertise  = runif(1000, 0, 1),
+           successes = rbinom(1000, 25, expertise)) %>%
   ggplot(aes(x = expertise, y = successes)) +
   geom_point()
 ```
@@ -443,13 +424,11 @@ The link function is the logarithm, as it transforms from the non-negative range
 
 ```r
 set.seed(6)
-D_Pois <-
-  tibble(
-    Obs = 1:30,
-    items_found = rpois(30, lambda = 3.4)
-  )
+D_Pois <- 
+  tibble(Obs = 1:30,
+  items_found = rpois(30, lambda = 3.4))
 
-D_Pois %>%
+D_Pois %>% 
   ggplot(aes(x = items_found)) +
   geom_histogram()
 ```
@@ -460,11 +439,10 @@ D_Pois %>%
 </div>
 
 ```r
-M_Pois <-
+M_Pois <- 
   stan_glm(items_found ~ 1,
-    family = poisson,
-    data = D_Pois
-  )
+           family = poisson,
+           data = D_Pois)
 ```
 
 
@@ -534,14 +512,13 @@ attach(IPump)
 
 
 ```r
-M_dev <-
-  stan_glmer(deviations ~ Design + session + session:Design +
-    (1 + Design + session | Part) +
-    (1 + Design | Task) +
-    (1 | Obs), ## observation-level ramdom effect
-  family = poisson,
-  data = D_pumps
-  )
+M_dev <- 
+  stan_glmer(deviations ~ Design + session + session:Design + 
+               (1 + Design + session|Part) +
+               (1 + Design|Task) +
+               (1|Obs), ## observation-level ramdom effect
+             family = poisson,
+             data = D_pumps) 
 ```
 
 
@@ -659,27 +636,24 @@ attach(IPump)
 
 
 ```r
-D_agg <-
-  D_agg %>%
-  mutate(
-    Step_1 = as.integer(session >= 1),
-    Step_2 = as.integer(session >= 2)
-  )
+D_agg <- 
+  D_agg %>% 
+  mutate(Step_1 = as.integer(session >= 1),
+         Step_2 = as.integer(session >= 2))
 ```
 
 
 
 ```r
 ## Ordered  regression model
-M_pois_cozfm <-
-  D_agg %>%
-  brm(deviations ~ 0 + Design + Step_1:Design + Step_2:Design,
-    family = "poisson", data = .
-  )
+M_pois_cozfm <- 
+  D_agg %>% 
+  brm(deviations ~ 0 + Design + Step_1:Design + Step_2:Design, 
+      family = "poisson", data = .)
 
 ## Linear regression model
 M_pois_clzrm <-
-  D_agg %>%
+  D_agg %>% 
   brm(deviations ~ 0 + Design + session:Design, family = "poisson", data = .)
 ```
 
@@ -691,23 +665,20 @@ T_fixef <-
   bind_rows(
     posterior(M_pois_cozfm),
     posterior(M_pois_clzrm)
-  ) %>%
-  fixef(mean.func = exp) %>%
-  separate(fixef, into = c("Design", "Learning_unit"), sep = ":") %>%
-  mutate(model = if_else(str_detect(model, "lz"),
-    "Continuous Model", "Ordered Factor Model"
-  )) %>%
-  filter(!is.na(Learning_unit)) %>%
-  arrange(Design, Learning_unit, model) %>%
+  ) %>% 
+  fixef(mean.func = exp) %>% 
+  separate(fixef, into = c("Design", "Learning_unit"), sep = ":") %>% 
+  mutate(model = if_else(str_detect(model, "lz"), 
+                         "Continuous Model", "Ordered Factor Model")) %>%
+  filter(!is.na(Learning_unit)) %>% 
+  arrange(Design, Learning_unit, model) %>% 
   discard_redundant()
 
-T_fixef %>%
-  ggplot(aes(
-    x = Learning_unit, y = center, col = Design,
-    ymin = lower, ymax = upper
-  )) +
+T_fixef %>% 
+  ggplot(aes(x = Learning_unit, y = center, col = Design, 
+             ymin = lower, ymax = upper)) +
   geom_crossbar(position = "dodge", width = .2) +
-  facet_wrap(. ~ model, scales = "free_x") +
+  facet_wrap(.~model, scales = "free_x") +
   labs(y = "rate of learning", scales = "free_x") +
   ylim(0, 1.2)
 ```
@@ -726,10 +697,9 @@ With the Poisson OFM the learning rates are very similar for both steps, which m
 
 ```r
 M_pois_lzrm <-
-  D_agg %>%
-  brm(deviations ~ 1 + Design + session,
-    family = "poisson", data = .
-  )
+  D_agg %>% 
+  brm(deviations ~ 1 + Design + session, 
+      family = "poisson", data = .)
 ```
 
 
@@ -955,8 +925,8 @@ For this purpose, we can classify users by what method they start with when give
 
 ```r
 set.seed(42)
-D_web <-
-  tibble(init_keyword = rbinom(100, 1, .4)) %>%
+D_web <- 
+  tibble(init_keyword = rbinom(100, 1, .4)) %>% 
   as_tbl_obs()
 
 D_web
@@ -982,10 +952,9 @@ For estimating the proportion of the two classes of users, we run a logistic reg
 
 
 ```r
-M_web <- stan_glm(init_keyword ~ 1,
-  data = D_web,
-  family = binomial
-)
+M_web <- stan_glm(init_keyword ~ 1, 
+                  data = D_web,
+                  family = binomial)
 ```
 
 
@@ -1078,12 +1047,10 @@ Imagine  we had conducted an extended version of the previous experiment, where 
 
 ```r
 set.seed(42)
-D_web_ex <-
-  tibble(
-    trials = round(runif(100, 7, 10), 0),
-    init_keyword = rbinom(100, trials, .4),
-    init_link = trials - init_keyword
-  ) %>%
+D_web_ex <- 
+  tibble(trials = round(runif(100, 7, 10), 0),
+         init_keyword = rbinom(100, trials, .4),
+         init_link = trials - init_keyword) %>% 
   mascutils::as_tbl_obs()
 
 D_web_ex
@@ -1116,19 +1083,17 @@ In order to estimate a model on the proportion of successes in a number of trial
 
 
 ```r
-M_web_ex <- stan_glm(cbind(init_keyword, init_link) ~ 1, # <--
-  family = binomial,
-  data = D_web_ex
-)
+M_web_ex <- stan_glm(cbind(init_keyword, init_link) ~ 1,# <--
+                   family = binomial,
+                   data = D_web_ex)
 ```
 
 
 
 
 ```r
-fixef(M_web_ex,
-  mean.func = inv_logit
-)
+fixef(M_web_ex, 
+      mean.func = inv_logit)
 ```
 
 
@@ -1180,13 +1145,12 @@ attach(IPump)
 
 
 ```r
-M_cmpl <-
-  D_pumps %>%
-  stan_glmer(completion ~ Design * Session +
-    (1 | Part) + (1 | Task),
-  family = binomial,
-  data = .
-  )
+M_cmpl <-   
+  D_pumps %>%  
+  stan_glmer(completion ~ Design * Session + 
+               (1|Part) + (1|Task),
+             family = binomial,
+             data = .)
 ```
 
 
@@ -1406,20 +1370,16 @@ The following simulation function works by using a two-parameter distribution, t
 
 ```r
 set.seed(42)
-N <- 400
+N = 400
 avg_sweet <- 6
-size <- 3
+size = 3
 
-Sweet_blood_nbin <- tibble(
-  Method = "NegBinomial",
-  bites = rnbinom(
-    n = N,
-    mu = avg_sweet,
-    size = size
-  )
-)
+Sweet_blood_nbin <- tibble(Method = "NegBinomial",
+                           bites = rnbinom(n = N, 
+                                           mu = avg_sweet, 
+                                           size = size))
 
-Sweet_blood_nbin %>%
+Sweet_blood_nbin %>% 
   summarize(mean(bites), var(bites)) 
 ```
 
@@ -1436,17 +1396,15 @@ The next simulation first creates an observation-level score for blood sweetness
 
 ```r
 set.seed(42)
-sd <- .5
+sd = .5
 
 
 Sweet_blood_olre <-
-  tibble(
-    Method = "OLRE",
-    sweetness = rnorm(N, mean = log(avg_sweet), sd = sd),
-    bites = rpois(N, lambda = exp(sweetness))
-  )
+  tibble(Method = "OLRE",
+         sweetness = rnorm(N, mean = log(avg_sweet), sd = sd),
+         bites = rpois(N, lambda = exp(sweetness)))
 
-Sweet_blood_olre %>%
+Sweet_blood_olre %>% 
   summarize(mean(bites), var(bites)) 
 ```
 
@@ -1461,17 +1419,13 @@ Table: (\#tab:logreg-11)Overdispersed counts can be sampled as Gaussian deviatio
 
 
 ```r
-tibble(
-  Method = "Poisson",
-  bites = rpois(N, avg_sweet)
-) %>%
-  bind_rows(
-    Sweet_blood_nbin,
-    Sweet_blood_olre
-  ) %>%
-  ggplot(aes(x = bites)) +
+tibble(Method = "Poisson",
+       bites = rpois(N, avg_sweet)) %>% 
+  bind_rows(Sweet_blood_nbin,
+            Sweet_blood_olre) %>% 
+  ggplot(aes(x = bites)) + 
   geom_histogram() +
-  facet_grid(Method ~ .)
+  facet_grid(Method~.)
 ```
 
 <div class="figure">
@@ -1537,11 +1491,9 @@ attach(IPump)
 
 
 ```r
-M_negbin_lzrm <-
-  brm(deviations ~ 1 + Design + session,
-    data = D_agg,
-    family = "negbinomial"
-  )
+M_negbin_lzrm <- 
+  brm(deviations ~ 1 + Design + session, data = D_agg,
+      family = "negbinomial")
 ```
 
 
@@ -1551,10 +1503,9 @@ M_negbin_lzrm <-
 ```r
 bind_rows(
   posterior(M_pois_lzrm),
-  posterior(M_negbin_lzrm)
-) %>%
-  filter(type == "fixef") %>%
-  clu() %>%
+  posterior(M_negbin_lzrm)) %>%   
+  filter(type == "fixef") %>% 
+  clu() %>% 
   ggplot(aes(y = center, ymin = lower, ymax = upper, x = model)) +
   facet_wrap(~fixef, scales = "free_y") +
   geom_crossbar(position = "dodge")
@@ -1599,11 +1550,10 @@ Beta-binomial regression follows a similar pattern as negative-binomial. A two p
 
 
 ```r
-rbetabinom <- function(n, size, a, b) {
+rbetabinom <-   function(n, size, a, b) 
   rbinom(n, size, rbeta(n, a, b))
-}
 
-rbetabinom(1000, 10, 1, 2) %>% qplot()
+rbetabinom(1000, 10, 1, 2) %>%  qplot()
 ```
 
 <div class="figure">
@@ -1624,8 +1574,7 @@ The Brms regression engine currently does not implement the beta-binomial family
 ```r
 # define a custom beta-binomial family
 beta_binomial2 <- custom_family(
-  "beta_binomial2",
-  dpars = c("mu", "phi"),
+  "beta_binomial2", dpars = c("mu", "phi"),
   links = c("logit", "log"), lb = c(NA, 0),
   type = "int", vars = "trials[n]"
 )
@@ -1649,20 +1598,16 @@ Defining the two functions is sufficient to estimate beta-binomial models with B
 
 ```r
 set.seed(42)
-D_betabin <- tibble(
-  y = VGAM::rbetabinom(1000, 9, prob = .1, rho = .3),
-  n = 9
-) %>%
+D_betabin <- tibble(y = VGAM::rbetabinom(1000, 9, prob = .1, rho = .3),
+                    n = 9) %>% 
   as_tbl_obs()
 
-M_betabin <-
-  D_betabin %>%
-  brm(y | trials(n) ~ 1,
-    family = beta_binomial2,
-    stan_funs = bb_stan_funs, data = .
-  )
+M_betabin <- 
+  D_betabin %>% 
+  brm(y | trials(n) ~ 1, family = beta_binomial2, 
+      stan_funs = bb_stan_funs, data = .)
 
-M_bin <- brm(y | trials(n) ~ 1, family = "binomial", data = D_betabin)
+M_bin <- brm(y |trials(n) ~ 1, family = "binomial", data = D_betabin)
 ```
 
 The following CLU table collects the estimates from both models, the true beta-binomial and the binomial, which does not account for over-dispersion in the data.
@@ -1671,8 +1616,7 @@ The following CLU table collects the estimates from both models, the true beta-b
 ```r
 bind_rows(
   posterior(M_bin),
-  posterior(M_betabin)
-) %>%
+  posterior(M_betabin)) %>% 
   clu(mean.func = inv_logit)
 ```
 
@@ -1733,30 +1677,24 @@ For demonstration of the concept, we simulate from an overdispersed Poisson gran
 
 ```r
 sim_ovdsp <- function(
-                      beta_0 = 2, # mu = 8
-                      sd_Obs = .3,
-                      sd_Part = .5,
-                      N_Part = 30,
-                      N_Rep = 20,
-                      N_Obs = N_Part * N_Rep,
-                      seed = 1) {
+  beta_0 = 2,   # mu = 8
+  sd_Obs = .3, 
+  sd_Part   = .5,
+  N_Part = 30,
+  N_Rep  = 20, 
+  N_Obs =  N_Part * N_Rep,
+  seed = 1){
   set.seed(seed)
-  Part <- tibble(
-    Part = 1:N_Part,
-    beta_0p = rnorm(N_Part, 0, sd_Part)
-  ) ## participant-level RE
-  D <- tibble(
-    Obs = 1:N_Obs,
-    Part = rep(1:N_Part, N_Rep),
-    beta_0i = rnorm(N_Obs, 0, sd_Obs), ## observeration-level RE
-    beta_0 = beta_0
-  ) %>%
-    left_join(Part) %>%
-    mutate(
-      theta_i = beta_0 + beta_0p + beta_0i,
-      mu_i = exp(theta_i), ## inverse link function
-      y_i = rpois(N_Obs, mu_i)
-    )
+  Part <- tibble(Part = 1:N_Part,
+                     beta_0p = rnorm(N_Part, 0, sd_Part)) ## participant-level RE
+  D <- tibble(Obs  = 1:N_Obs,
+                    Part = rep(1:N_Part, N_Rep),
+                    beta_0i = rnorm(N_Obs, 0, sd_Obs),   ## observeration-level RE
+                    beta_0 = beta_0) %>%
+    left_join(Part) %>% 
+    mutate(theta_i = beta_0 + beta_0p + beta_0i,
+           mu_i    = exp(theta_i),               ## inverse link function
+           y_i     = rpois(N_Obs, mu_i))
   D %>% as_tbl_obs()
 }
 
@@ -1775,12 +1713,10 @@ The extra variation comes from two sources: participant-level and observation-le
 
 
 ```r
-M_ovdsp <-
-  D_ovdsp %>%
-  stan_glmer(y_i ~ 1 + (1 | Part) + (1 | Obs),
-    data = .,
-    family = poisson
-  )
+M_ovdsp <- 
+  D_ovdsp %>% 
+  stan_glmer(y_i ~ 1 + (1|Part) + (1|Obs), data = .,
+             family = poisson)
 ```
 
 
@@ -1807,14 +1743,14 @@ Let's first take a look at the two random effect standard errors above. It seems
 
 
 ```r
-OLRE <-
-  posterior(M_ovdsp) %>%
-  filter(type == "ranef", re_factor == "Obs") %>%
+OLRE <- 
+  posterior(M_ovdsp) %>% 
+  filter(type == "ranef", re_factor == "Obs") %>% 
   clu()
 
-D_ovdsp %>%
-  bind_cols(OLRE) %>%
-  select(true_score = beta_0i, olre = center) %>%
+D_ovdsp %>% 
+  bind_cols(OLRE) %>% 
+  select(true_score = beta_0i, olre = center) %>% 
   ggplot(aes(x = true_score, y = olre)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)
@@ -1897,13 +1833,11 @@ In the following, data is simulated from an exponential distribution (Figure \@r
 
 ```r
 set.seed(20)
-D_exp <-
-  tibble(
-    Obs = 1:100,
-    time = rexp(100, rate = 1 / 3)
-  )
+D_exp <- 
+  tibble(Obs = 1:100,
+  time = rexp(100, rate = 1/3))
 
-D_exp %>%
+D_exp %>% 
   ggplot(aes(x = time)) +
   geom_histogram(bins = 20)
 ```
@@ -1916,10 +1850,9 @@ D_exp %>%
 
 
 ```r
-M_exp <- brm(time ~ 1,
-  family = "exponential",
-  data = D_exp
-)
+M_exp <- brm(time ~ 1, 
+             family = "exponential", 
+             data = D_exp)
 ```
 
 
@@ -1950,13 +1883,11 @@ The canonical form of Gamma distribution uses two parameters rate and shape, whi
 
 ```r
 set.seed(20)
-D_gam <-
-  tibble(
-    Obs = 1:100,
-    time = rgamma(100, rate = 1 / 3, shape = 2)
-  )
+D_gam <- 
+  tibble(Obs = 1:100,
+  time = rgamma(100, rate = 1/3, shape = 2))
 
-D_gam %>%
+D_gam %>% 
   ggplot(aes(x = time)) +
   geom_histogram(bins = 20)
 ```
@@ -1971,10 +1902,9 @@ In comparison to the exponential distribution (Figure \@ref(fig:expreg-1)), a si
 
 
 ```r
-M_gam <- brm(time ~ 1,
-  family = Gamma(link = log),
-  data = D_gam
-)
+M_gam <- brm(time ~ 1, 
+             family = Gamma(link = log), 
+             data = D_gam)
 ```
 
 
@@ -2017,17 +1947,13 @@ attach(Egan)
 
 
 ```r
-D_egan %>%
-  filter(
-    success,
-    Task == "academic calendar"
-  ) %>%
-  group_by(Task, Design) %>%
-  summarize(
-    min_time = min(ToT),
-    range = max(ToT) - min_time,
-    min_time / range
-  ) %>%
+D_egan %>% 
+  filter(success,
+         Task == "academic calendar") %>% 
+  group_by(Task, Design) %>% 
+  summarize(min_time = min(ToT),
+            range = max(ToT) - min_time,
+            min_time/range) %>% 
   arrange(min_time) 
 ```
 
@@ -2057,26 +1983,20 @@ On the first glance, that does not seem to pose a major problem for Gamma distri
 
 
 ```r
-M <- c(100, 200, 400)
-V <- 8000
+M = c(100,200, 400)
+V = 8000
 
 ## gamma
-rate <- M / V
-shape <- rate^2 * V
+rate = M/V
+shape = rate^2 * V
 
 ggplot(data.frame(x = c(0, 3000)), aes(x = x)) +
-  stat_function(
-    fun = dgamma,
-    args = list(rate = rate[1], shape = shape[1])
-  ) +
-  stat_function(
-    fun = dgamma,
-    args = list(rate = rate[1], shape = shape[2])
-  ) +
-  stat_function(
-    fun = dgamma,
-    args = list(rate = rate[1], shape = shape[3])
-  ) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[1])) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[2])) +
+  stat_function(fun = dgamma, 
+                args = list(rate = rate[1], shape = shape[3])) +
   labs(x = "ToT", y = "density")
 ```
 
@@ -2089,39 +2009,31 @@ So far in this chapter, we have seen that distributions with one parameter (Pois
 
 
 ```r
-M <- 400
-V <- 8000
+M = 400
+V = 8000
 
 ## Exgaussian
-mu <- M
-beta <- 80
-sigma <- sqrt(V - beta^2)
+mu = M
+beta = 80
+sigma = sqrt(V - beta^2)
 
 ## Gamma
-rate <- M / V
-shape <- rate^2 * V
+rate = M/V
+shape = rate^2 * V
 
 ggplot(data.frame(x = c(0, 800)), aes(x = x)) +
-  stat_function(
-    fun = dgamma,
-    args = list(rate = rate, shape = shape),
-    mapping = aes(colour = "Gamma")
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = M, sd = sqrt(V)),
-    mapping = aes(colour = "Gaussian")
-  ) +
-  stat_function(
-    fun = brms::dexgaussian,
-    args = list(
-      mu = M,
-      sigma = sigma,
-      beta = beta
-    ),
-    mapping = aes(colour = "Exgaussian")
-  ) +
-  labs(colour = "Distribution", x = "ToT", y = "density")
+  stat_function(fun = dgamma, 
+                args = list(rate = rate, shape = shape), 
+                mapping = aes(colour = "Gamma")) +
+  stat_function(fun = dnorm, 
+                args = list(mean = M, sd = sqrt(V)), 
+                mapping = aes(colour = "Gaussian")) +
+  stat_function(fun = brms::dexgaussian, 
+                args = list(mu = M, 
+                            sigma = sigma,
+                            beta = beta), 
+                mapping = aes(colour = "Exgaussian")) +
+  labs(colour="Distribution", x = "ToT", y = "density")
 ```
 
 <div class="figure">
@@ -2139,10 +2051,10 @@ attach(Chapter_GLM)
 
 ```r
 set.seed(126)
-D_exg <-
+D_exg <- 
   tibble(Y = rexgaussian(100, mu = 100, sigma = 20, beta = 30))
 
-qplot(D_exg$Y) + xlim(0, 300)
+qplot(D_exg$Y) + xlim(0,300)
 ```
 
 <div class="figure">
@@ -2154,9 +2066,8 @@ qplot(D_exg$Y) + xlim(0, 300)
 
 ```r
 M_exg <- brm(Y ~ 1,
-  family = exgaussian,
-  data = D_exg
-)
+             family = exgaussian,
+             data = D_exg)
 ```
 
 
@@ -2221,7 +2132,7 @@ Most of the participant-level frequency distributions of RT have a clear cut-off
 D_hugme %>%
   filter(Part <= 6) %>%
   ggplot(aes(y = RT, x = PrimeGeek)) +
-  facet_wrap(~Part, nrow = 2) +
+  facet_wrap(~Part, nrow = 2) + 
   geom_violin()
 ```
 
@@ -2237,38 +2148,35 @@ Even the effect of geek primes is barely visible, but we clearly observe a left 
 ```r
 memory.limit(16000)
 
-F_1 <- formula(RT ~ 1 + PrimeGeek + (1 + PrimeGeek | Part))
+F_1 <- formula(RT ~ 1 + PrimeGeek + (1 + PrimeGeek|Part))
 
-M_1_gau <- D_hugme %>%
+M_1_gau <- D_hugme %>% 
   brm(F_1,
-    family = gaussian,
-    data = .
-  )
+      family = gaussian,
+      data = .)
 
-M_1_gam <- D_hugme %>%
+M_1_gam <- D_hugme %>% 
   brm(F_1,
-    family = Gamma(link = identity),
-    data = .
-  )
+      family = Gamma(link = identity),
+      data = .)
 
-M_1_exg <- D_hugme %>%
+M_1_exg <- D_hugme %>% 
   brm(F_1,
-    family = exgaussian,
-    data = .
-  )
+      family = exgaussian,
+      data = .)
 
-P_1 <- bind_rows(
+P_1 <- bind_rows( 
   posterior(M_1_gau),
   posterior(M_1_gam),
   posterior(M_1_exg)
 )
 
-T_1_predict <-
-  bind_rows(
+T_1_predict <- 
+  bind_rows( 
     post_pred(M_1_gau, thin = 5),
     post_pred(M_1_gam, thin = 5),
     post_pred(M_1_exg, thin = 5)
-  ) %>%
+  ) %>% 
   predict()
 ```
 
@@ -2281,11 +2189,9 @@ The below plot shows the population-level effects for the three models. The cent
 
 
 ```r
-fixef(P_1) %>%
-  ggplot(aes(
-    y = center, ymin = lower, ymax = upper,
-    x = model
-  )) +
+fixef(P_1) %>% 
+  ggplot(aes(y = center, ymin = lower, ymax = upper, 
+             x = model)) +  
   facet_wrap(~fixef, scales = "free") +
   geom_crossbar(width = .2, position = "dodge")
 ```
@@ -2302,13 +2208,13 @@ If the Exgaussian model has a better fit, we should primarily see that in how th
 
 
 ```r
-D_hugme <- D_hugme %>%
-  left_join(T_1_predict) %>%
+D_hugme <- D_hugme %>% 
+  left_join(T_1_predict) %>% 
   mutate(resid = RT - center)
 
-D_hugme %>%
+D_hugme %>% 
   ggplot(aes(y = resid, x = PrimeGeek)) +
-  facet_grid(. ~ model) +
+  facet_grid(.~model) +
   geom_violin()
 ```
 
@@ -2344,47 +2250,43 @@ attach(CUE8)
 
 
 ```r
-D_cue8_mod <-
-  D_cue8 %>%
-  filter(Condition == "moderated", !is.na(ToT)) %>%
+D_cue8_mod <- 
+  D_cue8 %>% 
+  filter(Condition == "moderated", !is.na(ToT)) %>% 
   as_tbl_obs()
 ```
 
 
 
 ```r
-F_4 <- formula(ToT ~ 0 + Task + (1 | Part))
+F_4 <- formula(ToT ~ 0 + Task + (1|Part))
 
-M_4_gau <- D_cue8_mod %>%
+M_4_gau <- D_cue8_mod %>% 
   brm(F_4,
-    family = gaussian(link = log),
-    data = ., iter = 2000
-  )
+      family = gaussian(link = log),
+      data = ., iter = 2000)
 
-M_4_exg <- D_cue8_mod %>%
+M_4_exg <- D_cue8_mod %>% 
   brm(F_4,
-    family = exgaussian(link = log),
-    data = ., iter = 2000
-  )
+      family = exgaussian(link = log),
+      data = ., iter = 2000)
 
-M_4_gam <- D_cue8_mod %>%
+M_4_gam <- D_cue8_mod %>% 
   brm(F_4,
-    family = Gamma(link = log),
-    data = ., iter = 2000
-  )
+      family = Gamma(link = log),
+      data = ., iter = 2000)
 
-P_4 <- bind_rows(
+P_4 <- bind_rows( 
   posterior(M_4_gau),
   posterior(M_4_gam) %>% mutate(value = if_else(value %in% c("fixef", "ranef"), exp(value), value)),
   posterior(M_4_exg)
 )
 
 
-T_4_predict <- bind_rows(
+T_4_predict <- bind_rows( 
   post_pred(M_4_gau, thin = 5),
   post_pred(M_4_gam, thin = 5),
-  post_pred(M_4_exg, thin = 5)
-) %>%
+  post_pred(M_4_exg, thin = 5)) %>% 
   predict()
 ```
 
@@ -2398,14 +2300,12 @@ T_4_predict <- bind_rows(
 
 
 ```r
-fixef(P_4, mean.func = exp) %>%
-  ggplot(aes(
-    y = center, ymin = lower, ymax = upper,
-    x = model
-  )) +
+fixef(P_4, mean.func = exp) %>% 
+  ggplot(aes(y = center, ymin = lower, ymax = upper, 
+             x = model)) +  
   facet_wrap(~fixef) +
   geom_crossbar(width = .2) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x=element_text(angle=45, hjust = 1))
 ```
 
 <div class="figure">
@@ -2419,12 +2319,12 @@ Inspecting the residual distributions yields a similar pattern as with RT data: 
 
 
 ```r
-left_join(T_4_predict, D_cue8_mod, by = "Obs") %>%
-  mutate(resid = ToT - center) %>%
+left_join(T_4_predict, D_cue8_mod, by = "Obs") %>% 
+  mutate(resid = ToT - center) %>% 
   ggplot(aes(x = model, y = resid)) +
-  facet_wrap(~Task, nrow = 2) +
+  facet_wrap(~Task, nrow = 2) + 
   geom_violin() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x=element_text(angle=45, hjust = 1))
 ```
 
 <div class="figure">
@@ -2542,7 +2442,7 @@ One last issue remains to get clarified: using the identity link for Exgaussian 
 
 ```r
 bind_rows(Hugme$T_1_predict, CUE8$T_4_predict) %>%
-  group_by(model) %>%
+  group_by(model) %>% 
   summarize(mean(lower < 0)) 
 ```
 
@@ -2714,17 +2614,15 @@ To speak of a real case: In the IPump study, a single-item rating scale was used
 ```r
 attach(IPump)
 
-D_pumps %>%
-  group_by(Part) %>%
-  summarize(
-    min = min(workload),
-    max = max(workload),
-    median = median(workload)
-  ) %>%
-  mutate(Part_ord = rank(max, ties.method = "first")) %>%
+D_pumps %>% 
+  group_by(Part) %>% 
+  summarize(min = min(workload),
+            max = max(workload),
+            median = median(workload)) %>%
+  mutate(Part_ord = rank(max, ties.method = "first")) %>% 
   ggplot(aes(x = Part_ord, ymax = max, ymin = min, y = median)) +
   geom_crossbar() +
-  labs(x = "Part(ordered)", y = "workload")
+  labs(x = "Part(ordered)",y = "workload")
 ```
 
 <div class="figure">
@@ -2783,11 +2681,11 @@ attach(BrowsingAB)
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   ggplot(aes(x = rating)) +
-  facet_grid(Design ~ .) +
+  facet_grid(Design~.) +
   geom_histogram() +
-  xlim(1, 7)
+  xlim(1,7)
 ```
 
 <div class="figure">
@@ -2799,12 +2697,11 @@ The brms regression engine implements ordinal regression by the family `cratio` 
 
 
 ```r
-M_ord_1 <-
-  BAB1 %>%
-  brm(rating ~ Design,
-    family = "cratio",
-    data = .
-  )
+M_ord_1 <- 
+  BAB1 %>% 
+  brm(rating ~ Design, 
+      family = "cratio", 
+      data = .) 
 ```
 
 
@@ -2927,19 +2824,17 @@ attach(CUE8)
 
 ```r
 D_cue8_SUS <-
-  D_cue8 %>%
-  filter(!is.na(SUS)) %>%
-  group_by(Part, Team, Condition) %>%
-  dplyr::summarize(
-    ToT = sum(ToT),
-    SUS = mean(SUS)
-  ) %>%
+  D_cue8 %>% 
+  filter(!is.na(SUS)) %>% 
+  group_by(Part, Team, Condition) %>% 
+  dplyr::summarize(ToT = sum(ToT),
+            SUS = mean(SUS)) %>% 
   ungroup() %>%
-  filter(ToT > 30) %>%
+  filter(ToT > 30) %>% 
   mutate(SUS = mascutils::rescale_unit(SUS)) %>%
   as_tbl_obs()
 
-D_cue8_SUS %>%
+D_cue8_SUS %>% 
   ggplot(aes(x = Team, y = SUS)) +
   facet_grid(~Condition) +
   geom_violin() +
@@ -2955,11 +2850,10 @@ D_cue8_SUS %>%
 
 ```r
 M_5_bet <-
-  D_cue8_SUS %>%
+  D_cue8_SUS %>% 
   brm(SUS ~ Condition + (1 | Team),
-    family = Beta(link = "logit"),
-    data = .
-  )
+      family = Beta(link = "logit"),
+      data = .)
 ```
 
 
@@ -3021,31 +2915,25 @@ For the sake of simplicity (not for a strong research design), let us assume tha
 ```r
 set.seed(42)
 
-N <- 400
+N = 400
 
 Conditions <-
-  tribble(
-    ~Anchoring, ~mu, ~phi,
-    "extreme", .3, 18,
-    "moderate", .3, 6
-  ) %>%
-  mutate(
-    a = mu * phi,
-    b = phi - mu * phi
-  )
+  tribble(~Anchoring, ~mu, ~phi,
+          "extreme", .3, 18,
+          "moderate", .3, 6) %>% 
+  mutate(a = mu * phi,
+         b = phi - mu * phi)
 
-D_Anchor <-
-  tibble(
-    Obs = 1:N,
-    Anchoring = rep(c("extreme", "moderate"), N / 2)
-  ) %>%
-  left_join(Conditions) %>%
+D_Anchor <- 
+  tibble(Obs = 1:N,
+         Anchoring = rep(c("extreme", "moderate"), N/2)) %>% 
+  left_join(Conditions) %>% 
   mutate(rating = rbeta(N, a, b))
 
-D_Anchor %>%
+D_Anchor %>% 
   ggplot(aes(x = Anchoring, y = rating)) +
   geom_violin() +
-  ylim(0, 1)
+  ylim(0,1)
 ```
 
 <div class="figure">
@@ -3082,13 +2970,10 @@ When estimating dispersion or scale parameters, we have to regard that these are
 
 
 ```r
-M_beta <- brm(bf(
-  rating ~ 0 + Anchoring,
-  phi ~ 0 + Anchoring
-),
-family = Beta(),
-data = D_Anchor
-)
+M_beta <- brm(bf(rating ~ 0 + Anchoring,
+                 phi ~ 0 + Anchoring),
+              family = Beta(),
+              data = D_Anchor)
 ```
 
 
@@ -3097,11 +2982,10 @@ The parameter table below contains the two regular coefficients on location and,
 
 
 ```r
-posterior(M_beta) %>%
-  mutate(value = if_else(str_detect(parameter, "phi"),
-    exp(value),
-    inv_logit(value)
-  )) %>%
+posterior(M_beta) %>% 
+  mutate(value = if_else(str_detect(parameter, "phi"), 
+                         exp(value), 
+                         inv_logit(value))) %>% 
   clu()
 ```
 
@@ -3139,29 +3023,23 @@ attach(Uncanny)
 
 ```r
 RK_1 <-
-  RK_1 %>%
+  RK_1 %>% 
   mutate(response_unit = mascutils::rescale_centered(response, scale = .99) + 1)
 
-M_poly_3_beta <-
-  brm(
-    formula = response_unit ~ 1 + huMech1 + huMech2 + huMech3 +
-      (1 + huMech1 + huMech2 + huMech3 | Part),
-    family = Beta(),
-    data = RK_1,
-    inits = 0
-  )
-
-M_poly_3_beta_dist <-
-  brm(
-    formula = bf(
-      response_unit ~ 1 + huMech1 + huMech2 + huMech3 +
+M_poly_3_beta  <-
+  brm(formula = response_unit ~ 1 + huMech1 + huMech2 + huMech3 + 
         (1 + huMech1 + huMech2 + huMech3 | Part),
-      phi ~ 1 + (1 | Part)
-    ),
-    family = Beta(),
-    data = RK_1,
-    inits = 0
-  )
+      family = Beta(),
+      data = RK_1,
+      inits = 0)
+
+M_poly_3_beta_dist  <-
+  brm(formula = bf(response_unit ~ 1 + huMech1 + huMech2 + huMech3 + 
+        (1 + huMech1 + huMech2 + huMech3 | Part),
+                   phi ~ 1 + (1|Part)),
+      family = Beta(),
+      data = RK_1,
+      inits = 0)
 ```
 
 
@@ -3173,9 +3051,9 @@ M_poly_3_beta_dist <-
 
 
 ```r
-ranef(M_poly_3_beta_dist) %>%
-  filter(nonlin == "phi") %>%
-  mutate(Part_ord = dense_rank(center)) %>%
+ranef(M_poly_3_beta_dist) %>% 
+  filter(nonlin == "phi") %>% 
+  mutate(Part_ord = dense_rank(center)) %>% 
   ggplot(aes(x = Part_ord, y = center, ymin = lower, ymax = upper)) +
   geom_crossbar()
 ```
@@ -3217,17 +3095,13 @@ attach(Hugme)
 
 
 ```r
-M_1_exg_dist <-
-  brm(
-    formula = bf(
-      RT ~ 1 + PrimeGeek + (1 + PrimeGeek | Part),
-      sigma ~ 1 + (1 | Part),
-      beta ~ 1 + (1 | Part)
-    ),
-    family = exgaussian(),
-    data = D_hugme,
-    inits = 0
-  )
+M_1_exg_dist  <-
+  brm(formula = bf(RT    ~ 1 + PrimeGeek + (1 + PrimeGeek|Part),
+                   sigma ~ 1 + (1|Part),
+                   beta  ~ 1 + (1|Part)),
+      family = exgaussian(),
+      data = D_hugme,
+      inits = 0)
 ```
 
 
@@ -3240,11 +3114,11 @@ First, we extract the fixed effects, as well as the group-level standard deviati
 ```r
 P_1_exg_dist <- posterior(M_1_exg_dist)
 
-ranef(P_1_exg_dist) %>%
-  filter(nonlin %in% c("sigma", "beta")) %>%
-  group_by(nonlin) %>%
-  mutate(Part_ord = dense_rank(center)) %>%
-  ungroup() %>%
+ranef(P_1_exg_dist) %>% 
+  filter(nonlin %in% c("sigma", "beta")) %>% 
+  group_by(nonlin) %>% 
+  mutate(Part_ord = dense_rank(center)) %>% 
+  ungroup() %>% 
   ggplot(aes(x = Part_ord, y = center, ymin = lower, ymax = upper)) +
   facet_grid(~nonlin) +
   geom_crossbar()
@@ -3260,17 +3134,15 @@ Figure \@ref(fig:distmod-5) confirms, that participants vary significantly in ho
 
 
 ```r
-P_1_exg_dist %>%
+P_1_exg_dist %>% 
   filter(type == "ranef" & fixef == "Intercept") %>%
-  mutate(
-    dist_par = str_match(parameter, "beta|sigma"),
-    dist_par = if_else(is.na(dist_par), "mu", dist_par)
-  ) %>%
-  group_by(dist_par, re_entity) %>%
-  summarize(center = median(value)) %>%
-  ungroup() %>%
-  spread(key = dist_par, value = center) %>%
-  select(-re_entity) %>%
+  mutate(dist_par = str_match(parameter, "beta|sigma"),
+         dist_par = if_else(is.na(dist_par), "mu", dist_par)) %>% 
+  group_by(dist_par, re_entity) %>% 
+  summarize(center = median(value)) %>% 
+  ungroup() %>% 
+  spread(key = dist_par, value = center) %>% 
+  select(-re_entity) %>% 
   corrr::correlate() 
 ```
 

@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Learning curve models | New statistics for design researchers</title>
+  <meta name="description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Learning curve models | New statistics for design researchers" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  <meta name="github-repo" content="schmettow/New_Stats" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Learning curve models | New statistics for design researchers" />
+  
+  <meta name="twitter:description" content="A statistics book for designers, human factors specialists, UX researchers, applied psychologists and everyone else who works to make this world an easier place." />
+  
+
+<meta name="author" content="Martin Schmettow" />
+
+
+<meta name="date" content="2021-09-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="wwm.html"/>
+<link rel="next" href="cases.html"/>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="NewStats.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="part"><span><b>I Preparations</b></span></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#whom-for"><i class="fa fa-check"></i><b>1.1</b> Whom this book is for</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#quant-design-research"><i class="fa fa-check"></i><b>1.2</b> Quantitative design research</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-new-stats"><i class="fa fa-check"></i><b>1.3</b> What is New Statistics?</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#how-to-use"><i class="fa fa-check"></i><b>1.4</b> How to use this book</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#routes"><i class="fa fa-check"></i><b>1.4.1</b> Routes</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#classroom"><i class="fa fa-check"></i><b>1.4.2</b> In the classroom</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#rosetta"><i class="fa fa-check"></i><b>1.4.3</b> The stone of Rosetta</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#thank-you-and-supplementary-readings"><i class="fa fa-check"></i><b>1.5</b> Thank you and supplementary readings</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="gsr.html"><a href="gsr.html"><i class="fa fa-check"></i><b>2</b> Getting started with R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="gsr.html"><a href="gsr.html#setting-up-r"><i class="fa fa-check"></i><b>2.1</b> Setting up the R environment</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="gsr.html"><a href="gsr.html#install-cran"><i class="fa fa-check"></i><b>2.1.1</b> Installing CRAN packages</a></li>
+<li class="chapter" data-level="2.1.2" data-path="gsr.html"><a href="gsr.html#install-github"><i class="fa fa-check"></i><b>2.1.2</b> Installing packages from Github</a></li>
+<li class="chapter" data-level="2.1.3" data-path="gsr.html"><a href="gsr.html#first-program"><i class="fa fa-check"></i><b>2.1.3</b> A first statistical program</a></li>
+<li class="chapter" data-level="2.1.4" data-path="gsr.html"><a href="gsr.html#bibliographic-notes"><i class="fa fa-check"></i><b>2.1.4</b> Bibliographic notes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="gsr.html"><a href="gsr.html#r-primer"><i class="fa fa-check"></i><b>2.2</b> Learning R: a primer</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="gsr.html"><a href="gsr.html#objects"><i class="fa fa-check"></i><b>2.2.1</b> Assigning and calling Objects</a></li>
+<li class="chapter" data-level="2.2.2" data-path="gsr.html"><a href="gsr.html#vectors"><i class="fa fa-check"></i><b>2.2.2</b> Vectors</a></li>
+<li class="chapter" data-level="2.2.3" data-path="gsr.html"><a href="gsr.html#object-types"><i class="fa fa-check"></i><b>2.2.3</b> Basic object types</a></li>
+<li class="chapter" data-level="2.2.4" data-path="gsr.html"><a href="gsr.html#operators-functions"><i class="fa fa-check"></i><b>2.2.4</b> Operators and functions</a></li>
+<li class="chapter" data-level="2.2.5" data-path="gsr.html"><a href="gsr.html#data-frames"><i class="fa fa-check"></i><b>2.2.5</b> Storing data in data frames</a></li>
+<li class="chapter" data-level="2.2.6" data-path="gsr.html"><a href="gsr.html#import-export"><i class="fa fa-check"></i><b>2.2.6</b> Import, export and archiving</a></li>
+<li class="chapter" data-level="2.2.7" data-path="gsr.html"><a href="gsr.html#case-env"><i class="fa fa-check"></i><b>2.2.7</b> Case environments</a></li>
+<li class="chapter" data-level="2.2.8" data-path="gsr.html"><a href="gsr.html#structuring-data"><i class="fa fa-check"></i><b>2.2.8</b> Structuring data</a></li>
+<li class="chapter" data-level="2.2.9" data-path="gsr.html"><a href="gsr.html#data-transformation"><i class="fa fa-check"></i><b>2.2.9</b> Data transformation</a></li>
+<li class="chapter" data-level="2.2.10" data-path="gsr.html"><a href="gsr.html#plotting"><i class="fa fa-check"></i><b>2.2.10</b> Plotting data</a></li>
+<li class="chapter" data-level="2.2.11" data-path="gsr.html"><a href="gsr.html#fitting"><i class="fa fa-check"></i><b>2.2.11</b> Fitting regression models</a></li>
+<li class="chapter" data-level="2.2.12" data-path="gsr.html"><a href="gsr.html#knitting"><i class="fa fa-check"></i><b>2.2.12</b> Knitting statistical reports</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="gsr.html"><a href="gsr.html#lib_gsr"><i class="fa fa-check"></i><b>2.3</b> Further reading</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ebs.html"><a href="ebs.html"><i class="fa fa-check"></i><b>3</b> Elements of Bayesian statistics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="ebs.html"><a href="ebs.html#decision-making"><i class="fa fa-check"></i><b>3.1</b> Rational decision making in design research</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="ebs.html"><a href="ebs.html#measuring-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Measuring uncertainty</a></li>
+<li class="chapter" data-level="3.1.2" data-path="ebs.html"><a href="ebs.html#benchmarking-designs"><i class="fa fa-check"></i><b>3.1.2</b> Benchmarking designs</a></li>
+<li class="chapter" data-level="3.1.3" data-path="ebs.html"><a href="ebs.html#comparing-designs"><i class="fa fa-check"></i><b>3.1.3</b> Comparison of designs</a></li>
+<li class="chapter" data-level="3.1.4" data-path="ebs.html"><a href="ebs.html#prior-knowledge"><i class="fa fa-check"></i><b>3.1.4</b> Prior knowledge</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="ebs.html"><a href="ebs.html#observations-measures"><i class="fa fa-check"></i><b>3.2</b> Observations and measures</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="ebs.html"><a href="ebs.html#interaction-seq"><i class="fa fa-check"></i><b>3.2.1</b> Interaction sequences</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ebs.html"><a href="ebs.html#perf-measures"><i class="fa fa-check"></i><b>3.2.2</b> Performance measures</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ebs.html"><a href="ebs.html#satisfaction-and-other-feelings"><i class="fa fa-check"></i><b>3.2.3</b> Satisfaction and other feelings</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ebs.html"><a href="ebs.html#descriptive-stats"><i class="fa fa-check"></i><b>3.3</b> Descriptive statistics</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="ebs.html"><a href="ebs.html#frequencies"><i class="fa fa-check"></i><b>3.3.1</b> Frequencies</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ebs.html"><a href="ebs.html#central-tendency"><i class="fa fa-check"></i><b>3.3.2</b> Central tendency</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ebs.html"><a href="ebs.html#dispersion"><i class="fa fa-check"></i><b>3.3.3</b> Dispersion</a></li>
+<li class="chapter" data-level="3.3.4" data-path="ebs.html"><a href="ebs.html#associations"><i class="fa fa-check"></i><b>3.3.4</b> Associations</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ebs.html"><a href="ebs.html#bayes-prob-theory"><i class="fa fa-check"></i><b>3.4</b> Bayesian probability theory</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="ebs.html"><a href="ebs.html#set-theory"><i class="fa fa-check"></i><b>3.4.1</b> Some set theory</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ebs.html"><a href="ebs.html#probability"><i class="fa fa-check"></i><b>3.4.2</b> Probability</a></li>
+<li class="chapter" data-level="3.4.3" data-path="ebs.html"><a href="ebs.html#likelihood"><i class="fa fa-check"></i><b>3.4.3</b> Likelihood</a></li>
+<li class="chapter" data-level="3.4.4" data-path="ebs.html"><a href="ebs.html#bayes-freq-prob"><i class="fa fa-check"></i><b>3.4.4</b> Bayesian and frequentist probability</a></li>
+<li class="chapter" data-level="3.4.5" data-path="ebs.html"><a href="ebs.html#bayes-theorem"><i class="fa fa-check"></i><b>3.4.5</b> Bayes theorem</a></li>
+<li class="chapter" data-level="3.4.6" data-path="ebs.html"><a href="ebs.html#dynamics-belief"><i class="fa fa-check"></i><b>3.4.6</b> Bayesian dynamics of belief</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="ebs.html"><a href="ebs.html#statmod"><i class="fa fa-check"></i><b>3.5</b> Statistical models</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="ebs.html"><a href="ebs.html#structural-part"><i class="fa fa-check"></i><b>3.5.1</b> The structural part</a></li>
+<li class="chapter" data-level="3.5.2" data-path="ebs.html"><a href="ebs.html#distributions"><i class="fa fa-check"></i><b>3.5.2</b> Distributions: shapes of randomness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="ebs.html"><a href="ebs.html#bayes-estimation"><i class="fa fa-check"></i><b>3.6</b> Towards Bayesian estimation</a></li>
+<li class="chapter" data-level="3.7" data-path="ebs.html"><a href="ebs.html#priors-defaults"><i class="fa fa-check"></i><b>3.7</b> On priors and defaults</a></li>
+<li class="chapter" data-level="3.8" data-path="ebs.html"><a href="ebs.html#further-readings"><i class="fa fa-check"></i><b>3.8</b> Further readings</a></li>
+</ul></li>
+<li class="part"><span><b>II Models</b></span></li>
+<li class="chapter" data-level="4" data-path="lm.html"><a href="lm.html"><i class="fa fa-check"></i><b>4</b> Basic Linear models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="lm.html"><a href="lm.html#gmm"><i class="fa fa-check"></i><b>4.1</b> Quantification at work: grand mean models</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="lm.html"><a href="lm.html#random-walk"><i class="fa fa-check"></i><b>4.1.1</b> Do the random walk: Markov Chain Monte Carlo sampling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="lm.html"><a href="lm.html#likelihood-random-term"><i class="fa fa-check"></i><b>4.1.2</b> Likelihood and random term</a></li>
+<li class="chapter" data-level="4.1.3" data-path="lm.html"><a href="lm.html#posterior-dist"><i class="fa fa-check"></i><b>4.1.3</b> Working with the posterior distribution</a></li>
+<li class="chapter" data-level="4.1.4" data-path="lm.html"><a href="lm.html#clu"><i class="fa fa-check"></i><b>4.1.4</b> Center and interval estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="lm.html"><a href="lm.html#lrm"><i class="fa fa-check"></i><b>4.2</b> Walk the line: linear regression</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="lm.html"><a href="lm.html#transform-measures"><i class="fa fa-check"></i><b>4.2.1</b> Transforming measures</a></li>
+<li class="chapter" data-level="4.2.2" data-path="lm.html"><a href="lm.html#correlations"><i class="fa fa-check"></i><b>4.2.2</b> Correlations</a></li>
+<li class="chapter" data-level="4.2.3" data-path="lm.html"><a href="lm.html#endless-linear"><i class="fa fa-check"></i><b>4.2.3</b> Endlessly linear</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="lm.html"><a href="lm.html#factorial-models"><i class="fa fa-check"></i><b>4.3</b> Factorial Models</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="lm.html"><a href="lm.html#cgm"><i class="fa fa-check"></i><b>4.3.1</b> A versus B: Comparison of groups</a></li>
+<li class="chapter" data-level="4.3.2" data-path="lm.html"><a href="lm.html#dummy"><i class="fa fa-check"></i><b>4.3.2</b> Not stupid: dummy variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="lm.html"><a href="lm.html#treatment-contrasts"><i class="fa fa-check"></i><b>4.3.3</b> Treatment contrast coding</a></li>
+<li class="chapter" data-level="4.3.4" data-path="lm.html"><a href="lm.html#amm"><i class="fa fa-check"></i><b>4.3.4</b> Absolute Means Model</a></li>
+<li class="chapter" data-level="4.3.5" data-path="lm.html"><a href="lm.html#ofm"><i class="fa fa-check"></i><b>4.3.5</b> Ordered Factorial Models</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mpm.html"><a href="mpm.html"><i class="fa fa-check"></i><b>5</b> Multi-predictor models</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="mpm.html"><a href="mpm.html#mrm"><i class="fa fa-check"></i><b>5.1</b> On surface: multiple regression models</a></li>
+<li class="chapter" data-level="5.2" data-path="mpm.html"><a href="mpm.html#mfm"><i class="fa fa-check"></i><b>5.2</b> Crossover: multifactorial models</a></li>
+<li class="chapter" data-level="5.3" data-path="mpm.html"><a href="mpm.html#grm"><i class="fa fa-check"></i><b>5.3</b> Line-by-line: grouped regression models</a></li>
+<li class="chapter" data-level="5.4" data-path="mpm.html"><a href="mpm.html#cfxm"><i class="fa fa-check"></i><b>5.4</b> Conditional effects models</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="mpm.html"><a href="mpm.html#cmrm"><i class="fa fa-check"></i><b>5.4.1</b> Conditional multiple regression</a></li>
+<li class="chapter" data-level="5.4.2" data-path="mpm.html"><a href="mpm.html#cmfm"><i class="fa fa-check"></i><b>5.4.2</b> Conditional multifactorial models</a></li>
+<li class="chapter" data-level="5.4.3" data-path="mpm.html"><a href="mpm.html#saturation"><i class="fa fa-check"></i><b>5.4.3</b> Saturation: hitting the boundaries</a></li>
+<li class="chapter" data-level="5.4.4" data-path="mpm.html"><a href="mpm.html#amplification"><i class="fa fa-check"></i><b>5.4.4</b> Amplification: more than the sum</a></li>
+<li class="chapter" data-level="5.4.5" data-path="mpm.html"><a href="mpm.html#cfx-theory"><i class="fa fa-check"></i><b>5.4.5</b> Conditional effects and design theory</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="mpm.html"><a href="mpm.html#prm"><i class="fa fa-check"></i><b>5.5</b> Doing the rollercoaster: polynomial regression models</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="mpm.html"><a href="mpm.html#test-stat"><i class="fa fa-check"></i><b>5.5.1</b> Make yourself a test statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="mpm.html"><a href="mpm.html#further-readings-1"><i class="fa fa-check"></i><b>5.6</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="mlm.html"><a href="mlm.html"><i class="fa fa-check"></i><b>6</b> Multilevel models</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="mlm.html"><a href="mlm.html#intercept-re"><i class="fa fa-check"></i><b>6.1</b> The Human Factor: Intercept random effects</a></li>
+<li class="chapter" data-level="6.2" data-path="mlm.html"><a href="mlm.html#slope-re"><i class="fa fa-check"></i><b>6.2</b> Multi-level linear regression: variance in change</a></li>
+<li class="chapter" data-level="6.3" data-path="mlm.html"><a href="mlm.html#thinking-multi-level"><i class="fa fa-check"></i><b>6.3</b> Thinking multi-level</a></li>
+<li class="chapter" data-level="6.4" data-path="mlm.html"><a href="mlm.html#universality"><i class="fa fa-check"></i><b>6.4</b> Testing universality of theories</a></li>
+<li class="chapter" data-level="6.5" data-path="mlm.html"><a href="mlm.html#non-human-populations"><i class="fa fa-check"></i><b>6.5</b> Non-human populations and cross-overs</a></li>
+<li class="chapter" data-level="6.6" data-path="mlm.html"><a href="mlm.html#nested-re"><i class="fa fa-check"></i><b>6.6</b> Nested random effects</a></li>
+<li class="chapter" data-level="6.7" data-path="mlm.html"><a href="mlm.html#pool-shrink"><i class="fa fa-check"></i><b>6.7</b> What are random effects? On pooling and shrinkage</a></li>
+<li class="chapter" data-level="6.8" data-path="mlm.html"><a href="mlm.html#psychometrics"><i class="fa fa-check"></i><b>6.8</b> Psychometrics and design-o-metric models</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="mlm.html"><a href="mlm.html#coverage"><i class="fa fa-check"></i><b>6.8.1</b> Coverage</a></li>
+<li class="chapter" data-level="6.8.2" data-path="mlm.html"><a href="mlm.html#reliability"><i class="fa fa-check"></i><b>6.8.2</b> Reliability</a></li>
+<li class="chapter" data-level="6.8.3" data-path="mlm.html"><a href="mlm.html#validity"><i class="fa fa-check"></i><b>6.8.3</b> Validity</a></li>
+<li class="chapter" data-level="6.8.4" data-path="mlm.html"><a href="mlm.html#designometrix"><i class="fa fa-check"></i><b>6.8.4</b> Towards Design-o-metrix</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="mlm.html"><a href="mlm.html#further-readings-2"><i class="fa fa-check"></i><b>6.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="glm.html"><a href="glm.html"><i class="fa fa-check"></i><b>7</b> Generalized Linear Models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="glm.html"><a href="glm.html#elements-glm"><i class="fa fa-check"></i><b>7.1</b> Elements of Generalized Linear Models</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="glm.html"><a href="glm.html#relinking-linearity"><i class="fa fa-check"></i><b>7.1.1</b> Re-linking linearity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="glm.html"><a href="glm.html#choosing-randomness"><i class="fa fa-check"></i><b>7.1.2</b> Choosing patterns of randomness</a></li>
+<li class="chapter" data-level="7.1.3" data-path="glm.html"><a href="glm.html#mean-var-rel"><i class="fa fa-check"></i><b>7.1.3</b> Mean-variance relationship</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="glm.html"><a href="glm.html#count-data"><i class="fa fa-check"></i><b>7.2</b> Count data</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="glm.html"><a href="glm.html#pois-reg"><i class="fa fa-check"></i><b>7.2.1</b> Poisson regression</a></li>
+<li class="chapter" data-level="7.2.2" data-path="glm.html"><a href="glm.html#logistic-reg"><i class="fa fa-check"></i><b>7.2.2</b> Logistic (aka Binomial) regression</a></li>
+<li class="chapter" data-level="7.2.3" data-path="glm.html"><a href="glm.html#overdispersion"><i class="fa fa-check"></i><b>7.2.3</b> Modelling overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="glm.html"><a href="glm.html#duration-measures"><i class="fa fa-check"></i><b>7.3</b> Duration measures</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="glm.html"><a href="glm.html#exp-gam-reg"><i class="fa fa-check"></i><b>7.3.1</b> Exponential and Gamma regression</a></li>
+<li class="chapter" data-level="7.3.2" data-path="glm.html"><a href="glm.html#exgauss-reg"><i class="fa fa-check"></i><b>7.3.2</b> ExGaussian regression</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="glm.html"><a href="glm.html#rating-scales"><i class="fa fa-check"></i><b>7.4</b> Rating scales</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="glm.html"><a href="glm.html#ord-logist-reg"><i class="fa fa-check"></i><b>7.4.1</b> Ordered logistic regression</a></li>
+<li class="chapter" data-level="7.4.2" data-path="glm.html"><a href="glm.html#beta-reg"><i class="fa fa-check"></i><b>7.4.2</b> Beta regression</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="glm.html"><a href="glm.html#distributional-models"><i class="fa fa-check"></i><b>7.5</b> Beyond mean: distributional models</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="glm.html"><a href="glm.html#item-anchoring"><i class="fa fa-check"></i><b>7.5.1</b> Item-level anchoring in rating scales</a></li>
+<li class="chapter" data-level="7.5.2" data-path="glm.html"><a href="glm.html#part-employment"><i class="fa fa-check"></i><b>7.5.2</b> Participant-level employment of scale</a></li>
+<li class="chapter" data-level="7.5.3" data-path="glm.html"><a href="glm.html#part-skew"><i class="fa fa-check"></i><b>7.5.3</b> Participant-level skew in reaction times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="glm.html"><a href="glm.html#further-readings-3"><i class="fa fa-check"></i><b>7.6</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="wwm.html"><a href="wwm.html"><i class="fa fa-check"></i><b>8</b> Working with models</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="wwm.html"><a href="wwm.html#model-criticism"><i class="fa fa-check"></i><b>8.1</b> Model criticism</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="wwm.html"><a href="wwm.html#residual-analysis"><i class="fa fa-check"></i><b>8.1.1</b> Residual analysis</a></li>
+<li class="chapter" data-level="8.1.2" data-path="wwm.html"><a href="wwm.html#fitted-responses"><i class="fa fa-check"></i><b>8.1.2</b> Fitted responses analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="wwm.html"><a href="wwm.html#model-comp"><i class="fa fa-check"></i><b>8.2</b> Model comparison</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="wwm.html"><a href="wwm.html#overfitting"><i class="fa fa-check"></i><b>8.2.1</b> The problem of over-fitting</a></li>
+<li class="chapter" data-level="8.2.2" data-path="wwm.html"><a href="wwm.html#cross-validation"><i class="fa fa-check"></i><b>8.2.2</b> Cross validation and LOO</a></li>
+<li class="chapter" data-level="8.2.3" data-path="wwm.html"><a href="wwm.html#ic"><i class="fa fa-check"></i><b>8.2.3</b> Information Criteria</a></li>
+<li class="chapter" data-level="8.2.4" data-path="wwm.html"><a href="wwm.html#model-selection"><i class="fa fa-check"></i><b>8.2.4</b> Model selection</a></li>
+<li class="chapter" data-level="8.2.5" data-path="wwm.html"><a href="wwm.html#choose-dist"><i class="fa fa-check"></i><b>8.2.5</b> Comparing response distributions</a></li>
+<li class="chapter" data-level="8.2.6" data-path="wwm.html"><a href="wwm.html#testing-theories"><i class="fa fa-check"></i><b>8.2.6</b> Testing hypotheses</a></li>
+<li class="chapter" data-level="8.2.7" data-path="wwm.html"><a href="wwm.html#bayes-factor"><i class="fa fa-check"></i><b>8.2.7</b> A note on Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="wwm.html"><a href="wwm.html#further-readings-4"><i class="fa fa-check"></i><b>8.3</b> Further readings</a></li>
+</ul></li>
+<li class="part"><span><b>III Preview Chapters</b></span></li>
+<li class="chapter" data-level="9" data-path="LCM.html"><a href="LCM.html"><i class="fa fa-check"></i><b>9</b> Learning curve models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="LCM.html"><a href="LCM.html#the-tweak-finder-model-of-building-skills"><i class="fa fa-check"></i><b>9.1</b> The tweak-finder model of building skills</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="LCM.html"><a href="LCM.html#the-exponential-law-of-finding-tweaks"><i class="fa fa-check"></i><b>9.1.1</b> The Exponential law of finding tweaks</a></li>
+<li class="chapter" data-level="9.1.2" data-path="LCM.html"><a href="LCM.html#priors"><i class="fa fa-check"></i><b>9.1.2</b> Priors</a></li>
+<li class="chapter" data-level="9.1.3" data-path="LCM.html"><a href="LCM.html#building-the-model"><i class="fa fa-check"></i><b>9.1.3</b> Building the model</a></li>
+<li class="chapter" data-level="9.1.4" data-path="LCM.html"><a href="LCM.html#analyzing-the-results"><i class="fa fa-check"></i><b>9.1.4</b> Analyzing the results</a></li>
+<li class="chapter" data-level="9.1.5" data-path="LCM.html"><a href="LCM.html#a-bunch-of-girls-and-their-lacies"><i class="fa fa-check"></i><b>9.1.5</b> A bunch of girls and their Lacies</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="LCM.html"><a href="LCM.html#conditional-learning-curve-models"><i class="fa fa-check"></i><b>9.2</b> Conditional Learning Curve Models</a></li>
+<li class="chapter" data-level="9.3" data-path="LCM.html"><a href="LCM.html#compound-learning-curves-experimental"><i class="fa fa-check"></i><b>9.3</b> Compound learning curves (EXPERIMENTAL)</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="LCM.html"><a href="LCM.html#adjusting-for-fatigue-and-finding-a-separation"><i class="fa fa-check"></i><b>9.3.1</b> Adjusting for fatigue and finding a separation</a></li>
+<li class="chapter" data-level="9.3.2" data-path="LCM.html"><a href="LCM.html#lace-acy"><i class="fa fa-check"></i><b>9.3.2</b> Lace ACY!</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="cases.html"><a href="cases.html"><i class="fa fa-check"></i><b>A</b> Cases</a>
+<ul>
+<li class="chapter" data-level="A.1" data-path="cases.html"><a href="cases.html#real-cases"><i class="fa fa-check"></i><b>A.1</b> Real cases</a>
+<ul>
+<li class="chapter" data-level="A.1.1" data-path="cases.html"><a href="cases.html#hugme"><i class="fa fa-check"></i><b>A.1.1</b> Hugme</a></li>
+<li class="chapter" data-level="A.1.2" data-path="cases.html"><a href="cases.html#cue8"><i class="fa fa-check"></i><b>A.1.2</b> CUE8</a></li>
+<li class="chapter" data-level="A.1.3" data-path="cases.html"><a href="cases.html#uncanny"><i class="fa fa-check"></i><b>A.1.3</b> Uncanny Valley</a></li>
+<li class="chapter" data-level="A.1.4" data-path="cases.html"><a href="cases.html#ipump"><i class="fa fa-check"></i><b>A.1.4</b> IPump</a></li>
+<li class="chapter" data-level="A.1.5" data-path="cases.html"><a href="cases.html#sleepstudy"><i class="fa fa-check"></i><b>A.1.5</b> Case Sleepstudy</a></li>
+<li class="chapter" data-level="A.1.6" data-path="cases.html"><a href="cases.html#egan"><i class="fa fa-check"></i><b>A.1.6</b> Egan</a></li>
+<li class="chapter" data-level="A.1.7" data-path="cases.html"><a href="cases.html#mmn"><i class="fa fa-check"></i><b>A.1.7</b> Case: Millers Magic Number</a></li>
+<li class="chapter" data-level="A.1.8" data-path="cases.html"><a href="cases.html#aup"><i class="fa fa-check"></i><b>A.1.8</b> AUP</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="cases.html"><a href="cases.html#synthetic-data"><i class="fa fa-check"></i><b>A.2</b> Synthetic data sets</a>
+<ul>
+<li class="chapter" data-level="A.2.1" data-path="cases.html"><a href="cases.html#rainfall"><i class="fa fa-check"></i><b>A.2.1</b> Rainfall</a></li>
+<li class="chapter" data-level="A.2.2" data-path="cases.html"><a href="cases.html#sec99"><i class="fa fa-check"></i><b>A.2.2</b> 99 seconds</a></li>
+<li class="chapter" data-level="A.2.3" data-path="cases.html"><a href="cases.html#rational"><i class="fa fa-check"></i><b>A.2.3</b> Rational</a></li>
+<li class="chapter" data-level="A.2.4" data-path="cases.html"><a href="cases.html#browsingab"><i class="fa fa-check"></i><b>A.2.4</b> BrowsingAB</a></li>
+<li class="chapter" data-level="A.2.5" data-path="cases.html"><a href="cases.html#headache"><i class="fa fa-check"></i><b>A.2.5</b> Headache</a></li>
+<li class="chapter" data-level="A.2.6" data-path="cases.html"><a href="cases.html#reading"><i class="fa fa-check"></i><b>A.2.6</b> Reading time</a></li>
+<li class="chapter" data-level="A.2.7" data-path="cases.html"><a href="cases.html#argame"><i class="fa fa-check"></i><b>A.2.7</b> AR_game</a></li>
+<li class="chapter" data-level="A.2.8" data-path="cases.html"><a href="cases.html#sleep"><i class="fa fa-check"></i><b>A.2.8</b> Sleep</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">New statistics for design researchers</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="LCM" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Learning curve models</h1>
+<p>As learning we describe the psychological process of improving performance by means of training. This can be many things, such as learning a language, learning to multiply large numbers or learning to lace your shoes. Broadly, two types of learning can be distinguished, that often appear in that order: For lacing her shoes, a little girl first has to learn <em>how</em> this is done, for example by the following instructions:</p>
+<ol style="list-style-type: decimal">
+<li>make a tie</li>
+<li>make a lace on the left</li>
+<li>make a lace on the right</li>
+<li>make a tie with the laces</li>
+</ol>
+<div id="the-tweak-finder-model-of-building-skills" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> The tweak-finder model of building skills</h2>
+<p>The first phase of learning happens when the child is able to translate the spoken words into an <em>action plan</em>. We may call this <em>task knowledge</em>. Task knowledge has more or less a discrete learning function, which jumps from 0 to 1 at the exact moment the instructions are understood. Once there is comprehension, it won’t go away.</p>
+<p>The second phase of learning is building <em>building skills</em>. The initial action plan is mostly just a generic recipe. In consequence, initial successes usually don’t shine with elegance, when we learn to walk, tie our shoes or throw a Three-Sixty. Building skills is a long running, continuous process of refining the action plan. These refinements are <em>tweaks</em> like short-cuts, parallel execution out-of-loop execution etc.</p>
+<p>Building skill can be ascribed as the process of <em>finding the possible tweaks</em>. This does not go on forever, because there can be only so many possible tweaks. If we further assume that finding a tweak irreversible, the set of possible tweaks must diminish over time. This makes it harder to find them and the net amount of learning per exercise diminishes.</p>
+<p>When all tweaks are found and applied, the learning organism has reached its level of <em>maximum performance</em>. Maximum performance usually is a person-specific parameter that is always finite and never zero, because some parts of the organism cannot be tweaked, such as the travel time in nerve cells and the inertia of limbs.</p>
+<p>To summarize the process of building skills has two significant properties:</p>
+<ol style="list-style-type: decimal">
+<li>There is a point of maximum performance, which is reached asymptotically, but never crossed.</li>
+<li>The process is non-linear, such that the net effect diminishes over time.</li>
+</ol>
+<div id="the-exponential-law-of-finding-tweaks" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> The Exponential law of finding tweaks</h3>
+<p>Imagine at age of three a certain little girl understood how to lace her shoes in the morning. Let’s further assume the following:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(N_0 = 1000\)</span> possible tweaks exist before the first attempt</li>
+<li>With every trial <span class="math inline">\(t\)</span>, the little girl finds the remaining tweaks at a rate of <span class="math inline">\(.002\)</span>, which means the <em>rate of survival</em> is <span class="math inline">\(\textrm{Surv} = .998\)</span></li>
+</ol>
+<p>Let’s put this in a row and see what happens up to the third attempt:</p>
+<p><span class="math display">\[
+\begin{aligned}
+N_0 &amp;= 1000\\
+N_1 &amp;= N_0 \times .998\\
+N_2 &amp;= N_1 \times .998\\
+&amp;= N_0 \times .998 \times .998\\
+N_3 &amp;= N_2 \times .998\\
+&amp;= N_0 \times .998 \times .998 \times .998
+\end{aligned}
+\]</span></p>
+<p>By this series, we see that we can predict the remaining number of tweaks at any point in time as an exponential function running over trials <span class="math inline">\(t\)</span>.</p>
+<p><span class="math display">\[
+N_t = N_0 \times \textrm{Surv}^t
+\]</span></p>
+<p>Since Surv is a proportion, this term has the property to get smaller to asymptotically (not eventually) reach zero. As this formula is only counting hypothetical tweaks, it runs against zero. However, ToT and many other measures cannot run against zero, because performance also contains a non-tweakable part, a positive constant. Let’s assume that by the girls anatomy, the non-tweakable part of the execution is 2 seconds, then her <em>maximum performance</em> <span class="math inline">\(\textrm{Asym} = 2\)</span> is reached when all tweaks are found.</p>
+<p>Maximum performance enters the formula as positive constant. If we further assume that every tweak has a net effect of <span class="math inline">\(\beta = .005\)</span> seconds, we can predict the little girl’s performance over a series of 400 mornings (Figure <a href="LCM.html#fig:little-girl-1">9.1</a>).</p>
+<p><span class="math display">\[
+P_t = \textrm{Asym} + \beta N_0^t
+\]</span></p>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="LCM.html#cb730-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Chapter_LCM)</span></code></pre></div>
+<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb731-1"><a href="LCM.html#cb731-1" aria-hidden="true" tabindex="-1"></a>sim_Lacing <span class="ot">&lt;-</span> </span>
+<span id="cb731-2"><a href="LCM.html#cb731-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(<span class="at">N_Obs =</span> <span class="dv">3000</span>, </span>
+<span id="cb731-3"><a href="LCM.html#cb731-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">N_0 =</span> <span class="dv">1000</span>, </span>
+<span id="cb731-4"><a href="LCM.html#cb731-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">beta =</span> .<span class="dv">36</span>, </span>
+<span id="cb731-5"><a href="LCM.html#cb731-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">ampl =</span> N_0 <span class="sc">*</span> beta, </span>
+<span id="cb731-6"><a href="LCM.html#cb731-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">surv =</span> .<span class="dv">998</span>, </span>
+<span id="cb731-7"><a href="LCM.html#cb731-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">asym =</span> <span class="dv">2</span>,</span>
+<span id="cb731-8"><a href="LCM.html#cb731-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">seed =</span> <span class="dv">42</span>){  </span>
+<span id="cb731-9"><a href="LCM.html#cb731-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(seed)</span>
+<span id="cb731-10"><a href="LCM.html#cb731-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(<span class="at">trial =</span> <span class="dv">1</span><span class="sc">:</span>N_Obs,</span>
+<span id="cb731-11"><a href="LCM.html#cb731-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">N_tweaks =</span> N_0 <span class="sc">*</span> surv<span class="sc">^</span>trial,</span>
+<span id="cb731-12"><a href="LCM.html#cb731-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">ToT_pred =</span> asym <span class="sc">+</span> N_tweaks <span class="sc">*</span> beta,</span>
+<span id="cb731-13"><a href="LCM.html#cb731-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">ToT =</span> <span class="fu">rgamma</span>(N_Obs, </span>
+<span id="cb731-14"><a href="LCM.html#cb731-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">shape =</span> ToT_pred<span class="sc">/</span><span class="dv">8</span>, </span>
+<span id="cb731-15"><a href="LCM.html#cb731-15" aria-hidden="true" tabindex="-1"></a>                        <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb731-16"><a href="LCM.html#cb731-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tbl_obs</span>()</span>
+<span id="cb731-17"><a href="LCM.html#cb731-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb731-18"><a href="LCM.html#cb731-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb731-19"><a href="LCM.html#cb731-19" aria-hidden="true" tabindex="-1"></a>Lacing_1 <span class="ot">&lt;-</span> <span class="fu">sim_Lacing</span>()</span>
+<span id="cb731-20"><a href="LCM.html#cb731-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb731-21"><a href="LCM.html#cb731-21" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(sim_Lacing, Lacing_1, <span class="at">Env =</span> Chapter_LCM)</span></code></pre></div>
+<pre><code>## [1] &quot;sim_Lacing&quot; &quot;Lacing_1&quot;</code></pre>
+<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb733-1"><a href="LCM.html#cb733-1" aria-hidden="true" tabindex="-1"></a>Lacing_1 <span class="sc">%&gt;%</span></span>
+<span id="cb733-2"><a href="LCM.html#cb733-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> trial)) <span class="sc">+</span></span>
+<span id="cb733-3"><a href="LCM.html#cb733-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT, </span>
+<span id="cb733-4"><a href="LCM.html#cb733-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;simulated&quot;</span>), </span>
+<span id="cb733-5"><a href="LCM.html#cb733-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> .<span class="dv">05</span>, <span class="at">alpha =</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb733-6"><a href="LCM.html#cb733-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT_pred, </span>
+<span id="cb733-7"><a href="LCM.html#cb733-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;predicted&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb733-8"><a href="LCM.html#cb733-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">2</span>, </span>
+<span id="cb733-9"><a href="LCM.html#cb733-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;maximum performance&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb733-10"><a href="LCM.html#cb733-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">col =</span> <span class="st">&quot;Performance&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:little-girl-1"></span>
+<img src="Learning_curves_files/figure-html/little-girl-1-1.png" alt="Simulating a learning process as finding of possible tweaks" width="90%" />
+<p class="caption">
+Figure 9.1: Simulating a learning process as finding of possible tweaks
+</p>
+</div>
+<p>For the practical purpose of estimating learning curves, the formula above has a problem. In reality we do not know the initial number of tweaks <span class="math inline">\(N_0\)</span>, neither do we know the performance increment per tweak <span class="math inline">\(\beta\)</span>. We only see the decline in ToT, and that’s also what we are mostly interested in. If we pull the two together as one factor, usually called the <em>amplitude</em>, <span class="math inline">\(\textrm{Ampl} = \beta N_0\)</span>. It so represents the total performance improvement from the first encounter to, well, infinite amount of training.</p>
+<p><span class="math display">\[
+P_t = \textrm{Asym} + \textrm{Ampl}\times \textrm{Surv}^t
+\]</span></p>
+<div class="sourceCode" id="cb734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb734-1"><a href="LCM.html#cb734-1" aria-hidden="true" tabindex="-1"></a>F_asy <span class="ot">&lt;-</span> <span class="fu">formula</span>(ToT <span class="sc">~</span> asym <span class="sc">+</span> ampl <span class="sc">*</span> surv<span class="sc">^</span>trial)</span>
+<span id="cb734-2"><a href="LCM.html#cb734-2" aria-hidden="true" tabindex="-1"></a>F_lasy <span class="ot">&lt;-</span> <span class="fu">formula</span>(ToT <span class="sc">~</span> <span class="fu">exp</span>(asym) <span class="sc">+</span> <span class="fu">exp</span>(ampl) <span class="sc">*</span> <span class="fu">inv_logit</span>(surv)<span class="sc">^</span>trial)</span></code></pre></div>
+<p>The first step is to consider the allowed range for the three parameters. For positive measures, such as ToT or errors, asymptote and amplitude must be non-negative. Gamma distributions come to mind. The survival rate is a proportion, ranging between zero and one, which makes Beta distributions seem a good candidate.</p>
+<p>However, the Stan engine uses a highly advanced MCMC algorithm, Hamiltonian MC sampling, which requires all parameters to run without boundaries. You can define boundaries and you can use distributions with boundaries, but they will be internally converted to an unbound parameter. Can you guess how they do the conversion? <a href="glm.html#relinking-linearity">7.1.1</a>.</p>
+<p>In the case of ASY parameters, we have two types of conversion:</p>
+<ul>
+<li><p>Ampl and Asym need conversion from non-negative to unbound</p></li>
+<li><p>Surv needs double-bound to unbound conversion.</p></li>
+</ul>
+<p>This are the exact same transformations as in the linearization of linear coefficients (<a href="glm.html#relinking-linearity">7.1.1</a>) and we can use the usual pair of transformations: log/exp and logit/inv_logit</p>
+<p>Learning curve models tend to be nasty. One trick I have learned to make the estimation more quick and stable is to transform all non-linear parameters to an unbound space, right away. Let’s get started with Asym, which we need to be non-negative. The result of the exponential function is always positive, which we can assure by rewriting the ASY model as</p>
+<p><span class="math display">\[
+P_t = \exp\textrm{Asym} + \textrm{Ampl} \times\textrm{Surv}^t
+\]</span></p>
+<p>When estimating, Asym is not the same parameter as before. It now runs on a the unbound log scale. Following the same logic for Ampl and using the inverse logit for Surv, we can create the following re-parametrization of the ASY formula:</p>
+<p><span class="math display">\[
+P_t = \exp\textrm{Asym} + \exp\textrm{Ampl} \times\textrm{logit}^{-1} \textrm{Surv}^t
+\]</span></p>
+<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="LCM.html#cb735-1" aria-hidden="true" tabindex="-1"></a>F_lasy <span class="ot">&lt;-</span> <span class="fu">formula</span>(ToT <span class="sc">~</span> <span class="fu">exp</span>(asym) <span class="sc">+</span> <span class="fu">exp</span>(ampl) <span class="sc">*</span> <span class="fu">inv_logit</span>(surv)<span class="sc">^</span>trial)</span></code></pre></div>
+</div>
+<div id="priors" class="section level3" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Priors</h3>
+<p>The models presented in the second part of the book all came with a great convenience. Formally, all Bayesian models require the specification of <em>priors (</em><a href="LCM.html#priors">9.1.2</a>). Even if a researcher has very little prior knowledge, a prior has to be given and that requires a deeper understanding of statistical distributions. The developers of Rstanarm and Brms managed to automatize the choice of <em>weak priors</em> for a wide range of models. But for non-linear models, like learning curves, the user has to specify some of the priors.</p>
+<p>The first consideration in analysis of priors is the boundaries of parameters, as these confine the prior. ASY parameters have either one or two boundaries, so using Gamma and Beta distributions to represent our belief is a possibility. However, these two distributions are particularly user-unfriendly, because they don’t have separate parameters for location and dispersion. And, most importantly, if we estimate an unbound LASY model, we can conveniently use a boundless distribution, like the Gaussian distribution, ot <span class="math inline">\(t\)</span> distribution.</p>
+<p>To start with the priors for Asym, we have to figure out what <em>maximum</em> speeds are possible in lacing your shoes. Here, I am going with the rough estimate that most adults, with years of practice, can lace their shoe within 2 and 20 seconds.</p>
+<p>A quick and crude way to create a weak Gaussian prior on an unbound parameter is to take your best guess for lower and upper values and use the logarithm to create upper and lower bounds on the log scale. Then use the center as the Normal mean and a quarter of the range as the standard error.</p>
+<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb736-1"><a href="LCM.html#cb736-1" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">2</span>)</span>
+<span id="cb736-2"><a href="LCM.html#cb736-2" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">20</span>)</span>
+<span id="cb736-3"><a href="LCM.html#cb736-3" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">=</span> (lower <span class="sc">+</span> upper)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb736-4"><a href="LCM.html#cb736-4" aria-hidden="true" tabindex="-1"></a>se <span class="ot">=</span> (upper <span class="sc">-</span> lower)<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb736-5"><a href="LCM.html#cb736-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-6"><a href="LCM.html#cb736-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="LCM.html#cb737-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se)))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p>Then, we lift the values to the scale of measures (<code>exp</code>) and cvheck if this distribution represents what we know. In this case I am quite satisfied with my <em>weakly informative prior</em>.</p>
+<p>In the same manner, we can produce a distribution for the amplitude. Here, my common sense is that the first time it can take easily take between 60 and 600 seconds longer compared to maximum performance at a much later age.</p>
+<div class="sourceCode" id="cb738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb738-1"><a href="LCM.html#cb738-1" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">60</span>)</span>
+<span id="cb738-2"><a href="LCM.html#cb738-2" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">600</span>)</span>
+<span id="cb738-3"><a href="LCM.html#cb738-3" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">=</span> (lower <span class="sc">+</span> upper)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb738-4"><a href="LCM.html#cb738-4" aria-hidden="true" tabindex="-1"></a>se <span class="ot">=</span> (upper <span class="sc">-</span> lower)<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb738-5"><a href="LCM.html#cb738-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb738-6"><a href="LCM.html#cb738-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="LCM.html#cb739-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se)))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-8-1.png" width="90%" />
+Finally, the same procedure is used on the survival rate, with a logit transformation. I have seen learning curves on several motor tasks that drop very fast, with a survival of as low as 20%. At the lower end I can think of situations with an incredibly high survival, like 99.9%.</p>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb740-1"><a href="LCM.html#cb740-1" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">=</span> <span class="fu">logit</span>(.<span class="dv">2</span>)</span>
+<span id="cb740-2"><a href="LCM.html#cb740-2" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">=</span> <span class="fu">logit</span>(.<span class="dv">999</span>)</span>
+<span id="cb740-3"><a href="LCM.html#cb740-3" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">=</span> (lower <span class="sc">+</span> upper)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb740-4"><a href="LCM.html#cb740-4" aria-hidden="true" tabindex="-1"></a>se <span class="ot">=</span> (upper <span class="sc">-</span> lower)<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb740-5"><a href="LCM.html#cb740-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb740-6"><a href="LCM.html#cb740-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb741-1"><a href="LCM.html#cb741-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">inv_logit</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se)))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-9-2.png" width="90%" />
+Note that the trick here is to approximate a Normal distribution on the linearized scale, such that it matches the prior you have on your mind, which usually is in on the original scale. So you will have to make some adjustments. The visual check after transformation is crucial, because exponentials and inverse logits are sensitive. Exponentials tend to blow up, so you may end up with unreasonably wide priors, when you choose the wrong base. Inverse logits are even worse, because if you make the Normal prior too wide, you can easily produce split-mind priors, like the following:</p>
+<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb742-1"><a href="LCM.html#cb742-1" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">=</span> <span class="fu">logit</span>(.<span class="dv">2</span>)</span>
+<span id="cb742-2"><a href="LCM.html#cb742-2" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">=</span> <span class="fu">logit</span>(.<span class="dv">999</span>)</span>
+<span id="cb742-3"><a href="LCM.html#cb742-3" aria-hidden="true" tabindex="-1"></a>mean  <span class="ot">=</span> (lower <span class="sc">+</span> upper)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb742-4"><a href="LCM.html#cb742-4" aria-hidden="true" tabindex="-1"></a>se    <span class="ot">=</span> upper <span class="sc">-</span> lower</span>
+<span id="cb742-5"><a href="LCM.html#cb742-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb742-6"><a href="LCM.html#cb742-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="LCM.html#cb743-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="fu">inv_logit</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>, mean, se)))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-10-2.png" width="90%" /></p>
+<p>The following code puts these priors into Brms formulas:</p>
+<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb744-1"><a href="LCM.html#cb744-1" aria-hidden="true" tabindex="-1"></a>F_asy_prior <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">set_prior</span>(<span class="st">&quot;normal(300, 200)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl&quot;</span>, <span class="at">lb =</span> <span class="dv">0</span>),</span>
+<span id="cb744-2"><a href="LCM.html#cb744-2" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">set_prior</span>(<span class="st">&quot;beta(2, 4)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;surv&quot;</span>, <span class="at">lb =</span> .<span class="dv">0001</span>, <span class="at">ub =</span> .<span class="dv">9999</span>),</span>
+<span id="cb744-3"><a href="LCM.html#cb744-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">set_prior</span>(<span class="st">&quot;normal(6, 5)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;asym&quot;</span>, <span class="at">lb =</span> <span class="dv">0</span>))</span>
+<span id="cb744-4"><a href="LCM.html#cb744-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb744-5"><a href="LCM.html#cb744-5" aria-hidden="true" tabindex="-1"></a>F_lasy_prior <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">set_prior</span>(<span class="st">&quot;normal(5.25, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl&quot;</span>),</span>
+<span id="cb744-6"><a href="LCM.html#cb744-6" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">set_prior</span>(<span class="st">&quot;normal(2.76, 2.07)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;surv&quot;</span>),</span>
+<span id="cb744-7"><a href="LCM.html#cb744-7" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">set_prior</span>(<span class="st">&quot;normal(1.84, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;asym&quot;</span>))</span></code></pre></div>
+</div>
+<div id="building-the-model" class="section level3" number="9.1.3">
+<h3><span class="header-section-number">9.1.3</span> Building the model</h3>
+<p>If we compare the non-linear term formula to the linear models formulas, there is one notable difference. With linear models, all coefficient names are composed of the names of measured variables. That is because they are all linear coefficients. Here, new names are introduced and the formula is not just a combination of linear terms. The second set of formulas specifies the linear association of non-linear parameters and coefficients. We will explore that later, because here there really is just a single little girl and we specify a plain intercept-only model.</p>
+<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="LCM.html#cb745-1" aria-hidden="true" tabindex="-1"></a>F_asy_ef_1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span>),</span>
+<span id="cb745-2"><a href="LCM.html#cb745-2" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">formula</span>(surv <span class="sc">~</span> <span class="dv">1</span>),</span>
+<span id="cb745-3"><a href="LCM.html#cb745-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span>))</span></code></pre></div>
+<p>The model is build by collecting the non-linear formula, the effects formula and the priors specifications. Note that <code>nl = T</code> switches the non-linear mode of on. This is crucial, because otherwise the engine assumes all variable names to be from the data set.</p>
+<p>Finally, we are dealing with duration measures, which requires a random component that is bounded below and has a suitable mean-variance relationship. As the measures are getting rather close to zero, a gamma distribution is a reasonable approximation.</p>
+<p>For our first model, we only look at the data of the first two years of training.</p>
+<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb746-1"><a href="LCM.html#cb746-1" aria-hidden="true" tabindex="-1"></a>Lacing_2 <span class="ot">&lt;-</span> </span>
+<span id="cb746-2"><a href="LCM.html#cb746-2" aria-hidden="true" tabindex="-1"></a>  Lacing_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb746-3"><a href="LCM.html#cb746-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(trial <span class="sc">&lt;=</span> <span class="dv">730</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb747-1"><a href="LCM.html#cb747-1" aria-hidden="true" tabindex="-1"></a>M_1 <span class="ot">&lt;-</span> </span>
+<span id="cb747-2"><a href="LCM.html#cb747-2" aria-hidden="true" tabindex="-1"></a>  Lacing_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb747-3"><a href="LCM.html#cb747-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lasy,</span>
+<span id="cb747-4"><a href="LCM.html#cb747-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_asy_ef_1,</span>
+<span id="cb747-5"><a href="LCM.html#cb747-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb747-6"><a href="LCM.html#cb747-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lasy_prior,</span>
+<span id="cb747-7"><a href="LCM.html#cb747-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb747-8"><a href="LCM.html#cb747-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .,</span>
+<span id="cb747-9"><a href="LCM.html#cb747-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">chains =</span> <span class="dv">2</span>)</span>
+<span id="cb747-10"><a href="LCM.html#cb747-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb747-11"><a href="LCM.html#cb747-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(Lacing_2, M_1, <span class="at">Env =</span> Chapter_LCM)</span></code></pre></div>
+<p>The fixef command extracts the parameter estimate. Since this is an intercept-only model, exponentiation yields the original scale for Ampl and Asym, whereas Surv is expressed as odds.</p>
+<div class="sourceCode" id="cb748"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb748-1"><a href="LCM.html#cb748-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_1, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-15">Table 9.1: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="right">350.24</td>
+<td align="right">336.74</td>
+<td align="right">362.5</td>
+</tr>
+<tr class="even">
+<td align="left">surv</td>
+<td align="right">483.92</td>
+<td align="right">437.98</td>
+<td align="right">511.2</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="right">7.68</td>
+<td align="right">2.36</td>
+<td align="right">22.3</td>
+</tr>
+</tbody>
+</table>
+<p>If Surv is 500, that means the odds are 500 against 1 in favor of tweak survival. This can be transformed back and from proportions as follows:</p>
+<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb749-1"><a href="LCM.html#cb749-1" aria-hidden="true" tabindex="-1"></a>odd <span class="ot">&lt;-</span> <span class="cf">function</span>(prop) prop<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>prop) </span>
+<span id="cb749-2"><a href="LCM.html#cb749-2" aria-hidden="true" tabindex="-1"></a>unodd <span class="ot">&lt;-</span> <span class="cf">function</span>(odd) odd<span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span>odd)</span>
+<span id="cb749-3"><a href="LCM.html#cb749-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb749-4"><a href="LCM.html#cb749-4" aria-hidden="true" tabindex="-1"></a>my_odd <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb749-5"><a href="LCM.html#cb749-5" aria-hidden="true" tabindex="-1"></a>my_odd</span></code></pre></div>
+<pre><code>## [1] 500</code></pre>
+<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb751-1"><a href="LCM.html#cb751-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unodd</span>(my_odd)</span></code></pre></div>
+<pre><code>## [1] 0.998</code></pre>
+<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb753-1"><a href="LCM.html#cb753-1" aria-hidden="true" tabindex="-1"></a><span class="fu">odd</span>(<span class="fu">unodd</span>(my_odd))</span></code></pre></div>
+<pre><code>## [1] 500</code></pre>
+</div>
+<div id="analyzing-the-results" class="section level3" number="9.1.4">
+<h3><span class="header-section-number">9.1.4</span> Analyzing the results</h3>
+<p>After being trained with data, the learning curve model turns into a forecasting engine. But, first we will see that all parameters have a useful interpretation.</p>
+<div id="parameter-interpretation" class="section level4" number="9.1.4.1">
+<h4><span class="header-section-number">9.1.4.1</span> Parameter interpretation</h4>
+<p>The way the ASY model is derived, the <em>Asym</em> parameter represents performance once all possible tweaks have been found. In other words, it contains all processes that are not improving by training (at least not this one) and therefore defines the <em>maximum performance</em> for this girl, under this training. If the value is 8, this will be the value the girl will work towards her whole life time, under this model.</p>
+<p>Recall how we derived <em>Ampl</em> from the tweak-finding model as the number of possible tweaks times the average gain. In other words the amplitude parameter represents the amount of <em>potential for improvement</em>, before the first trial. Or rather, what has been marked as the first trial. Sometimes, the first trial in such an experiment may not be the first attempt. Imagine, the little girl had done ten earlier attempts without her dad noticing.</p>
+<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb755-1"><a href="LCM.html#cb755-1" aria-hidden="true" tabindex="-1"></a>Lacing_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb755-2"><a href="LCM.html#cb755-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(trial <span class="sc">&lt;=</span> <span class="dv">300</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb755-3"><a href="LCM.html#cb755-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ToT_shifted =</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(ToT_pred, <span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb755-4"><a href="LCM.html#cb755-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> trial)) <span class="sc">+</span></span>
+<span id="cb755-5"><a href="LCM.html#cb755-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT_pred, <span class="at">col =</span> <span class="st">&quot;full recording&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb755-6"><a href="LCM.html#cb755-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT_shifted, <span class="at">col =</span> <span class="st">&quot;first 10 trials missed&quot;</span>))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
+<p>Amplitude and asymptote are predictions that will never happen. The real fun begins when we use parameter <em>Surv</em> to predict events that are actually going to happen. Surv represents the survival of tweaks, that means the <em>smaller</em> Surv is, the <em>faster</em> the little girl learns.</p>
+<p>How long does it take to reach a certain level? On which day will the girl have found half of the tweaks, and when will her skills reach 99%? For a start we can create a simple projection:</p>
+<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="LCM.html#cb756-1" aria-hidden="true" tabindex="-1"></a>prop_surv <span class="ot">&lt;-</span> .<span class="dv">998</span></span>
+<span id="cb756-2"><a href="LCM.html#cb756-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb756-3"><a href="LCM.html#cb756-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">years =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>,</span>
+<span id="cb756-4"><a href="LCM.html#cb756-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">trial =</span> years <span class="sc">*</span> <span class="dv">365</span>,</span>
+<span id="cb756-5"><a href="LCM.html#cb756-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">level =</span> <span class="dv">1</span> <span class="sc">-</span> prop_surv<span class="sc">^</span>trial) <span class="sc">%&gt;%</span> </span>
+<span id="cb756-6"><a href="LCM.html#cb756-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> years, <span class="at">y =</span> level)) <span class="sc">+</span></span>
+<span id="cb756-7"><a href="LCM.html#cb756-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-18-1.png" width="90%" />
+It is predicted that 50% performance already is reached within one year. For reaching 99%, the girl has to practice between 6 and 7 years. A more precise statement can be derived easily. We want to know how often Surv needs to be multiplied to reach a desired level, which means we can use the logarithm. Note how the base of the logarithm is specified. When we use the <code>exp()</code> function for scale transformations, the base does not matter as long as it is the same. When the base argument is omitted, the default base is Euler’s number <span class="math inline">\(e\)</span>. Also note that R is one of the few languages knowing infinity as a value.</p>
+<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb757-1"><a href="LCM.html#cb757-1" aria-hidden="true" tabindex="-1"></a>prop_surv <span class="ot">&lt;-</span> .<span class="dv">998</span></span>
+<span id="cb757-2"><a href="LCM.html#cb757-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb757-3"><a href="LCM.html#cb757-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">level =</span>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">95</span>, <span class="dv">99</span>, <span class="dv">100</span>)<span class="sc">/</span><span class="dv">100</span>,</span>
+<span id="cb757-4"><a href="LCM.html#cb757-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">trials =</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> level, <span class="at">base =</span> prop_surv),</span>
+<span id="cb757-5"><a href="LCM.html#cb757-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">years =</span> trials<span class="sc">/</span><span class="dv">365</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">level</th>
+<th align="right">trials</th>
+<th align="right">years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="right">0.01</td>
+<td align="right">5.02</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="odd">
+<td align="right">0.05</td>
+<td align="right">25.62</td>
+<td align="right">0.070</td>
+</tr>
+<tr class="even">
+<td align="right">0.10</td>
+<td align="right">52.63</td>
+<td align="right">0.144</td>
+</tr>
+<tr class="odd">
+<td align="right">0.50</td>
+<td align="right">346.23</td>
+<td align="right">0.949</td>
+</tr>
+<tr class="even">
+<td align="right">0.95</td>
+<td align="right">1496.37</td>
+<td align="right">4.100</td>
+</tr>
+<tr class="odd">
+<td align="right">0.99</td>
+<td align="right">2300.28</td>
+<td align="right">6.302</td>
+</tr>
+<tr class="even">
+<td align="right">1.00</td>
+<td align="right">Inf</td>
+<td align="right">Inf</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="posterior-predictions" class="section level4" number="9.1.4.2">
+<h4><span class="header-section-number">9.1.4.2</span> Posterior predictions</h4>
+<p>Parameter interpretation and projection are useful for eye-balling the model results, but they lack one important ingredient: information on certainty. Posterior predictions contain certainty information and are the ultimate method to make predictions from learning curves.</p>
+<p>We start by extracting the posterior predictions and plot them over the observed range:</p>
+<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb758-1"><a href="LCM.html#cb758-1" aria-hidden="true" tabindex="-1"></a>PP_1 <span class="ot">&lt;-</span> <span class="fu">post_pred</span>(M_1)</span>
+<span id="cb758-2"><a href="LCM.html#cb758-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(PP_1, <span class="at">Env =</span> Chapter_LCM)</span></code></pre></div>
+<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb759-1"><a href="LCM.html#cb759-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(PP_1)  <span class="sc">%&gt;%</span> </span>
+<span id="cb759-2"><a href="LCM.html#cb759-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(Lacing_1) <span class="sc">%&gt;%</span> </span>
+<span id="cb759-3"><a href="LCM.html#cb759-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> trial)) <span class="sc">+</span></span>
+<span id="cb759-4"><a href="LCM.html#cb759-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT, <span class="at">color =</span> <span class="st">&quot;data&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb759-5"><a href="LCM.html#cb759-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> center, <span class="at">color =</span> <span class="st">&quot;predicted&quot;</span>))</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-21-1.png" width="90%" /></p>
+<p>In order to reach beyond the observed range, we extract posterior predictions based on fabricated data. This fabricated data contains only the model predictors (<code>trial</code>). The trained model is used as a simulator for the outcome.</p>
+<div class="sourceCode" id="cb760"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb760-1"><a href="LCM.html#cb760-1" aria-hidden="true" tabindex="-1"></a>D_fore <span class="ot">&lt;-</span> </span>
+<span id="cb760-2"><a href="LCM.html#cb760-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">trial =</span> <span class="fu">c</span>(<span class="dv">3</span><span class="sc">*</span><span class="dv">365</span>, <span class="dv">6</span><span class="sc">*</span><span class="dv">365</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb760-3"><a href="LCM.html#cb760-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>()</span>
+<span id="cb760-4"><a href="LCM.html#cb760-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb760-5"><a href="LCM.html#cb760-5" aria-hidden="true" tabindex="-1"></a>PP_fore <span class="ot">&lt;-</span> <span class="fu">post_pred</span>(M_1, <span class="at">newdata =</span> D_fore)</span>
+<span id="cb760-6"><a href="LCM.html#cb760-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb760-7"><a href="LCM.html#cb760-7" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb760-8"><a href="LCM.html#cb760-8" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(D_fore, <span class="fu">predict</span>(PP_fore))</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-22">Table 9.2: </span>Data set with 6 variables, showing 2 of 2 observations.</caption>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">trial</th>
+<th align="left">model</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1095</td>
+<td align="left">M_1</td>
+<td align="right">44.3</td>
+<td align="right">27.50</td>
+<td align="right">67.1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2190</td>
+<td align="left">M_1</td>
+<td align="right">11.4</td>
+<td align="right">5.64</td>
+<td align="right">25.7</td>
+</tr>
+</tbody>
+</table>
+<p>Now, we can add certainty statements, as usual. Or, to be most precise, display the posterior predictive distribution:</p>
+<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="LCM.html#cb761-1" aria-hidden="true" tabindex="-1"></a>PP_fore <span class="sc">%&gt;%</span> </span>
+<span id="cb761-2"><a href="LCM.html#cb761-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(D_fore) <span class="sc">%&gt;%</span> </span>
+<span id="cb761-3"><a href="LCM.html#cb761-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb761-4"><a href="LCM.html#cb761-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb761-5"><a href="LCM.html#cb761-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Obs<span class="sc">~</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb761-6"><a href="LCM.html#cb761-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;ToT&quot;</span>)</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-23-1.png" width="90%" />
+Using the full distributions, we can derive further statements around uncertainty, for example: what is the probability that the girl will lace her shoe in less than 30 seconds:</p>
+<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="LCM.html#cb762-1" aria-hidden="true" tabindex="-1"></a>PP_fore <span class="sc">%&gt;%</span> </span>
+<span id="cb762-2"><a href="LCM.html#cb762-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Obs) <span class="sc">%&gt;%</span> </span>
+<span id="cb762-3"><a href="LCM.html#cb762-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prob_LT30 =</span> <span class="fu">mean</span>(value <span class="sc">&lt;</span> <span class="dv">30</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">prob_LT30</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.060</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.991</td>
+</tr>
+</tbody>
+</table>
+<p>According to these results, the chance of lacing faster than 30 seconds is very small after three years of training, but it is almost certain after six years.</p>
+<p>For its three parameters <em>A</em>mplitude, <em>S</em>urvival and As<em>y</em>mptode, we abbreviate this model as ASY. We have discussed the interpretation of the learning parameters and we have seen two ways for making forecasts using a trained learning curve model.</p>
+</div>
+</div>
+<div id="a-bunch-of-girls-and-their-lacies" class="section level3" number="9.1.5">
+<h3><span class="header-section-number">9.1.5</span> A bunch of girls and their Lacies</h3>
+<p>As we have seen, ASY parameters can be used to make a forecast for a single learner. As we will see now, we can also compare learners. Also, we will make a slight modification and introduce the ACY model. Imagine the following three little girls and their shoe lacing performance over one year of practice:</p>
+<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb763-1"><a href="LCM.html#cb763-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb763-2"><a href="LCM.html#cb763-2" aria-hidden="true" tabindex="-1"></a>Years <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb763-3"><a href="LCM.html#cb763-3" aria-hidden="true" tabindex="-1"></a>N_trials <span class="ot">=</span> Years <span class="sc">*</span> <span class="dv">365</span></span>
+<span id="cb763-4"><a href="LCM.html#cb763-4" aria-hidden="true" tabindex="-1"></a>N_Girls <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb763-5"><a href="LCM.html#cb763-5" aria-hidden="true" tabindex="-1"></a>N_Obs <span class="ot">=</span> N_trials <span class="sc">*</span> N_Girls</span>
+<span id="cb763-6"><a href="LCM.html#cb763-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb763-7"><a href="LCM.html#cb763-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb763-8"><a href="LCM.html#cb763-8" aria-hidden="true" tabindex="-1"></a>Girls <span class="ot">&lt;-</span> </span>
+<span id="cb763-9"><a href="LCM.html#cb763-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tribble</span>(<span class="sc">~</span>Girl, <span class="sc">~</span>ampl, <span class="sc">~</span>surv, <span class="sc">~</span>asym,</span>
+<span id="cb763-10"><a href="LCM.html#cb763-10" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;Eli&quot;</span>,   <span class="dv">300</span>,   .<span class="dv">996</span>,     <span class="dv">10</span>,</span>
+<span id="cb763-11"><a href="LCM.html#cb763-11" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;Lia&quot;</span>,   <span class="dv">200</span>,   .<span class="dv">997</span>,     <span class="dv">20</span>,</span>
+<span id="cb763-12"><a href="LCM.html#cb763-12" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;Ina&quot;</span>,   <span class="dv">100</span>,   .<span class="dv">998</span>,     <span class="dv">30</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb763-13"><a href="LCM.html#cb763-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">surv_odd =</span> <span class="fu">odd</span>(surv))</span>
+<span id="cb763-14"><a href="LCM.html#cb763-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb763-15"><a href="LCM.html#cb763-15" aria-hidden="true" tabindex="-1"></a>Lacing_3 <span class="ot">&lt;-</span> </span>
+<span id="cb763-16"><a href="LCM.html#cb763-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">trial =</span> <span class="dv">1</span><span class="sc">:</span>N_trials,</span>
+<span id="cb763-17"><a href="LCM.html#cb763-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">Girl =</span> Girls<span class="sc">$</span>Girl) <span class="sc">%&gt;%</span> </span>
+<span id="cb763-18"><a href="LCM.html#cb763-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(Girls, <span class="at">by =</span> <span class="st">&quot;Girl&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb763-19"><a href="LCM.html#cb763-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ToT_pred =</span> asym <span class="sc">+</span> ampl <span class="sc">*</span> surv<span class="sc">^</span>trial,</span>
+<span id="cb763-20"><a href="LCM.html#cb763-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">ToT =</span> <span class="fu">rgamma</span>(N_Obs, <span class="at">shape =</span> ToT_pred<span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb763-21"><a href="LCM.html#cb763-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tbl_obs</span>()</span>
+<span id="cb763-22"><a href="LCM.html#cb763-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb763-23"><a href="LCM.html#cb763-23" aria-hidden="true" tabindex="-1"></a>Lacing_3</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-25">Table 9.3: </span>Data set with 9 variables, showing 8 of 1095 observations.</caption>
+<thead>
+<tr class="header">
+<th align="right">Obs</th>
+<th align="right">trial</th>
+<th align="left">Girl</th>
+<th align="right">ampl</th>
+<th align="right">surv</th>
+<th align="right">asym</th>
+<th align="right">surv_odd</th>
+<th align="right">ToT_pred</th>
+<th align="right">ToT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">34</td>
+<td align="right">34</td>
+<td align="left">Eli</td>
+<td align="right">300</td>
+<td align="right">0.996</td>
+<td align="right">10</td>
+<td align="right">249</td>
+<td align="right">271.8</td>
+<td align="right">262.4</td>
+</tr>
+<tr class="even">
+<td align="right">167</td>
+<td align="right">167</td>
+<td align="left">Eli</td>
+<td align="right">300</td>
+<td align="right">0.996</td>
+<td align="right">10</td>
+<td align="right">249</td>
+<td align="right">163.6</td>
+<td align="right">173.4</td>
+</tr>
+<tr class="odd">
+<td align="right">316</td>
+<td align="right">316</td>
+<td align="left">Eli</td>
+<td align="right">300</td>
+<td align="right">0.996</td>
+<td align="right">10</td>
+<td align="right">249</td>
+<td align="right">94.5</td>
+<td align="right">79.4</td>
+</tr>
+<tr class="even">
+<td align="right">355</td>
+<td align="right">355</td>
+<td align="left">Eli</td>
+<td align="right">300</td>
+<td align="right">0.996</td>
+<td align="right">10</td>
+<td align="right">249</td>
+<td align="right">82.3</td>
+<td align="right">54.9</td>
+</tr>
+<tr class="odd">
+<td align="right">448</td>
+<td align="right">83</td>
+<td align="left">Lia</td>
+<td align="right">200</td>
+<td align="right">0.997</td>
+<td align="right">20</td>
+<td align="right">332</td>
+<td align="right">175.9</td>
+<td align="right">184.9</td>
+</tr>
+<tr class="even">
+<td align="right">671</td>
+<td align="right">306</td>
+<td align="left">Lia</td>
+<td align="right">200</td>
+<td align="right">0.997</td>
+<td align="right">20</td>
+<td align="right">332</td>
+<td align="right">99.8</td>
+<td align="right">110.9</td>
+</tr>
+<tr class="odd">
+<td align="right">803</td>
+<td align="right">73</td>
+<td align="left">Ina</td>
+<td align="right">100</td>
+<td align="right">0.998</td>
+<td align="right">30</td>
+<td align="right">499</td>
+<td align="right">116.4</td>
+<td align="right">138.3</td>
+</tr>
+<tr class="even">
+<td align="right">837</td>
+<td align="right">107</td>
+<td align="left">Ina</td>
+<td align="right">100</td>
+<td align="right">0.998</td>
+<td align="right">30</td>
+<td align="right">499</td>
+<td align="right">110.7</td>
+<td align="right">102.3</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="LCM.html#cb764-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(Lacing_3, <span class="at">Env =</span> Chapter_LCM)</span></code></pre></div>
+<pre><code>## [1] &quot;Lacing_3&quot;</code></pre>
+<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="LCM.html#cb766-1" aria-hidden="true" tabindex="-1"></a>Lacing_3 <span class="sc">%&gt;%</span> </span>
+<span id="cb766-2"><a href="LCM.html#cb766-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> trial, <span class="at">color =</span> Girl)) <span class="sc">+</span></span>
+<span id="cb766-3"><a href="LCM.html#cb766-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ToT_pred)) <span class="sc">+</span></span>
+<span id="cb766-4"><a href="LCM.html#cb766-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span> ToT), <span class="at">size =</span> .<span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb766-5"><a href="LCM.html#cb766-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">400</span>)</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-26-1.png" width="90%" /></p>
+<p>Note how tiny differences in Surv seem to make a huge difference for speed of learning. Within one year, Eli catches up to Ina, although she has three times the amplitude. This becomes clear, when we replace rate of survival with <em>rate of catching tweaks</em>:</p>
+<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb767-1"><a href="LCM.html#cb767-1" aria-hidden="true" tabindex="-1"></a>Girls <span class="sc">%&gt;%</span> </span>
+<span id="cb767-2"><a href="LCM.html#cb767-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ctch =</span> <span class="dv">1</span> <span class="sc">-</span> surv)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Girl</th>
+<th align="right">ampl</th>
+<th align="right">surv</th>
+<th align="right">asym</th>
+<th align="right">surv_odd</th>
+<th align="right">ctch</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Eli</td>
+<td align="right">300</td>
+<td align="right">0.996</td>
+<td align="right">10</td>
+<td align="right">249</td>
+<td align="right">0.004</td>
+</tr>
+<tr class="even">
+<td align="left">Lia</td>
+<td align="right">200</td>
+<td align="right">0.997</td>
+<td align="right">20</td>
+<td align="right">332</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="odd">
+<td align="left">Ina</td>
+<td align="right">100</td>
+<td align="right">0.998</td>
+<td align="right">30</td>
+<td align="right">499</td>
+<td align="right">0.002</td>
+</tr>
+</tbody>
+</table>
+<p>Now, it becomes clear that Eli catches up with Ina, because she has double the chance to catch a tweak. Eli started out with a larger set of undiscovered tweaks, but she catches more of them per trial. For the purpose of comparing learners, the catch rate is more intuitive and we can easily derive the ACY (amplitude, catch rate, asymptote) model.</p>
+<p><span class="math display">\[
+\textrm{Perf}_t = \textrm{Asym} + \textrm{Ampl}\times(1 - \textrm{Ctch})^t
+\]</span>
+Just like Surv, Ctch is a proportion and the LACY formula of the unbound model is derived much the same way:</p>
+<p><span class="math display">\[
+P_t = \exp\textrm{Asym} + \exp\textrm{Ampl} \times \textrm{logit}^{-1} (1-\textrm{Ctch})^t
+\]</span></p>
+<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="LCM.html#cb768-1" aria-hidden="true" tabindex="-1"></a>F_lacy <span class="ot">&lt;-</span> <span class="fu">formula</span>(ToT <span class="sc">~</span> <span class="fu">exp</span>(asym) <span class="sc">+</span> <span class="fu">exp</span>(ampl) <span class="sc">*</span> <span class="fu">inv_logit</span>((<span class="dv">1</span><span class="sc">-</span>ctch))<span class="sc">^</span>trial) </span></code></pre></div>
+<p>The priors need only one simple adjustment for the switch from Surv to Ctch. The Ctch prior is a mirrored version of the Surv prior, with a mirror axis at 50%, which is an odd of 1 and on a logit scale zero becames the mirror axis. The LACY prior for catch rate is just the negative.</p>
+<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb769-1"><a href="LCM.html#cb769-1" aria-hidden="true" tabindex="-1"></a>F_lacy_prior <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">set_prior</span>(<span class="st">&quot;normal(5.25, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl&quot;</span>),</span>
+<span id="cb769-2"><a href="LCM.html#cb769-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(-2.76, 2.07)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ctch&quot;</span>),</span>
+<span id="cb769-3"><a href="LCM.html#cb769-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(1.84, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;asym&quot;</span>))</span></code></pre></div>
+<p>Since we want to estimate three learning curves, we have to adjust the effects formula. The following factorial effects formula suppresses the Intercept and results absolute learning parameters, conditional on Girl.
+Note that with larger learner samples, a multi-level model is more approriate. We will come to that in the next section.</p>
+<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="LCM.html#cb770-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Girl),</span>
+<span id="cb770-2"><a href="LCM.html#cb770-2" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Girl),</span>
+<span id="cb770-3"><a href="LCM.html#cb770-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Girl))</span>
+<span id="cb770-4"><a href="LCM.html#cb770-4" aria-hidden="true" tabindex="-1"></a>M_2 <span class="ot">&lt;-</span> </span>
+<span id="cb770-5"><a href="LCM.html#cb770-5" aria-hidden="true" tabindex="-1"></a>  Lacing_3 <span class="sc">%&gt;%</span> </span>
+<span id="cb770-6"><a href="LCM.html#cb770-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb770-7"><a href="LCM.html#cb770-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_1,</span>
+<span id="cb770-8"><a href="LCM.html#cb770-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb770-9"><a href="LCM.html#cb770-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb770-10"><a href="LCM.html#cb770-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb770-11"><a href="LCM.html#cb770-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb770-12"><a href="LCM.html#cb770-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb770-13"><a href="LCM.html#cb770-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_2, <span class="at">Env =</span> Chapter_LCM)</span></code></pre></div>
+<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb771-1"><a href="LCM.html#cb771-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_2, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-31">Table 9.4: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="left">GirlEli</td>
+<td align="right">305.450</td>
+<td align="right">295.218</td>
+<td align="right">314.759</td>
+</tr>
+<tr class="even">
+<td align="left">ampl</td>
+<td align="left">GirlIna</td>
+<td align="right">124.886</td>
+<td align="right">112.026</td>
+<td align="right">130.943</td>
+</tr>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="left">GirlLia</td>
+<td align="right">210.727</td>
+<td align="right">198.709</td>
+<td align="right">218.599</td>
+</tr>
+<tr class="even">
+<td align="left">ctch</td>
+<td align="left">GirlEli</td>
+<td align="right">0.011</td>
+<td align="right">0.010</td>
+<td align="right">0.012</td>
+</tr>
+<tr class="odd">
+<td align="left">ctch</td>
+<td align="left">GirlIna</td>
+<td align="right">0.004</td>
+<td align="right">0.004</td>
+<td align="right">0.005</td>
+</tr>
+<tr class="even">
+<td align="left">ctch</td>
+<td align="left">GirlLia</td>
+<td align="right">0.007</td>
+<td align="right">0.007</td>
+<td align="right">0.008</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="left">GirlEli</td>
+<td align="right">5.865</td>
+<td align="right">2.036</td>
+<td align="right">15.100</td>
+</tr>
+<tr class="even">
+<td align="left">asym</td>
+<td align="left">GirlIna</td>
+<td align="right">6.619</td>
+<td align="right">2.154</td>
+<td align="right">19.806</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="left">GirlLia</td>
+<td align="right">6.673</td>
+<td align="right">2.217</td>
+<td align="right">20.110</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"></code></pre></div>
+</div>
+</div>
+<div id="conditional-learning-curve-models" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Conditional Learning Curve Models</h2>
+<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb773-1"><a href="LCM.html#cb773-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="LCM.html#cb774-1" aria-hidden="true" tabindex="-1"></a>F_lacy <span class="ot">&lt;-</span> <span class="fu">formula</span>(ToT <span class="sc">~</span> <span class="fu">exp</span>(asym) <span class="sc">+</span> <span class="fu">exp</span>(ampl) <span class="sc">*</span> <span class="fu">inv_logit</span>((<span class="dv">1</span><span class="sc">-</span>ctch))<span class="sc">^</span>trial) </span></code></pre></div>
+<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="LCM.html#cb775-1" aria-hidden="true" tabindex="-1"></a>F_lacy_prior <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">set_prior</span>(<span class="st">&quot;normal(5.25, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl&quot;</span>),</span>
+<span id="cb775-2"><a href="LCM.html#cb775-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(-2.76, 2.07)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ctch&quot;</span>),</span>
+<span id="cb775-3"><a href="LCM.html#cb775-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(1.84, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;asym&quot;</span>))</span></code></pre></div>
+<p>Let’s try LACY on a real data set:</p>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="LCM.html#cb776-1" aria-hidden="true" tabindex="-1"></a>D_LT <span class="ot">&lt;-</span> </span>
+<span id="cb776-2"><a href="LCM.html#cb776-2" aria-hidden="true" tabindex="-1"></a>  D_laptrain <span class="sc">%&gt;%</span> </span>
+<span id="cb776-3"><a href="LCM.html#cb776-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ToT =</span> Duration,</span>
+<span id="cb776-4"><a href="LCM.html#cb776-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">gaming =</span> <span class="fu">as.numeric</span>(Gaming)) <span class="sc">%&gt;%</span> </span>
+<span id="cb776-5"><a href="LCM.html#cb776-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Obs, Part, gaming, SM, VSA, trial, ToT)</span></code></pre></div>
+<p>The following linear effects specifications create an intercept-only multi-level model:</p>
+<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb777-1"><a href="LCM.html#cb777-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_3 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>Part),</span>
+<span id="cb777-2"><a href="LCM.html#cb777-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>Part),</span>
+<span id="cb777-3"><a href="LCM.html#cb777-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>Part))</span></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="LCM.html#cb778-1" aria-hidden="true" tabindex="-1"></a>M_3 <span class="ot">&lt;-</span> </span>
+<span id="cb778-2"><a href="LCM.html#cb778-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb778-3"><a href="LCM.html#cb778-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb778-4"><a href="LCM.html#cb778-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_3,</span>
+<span id="cb778-5"><a href="LCM.html#cb778-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb778-6"><a href="LCM.html#cb778-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb778-7"><a href="LCM.html#cb778-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb778-8"><a href="LCM.html#cb778-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb778-9"><a href="LCM.html#cb778-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb778-10"><a href="LCM.html#cb778-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_3, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div id="do-gamers-have-previous-experience" class="section level4" number="9.2.0.1">
+<h4><span class="header-section-number">9.2.0.1</span> Do gamers have previous experience?</h4>
+<p>Gamers have previous experience with processing a 2D image of a 3D environment. As this is part of the task, gamers can be expected to have lower amplitudes. As gaming experience varies within the population, but not on participant level, the predictor enters the model as a continuous linear predictor.</p>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="LCM.html#cb779-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_4 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> gaming <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb779-2"><a href="LCM.html#cb779-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb779-3"><a href="LCM.html#cb779-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)))</span></code></pre></div>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="LCM.html#cb780-1" aria-hidden="true" tabindex="-1"></a>M_4 <span class="ot">&lt;-</span> </span>
+<span id="cb780-2"><a href="LCM.html#cb780-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb780-3"><a href="LCM.html#cb780-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb780-4"><a href="LCM.html#cb780-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_4,</span>
+<span id="cb780-5"><a href="LCM.html#cb780-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb780-6"><a href="LCM.html#cb780-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb780-7"><a href="LCM.html#cb780-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb780-8"><a href="LCM.html#cb780-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb780-9"><a href="LCM.html#cb780-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb780-10"><a href="LCM.html#cb780-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_4, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="LCM.html#cb781-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_4)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-41">Table 9.5: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">2.771</td>
+<td align="right">2.537</td>
+<td align="right">3.071</td>
+</tr>
+<tr class="even">
+<td align="left">ampl</td>
+<td align="left">gaming</td>
+<td align="right">-0.021</td>
+<td align="right">-0.066</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="odd">
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">0.750</td>
+<td align="right">0.451</td>
+<td align="right">1.080</td>
+</tr>
+<tr class="even">
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">0.986</td>
+<td align="right">0.879</td>
+<td align="right">1.108</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="is-spatial-memory-capacity-associated-with-faster-learning" class="section level4" number="9.2.0.2">
+<h4><span class="header-section-number">9.2.0.2</span> Is spatial memory capacity associated with faster learning?</h4>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="LCM.html#cb782-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_5 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb782-2"><a href="LCM.html#cb782-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> SM <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb782-3"><a href="LCM.html#cb782-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)))</span></code></pre></div>
+<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="LCM.html#cb783-1" aria-hidden="true" tabindex="-1"></a>M_5 <span class="ot">&lt;-</span> </span>
+<span id="cb783-2"><a href="LCM.html#cb783-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb783-3"><a href="LCM.html#cb783-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb783-4"><a href="LCM.html#cb783-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_5,</span>
+<span id="cb783-5"><a href="LCM.html#cb783-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb783-6"><a href="LCM.html#cb783-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb783-7"><a href="LCM.html#cb783-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb783-8"><a href="LCM.html#cb783-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb783-9"><a href="LCM.html#cb783-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb783-10"><a href="LCM.html#cb783-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_5, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb784-1"><a href="LCM.html#cb784-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_5, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-44">Table 9.6: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">15.207</td>
+<td align="right">12.479</td>
+<td align="right">19.23</td>
+</tr>
+<tr class="even">
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">0.111</td>
+<td align="right">0.007</td>
+<td align="right">1.65</td>
+</tr>
+<tr class="odd">
+<td align="left">ctch</td>
+<td align="left">SM</td>
+<td align="right">1.468</td>
+<td align="right">1.037</td>
+<td align="right">2.11</td>
+</tr>
+<tr class="even">
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">2.687</td>
+<td align="right">2.409</td>
+<td align="right">3.02</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="LCM.html#cb785-1" aria-hidden="true" tabindex="-1"></a>Loo_3 <span class="ot">&lt;-</span> <span class="fu">loo</span>(M_3)</span>
+<span id="cb785-2"><a href="LCM.html#cb785-2" aria-hidden="true" tabindex="-1"></a>Loo_5 <span class="ot">&lt;-</span> <span class="fu">loo</span>(M_5)</span>
+<span id="cb785-3"><a href="LCM.html#cb785-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb785-4"><a href="LCM.html#cb785-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(Loo_3, Loo_5, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="LCM.html#cb786-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(Loo_3, Loo_5) <span class="sc">%&gt;%</span> </span>
+<span id="cb786-2"><a href="LCM.html#cb786-2" aria-hidden="true" tabindex="-1"></a>       bayr<span class="sc">::</span><span class="fu">compare_IC</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-46">Table 9.7: </span>Model ranking by predictive accuracy</caption>
+<thead>
+<tr class="header">
+<th align="left">Model</th>
+<th align="left">IC</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">diff_IC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="left">looic</td>
+<td align="right">554</td>
+<td align="right">43.5</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td align="left">M_5</td>
+<td align="left">looic</td>
+<td align="right">557</td>
+<td align="right">43.7</td>
+<td align="right">2.41</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="high-vsa-is-associated-with-a-lower-asymptote" class="section level4" number="9.2.0.3">
+<h4><span class="header-section-number">9.2.0.3</span> High VSA is associated with a lower asymptote</h4>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb787-1"><a href="LCM.html#cb787-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_6 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb787-2"><a href="LCM.html#cb787-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb787-3"><a href="LCM.html#cb787-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> VSA <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)))</span></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="LCM.html#cb788-1" aria-hidden="true" tabindex="-1"></a>M_6 <span class="ot">&lt;-</span> </span>
+<span id="cb788-2"><a href="LCM.html#cb788-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb788-3"><a href="LCM.html#cb788-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb788-4"><a href="LCM.html#cb788-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_6,</span>
+<span id="cb788-5"><a href="LCM.html#cb788-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb788-6"><a href="LCM.html#cb788-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb788-7"><a href="LCM.html#cb788-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb788-8"><a href="LCM.html#cb788-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb788-9"><a href="LCM.html#cb788-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb788-10"><a href="LCM.html#cb788-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_6, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb789-1"><a href="LCM.html#cb789-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_6, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-49">Table 9.8: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">15.233</td>
+<td align="right">12.247</td>
+<td align="right">19.54</td>
+</tr>
+<tr class="even">
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">2.130</td>
+<td align="right">1.528</td>
+<td align="right">2.96</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">3.739</td>
+<td align="right">1.833</td>
+<td align="right">8.41</td>
+</tr>
+<tr class="even">
+<td align="left">asym</td>
+<td align="left">VSA</td>
+<td align="right">0.994</td>
+<td align="right">0.978</td>
+<td align="right">1.01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="compound-learning-curves-experimental" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Compound learning curves (EXPERIMENTAL)</h2>
+<p>How likely is it that all tweaks have the same probability of discovery (Ctch) or total effect (Ampl).</p>
+<div id="adjusting-for-fatigue-and-finding-a-separation" class="section level3" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Adjusting for fatigue and finding a separation</h3>
+<p>What you often see in learning curves that were taken on the same day is that performance starts declining caused by fatigue. Sometimes, an otherwise proper learning curve warps up. This is not covered by the standard LACY model and can throw off the MCMC sampling.</p>
+<p>You can think of fatigue in two ways, depending on where it appears, in the tweakable or un-tweakable part. Fatigue of learning would result in a reduction of Ctch, whereas performance fatigue can be modelled as an asymptote that increases with every new trial:</p>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="LCM.html#cb790-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_7 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb790-2"><a href="LCM.html#cb790-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb790-3"><a href="LCM.html#cb790-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> trial <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)))</span></code></pre></div>
+<p>As you can see, I have to tune the Stan engine quite a bit to get a properly converging model.</p>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="LCM.html#cb791-1" aria-hidden="true" tabindex="-1"></a>M_7 <span class="ot">&lt;-</span> </span>
+<span id="cb791-2"><a href="LCM.html#cb791-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb791-3"><a href="LCM.html#cb791-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacy,</span>
+<span id="cb791-4"><a href="LCM.html#cb791-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_7,</span>
+<span id="cb791-5"><a href="LCM.html#cb791-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb791-6"><a href="LCM.html#cb791-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacy_prior,</span>
+<span id="cb791-7"><a href="LCM.html#cb791-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb791-8"><a href="LCM.html#cb791-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">iter =</span> <span class="dv">4000</span>, <span class="at">warmup =</span> <span class="dv">2000</span>,</span>
+<span id="cb791-9"><a href="LCM.html#cb791-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">chains =</span> <span class="dv">6</span>,</span>
+<span id="cb791-10"><a href="LCM.html#cb791-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">control=</span><span class="fu">list</span>(<span class="at">adapt_delta=</span><span class="fl">0.999</span>),</span>
+<span id="cb791-11"><a href="LCM.html#cb791-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb791-12"><a href="LCM.html#cb791-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-13"><a href="LCM.html#cb791-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_7, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb792-1"><a href="LCM.html#cb792-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(<span class="fu">posterior</span>(M_3),</span>
+<span id="cb792-2"><a href="LCM.html#cb792-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">posterior</span>(M_7)) <span class="sc">%&gt;%</span> </span>
+<span id="cb792-3"><a href="LCM.html#cb792-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fixef</span>(<span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-52">Table 9.9: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">15.158</td>
+<td align="right">12.164</td>
+<td align="right">19.684</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">2.121</td>
+<td align="right">1.532</td>
+<td align="right">2.944</td>
+</tr>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">2.678</td>
+<td align="right">2.399</td>
+<td align="right">3.006</td>
+</tr>
+<tr class="even">
+<td align="left">M_7</td>
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">30.250</td>
+<td align="right">18.642</td>
+<td align="right">64.359</td>
+</tr>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">7.367</td>
+<td align="right">3.681</td>
+<td align="right">23.025</td>
+</tr>
+<tr class="even">
+<td align="left">M_7</td>
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">4.871</td>
+<td align="right">4.066</td>
+<td align="right">5.977</td>
+</tr>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">asym</td>
+<td align="left">trial</td>
+<td align="right">0.944</td>
+<td align="right">0.927</td>
+<td align="right">0.958</td>
+</tr>
+</tbody>
+</table>
+<p>The results indicate a different picture:</p>
+<ul>
+<li>Asym is not rising, but falling at a rate of .94</li>
+<li>the amplitude and asymptote have both doubled.</li>
+<li>the catch odds are more than tripled</li>
+<li>the initial asymptote is almost doubled</li>
+</ul>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="LCM.html#cb793-1" aria-hidden="true" tabindex="-1"></a>PP_cmpnd <span class="ot">&lt;-</span> </span>
+<span id="cb793-2"><a href="LCM.html#cb793-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">post_pred</span>(M_3, <span class="at">thin =</span> <span class="dv">8</span>),</span>
+<span id="cb793-3"><a href="LCM.html#cb793-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">post_pred</span>(M_7, <span class="at">thin =</span> <span class="dv">24</span>))</span>
+<span id="cb793-4"><a href="LCM.html#cb793-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb793-5"><a href="LCM.html#cb793-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(PP_cmpnd, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb794-1"><a href="LCM.html#cb794-1" aria-hidden="true" tabindex="-1"></a>PP_cmpnd <span class="sc">%&gt;%</span> </span>
+<span id="cb794-2"><a href="LCM.html#cb794-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb794-3"><a href="LCM.html#cb794-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(D_LT, <span class="at">by =</span> <span class="st">&quot;Obs&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb794-4"><a href="LCM.html#cb794-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> trial, </span>
+<span id="cb794-5"><a href="LCM.html#cb794-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> center,</span>
+<span id="cb794-6"><a href="LCM.html#cb794-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> model)) <span class="sc">+</span></span>
+<span id="cb794-7"><a href="LCM.html#cb794-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb794-8"><a href="LCM.html#cb794-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Part)</span></code></pre></div>
+<p><img src="Learning_curves_files/figure-html/unnamed-chunk-54-1.png" width="90%" /></p>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="LCM.html#cb795-1" aria-hidden="true" tabindex="-1"></a>Loo_7 <span class="ot">&lt;-</span> <span class="fu">loo</span>(M_7)</span>
+<span id="cb795-2"><a href="LCM.html#cb795-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb795-3"><a href="LCM.html#cb795-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(Loo_3, Loo_7) <span class="sc">%&gt;%</span> </span>
+<span id="cb795-4"><a href="LCM.html#cb795-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compare_IC</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-55">Table 9.10: </span>Model ranking by predictive accuracy</caption>
+<thead>
+<tr class="header">
+<th align="left">Model</th>
+<th align="left">IC</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">diff_IC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">looic</td>
+<td align="right">526</td>
+<td align="right">45.3</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="left">looic</td>
+<td align="right">554</td>
+<td align="right">43.5</td>
+<td align="right">28.7</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb796-1"><a href="LCM.html#cb796-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(Loo_7, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<pre><code>## [1] &quot;Loo_7&quot;</code></pre>
+<p>This model suggests that the data is better explained by adding a second much slower decay process with a survival rate of 94%. Enter Lace Acy!</p>
+</div>
+<div id="lace-acy" class="section level3" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Lace ACY!</h3>
+<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb798-1"><a href="LCM.html#cb798-1" aria-hidden="true" tabindex="-1"></a>F_lacacy <span class="ot">&lt;-</span> ToT <span class="sc">~</span> <span class="fu">exp</span>(asym) <span class="sc">+</span> <span class="fu">exp</span>(ampl1) <span class="sc">*</span> <span class="fu">inv_logit</span>((<span class="dv">1</span> <span class="sc">-</span> ctch1))<span class="sc">^</span>trial  <span class="sc">+</span> <span class="fu">exp</span>(ampl2) <span class="sc">*</span> <span class="fu">inv_logit</span>((<span class="dv">1</span> <span class="sc">-</span> ctch2))<span class="sc">^</span>trial</span></code></pre></div>
+<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb799-1"><a href="LCM.html#cb799-1" aria-hidden="true" tabindex="-1"></a>F_lacacy_prior<span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">set_prior</span>(<span class="st">&quot;normal(2.25, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl1&quot;</span>),</span>
+<span id="cb799-2"><a href="LCM.html#cb799-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(-2.76, 2.07)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ctch1&quot;</span>),</span>
+<span id="cb799-3"><a href="LCM.html#cb799-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(5.25, 0.576)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ampl2&quot;</span>),</span>
+<span id="cb799-4"><a href="LCM.html#cb799-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(2.76, 2.07)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;ctch2&quot;</span>),</span>
+<span id="cb799-5"><a href="LCM.html#cb799-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">set_prior</span>(<span class="st">&quot;normal(1.84, 2)&quot;</span>, <span class="at">nlpar =</span> <span class="st">&quot;asym&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="LCM.html#cb800-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_8 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl1 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb800-2"><a href="LCM.html#cb800-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch1 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb800-3"><a href="LCM.html#cb800-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb800-4"><a href="LCM.html#cb800-4" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ampl2 <span class="sc">~</span> <span class="dv">1</span>),</span>
+<span id="cb800-5"><a href="LCM.html#cb800-5" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch2 <span class="sc">~</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb801-1"><a href="LCM.html#cb801-1" aria-hidden="true" tabindex="-1"></a>M_8 <span class="ot">&lt;-</span> </span>
+<span id="cb801-2"><a href="LCM.html#cb801-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb801-3"><a href="LCM.html#cb801-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacacy,</span>
+<span id="cb801-4"><a href="LCM.html#cb801-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_8,</span>
+<span id="cb801-5"><a href="LCM.html#cb801-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb801-6"><a href="LCM.html#cb801-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacacy_prior,</span>
+<span id="cb801-7"><a href="LCM.html#cb801-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb801-8"><a href="LCM.html#cb801-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">iter =</span> <span class="dv">6000</span>, <span class="at">warmup =</span> <span class="dv">4000</span>,</span>
+<span id="cb801-9"><a href="LCM.html#cb801-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">chains =</span> <span class="dv">6</span>,</span>
+<span id="cb801-10"><a href="LCM.html#cb801-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">control=</span><span class="fu">list</span>(<span class="at">adapt_delta=</span><span class="fl">0.999</span>),</span>
+<span id="cb801-11"><a href="LCM.html#cb801-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb801-12"><a href="LCM.html#cb801-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb801-13"><a href="LCM.html#cb801-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_8, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="LCM.html#cb802-1" aria-hidden="true" tabindex="-1"></a>P_cmpnd <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">posterior</span>(M_3),</span>
+<span id="cb802-2"><a href="LCM.html#cb802-2" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">posterior</span>(M_7),</span>
+<span id="cb802-3"><a href="LCM.html#cb802-3" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">posterior</span>(M_8))</span>
+<span id="cb802-4"><a href="LCM.html#cb802-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb802-5"><a href="LCM.html#cb802-5" aria-hidden="true" tabindex="-1"></a>P_cmpnd <span class="sc">%&gt;%</span> <span class="fu">fixef</span>(<span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-60">Table 9.11: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="left">nonlin</th>
+<th align="left">fixef</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">15.158</td>
+<td align="right">12.164</td>
+<td align="right">19.684</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">2.121</td>
+<td align="right">1.532</td>
+<td align="right">2.944</td>
+</tr>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">2.678</td>
+<td align="right">2.399</td>
+<td align="right">3.006</td>
+</tr>
+<tr class="even">
+<td align="left">M_7</td>
+<td align="left">ampl</td>
+<td align="left">Intercept</td>
+<td align="right">30.250</td>
+<td align="right">18.642</td>
+<td align="right">64.359</td>
+</tr>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">ctch</td>
+<td align="left">Intercept</td>
+<td align="right">7.367</td>
+<td align="right">3.681</td>
+<td align="right">23.025</td>
+</tr>
+<tr class="even">
+<td align="left">M_7</td>
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">4.871</td>
+<td align="right">4.066</td>
+<td align="right">5.977</td>
+</tr>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">asym</td>
+<td align="left">trial</td>
+<td align="right">0.944</td>
+<td align="right">0.927</td>
+<td align="right">0.958</td>
+</tr>
+<tr class="even">
+<td align="left">M_8</td>
+<td align="left">ampl1</td>
+<td align="left">Intercept</td>
+<td align="right">844.564</td>
+<td align="right">201.583</td>
+<td align="right">1215.560</td>
+</tr>
+<tr class="odd">
+<td align="left">M_8</td>
+<td align="left">ctch1</td>
+<td align="left">Intercept</td>
+<td align="right">3.750</td>
+<td align="right">0.614</td>
+<td align="right">6.693</td>
+</tr>
+<tr class="even">
+<td align="left">M_8</td>
+<td align="left">asym</td>
+<td align="left">Intercept</td>
+<td align="right">21.480</td>
+<td align="right">2.062</td>
+<td align="right">138.113</td>
+</tr>
+<tr class="odd">
+<td align="left">M_8</td>
+<td align="left">ampl2</td>
+<td align="left">Intercept</td>
+<td align="right">224.229</td>
+<td align="right">177.049</td>
+<td align="right">926.792</td>
+</tr>
+<tr class="even">
+<td align="left">M_8</td>
+<td align="left">ctch2</td>
+<td align="left">Intercept</td>
+<td align="right">0.158</td>
+<td align="right">0.092</td>
+<td align="right">4.914</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="LCM.html#cb803-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grpef</span>(M_8, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-60">Table 9.11: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl1</td>
+<td align="right">0.585</td>
+<td align="right">0.235</td>
+<td align="right">1.47</td>
+</tr>
+<tr class="even">
+<td align="left">ctch1</td>
+<td align="right">0.723</td>
+<td align="right">0.358</td>
+<td align="right">1.42</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="right">1.113</td>
+<td align="right">0.110</td>
+<td align="right">3.31</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="LCM.html#cb804-1" aria-hidden="true" tabindex="-1"></a>PP_cmpnd</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-61">Table 9.12: </span>posterior predictions: 500 samples in 1 chains on 226 observations. (five shown below)</caption>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="right">Obs</th>
+<th align="right">iter</th>
+<th align="right">value</th>
+<th align="left">Part</th>
+<th align="right">SM</th>
+<th align="right">VSA</th>
+<th align="right">gaming</th>
+<th align="right">trial</th>
+<th align="right">ToT</th>
+<th align="right">Damage</th>
+<th align="right">MotionEfficiency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="right">14</td>
+<td align="right">362</td>
+<td align="right">7.21</td>
+<td align="left">02</td>
+<td align="right">8.5</td>
+<td align="right">54.5</td>
+<td align="right">0.0</td>
+<td align="right">2</td>
+<td align="right">452</td>
+<td align="right">43.82</td>
+<td align="right">7.73</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="right">46</td>
+<td align="right">207</td>
+<td align="right">2.89</td>
+<td align="left">04</td>
+<td align="right">7.0</td>
+<td align="right">48.8</td>
+<td align="right">0.0</td>
+<td align="right">10</td>
+<td align="right">155</td>
+<td align="right">6.66</td>
+<td align="right">3.43</td>
+</tr>
+<tr class="odd">
+<td align="left">M_3</td>
+<td align="right">190</td>
+<td align="right">466</td>
+<td align="right">2.57</td>
+<td align="left">16</td>
+<td align="right">8.0</td>
+<td align="right">54.5</td>
+<td align="right">0.0</td>
+<td align="right">12</td>
+<td align="right">173</td>
+<td align="right">8.92</td>
+<td align="right">2.47</td>
+</tr>
+<tr class="even">
+<td align="left">M_7</td>
+<td align="right">19</td>
+<td align="right">128</td>
+<td align="right">4.46</td>
+<td align="left">02</td>
+<td align="right">8.5</td>
+<td align="right">54.5</td>
+<td align="right">0.0</td>
+<td align="right">7</td>
+<td align="right">224</td>
+<td align="right">7.65</td>
+<td align="right">3.66</td>
+</tr>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="right">100</td>
+<td align="right">146</td>
+<td align="right">3.29</td>
+<td align="left">09</td>
+<td align="right">7.0</td>
+<td align="right">36.5</td>
+<td align="right">0.5</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">8.78</td>
+<td align="right">3.59</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb805-1"><a href="LCM.html#cb805-1" aria-hidden="true" tabindex="-1"></a>Loo_8 <span class="ot">&lt;-</span> <span class="fu">loo</span>(M_8)</span>
+<span id="cb805-2"><a href="LCM.html#cb805-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(Loo_8, <span class="at">Env =</span> LapTrain)</span></code></pre></div>
+<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb806-1"><a href="LCM.html#cb806-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(Loo_3, Loo_8, Loo_7) <span class="sc">%&gt;%</span> </span>
+<span id="cb806-2"><a href="LCM.html#cb806-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compare_IC</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-63">Table 9.13: </span>Model ranking by predictive accuracy</caption>
+<thead>
+<tr class="header">
+<th align="left">Model</th>
+<th align="left">IC</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">diff_IC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">looic</td>
+<td align="right">526</td>
+<td align="right">45.3</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="left">looic</td>
+<td align="right">554</td>
+<td align="right">43.5</td>
+<td align="right">28.7</td>
+</tr>
+<tr class="odd">
+<td align="left">M_8</td>
+<td align="left">looic</td>
+<td align="right">2380</td>
+<td align="right">46.8</td>
+<td align="right">1854.3</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb807-1"><a href="LCM.html#cb807-1" aria-hidden="true" tabindex="-1"></a>F_acy_ef_9 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">formula</span>(ampl1 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb807-2"><a href="LCM.html#cb807-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch1 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb807-3"><a href="LCM.html#cb807-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ampl2 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb807-4"><a href="LCM.html#cb807-4" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(ctch2 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)),</span>
+<span id="cb807-5"><a href="LCM.html#cb807-5" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">formula</span>(asym <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Part)))</span></code></pre></div>
+<div class="sourceCode" id="cb808"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb808-1"><a href="LCM.html#cb808-1" aria-hidden="true" tabindex="-1"></a>M_9 <span class="ot">&lt;-</span> </span>
+<span id="cb808-2"><a href="LCM.html#cb808-2" aria-hidden="true" tabindex="-1"></a>  D_LT <span class="sc">%&gt;%</span> </span>
+<span id="cb808-3"><a href="LCM.html#cb808-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">brm</span>(<span class="fu">bf</span>(F_lacacy,</span>
+<span id="cb808-4"><a href="LCM.html#cb808-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">flist =</span> F_acy_ef_9,</span>
+<span id="cb808-5"><a href="LCM.html#cb808-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">nl =</span> T), </span>
+<span id="cb808-6"><a href="LCM.html#cb808-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">prior =</span> F_lacacy_prior,</span>
+<span id="cb808-7"><a href="LCM.html#cb808-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> identity),</span>
+<span id="cb808-8"><a href="LCM.html#cb808-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">iter =</span> <span class="dv">8000</span>, <span class="at">warmup =</span> <span class="dv">6000</span>,</span>
+<span id="cb808-9"><a href="LCM.html#cb808-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">chains =</span> <span class="dv">6</span>,</span>
+<span id="cb808-10"><a href="LCM.html#cb808-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">control=</span><span class="fu">list</span>(<span class="at">adapt_delta=</span><span class="fl">0.9999</span>),</span>
+<span id="cb808-11"><a href="LCM.html#cb808-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb808-12"><a href="LCM.html#cb808-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb808-13"><a href="LCM.html#cb808-13" aria-hidden="true" tabindex="-1"></a>Loo_9 <span class="ot">&lt;-</span> <span class="fu">loo</span>(M_9)</span>
+<span id="cb808-14"><a href="LCM.html#cb808-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb808-15"><a href="LCM.html#cb808-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sync_CE</span>(M_9, Loo_9, <span class="at">Env =</span> LapTrain)</span>
+<span id="cb808-16"><a href="LCM.html#cb808-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb808-17"><a href="LCM.html#cb808-17" aria-hidden="true" tabindex="-1"></a>M_9</span></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb809-1"><a href="LCM.html#cb809-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(M_9, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-66">Table 9.14: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl1</td>
+<td align="right">238.651</td>
+<td align="right">59.604</td>
+<td align="right">1000.3</td>
+</tr>
+<tr class="even">
+<td align="left">ctch1</td>
+<td align="right">0.158</td>
+<td align="right">0.063</td>
+<td align="right">17.6</td>
+</tr>
+<tr class="odd">
+<td align="left">ampl2</td>
+<td align="right">899.298</td>
+<td align="right">202.552</td>
+<td align="right">1455.6</td>
+</tr>
+<tr class="even">
+<td align="left">ctch2</td>
+<td align="right">3.877</td>
+<td align="right">0.116</td>
+<td align="right">15.9</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="right">8.489</td>
+<td align="right">0.128</td>
+<td align="right">153.2</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb810-1"><a href="LCM.html#cb810-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grpef</span>(M_9, <span class="at">mean.func =</span> exp)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-67">Table 9.15: </span>Coefficient estimates with 95% credibility limits</caption>
+<thead>
+<tr class="header">
+<th align="left">nonlin</th>
+<th align="right">center</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ampl1</td>
+<td align="right">0.154</td>
+<td align="right">0.013</td>
+<td align="right">4.00</td>
+</tr>
+<tr class="even">
+<td align="left">ctch1</td>
+<td align="right">0.238</td>
+<td align="right">0.016</td>
+<td align="right">30.67</td>
+</tr>
+<tr class="odd">
+<td align="left">ampl2</td>
+<td align="right">0.515</td>
+<td align="right">0.057</td>
+<td align="right">1.99</td>
+</tr>
+<tr class="even">
+<td align="left">ctch2</td>
+<td align="right">0.631</td>
+<td align="right">0.058</td>
+<td align="right">2.00</td>
+</tr>
+<tr class="odd">
+<td align="left">asym</td>
+<td align="right">1.360</td>
+<td align="right">0.029</td>
+<td align="right">5.60</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="LCM.html#cb811-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(Loo_3, Loo_7, Loo_8, Loo_9) <span class="sc">%&gt;%</span> </span>
+<span id="cb811-2"><a href="LCM.html#cb811-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compare_IC</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-68">Table 9.16: </span>Model ranking by predictive accuracy</caption>
+<thead>
+<tr class="header">
+<th align="left">Model</th>
+<th align="left">IC</th>
+<th align="right">Estimate</th>
+<th align="right">SE</th>
+<th align="right">diff_IC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">M_7</td>
+<td align="left">looic</td>
+<td align="right">526</td>
+<td align="right">45.3</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">M_3</td>
+<td align="left">looic</td>
+<td align="right">554</td>
+<td align="right">43.5</td>
+<td align="right">28.7</td>
+</tr>
+<tr class="odd">
+<td align="left">M_8</td>
+<td align="left">looic</td>
+<td align="right">2380</td>
+<td align="right">46.8</td>
+<td align="right">1854.3</td>
+</tr>
+<tr class="even">
+<td align="left">M_9</td>
+<td align="left">looic</td>
+<td align="right">2380</td>
+<td align="right">47.3</td>
+<td align="right">1854.6</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb812"><pre class="sourceCode r"><code class="sourceCode r"></code></pre></div>
+<!-- ### Comparison with LARY -->
+<!-- ```{r opts.label = "mcmc"} -->
+<!-- F_ary <- formula(ToT ~ ampl*exp(-rate * trial) + asym) -->
+<!-- F_lary <- formula(ToT ~ exp(ampl)*exp(-exp(rate) * trial) + exp(asym)) -->
+<!-- F_lary_prior <- c(set_prior("normal(5.25, 0.576)", nlpar = "ampl"), -->
+<!--                   set_prior("normal(0, 10)", nlpar = "rate"), -->
+<!--                   set_prior("normal(1.84, 0.576)", nlpar = "asym")) -->
+<!-- F_ary_ef_2 <- list(formula(ampl ~ 1|Part), -->
+<!--                    formula(rate ~ 1|Part), -->
+<!--                    formula(asym ~ 1|Part)) -->
+<!-- M_4 <-  -->
+<!--   D_laptrain %>%  -->
+<!--   brm(bf(F_lary, -->
+<!--          flist = F_ary_ef_2, -->
+<!--          nl = T),  -->
+<!--       prior = F_lary_prior, -->
+<!--       family = Gamma(link = identity), -->
+<!--       data = .) -->
+<!-- P_LapTrain <-  -->
+<!--   bind_rows(posterior(M_3), -->
+<!--             posterior(M_4))  -->
+<!-- PP_LapTrain <- bind_rows(post_pred(M_3), -->
+<!--                          post_pred(M_4)) -->
+<!-- sync_CE(M_3, M_4, P_LapTrain, PP_LapTrain, Env = LapTrain) -->
+<!-- ``` -->
+<!-- Do we get similar Asym and Ampl estimates? -->
+<!-- ```{r} -->
+<!-- P_LapTrain %>%  -->
+<!--   fixef(mean.func = exp) -->
+<!-- ``` -->
+<!-- Do we get the same random effects? -->
+<!-- ```{r} -->
+<!-- P_LapTrain %>%  -->
+<!--   ranef() %>%  -->
+<!--   pivot_wider(id_cols = c("re_entity","nonlin"),  -->
+<!--               names_from = model,  -->
+<!--               values_from = center) -->
+<!-- ``` -->
+<!-- ```{r fig.height = 12} -->
+<!-- sync_CE(PP_LapTrain, Env = LapTrain) -->
+<!-- PP_LapTrain %>%  -->
+<!--   predict() %>%  -->
+<!--   left_join(D_laptrain, by = "Obs") %>%  -->
+<!--   ggplot(aes(x = trial)) + -->
+<!--   # geom_point(aes(y = ToT), size = .1) + -->
+<!--   geom_smooth(aes(y = center, color = model, ), se = F) + -->
+<!--   facet_wrap(~Part) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- Loo_3 <- loo(M_3, moment_match = T) -->
+<!-- Loo_4 <- loo(M_4, moment_match = T) -->
+<!-- list(,  -->
+<!--      loo(M_4, moment_match = T)) %>%  -->
+<!--   compare_IC() -->
+<!-- ``` -->
+<!-- ##### [HERE] -->
+<!-- 1.  In contrast to linear coefficients, ARY parameters must all be positive (including zero). At the same time, the prior distributions need to be specified as their cannot be reasonable defaults for a such a wide class of models. The pragmatic choice is the positive part of a Normal distribution. Amplitude and asymptote are on the scale of minutes. Typically, trained persons do such a simulator task in the range of a few minutes, but the amplitude can be much larger. A rather pronounced variance makes the prior weakly informative. For rate parameters the scale is a little different. Typical values are in the range between zero and 1, whereas With values larger than 3 the curve practically drops to the asymptote in one step. Note that with `brm` it is required to explicitly state the parameter boundaries (`lb`) if they exist. In addition, the non-linear likelihood function already takes care of the lower boundary of performance, such that we do not need a logarithmic link function. -->
+<!-- ```{r} -->
+<!-- grid.arrange( -->
+<!--   data_frame(x = seq(0,50), -->
+<!--              density = dnorm(x, 25, 100)) %>% -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "amplitude prior"), -->
+<!--   data_frame(x = seq(0,5,.1), -->
+<!--              density = dnorm(x, 0.5, 5)) %>% -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "rate prior"), -->
+<!--   data_frame(x = seq(0,10, .1), -->
+<!--              density = dnorm(x, 3, 15)) %>% -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "asymptote prior"), -->
+<!--   nrow = 1 -->
+<!-- ) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- ``` -->
+<!-- This basic model only estimates a single learning curve, hence we have to pick one individual from the LapTrain data set. In addition, the above learning curve equation requires the trials to start counting at zero, as there has not happened any learning before the first trial. -->
+<!-- ```{r} -->
+<!-- D_1 <- D_laptrain %>%  -->
+<!--   filter(Part == "03") %>%  -->
+<!--   mutate(Obs = row_number()) %>%  -->
+<!--   select(Obs, trial, Duration) -->
+<!-- D_1 %>%  -->
+<!--   ggplot(aes(x = trial, y = Duration)) + -->
+<!--   geom_point() + -->
+<!--   geom_smooth(se = F) + -->
+<!--   expand_limits(y = 0, x = 0) -->
+<!-- ``` -->
+<!-- The model is build as follows. Note that `nl = T` switches the non-linear mode of `brm` on. Finally, we are dealing with a temporal variable, which requires a random component that is bounded below and has a suitable mean-variance relationship. As the measures are getting rather close to zero, a gamma distribution is a reasonable approximation. -->
+<!-- ```{r opts.label = "mcmc"} -->
+<!-- M_1 <- D_1 %>%  -->
+<!--   brm(bf(F_ary, -->
+<!--          flist = F_ary_ef_1, -->
+<!--          nl = T),  -->
+<!--       prior = F_ary_prior, -->
+<!--       family = Gamma(link = identity), -->
+<!--       data = .) -->
+<!-- M_1 <- brm(fit = M_1, data = D_1) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- ``` -->
+<!-- When training a skill, performance gets better over time, but sooner or later starts leaning towards an asymptote. We will now develop the *exponential law of training* in a step-by-step manner from the well-known exponential function. -->
+<!-- $$f(t) = \exp t$$ -->
+<!-- ```{r} -->
+<!-- tibble(amount = 0:10, -->
+<!--        performance = exp(amount)) %>%  -->
+<!--   ggplot(aes(x = amount, y = performance)) + -->
+<!--   geom_line() -->
+<!-- ``` -->
+<!-- The first we notice is that the function increases, rather than decreases and therefore reaches the asymptote to the left. This can easily be fixed by reversing amounts $t$: -->
+<!-- $$f(t) = \exp -t$$ -->
+<!-- ```{r} -->
+<!-- tibble(amount = 0:10, -->
+<!--        performance = exp(-amount)) %>%  -->
+<!--   ggplot(aes(x = amount, y = performance)) + -->
+<!--   geom_line() -->
+<!-- ``` -->
+<!-- Next, the exponential function asymptotically reaches zero, but most real performance measures are strictly positive and the little girl will reach $5s$ at best. The *maximum performance* parameter $omega$ (omega) is just an additive constant to the learning process, shifting the whole curve upwards. -->
+<!-- $$f(t) = \textrm{Asym} + \exp -t$$ -->
+<!-- ```{r} -->
+<!-- asym = 5 -->
+<!-- tibble(amount = 0:10, -->
+<!--        performance = exp(-amount) + asym) %>%  -->
+<!--   ggplot(aes(x = amount, y = performance)) + -->
+<!--   geom_line() + -->
+<!--   geom_hline(yintercept = asym, color = "blue") + -->
+<!--   geom_hline(yintercept = 0, color = "blue", linetype = 2) + -->
+<!--   geom_segment(x = 0, y = -.1, xend = 0, yend = 5, arrow = arrow(), col = "red") + -->
+<!--   expand_limits(y = 0) -->
+<!-- ``` -->
+<!-- The range of performance is squeezed between initial performance (6) and the asymptote. By scaling up the exponential part of the formula by a constant $\textrm{Ampl}$, we adjust the scale of performance to the real measures. This parameter $\textrm{Ampl}$ directly represents the total amount of learning and is therefore called the *amplitude*. -->
+<!-- ```{r} -->
+<!-- ampl = 115 -->
+<!-- asym = 5 -->
+<!-- tibble(amount = 0:10, -->
+<!--        ToT = asym + ampl * exp(-amount)) %>%  -->
+<!--   ggplot(aes(x = amount, y = ToT)) + -->
+<!--   geom_line() + -->
+<!--   geom_hline(yintercept = asym) + -->
+<!--   geom_segment(x = 0, y = asym, xend = 0, yend = asym + ampl, arrow = arrow(ends = "both"), col = "red") + -->
+<!--   expand_limits(y = 0) -->
+<!-- ``` -->
+<!-- $$f(t) = \textrm{Asym} + \textrm{Ampl}\exp -t$$ -->
+<!-- Next we adjust the amount-of-training scale. The constructed learning curve approaches the asmptote much too fast for the shoe lacing example. One unit of training exert to much effect. The *learning rate* parameter $\rho$ adjusts the strength of effect as a multiplier for trials $t$: -->
+<!-- $$f(t) = \textrm{Asym} + \textrm{Ampl}\exp -t \rho$$ -->
+<!-- ```{r} -->
+<!-- ampl = 115 -->
+<!-- rate = 1/100 -->
+<!-- asym = 5 -->
+<!-- tibble(day = 0:1000, -->
+<!--        ToT = asym + ampl * exp(-day * rate)) %>%  -->
+<!--   ggplot(aes(x = day, y = ToT)) + -->
+<!--   geom_smooth() + -->
+<!--   geom_segment(x = 0, y = 0, xend = 1000, yend = 0, arrow = arrow(ends = "both"), col = "red") + -->
+<!--   expand_limits(y = 0) -->
+<!-- ``` -->
+<!-- ### The problem with end-point analysis -->
+<!-- ### The problem with averaging learning curves -->
+<!-- Task knowledge\* is learned by Understanding these instructions is a first step -->
+<!-- The principle of many design domains is to adapt the system or process to the user as much as possible. A modern car is a good example of that. Human drivers are terrible. They have no clue of physics, poor reaction times and are easily distracted or annoyed. This is why modern cars are  stuffed with assistant systems that augment the limited processing capabilities of the human driver. And nobody doubts that the advent of the automatic car will drastically improve overall road safety. Eventually, we will no longer need a driving licenses to ride a car. -->
+<!-- In the domain of aircraft transport the situation is oddly different. The first aircraft piloting assistance systems appeared a century ago. Still, while there is little trouble in becoming a cab or bus driver, most people won't pass the tight personnel selection for professional pilots. Only the fittest are admitted and what follows is a tough traning and strict certification rules. -->
+<!-- The situation is again different in minimally invasive surgery. Modern surgical techniques, such as laparascopy, have great benefits for patients in terms of reduced risk and convenience. At the same time, laparascopy is an extremely hard job for the surgeon. Imagine you ride a bike through dense traffic, but can only view your surrounding through a tiny mirror and you arms reach the handelbar crosswise. This is how it must feel to be a laparascopist. For us mortals it would be comforting to know that a job so hard on the limits of human capabilities would have a similarly strict selection process as we find in other high-risk domains (other than private transport).  -->
+<!-- Any selection process is basically an attempt to predict future performance. Reaction time tests in pilot personnel selection aim at predicting the timeliness. Many studies in laparascopy research have attempted to predict laparascopy performance by means of standardized tests. For example, the Corsi block tapping task is often used to assess a persons visual-spatial working memory capacity. As laparascopy involves spatial cognitive operations, this seems logical. However, most studies seem to miss an important point: the cognitive predictors are being used on average performance in a number of trials, whereas it is common sense that performance changes systematically with practice. Psychologists describe this association with *learning curves*. Several mathematical models have been suggested for learning curves. Here we are introducing the *exponential law of practice*.  -->
+<!-- The mathematical function has the following form: -->
+<!-- $$ -->
+<!-- y = \textrm{Asym} + \textrm{Ampl} e^{-\rho t} -->
+<!-- $$ -->
+<!-- where the parameters have the following interpretation: -->
+<!-- -   amplitude $\textrm{Ampl}$ is the total amount of performance improvement a person would ideally achieve, i.e. with infinite practice. -->
+<!-- -   rate $\rho$ is the speed of learning -->
+<!-- -   asymptote $\textrm{Asym}$ is the maximum level of performance, i.e. under infinite practice. -->
+<!-- -   $t$ is the number of practice trials -->
+<!-- Other parametrizations exist for this model, where the parameters have a different meaning. These will be introduced below, but for now, we refer to this parametrization as *ARY* (Amplitude, Rate, asYmptote). The following graphs show a selection of forms learning curves can take. -->
+<!-- ```{r} -->
+<!-- ## move to asymptote library -->
+<!-- sim_ARY <- function(){ -->
+<!--   Part <- data_frame(Part = 1:8) %>%  -->
+<!--     bind_cols( -->
+<!--       expand_grid(ampl = c(2, 4), -->
+<!--                   rate = c(.3, .5), -->
+<!--                   asym = c(1, 2)) -->
+<!--     ) -->
+<!--   Obs <- expand_grid( -->
+<!--     Part = Part$Part, -->
+<!--     trial = 0:20) %>%  -->
+<!--     left_join(Part) %>%  -->
+<!--     mutate(performance = ary(ampl, rate, asym, trial)) -->
+<!--   Obs %>% as_tbl_obs() -->
+<!-- } -->
+<!-- ``` -->
+<!-- As you can see, these learning curves are declining, as for many performance measures lower values mean better performance, think of time on task, reaction times or number of errors. The central part in the formula is the exponential term $e^{\rho t}$. The rate parameter $\rho$ has to be a positive number. When $\rho$ is zero, the term becomes $e^0 = 1$, which basically means that performance is a flat line without progress. Recall the arithmetic law of $e^{-x} = \frac{1}{e^x}$. When $\rho$ grows larger, the exponential term gets smaller, i.e. the learning curve approaches the asymptote at a slower rate. Note that there is nothing special about the natural base $e$, one could equally well use 2, 10 or 42 as a base. -->
+<!-- ```{r} -->
+<!-- attach(LapTrain) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- sim_ARY() %>%  -->
+<!--   ggplot(aes(x = trial, y = performance, col = as.factor(rate))) + -->
+<!--   facet_grid(as.factor(ampl) ~ as.factor(asym)) + -->
+<!--   geom_line() -->
+<!-- ``` -->
+<!-- Learning curves are obviously not linear and estimation is not supported by the `rstanarm` regression engines and most others. Currently, only, the `brm` regression engine provides powerful means to estimate regression models with non-linear relationships between predictors and outcome. The most basic case is when performance of a single subject depends simply on the number of trials. In order to allow for non-linear models, the formula interface of `brm` has been extended and can take more than one formula to specify different aspacts of the model. We build the required formulas one-by-one: -->
+<!-- 1.  First, the non-linear relationship is specified in a separate formula. Whereas in the linear model formula interface only the predictors are specified and the coefficients are implicit, here the parameters `ampl`, `rate` and `asym` must be spelled out. -->
+<!-- ```{r} -->
+<!-- F_ary <- formula(Duration ~ asym + ampl * exp(-rate * trial)) -->
+<!-- ``` -->
+<!-- 1.  The second set of formulas specifies additional fixed and random effects. Later in this chapter, we will attach predictors to some of the learning parameters, but here we specify a plain intercept-only model. -->
+<!-- ```{r} -->
+<!-- F_ary_ef_1 <- list(formula(ampl ~ 1), -->
+<!--                  formula(rate ~ 1), -->
+<!--                  formula(asym ~ 1)) -->
+<!-- ``` -->
+<!-- 1.  In contrast to linear coefficients, ARY parameters must all be positive (including zero). At the same time, the prior distributions need to be specified as their cannot be reasonable defaults for a such a wide class of models. The pragmatic choice is the positive part of a Normal distribution. Amplitude and asymptote are on the scale of minutes. Typically, trained persons do such a simulator task in the range of a few minutes, but the amplitude can be much larger. A rather pronounced variance makes the prior weakly informative. For rate parameters the scale is a little different. Typical values are in the range between zero and 1, whereas With values larger than 3 the curve practically drops to the asymptote in one step. Note that with `brm` it is required to explicitly state the parameter boundaries (`lb`) if they exist. In addition, the non-linear likelihood function already takes care of the lower boundary of performance, such that we do not need a logarithmic link function. -->
+<!-- ```{r} -->
+<!-- grid.arrange( -->
+<!--   data_frame(x = seq(0,50), -->
+<!--              density = dnorm(x, 25, 100)) %>%  -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "amplitude prior"), -->
+<!--   data_frame(x = seq(0,5,.1), -->
+<!--              density = dnorm(x, 0.5, 5)) %>%  -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "rate prior"), -->
+<!--   data_frame(x = seq(0,10, .1), -->
+<!--              density = dnorm(x, 3, 15)) %>%  -->
+<!--     ggplot(aes(x = x, y = density)) + -->
+<!--     geom_line() + -->
+<!--     expand_limits(y=0) + -->
+<!--     labs(title = "asymptote prior"), -->
+<!--   nrow = 1 -->
+<!-- ) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- F_ary_prior <- c(set_prior("normal(25, 100)", nlpar = "ampl", lb = 0), -->
+<!--                  set_prior("normal(.5, 3)", nlpar = "rate", lb = 0), -->
+<!--                  set_prior("normal(3, 15)", nlpar = "asym", lb = 0)) -->
+<!-- ``` -->
+<!-- This basic model only estimates a single learning curve, hence we have to pick one individual from the LapTrain data set. In addition, the above learning curve equation requires the trials to start counting at zero, as there has not happened any learning before the first trial. -->
+<!-- ```{r} -->
+<!-- D_1 <- D_laptrain %>%  -->
+<!--   filter(Part == "03") %>%  -->
+<!--   mutate(Obs = row_number()) %>%  -->
+<!--   select(Obs, trial, Duration) -->
+<!-- D_1 %>%  -->
+<!--   ggplot(aes(x = trial, y = Duration)) + -->
+<!--   geom_point() + -->
+<!--   geom_smooth(se = F) + -->
+<!--   expand_limits(y = 0, x = 0) -->
+<!-- ``` -->
+<!-- The model is build as follows. Note that `nl = T` switches the non-linear mode of `brm` on. Finally, we are dealing with a temporal variable, which requires a random component that is bounded below and has a suitable mean-variance relationship. As the measures are getting rather close to zero, a gamma distribution is a reasonable approximation. -->
+<!-- ```{r opts.label = "mcmc"} -->
+<!-- M_1 <- D_1 %>%  -->
+<!--   brm(bf(F_ary, -->
+<!--          flist = F_ary_ef_1, -->
+<!--          nl = T),  -->
+<!--       prior = F_ary_prior, -->
+<!--       family = Gamma(link = identity), -->
+<!--       data = .) -->
+<!-- M_1 <- brm(fit = M_1, data = D_1) -->
+<!-- ``` -->
+<!-- ```{r opts.label = "mcsync"} -->
+<!-- sync_CE(LapTrain, M_1, D_1) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- fixef(M_1) -->
+<!-- ``` -->
+<!-- In comparison to the exploratory plot above, the asymptote parameter seems to make sense, whereas the amplitude appears to be strikingly off. The reason is that amplitude does *not* represent the difference between the first trial and teh asymptote, but teh difference between performance *before* the first trial and maximum performance. -->
+<!-- To see whether the model fitted a proper learning curve, we extract the posterior predictions and plot them against the original observations. The following posterior prediction plot contains three layers with different data sources: first, all MCMC draws are plotted, which represents the distribution of certainty (`PP_1`), the posterior predictive median serves as a center estimate (`T_1`), whereas the third layer contains the original data points (`D_1`). We observe that the center estimates are neatly aligned with the original data. A very typical phenomenon with learning curves is that uncertainty is very pronounced in the first few trials, but the situation improves dramatically when performance approaches the asymptote. As much as this is logical, it also means that the first trials have very little to say about the potential of the person under assessment. -->
+<!-- ```{r} -->
+<!-- PP_1 <-  -->
+<!--   post_pred(M_1) %>%  -->
+<!--   left_join(D_1, by = "Obs") -->
+<!-- T_1 <- PP_1 %>%  -->
+<!--   group_by(Obs, trial) %>%  -->
+<!--   mutate(center = median(value)) -->
+<!-- PP_1 %>%  -->
+<!--   ggplot(aes(x = trial, y = value)) + -->
+<!--   geom_jitter(size = .05, alpha = .02) + -->
+<!--   geom_line(aes(y = center), data = T_1, linestyle = 2) + -->
+<!--   geom_point(aes(y = Duration), size = 2, data = D_1) -->
+<!-- ``` -->
+<!-- Now that the basic model seems to produce proper predictions, we can move on to estimate learning curves for the complete sample. This follows similar principles as in multilevel modelling. In particular, when dealing with non-linear functions, estimating individual curves is a must as the arithmetic average (per trial across persons) is not properly defined for exponential functions. -->
+<!-- In order to build a *bunch of learning curves (BLCM) model*, first, the random effects are specified in the effects formula, such that contains the participant factor. The typical random effects syntax is used: -->
+<!-- ```{r} -->
+<!-- F_ary_ef_2 <- list(formula(ampl ~ (1|Part)), -->
+<!--                  formula(rate ~ (1|Part)), -->
+<!--                  formula(asym ~ (1|Part))) -->
+<!-- ``` -->
+<!-- As always, random effects imply that the coefficients are on a linear scale, as otherwise, the factor-level normal distribution could hit the boundaries. Therefore, a link function is necessary. Quite conveniently, the three parameters all have a lower boundary at zero, such that a logarithmic link function applies and we can just add this via the `family = Gamma(link = log)` argument. As a consequence, the priors must support the whole range. -->
+<!-- ```{=html} -->
+<!-- <!-- -->
+<!-- The normally distributed priors below are tight only seemingly. In fact, they are only weakly informative, as the logarithmic link  function compresses the scale of the coefficients. If a participant has an amplitude of 15, on the log scale this is just 2.708.-->
+<p>–&gt;
+<!-- ``` -->
+<!-- ```{r opts.label = "future"} -->
+<!-- F_ary_prior_2 <- c(set_prior("normal(3, 5)", nlpar = "ampl", lb = 0), -->
+<!--                  set_prior("normal(-1, 2)", nlpar = "rate", lb = 0), -->
+<!--                  set_prior("normal(1, 3)", nlpar = "asym", lb = 0)) --></p>
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- M_2 <-   brm(bf(F_ary, -->
+<!--                 flist = F_ary_ef_2, -->
+<!--                 nl = T),  -->
+<!--              prior = F_ary_prior, -->
+<!--              family = Gamma(link = log), -->
+<!--              data = LapTrain$D) -->
+<!-- ``` -->
+<!-- ```{r opts.label = "mcsync"} -->
+<!-- sync_CE(LapTrain, M_2) -->
+<!-- ``` -->
+<!-- The population level averages are given in the following table. -->
+<!-- ```{r} -->
+<!-- fixef(M_2) -->
+<!-- ``` -->
+<!-- However, a more interesting issue is in how much participants differ in learning performance, i.e. rate and asymptote. The next table shows the factor-level variance. On the linear predictor scale, this is how much individuals vary in the population. Setting the high level of uncertainty aside for a moment, there appears to be some variation, at least. -->
+<!-- ```{r} -->
+<!-- grpef(M_2) -->
+<!-- ``` -->
+<!-- If this laparascopy task were used in an assessment, then what would also need a rule that decides on admission or rejection of a candidate. Such a rule could be: the candidate has a 80% chance of eventually completing the procedure within 80 seconds. The following code extracts the *absolute* individual asymptotes from the posterior distribution and selects participants 07 and 19 for rejection. -->
+<!-- ```{r} -->
+<!-- P_2_fixef <-  -->
+<!--   posterior(M_2, type = "fixef") %>%  -->
+<!--   filter(nonlin == "asym") %>%  -->
+<!--   posterior() -->
+<!-- P_2_ranef <-  -->
+<!--   posterior(M_2, type = "ranef") %>%  -->
+<!--   filter(nonlin == "asym") %>%  -->
+<!--   posterior() -->
+<!-- P_2_scores <-  -->
+<!--   left_join(P_2_ranef, P_2_fixef,  -->
+<!--             by = "iter", suffix = c("", "_fixef")) %>%  -->
+<!--   mutate(asym = value + value_fixef) %>%  -->
+<!--   posterior() -->
+<!-- P_2_scores %>%  -->
+<!--   group_by(re_entity) %>%  -->
+<!--   mutate(value = exp(value) * 60) %>%         ## <- mean function, seconds -->
+<!--   summarize(lb80 = quantile(value, .9)) %>%  -->
+<!--   filter(lb80 > 80) -->
+<!-- ``` -->
+<!-- The random effects learning curve estimates a bunch of learning curves. The asymptote parameter predicts future (or maximum) performance and applies for psychometric purposes. In the same manner other rules can be constructed, for example, one may prefer fast learners for the training program. In theory, one could also design an adaptive training, where a learning curve is continually updated and the candidate continues the training until an acceptable level of performance is reached. However, that vwoudl probably require a much faster implementation of the model. -->
+<!-- Beyond that, the learning curve model can also be extended by predictors for testing certain hypotheses. In research on laparascopy training an abundance of studies attempted to predict performance by means of so-called innate ability tests. For example, the fulcrum effect, i.e. crosswise handling of the instruments, complicates matters a lot. One may theorize that dealing with the fulcrum effect requires a good deal of mental rotation operations. An experimental task that measures the processing speed in mental rotation is easy to construct: in several trials, two figures are shown next to each other, where the right one is rotated by a certain degree. When we ask the participants to decide whether the figures are the same or not, reaction time represents the mental rotation processing speed. In the LapTrain study, such a measure has been collected. -->
+<!-- #### [HERE] -->
+<!-- ### Testing SCOR -->
+<!-- ```{r} -->
+<!-- ``` -->
+<!-- ### Exercises -->
+<!-- 1.  Pick one of the models in chapter \@ref(LM) and build it with `brm` as if it were non-linear -->
+
+</div>
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="wwm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cases.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsubsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

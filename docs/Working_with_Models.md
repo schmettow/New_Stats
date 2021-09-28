@@ -131,19 +131,14 @@ attach(BrowsingAB)
 
 
 ```r
-tibble(resid = residuals(M_age_shft)) %>%
-  ggplot(aes(x = resid)) +
+tibble(resid = residuals(M_age_shft)) %>% 
+  ggplot(aes(x = resid)) + 
   geom_histogram(aes(y = ..density..), bins = 15) +
-  stat_function(
-    fun = dnorm,
-    args = c(
-      mean = 0,
-      sd = clu(M_age_shft,
-        type = "disp"
-      )$center
-    ),
-    colour = "red"
-  )
+  stat_function(fun = dnorm, 
+                args = c(mean = 0, 
+                         sd = clu(M_age_shft, 
+                                  type = "disp")$center), 
+                colour = "red")
 ```
 
 <img src="Working_with_Models_files/figure-html/resid_dist_1-1.png" width="90%" />
@@ -152,7 +147,7 @@ The match of residual distribution with the theoretical distribution is not perf
 
 
 ```r
-M_age_rtrn <-
+M_age_rtrn <- 
   stan_glm(returns ~ 1 + age_shft, data = BAB1)
 P_age_rtrn <- posterior(M_age_rtrn)
 ```
@@ -180,26 +175,20 @@ We now graphically compare the distribution of estimated residuals against the G
 
 
 ```r
-C_age_rtrn_sd <-
-  T_age_rtrn %>%
-  filter(parameter == "sigma_resid") %>%
-  select(center) %>%
+C_age_rtrn_sd <- 
+  T_age_rtrn %>% 
+  filter(parameter == "sigma_resid") %>% 
+  select(center) %>% 
   as.numeric()
 
-tibble(resid = residuals(M_age_rtrn)) %>%
-  ggplot(aes(x = resid)) +
-  geom_histogram(aes(y = ..density..),
-    bins = 20,
-    color = "black",
-    fill = "white"
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = c(
-      mean = 0,
-      sd = C_age_rtrn_sd
-    )
-  ) +
+tibble(resid = residuals(M_age_rtrn)) %>% 
+  ggplot(aes(x = resid)) + 
+  geom_histogram(aes(y = ..density..), bins = 20,
+                 color = "black",
+                 fill = "white") +
+  stat_function(fun = dnorm, 
+                args = c(mean = 0, 
+                         sd = C_age_rtrn_sd)) +
   xlim(-5, 5)
 ```
 
@@ -227,7 +216,7 @@ attach(Chapter_LM)
 
 ```r
 set.seed(42)
-D_bimod <-
+D_bimod <- 
   bind_rows(
     tibble(Group = "A", y = rnorm(50, 4, 1)),
     tibble(Group = "B", y = rnorm(50, 8, 1))
@@ -243,14 +232,12 @@ M_bimod <- stan_glm(y ~ 1, data = D_bimod, iter = 500)
 
 
 ```r
-D_bimod %>%
-  mutate(resid = residuals(M_bimod)) %>%
+D_bimod  %>%  
+  mutate(resid = residuals(M_bimod)) %>% 
   ggplot(aes(x = resid)) +
-  geom_histogram(aes(y = ..density..),
-    bins = 20,
-    color = "black",
-    fill = "white"
-  ) +
+  geom_histogram(aes(y = ..density..), bins = 20,
+                 color = "black",
+                 fill = "white") +
   geom_density()
 ```
 
@@ -277,7 +264,7 @@ D_t <- tibble(y = rt(200, 2))
 
 
 ```r
-M_t <- stan_glm(y ~ 1, data = D_t, iter = 500)
+M_t <- stan_glm(y ~1, data = D_t, iter = 500)
 ```
 
 We obtain the following residual and theoretical distributions. It is approximately symmetric and unimodal, but the curvature seems to be a bit off (Figure \@ref(fig:resid-6)). The center is taller and extreme residuals seem far more frequent than by Gaussian distribution.
@@ -285,21 +272,17 @@ We obtain the following residual and theoretical distributions. It is approximat
 
 
 ```r
-D_t <- mutate(D_t, resid = residuals(M_t))
+D_t <-  mutate(D_t, resid = residuals(M_t))
 
 C_sigma <- rstanarm::sigma(M_t)
 
 D_t %>%
   ggplot(aes(x = resid)) +
   geom_histogram(aes(y = ..density..)) +
-  stat_function(
-    fun = dnorm,
-    args = c(
-      mean = 0,
-      sd = C_sigma
-    ),
-    colour = "red"
-  )
+  stat_function(fun = dnorm,
+                args = c(mean = 0,
+                         sd = C_sigma),
+                colour = "red")
 ```
 
 <div class="figure">
@@ -312,13 +295,11 @@ The example shown in Figure \@ref(fig:resid-6) is rather pronounced. More subtle
 
 
 ```r
-D_QQ <- tibble(
-  step = 0:100 / 100,
-  quant_obs = quantile(D_t$resid, step),
-  quant_theo = qnorm(step, 0, C_sigma)
-)
+D_QQ <- tibble(step = 0:100/100,
+           quant_obs = quantile(D_t$resid, step),
+           quant_theo = qnorm(step, 0, C_sigma))
 
-D_QQ %>%
+D_QQ %>% 
   ggplot(aes(x = quant_theo, y = quant_obs)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, col = "red")
@@ -349,7 +330,7 @@ Once mastered, the qq-plot is the swiss knife of distribution check. Next to the
 
 
 ```r
-tibble(resid = residuals(BrowsingAB$M_age_rtrn)) %>%
+tibble(resid = residuals(BrowsingAB$M_age_rtrn)) %>% 
   ggplot(aes(sample = resid)) +
   geom_qq(distribution = qnorm) +
   geom_abline(intercept = 0, slope = 1, col = "red")
@@ -389,8 +370,8 @@ attach(BrowsingAB)
 
 
 ```r
-BAB1 %>%
-  mutate(resid_CGM = residuals(M_CGM)) %>%
+BAB1 %>% 
+  mutate(resid_CGM = residuals(M_CGM)) %>% 
   ggplot(aes(x = Design, y = resid_CGM)) +
   geom_violin()
 ```
@@ -408,7 +389,7 @@ Visual checks of constant variance for factors is straight forward using common 
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   mutate(resid_age = residuals(M_age)) %>%
   ggplot(aes(x = age, y = resid_age)) +
   geom_point() +
@@ -424,7 +405,7 @@ The quantile plot uses a smoothing algorithm to picture the trend of quantiles (
 
 
 ```r
-BAB1 %>%
+BAB1 %>% 
   mutate(resid_grm_1 = residuals(M_grm_1)) %>%
   ggplot(aes(x = age_shft, y = resid_grm_1)) +
   facet_grid(~Design) +
@@ -455,11 +436,9 @@ attach(AUP)
 
 
 ```r
-AUP_1 %>%
-  mutate(
-    resid_3 = residuals(M_3),
-    mu_3 = predict(M_3)$center
-  ) %>%
+AUP_1 %>% 
+  mutate(resid_3 = residuals(M_3),
+         mu_3 = predict(M_3)$center) %>%
   ggplot(aes(x = mu_3, y = resid_3)) +
   geom_point() +
   geom_quantile()
@@ -480,7 +459,7 @@ We observe a clear trend in quantiles, with residual dispersion increasing with 
 
 <!-- 37
 
-What has happened here is another flavour of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `frm_coef(coef(P_age_rtrn), ~fixef == "Intercept")`, with a residual standard error of $`C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
+What has happened here is another flavour of the endless-universe paradox. When discussing predictions, we had seen that the linear model is always compromised as it assumes an infinite range of the outcome variable. Often that is of no practical concern, as long as one stays in the safe area with predictions. The problem here arises from the residual distribution extending to infinity in both directions, too. The LR with homepage returns by age estimated number of returns of a 20-year to be `frm_coef(coef(P_age_rtrn), fixef == "Intercept")`, with a residual standard error of $`C_age_rtrn_disp`$. As the expected value is positive, there is no linearity paradox and we are perfectly fine.
 
 
 Analyses of expected values (predictions) are necessary to discover problems with the linearity. Are the predictions we want to make in the safe range? This is essential to know for serious quantification. It is logical, that prediction analysis can only be done after the model has been applied to the data. Residual analysis is another essential part of the modelling process. By analysing residuals, we reflect on whether the Normality assumption is reasonably defensible. For the distribution of count variables may not look Normal at all and impossible predictions can arise when simulating from the model. Keep in mind, that neither the linearity nor the Normality assumption are truly defensible ever, in an endless universe. 
@@ -496,7 +475,7 @@ The first assumption of linear models is obvious: the residual distribution must
 
 
 ```r
-tibble(resid = residuals(M_age)) %>%
+tibble(resid = residuals(M_age)) %>% 
   ggplot(aes(x = resid)) +
   geom_density()
 ```
@@ -508,11 +487,9 @@ The single residual distribution assumption of linear models, as harmless as it 
 
 ```r
 set.seed(42)
-tibble(
-  age = runif(200, 20, 70),
-  resid = rnorm(200, 0, 46),
-  Obs = dplyr::min_rank(age)
-) %>%
+tibble(age = runif(200, 20, 70),
+           resid = rnorm(200, 0, 46),
+           Obs = dplyr::min_rank(age)) %>% 
   ggplot(aes(x = Obs, y = resid)) +
   geom_point() +
   geom_quantile()
@@ -600,7 +577,7 @@ There will always be as many fitted responses as there are responses and they co
 
 
 ```r
-BAB1 <- BAB1 %>%
+BAB1 <- BAB1 %>% 
   mutate(M_age_shft = T_pred_age_shft$center)
 ```
 
@@ -610,8 +587,8 @@ The evaluation of model fit is a visual task (at this stage). We start with a pl
 
 
 ```r
-BAB1 %>%
-  ggplot(aes(x = age, y = ToT)) +
+BAB1 %>% 
+  ggplot(aes(x = age, y = ToT)) + 
   geom_point() +
   geom_smooth(aes(linetype = "LOESS"), se = F) +
   geom_smooth(aes(y = M_age_shft, linetype = "M_age_shft"), se = F) +
@@ -633,17 +610,15 @@ In conclusion, LOESS and LRM tell different stories and we cannot tell which one
 
 ```r
 G_Design_age <-
-  BAB1 %>%
-  ggplot(aes(x = age, y = ToT)) +
+  BAB1 %>% 
+  ggplot(aes(x = age, y = ToT)) + 
   facet_grid(~Design) +
   geom_smooth(aes(linetype = "LOESS"), se = F) +
   geom_point(size = 1) +
   labs(linetype = "fitted response")
 
-G_Design_age + geom_smooth(aes(
-  y = M_age_shft,
-  linetype = "M_age_shft"
-), se = F)
+G_Design_age + geom_smooth(aes(y = M_age_shft, 
+                               linetype = "M_age_shft"), se = F)
 ```
 
 <div class="figure">
@@ -655,7 +630,7 @@ As Figure \@ref(fig:fitresp-3) shows, once we look at two designs separately, th
 
 
 ```r
-M_cgrm <- BAB1 %>%
+M_cgrm <- BAB1 %>% 
   stan_glm(ToT ~ Design * age, data = .)
 ```
 
@@ -665,7 +640,7 @@ M_cgrm <- BAB1 %>%
 ```r
 BAB1$M_cgrm <- predict(M_cgrm)$center
 
-G_Design_age %+%
+G_Design_age %+% 
   BAB1 +
   geom_smooth(aes(y = M_cgrm, linetype = "M_cgrm"))
 ```
@@ -686,7 +661,7 @@ As Figure \@ref(fig:fitresp-5) shows, the improved model now captures the overal
 
 The Uncanny Valley effect is all about non-linearity and we have seen in \@ref(prm) how a complex curves can be captured by higher-degree polynomials. With every degree added to a polynomial, the model gets one more coefficient. It should be clear by now that models with more coefficients are more flexible. As another example, adding a conditional term to a multi-factorial model lets all group means move freely. The flexibility of a polynomial can be measured by how many stationary points are possible, shoulders and troughs. Higher degree polynomials can do even more tricks, such as saddle points, that have a local slope of zero without changing direction.
 
-Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models. 
+Mathur & Reichling identified a cubic polynomial as the lowest degree that would render the Uncanny Valley  effect, which has at least one local maximum and one local minimum (both are stationary points). In fact, they also conducted a formal model comparison, which approved that adding higher degrees does not make the model better. Such a formal procedure is introduced in \@ref(testing-theories), whereas here we use visualizations of fitted responses to evaluate the possible models. 
 
 In the following, the cubic model is compared to the simpler quadratic model. It could be, after all, that a parable is sufficient to render the valley. On the other side of things, a polynomial model with the ridiculous degree 9 is estimated, just to see whether there is any chance a more complex model would sit more snug on the data.
 
@@ -699,13 +674,13 @@ attach(Uncanny)
 
 
 ```r
-M_poly_2 <- RK_2 %>%
+M_poly_2 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 2), data = .)
 
-M_poly_3 <- RK_2 %>%
+M_poly_3 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 3), data = .)
 
-M_poly_9 <- RK_2 %>%
+M_poly_9 <- RK_2 %>% 
   stan_glm(avg_like ~ poly(huMech, 9), data = .)
 ```
 
@@ -716,23 +691,21 @@ M_poly_9 <- RK_2 %>%
 
 
 ```r
-PP_poly <- bind_rows(
-  post_pred(M_poly_2),
-  post_pred(M_poly_3),
-  post_pred(M_poly_9)
-)
+PP_poly <- bind_rows(post_pred(M_poly_2),
+                     post_pred(M_poly_3),
+                     post_pred(M_poly_9))
 
-T_fit_poly <-
+T_fit_poly <- 
   predict(PP_poly) %>%
-  select(model, Obs, center) %>%
+  select(model, Obs, center) %>% 
   spread(model, center)
 ```
 
 
 ```r
-RK_2 %>%
-  bind_cols(T_fit_poly) %>%
-  ggplot(aes(x = huMech)) +
+RK_2 %>% 
+  bind_cols(T_fit_poly) %>% 
+  ggplot(aes(x = huMech)) + 
   geom_point(aes(y = avg_like, col = "observed")) +
   geom_smooth(aes(y = avg_like, col = "observed"), se = F) +
   geom_smooth(aes(y = M_poly_2, col = "poly_2"), se = F) +
@@ -795,14 +768,11 @@ attach(Chapter_LM)
 
 
 ```r
-sim_overfit <- function(n = 10, seed = 1317) {
+sim_overfit <- function(n = 10, seed = 1317){
   set.seed(seed)
-  tibble(
-    pred = rnorm(n = 10, mean = 0, sd = 1),
-    outcome = rnorm(n = 10, mean = 2, sd = 1)
-  ) %>%
-    as_tbl_obs()
-}
+  tibble(pred    = rnorm(n = 10, mean = 0, sd = 1),
+         outcome = rnorm(n = 10, mean = 2, sd = 1)) %>% 
+  as_tbl_obs()}
 
 
 D_overfit <- sim_overfit()
@@ -811,22 +781,18 @@ D_overfit <- sim_overfit()
 
 
 ```r
-M_gmm <- stan_glm(outcome ~ 1,
-  data = D_overfit, iter = 2000
-)
-M_lrm <- stan_glm(outcome ~ 1 + pred,
-  data = D_overfit, iter = 2000
-)
+M_gmm <-  stan_glm(outcome ~ 1,        
+                   data = D_overfit, iter = 2000)
+M_lrm <-  stan_glm(outcome ~ 1 + pred, 
+                   data = D_overfit, iter = 2000)
 ```
 
 
 
 
 ```r
-P_overfit <- bind_rows(
-  posterior(M_gmm),
-  posterior(M_lrm)
-)
+P_overfit <- bind_rows(posterior(M_gmm), 
+                       posterior(M_lrm))
 coef(P_overfit)
 ```
 
@@ -846,13 +812,13 @@ Figure \@ref(fig:overfit-2) illustrates the mechanism behind over-fitting. It is
 
 
 ```r
-P_overfit %>%
-  filter(type == "fixef") %>%
-  select(model, iter, parameter, value) %>%
-  spread(key = parameter, value = value, fill = 0) %>%
-  filter((iter %% 10) == 0) %>%
+P_overfit %>% 
+  filter(type == "fixef") %>% 
+  select(model, iter, parameter, value) %>% 
+  spread(key = parameter, value = value, fill = 0) %>% 
+  filter( (iter %% 10) == 0 ) %>% 
   ggplot() +
-  facet_wrap(~model) +
+  facet_wrap(~model) + 
   geom_abline(aes(intercept = Intercept, slope = pred), alpha = .2) +
   geom_point(aes(x = pred, y = outcome), data = D_overfit, col = "Red") +
   geom_label(aes(x = pred, y = outcome, label = Obs), data = D_overfit, col = "Red")
@@ -893,8 +859,8 @@ attach(Chapter_LM)
 
 ```r
 RMSE <- function(true, value) {
-  se <- (true - value)^2
-  mse <- mean(se)
+  se   <- (true - value)^2
+  mse  <- mean(se)
   rmse <- sqrt(mse)
   rmse
 }
@@ -904,11 +870,9 @@ RMSE <- function(true, value) {
 
 
 ```r
-PP_overfit <-
-  bind_rows(
-    post_pred(M_gmm),
-    post_pred(M_lrm)
-  ) %>%
+PP_overfit <- 
+  bind_rows(post_pred(M_gmm),
+            post_pred(M_lrm)) %>% 
   left_join(D_overfit, by = "Obs")
 
 PP_overfit %>%
@@ -933,15 +897,13 @@ In practice, the central dilemma in evaluating predictive accuracy is that usual
 ```r
 D_new_data <- sim_overfit(n = 100, seed = 1318)
 
-PP_cross_valid <-
-  bind_rows(
-    post_pred(M_gmm, newdata = D_new_data),
-    post_pred(M_lrm, newdata = D_new_data)
-  ) %>%
+PP_cross_valid <- 
+  bind_rows(post_pred(M_gmm, newdata = D_new_data),
+            post_pred(M_lrm, newdata = D_new_data)) %>% 
   left_join(D_new_data, by = "Obs")
 
-PP_cross_valid %>%
-  group_by(model) %>%
+PP_cross_valid %>% 
+  group_by(model) %>% 
   summarize(RMSE = RMSE(value, outcome))
 ```
 
@@ -968,45 +930,37 @@ The following code implements a generic function to run a LOO analysis using an 
 
 
 ```r
-do_loo <-
+do_loo <- 
   function(data,
-           F_fit,
-           f_predict = function(fit, obs) {
-             post_pred(fit, newdata = obs)
-           }) {
+           F_fit, 
+           f_predict = function(fit, obs) 
+             post_pred(fit, newdata = obs))
+  { 
+    
     model_name <- as.character(substitute(F_fit))
-    F_train_sample <- function(obs) {
-      data %>% slice(-obs)
-    } # Quosure
-    F_test_obs <- function(obs) {
-      data %>% slice(obs)
-    } # Quosure
-    F_post_pred <- function(model, model_name,
+    F_train_sample <- function(obs) 
+      data %>% slice(-obs) # Quosure
+    F_test_obs  <- function(obs) 
+      data %>% slice(obs)  # Quosure
+    F_post_pred <- function(model, model_name, 
                             newdata, this_Obs) {
-      post_pred(
-        model = model,
-        model_name = model_name,
-        newdata = newdata
-      ) %>%
-        mutate(Obs = this_Obs)
-    }
-
-    out <- tibble(
-      Obs = 1:nrow(data),
-      Model = model_name,
-      # training observations
-      Train_sample = map(Obs, F_train_sample),
-      # test observation
-      Test_obs = map(Obs, F_test_obs),
-      # model objects
-      Fitted = map(Train_sample, F_fit)
-    ) %>%
-      mutate(Post_pred = pmap(list(
-        model = Fitted,
-        newdata = Test_obs,
-        model_name = Model,
-        this_Obs = Obs
-      ), F_post_pred))
+      post_pred(model = model,
+                model_name = model_name,
+                newdata = newdata) %>% 
+        mutate(Obs = this_Obs)}
+    
+    out <-   tibble(Obs          = 1:nrow(data),
+                    Model        = model_name,
+                    # training observations
+                    Train_sample = map(Obs, F_train_sample),
+                    # test observation
+                    Test_obs     = map(Obs, F_test_obs),  
+                    # model objects
+                    Fitted       = map(Train_sample, F_fit)) %>%
+      mutate(Post_pred = pmap(list(model = Fitted, 
+                                   newdata = Test_obs, 
+                                   model_name = Model, 
+                                   this_Obs = Obs), F_post_pred))
     return(out)
   }
 ```
@@ -1028,23 +982,15 @@ Since we want to compare two models, we define two functions, invoke `do_loo` tw
 
 
 ```r
-fit_GMM <- function(sample) {
-  stan_glm(outcome ~ 1,
-    data = sample,
-    iter = 500
-  )
-}
-fit_LRM <- function(sample) {
-  stan_glm(outcome ~ 1 + pred,
-    data = sample,
-    iter = 500
-  )
-}
+fit_GMM  <-  function(sample) stan_glm(outcome ~ 1,        
+                                       data = sample, 
+                                       iter = 500)
+fit_LRM  <-  function(sample) stan_glm(outcome ~ 1 + pred, 
+                                       data = sample, 
+                                       iter = 500)
 
-Loo <- bind_rows(
-  do_loo(D_overfit, fit_GMM),
-  do_loo(D_overfit, fit_LRM)
-)
+Loo <- bind_rows(do_loo(D_overfit, fit_GMM),
+                 do_loo(D_overfit, fit_LRM))
 
 Loo %>% sample_n(5)
 ```
@@ -1059,15 +1005,15 @@ Model comparison is based on the posterior predictive distribution. The followin
 
 
 ```r
-PP_Loo <-
-  bind_rows(Loo$Post_pred) %>%
-  left_join(D_overfit) %>%
+PP_Loo <- 
+  bind_rows(Loo$Post_pred) %>% 
+  left_join(D_overfit) %>% 
   rename(prediction = value)
 
-PP_Loo %>%
-  group_by(model) %>%
-  summarize(RMSE = RMSE(prediction, outcome)) %>%
-  spread(value = RMSE, key = model) %>%
+PP_Loo %>%  
+  group_by(model) %>% 
+  summarize(RMSE = RMSE(prediction, outcome)) %>%  
+  spread(value = RMSE, key = model) %>% 
   mutate(diff = fit_LRM - fit_GMM) 
 ```
 
@@ -1082,9 +1028,9 @@ Table: (\#tab:xval-1)Comparison of global RMSE scores
 
 
 ```r
-PP_Loo %>%
-  group_by(model, Obs) %>%
-  summarize(RMSE = RMSE(prediction, outcome)) %>%
+PP_Loo %>%  
+  group_by(model, Obs) %>% 
+  summarize(RMSE = RMSE(prediction, outcome)) %>%  
   spread(value = RMSE, key = model) %>%
   mutate(diff = fit_LRM - fit_GMM) 
 ```
@@ -1227,9 +1173,9 @@ attach(IPump)
 
 
 ```r
-L_pois_cozfm <- loo(M_pois_cozfm)
-L_pois_clzrm <- loo(M_pois_clzrm)
-L_pois_lzrm <- loo(M_pois_lzrm)
+L_pois_cozfm <-  loo(M_pois_cozfm)
+L_pois_clzrm <-  loo(M_pois_clzrm)
+L_pois_lzrm <-  loo(M_pois_lzrm)
 ```
 
 
@@ -1237,12 +1183,10 @@ L_pois_lzrm <- loo(M_pois_lzrm)
 
 
 ```r
-list(
-  L_pois_lzrm,
-  L_pois_clzrm,
-  L_pois_cozfm
-) %>%
-  bayr::compare_IC()
+list(L_pois_lzrm, 
+     L_pois_clzrm, 
+     L_pois_cozfm) %>% 
+bayr::compare_IC()
 ```
 
 
@@ -1283,7 +1227,7 @@ Loo_1_exg <- loo(M_1_exg, reloo = TRUE)
 
 
 ```r
-list(Loo_1_gau, Loo_1_gam, Loo_1_exg) %>%
+list(Loo_1_gau, Loo_1_gam, Loo_1_exg) %>% 
   compare_IC()
 ```
 
@@ -1332,7 +1276,7 @@ F10_4_exg <- kfold(M_4_exg, K = 10)
 
 
 ```r
-list(F10_4_gau, F10_4_gam, F10_4_exg) %>%
+list(F10_4_gau, F10_4_gam, F10_4_exg) %>% 
   compare_IC()
 ```
 
@@ -1374,7 +1318,7 @@ Loo_dist <- loo(M_poly_3_beta_dist)
 
 
 ```r
-list(Loo_beta, Loo_dist) %>%
+list(Loo_beta, Loo_dist) %>% 
   compare_IC()
 ```
 
@@ -1426,7 +1370,7 @@ Loo_poly_3 <- loo(M_poly_3)
 
 
 ```r
-list(Loo_poly_2, Loo_poly_3) %>%
+list(Loo_poly_2, Loo_poly_3) %>% 
   compare_IC()
 ```
 

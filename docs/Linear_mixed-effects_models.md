@@ -57,7 +57,7 @@ attach(IPump)
 
 
 ```r
-D_Novel %>%
+D_Novel %>% 
   summarize(mean_Pop = mean(ToT)) 
 ```
 
@@ -75,9 +75,9 @@ The answer is just one number and does not refer to any individuals in the popul
 
 
 ```r
-D_Novel %>%
-  group_by(Part) %>%
-  summarize(mean_Part = mean(ToT)) %>%
+D_Novel %>% 
+group_by(Part) %>% 
+summarize(mean_Part = mean(ToT)) %>% 
   sample_n(5) 
 ```
 
@@ -87,21 +87,21 @@ Table: (\#tab:part-mean)Participant-level mean ToT
 
 |Part | mean_Part|
 |:----|---------:|
-|15   |      17.2|
-|5    |      16.0|
-|9    |      19.4|
-|20   |      19.1|
-|2    |      16.7|
+|6    |      12.3|
+|17   |      13.3|
+|22   |      12.7|
+|3    |      14.1|
+|10   |      14.2|
 
 Such a grouped summary can be useful for situations where we want  to directly compare individuals, like in performance tests. In experimental research, individual participants are of lesser interest, as they are exchangeable entities. What matters is the total variation within the sample, representing the population of users. Once we have participant-level effects, the amount of variation can be summarized by the standard deviation (Table \@ref(tab:part-sd)):
 
 
 ```r
-D_Novel %>%
-  group_by(Part) %>%
-  summarize(mean_Part = mean(ToT)) %>%
-  ungroup() %>%
-  summarize(sd_Part = var(mean_Part)) 
+D_Novel %>% 
+  group_by(Part) %>% 
+  summarize(mean_Part = mean(ToT)) %>% 
+  ungroup() %>% 
+  summarize(sd_Part   = var(mean_Part)) 
 ```
 
 
@@ -167,7 +167,7 @@ attach(IPump)
 
 
 ```r
-M_hf <- brm(ToT ~ 1 + (1 | Part), data = D_Novel)
+M_hf <- brm(ToT ~ 1 + (1|Part), data = D_Novel)
 P_hf <- posterior(M_hf)
 ```
 
@@ -206,11 +206,11 @@ Table: (\#tab:ml-ranef)Coefficient estimates with 95% credibility limits
 
 |re_entity | center| lower| upper|
 |:---------|------:|-----:|-----:|
-|3         | -0.155| -4.10|  2.85|
-|10        | -0.160| -3.86|  2.77|
+|20        |  0.362| -2.13|  4.27|
+|13        |  0.246| -2.59|  4.33|
 |12        |  0.304| -2.29|  4.51|
 |1         |  1.091| -1.10|  6.38|
-|4         |  0.782| -1.38|  5.89|
+|3         | -0.155| -4.10|  2.85|
 
 
 ```r
@@ -241,8 +241,8 @@ The solution is to use a different contrast coding for random factors: *deviatio
 
 
 ```r
-tibble(mu_i = ranef(P_hf)$center +
-  fixef(P_hf)$center) %>%
+tibble(mu_i = ranef(P_hf)$center + 
+             fixef(P_hf)$center) %>% 
   ggplot(aes(x = mu_i)) +
   geom_histogram()
 ```
@@ -257,8 +257,8 @@ Note that first two lines in the above code only work correctly if there is just
 
 
 ```r
-re_scores(P_hf) %>%
-  clu() %>%
+re_scores(P_hf) %>% 
+  clu() %>% 
   sample_n(8)
 ```
 
@@ -268,21 +268,21 @@ Table: (\#tab:rescores-2)Parameter estimates with 95% credibility limits
 
 |parameter            |re_entity | center| lower| upper|
 |:--------------------|:---------|------:|-----:|-----:|
-|r_Part[2,Intercept]  |2         |   16.1|  13.0|  19.6|
 |r_Part[23,Intercept] |23        |   15.4|  11.3|  18.2|
-|r_Part[19,Intercept] |19        |   16.1|  12.9|  19.4|
-|r_Part[20,Intercept] |20        |   16.4|  13.7|  20.3|
-|r_Part[1,Intercept]  |1         |   17.1|  14.5|  22.4|
-|r_Part[5,Intercept]  |5         |   16.0|  12.7|  19.3|
-|r_Part[15,Intercept] |15        |   16.2|  12.9|  19.7|
-|r_Part[16,Intercept] |16        |   15.9|  12.5|  19.2|
+|r_Part[3,Intercept]  |3         |   15.7|  11.9|  18.8|
+|r_Part[2,Intercept]  |2         |   16.1|  13.0|  19.6|
+|r_Part[11,Intercept] |11        |   15.8|  11.9|  19.0|
+|r_Part[17,Intercept] |17        |   15.6|  11.7|  18.5|
+|r_Part[9,Intercept]  |9         |   16.5|  13.7|  20.6|
+|r_Part[14,Intercept] |14        |   15.9|  12.5|  19.2|
+|r_Part[18,Intercept] |18        |   15.6|  11.7|  18.5|
 
 Finally, we can assess the initial question: are individual differences a significant component of all variation in the experiment? Assessing the impact of variation is not as straight-forward as with fixed effects. Two useful heuristics are to compare group-level variation to the fixed effects estimate (Intercept) and against the standard error:
 
 
 ```r
-P_hf %>%
-  filter(type %in% c("grpef", "disp", "fixef")) %>%
+P_hf %>% 
+  filter(type %in% c("grpef", "disp", "fixef")) %>% 
   clu()
 ```
 
@@ -337,14 +337,14 @@ attach(Sleepstudy)
 
 
 ```r
-D_slpstd %>%
+D_slpstd %>% 
   ggplot(aes(x = days, y = RT)) +
   facet_wrap(~Part) +
   geom_point() +
   geom_smooth(se = F, aes(color = "LOESS")) +
   geom_smooth(se = F, method = "lm", aes(color = "Linear model")) +
   labs(color = "Smoothing function") +
-  theme(legend.position = c(0.8, 0.1)) # !del+
+  theme(legend.position = c(0.8, 0.1)) #!del+
 ```
 
 <div class="figure">
@@ -356,18 +356,14 @@ A more compact way of plotting multi-level slopes is the spaghetti plot below. B
 
 
 ```r
-D_slpstd %>%
-  ggplot(aes(
-    x = days,
-    y = RT,
-    group = Part
-  )) +
-  geom_smooth(aes(color = "participant"),
-    size = .5, se = F, method = "lm"
-  ) +
-  geom_smooth(aes(group = 1, color = "population"),
-    size = 2, se = F, method = "lm"
-  ) +
+D_slpstd %>% 
+  ggplot(aes(x = days,
+             y = RT,
+             group = Part)) +
+  geom_smooth(aes(color = "participant"), 
+              size = .5, se = F, method = "lm")+
+  geom_smooth(aes(group = 1, color = "population"), 
+              size = 2, se = F, method = "lm") +
   labs(color = "Level of Effect")
 ```
 
@@ -385,10 +381,9 @@ Remember to always put complex random effects into brackets, because the `+` ope
 
 
 ```r
-M_slpsty_1 <- brm(RT ~ 1 + days + (1 + days | Part),
-  data = D_slpstd,
-  iter = 2000
-)
+M_slpsty_1 <- brm(RT ~ 1 + days + (1 + days|Part),
+                       data = D_slpstd,
+                       iter = 2000)
 ```
 
 
@@ -420,9 +415,9 @@ Table: (\#tab:slpstd-4)Population-level coefficients with random effects standar
 
 
 ```r
-ranef(M_slpsty_1) %>%
-  filter(fixef == "days") %>%
-  mutate(Part_ord = rank(center)) %>%
+ranef(M_slpsty_1) %>% 
+  filter(fixef == "days") %>% 
+  mutate(Part_ord = rank(center)) %>% 
   ggplot(aes(x = Part_ord, ymin = lower, y = center, ymax = upper)) +
   geom_crossbar() +
   labs(y = "diff RT")
@@ -457,18 +452,16 @@ This underlines that random coefficients are additive correction terms to the po
 
 
 ```r
-posterior(M_slpsty_1) %>%
-  re_scores() %>%
-  clu() %>%
-  select(re_entity, fixef, center) %>%
-  pivot_wider(names_from = fixef, values_from = center) %>%
+posterior(M_slpsty_1) %>% 
+  re_scores() %>% 
+  clu() %>% 
+  select(re_entity, fixef, center) %>% 
+  pivot_wider(names_from = fixef, values_from = center) %>% 
   ggplot() +
-  geom_abline(aes(
-    intercept = Intercept,
-    slope = days
-  )) +
+    geom_abline(aes(intercept = Intercept,
+                    slope = days)) +
   xlim(0, 20) +
-  ylim(0, 700)
+  ylim(0, 700) 
 ```
 
 <div class="figure">
@@ -510,9 +503,8 @@ To answer this question, we can compare the two group means using a basic CGM (T
 
 
 ```r
-M_cgm <- stan_glm(ToT ~ 1 + Design,
-  data = D_pumps
-)
+M_cgm <-  stan_glm(ToT ~ 1 + Design, 
+                   data = D_pumps)
 ```
 
 
@@ -540,41 +532,35 @@ An average benefit  sounds promising, but we should be clear what it precisely m
 
 ```r
 T_Part <-
-  D_pumps %>%
-  group_by(Part, Design) %>%
+  D_pumps %>% 
+  group_by(Part, Design) %>% 
   summarize(mean_Part = mean(ToT))
 
-T_Pop <-
-  T_Part %>%
-  group_by(Design) %>%
+T_Pop  <-
+  T_Part %>% 
+  group_by(Design) %>% 
   summarize(mean_Pop = mean(mean_Part))
 ```
 
 
 
 ```r
-gridExtra::grid.arrange(
-  nrow = 2,
-  T_Pop %>%
-    ggplot(aes(
-      x = Design, group = NA,
-      y = mean_Pop
-    )) +
-    geom_point() +
-    geom_line() +
-    ggtitle("Population-level model (average benefits)") +
-    ylim(0, 60),
-  T_Part %>%
-    ggplot(aes(
-      x = Design,
-      y = mean_Part,
-      group = Part, label = Part
-    )) +
-    geom_line() +
-    ggrepel::geom_label_repel(size = 3, alpha = .5) +
-    ggtitle("Participant-level model (individual benefits)") +
-    ylim(0, 60)
-)
+gridExtra::grid.arrange(nrow = 2,
+             T_Pop %>% 
+  ggplot(aes(x = Design, group = NA,
+             y = mean_Pop)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Population-level model (average benefits)") +
+  ylim(0, 60),
+ T_Part %>% 
+  ggplot(aes(x = Design,
+             y = mean_Part,
+             group = Part, label = Part)) +
+  geom_line() +
+  ggrepel::geom_label_repel(size = 3, alpha = .5) +
+  ggtitle("Participant-level model (individual benefits)") +
+  ylim(0, 60))
 ```
 
 <div class="figure">
@@ -597,11 +583,11 @@ If you look again at the participant-level *spaghetti plot* (They are uncooked!)
 
 ```r
 M_amm_pop <-
-  D_pumps %>%
+  D_pumps %>% 
   stan_glm(ToT ~ 0 + Design, data = .)
 
 M_amm_part <-
-  D_pumps %>%
+  D_pumps %>% 
   stan_glm(ToT ~ (0 + Design):Part, data = .)
 ```
 
@@ -609,14 +595,12 @@ M_amm_part <-
 
 ```r
 T_amm <-
-  bind_rows(
-    posterior(M_amm_pop),
-    posterior(M_amm_part)
-  ) %>%
-  fixef() %>%
+  bind_rows(posterior(M_amm_pop),
+            posterior(M_amm_part)) %>% 
+  fixef() %>% 
   separate(fixef, into = c("Design", "Part"))
 
-T_amm %>%
+T_amm %>% 
   ggplot(aes(x = Design, y = center, group = Part, color = model)) +
   geom_line()
 ```
@@ -631,8 +615,8 @@ The convenience of (true) multi-level models is that  both (or more) levels are 
 
 ```r
 M_mlcgm <-
-  D_pumps %>%
-  brm(ToT ~ 1 + Design + (1 + Design | Part), data = .)
+  D_pumps %>% 
+  brm(ToT ~ 1 + Design + (1 + Design|Part), data = .)
 ```
 
 In the formula of this multi-level CGM the predictor term (`1 + Design`) is just copied. The first instance is the usual population-level averages, but the second is on participant-level. The `|` operator in probability theory means "conditional upon" and here this can be read as *effect of Design conditional on participant*.
@@ -655,7 +639,7 @@ Table: (\#tab:tml-4)Coefficient estimates with 95% credibility limits
 
 ```r
 ranef(M_mlcgm) %>%
-  rename(Part = re_entity, `deviation` = center) %>%
+  rename(Part = re_entity, `deviation` = center) %>% 
   ggplot(aes(x = deviation)) +
   facet_grid(~fixef) +
   geom_histogram()
@@ -866,11 +850,10 @@ attach(Uncanny)
 
 ```r
 M_poly_3_ml <-
-  RK_1 %>%
-  brm(response ~ 1 + huMech1 + huMech2 + huMech3 +
-    (1 + huMech1 + huMech2 + huMech3 | Part),
-  data = ., iter = 2500
-  )
+  RK_1 %>% 
+  brm(response ~ 1 + huMech1 + huMech2 + huMech3 + 
+               (1 + huMech1 + huMech2 + huMech3|Part),
+             data = ., iter = 2500)
 
 P_poly_3_ml <- posterior(M_poly_3_ml)
 
@@ -885,11 +868,11 @@ One method for testing universality is to extract the fitted responses (`predict
 
 
 ```r
-T_pred <-
-  RK_1 %>%
+T_pred <- 
+  RK_1 %>% 
   mutate(M_poly_3_ml = predict(PP_poly_3_ml)$center)
 
-T_pred %>%
+T_pred %>% 
   ggplot(aes(x = huMech, y = M_poly_3_ml, group = Part)) +
   geom_smooth(se = F, size = .5) +
   labs(x = "human likeness", y = "fitted emotional response")
@@ -917,20 +900,18 @@ For testing universality of the effect, we just have to run the same analysis on
 
 library(uncanny)
 
-P_univ_uncanny <-
-  P_poly_3_ml %>%
-  re_scores() %>%
-  select(iter, Part = re_entity, fixef, value) %>%
-  tidyr::spread(key = "fixef", value = "value") %>%
-  select(iter, Part, huMech0 = Intercept, huMech1:huMech3) %>%
-  mutate(
-    trough = trough(select(., huMech0:huMech3)),
-    shoulder = shoulder(select(., huMech0:huMech3)),
-    has_trough = !is.na(trough),
-    has_shoulder = !is.na(shoulder),
-    shoulder_left = trough > shoulder,
-    is_uncanny = has_trough & has_shoulder & shoulder_left
-  )
+P_univ_uncanny <- 
+  P_poly_3_ml %>% 
+  re_scores() %>% 
+  select(iter, Part = re_entity, fixef, value) %>% 
+  tidyr::spread(key = "fixef", value = "value") %>% 
+  select(iter, Part, huMech0 = Intercept, huMech1:huMech3) %>% 
+  mutate(trough = trough(select(.,huMech0:huMech3)),
+         shoulder = shoulder(select(.,huMech0:huMech3)),
+         has_trough = !is.na(trough),
+         has_shoulder = !is.na(shoulder), 
+         shoulder_left = trough > shoulder,
+         is_uncanny = has_trough & has_shoulder & shoulder_left) 
 ```
 
 
@@ -939,9 +920,9 @@ To produce Figure \@ref(fig:uncanny-8), the probability that the participant exp
 
 
 ```r
-P_univ_uncanny %>%
-  group_by(Part) %>%
-  summarize(prob_uncanny = mean(is_uncanny)) %>%
+P_univ_uncanny %>% 
+  group_by(Part) %>% 
+  summarize(prob_uncanny = mean(is_uncanny)) %>% 
   mutate(label = str_c(100 * round(prob_uncanny, 4), "%")) %>%
   ggplot(aes(x = Part, y = prob_uncanny)) +
   geom_col() +
@@ -973,16 +954,16 @@ attach(Sleepstudy)
 
 
 ```r
-P_scores <-
-  posterior(M_slpsty_1) %>%
-  re_scores() %>%
+P_scores <- 
+  posterior(M_slpsty_1) %>% 
+  re_scores() %>% 
   mutate(Part = re_entity)
 
-P_scores %>%
-  filter(fixef == "days") %>%
-  group_by(Part) %>%
-  summarize(prob_positive = mean(value >= 0)) %>%
-  mutate(label = str_c(100 * round(prob_positive, 4), "%")) %>%
+P_scores %>% 
+  filter(fixef == "days") %>% 
+  group_by(Part) %>% 
+  summarize(prob_positive = mean(value >= 0)) %>% 
+  mutate(label = str_c(100 * round(prob_positive, 4), "%")) %>% 
   ggplot(aes(x = Part, y = prob_positive)) +
   geom_col() +
   geom_label(aes(label = label), vjust = 1) +
@@ -999,14 +980,13 @@ All, but participants 309 and 335, almost certainly have positive slopes. Partic
 
 ```r
 P_scores %>%
-  filter(Part %in% c(308, 335), fixef == "days") %>%
+  filter(Part %in% c(308, 335), fixef == "days") %>% 
   ggplot() +
   xlim(0.05, 1) +
   ylim(-10, 25) +
-  geom_abline(aes(intercept = 0, slope = value),
-    alpha = .01
-  ) +
-  facet_grid(. ~ Part)
+  geom_abline(aes(intercept = 0, slope = value), 
+              alpha = .01) +
+  facet_grid(.~Part)
 ```
 
 <div class="figure">
@@ -1180,13 +1160,13 @@ Egan's claim is a two-way encounter to which we added the tasks, which makes it 
 
 
 ```r
-D_egan %>%
-  group_by(Part) %>%
-  summarize(avg_logToT = mean(logToT)) %>%
-  ggplot(aes(x = avg_logToT)) +
-  geom_histogram() +
-  labs(title = "participant-level average log-times") +
-  xlim(1.5, 6.5)
+  D_egan %>% 
+    group_by(Part) %>%
+    summarize(avg_logToT = mean(logToT)) %>% 
+    ggplot(aes(x = avg_logToT)) +
+    geom_histogram() +
+    labs(title = "participant-level average log-times") +
+    xlim(1.5,6.5)
 ```
 
 
@@ -1214,13 +1194,12 @@ There seems to be substantial variation between participants, tasks and items, b
 
 
 ```r
-M_1 <-
-  brm(logToT ~ 1 +
-    (1 | Part) + (1 | Design) + (1 | Task) + (1 | Design:Task),
-  data = D_egan
-  )
+M_1 <-  
+  brm(logToT ~ 1 + 
+        (1|Part) + (1|Design) + (1|Task) + (1|Design:Task),
+             data = D_egan)
 
-P_1 <- posterior(M_1)
+P_1 <-  posterior(M_1)
 ```
 
 
@@ -1233,21 +1212,16 @@ A Bayesian multi-level model estimates the standard deviation alongside with  co
 ```r
 library(mascutils) # reorder-levels
 
-P_1 %>%
-  filter(type == "grpef" | type == "disp") %>%
-  mutate(
-    re_factor = if_else(type == "disp",
-      "Obs", re_factor
-    ),
-    re_factor = reorder_levels(
-      re_factor,
-      c(4, 2, 5, 3, 1)
-    )
-  ) %>%
+P_1 %>% 
+  filter(type == "grpef"  | type == "disp") %>% 
+  mutate(re_factor = if_else(type == "disp", 
+                             "Obs", re_factor),
+         re_factor = reorder_levels(re_factor, 
+                                    c(4, 2, 5, 3, 1))) %>% 
   ggplot(aes(x = value)) +
   geom_density() +
   labs(x = "random effect standard deviation") +
-  facet_grid(re_factor ~ .)
+  facet_grid(re_factor~.)
 ```
 
 <div class="figure">
@@ -1271,10 +1245,10 @@ Still, Egan's claim is out in the world and requires an answer. To reduce the qu
 
 
 ```r
-P_1 %>%
-  filter(type == "grpef", re_factor %in% c("Part", "Design")) %>%
-  select(chain, iter, re_factor, value) %>%
-  spread(re_factor, value) %>%
+P_1 %>% 
+  filter(type == "grpef", re_factor %in% c("Part", "Design")) %>% 
+  select(chain, iter, re_factor, value) %>% 
+  spread(re_factor, value) %>% 
   summarize(prob_Egan_is_right = mean(Part > Design)) 
 ```
 
@@ -1291,11 +1265,11 @@ Such a chance can count as good evidence in favor of Egan's claim, although it c
 
 
 ```r
-P_1 %>%
-  filter(type == "grpef", re_factor %in% c("Part", "Design", "Design:Task")) %>%
-  select(chain, iter, re_factor, value) %>%
-  spread(re_factor, value) %>%
-  mutate(Egan_is_right = Part > Design & Part > `Design:Task`) %>%
+P_1 %>% 
+  filter(type == "grpef", re_factor %in% c("Part", "Design", "Design:Task")) %>% 
+  select(chain, iter, re_factor, value) %>% 
+  spread(re_factor, value) %>% 
+  mutate(Egan_is_right = Part > Design & Part > `Design:Task`) %>% 
   summarize(prob_Egan_is_right = mean(Egan_is_right)) 
 ```
 
@@ -1349,14 +1323,14 @@ Table: (\#tab:cue8-1)Data set with 8 variables, showing 8 of 2620 observations.
 
 |  Obs|Team |Part |Condition | SUS|Task | ToT| logToT|
 |----:|:----|:----|:---------|---:|:----|---:|------:|
-|  521|G3   |105  |moderated |    |1    | 347|   5.85|
-|  818|H3   |164  |remote    |  95|3    | 121|   4.80|
-|  882|J3   |177  |remote    |    |2    |    |       |
-|  886|J3   |178  |remote    |    |1    | 196|   5.28|
-| 1177|L3   |236  |remote    |  80|2    | 123|   4.81|
-| 1230|L3   |246  |remote    |  98|5    |  99|   4.59|
-| 1879|L3   |376  |remote    |  98|4    | 105|   4.65|
-| 2605|O3   |521  |moderated |    |5    |  44|   3.78|
+|   91|A3   |19   |moderated |  24|1    | 180|   5.19|
+|  861|J3   |173  |remote    |    |1    | 264|   5.58|
+| 1107|L3   |222  |remote    |  75|2    | 111|   4.71|
+| 1486|L3   |298  |remote    |  35|1    | 138|   4.93|
+| 1665|L3   |333  |remote    |  38|5    |  78|   4.36|
+| 1945|L3   |389  |remote    |  95|5    |  94|   4.54|
+| 2046|L3   |410  |remote    |  88|1    |  89|   4.49|
+| 2261|L3   |453  |remote    |  95|1    |  78|   4.36|
 
 
 An analysis can performed on three levels: the population level would tell us the average performance on this website. That could be interesting for the company running it. Below that are the teams and their variation is what the original research question is about.  Participants  make the third level for a nested multi-level model. It is nested, because every participant is assigned to exactly one team. If that weren't the case, say there is one sample of participants shared by the teams, that would be cross-classification.
@@ -1377,11 +1351,10 @@ It seems there is ample variation in ToT for participants, with mean ToT ranging
 
 
 ```r
-M_1 <-
-  D_cue8 %>%
-  brm(logToT ~ Condition + (1 | Team / Part),
-    data = .
-  )
+M_1 <- 
+  D_cue8 %>% 
+  brm(logToT ~ Condition + (1|Team/Part),
+       data = .)
 
 P_1 <- posterior(M_1)
 ```
@@ -1415,9 +1388,9 @@ The syntax really is just a safe way to deal with nested samples, where particip
 
 
 ```r
-D_cue8_x <-
-  D_cue8 %>%
-  unite(Part, Team:Part, remove = F) %>%
+D_cue8_x <- 
+  D_cue8 %>% 
+  unite(Part, Team:Part, remove = F) %>% 
   as_tbl_obs()
 
 D_cue8_x
@@ -1427,24 +1400,24 @@ D_cue8_x
 
 Table: (\#tab:cue8-5)Data set with 8 variables, showing 8 of 2620 observations.
 
-|  Obs|Part   |Team |Condition | SUS|Task | ToT| logToT|
-|----:|:------|:----|:---------|---:|:----|---:|------:|
-|  399|F3_80  |F3   |remote    |    |4    | 225|   5.42|
-|  408|F3_82  |F3   |remote    |    |3    |  70|   4.25|
-|  522|G3_105 |G3   |moderated |    |2    | 153|   5.03|
-| 1538|L3_308 |L3   |remote    |  58|3    |  69|   4.23|
-| 1544|L3_309 |L3   |remote    |  70|4    | 145|   4.98|
-| 1986|L3_398 |L3   |remote    |  85|1    |  40|   3.69|
-| 2271|L3_455 |L3   |remote    |  60|1    | 111|   4.71|
-| 2308|M3_462 |M3   |remote    |   5|3    | 139|   4.93|
+|  Obs|Part   |Team |Condition |   SUS|Task | ToT| logToT|
+|----:|:------|:----|:---------|-----:|:----|---:|------:|
+|  364|E3_73  |E3   |moderated |      |4    | 350|   5.86|
+|  586|H3_118 |H3   |remote    |  95.0|1    |  88|   4.48|
+|  663|H3_133 |H3   |remote    |      |3    |    |       |
+| 1551|L3_311 |L3   |remote    | 100.0|1    |  92|   4.52|
+| 1562|L3_313 |L3   |remote    |  75.0|2    | 104|   4.64|
+| 2072|L3_415 |L3   |remote    |  58.0|2    | 102|   4.62|
+| 2353|M3_471 |M3   |remote    |  82.5|3    | 402|   6.00|
+| 2374|M3_475 |M3   |remote    |  72.5|4    |  58|   4.06|
 
 
 Let's take a closer look at the results regarding consistency of ToT measures across teams (Table \@ref(tab:cue8-6)). We would always expect participants to show variation, but if team averages show strong variation, then we can suspect that there are biases. It turns out that the variation by team is  by a factor of 1.5 larger than individual differences. And it is on par with the measurement error (sigma).
 
 
 ```r
-P_1 %>%
-  filter(type %in% c("fixef", "grpef")) %>%
+P_1 %>% 
+  filter(type %in% c("fixef", "grpef")) %>% 
   clu()
 ```
 
@@ -1540,21 +1513,21 @@ attach(CUE8)
 
 ```r
 set.seed(42)
-D_cue8_1 <-
-  D_cue8 %>%
+D_cue8_1 <- 
+  D_cue8 %>% 
   sample_frac(.1)
 ```
 
 
 
 ```r
-M_2 <-
-  D_cue8_1 %>%
+M_2 <- 
+  D_cue8_1 %>% 
   brm(logToT ~ Team - 1, data = .)
 
-M_3 <-
-  D_cue8_1 %>%
-  brm(logToT ~ 1 + (1 | Team), data = .)
+M_3 <- 
+  D_cue8_1 %>% 
+  brm(logToT ~ 1 + (1|Team), data = .)
 ```
 
 
@@ -1564,23 +1537,21 @@ M_3 <-
 
 ```r
 P_fixef <- posterior(M_2, type = "fixef")
-P_ranef <- posterior(M_3) %>%
+P_ranef <- posterior(M_3) %>% 
   bayr::re_scores()
 
-T_shrinkage <-
-  D_cue8_1 %>%
-  group_by(Team) %>%
-  summarize(N = n()) %>%
-  mutate(
-    fixef = fixef(P_fixef)$center,
-    ranef = ranef(P_ranef)$center,
-    shrinkage = fixef - ranef
-  )
+T_shrinkage <- 
+  D_cue8_1 %>% 
+  group_by(Team) %>% 
+  summarize(N = n()) %>% 
+  mutate(fixef = fixef(P_fixef)$center,
+         ranef = ranef(P_ranef)$center,
+         shrinkage = fixef - ranef)
 ```
 
 
 ```r
-T_shrinkage %>%
+T_shrinkage %>% 
   ggplot(aes(x = Team, size = N)) +
   geom_point(aes(y = fixef, col = "fixef"), alpha = .5) +
   geom_point(aes(y = ranef, col = "ranef"), alpha = .5) +
@@ -1649,23 +1620,18 @@ n_Part <- 10
 n_Trial <- 20
 n_Obs <- n_Part * n_Trial
 
-D_Part <- tibble(
-  Part = 1:n_Part,
-  true_score = rnorm(n_Part, 900, 80)
-)
+D_Part <- tibble(Part = 1:n_Part,
+                 true_score = rnorm(n_Part, 900, 80))
 
 D_Trial <- tibble(Trial = 1:n_Trial)
 
-D_CTT <-
-  mascutils::expand_grid(
-    Part = D_Part$Part,
-    Trial = D_Trial$Trial
-  ) %>%
-  left_join(D_Part) %>%
-  mutate(RT = rnorm(n_Obs,
-    mean = true_score,
-    sd = 100
-  )) %>%
+D_CTT <- 
+  mascutils::expand_grid(Part = D_Part$Part,
+                         Trial = D_Trial$Trial) %>% 
+  left_join(D_Part) %>% 
+  mutate(RT = rnorm(n_Obs, 
+                    mean = true_score,
+                    sd = 100)) %>% 
   as_tbl_obs()
 
 D_CTT
@@ -1693,9 +1659,9 @@ With that many measures at our hand, how can we arrive at a single score to comp
 
 
 ```r
-D_CTT %>%
-  group_by(Part) %>%
-  summarize(proc_speed = mean(RT)) %>%
+ D_CTT %>% 
+  group_by(Part) %>% 
+  summarize(proc_speed = mean(RT)) %>% 
   arrange(proc_speed) 
 ```
 
@@ -1727,15 +1693,15 @@ The following model implements CTT as a multi-level absolute group means model \
 
 
 ```r
-M_CTT <- brm(RT ~ 1 + (1 | Part), data = D_CTT)
+M_CTT <- brm(RT ~ 1 + (1|Part), data = D_CTT)
 ```
 
 
 ```r
-posterior(M_CTT) %>%
-  re_scores() %>%
-  ranef() %>%
-  rename(Part = re_entity) %>%
+posterior(M_CTT) %>% 
+  re_scores() %>% 
+  ranef() %>% 
+  rename(Part = re_entity) %>% 
   arrange(center)
 ```
 
@@ -1783,11 +1749,9 @@ One important thing to note at this point is that psychometricians like to put t
 
 
 ```r
-D_long <- expand_grid(
-  Part = 1:8,
-  Item = 1:5
-) %>%
-  mutate(rating = rnorm(40)) %>%
+D_long <- expand_grid(Part = 1:8, 
+                      Item = 1:5) %>% 
+  mutate(rating = rnorm(40)) %>% 
   mascutils::as_tbl_obs()
 D_long
 ```
@@ -1808,12 +1772,10 @@ Table: (\#tab:irt-long-form)Data set with 4 variables, showing 8 of 40 observati
 |  39|    7|    5| -0.702|
 
 ```r
-D_long %>%
-  select(Part, Item, rating) %>%
-  pivot_wider(
-    names_from = Item,
-    values_from = rating
-  ) 
+D_long %>%  
+  select(Part, Item, rating) %>% 
+  pivot_wider(names_from = Item, 
+              values_from = rating) 
 ```
 
 
@@ -1836,14 +1798,14 @@ Psychometric programs often require matrix data, but for a multi-level models we
 
 
 ```r
-D_psymx_1 <-
-  D_quest %>%
+D_psymx_1 <- 
+  D_quest %>%   
   filter(Scale == "Geek", Session == 1)
+  
 
-
-M_psymx_1 <-
-  D_psymx_1 %>%
-  brm(rating ~ 1 + (1 | Part) + (1 | Item), data = .)
+M_psymx_1 <- 
+  D_psymx_1 %>% 
+  brm(rating ~ 1 + (1|Part) + (1|Item), data = .)
 ```
 
 Once a rating scale instrument is ready to use, the researcher will ultimately be interested in the person scores. However, during the process of constructing a psychometric instrument, items scores play an important role. In the following I will demonstrate three psychometric evaluations, using multi-level models:
@@ -1869,22 +1831,19 @@ We have a linear model, where the rating is weighted sums of person tendency and
 ```r
 P_psymx_1 <- posterior(M_psymx_1)
 
-T_ranef <-
-  ranef(P_psymx_1) %>%
-  rename(geekism = center) %>%
-  mutate(geekism = if_else(re_factor == "Item",
-    -geekism, geekism
-  )) # reversing
+T_ranef <- 
+  ranef(P_psymx_1) %>% 
+  rename(geekism = center) %>% 
+  mutate(geekism = if_else(re_factor == "Item", 
+                           -geekism, geekism)) # reversing
 ```
 
 
 ```r
-T_ranef %>%
-  ggplot(aes(
-    x = re_factor,
-    y = geekism,
-    label = re_entity
-  )) +
+T_ranef %>% 
+  ggplot(aes(x = re_factor,
+             y = geekism,
+             label = re_entity)) +
   geom_violin() +
   geom_jitter(width = .2) +
   ylim(-2, 2)
@@ -1906,15 +1865,14 @@ In order to obtain the scores per session, we add Session as a factor to the mod
 
 
 ```r
-D_psymx_2 <-
+D_psymx_2 <- 
   D_quest %>% filter(Scale == "Geek")
 
-M_psymx_2 <-
-  brm(rating ~ 0 + Session +
-    (0 + Session | Part) +
-    (0 + Session | Item),
-  data = D_psymx_2
-  )
+M_psymx_2 <- 
+  brm(rating ~ 0 + Session + 
+        (0 + Session|Part) + 
+        (0 + Session|Item),
+      data = D_psymx_2)
 ```
 
 
@@ -1924,9 +1882,9 @@ We extract the random effects and plot test-retest scores for participants and i
 
 
 ```r
-T_ranef <-
-  ranef(M_psymx_2) %>%
-  select(re_factor, re_entity, Session = fixef, score = center) %>%
+T_ranef <- 
+  ranef(M_psymx_2) %>% 
+  select(re_factor, re_entity, Session = fixef, score = center) %>% 
   pivot_wider(names_from = Session, values_from = "score")
 
 T_ranef %>% sample_n(8)
@@ -1949,19 +1907,15 @@ T_ranef %>% sample_n(8)
 
 
 ```r
-plot_stability <-
-  function(ranef) {
-    ranef %>%
-      ggplot(aes(x = Session1, y = Session2)) +
-      facet_grid(re_factor ~ .) +
-      geom_point() +
-      geom_smooth(aes(color = "observed"), se = F) +
-      geom_abline(aes(
-        intercept = 0, slope = 1,
-        color = "ideal"
-      )) +
-      labs(x = "Stability")
-  }
+plot_stability <- 
+  function(ranef) ranef %>% 
+  ggplot(aes(x = Session1, y = Session2)) +
+  facet_grid(re_factor~.) +
+  geom_point() +
+  geom_smooth(aes(color = "observed"), se = F) +
+  geom_abline(aes(intercept = 0, slope = 1, 
+                  color = "ideal")) +
+  labs(x = "Stability")
 
 T_ranef %>% plot_stability()
 ```
@@ -1981,8 +1935,8 @@ The example of test-retest stability shows one more time, how useful plots are f
 
 
 ```r
-T_ranef %>%
-  group_by(re_factor) %>%
+T_ranef %>% 
+  group_by(re_factor) %>% 
   summarize(cor = cor(Session1, Session2)) 
 ```
 
@@ -1999,26 +1953,22 @@ Unfortunately, this lacks information about the degree of certainty. The better 
 
 
 ```r
-clu_cor <-
-  function(model) {
-    model %>%
-      posterior() %>%
-      filter(type == "cor") %>%
-      mutate(parameter = str_remove_all(parameter, "cor_")) %>%
-      group_by(parameter) %>%
-      summarize(
-        center = median(value),
-        lower = quantile(value, .025),
-        upper = quantile(value, .975)
-      ) %>%
-      separate(parameter,
-        into = c("re_factor", "between", "and"),
-        sep = "__"
-      )
+clu_cor <- 
+  function(model){
+    model %>% 
+      posterior() %>% 
+      filter(type == "cor") %>% 
+      mutate(parameter = str_remove_all(parameter, "cor_")) %>% 
+      group_by(parameter) %>% 
+      summarize(center = median(value),
+                lower = quantile(value, .025),
+                upper = quantile(value, .975)) %>%
+      separate(parameter, into = c("re_factor", "between", "and"), 
+               sep = "__")
   }
 
 
-M_psymx_2 %>%
+M_psymx_2 %>% 
   clu_cor() 
 ```
 
@@ -2049,9 +1999,9 @@ In the real world, researchers in the field of personality are often content wit
 
 
 ```r
-M_psymx_3 <-
-  D_quest %>%
-  brm(rating ~ 0 + Scale + (0 + Scale | Part), data = .)
+M_psymx_3 <- 
+  D_quest %>% 
+  brm(rating ~ 0 + Scale + (0 + Scale|Part),  data = .)
 ```
 
 
@@ -2059,7 +2009,7 @@ M_psymx_3 <-
 
 
 ```r
-M_psymx_3 %>%
+M_psymx_3 %>% 
   clu_cor() 
 ```
 
@@ -2095,9 +2045,9 @@ attach(Uncanny)
 
 
 ```r
-UV_dsgmx <-
+UV_dsgmx <- 
   RK_1 %>%
-  select(Part, Item, Design = Stimulus, Session, response) %>%
+  select(Part, Item, Design = Stimulus, Session, response) %>% 
   as_tbl_obs()
 UV_dsgmx
 ```
@@ -2124,18 +2074,17 @@ Measures in the Uncanny experiment are an encounter of three samples: Part, Item
 
 ```r
 M_dsgmx_1 <-
-  brm(response ~ 0 + Session +
-    (0 + Session | Part) +
-    (0 + Session | Item) +
-    (0 + Session | Design),
-  data = UV_dsgmx
-  )
+  brm(response ~ 0 + Session + 
+        (0 + Session|Part) + 
+        (0 + Session|Item) +
+        (0 + Session|Design), 
+      data = UV_dsgmx)
 ```
 
 
 
 ```r
-M_dsgmx_1 %>%
+M_dsgmx_1 %>% 
   clu_cor() 
 ```
 
