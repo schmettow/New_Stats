@@ -1,3 +1,5 @@
+# (PART) Appendix {.unnumbered}
+
 # Cases
 
 ```{r setup, include = FALSE, eval = TRUE}
@@ -1016,6 +1018,43 @@ write_csv(Hugme$D_hugme, "Data/Hugme.csv")
 #write_csv(Hugme$HUG_resp, "Data/HUG_resp.csv")
 #write_sav(Hugme$HUG_exp, "Data/HUG_exp.sav")
 #write_csv(Hugme$HUG_exp, "Data/HUG_exp.csv")
+```
+
+
+### Case: Boxtrainer
+
+[Ace Küpper](https://essay.utwente.nl/76400/)
+
+
+#### Research Design
+
+
+#### Measures
+
+
+
+
+```{r Boxtrainer_raw_data}
+load("external_data/AK18.Rda")
+
+AK18 <- mascutils::as_tbl_obs(AK18)
+
+AK18
+
+```
+
+
+```{r Boxtrain_create, opts.label = "simulate"}
+new_syncenv("Boxtrain")
+Boxtrain$AK18 <- AK18
+```
+
+
+
+
+```{r Boxtrain_export}
+save(Boxtrain, file = "Cases/Boxtrain.Rda")
+write_csv(Boxtrain$AK18, "Data/Boxtrain.csv")
 ```
 
 
