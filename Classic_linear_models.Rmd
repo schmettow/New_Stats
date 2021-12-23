@@ -738,12 +738,16 @@ T_age <- coef(M_age)
 ```
 
 ```{r BAB-age}
-coef(M_age)
+coef(T_age)
 ```
 
+
+
+
+
 Is age associated with ToT?
-Table \@ref(tab:BAB-age) tells us that with every year of age, users get `r frm_coef(T_age, ~fixef == "age",  interval = F)` seconds slower, which is considerable.
-It also tells us that the predicted performance at age = 0 is `r frm_coef(T_age, ~fixef == "Intercept", interval = F)`.
+Table \@ref(tab:BAB-age) tells us that with every year of age, users get `r frm_coef(T_age, fixef == "age",  interval = F)` seconds slower, which is considerable.
+It also tells us that the predicted performance at age = 0 is `r frm_coef(T_age, fixef == "Intercept", interval = F)`.
 
 <!-- #123 -->
 
@@ -756,7 +760,8 @@ We also realize that over the whole life span of a typical web user, say 12 year
 Generally, with linear models, one should avoid making statements about a range that has not been observed.
 Linearity, as we will see in \@ref(relinking-linearity), always is just an approximation for a process that truly is non-linear.
 
-Placing the intercept where there is no data has another consequence: the estimate is rather uncertain, with a wide 95% CI, `r frm_coef(T_age, ~fixef == "Intercept")`.
+
+Placing the intercept where there is no data has another consequence: the estimate is rather uncertain, with a wide 95% CI, `r frm_coef(T_age, fixef == "Intercept")`.
 As a metaphor, think of the data as a hand that holds the a stick, the regression line and tries to push a light switch.
 The longer the stick, the more difficult is becomes to hit the target.
 
@@ -1261,11 +1266,11 @@ How can you have a slope and a "crossing point zero", when there is no line, but
 This will be explained further in \@ref(dummy) and \@ref(treatment-contrasts).
 Fact is, in the model at hand, the Intercept is the *mean of a reference group*.
 Per default, stan\_glm chooses the alphabetically first group label as the reference group, in this case design A.
-We can therefore say that design A has an average performance of `r frm_coef(coef(BrowsingAB$M_CGM), ~fixef == "Intercept")`.
+We can therefore say that design A has an average performance of `r frm_coef(coef(BrowsingAB$M_CGM), fixef == "Intercept")`.
 
 The second parameter is the effect of "moving to design B".
 It is given as the *difference to the reference group*.
-With design B it took users `r frm_coef(coef(BrowsingAB$M_CGM), ~fixef == "DesignB", neg = T)` seconds less to complete the task.
+With design B it took users `r frm_coef(coef(BrowsingAB$M_CGM), fixef == "DesignB", neg = T)` seconds less to complete the task.
 However, this effect appears rather small and there is huge uncertainty about it.
 It barely justifies the effort to replace design A with B.
 If the BrowsingAB data set has some exciting stories to tell, the design difference is not it.
@@ -1993,8 +1998,8 @@ Recall, that the intercept in an LRM is the point, where the predictor variable 
 In MRM this is just the same: here, the intercept is the predicted AUP resistance score, when NCS and GEX are both zero.
 
 When using the two predictors simultaneously, the overall positive tendency remains.
-However, we observe major and minor shifts: in the MRM, the coefficient of the geekism score is reduced to less than half: `r frm_coef(coef(AUP$M_3), ~fixef == "zgex")`.
-In contrast, the impact of NCS is reduced just by a little, compared to M_1 : `r frm_coef(coef(AUP$M_3),  ~fixef == "zncs")`.
+However, we observe major and minor shifts: in the MRM, the coefficient of the geekism score is reduced to less than half: `r frm_coef(coef(AUP$M_3), fixef == "zgex")`.
+In contrast, the impact of NCS is reduced just by a little, compared to M_1 : `r frm_coef(coef(AUP$M_3),  fixef == "zncs")`.
 
 For any researcher who has carefully conceived a research question this appears to be a disappointing outcome. Indeed, putting multiple predictors into a model sometimes reduces the  size of the effect, compared to single-predictor models. More precisely, this happens, when  *predictors are correlated*.
 In this study, participants who are high on NCS also tend to have more pronounced geekism (Figure \@ref(fig:AUP-corr-predictors)))
@@ -2124,7 +2129,7 @@ tribble(~Condition, ~F, ~M,
 ```
 
 The first one, A-F, has been set as reference group.
-In Table \@ref(tab:mfm-2) the intercept coefficient tells that women in condition A have an average ToT of `r frm_coef(T_fixef_mfm_1, ~fixef == "Intercept")` seconds.
+In Table \@ref(tab:mfm-2) the intercept coefficient tells that women in condition A have an average ToT of `r frm_coef(T_fixef_mfm_1, fixef == "Intercept")` seconds.
 The second coefficient says that design B is slightly faster and that there seemingly is no gender effect.
 
 How comes that the model only has three parameters, when there are four groups?
@@ -2219,10 +2224,10 @@ Once again, we get an intercept first.
 Recall, that in LRM the intercept is the the performance of a 20-year old (age was shifted!).
 In the CGM the intercept is the mean of the reference group.
 When marrying factors with continuous predictors, the *intercept is point zero in the reference group*.
-The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, ~fixef == "Intercept")`.
-The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, ~fixef == "age_shft")` seconds slower.
+The predicted average performance of 20-year old with design A is `r frm_coef(T_fixef_mpm_2, fixef == "Intercept")`.
+The age effect has the usual meaning: by year of life, participants get `r frm_coef(T_fixef_mpm_2, fixef == "age_shft")` seconds slower.
 The *factorial effect* B is a *vertical shift of the intercept*.
-A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, ~fixef == "DesignB", neg = T)` seconds faster.
+A 20-year old in condition B is `r frm_coef(T_fixef_mpm_2, fixef == "DesignB", neg = T)` seconds faster.
 
 It is important to that this is a model of parallel lines, implying that the age effect is the same everywhere.
 The following model estimates intercepts and slopes separately for every level, making it an *absolute mixed-predictor model (AMPM)*.
@@ -2483,13 +2488,13 @@ C_cmrm_ageB <- T_comb %>%
 
 The conditional model shares the first three coefficients with the unconditional model, but only the first two, Intercept and DesignB have the same meaning.
 
-The intercept is the performance of an average twenty-year-old using design A, but the two models diverge in where to place this and the conditional model is less in favor of design A (`r frm_coef(T_comb, ~model == "M_cmrm", ~fixef == "Intercept")` seconds).
-Conversely, the effect of design B at age of 20 improved dramatically: accordingly, a twenty-year-old is `r frm_coef(T_comb, ~model == "M_cmrm", ~fixef == "DesignB", neg = T)` faster with B.
+The intercept is the performance of an average twenty-year-old using design A, but the two models diverge in where to place this and the conditional model is less in favor of design A (`r frm_coef(T_comb, model == "M_cmrm", fixef == "Intercept")` seconds).
+Conversely, the effect of design B at age of 20 improved dramatically: accordingly, a twenty-year-old is `r frm_coef(T_comb, model == "M_cmrm", fixef == "DesignB", neg = T)` faster with B.
 
 The third coefficient Age_shift appears in both models, but really means something different.
-The GRM assumes that both designs have the same slope of `r frm_coef(T_comb, ~model == "M_grm_1", ~fixef == "age_shft", interval = F)` seconds per year.
+The GRM assumes that both designs have the same slope of `r frm_coef(T_comb, model == "M_grm_1", fixef == "age_shft", interval = F)` seconds per year.
 The conditional model produces one slope per design and here the coefficient refers to design A only, as this is the reference group.
-Due to the treatment effects, `DesignB:age_shft` is the *difference in slopes*: users loose `r frm_coef(T_comb, ~model == "M_grm_1", ~fixef == "age_shft", interval = F)` seconds per year with A, and on top of that `r frm_coef(T_comb, ~model == "M_cmrm", ~fixef == "age_shft", interval = T)` with design B.
+Due to the treatment effects, `DesignB:age_shft` is the *difference in slopes*: users loose `r frm_coef(T_comb, model == "M_grm_1", fixef == "age_shft", interval = F)` seconds per year with A, and on top of that `r frm_coef(T_comb, model == "M_cmrm", fixef == "age_shft", interval = T)` with design B.
 
 ```{r}
 detach(BrowsingAB)
@@ -2579,7 +2584,7 @@ Recall that in the MFM, the group mean of design B among men is calculated by ad
 This group mean is fixed.
 The conditional effect `DesignB:GenderM` is the difference to the fixed group in the MFM.
 It can be imagined as an adjustment parameter, that gives the fourth group its own degree of freedom.
-In the current CMFM the conditional coefficient is very close to zero, with a difference of just `r frm_coef(T_ratings, ~model == "M_cmfm_1", ~fixef == "DesignB:GenderM")`.
+In the current CMFM the conditional coefficient is very close to zero, with a difference of just `r frm_coef(T_ratings, model == "M_cmfm_1", fixef == "DesignB:GenderM")`.
 
 It seems we are getting into a lot of null results here.
 If you have a background in classic statistics, you may get nervous at such a point, because you remember that in case of null results someone said: "one cannot say anything".
@@ -2692,8 +2697,8 @@ Note that ...
 +   here I demonstrate a different technique to attach dummies to the data. First a coding table `T_dummy` is created, which is then combined with the data, using a (tidy) *join* operation.
 +   we have expanded the factor Session into three dummy variables and we have to make every single one conditional. `Design:(Step3_2 + Step2_1)` is short for `Design:Step3_2 + Design:Step2_1`. But, you should *never* use the fully factorial expansion (`Factor1 * Factor2`), a this would make dummy variables conditional.
 
-In conditional learning curve model, the intercept coefficient tells us that the average ToT with the Legacy in the final session is `r frm_coef(T_cmfm_2, ~fixef == "Intercept")` seconds.
-Using the Novel design the nurses were `r frm_coef(T_cmfm_2, ~fixef == "DesignNovel", neg = T)` seconds faster and that is our best estimate for the long-term improvement in efficiency.
+In conditional learning curve model, the intercept coefficient tells us that the average ToT with the Legacy in the final session is `r frm_coef(T_cmfm_2, fixef == "Intercept")` seconds.
+Using the Novel design the nurses were `r frm_coef(T_cmfm_2, fixef == "DesignNovel", neg = T)` seconds faster and that is our best estimate for the long-term improvement in efficiency.
 
 Again, the learning step coefficients are not "main" effects, but is local to Legacy.
 The first step `Step2_1` is much larger than the second, as is typical for learning curves.
@@ -3420,11 +3425,11 @@ T_fixef <- coef(M_1)
 ```
 
 Recall, that treatment contrasts were used, where all effects are given relative to the reference group quiet-rested (intercept).
-The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(T_fixef, ~fixef == "SleepSleepy")`.
-Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy")`.
+The results confirm the deteriorating effect of sleepiness, although its exact impact is blurred by pronounced uncertainty `r frm_coef(T_fixef, fixef == "SleepSleepy")`.
+Somewhat surprisingly, noise did not affect well-rested persons by much `r frm_coef(T_fixef, fixef == "EnvironmentNoisy")`.
 Note however, that we cannot conclude a null effect, as the credibility limits are wide.
 Maybe the lack of a clear effect is because steady white noise was used, not a disturbing tumult.
-The effect of sleepiness on RT is partly reduced in a noisy environment `r frm_coef(T_fixef, ~fixef == "EnvironmentNoisy:SleepSleepy")`.
+The effect of sleepiness on RT is partly reduced in a noisy environment `r frm_coef(T_fixef, fixef == "EnvironmentNoisy:SleepSleepy")`.
 This suggests that the arousal system is involved in the deteriorating effect of sleep deprivation, which has interesting consequences for the design of vigilance tasks in the real world.
 
 These findings reverb with a well known law in Psychology of Human Factors, the Yerkes-Dodson law, which states that human performance at cognitive tasks is influenced by arousal.

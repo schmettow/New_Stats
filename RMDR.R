@@ -432,14 +432,28 @@ save_CE <-
 
 
 deploy_CE <-
-  function(cases, path){
+  function(cases, path, strip_large = F){
     for(c in cases){
       fname = paste0(path,"/",c,".Rda")
       load(paste0("Cases/",c,".Rda"), envir = globalenv())
       rm("<-", envir = eval(parse(text = c)))
       rm("environment", envir = eval(parse(text = c)))
+      if(strip_large){
+        content <- ls(envir = eval(parse(text = c)))
+        pattern <- "^P_|^PP_|^Loo_|^M_"
+        remove <- content[stringr::str_detect(content, pattern)]
+        print(paste0("Removing ", paste(remove), " from ", c))
+        rm(list = remove, envir = eval(parse(text = c)))
+      }
       save(list = c, file = fname)
       message(paste0("Deploying case environment ", c, " to: ", fname))
     }
 }
+
+# deploy_CE(c("AR_game", "AUP", "BrowsingAB", "CUE8", "Egan", "Headache", 
+#             "Hugme", "IPump", "MMN", "Rainfall", "Rational", "Reading", "Sec99",
+#             "Sleep", "Sleepstudy", "Uncanny"), 
+#           path = "Cases/stripped", 
+#           strip_large = T)
+
 

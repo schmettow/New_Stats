@@ -8,7 +8,7 @@ output_dir: Production
 #rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd"]
 #rmd_files: ["index.Rmd", "Working_with_Models.Rmd"]
 #rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd"]
-rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd", "Appendix.Rmd"]
+rmd_files: ["index.Rmd", "Getting_started_with_R.rmd", "Bayesian_statistics.rmd", "Classic_linear_models.Rmd", "Linear_mixed-effects_models.Rmd", "Generalized_Linear_Models.Rmd", "Working_with_Models.rmd", "Learning_curves.Rmd","Appendix.Rmd"]
 new_session: yes
 graphics: yes
 delete_merged_file: false

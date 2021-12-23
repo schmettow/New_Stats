@@ -1274,7 +1274,7 @@ P_1 %>%
 ```
 
 
-It is not surprising to see the test users vary greatly in performance. What is concerning is that the discordance between professional teams. Note that this is the net variance after controlling for the condition, remote or moderated. Surprisingly, evidence for just that  difference rather low and highly uncertain (`r frm_coef(fixef(CUE8$P_1), ~fixef == "Conditionmoderated")`).
+It is not surprising to see the test users vary greatly in performance. What is concerning is that the discordance between professional teams. Note that this is the net variance after controlling for the condition, remote or moderated. Surprisingly, evidence for just that  difference rather low and highly uncertain (`r frm_coef(fixef(CUE8$P_1), fixef == "Conditionmoderated")`).
 
 
 ```{r opts.lavbel = "inv"}

@@ -94,7 +94,7 @@ The parameters of a polynomial model usually don't have a direct interpretation.
 Linearity means that we increase the predictor by a fixed unit, the outcome will follow suit by a constant amount. In the chapter on Linear Models \@ref(lm), we encountered several situations where linearity was violated. 
 
 + In \@ref(ofm) increasing amount of training by one session did result in rather different amount of learning. In effect, we used not an LRM, but ordered factors to estimate the learning curves.
-+ In \@ref(saturation), two pills did not reduce headache by the sum of each oill alone. We used conditional effects when two or more interventions improve the same process in a non-linear way.
++ In \@ref(saturation), two pills did not reduce headache by the sum of each pill alone. We used conditional effects when two or more interventions improve the same process in a non-linear way.
 + and in \@ref(prm) we used polynomials to estimate wildly curved relationships
 
 The case of Polynomial regression is special in two ways: first, the curvature itself is of theoretical interest (e.g. finding the "trough" of the Uncanny Valley effect). Second, a polynomial curve (of second degree or more) is no longer monotonously increasing (or decreasing). In contrast, learning curves and saturation effects have in common that in both situations outcome steadily increases (or decreases) when we add more to the predictor side. There just is a limit to performance, which is reached asymptotically (which means the curve never really flattens).
@@ -997,7 +997,7 @@ Recall, how we characterized tasks as populations and introduced multi-level mod
 
 #### Talking odds {#talking-odds}
 
-When presenting results of a statistical analysis, the linear predictor is likely to cause trouble, at least when the audience is interested in real quantities. Coefficients on a  logit-linearized scale have only very general intuition: 
+When presenting results of a statistical analysis, the linear predictor is likely to cause trouble, at least when the audience is interested in real quantities. Especially Coefficients on a  logit-linearized scale have only very general intuition: 
 
 + zero marks a 50% chance
 + positive values increase the chance, negative decrease
