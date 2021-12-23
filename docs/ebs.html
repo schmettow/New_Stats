@@ -596,17 +596,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
+<td align="right">2</td>
 <td align="left">TRUE</td>
 <td align="left">TRUE</td>
 </tr>
@@ -616,9 +606,9 @@ div.csl-indent {
 <td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="right">9</td>
+<td align="right">7</td>
 <td align="left">FALSE</td>
-<td align="left">TRUE</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
@@ -626,9 +616,19 @@ div.csl-indent {
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="right">19</td>
+<td align="right">11</td>
 <td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
 <td align="left">FALSE</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="right">20</td>
@@ -753,7 +753,7 @@ div.csl-indent {
 </tbody>
 </table>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"></code></pre></div>
-<p>These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter <span class="math inline">\(P(rain|cloudy) = 60\)</span>%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the <em>true</em> parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, <span class="math inline">\(P(rain|cloudy) = 62.545\)</span>%.</p>
+<p>These probabilities we can feed into the decision framework as outlined above. The problem is, that we obtained just a few observations to infer the magnitude of the parameter <span class="math inline">\(P(rain|cloudy) = 60\)</span>%. Imagine, you would repeat the observation series on another 20 days. Due to random fluctuations, you would get a more or less different series and different estimates for the probability of rain. More generally, the <em>true</em> parameter is only imperfectly represented by any sample, it is not unlikely, that it is close to the estimate, but it could be somewhere else, for example, <span class="math inline">\(P(rain|cloudy) = 58.719\)</span>%.</p>
 <p>The trust you put in your estimation is called <em>level of certainty</em> or <em>belief</em> or <em>confidence</em>. It is the primary aim of statistics to rationally deal with uncertainty, which involves to <em>measure the level of certainty</em> associated with any statement derived from teh data. So, what would be a good way to determine certainty? Think for a moment. If you were asking an expert, how would you do that to learn about magnitude and uncertainty regarding <span class="math inline">\(P(rain|cloudy)\)</span>?</p>
 <p>Maybe, the conversation would be as follows:</p>
 <blockquote>

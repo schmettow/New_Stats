@@ -32,22 +32,26 @@ The tweak-finding model describes the process of building a skill as a process o
 
 The second assumption is that finding a tweak is irreversible. Finding a new tweak improves performance, usually by a small amount. This advantage continues, just like climbing the stairs. But as much as a stair has an upper end, the set of possible tweaks must diminish over time.
 
-The third assumption is that every tweak has a certain probability to be found. This probability may vary between tweaks, but does not change over the process. A consequence of this assumption is that the learning process is *not* like climbing the stairs, but like finding Easter eggs. In the beginning there are many and you fill your basket in eggs per minute. Reportedly, finding the last Easter eggs can take a couple of months. For a beginning learner, performance improves very fast, because pool of tweaks is full and tweaks are found at a high rate. For an expert, the pool of tweaks has almost diminished, and it is hard to find new tweaks: performance improves at a slow rate.
+The third assumption is that every tweak has a fixed probability to be found. This probability may vary between tweaks, but on average it is very small. Most importantly, the probability of being found is stable across the learning process. A consequence of this assumptions is that the learning process is *not linear*, like climbing the stairs, but more like finding Easter eggs. In the beginning you find them easily, just because there are so many of them left  and you fill your basket in eggs per minute. The more you find, the less are in pool (another analogy would be fishing in a pond). Reportedly, finding the last Easter eggs can take a couple of months. 
 
-When all tweaks are found and applied, the learning organism has reached its level of *maximum performance*. Maximum performance usually is a person-specific parameter that is always finite and never zero. It is never zero, because execution of complex tasks contains many functional areas of the executing organism, as well as physical constraints. If you learn to lace your shoes, many wondrous things are happening in your brain, but it won't grow the hands, or accelerate the travel time within nerve cells. We call this the *non-trainable part*.
+The beginning learner has a full pool of tweaks and performance improves very fast, because there are many tweaks to be found, yet. For an expert, the pool of tweaks has almost drained. It is becoming harder to find new tweaks and performance improves at a slow rate.
+
+When all tweaks are found and applied, the learning organism has reached its level of *maximum performance*. Maximum performance usually is a person-specific parameter that is always finite and never zero. It is never zero, because execution of complex tasks contains many functional areas of the executing organism, that cannot be trained. If you learn to lace your shoes, many wondrous things are happening in your brain, but it won't grow the hands, or accelerate the travel time of signals within nerve cells. We call this the *non-trainable part*.
+
+
 
 ## The Exponential law of finding tweaks
 
 The tweak-finder model makes three assumptions. As we shall see now, these assumptions can be converted into a mathematical function that predicts performance by the amount of training. The ARY learning function will use three non-linear parameters that correspond with the assumptions of the tweak finding model:
 
-1.  *Amplitude* reflects that at every point in the process there is a finite set of tweaks
-2.  *Rate of survival* reflects the constant probability for a tweak to be found.
+1.  *Amplitude* reflects that at every point in the process there is a finite set of tweaks. If this pool is full, we speak of a beginner.
+2.  *rate of survival* reflects the constant probability for a tweak to remain undiscovered during a trial. 
 3.  *Maximum performance* divides the trainable part from the non-trainable
 
 Imagine at age of three a certain little girl understood how to lace her shoes in the morning. Let's further assume the following:
 
 1.  $N_0 = 1000$ possible tweaks exist before the first attempt
-2.  Every tweak has a probability of $.002$ to be found, which means the *probability of survival* is $\textrm{Surv} = 1 - .002 = .998$
+2.  Every tweak has a probability of $.002$ to be found, which means the *rate of survival* is $\textrm{Surv} = 1 - .002 = .998$
 
 Let's put this in a row and see what happens up to the third attempt:
 
@@ -68,7 +72,7 @@ $$
 N_t = N_0 \times \textrm{Surv}^t
 $$
 
-Since Surv is a proportion, it is a number, usually smaller than 1. this term has the property to get smaller to asymptotically (not eventually) reach zero:
+Since Surv is a probability, it is not just any number, but it is between 0 and 1. Therefore, the exponential term has the property to create a smaller step everytime and asymptotically (not eventually) reach zero:
 
 ```{r}
 Surv <- .99
@@ -161,7 +165,7 @@ In the case of ASY parameters, we have two types of conversion to make:
 
 -   Surv needs double-bound to unbound conversion.
 
-This are the exact same transformations as in the linearization of linear coefficients (\@ref(relinking-linearity)) and we can use the usual pair of transformations: log/exp and logit/inv_logit
+This are the exact same transformations as in the linearization of  coefficients (\@ref(relinking-linearity)) and we can use the usual pair of transformations: log/exp and logit/inv_logit
 
 Learning curve models tend to be nasty. One trick I have learned to make the estimation more quick and stable is to built the linearization right into the formula. Let's get started with the asymptote, which must be non-negative. Using exponentiation makes it sure that the term is negative, no matter what the input is. In result, parameter Asym is estimated on the log-scale, is unbound and can therefore be used with linear predictors.
 
